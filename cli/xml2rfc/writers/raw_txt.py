@@ -432,14 +432,14 @@ class RawTextRfcWriter(BaseRfcWriter):
                 line.append(self._expand_xref(element))
             elif element.tag == 'eref':
                 if element.text and len(element.text)>0:
-                    line.append(element.text + ' ')
+                    line.append(element.text.strip())
                     self.eref_count += 1
-                    if element.text != element.attrib['target']:
-                        line.append('[' + str(self.eref_count) + ']')
+                    if element.text.strip() != element.attrib['target'].strip():
+                        line.append(' [' + str(self.eref_count) + ']')
                         if self.indexmode:
                             self.eref_list.append([self.eref_count, element])
                 else:
-                    line.append('<' + element.attrib['target'] + '>')
+                    line.append('<' + element.attrib['target'].strip() + '>')
             elif element.tag == 'iref':
                 self._add_iref_to_index(element)
             elif element.tag == 'cref' and \
