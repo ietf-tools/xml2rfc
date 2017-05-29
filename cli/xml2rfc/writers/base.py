@@ -864,7 +864,7 @@ class BaseRfcWriter:
         return str
 
     def write_section_rec(self, section, count_str="1.", appendix=False,
-                           level=0, numbered=True):
+                           level=0, numbered=True, emit_numbered="all", s_count=1):
         """ Recursively writes <section> elements 
         
             We use the self.indexmode flag to determine whether or not we
@@ -926,8 +926,6 @@ class BaseRfcWriter:
             elif element.tag == 'iref':
                 self._add_iref_to_index(element)
 
-        s_count = 1  # Section counter
-        
         # Append a dot to separate sub counters
         if count_str:
             count_str += '.'
@@ -942,6 +940,10 @@ class BaseRfcWriter:
                     if not self.indexmode:
                         xml2rfc.log.warn('Numbered sections are not permitted after unnumbered sections: found section "%s" without attribute numbered="no"' % (title,))
                     numbered = False
+                if emit_numbered=="only" and not numbered:
+                    continue
+                if emit_numbered=="no" and numbered:
+                    continue
             if appendix == True and not count_str:
                 if s_count == 1 and self.pis["rfcedstyle"] == "yes":
                    self.needLines(-1)
@@ -958,6 +960,8 @@ class BaseRfcWriter:
         # Set the ending index number so we know where to begin references
         if count_str == '' and appendix == False:
             self.refs_start = s_count
+
+        return s_count
 
     def write_status_section(self):
         """ Writes the 'Status of this Memo' section """
@@ -1127,7 +1131,7 @@ class BaseRfcWriter:
         # Appendix sections
         back = self.r.find('back')
         if back is not None:
-            self.write_section_rec(back, None, appendix=True)
+            s_count = self.write_section_rec(back, None, appendix=True, emit_numbered="only")
 
         # Index section, disable if there are no irefs
         if len(self._iref_index) > 0:
@@ -1136,6 +1140,9 @@ class BaseRfcWriter:
             autoAnchor = 'rfc.index'
             item = _RfcItem(title, autoAnchor, title=title)
             self._index.append(item)
+
+        if back is not None:
+            self.write_section_rec(back, None, appendix=True, emit_numbered="no", s_count=s_count)
 
         # Authors addresses section
         authors = self.r.findall('front/author')
@@ -1246,13 +1253,16 @@ class BaseRfcWriter:
         # Appendix sections
         back = self.r.find('back')
         if back is not None:
-            self.write_section_rec(back, None, appendix=True)
-
-        self.write_crefs()
+            s_count = self.write_section_rec(back, None, appendix=True, emit_numbered="only")
 
         # Index section, disable if there are no irefs
         if len(self._iref_index) > 0:
             self.insert_iref_index()
+
+        if back is not None:
+            self.write_section_rec(back, None, appendix=True, emit_numbered="no", s_count=s_count)
+
+        self.write_crefs()
 
         # Authors addresses section
         authors = self.r.findall('front/author')
