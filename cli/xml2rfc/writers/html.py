@@ -543,16 +543,13 @@ class HtmlRfcWriter(BaseRfcWriter):
             last = ref_td
             authors = reference.findall('front/author')
             for j, author in enumerate(authors):
+                for e in author:
+                    if e.tag is lxml.etree.PI:
+                        self.parse_pi(e)
                 organization = author.find('organization')
                 email = author.find('address/email')
                 surname = author.attrib.get('surname')
-                multipleInitials = False
-                if surname:
-                    if author[0].tag is lxml.etree.PI:
-                        pidict = self.parse_pi(author[0])
-                        if pidict and "multiple-initials" in pidict and pidict["multiple-initials"] == "yes":
-                            multipleInitials = True
-                initials = self.get_initials(author, multipleInitials)
+                initials = self.get_initials(author)
                 a = None
                 if j == len(authors) - 1 and len(authors) > 1:
                     last.tail = ' and '

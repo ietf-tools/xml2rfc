@@ -455,10 +455,11 @@ class BaseRfcWriter:
         self._index.append(item)
         return item
 
-    def get_initials(self, author, multiple=False):
+    def get_initials(self, author):
         """author is an rfc2629 author element.  Return the author initials,
         fixed up according to current flavour and policy."""
         initials = author.attrib.get('initials', '')
+        multiple = self.pis["multiple-initials"] == "yes"
         initials_list = re.split("[. ]+", initials)
         try:
             initials_list.remove('')
@@ -466,7 +467,11 @@ class BaseRfcWriter:
             pass
         if len(initials_list) > 0:
             if multiple:
-                initials = ". ".join(initials_list) + "."
+                # preserve spacing, but make sure all parts have a trailing
+                # period
+                initials = initials.strip()
+                initials += '.' if not initials.endswith('.') else ''
+                initials = re.sub('([^.]) ', '\g<1>. ', initials)
             else:
                 initials = initials_list[0] + "."
         return initials
@@ -600,13 +605,10 @@ class BaseRfcWriter:
             if i == len(authors) - 1 and len(authors) > 1:
                 buf.append('and ')
             if surname:
-                multipleInitials = False
-                if author[0].tag is lxml.etree.PI:
-                    pidict = self.parse_pi(author[0])
-                    if pidict and "multiple-initials" in pidict and pidict["multiple-initials"] == "yes":
-                        multipleInitials = True
-                        
-                initials = self.get_initials(author, multipleInitials)
+                for e in author:
+                    if e.tag is lxml.etree.PI:
+                        self.parse_pi(e)
+                initials = self.get_initials(author)
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
                     if len(initials) > 0:
@@ -710,6 +712,9 @@ class BaseRfcWriter:
                 role = author.attrib.get('role', '')
                 if role == 'editor':
                     role = ', Ed.'
+                for e in author:
+                    if e.tag is lxml.etree.PI:
+                        self.parse_pi(e)
                 initials = self.get_initials(author)
                 lines.append(initials + ' ' + author.attrib.\
                              get('surname', '') + role)
