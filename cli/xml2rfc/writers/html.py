@@ -629,7 +629,10 @@ class HtmlRfcWriter(BaseRfcWriter):
             # Render annotation as a separate paragraph
             annotation = reference.find('annotation')
             if annotation is not None and annotation.text:
-                ref_td.append(E.P(annotation.text))
+                p = E.P()
+                self.write_t_rec(annotation, parent=p)
+                ref_td.append(p)
+                    
         if self.pis['sortrefs'] == 'yes' and self.pis['symrefs'] == 'yes':
             refkeys.sort(key=str.lower)
         for key in refkeys:
