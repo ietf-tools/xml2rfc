@@ -464,7 +464,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     self.cref_list.append(element)
             elif element.tag == 'spanx':
                 style = element.attrib.get('style', 'emph')
-                edgechar = '?'
+                edgechar = '_'  # default to emph because the spanx element exists
                 if style == 'emph':
                     edgechar = '_'
                 elif style == 'strong':
