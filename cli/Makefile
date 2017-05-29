@@ -64,7 +64,7 @@ cleantmp:
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
 
-tests: test regressiontests cachetest
+tests: test regressiontests cachetest drafttest miektest
 
 noflakestests: install pytests regressiontests
 
