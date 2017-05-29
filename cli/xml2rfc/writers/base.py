@@ -1275,6 +1275,9 @@ class BaseRfcWriter:
         if self.ascii:
             xml2rfc.utils.safeReplaceUnicode(self.r)
 
+        # Protect any words with slashes that are on the preserve list
+        xml2rfc.utils.safeTagSlashedWords(self.r)
+
         # Do any pre processing necessary, such as inserting metadata
         self.pre_indexing()
         # Make two passes over the document, the first pass we run in

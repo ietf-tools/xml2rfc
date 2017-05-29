@@ -36,7 +36,7 @@ class ExpandedXmlWriter:
                                        pretty_print=True)
 
         if sys.version > '3':
-            file.write(text.decode())
+            file.write(text.decode('ascii'))
         else:
             file.write(text)
 

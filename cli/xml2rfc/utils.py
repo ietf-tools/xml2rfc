@@ -315,6 +315,7 @@ def _replace_unicode_characters(str):
 # Ascii representations of unicode chars from rfc2629-xhtml.ent
 # Auto-generated from comments in rfc2629-xhtml.ent
 _unicode_replacements = {
+    u'\x09': ' ',
     u'\xa1': '!',
     u'\xa2': '[cents]',
     u'\xa3': 'GBP',
@@ -497,3 +498,44 @@ def parse_pi(pi, pis):
         # Return the new values added
         return tmp_dict
     return {}
+
+def safeTagSlashedWords(tree):
+    """ Traverses an lxml.etree ElementTree and replace words seperated
+        by slashes if they are on the list
+    """
+    slashList = {}
+    for element in _slash_replacements:
+        slashList[element] = re.sub(u'/', u'\u200B/\u200B', element)
+        
+    for element in tree.iter():
+        if element.text:
+            element.text = _replace_slashed_words(element.text, slashList)
+        if element.tail:
+            element.tail = _replace_slashed_words(element.tail, slashList)
+        # I do not know that this makes any sense
+        # for key in element.attrib.keys():
+        #    element.attrib[key] = \
+        #        _replace_slashed_words(element.attrib[key], slashList)
+
+
+def _replace_slashed_words(str, slashList):
+    """ replace slashed separated words the list with
+        <word1> &nbsp; / &nbsp; <word 2>
+    """
+    match = re.findall(u'(\w+(/\w+)+)', str)
+    for item in match:
+        if item[0] in slashList:
+            str = re.sub(item[0], slashList[item[0]], str)
+    return str
+
+
+_slash_replacements = [
+    u'PDF/A',
+    u'PDF/UA',
+    u'PDF/VT',
+    u'S/MIME',
+    # If you remove me the regression test fails
+    u'this/is/a/long/test',
+];
+
+            

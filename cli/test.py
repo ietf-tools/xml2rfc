@@ -36,7 +36,7 @@ def diff_test(case, valid, test, failpath):
     if testarr != validarr:
         diff = difflib.ndiff(validarr, testarr)
         fh = open(failpath, 'w')
-        fh.write(test.encode('ascii', 'xmlcharrefreplace'))
+        fh.write(test)
         fh.close()
         case.fail("Output doesn't match, file saved to %s.\nDIFF:\n%s" % (failpath, '\n'.join(diff)))
 
@@ -111,34 +111,45 @@ class XmlRfcDummy():
                 self.pis[key] = val
             # Return the new values added
 
+def html_post_rendering(text):
+    return text.encode('ascii', 'xmlcharrefreplace').decode('ascii')
+
 output_format = [
     {
         "ext": "txt",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
+        "slashfix": xml2rfc.utils.safeTagSlashedWords,
         "writer": xml2rfc.PaginatedTextRfcWriter,
-        "postprocesslines": "post_process_lines"
+        "postrendering": lambda x: x,
+        "postprocesslines": "post_process_lines",
     },
     {
         "ext": "raw.txt",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
+        "slashfix": xml2rfc.utils.safeTagSlashedWords,
         "writer": xml2rfc.RawTextRfcWriter,
-        "postprocesslines": "post_process_lines"
+        "postrendering": lambda x: x,
+        "postprocesslines": "post_process_lines",
     },
     {
         "ext": "nroff",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
+        "slashfix": xml2rfc.utils.safeTagSlashedWords,
         "writer": xml2rfc.NroffRfcWriter,
-        "postprocesslines": "post_process_lines"
+        "postrendering": lambda x: x,
+        "postprocesslines": "post_process_lines",
     },
     {
         "ext": "html",
         "spacefix": lambda x: x,
         "unicodefix": lambda x: x,
+        "slashfix": xml2rfc.utils.safeTagSlashedWords,
         "writer": xml2rfc.HtmlRfcWriter,
-        "postprocesslines": "post_process_lines"
+        "postrendering": html_post_rendering,
+        "postprocesslines": "post_process_lines",
     },
 ]
 
@@ -175,9 +186,11 @@ class WriterElementTest(unittest.TestCase):
             ext = format["ext"]
             spacefix = format["spacefix"]
             unicodefix = format["unicodefix"]
+            slashfix = format["slashfix"]
             writer = format["writer"](xmlrfc, options=Values(defaults=dict(quiet=True, verbose=False, utf8=False)))
             testfunc = getattr(writer, func_name)
             postprocessing = getattr(writer, format["postprocesslines"])
+            postrendering = format['postrendering']
             #
             validpath = "tests/valid/%s.%s" % (name, ext)
             try:
@@ -189,8 +202,9 @@ class WriterElementTest(unittest.TestCase):
             #
             spacefix(element)
             unicodefix(element)
+            slashfix(element)
             testfunc(element)
-            output = '\n'.join(arrstrip(postprocessing(writer.buf)))  # Don't care about initial blank
+            output = postrendering('\n'.join(arrstrip(postprocessing(writer.buf))))  # Don't care about initial blank
             diff_test(self, valid, output, validpath.replace('valid', 'failed'))
 
     def test_references(self):
@@ -234,6 +248,9 @@ class WriterElementTest(unittest.TestCase):
 
     def test_textwrap(self):
         return self.function_test("textwrap", "write_section_rec")
+
+    def test_slashbreak(self):
+        return self.function_test("slashbreak", "write_section_rec")
 
     def test_abbreviations(self):
         return self.function_test("abbreviations", "write_t_rec")

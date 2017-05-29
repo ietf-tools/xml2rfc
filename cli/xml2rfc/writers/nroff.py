@@ -308,7 +308,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # character replacement
         text = re.sub(u"\u2011", "-", text)
         text = re.sub(u'\u00A0', r'\\0', text)
-        text = re.sub(u'\u200B', '', text)
+        text = re.sub(u'\u200B', r'\\&', text)
 
         # wrapping quoting
         if flow_text:
