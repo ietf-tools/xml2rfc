@@ -9,6 +9,12 @@ import tempfile
 import re
 from optparse import Values
 
+try:
+    import debug
+    assert debug
+except ImportError:
+    pass
+
 def arrstrip(arr):
     """ Strip beginning and end blanklines of an array """
     if not arr[0]: arr.pop(0)
@@ -136,6 +142,9 @@ output_format = [
     },
 ]
 
+class AnnotatedElement(lxml.etree.ElementBase):
+    pis = None
+
 class WriterElementTest(unittest.TestCase):
     """ Performs tests of isolated XML elements against text writer functions """
 
@@ -145,12 +154,28 @@ class WriterElementTest(unittest.TestCase):
     def function_test(self, name, func_name):
         """ Skeleton method for testing an XML element with a writer function """
         xmlpath = "tests/input/%s.xml" % name
-        element = lxml.etree.parse(xmlpath).getroot()
+        parser = lxml.etree.XMLParser()
+        element_lookup = lxml.etree.ElementDefaultClassLookup(element=AnnotatedElement)
+        parser.set_element_class_lookup(element_lookup)
+        element = lxml.etree.parse(xmlpath, parser).getroot()
+        xmlrfc = XmlRfcDummy()
+        pis = xmlrfc.pis.copy()
+        element.pis = pis
+        elements_cache = []
+        for e in element.iterdescendants():
+            elements_cache.append(e)
+            if e.tag is lxml.etree.PI:
+                xmlrfc.parse_pi(e)
+                pis = xmlrfc.pis.copy()
+            else:
+                if isinstance(e, AnnotatedElement):
+                    e.pis = pis
+
         for format in output_format:
             ext = format["ext"]
             spacefix = format["spacefix"]
             unicodefix = format["unicodefix"]
-            writer = format["writer"](XmlRfcDummy(), options=Values(defaults=dict(quiet=True, verbose=False, utf8=False)))
+            writer = format["writer"](xmlrfc, options=Values(defaults=dict(quiet=True, verbose=False, utf8=False)))
             testfunc = getattr(writer, func_name)
             postprocessing = getattr(writer, format["postprocesslines"])
             #

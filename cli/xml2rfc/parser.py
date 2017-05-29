@@ -4,15 +4,15 @@
 
 """ Public XML parser module """
 
-import lxml.etree
 import re
 import os
+import codecs
 import shutil
+import time
+import requests
+import lxml.etree
 import xml2rfc.log
 import xml2rfc.utils
-import requests
-import codecs
-import time
 
 try:
     from urllib.parse import urlparse, urljoin
@@ -357,6 +357,9 @@ class CachingResolver(lxml.etree.Resolver):
             return ''
 
 
+class AnnotatedElement(lxml.etree.ElementBase):
+    pis = None
+
 class XmlRfcParser:
 
     """ XML parser container with callbacks to construct an RFC tree """
@@ -477,17 +480,29 @@ class XmlRfcParser:
         # Add our custom resolver
         parser.resolvers.add(self.cachingResolver)
 
+        # Use our custom element class, which holds the state of PI settings
+        # at this point in the xml tree
+        element_lookup = lxml.etree.ElementDefaultClassLookup(element=AnnotatedElement)
+        parser.set_element_class_lookup(element_lookup)
+
         # Parse the XML file into a tree and create an rfc instance
         tree = lxml.etree.parse(self.source, parser)
         xmlrfc = XmlRfc(tree, self.default_dtd_path)
         
-        # Evaluate processing instructions behind root element
+        # Evaluate processing instructions before root element
         xmlrfc._eval_pre_pi()
         
-        # Expand 'include' instructions
-        for element in xmlrfc.getroot().iter():
+        # Keep seen elements in a list, to force lxml to not discard (and
+        # recreate) the elements, as this would cause loss of our custom
+        # state, the PI settings at the time the element was parsed
+        # (in element.pis)
+        xmlrfc._elements_cache = []
+        # Process PIs and expand 'include' instructions
+        pis = xmlrfc.pis.copy()
+        for element in xmlrfc.getroot().iterdescendants():
             if element.tag is lxml.etree.PI:
                 pidict = xmlrfc.parse_pi(element)
+                pis = xmlrfc.pis.copy() 
                 if 'include' in pidict and pidict['include']:
                     request = pidict['include']
                     path = self.cachingResolver.getReferenceRequest(request,
@@ -502,8 +517,14 @@ class XmlRfcParser:
                                                       remove_blank_text=True,
                                                       resolve_entities=True,
                                                       strip_cdata=strip_cdata)
+                        parser.set_element_class_lookup(element_lookup)
                         # parser.resolvers.add(self.cachingResolver) --- should this be done?
                         ref_root = lxml.etree.parse(path, parser).getroot()
+                        ref_root.pis = pis
+                        xmlrfc._elements_cache.append(ref_root)
+                        for e in ref_root.iterdescendants():
+                            e.pis = pis
+                            xmlrfc._elements_cache.append(e)
                         parent = element.getparent()
                         parent.replace(element, ref_root)
                     except (lxml.etree.XMLSyntaxError, IOError) as e:
@@ -514,7 +535,10 @@ class XmlRfcParser:
                         else:
                             xml2rfc.log.warn('Unable to load the include file at',
                                               path)
-
+            else:
+                if isinstance(element, AnnotatedElement):
+                    element.pis = pis
+                    xmlrfc._elements_cache.append(element)                    
         # Finally, do any extra formatting on the RFC before returning
         xmlrfc._format_whitespace()
 

@@ -194,10 +194,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif element.tag == 't':
                 # Disable linebreak if subcompact=yes AND not first list element
                 leading_blankline = True
-                if t_count > 0 and self.pis['subcompact'] == 'yes':
+                if t_count > 0 and element.pis['subcompact'] == 'yes':
                     leading_blankline = False
                 if style == 'symbols':
-                    bullet = self.pis['text-list-symbols'][level % len(self.pis['text-list-symbols'])]
+                    bullet = element.pis['text-list-symbols'][level % len(self.pis['text-list-symbols'])]
                     bullet += '  '
                 elif style == 'numbers':
                     bullet = self._format_counter("%d.", t_count+1, listlength)
@@ -216,7 +216,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                         bullet += '  '
                     # Add an extra space in front of colon if colonspace enabled
                     if bullet.endswith(':') and \
-                    self.pis['colonspace'] == 'yes':
+                    element.pis['colonspace'] == 'yes':
                         bullet+= ' '
                     if element.text and len(bullet) > self.width//2:
                         # extra check of remaining space if the bullet is
@@ -449,7 +449,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif element.tag == 'iref':
                 self._add_iref_to_index(element)
             elif element.tag == 'cref' and \
-                self.pis['comments'] == 'yes':                
+                element.pis['comments'] == 'yes':                
                 # Render if processing instruction is enabled
                 self.cref_counter += 1
                 anchor = element.attrib.get('anchor', None)
@@ -457,7 +457,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     anchor = 'CREF' + str(self.cref_counter)
                     element.attrib['anchor'] = anchor
                 self._indexCref(self.cref_counter, anchor)
-                if self.pis['inline'] == 'yes':
+                if element.pis['inline'] == 'yes':
                     if anchor:
                         anchor = anchor + ': '
                     source = element.attrib.get('source', "")
@@ -855,7 +855,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, cell in enumerate(table.findall('c')):
             if i % num_columns == 0:
                 # Insert blank row if PI 'compact' is 'no'
-                if self.pis["compact"] == "no":
+                if table.pis["compact"] == "no":
                     if (style == 'none' and row == 0) or (style in ['headers', 'full'] and row != 0):
                         row += 1
                         matrix.append(['']*num_columns)

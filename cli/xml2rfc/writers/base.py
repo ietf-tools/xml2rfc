@@ -459,7 +459,7 @@ class BaseRfcWriter:
         """author is an rfc2629 author element.  Return the author initials,
         fixed up according to current flavour and policy."""
         initials = author.attrib.get('initials', '')
-        multiple = self.pis["multiple-initials"] == "yes"
+        multiple = author.pis["multiple-initials"] == "yes"
         initials_list = re.split("[. ]+", initials)
         try:
             initials_list.remove('')
@@ -784,10 +784,10 @@ class BaseRfcWriter:
                 self._add_iref_to_index(element)
 
         # Write figure with optional delimiter
-        delimiter = self.pis['artworkdelimiter']
+        delimiter = figure.pis['artworkdelimiter']
         artwork = figure.find('artwork')
         artwork_align = artwork.attrib.get('align', figure_align)
-        blanklines = int(self.pis['artworklines'])
+        blanklines = int(figure.pis['artworklines'])
         self.write_raw(artwork.text, align=artwork_align,
                        blanklines=blanklines, delimiter=delimiter,
                        source_line=figure.sourceline)
