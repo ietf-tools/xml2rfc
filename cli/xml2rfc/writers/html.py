@@ -202,9 +202,9 @@ class HtmlRfcWriter(BaseRfcWriter):
 
     def _serialize(self, element):
         if sys.version > '3':
-            return lxml.html.tostring(element, pretty_print=True, method='xml', encoding='ascii').decode()
+            return lxml.html.tostring(element, pretty_print=True, method='html', encoding='utf-8').decode('utf-8')
         else:
-            return lxml.html.tostring(element, pretty_print=True, method='xml')
+            return lxml.html.tostring(element, pretty_print=True, method='html')
     
     def _flush_temp_div(self):
         lines = []
