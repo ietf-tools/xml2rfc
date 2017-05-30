@@ -582,7 +582,7 @@ class XmlRfc:
             "refparent":	"References",
             "rfcedstyle":	"no",
             "rfcprocack":	"no",
-            "sectionorphan":    4,
+            "sectionorphan":    "4",
             "slides":		"no",
             "sortrefs":		"no",
             "strict":		"no",
@@ -595,6 +595,7 @@ class XmlRfc:
             "tocindent":	"yes",
             "tocnarrow":	"yes",
             "tocompact":	"yes",
+            "tocpagebreak":     "no",
             "topblock":		"yes",
             #"typeout":		Unset
             "useobject":	"no" ,

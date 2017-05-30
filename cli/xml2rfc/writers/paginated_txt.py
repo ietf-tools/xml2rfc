@@ -150,7 +150,13 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                                        level=level)
         # Reserve room for a blankline and some lines of section content
         # text, in order to prevent orphan headings
-        end = len(self.buf) + self.pis["sectionorphan"]
+        orphanlines = self.pis["sectionorphan"]
+        if not orphanlines.isdigit():
+            xml2rfc.log.warn('Expected a numeric value for the sectionorphan PI, found "%s"' % orphanlines)
+            orphanlines = 4
+        else:
+            orphanlines = int(orphanlines)
+        end = len(self.buf) + orphanlines
         self._set_break_hint(end-begin, 'raw', begin)
                                         
 
@@ -256,7 +262,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         for line_num, line in enumerate(self.buf):
             if line_num == self.toc_marker and self.toc_marker > 0:
                 # Don't start ToC too close to the end of the page
-                if self.page_length + 10 >= max_page_length:
+                if self.pis['tocpagebreak'] == 'yes' or self.page_length + 10 >= max_page_length:
                     remainder = max_page_length - self.page_length - 2
                     self.emit([''] * remainder)
                     self.page_break()

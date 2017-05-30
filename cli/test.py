@@ -87,6 +87,7 @@ class XmlRfcDummy():
             "tocindent":	"yes",
             "tocnarrow":	"yes",
             "tocompact":	"yes",
+            "tocpagebreak":	"no",
             "topblock":		"yes",
             #"typeout":		Unset
             "useobject":	"no" ,
