@@ -704,39 +704,39 @@ class BaseRfcWriter:
         """ Returns a list of lines for the top right header """
         lines = []
         # Render author?
-        authorship = self.pis['authorship']
-        if authorship in ['yes', 'IAB', ]:
-            # Keep track of previous organization and remove if redundant.
-            last_org = None
-            last_pos = None
-            for author in self.r.findall('front/author'):
-                role = author.attrib.get('role', '')
-                if role == 'editor':
-                    role = ', Ed.'
-                initials = self.get_initials(author)
-                lines.append(initials + ' ' + author.attrib.\
-                             get('surname', '') + role)
-                organization = author.find('organization')
-                org_name = ''
-                if organization is not None and authorship == 'yes':
+        stream = self.r.attrib.get('submissionType', self.defaults['submissionType'])
+        # Keep track of previous organization and remove if redundant.
+        last_org = None
+        last_pos = None
+        for author in self.r.findall('front/author'):
+            role = author.attrib.get('role', '')
+            if role == 'editor':
+                role = ', Ed.'
+            initials = self.get_initials(author)
+            lines.append(initials + ' ' + author.attrib.\
+                         get('surname', '') + role)
+            organization = author.find('organization')
+            org_name = ''
+            if stream != 'IAB':
+                if organization is not None:
                     abbrev = organization.attrib.get("abbrev", None)
                     if  abbrev != None and abbrev.strip() != '':
                         org_name = abbrev.strip()
                     elif organization.text and organization.text.strip() != '':
                         org_name = organization.text.strip()
-                if org_name == '' and authorship == 'yes':
+                if org_name == '':
                     lines.append('')
                 else:
                     if org_name == last_org:
                         # Remove redundant organization
                         del lines[last_pos]
                     lines.append(org_name)
-                last_org = org_name
-                last_pos = len(lines)-1
-            # remove blank lines between authors and date
-            if lines[last_pos] == '':
-                del lines[last_pos]
-                last_pos = len(lines)-1
+            last_org = org_name
+            last_pos = len(lines)-1
+        # remove blank lines between authors and date
+        if lines[last_pos] == '':
+            del lines[last_pos]
+            last_pos = len(lines)-1
 
         date = self.r.find('front/date')
         if date is not None:
@@ -1145,15 +1145,17 @@ class BaseRfcWriter:
             self.write_section_rec(back, None, appendix=True, emit_numbered="no", s_count=s_count)
 
         # Authors addresses section
-        authors = self.r.findall('front/author')
-        autoAnchor = 'rfc.authors'
-        if len(authors) > 1:
-            title = "Authors' Addresses"
-        else:
-            title = "Author's Address"
-        # Add explicitly to index
-        item = _RfcItem(title, autoAnchor, title=title)
-        self._index.append(item)
+
+        if self.pis['authorship'] == 'yes':
+            authors = self.r.findall('front/author')
+            autoAnchor = 'rfc.authors'
+            if len(authors) > 1:
+                title = "Authors' Addresses"
+            else:
+                title = "Author's Address"
+            # Add explicitly to index
+            item = _RfcItem(title, autoAnchor, title=title)
+            self._index.append(item)
 
     def _build_document(self):
         self.indexmode = False
@@ -1265,15 +1267,16 @@ class BaseRfcWriter:
         self.write_crefs()
 
         # Authors addresses section
-        authors = self.r.findall('front/author')
-        autoAnchor = 'rfc.authors'
-        if len(authors) > 1:
-            title = "Authors' Addresses"
-        else:
-            title = "Author's Address"
-        self.write_heading(title, autoAnchor=autoAnchor)
-        for author in authors:
-            self.write_address_card(author)
+        if self.pis['authorship'] == 'yes':
+            authors = self.r.findall('front/author')
+            autoAnchor = 'rfc.authors'
+            if len(authors) > 1:
+                title = "Authors' Addresses"
+            else:
+                title = "Author's Address"
+            self.write_heading(title, autoAnchor=autoAnchor)
+            for author in authors:
+                self.write_address_card(author)
 
         self.check_for_unused_references()
         
