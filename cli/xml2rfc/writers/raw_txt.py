@@ -5,6 +5,7 @@
 # Python libs
 import textwrap
 import datetime
+import lxml
 import re
 from optparse import Values
 
@@ -188,7 +189,11 @@ class RawTextRfcWriter(BaseRfcWriter):
         t_count = 0
         for element in list:
             # Check for PI
-            if element.tag == 't':
+            if element.tag is lxml.etree.PI:
+                pidict = self.parse_pi(element)
+                if pidict and "needLines" in pidict:
+                    self.needLines(pidict["needLines"])
+            elif element.tag == 't':
                 # Disable linebreak if subcompact=yes AND not first list element
                 leading_blankline = True
                 if t_count > 0 and element.pis['subcompact'] == 'yes':
