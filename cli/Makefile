@@ -6,6 +6,20 @@ datetime_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T_ ][0-9][0-9]:[0-9]
 version_regex =  [Vv]ersion [2N]\(\.[0-9N]\+\)\+\(\.dev\)\?
 
 
+rfcxml= \
+	rfc6787.xml		\
+	rfc7911.xml		\
+#	rfc7754.edited.xml	\
+
+rfcxmlfiles = $(addprefix tests/input/, $(rfcxml))
+rfctxt      = $(addsuffix .txt, $(basename $(rfcxml)))
+rfctest     = $(addsuffix .tests, $(basename $(rfcxml)))
+rfctxtfiles = $(addprefix tests/out/, $(rfctxt))
+rfctests    = $(addprefix tests/out/, $(rfctest))
+
+pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
+
+
 env/bin/python:
 	echo "Install virtualenv in $$PWD/env/ in order to run tests locally."
 
@@ -30,6 +44,27 @@ CHECKOUTPUT=	\
 	done ; if [ $$type = ascii ]; then echo "Diff nroff output with xml2rfc output:";\
 	diff -I '$(datetime_regex)' -I '$(version_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
 
+# ----------------------------------------------------------------------
+#
+# Generic rules
+
+%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt
+	@echo "Diffing .nroff.txt against "
+	doc=$(basename $@); diff -I '$(datetime_regex)' -I '$(version_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
+
+tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt tests/out/%.exp.xml: tests/input/%.xml install
+	@ echo "\nProcessing $<"
+	xml2rfc --cache tests/cache --no-network $< --base tests/out/ --raw --text --nroff --html --exp
+
+%.test: %
+	@echo "Diffing $< against master"
+	diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output"; exit 1; }
+
+%.nroff.txt: %.nroff
+	groff -ms -Kascii -Tascii $< | ./fix.pl > $@
+
+# ----------------------------------------------------------------------
+
 drafttest: cleantmp install
 	@ xml2rfc --cache tests/cache --no-network tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
 	doc=draft-template ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
@@ -46,11 +81,16 @@ cachetest: cleantmp install
 	@ echo "Running without accessing network ..."
 	@ xml2rfc --cache .cache tests/input/rfc6787.xml --no-network --base tmp/ --raw
 
-rfctest: cleantmp env/bin/python install
-	@ xml2rfc --cache tests/cache --no-network tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
-	doc=rfc6787 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
-	@ xml2rfc --cache tests/cache --no-network tests/input/rfc7911.xml --base tmp/ --raw --text --nroff --html --exp
-	doc=rfc7911 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
+
+rfctest: cleantmp env/bin/python install $(rfctests)
+
+# rfctest: cleantmp env/bin/python install $(rfctests)
+# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
+# 	doc=rfc6787 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
+# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc7754.edited.xml --base tmp/ --raw --text --nroff --html --exp
+# 	doc=rfc7754.edited ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
+# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc7911.xml --base tmp/ --raw --text --nroff --html --exp
+# 	doc=rfc7911 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
 
 unicodetest: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network tests/input/unicode.xml --base tmp/ --raw --text --nroff --html --exp
