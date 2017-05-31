@@ -51,7 +51,7 @@ class XmlRfcDummy():
     def __init__(self):
         self.pis = {
             "artworkdelimiter":	None,
-            "artworklines":	0 ,
+            "artworklines":	"0" ,
             "authorship":	"yes",
             "autobreaks":	"yes",
             "background":	"" ,
@@ -74,7 +74,7 @@ class XmlRfcDummy():
             "refparent":	"References",
             "rfcedstyle":	"no",
             "rfcprocack":	"no",
-            "sectionorphan":    5,
+            "sectionorphan":    "5",
             "slides":		"no",
             "sortrefs":		"yes",  # different from default
             "strict":		"no",
@@ -83,7 +83,7 @@ class XmlRfcDummy():
             "text-list-symbols": "o*+-",
             "toc":		"no",
             "tocappendix":	"yes",
-            "tocdepth":		3,
+            "tocdepth":		"3",
             "tocindent":	"yes",
             "tocnarrow":	"yes",
             "tocompact":	"yes",
