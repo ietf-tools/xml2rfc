@@ -1,3 +1,117 @@
+xml2rfc (2.6.0) ietf; urgency=medium
+
+  * The implementation of the 'authorship' PI in the original TCL tool would
+    suppress the Author's Address section when set to "no", while in the
+    current implementation it removed author information on the first page.
+    Changed to the original semantics.  Also author organisation handling on
+    the first page changed to use the submissionType setting to trigger the
+    behaviour described in issue #311.  Fixes issue #311 without overlaying
+    this on the 'authorship' PI.
+
+  * Added a check for the 'needLines' PI within lists.
+
+  * Fixed a bug in the code for the 'sectionorphans' PI. Added a PI
+    'tocpagebreak' to force a page break before the ToC.  This, together with
+    the fix for #311 and needLines within lists, lets xml2rfc produce
+    rfc7754.txt correctly from suitable xml without postprocessing.
+
+  * Tweaked the eref output in text mode to avoid generating extraneous 
+    space characters.  Fixes issue #329.
+
+  * Merged in [2251] from ietf@augustcellars.com:
+    Changed to use the emph character in spanex so that the same thing happens
+    in both html and text if an unknown attribute is given.  Fixes issue #297"
+
+  * Merged in [2250] from ietf@augustcellars.com, with tweaks:
+    Added code to emit sections in two sections, numbered and un-numbered,
+    separately.  Then emit the numbered appendixes, the index, the unnumbered
+    appendixes, cref items, authors at the end of the document.  Fixes issue
+    #310.
+
+  * Merged in [2249] from ietf@augustcellars.com:
+    If you have an xref or similar element in an annotation in a reference,
+    any text that follows the xref is absent from the output HTML file.  Text
+    files emit correctly.  Fixed the html generation.
+
+  * Merged in [2248] from ietf@augustcellars.com: 
+    The HTML rendering for <xref> elements were inconsistent with the text
+    rendering.  Fixed this by doing something completely different than is
+    called for in the bug report:
+
+    We follow the layout of what the V3 HTML document says to do.  This
+    means that we use the child text of the xref when it exists to the
+    exclusion of any generated text.  When the child text does not exist
+    then we use the synthesized text string as the text for the anchor
+    element.  In all cases the anchor element is emitted with an href of the
+    target.  Fixes issue #293.
+
+  * Merged in [2247] from ietf@augustcellars.com:
+    Added true and false as legal values for the attribute numbered on a
+    section.xml Fixes issue #313
+
+  * Eliminated redundant PI parsing, now that each element carries the local 
+    PI settings.
+
+  * Merged in patch from martin.thomson@gmail.com, see ticket #307:
+    Fixed a problem where if there are no authors, references in HTML are
+    badly formatted.  Fixes issue #307 and #309.
+
+  * Merged in [2215] from ietf@augustcellars.com, with some tweaks to make
+    things work under python 3.x:
+    Don't split special terms with embedded forward slash on the slash
+    character.  Fixes issue #288.  Also added code to deal with an extra tab
+    in the middle of a sentence.
+
+  * Changed the handling of PIs such that each element in the parsed xml 
+    tree holds the PI state at that point of the xml document.  This provides 
+    the ability to use different PI settings at different points in the 
+    document.  This only makes sense for some PIs, though.  The following PIs 
+    will now be honoured if changed inside the document, in order to provide 
+    more flexibility: 'multiple-initials', 'artworkdelimiter', 'compact', 
+    'subcompact', 'text-list-symbols', 'colonspace'.
+
+  * Honour the way double initials are given in the XML, with or without 
+    interleaved spaces.  See issue #303, which says of multiple initials '... 
+    Expectation was that it would exactly match the initials attribute in the 
+    XML'
+
+  * Merged in [2070] from ietf@augustcellars.com:
+    Enabled the multiple-initial PI again.  The code now also looks for the PI
+    as the first element of the author element, to apply for that author entry
+    only, with a default of 'no'.
+
+  * Merged in [2064] from ietf@augustcellars.com:
+    Added handling for absent author initials for the html generator.
+
+  * Merged in [2062] from ietf@augustcellars.com:
+    This commit provides support for multiple author initials.  Fixes issue
+    #303.  Also fixes the issue of extra commas showing up when there are no
+    initials, just a surname.
+
+  * Merged in [2059] from ietf@augustcellars.com:
+    Changet to emit html not xhtml.  Addresses issues #263 and #279.
+
+  * Updated additional test masters needed to make the tox tests pass, and
+    changed the html encoding and decoding to use utf-8, to work with the
+    unicode and utf-8 tests.
+
+  * Removed python 2.6 from tox texting (a previous commit added python 3.5).
+
+  * Don't let the value of 'title' be None, make it an empty string if that 
+    happens.  Fixes issue #328
+
+  * Someone might want to set hangIndent to zero.  Test the value against None
+    explicitly to permit this to succeed.
+
+  * Added an --utf8 switch to xml2rfc.  In nroff mode, the output will 
+    contain utf-8 characters, not \[u8FD9] escapes; use groff with the -Kutf8 
+    switch to process the resulting nroff.
+
+  * Removed all references to xml.resource.org; it is not useful for 
+    fallback purposes any more.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  31 May 2017 05:04:20 -0700
+
 xml2rfc (2.5.2) ietf; urgency=medium
 
   This is a maintenance release.  It changes the RFC boilerplate for stream
