@@ -57,7 +57,7 @@ long_description += """
 Changelog
 =========
 
-""" + "\n".join([ changelog_entry_template % entry for entry in parse("changelog")[:3] ])
+""" + "\n".join([ changelog_entry_template % entry for entry in parse("changelog")[:2] ])
 
 setup(
     # Package metadata
