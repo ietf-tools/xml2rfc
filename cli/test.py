@@ -50,7 +50,7 @@ class XmlRfcDummy():
     def __init__(self):
         self.pis = {
             "artworkdelimiter":	None,
-            "artworklines":	"0" ,
+            "artworklines":	"0",
             "authorship":	"yes",
             "autobreaks":	"yes",
             "background":	"" ,
@@ -58,25 +58,26 @@ class XmlRfcDummy():
             "comments":		"no" ,
             "docmapping":	"no",
             "editing":		"no",
-            "emoticonic":	"no",
+            #"emoticonic":	"no",
             #"footer":		Unset
             "figurecount":      "no",
             #"header":		Unset
             "inline":		"no",
-            "iprnotified":	"no",
+            #"iprnotified":	"no",
             "linkmailto":	"yes",
             #"linefile":	Unset
             #"needLines":       Unset
             "multiple-initials":"no",
-            "notedraftinprogress": "yes",
+            #"notedraftinprogress": "yes",
+            "orphanlimit":      "2",
             "private":		"",
             "refparent":	"References",
             "rfcedstyle":	"no",
-            "rfcprocack":	"no",
+            #"rfcprocack":	"no",
             "sectionorphan":    "4",
-            "slides":		"no",
+            #"slides":		"no",
             "sortrefs":		"yes",  # different from default
-            "strict":		"no",
+            #"strict":		"no",
             "symrefs":		"yes",
             "tablecount":       "no",
             "text-list-symbols": "o*+-",
@@ -85,11 +86,12 @@ class XmlRfcDummy():
             "tocdepth":		"3",
             "tocindent":	"yes",
             "tocnarrow":	"yes",
-            "tocompact":	"yes",
+            #"tocompact":	"yes",
             "tocpagebreak":	"no",
             "topblock":		"yes",
             #"typeout":		Unset
-            "useobject":	"no" ,
+            #"useobject":	"no" ,
+            "widowlimit":       "2",
         }
         self.pis["compact"] = self.pis["rfcedstyle"]
         self.pis["subcompact"] = self.pis["compact"]

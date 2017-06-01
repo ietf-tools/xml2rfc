@@ -29,6 +29,17 @@ def clear_cache(self, opt, value, parser):
     sys.exit()
 
 
+def print_pi_help(self, opt, value, parser):
+    pis = xml2rfc.parser.XmlRfc(None, None).pis.items()
+    pis.sort()
+    print("Available processing instructions (PIs), with defaults:\n")
+    for k, v in pis:
+        if isinstance(v, type('')):
+            print('    %-20s  "%s"' % (k,v))
+        else:
+            print('    %-20s  %s' % (k,v))
+    sys.exit()
+
 def main():
     # Populate options
     formatter = optparse.IndentedHelpFormatter(max_help_position=40)
@@ -45,8 +56,7 @@ def main():
                                        'on the input filename, unless an '
                                        'argument is given to --basename.')
     formatgroup.add_option('', '--text', dest='text', action='store_true',
-                           help='outputs to a text file with proper page '
-                           'breaks')
+                           help='outputs to a text file with proper page breaks')
     formatgroup.add_option('', '--html', dest='html', action='store_true',
                            help='outputs to an html file')
     formatgroup.add_option('', '--nroff', dest='nroff', action='store_true',
@@ -54,35 +64,35 @@ def main():
     formatgroup.add_option('', '--raw', dest='raw', action='store_true',
                            help='outputs to a text file, unpaginated')
     formatgroup.add_option('', '--exp', dest='exp', action='store_true',
-                           help='outputs to an XML file with all references'
-                           ' expanded')
+                           help='outputs to an XML file with all references expanded')
     optionparser.add_option_group(formatgroup)
 
 
     plain_options = optparse.OptionGroup(optionparser, 'Plain Options')
-    plain_options.add_option('-C', '--clear-cache', action='callback',
-                            help='purge the cache and exit', callback=clear_cache)
-    plain_options.add_option('-n', '--no-dtd', dest='no_dtd', action='store_true',
+    plain_options.add_option('-C', '--clear-cache', action='callback', callback=clear_cache,
+                            help='purge the cache and exit')
+    plain_options.add_option('-H', '--pi-help', action='callback', callback=print_pi_help,
+                            help='show the names and default values of PIs')
+    plain_options.add_option('-n', '--no-dtd', action='store_true',
                             help='disable DTD validation step')
-    plain_options.add_option('-N', '--no-network', dest='no_network', action='store_true',
-                            help='don\'t use the network to resolve references', default=False)
+    plain_options.add_option('-N', '--no-network', action='store_true', default=False,
+                            help='don\'t use the network to resolve references')
     plain_options.add_option('-q', '--quiet', action='store_true',
-                            dest='quiet', help='dont print anything')
+                            help='dont print anything')
     plain_options.add_option('-u', '--utf8', action='store_true',
-                            dest='utf8', help='generate utf8 output')
+                            help='generate utf8 output')
     plain_options.add_option('-v', '--verbose', action='store_true',
-                            dest='verbose', help='print extra information')
-    plain_options.add_option('-V', '--version', action='callback',
-                            help='display the version number and exit',
-                            callback=display_version)
+                            help='print extra information')
+    plain_options.add_option('-V', '--version', action='callback', callback=display_version,
+                            help='display the version number and exit')
     optionparser.add_option_group(plain_options)
 
 
     value_options = optparse.OptionGroup(optionparser, 'Other Options')
     value_options.add_option('-b', '--basename', dest='basename', metavar='NAME',
                             help='specify the base name for output files')
-    value_options.add_option('-c', '--cache', dest='cache', 
-                            help='specify an alternate cache directory to write to')
+    value_options.add_option('-c', '--cache', dest='cache',
+                            help='specify a primary cache directory to write to; default: try [ %s ]'%', '.join(xml2rfc.CACHES) )
     value_options.add_option('-d', '--dtd', dest='dtd', help='specify an alternate dtd file')
     value_options.add_option('-D', '--date', dest='datestring', metavar='DATE',
                             default=datetime.datetime.today().strftime("%Y-%m-%d"),

@@ -553,13 +553,15 @@ class XmlRfc:
         Accessing the rfc tree is done by getting the root node from getroot()
     """
 
+    pis = {}
+
     def __init__(self, tree, default_dtd_path):
         self.default_dtd_path = default_dtd_path
         self.tree = tree
         # Pi default values
         self.pis = {
             "artworkdelimiter":	None,
-            "artworklines":	0 ,
+            "artworklines":	"0",
             "authorship":	"yes",
             "autobreaks":	"yes",
             "background":	"" ,
@@ -567,25 +569,26 @@ class XmlRfc:
             "comments":		"no" ,
             "docmapping":	"no",
             "editing":		"no",
-            "emoticonic":	"no",
+            #"emoticonic":	"no",
             #"footer":		Unset
             "figurecount":      "no",
             #"header":		Unset
             "inline":		"no",
-            "iprnotified":	"no",
+            #"iprnotified":	"no",
             "linkmailto":	"yes",
             #"linefile":	Unset
-            #"needLines":       Unset
+            "needLines":        None,
             "multiple-initials":"no",
-            "notedraftinprogress": "yes",
+            #"notedraftinprogress": "yes",
+            "orphanlimit":      "2",
             "private":		"",
             "refparent":	"References",
             "rfcedstyle":	"no",
-            "rfcprocack":	"no",
+            #"rfcprocack":	"no",
             "sectionorphan":    "4",
-            "slides":		"no",
-            "sortrefs":		"no",
-            "strict":		"no",
+            #"slides":		"no",
+            "sortrefs":		"yes",
+            #"strict":		"no",
             "symrefs":		"yes",
             "tablecount":       "no",
             "text-list-symbols": "o*+-",
@@ -594,11 +597,12 @@ class XmlRfc:
             "tocdepth":		"3",
             "tocindent":	"yes",
             "tocnarrow":	"yes",
-            "tocompact":	"yes",
+            #"tocompact":	"yes",
             "tocpagebreak":     "no",
             "topblock":		"yes",
             #"typeout":		Unset
-            "useobject":	"no" ,
+            #"useobject":	"no" ,
+            "widowlimit":       "2",
         }
         # Special cases:
         self.pis["compact"] = self.pis["rfcedstyle"]
