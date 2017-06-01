@@ -4,7 +4,6 @@
 
 # Python libs
 import datetime
-from optparse import Values
 
 try:
     import debug
@@ -13,7 +12,7 @@ except ImportError:
     pass
 
 # Local libs
-from xml2rfc.writers.base import BaseRfcWriter
+from xml2rfc.writers.base import BaseRfcWriter, default_options
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
 import xml2rfc.utils
 import xml2rfc.log
@@ -24,8 +23,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today(),
-                    omit_headers=False):
+    def __init__(self, xmlrfc, width=72, quiet=None, options=default_options,
+                               date=datetime.date.today(), omit_headers=False):
+        if not quiet is None:
+            options.quiet = quiet
         RawTextRfcWriter.__init__(self, xmlrfc, options=options, date=date)
         self.left_header = ''
         self.center_header = ''

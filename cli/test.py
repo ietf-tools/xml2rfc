@@ -7,7 +7,6 @@ import xml2rfc.utils
 import lxml
 import tempfile
 import re
-from optparse import Values
 
 try:
     import debug
@@ -188,7 +187,7 @@ class WriterElementTest(unittest.TestCase):
             spacefix = format["spacefix"]
             unicodefix = format["unicodefix"]
             slashfix = format["slashfix"]
-            writer = format["writer"](xmlrfc, options=Values(defaults=dict(quiet=True, verbose=False, utf8=False)))
+            writer = format["writer"](xmlrfc, quiet=True)
             testfunc = getattr(writer, func_name)
             postprocessing = getattr(writer, format["postprocesslines"])
             postrendering = format['postrendering']
@@ -263,7 +262,7 @@ class WriterRootTest(unittest.TestCase):
         """ Parse a minimal RFC tree and instantiate a writer """
         self.parser = xml2rfc.XmlRfcParser(path, quiet=True)
         self.xmlrfc = self.parser.parse()
-        self.writer = xml2rfc.PaginatedTextRfcWriter(self.xmlrfc, options=Values(defaults=dict(quiet=True, verbose=False, utf8=False)))
+        self.writer = xml2rfc.PaginatedTextRfcWriter(self.xmlrfc, quiet=True)
         self.writer._format_date()
         self.writer.pre_rendering()
 

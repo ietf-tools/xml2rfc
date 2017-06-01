@@ -7,7 +7,6 @@ import textwrap
 import datetime
 import lxml
 import re
-from optparse import Values
 
 try:
     import debug
@@ -16,7 +15,7 @@ except ImportError:
     pass
 
 # Local lib
-from xml2rfc.writers.base import BaseRfcWriter
+from xml2rfc.writers.base import BaseRfcWriter, default_options
 import xml2rfc.utils
 
 
@@ -26,7 +25,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, margin=3, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today()):
+    def __init__(self, xmlrfc, width=72, margin=3, quiet=None, options=default_options, date=datetime.date.today()):
+        if not quiet is None:
+            options.quiet = quiet
         BaseRfcWriter.__init__(self, xmlrfc, options=options, date=date)
         # Document processing data
         self.width = width      # Page width

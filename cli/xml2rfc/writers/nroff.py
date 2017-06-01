@@ -8,7 +8,6 @@ from __future__ import print_function
 import time
 import datetime
 import re
-from optparse import Values
 
 try:
     import debug
@@ -20,7 +19,7 @@ except ImportError:
 import xml2rfc
 from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
-from xml2rfc.writers.base import BaseRfcWriter
+from xml2rfc.writers.base import BaseRfcWriter, default_options
 
 nroff_linestart_meta = ["'", ".", ]
 
@@ -51,9 +50,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     in_list = False
 
-    def __init__(self, xmlrfc, width=72, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today()):
-        PaginatedTextRfcWriter.__init__(self, xmlrfc, width=width, \
-                                        options=options, date=date)
+    def __init__(self, xmlrfc, width=72, quiet=None, options=default_options, date=datetime.date.today()):
+        if not quiet is None:
+            options.quiet = quiet
+        PaginatedTextRfcWriter.__init__(self, xmlrfc, width=width, options=options, date=date)
         self.curr_indent = 0    # Used like a state machine to control
                                 # whether or not we print a .in command
 

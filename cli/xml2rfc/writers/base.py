@@ -17,6 +17,8 @@ try:
 except ImportError:
     pass
 
+default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False))
+
 class _RfcItem:
     """ A unique ID object for an anchored RFC element.
     
@@ -313,10 +315,10 @@ class BaseRfcWriter:
 
     # -------------------------------------------------------------------------
 
-    def __init__(self, xmlrfc, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+        if not quiet is None:
+            options.quiet = quiet
         self.options = options
-        self.quiet = options.quiet
-        self.verbose = options.verbose
         self.date = date
         self.expire_string = ''
         self.ascii = False
@@ -1318,7 +1320,7 @@ class BaseRfcWriter:
         else:
             self.write_to_file(tmpfile)
 
-        if not self.quiet and filename:
+        if not self.options.quiet and filename:
             xml2rfc.log.write('Created file', filename)
 
     def write_erefs(self, refs_counter, refs_subsection):

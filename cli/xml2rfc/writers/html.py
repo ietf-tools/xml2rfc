@@ -10,7 +10,6 @@ import string
 import sys
 import datetime
 import cgi
-from optparse import Values
 
 try:
     import debug
@@ -20,7 +19,7 @@ except ImportError:
 
 # Local libs
 import xml2rfc
-from xml2rfc.writers.base import BaseRfcWriter
+from xml2rfc.writers.base import BaseRfcWriter, default_options
 
 
 class HtmlRfcWriter(BaseRfcWriter):
@@ -33,7 +32,10 @@ class HtmlRfcWriter(BaseRfcWriter):
         'references_url': 'http://tools.ietf.org/html/',
     }
 
-    def __init__(self, xmlrfc, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today(), templates_dir=None):
+    def __init__(self, xmlrfc, quiet=None, options=default_options,
+                               date=datetime.date.today(), templates_dir=None):
+        if not quiet is None:
+            options.quiet = quiet
         BaseRfcWriter.__init__(self, xmlrfc, options=options)
         self.list_counters = {}
         self.iref_index = []
