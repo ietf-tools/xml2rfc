@@ -38,6 +38,13 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.paged_toc_marker = 0
         self.page_line = 0
         self.omit_headers = omit_headers
+        self.page_end_blank_lines = 2
+        # Don't permit less than this many lines of a broken paragrah at the
+        # top of a page:
+        self.widow_limit = 2
+        # Don't permit less than this many lines of a broken paragrah at the
+        # bottom of a page:
+        self.orphan_limit = 2
 
     def _make_footer_and_header(self, page, final=False):
         tmp = []
@@ -151,15 +158,22 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                                        level=level)
         # Reserve room for a blankline and some lines of section content
         # text, in order to prevent orphan headings
-        orphanlines = self.pis["sectionorphan"]
-        if not orphanlines.isdigit():
-            xml2rfc.log.warn('Expected a numeric value for the sectionorphan PI, found "%s"' % orphanlines)
-            orphanlines = 4
-        else:
+        #
+        # We've now written a blank line before the heading, followed by
+        # the heading.  Next will be a blank line, followed by the section
+        # content.  We thus need (begin - end) + 1 + orphan_limit lines, but
+        # if we ask for only that, we'll end up moving the text, to the next
+        # page, without moving the section heading.  So we ask for one more
+        orphanlines = self.pis.get("sectionorphan") or str(self.orphan_limit+2)
+        if orphanlines.isdigit():
             orphanlines = int(orphanlines)
-        end = len(self.buf) + orphanlines
-        self._set_break_hint(end-begin, 'raw', begin)
-                                        
+        else:
+            xml2rfc.log.warn('Expected a numeric value for the sectionorphan PI, found "%s"' % orphanlines)
+            orphanlines = self.orphan_limit+2
+        end = len(self.buf)
+        needed = end - begin + orphanlines
+        self._set_break_hint(needed, 'raw', begin)
+
 
     def pre_rendering(self):
         """ Prepares the header and footer information """
@@ -264,7 +278,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             if line_num == self.toc_marker and self.toc_marker > 0:
                 # Don't start ToC too close to the end of the page
                 if self.pis['tocpagebreak'] == 'yes' or self.page_length + 10 >= max_page_length:
-                    remainder = max_page_length - self.page_length - 2
+                    remainder = max_page_length - self.page_length - self.page_end_blank_lines
                     self.emit([''] * remainder)
                     self.page_break()
 
@@ -272,7 +286,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 toc_prev_start = len(self.output)
                 preliminary_toc = self.write_toc(paging=True)
                 for l in preliminary_toc:
-                    if self.page_length + 2 >= max_page_length:
+                    if self.page_length + self.page_end_blank_lines >= max_page_length:
                         # Store a pair of TOC pointers
                         toc_pointers.append((toc_prev_start, len(self.output)))
                         # New page
@@ -286,7 +300,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             if line_num == self.iref_marker and self.iref_marker > 0:
                 # Don't start Index too close to the end of the page
                 if self.page_length + 10 >= max_page_length:
-                    remainder = max_page_length - self.page_length - 2
+                    remainder = max_page_length - self.page_length - self.page_end_blank_lines
                     self.emit([''] * remainder)
                     self.page_break()
 
@@ -298,7 +312,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 iref_prev_start = len(self.output)
                 preliminary_iref_index = self.write_iref_index()
                 for l in preliminary_iref_index:
-                    if self.page_length + 2 >= max_page_length:
+                    if self.page_length + self.page_end_blank_lines >= max_page_length:
                         # Store a pair of pointers
                         iref_pointers.append((iref_prev_start, len(self.output)))
                         # New page
@@ -313,7 +327,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 # If this size hint exceeds the rest of the page, or is set
                 # to -1 (a forced break), insert a break.
 
-                available = max_page_length - (self.page_length + 2)
+                available = max_page_length - (self.page_length + self.page_end_blank_lines)
                 needed, text_type = self.break_hints[line_num]
 
                 blanks = 0
@@ -332,17 +346,17 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                     needed -= blanks
 
                 if (text_type == "break"
-                    or (text_type == "raw" and needed > available and needed < max_page_length-2 )):
+                    or (text_type == "raw" and needed > available and needed < max_page_length-self.page_end_blank_lines )):
                     lines_until_break = 0
 
                 elif (self.pis['autobreaks'] == 'yes'
                       and needed > available
-                      and needed < max_page_length-2
-                      and (needed-available < 2 or available < 2) ):
+                      and needed < max_page_length-self.page_end_blank_lines
+                      and (needed-available < self.widow_limit or available < self.orphan_limit) ):
                     lines_until_break = available
                     if available == needed - 1:
                         lines_until_break -= 1
-                    if lines_until_break < 2:
+                    if lines_until_break < self.page_end_blank_lines:
                         lines_until_break = 0
                     if lines_until_break > 0 and blanks > 0:
                         # put back that blank line since we are going to emit it
@@ -350,12 +364,12 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
             if lines_until_break == 0:
                 # Insert break
-                remainder = max_page_length - self.page_length - 2
+                remainder = max_page_length - self.page_length - self.page_end_blank_lines
                 self.emit([''] * remainder)
             if not self.IsFormatting(line):
                 lines_until_break -= 1
 
-            if self.page_length + 2 >= max_page_length:
+            if self.page_length + self.page_end_blank_lines >= max_page_length:
                 # New page
                 self.page_break()
 
@@ -376,7 +390,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
         # Write final footer
         if self.page_length > 1:
-            remainder = max_page_length - self.page_length - 2
+            remainder = max_page_length - self.page_length - self.page_end_blank_lines
             self.emit([''] * remainder)
         self.page_break(final=True)
         

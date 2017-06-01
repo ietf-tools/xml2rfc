@@ -591,7 +591,7 @@ class XmlRfc:
             "text-list-symbols": "o*+-",
             "toc":		"no",
             "tocappendix":	"yes",
-            "tocdepth":		3,
+            "tocdepth":		"3",
             "tocindent":	"yes",
             "tocnarrow":	"yes",
             "tocompact":	"yes",

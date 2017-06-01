@@ -73,7 +73,7 @@ class XmlRfcDummy():
             "refparent":	"References",
             "rfcedstyle":	"no",
             "rfcprocack":	"no",
-            "sectionorphan":    "5",
+            "sectionorphan":    "4",
             "slides":		"no",
             "sortrefs":		"yes",  # different from default
             "strict":		"no",

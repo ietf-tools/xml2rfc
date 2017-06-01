@@ -239,10 +239,17 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                                        autoAnchor=autoAnchor, anchor=anchor, level=level)
         # Reserve room for a blankline and some lines of section content
         # text, in order to prevent orphan headings
-
+        #
+        orphanlines = self.pis.get("sectionorphan") or str(self.orphan_limit+2)
+        if orphanlines.isdigit():
+            orphanlines = int(orphanlines)
+        else:
+            xml2rfc.log.warn('Expected a numeric value for the sectionorphan PI, found "%s"' % orphanlines)
+            orphanlines = self.orphan_limit+2
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
-        self._set_break_hint(end - begin - nr + int(self.pis["sectionorphan"]), "raw", begin)
+        needed = end - begin - nr + orphanlines
+        self._set_break_hint(needed, "raw", begin)
 
     def pre_rendering(self):
         """ Inserts an nroff header into the buffer """
