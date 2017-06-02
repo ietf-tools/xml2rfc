@@ -41,10 +41,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.page_end_blank_lines = 2
         # Don't permit less than this many lines of a broken paragrah at the
         # top of a page:
-        self.widow_limit = 2
+        self.widow_limit = self.get_numeric_pi('widowlimit', default=2)
         # Don't permit less than this many lines of a broken paragrah at the
         # bottom of a page:
-        self.orphan_limit = 2
+        self.orphan_limit = self.get_numeric_pi('orphanlimit', default=2)
 
     def _make_footer_and_header(self, page, final=False):
         tmp = []
@@ -164,12 +164,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # content.  We thus need (begin - end) + 1 + orphan_limit lines, but
         # if we ask for only that, we'll end up moving the text, to the next
         # page, without moving the section heading.  So we ask for one more
-        orphanlines = self.pis.get("sectionorphan") or str(self.orphan_limit+2)
-        if orphanlines.isdigit():
-            orphanlines = int(orphanlines)
-        else:
-            xml2rfc.log.warn('Expected a numeric value for the sectionorphan PI, found "%s"' % orphanlines)
-            orphanlines = self.orphan_limit+2
+        self.orphan_limit = self.get_numeric_pi('orphanlimit', default=self.orphan_limit)
+        orphanlines = self.get_numeric_pi('sectionorphan', default=self.orphan_limit+2)
         end = len(self.buf)
         needed = end - begin + orphanlines
         self._set_break_hint(needed, 'raw', begin)

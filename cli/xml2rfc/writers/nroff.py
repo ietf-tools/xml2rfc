@@ -240,12 +240,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # Reserve room for a blankline and some lines of section content
         # text, in order to prevent orphan headings
         #
-        orphanlines = self.pis.get("sectionorphan") or str(self.orphan_limit+2)
-        if orphanlines.isdigit():
-            orphanlines = int(orphanlines)
-        else:
-            xml2rfc.log.warn('Expected a numeric value for the sectionorphan PI, found "%s"' % orphanlines)
-            orphanlines = self.orphan_limit+2
+        orphanlines = self.get_numeric_pi('sectionorphan', default=self.orphan_limit+2)
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
         needed = end - begin - nr + orphanlines

@@ -481,6 +481,15 @@ class BaseRfcWriter:
     def parse_pi(self, pi):
         return xml2rfc.utils.parse_pi(pi, self.pis)
 
+    def get_numeric_pi(self, key, default):
+        num = self.pis.get(key, None)
+        if num is None:
+            return default
+        if not num.isdigit():
+            xml2rfc.log.warn('Expected a numeric value for the %s PI, found "%s"' % (key, num))
+            return default
+        return int(num)
+
     def _getTocIndex(self):
         return [item for item in self._index if item.toc]
         
