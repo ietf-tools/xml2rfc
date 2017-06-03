@@ -187,10 +187,12 @@ note "Verifying there's no uncommitted changes..."
 $do svn st | grep "^[AMGRD] " && die "There seems to be uncommitted changes in this working copy"
 
 note "\nUpdating the version info in $VERFILE and settings.py"
-set -x
-sed -i -r -e "/^__version__/s/'[\.0-9]+(-dev[0-9]?)?\"/'$VER'/" $VERFILE
-sed -i -r -e "/version=/s/'[\.0-9]+(-dev[0-9]?)?\"/'$VER'/" setup.py
-set +x
+sed -i -r -e "/^__version__/s/'[\.0-9]+(dev[0-9]+)?'/'$VER'/" $VERFILE
+sed -i -r -e "/version=/s/'[\.0-9]+(-dev[0-9]?)?'/'$VER'/" setup.py
+
+note "\nVerifying that we're now reporting the correct version"
+$do make install
+$do [ $(xml2rfc --version) = $VER ] || die "Xml2rfc reported the wrong version number"
 
 note "\nCommitting version information for version $VER: $MSG"
 $do svn commit $VERFILE setup.py -m "Set version info to release version $VER before tagging."
