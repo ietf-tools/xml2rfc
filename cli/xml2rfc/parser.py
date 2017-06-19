@@ -63,7 +63,7 @@ class CachingResolver(lxml.etree.Resolver):
 
         # Get directory of source
         if self.source:
-            if isinstance(self.source, type("")):
+            if isinstance(self.source, six.string_types):
                 self.source_dir = os.path.abspath(os.path.dirname(self.source))
             else:
                 self.source_dir = os.path.abspath(os.path.dirname(self.source.name))                
