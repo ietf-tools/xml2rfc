@@ -57,12 +57,12 @@ long_description += """
 Changelog
 =========
 
-""" + "\n".join([ changelog_entry_template % entry for entry in parse("changelog")[:2] ])
+""" + "\n".join([ changelog_entry_template % entry for entry in parse("changelog")[:3] ])
 
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.6.1',
+    version='2.6.2',
     author='Josh Bothun, Henrik Levkowetz ',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
@@ -95,6 +95,6 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
-    install_requires = ['lxml >=2.2.8', 'requests >=2.5.0'],
+    install_requires = ['lxml >=2.2.8', 'requests >=2.5.0', 'six', ],
     zip_safe = False,                   # We're reading templates from a package directory.
 )

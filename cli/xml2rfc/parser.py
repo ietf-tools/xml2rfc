@@ -8,6 +8,7 @@ import re
 import os
 import codecs
 import shutil
+import six
 import time
 import requests
 import lxml.etree
@@ -62,7 +63,10 @@ class CachingResolver(lxml.etree.Resolver):
 
         # Get directory of source
         if self.source:
-            self.source_dir = os.path.abspath(os.path.dirname(self.source))
+            if isinstance(self.source, type("")):
+                self.source_dir = os.path.abspath(os.path.dirname(self.source))
+            else:
+                self.source_dir = os.path.abspath(os.path.dirname(self.source.name))                
         else:
             self.source_dir = None
 
@@ -418,8 +422,14 @@ class XmlRfcParser:
         if not (self.quiet or quiet):
             xml2rfc.log.write('Parsing file', self.source)
 
+        if six.PY2:
+            self.text = open(self.source, "rU").read()
+        else:
+            self.text = six.binary_type(open(self.source, "rU").read(), 'utf8')
+
         # Get an iterating parser object
-        context = lxml.etree.iterparse(self.source,
+        file = six.BytesIO(self.text)
+        context = lxml.etree.iterparse(file,
                                       dtd_validation=False,
                                       load_dtd=True,
                                       attribute_defaults=True,
@@ -441,7 +451,7 @@ class XmlRfcParser:
                                         network_locs=self.network_locs,
                                         verbose=self.verbose,
                                         quiet=self.quiet,
-                                    )
+                                     )
         context.resolvers.add(caching_resolver)
 
         # Get hold of the rfc number (if any) in the rfc element, so we can
@@ -451,8 +461,12 @@ class XmlRfcParser:
             for action, element in context:
                 if element.tag == "rfc":
                     self.rfc_number = element.attrib.get("number", None)
+                    break
         except lxml.etree.XMLSyntaxError as e:
             xml2rfc.log.warn("Parsing Error: %s" % e)
+        except ValueError as e:
+            if e.message=="I/O operation on closed file":
+                pass
 
         # now get a regular parser, and parse again, this time resolving entities
         parser = lxml.etree.XMLParser(dtd_validation=False,
@@ -486,9 +500,10 @@ class XmlRfcParser:
         parser.set_element_class_lookup(element_lookup)
 
         # Parse the XML file into a tree and create an rfc instance
-        tree = lxml.etree.parse(self.source, parser)
+        file = six.BytesIO(self.text)
+        tree = lxml.etree.parse(file, parser)
         xmlrfc = XmlRfc(tree, self.default_dtd_path)
-        
+
         # Evaluate processing instructions before root element
         xmlrfc._eval_pre_pi()
         
