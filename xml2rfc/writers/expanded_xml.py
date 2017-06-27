@@ -6,6 +6,7 @@ import sys
 import lxml.etree
 import xml2rfc
 import datetime
+from io import open
 from xml2rfc.writers.base import default_options
 
 class ExpandedXmlWriter:
@@ -28,17 +29,13 @@ class ExpandedXmlWriter:
         """ Public method to write the XML document to a file """
 
         # Use lxml's built-in serialization
-        file = open(filename, 'w')
+        file = open(filename, 'w', encoding='ascii')
         text = lxml.etree.tostring(self.root.getroottree(), 
                                        xml_declaration=True, 
                                        encoding='ascii',
                                        doctype='<!DOCTYPE rfc SYSTEM "rfc2629.dtd">',
                                        pretty_print=True)
-
-        if sys.version > '3':
-            file.write(text.decode('ascii'))
-        else:
-            file.write(text)
+        file.write(text.decode('ascii'))
 
         if not self.options.quiet:
             xml2rfc.log.write('Created file', filename)

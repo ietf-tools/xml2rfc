@@ -100,11 +100,14 @@ utf8test: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network --utf8 tests/input/utf8.xml --base tmp/ --raw --text --nroff --html --exp
 	doc=utf8 ; postnrofffix="cat" ; type=utf8; $(CHECKOUTPUT)
 
+v2v3test: cleantmp  env/bin/python install
+	@ xml2rfc --v2v3 --utf8 tests/input/draft-flanagan-nonascii-05.xml
+
 cleantmp:
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
 
-tests: test regressiontests cachetest drafttest miektest
+tests: test regressiontests cachetest drafttest miektest v2v3test
 
 noflakestests: install pytests regressiontests
 
@@ -113,7 +116,7 @@ regressiontests: drafttest miektest rfctest
 test2:	test
 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc6635.xml --text --out tmp/rfc6635.txt	&& diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt 
 
-upload:
+upload: install
 	rst2html changelog > /dev/null	# verify that the changelog is valid rst
 	python setup.py sdist upload --sign
 	python setup.py install

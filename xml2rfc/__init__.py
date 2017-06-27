@@ -10,10 +10,10 @@ NET_SUBDIRS  = ['bibxml', 'bibxml2', 'bibxml3', 'bibxml4', 'bibxml5']
 
 from xml2rfc.parser import  XmlRfcError, CachingResolver, XmlRfcParser, XmlRfc
 from xml2rfc.writers import BaseRfcWriter, RawTextRfcWriter, PaginatedTextRfcWriter
-from xml2rfc.writers import HtmlRfcWriter, NroffRfcWriter, ExpandedXmlWriter, RfcWriterError
+from xml2rfc.writers import HtmlRfcWriter, NroffRfcWriter, ExpandedXmlWriter, RfcWriterError, V2v3XmlWriter
 
 __all__ = ['XmlRfcError', 'CachingResolver', 'XmlRfcParser', 'XmlRfc',
            'BaseRfcWriter', 'RawTextRfcWriter', 'PaginatedTextRfcWriter',
            'HtmlRfcWriter', 'NroffRfcWriter', 'ExpandedXmlWriter',
-           'RfcWriterError',]
+           'RfcWriterError', 'V2v3XmlWriter', ]
 

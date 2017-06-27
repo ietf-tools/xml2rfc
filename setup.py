@@ -92,8 +92,10 @@ setup(
     },
 
     packages=['xml2rfc', 'xml2rfc/writers'],
-    package_data={'xml2rfc': ['templates/*',
-                              ]},
+    package_data={'xml2rfc': [
+        'templates/*',
+        'data/*',
+    ]},
 
     install_requires = ['lxml >=2.2.8', 'requests >=2.5.0'],
     zip_safe = False,                   # We're reading templates from a package directory.

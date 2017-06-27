@@ -65,6 +65,8 @@ def main():
                            help='outputs to a text file, unpaginated')
     formatgroup.add_option('', '--exp', dest='exp', action='store_true',
                            help='outputs to an XML file with all references expanded')
+    formatgroup.add_option('', '--v2v3', dest='v2v3', action='store_true',
+                           help=optparse.SUPPRESS_HELP)
     optionparser.add_option_group(formatgroup)
 
 
@@ -112,8 +114,20 @@ def main():
                        )
     optionparser.add_option_group(formatoptions)
 
+    if sys.argv[0].endswith('v2v3') or True:
+        v2v3options = optparse.OptionGroup(optionparser, 'V2 to V3 Conversion Options')
+        v2v3options.add_option('--strip-pis', action='store_true', default=False,
+                            help='Strip XML processing instructions when converting to v3 vocabulary')
+        v2v3options.add_option('--entity-refs', action='store_true', default=False,
+                            help='Insert entity references instead of inline RFC and I-D reference entries')
+        v2v3options.add_option('--xinclude-refs', action='store_true', default=False,
+                            help='Insert XInclude references instead of inline RFC and I-D reference entries')
+        v2v3options.add_option('--comments', action='store_true', default=False,
+                            help='Insert comments about the conversion')
+        optionparser.add_option_group(v2v3options)
 
-    # Parse and validate arguments
+    # --- Parse and validate arguments ---------------------------------
+
     (options, args) = optionparser.parse_args()
     if len(args) < 1:
         optionparser.print_help()
@@ -121,7 +135,10 @@ def main():
     source = args[0]
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp] if o])
+    if sys.argv[0].endswith('v2v3'):
+        options.v2v3 = True
+        options.utf8 = True
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
                  'use --basename instead.')
@@ -144,7 +161,6 @@ def main():
                 print('Cache directory is not writable: %s' % options.cache)
                 sys.exit(1)
     options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
-
     if options.omit_headers and not options.text:
         sys.exit("You can only use --no-headers with paginated text output.")
 
@@ -212,6 +228,7 @@ def main():
             if not filename:
                 filename = basename + '.exp.xml'
             expwriter.write(filename)
+
         if options.html:
             htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
                                                options=options,
@@ -221,6 +238,7 @@ def main():
             if not filename:
                 filename = basename + '.html'
             htmlwriter.write(filename)
+
         if options.raw:
             rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc,
                                                  options=options,
@@ -229,6 +247,7 @@ def main():
             if not filename:
                 filename = basename + '.raw.txt'
             rawwriter.write(filename)
+
         if options.text:
             pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc,
                                                          options=options,
@@ -239,6 +258,7 @@ def main():
             if not filename:
                 filename = basename + '.txt'
             pagedwriter.write(filename)
+
         if options.nroff:
             nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc,
                                                  options=options,
@@ -247,6 +267,16 @@ def main():
             if not filename:
                 filename = basename + '.nroff'
             nroffwriter.write(filename)
+
+        if options.v2v3:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            v2v3writer = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.v2v3.xml'
+            v2v3writer.write(filename)
+
+
     except xml2rfc.RfcWriterError as e:
         xml2rfc.log.error('Unable to convert the document: ' + args[0],  
                           '\n  ' + e.msg)
