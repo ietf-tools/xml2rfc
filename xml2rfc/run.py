@@ -75,6 +75,8 @@ def main():
                             help='purge the cache and exit')
     plain_options.add_option('-H', '--pi-help', action='callback', callback=print_pi_help,
                             help='show the names and default values of PIs')
+    plain_options.add_option(      '--debug', action='store_true',
+                            help='Show debugging output')
     plain_options.add_option('-n', '--no-dtd', action='store_true',
                             help='disable DTD validation step')
     plain_options.add_option('-N', '--no-network', action='store_true', default=False,
