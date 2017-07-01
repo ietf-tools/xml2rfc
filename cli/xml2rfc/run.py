@@ -19,6 +19,14 @@ import lxml.etree
 import datetime
 
 
+try:
+    import debug
+    assert debug
+except ImportError:
+    pass
+
+
+
 def display_version(self, opt, value, parser):
     print(xml2rfc.__version__)
     sys.exit()
@@ -65,6 +73,8 @@ def main():
                            help='outputs to a text file, unpaginated')
     formatgroup.add_option('', '--exp', dest='exp', action='store_true',
                            help='outputs to an XML file with all references expanded')
+    formatgroup.add_option('', '--v2v3', dest='v2v3', action='store_true',
+                           help='convert vocabulary version 2 XML to version 3')
     optionparser.add_option_group(formatgroup)
 
 
@@ -73,6 +83,8 @@ def main():
                             help='purge the cache and exit')
     plain_options.add_option('-H', '--pi-help', action='callback', callback=print_pi_help,
                             help='show the names and default values of PIs')
+    plain_options.add_option(      '--debug', action='store_true',
+                            help='Show debugging output')
     plain_options.add_option('-n', '--no-dtd', action='store_true',
                             help='disable DTD validation step')
     plain_options.add_option('-N', '--no-network', action='store_true', default=False,
@@ -85,6 +97,8 @@ def main():
                             help='print extra information')
     plain_options.add_option('-V', '--version', action='callback', callback=display_version,
                             help='display the version number and exit')
+    plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
+                            help='Remove XML processing instructions')
     optionparser.add_option_group(plain_options)
 
 
@@ -110,18 +124,26 @@ def main():
                            help='with --text: calculate page breaks, and emit form feeds and page top'
                            ' spacing, but omit headers and footers from the paginated format'
                        )
+    formatoptions.add_option('', '--add-xinclude', action='store_true',
+                           help='with --v2v3: replace reference elements with RFC and Internet-Draft'
+                           ' seriesInfo with the appropriate XInclude element'
+                       )
     optionparser.add_option_group(formatoptions)
 
+    # --- Parse and validate arguments ---------------------------------
 
-    # Parse and validate arguments
     (options, args) = optionparser.parse_args()
+
     if len(args) < 1:
         optionparser.print_help()
         sys.exit(2)
     source = args[0]
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp] if o])
+    if sys.argv[0].endswith('v2v3'):
+        options.v2v3 = True
+        options.utf8 = True
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
                  'use --basename instead.')
@@ -144,7 +166,6 @@ def main():
                 print('Cache directory is not writable: %s' % options.cache)
                 sys.exit(1)
     options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
-
     if options.omit_headers and not options.text:
         sys.exit("You can only use --no-headers with paginated text output.")
 
@@ -158,9 +179,10 @@ def main():
                                   quiet=options.quiet,
                                   cache_path=options.cache,
                                   no_network=options.no_network,
-                                  templates_path=globals().get('_TEMPLATESPATH', None))
+                                  templates_path=globals().get('_TEMPLATESPATH', None),
+                              )
     try:
-        xmlrfc = parser.parse()
+        xmlrfc = parser.parse(remove_pis=options.remove_pis)
     except xml2rfc.parser.XmlRfcError as e:
         xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e)
         sys.exit(1)
@@ -212,6 +234,7 @@ def main():
             if not filename:
                 filename = basename + '.exp.xml'
             expwriter.write(filename)
+
         if options.html:
             htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
                                                options=options,
@@ -221,6 +244,7 @@ def main():
             if not filename:
                 filename = basename + '.html'
             htmlwriter.write(filename)
+
         if options.raw:
             rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc,
                                                  options=options,
@@ -229,6 +253,7 @@ def main():
             if not filename:
                 filename = basename + '.raw.txt'
             rawwriter.write(filename)
+
         if options.text:
             pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc,
                                                          options=options,
@@ -239,6 +264,7 @@ def main():
             if not filename:
                 filename = basename + '.txt'
             pagedwriter.write(filename)
+
         if options.nroff:
             nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc,
                                                  options=options,
@@ -247,6 +273,16 @@ def main():
             if not filename:
                 filename = basename + '.nroff'
             nroffwriter.write(filename)
+
+        if options.v2v3:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            v2v3writer = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.v2v3.xml'
+            v2v3writer.write(filename)
+
+
     except xml2rfc.RfcWriterError as e:
         xml2rfc.log.error('Unable to convert the document: ' + args[0],  
                           '\n  ' + e.msg)

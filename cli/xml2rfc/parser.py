@@ -366,6 +366,11 @@ class AnnotatedElement(lxml.etree.ElementBase):
 
 class XmlRfcParser:
 
+    nsmap = {
+        'xi':   'http://www.w3.org/2001/XInclude',
+    }
+
+
     """ XML parser container with callbacks to construct an RFC tree """
     def __init__(self, source, verbose=False, quiet=False,
                  cache_path=None, templates_path=None, library_dirs=None,
@@ -386,6 +391,9 @@ class XmlRfcParser:
                               os.path.join(os.path.dirname(xml2rfc.__file__),
                                            'templates')
         self.default_dtd_path = os.path.join(self.templates_path, 'rfc2629.dtd')
+
+        for prefix, value in self.nsmap.items():
+            lxml.etree.register_namespace(prefix, value)
 
         # If library dirs werent explicitly set, like from the gui, then try:
         #   1. $XML_LIBRARY environment variable as a delimited list
@@ -502,7 +510,7 @@ class XmlRfcParser:
         # Parse the XML file into a tree and create an rfc instance
         file = six.BytesIO(self.text)
         tree = lxml.etree.parse(file, parser)
-        xmlrfc = XmlRfc(tree, self.default_dtd_path)
+        xmlrfc = XmlRfc(tree, self.default_dtd_path, nsmap=self.nsmap)
 
         # Evaluate processing instructions before root element
         xmlrfc._eval_pre_pi()
@@ -570,9 +578,10 @@ class XmlRfc:
 
     pis = {}
 
-    def __init__(self, tree, default_dtd_path):
+    def __init__(self, tree, default_dtd_path, nsmap={}):
         self.default_dtd_path = default_dtd_path
         self.tree = tree
+        self.nsmap = nsmap
         # Pi default values
         self.pis = {
             "artworkdelimiter":	None,

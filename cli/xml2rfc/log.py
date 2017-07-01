@@ -20,13 +20,13 @@ write_err = sys.stderr
 
 def write_on_line(*args):
     """ Writes a message without ending the line, i.e. in a loading bar """
-    write_out.write(' '.join(args))
-    write_out.flush()
+    write_err.write(' '.join(args))
+    write_err.flush()
 
 def write(*args):
     """ Prints a message to write_out """
-    write_out.write(' '.join(args))
-    write_out.write('\n')
+    write_err.write(' '.join(args))
+    write_err.write('\n')
 
 def note(*args):
     if verbose and not quiet:
