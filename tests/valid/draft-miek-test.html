@@ -427,7 +427,7 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.5.3.dev0 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.6.1 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Gieben, R." />
@@ -599,17 +599,21 @@
 <p></p>
 
 <ul class="empty"><li>Note: this document is typeset in Pandoc and does not render completely correct when reading it on github.  </li></ul>
+
+<p> </p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#pandoc-to-rfc" id="pandoc-to-rfc">Pandoc to RFC</a>
 </h1>
 <p></p>
 
 <ul class="empty"><li>Pandoc2rfc -- designed to do the right thing, until it doesn't.  </li></ul>
+
+<p> </p>
 <p id="rfc.section.2.p.2">When writing <a href="#RFC4641" class="xref">[RFC4641]</a> we directly wrote the XML. Needless to say it was tedious even thought the XML of <a href="http://xml.resource.org/experimental">xml2rfc</a> is very "light". The <a href="http://pypi.python.org/pypi/xml2rfc/">latest version of xml2rfc version 2 can be found here</a>.  </p>
 <p id="rfc.section.2.p.3">During the last few years people have been developing markup languages that are very easy to remember and type. These languages have become known as <samp>almost plain text</samp>-markup languages. One of the first was the <a href="http://daringfireball.net/projects/markdown/">Markdown</a> syntax. One that was developed later and incorporates Markdown and a number of extensions is <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a>. The power of Pandoc also comes from the fact that it can be translated to numerous output formats, including, but not limited to: HTML, (plain) Markdown and <samp>docbook</samp> XML.  </p>
 <p id="rfc.section.2.p.4">So using Pandoc for writing RFCs seems like a sane choice. As <samp>xml2rfc</samp> uses XML, the easiest way would be to create <samp>docbook</samp> XML and transform that using XSLT.  Pandoc2rfc does just that. The conversions are, in some way amusing, as we start off with (almost) plain text, use elaborate XML and end up with plain text again.  </p>
 <div id="rfc.figure.1"></div>
-<div id="fig:attempt-to"></div>
+<div id="fig-attempt-to"></div>
 <pre>
 +-------------------+   pandoc   +---------+  
 | ALMOST PLAIN TEXT |   ------&gt;  | DOCBOOK |  
@@ -623,9 +627,9 @@ non-existent  |                       | xsltproc
       +------------+             +---------+ 
 </pre>
 <p class="figure">Figure 1: Attempt to justify Pandoc2rfc.</p>
-<p id="rfc.section.2.p.5">The XML generated (the output after the <samp>xsltproc</samp> step in <a href="#fig:attempt-to" class="xref">Figure 1</a>) is suitable for inclusion in either the <samp>middle</samp> or <samp>back</samp> section of an RFC. The simplest way is to create a template XML file and include the appropriate XML: </p>
+<p id="rfc.section.2.p.5">The XML generated (the output after the <samp>xsltproc</samp> step in <a href="#fig-attempt-to" class="xref">Figure 1</a>) is suitable for inclusion in either the <samp>middle</samp> or <samp>back</samp> section of an RFC. The simplest way is to create a template XML file and include the appropriate XML: </p>
 <div id="rfc.figure.2"></div>
-<div id="fig:a-minimal-"></div>
+<div id="fig-a-minimal-"></div>
 <pre>
 &lt;?xml version='1.0' ?&gt;
 &lt;!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
@@ -910,7 +914,7 @@ Like this
 <li>Spaces and single quotes (') are translated to a minus <samp>-</samp>; </li>
 <li>Uppercase letters translated to lowercase.  </li>
 </ul>
-<p id="rfc.section.7.4.1.p.3">So the first artwork with a caption will get <samp>fig:a-minimal-</samp> as a reference. See for instance <a href="#fig:a-minimal-" class="xref">Figure 2</a>.  </p>
+<p id="rfc.section.7.4.1.p.3">So the first artwork with a caption will get <samp>fig:a-minimal-</samp> as a reference. See for instance <a href="#fig-a-minimal-" class="xref">Figure 2</a>.  </p>
 <p id="rfc.section.7.4.1.p.4">This anchoring is completely handled from within the <samp>xslt</samp>. Note that duplicate anchors are an XML validation error which will make <samp>xml2rfc</samp> fail.  </p>
 <h1 id="rfc.section.7.5">
 <a href="#rfc.section.7.5">7.5.</a> <a href="#block-quote" id="block-quote">Block Quote</a>
@@ -959,7 +963,7 @@ See [](#pandoc-constructs)
 </h1>
 <p id="rfc.section.7.8.p.1">A table can be entered as: </p>
 <div id="rfc.figure.3"></div>
-<div id="fig:a-caption-"></div>
+<div id="fig-a-caption-"></div>
 <pre>
   Right     Left     Center     Default                                                                  
   -------   ------ ----------   -------                                                                  
@@ -1092,7 +1096,7 @@ jkasjksajassjasjsajsajkas
 <h1 id="rfc.appendix.A.5">
 <a href="#rfc.appendix.A.5">A.5.</a> <a href="#reference-tests" id="reference-tests">Reference Tests</a>
 </h1>
-<p id="rfc.section.A.5.p.1">Refer to <a href="#RFC2119" class="xref">RFC 2119</a> if you will. Or maybe you want to inspect <a href="#fig:a-minimal-" class="xref">Figure 2</a> in <a href="#pandoc-to-rfc" class="xref">Section 2</a> again. Or you might want to <a href="http://miek.nl">Click here</a>.  </p>
+<p id="rfc.section.A.5.p.1">Refer to <a href="#RFC2119" class="xref">RFC 2119</a> if you will. Or maybe you want to inspect <a href="#fig-a-minimal-" class="xref">Figure 2</a> in <a href="#pandoc-to-rfc" class="xref">Section 2</a> again. Or you might want to <a href="http://miek.nl">Click here</a>.  </p>
 <h1 id="rfc.appendix.A.6">
 <a href="#rfc.appendix.A.6">A.6.</a> <a href="#spanx-tests" id="spanx-tests">Spanx Tests</a>
 </h1>
@@ -1406,7 +1410,7 @@ See [](#tab:here-s-the)
 <a href="#rfc.appendix.A.10">A.10.</a> <a href="#figure-tests" id="figure-tests">Figure tests</a>
 </h1>
 <div id="rfc.figure.4"></div>
-<div id="fig:this-is-th"></div>
+<div id="fig-this-is-th"></div>
 <pre>
 This is a figure
 This is a figure
@@ -1416,7 +1420,7 @@ This is a figure
 <p class="figure">Figure 4: This is the caption, with text in `typewriter`. Which isnt converted to a &lt;spanx&gt; style, because this is copied as-is.</p>
 <p id="rfc.section.A.10.p.1">And how a figure that is not centered, do to using <samp>figure</samp> and not <samp>Figure</samp>.  </p>
 <div id="rfc.figure.5"></div>
-<div id="fig:a-non-cent"></div>
+<div id="fig-a-non-cent"></div>
 <pre>
 This is a figure
 This is a figure

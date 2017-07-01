@@ -50,22 +50,14 @@
       <t>This document presents a technique for using Pandoc syntax as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  </t>
       <t>This version is adapted to work with <spanx style="verb" xml:space="preserve">xml2rfc</spanx> version 2.x.  </t>
       <t>Pandoc is an "almost plain text" format and therefor particularly well suited for editing RFC-like documents.  </t>
-      <t>
-        <list style="empty">
-          <t>Note: this document is typeset in Pandoc and does not render completely correct when reading it on github.  </t>
-        </list>
-      </t>
+      <t><list style="empty"><t>Note: this document is typeset in Pandoc and does not render completely correct when reading it on github.  </t></list> </t>
     </section>
     <section title="Pandoc to RFC" anchor="pandoc-to-rfc" toc="default" numbered="true">
-      <t>
-        <list style="empty">
-          <t>Pandoc2rfc -- designed to do the right thing, until it doesn't.  </t>
-        </list>
-      </t>
+      <t><list style="empty"><t>Pandoc2rfc -- designed to do the right thing, until it doesn't.  </t></list> </t>
       <t>When writing <xref target="RFC4641" pageno="false" format="default"/> we directly wrote the XML. Needless to say it was tedious even thought the XML of <eref target="http://xml.resource.org/experimental">xml2rfc</eref> is very "light". The <eref target="http://pypi.python.org/pypi/xml2rfc/">latest version of xml2rfc version 2 can be found here</eref>.  </t>
       <t>During the last few years people have been developing markup languages that are very easy to remember and type. These languages have become known as <spanx style="verb" xml:space="preserve">almost plain text</spanx>-markup languages. One of the first was the <eref target="http://daringfireball.net/projects/markdown/">Markdown</eref> syntax. One that was developed later and incorporates Markdown and a number of extensions is <eref target="http://johnmacfarlane.net/pandoc/">Pandoc</eref>. The power of Pandoc also comes from the fact that it can be translated to numerous output formats, including, but not limited to: HTML, (plain) Markdown and <spanx style="verb" xml:space="preserve">docbook</spanx> XML.  </t>
       <t>So using Pandoc for writing RFCs seems like a sane choice. As <spanx style="verb" xml:space="preserve">xml2rfc</spanx> uses XML, the easiest way would be to create <spanx style="verb" xml:space="preserve">docbook</spanx> XML and transform that using XSLT.  Pandoc2rfc does just that. The conversions are, in some way amusing, as we start off with (almost) plain text, use elaborate XML and end up with plain text again.  </t>
-      <figure anchor="fig:attempt-to" align="center" title="Attempt to justify Pandoc2rfc." suppress-title="false" alt="" width="" height="">
+      <figure anchor="fig-attempt-to" align="center" title="Attempt to justify Pandoc2rfc." suppress-title="false" alt="" width="" height="">
         <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 +-------------------+   pandoc   +---------+  
 | ALMOST PLAIN TEXT |   ------&gt;  | DOCBOOK |  
@@ -79,8 +71,8 @@ non-existent  |                       | xsltproc
       +------------+             +---------+ 
 </artwork>
       </figure>
-      <t>The XML generated (the output after the <spanx style="verb" xml:space="preserve">xsltproc</spanx> step in <xref target="fig:attempt-to" pageno="false" format="default"/>) is suitable for inclusion in either the <spanx style="verb" xml:space="preserve">middle</spanx> or <spanx style="verb" xml:space="preserve">back</spanx> section of an RFC. The simplest way is to create a template XML file and include the appropriate XML: </t>
-      <figure anchor="fig:a-minimal-" align="center" title="A minimal template.xml." suppress-title="false" alt="" width="" height="">
+      <t>The XML generated (the output after the <spanx style="verb" xml:space="preserve">xsltproc</spanx> step in <xref target="fig-attempt-to" pageno="false" format="default"/>) is suitable for inclusion in either the <spanx style="verb" xml:space="preserve">middle</spanx> or <spanx style="verb" xml:space="preserve">back</spanx> section of an RFC. The simplest way is to create a template XML file and include the appropriate XML: </t>
+      <figure anchor="fig-a-minimal-" align="center" title="A minimal template.xml." suppress-title="false" alt="" width="" height="">
         <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 &lt;?xml version='1.0' ?&gt;
 &lt;!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
@@ -330,7 +322,7 @@ Like this
               <t>Uppercase letters translated to lowercase.  </t>
             </list>
           </t>
-          <t>So the first artwork with a caption will get <spanx style="verb" xml:space="preserve">fig:a-minimal-</spanx> as a reference. See for instance <xref target="fig:a-minimal-" pageno="false" format="default"/>.  </t>
+          <t>So the first artwork with a caption will get <spanx style="verb" xml:space="preserve">fig:a-minimal-</spanx> as a reference. See for instance <xref target="fig-a-minimal-" pageno="false" format="default"/>.  </t>
           <t>This anchoring is completely handled from within the <spanx style="verb" xml:space="preserve">xslt</spanx>. Note that duplicate anchors are an XML validation error which will make <spanx style="verb" xml:space="preserve">xml2rfc</spanx> fail.  </t>
         </section>
       </section>
@@ -383,7 +375,7 @@ See [](#pandoc-constructs)
       </section>
       <section title="Tables" anchor="tables" toc="default" numbered="true">
         <t>A table can be entered as: </t>
-        <figure anchor="fig:a-caption-" align="center" title="A caption describing the figure describing the table." suppress-title="false" alt="" width="" height="">
+        <figure anchor="fig-a-caption-" align="center" title="A caption describing the figure describing the table." suppress-title="false" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
   Right     Left     Center     Default                                                                  
   -------   ------ ----------   -------                                                                  
@@ -560,7 +552,7 @@ jkasjksajassjasjsajsajkas
         </figure>
       </section>
       <section title="Reference Tests" anchor="reference-tests" toc="default" numbered="true">
-        <t>Refer to <xref target="RFC2119" pageno="false" format="default">RFC 2119</xref> if you will. Or maybe you want to inspect <xref target="fig:a-minimal-" pageno="false" format="default"/> in <xref target="pandoc-to-rfc" pageno="false" format="default"/> again. Or you might want to <eref target="http://miek.nl">Click here</eref>.  </t>
+        <t>Refer to <xref target="RFC2119" pageno="false" format="default">RFC 2119</xref> if you will. Or maybe you want to inspect <xref target="fig-a-minimal-" pageno="false" format="default"/> in <xref target="pandoc-to-rfc" pageno="false" format="default"/> again. Or you might want to <eref target="http://miek.nl">Click here</eref>.  </t>
       </section>
       <section title="Spanx Tests" anchor="spanx-tests" toc="default" numbered="true">
         <t>
@@ -769,7 +761,7 @@ See [](#tab:here-s-the)
         <t>as (1) shows...  </t>
       </section>
       <section title="Figure tests" anchor="figure-tests" toc="default" numbered="true">
-        <figure anchor="fig:this-is-th" align="center" title="This is the caption, with text in `typewriter`. Which isnt converted to a &lt;spanx&gt; style, because this is copied as-is." suppress-title="false" alt="" width="" height="">
+        <figure anchor="fig-this-is-th" align="center" title="This is the caption, with text in `typewriter`. Which isnt converted to a &lt;spanx&gt; style, because this is copied as-is." suppress-title="false" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 This is a figure
 This is a figure
@@ -778,7 +770,7 @@ This is a figure
 </artwork>
         </figure>
         <t>And how a figure that is not centered, do to using <spanx style="verb" xml:space="preserve">figure</spanx> and not <spanx style="verb" xml:space="preserve">Figure</spanx>.  </t>
-        <figure anchor="fig:a-non-cent" title="A non centered figure." suppress-title="false" align="left" alt="" width="" height="">
+        <figure anchor="fig-a-non-cent" title="A non centered figure." suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 This is a figure
 This is a figure
