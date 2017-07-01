@@ -39,8 +39,8 @@ pytests:
 
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
-	for type in .raw.txt .txt .nroff .html .exp.xml ; do					\
-	diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for $$doc$$type output"; exit 1; } \
+	for type in .raw.txt .txt .nroff .html .exp.xml .v2v3.xml ; do					\
+	  diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for $$doc$$type output"; exit 1; } \
 	done ; if [ $$type = ascii ]; then echo "Diff nroff output with xml2rfc output:";\
 	diff -I '$(datetime_regex)' -I '$(version_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
 
@@ -48,13 +48,15 @@ CHECKOUTPUT=	\
 #
 # Generic rules
 
-%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt
+%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test
 	@echo "Diffing .nroff.txt against "
 	doc=$(basename $@); diff -I '$(datetime_regex)' -I '$(version_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
+	@echo checking v3 validity
+	doc=$(basename $@); xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.v2v3.xml
 
-tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt tests/out/%.exp.xml: tests/input/%.xml install
+tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml: tests/input/%.xml install
 	@ echo "\nProcessing $<"
-	xml2rfc --cache tests/cache --no-network $< --base tests/out/ --raw --text --nroff --html --exp
+	xml2rfc --cache tests/cache --no-network $< --base tests/out/ --raw --text --nroff --html --exp --v2v3
 
 %.test: %
 	@echo "Diffing $< against master"
@@ -66,11 +68,11 @@ tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out
 # ----------------------------------------------------------------------
 
 drafttest: cleantmp install
-	@ xml2rfc --cache tests/cache --no-network tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
+	@ xml2rfc --cache tests/cache --no-network tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp --v2v3
 	doc=draft-template ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 miektest: cleantmp install
-	@ xml2rfc --cache tests/cache --no-network tests/input/draft-miek-test.xml --base tmp/ --raw --text --nroff --html --exp
+	@ xml2rfc --cache tests/cache --no-network tests/input/draft-miek-test.xml --base tmp/ --raw --text --nroff --html --exp --v2v3
 	doc=draft-miek-test ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 cachetest: cleantmp install
@@ -85,29 +87,29 @@ cachetest: cleantmp install
 rfctest: cleantmp env/bin/python install $(rfctests)
 
 # rfctest: cleantmp env/bin/python install $(rfctests)
-# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
+# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp --v2v3
 # 	doc=rfc6787 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
-# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc7754.edited.xml --base tmp/ --raw --text --nroff --html --exp
+# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc7754.edited.xml --base tmp/ --raw --text --nroff --html --exp --v2v3
 # 	doc=rfc7754.edited ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
-# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc7911.xml --base tmp/ --raw --text --nroff --html --exp
+# 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc7911.xml --base tmp/ --raw --text --nroff --html --exp --v2v3
 # 	doc=rfc7911 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
 
 unicodetest: cleantmp  env/bin/python install
-	@ xml2rfc --cache tests/cache --no-network tests/input/unicode.xml --base tmp/ --raw --text --nroff --html --exp
+	@ xml2rfc --cache tests/cache --no-network tests/input/unicode.xml --base tmp/ --raw --text --nroff --html --exp --v2v3
 	doc=unicode ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 utf8test: cleantmp  env/bin/python install
-	@ xml2rfc --cache tests/cache --no-network --utf8 tests/input/utf8.xml --base tmp/ --raw --text --nroff --html --exp
+	@ xml2rfc --cache tests/cache --no-network --utf8 tests/input/utf8.xml --base tmp/ --raw --text --nroff --html --exp --v2v3
 	doc=utf8 ; postnrofffix="cat" ; type=utf8; $(CHECKOUTPUT)
-
-v2v3test: cleantmp  env/bin/python install
-	@ xml2rfc --v2v3 --utf8 tests/input/draft-flanagan-nonascii-05.xml
 
 cleantmp:
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
+	[ -d tests/out ] || mkdir -p tests/out
+	[ -d tests/out ] && rm -f tests/out/* && cp xml2rfc/templates/rfc2629* tests/out/
 
-tests: test regressiontests cachetest drafttest miektest v2v3test
+
+tests: test regressiontests cachetest drafttest miektest
 
 noflakestests: install pytests regressiontests
 
