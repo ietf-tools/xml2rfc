@@ -2,7 +2,6 @@
 # Copyright The IETF Trust 2011, All Rights Reserved
 # --------------------------------------------------
 
-import sys
 import lxml.etree
 import xml2rfc
 import datetime
