@@ -19,6 +19,14 @@ import lxml.etree
 import datetime
 
 
+try:
+    import debug
+    assert debug
+except ImportError:
+    pass
+
+
+
 def display_version(self, opt, value, parser):
     print(xml2rfc.__version__)
     sys.exit()
@@ -66,7 +74,7 @@ def main():
     formatgroup.add_option('', '--exp', dest='exp', action='store_true',
                            help='outputs to an XML file with all references expanded')
     formatgroup.add_option('', '--v2v3', dest='v2v3', action='store_true',
-                           help=optparse.SUPPRESS_HELP)
+                           help='convert vocabulary version 2 XML to version 3')
     optionparser.add_option_group(formatgroup)
 
 
@@ -89,6 +97,8 @@ def main():
                             help='print extra information')
     plain_options.add_option('-V', '--version', action='callback', callback=display_version,
                             help='display the version number and exit')
+    plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
+                            help='Remove XML processing instructions')
     optionparser.add_option_group(plain_options)
 
 
@@ -114,23 +124,16 @@ def main():
                            help='with --text: calculate page breaks, and emit form feeds and page top'
                            ' spacing, but omit headers and footers from the paginated format'
                        )
+    formatoptions.add_option('', '--add-xinclude', action='store_true',
+                           help='with --v2v3: replace reference elements with RFC and Internet-Draft'
+                           ' seriesInfo with the appropriate XInclude element'
+                       )
     optionparser.add_option_group(formatoptions)
-
-    if sys.argv[0].endswith('v2v3') or True:
-        v2v3options = optparse.OptionGroup(optionparser, 'V2 to V3 Conversion Options')
-        v2v3options.add_option('--strip-pis', action='store_true', default=False,
-                            help='Strip XML processing instructions when converting to v3 vocabulary')
-        v2v3options.add_option('--entity-refs', action='store_true', default=False,
-                            help='Insert entity references instead of inline RFC and I-D reference entries')
-        v2v3options.add_option('--xinclude-refs', action='store_true', default=False,
-                            help='Insert XInclude references instead of inline RFC and I-D reference entries')
-        v2v3options.add_option('--comments', action='store_true', default=False,
-                            help='Insert comments about the conversion')
-        optionparser.add_option_group(v2v3options)
 
     # --- Parse and validate arguments ---------------------------------
 
     (options, args) = optionparser.parse_args()
+
     if len(args) < 1:
         optionparser.print_help()
         sys.exit(2)
@@ -176,9 +179,10 @@ def main():
                                   quiet=options.quiet,
                                   cache_path=options.cache,
                                   no_network=options.no_network,
-                                  templates_path=globals().get('_TEMPLATESPATH', None))
+                                  templates_path=globals().get('_TEMPLATESPATH', None),
+                              )
     try:
-        xmlrfc = parser.parse()
+        xmlrfc = parser.parse(remove_pis=options.remove_pis)
     except xml2rfc.parser.XmlRfcError as e:
         xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e)
         sys.exit(1)
