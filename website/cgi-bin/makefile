@@ -1,6 +1,7 @@
 DIR=cgi-bin
 PUB= $$HOME/public_html/$(DIR)
-INS= cat.cgi xml2rfc-dev.cgi xml2rfc.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi kramdown.cgi kramdown-version.cgi nph-reanchor.cgi
+INS= cat.cgi xml2rfc-dev.cgi xml2rfc.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi kramdown.cgi kramdown-version.cgi \
+	nph-reanchor.cgi id2xml.cgi id2xml-version.cgi
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= 
 

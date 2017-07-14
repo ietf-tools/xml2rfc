@@ -57,6 +57,7 @@ txt		xml2rfc --text > text
 unpg		xml2rfc --raw > unpg
 nroff		xml2rfc --nroff > nroff
 xml		xml2rfc --exp > xml
+v3xml           xml2rfc --v2v3 > xml
 html		xml2rfc --html > html
 htmlxslt	xml2rfc --exp > xml, xslt process > html
 htmlrfcmarkup	xml2rfc --text > text, rfcmarkup > html
@@ -83,7 +84,7 @@ html*/mobi	ebook-convert < html* > mobi
 COMMENT
 
 my @inputtypes = ('xml2rfc', 'kramdown');
-my @modes = ('txt', 'unpg', 'html', 'htmlxslt', 'htmlrfcmarkup', 'nr', 'xml');
+my @modes = ('txt', 'unpg', 'html', 'htmlxslt', 'htmlrfcmarkup', 'nr', 'v3xml', 'xml');
 my @formats = ('ascii',  'pdf',  'epub', 'mobi',  'rtf',  'ps');
 
 umask(0);
@@ -130,6 +131,7 @@ my %expandedModes = (
     htmlrfcmarkup => "HTML via RfcMarkup",
     nr => "Nroff",
     unpg => "Unpaginated Text",
+    v3xml => "V3 XML",
     xml => "XML"
     );
 my %expandedFormats = (
@@ -148,6 +150,7 @@ my %extensions = (
     nr => 'nr',
     unpg => 'unpg',
     xml => 'xml',
+    v3xml => 'xml',
     pdf => 'pdf',
     epub => 'epub',
     mobi => 'mobi',
@@ -163,6 +166,7 @@ my %xml2rfc2modes = (
     ps => 'text',
     txt => 'text',
     unpg => 'raw',
+    v3xml => 'v2v3',
     xml => 'exp',
     );
 
@@ -177,7 +181,7 @@ saveTracePass("Generating $expandedModes{$mode} output in $expandedFormats{$form
 ####### # pass 0 - environment
 ####### #	change directory
 ####### #	set environment variables
-####### #	if mode == xml
+####### #	if mode == xml or v3xml
 ####### #		type = tofile
 ####### ########################### #######
 
@@ -218,7 +222,7 @@ foreach my $dtdFile ('rfc2629-other.ent', 'rfc2629-xhtml.ent', 'rfc2629.dtd', 'r
 }
 
 # force xml to go to a file instead of the window
-$type = 'tofile' if (($type eq 'towindow') && ($mode eq 'xml'));
+$type = 'tofile' if (($type eq 'towindow') && (($mode eq 'xml') || ($mode eq 'v3xml')));
 
 my $newinputfn = setSubTempFile("$basename.xml");
 my $ret = rename($inputfn, $newinputfn);
@@ -268,6 +272,10 @@ given ($mode) {
     }
     when("xml") {
 	my $tmpout = callXml2rfc("xml", "exp");
+	$curfile = $tmpout;
+    }
+    when("v3xml") {
+	my $tmpout = callXml2rfc("xml", "v2v3");
 	$curfile = $tmpout;
     }
     when("html") {
@@ -454,7 +462,7 @@ if ($type eq 'towindow') {
     my $KEEP = keepTempFile($curfile, "$inputfn-6." . getExtension($curfile), $debug);
     printHeaders("text/html");
     print "<html><head><title>XML2RFC Processor with Warnings &amp; Errors</title></head>\n";
-    my $rows = (($format eq 'ascii') && ($mode ne 'xml')) ? '25%,*' : '50%,*';
+    my $rows = (($format eq 'ascii') && ($mode ne 'xml') && ($mode ne 'v3xml')) ? '25%,*' : '50%,*';
     print "<frameset rows='$rows'>\n";
     print "<frame src='cat.cgi?input=" . encryptFileName($TMPTRACE) . "'/>\n";
     print "<frame src='cat.cgi/$outputfn?input=" . encryptFileName($KEEP) . "'/>\n";
@@ -731,23 +739,32 @@ sub printHeaders {
 sub getContentType {
     my $mode = shift;
     my $format = shift;
-    if ($format eq 'ascii') {
-	if ($mode eq 'txt') { return "text/plain"; }
-	if ($mode =~ /^html/) { return "text/html"; }
-	if ($mode eq 'xml') { return "text/xml"; }
-	return "text/plain";	# nr, unpg
-    } elsif ($format eq 'pdf') {
-	return "application/pdf";
-    } elsif ($format eq 'epub') {
-	return "application/epub+zip";
-    } elsif ($format eq 'mobi') {
-	return "application/x-mobipocket-ebook";
-    } elsif ($format eq 'rtf') {
-	return "application/rtf";
-    } elsif ($format eq 'ps') {
-	return "application/postscript";
-    } else {
-	return "application/octet-stream";
+    given ($format) {
+	when ($format eq 'ascii') {
+	    if ($mode eq 'txt') { return "text/plain"; }
+	    if ($mode =~ /^html/) { return "text/html"; }
+	    if ($mode eq 'xml') { return "text/xml"; }
+	    if ($mode eq 'v3xml') { return "text/xml"; }
+	    return "text/plain";	# nr, unpg
+	}
+	when ('pdf') {
+	    return "application/pdf";
+	}
+	when ('epub') {
+	    return "application/epub+zip";
+	}
+	when ('mobi') {
+	    return "application/x-mobipocket-ebook";
+	}
+	when ('rtf') {
+	    return "application/rtf";
+	}
+	when ('ps') {
+	    return "application/postscript";
+	}
+	default {
+	    return "application/octet-stream";
+	}
     }
 }
 
