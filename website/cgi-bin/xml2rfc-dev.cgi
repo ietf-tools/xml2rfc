@@ -109,6 +109,10 @@ my $url = $q->param('url');
 printHeaders("text/plain") if $debug;
 print "input='$input', inputfn='$inputfn'\n" if $debug;
 if (($input eq '') || ($inputfn eq '')) {
+    if ($ENV{XML2RFC_URL}) {
+        print "Using ENV{XML2RFC_URL}\n" if $debug;
+        $url = $ENV{XML2RFC_URL};
+    }
     userError("No input file") if ($url eq '');
     print "Getting URL=" . untaint($url) . "\n" if $debug;
     my ($content, $err) = wget($url);
@@ -120,6 +124,10 @@ if (($input eq '') || ($inputfn eq '')) {
 
 my $inputfndir = "$inputfn.dir";
 my $modeAsFormat = $q->param('modeAsFormat');
+if ($ENV{XML2RFC_MODEASFORMAT}) {
+    print "using ENV{XML2RFC_MODEASFORMAT}\n" if $debug;
+    $modeAsFormat = $ENV{XML2RFC_MODEASFORMAT};
+}
 if ($modeAsFormat =~ m((.*)/(.*))) {
    $q->param('mode', $1);
    $q->param('format', $2);

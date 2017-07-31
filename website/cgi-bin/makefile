@@ -2,7 +2,7 @@ DIR=cgi-bin
 PUB= $$HOME/public_html/$(DIR)
 NOCGI=  xml2rfc-dev.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi kramdown-version.cgi \
 	nph-reanchor.cgi id2xml-version.cgi \
-	github2ascii.cgi github2html.cgi
+	github2text.cgi github2html.cgi
 INS=$(NOCGI) cat.cgi xml2rfc.cgi kramdown.cgi id2xml.cgi
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= 

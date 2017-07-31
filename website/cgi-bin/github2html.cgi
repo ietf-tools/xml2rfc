@@ -10,8 +10,9 @@ $fn =~ s(/../)(/)g;
 $fn =~ s/['"]//gi;
 
 print("Content-type: text/html\n\n");
-print("<meta http-equiv='refresh' content='0;URL=/cgi-bin/xml2rfc-dev.cgi?url=https://raw.githubusercontent.com/$fn?modeAsFormat=html/ascii'>\n");
-
+$ENV{XML2RFC_URL} = "https://raw.githubusercontent.com/$fn";
+$ENV{XML2RFC_MODEASFORMAT} = 'html/ascii';
+system("./xml2rfc-dev.cgi");
 
 ####### use a given pattern to untaint a value
 ####### default to the entire value
