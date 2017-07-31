@@ -9,7 +9,6 @@ $fn =~ s(^/*)();
 $fn =~ s(/../)(/)g;
 $fn =~ s/['"]//gi;
 
-print("Content-type: text/html\n\n");
 $ENV{XML2RFC_URL} = "https://raw.githubusercontent.com/$fn";
 $ENV{XML2RFC_MODEASFORMAT} = 'txt/ascii';
 system("./xml2rfc-dev.cgi");
