@@ -416,7 +416,7 @@ print "at end of second pass, curfile=$curfile\n" if $debug;
 
 
 if ($type eq 'towindow') {
-    printHeaders(getContentType($mode, $format));
+    printHeaders(getContentType($mode, $format), "Content-Disposition: inline; filename=\"$outputfn\"");
     catFile($curfile);
 } elsif ($type eq 'toframe') {
     my $TMPTRACE = "$inputfn-5.html";

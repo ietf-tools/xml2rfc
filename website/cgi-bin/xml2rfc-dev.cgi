@@ -23,6 +23,21 @@ my @filesToRemove;
 my @dirsToRemove;
 my %fileValues;
 
+# set environment
+$ENV{PATH} = "/usr/bin:/bin";
+$ENV{DOCUMENT_ROOT} = 'web' if !defined($ENV{DOCUMENT_ROOT});
+$ENV{SERVER_ADMIN} = 'tony@att.com';
+# $ENV{HOME} = "/var/tmp";
+# $ENV{HOME} = "/home/tonyh";
+$ENV{LANG} = "en_US";
+$ENV{KRAMDOWN_SAFE} = "y";
+$ENV{KRAMDOWN_REFCACHEDIR} = "/var/tmp/.refcache";
+
+$ENV{XML_LIBRARY} = "$dir/web/public/rfc/bibxml";
+foreach my $bibxml (<$dir/web/public/rfc/bibxml?>) {
+    $ENV{XML_LIBRARY} .= ":$bibxml";
+}
+
 <<COMMENT;
 ########################### #######
  Process an xml2rfc HTTP request
@@ -195,21 +210,6 @@ if ($dir =~ /\/cgi-bin$/) {
     print "in '$dir'\n" if $debug;
 }
 my $tmpdir = dirname($inputfn);
-
-# set environment
-$ENV{PATH} = "/usr/bin:/bin";
-$ENV{DOCUMENT_ROOT} = 'web' if !defined($ENV{DOCUMENT_ROOT});
-$ENV{SERVER_ADMIN} = 'tony@att.com';
-# $ENV{HOME} = "/var/tmp";
-# $ENV{HOME} = "/home/tonyh";
-$ENV{LANG} = "en_US";
-$ENV{KRAMDOWN_SAFE} = "y";
-$ENV{KRAMDOWN_REFCACHEDIR} = "/var/tmp/.refcache";
-
-$ENV{XML_LIBRARY} = "$dir/web/public/rfc/bibxml";
-foreach my $bibxml (<$dir/web/public/rfc/bibxml?>) {
-    $ENV{XML_LIBRARY} .= ":$bibxml";
-}
 
 # link/copy files needed in order to convert files
 foreach my $dtdFile ('rfc2629-other.ent', 'rfc2629-xhtml.ent', 'rfc2629.dtd', 'rfc2629.xslt') {
@@ -448,7 +448,7 @@ print "at end of second pass, curfile=$curfile\n" if $debug;
 
 
 if ($type eq 'towindow') {
-    printHeaders(getContentType($mode, $format));
+    printHeaders(getContentType($mode, $format), "Content-Disposition: inline; filename=\"$outputfn\"");
     catFile($curfile);
 } elsif ($type eq 'toframe') {
     my $TMPTRACE = "$inputfn-5.html";

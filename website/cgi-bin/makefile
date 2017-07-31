@@ -1,7 +1,9 @@
 DIR=cgi-bin
 PUB= $$HOME/public_html/$(DIR)
-INS= cat.cgi xml2rfc-dev.cgi xml2rfc.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi kramdown.cgi kramdown-version.cgi \
-	nph-reanchor.cgi id2xml.cgi id2xml-version.cgi
+NOCGI=  xml2rfc-dev.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi kramdown-version.cgi \
+	nph-reanchor.cgi id2xml-version.cgi \
+	github2ascii.cgi github2html.cgi
+INS=$(NOCGI) cat.cgi xml2rfc.cgi kramdown.cgi id2xml.cgi
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= 
 
@@ -11,7 +13,14 @@ install: all
 	@for i in $(INS); do \
 	    if [ $$i -nt $(WEB)/$$i -o ! -f $(WEB)/$$i ];then \
 	        echo cp $$i $(WEB)/$$i; \
-	        chmod a+x $$i && cp $$i $(WEB)/$$i; \
+	        chmod a+x $$i && cp $$i $(WEB)/$$i ; \
+	    fi; \
+	done
+	@for i in $(NOCGI); do \
+	    b=`basename $$i .cgi`; \
+	    if [ $$i -nt $(WEB)/$$b -o ! -f $(WEB)/$$b ];then \
+	        echo cp $$i $(WEB)/$$b; \
+	        chmod a+x $$i && cp $$i $(WEB)/$$b ; \
 	    fi; \
 	done
 
