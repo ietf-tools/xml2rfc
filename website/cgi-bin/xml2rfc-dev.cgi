@@ -133,9 +133,10 @@ if ($modeAsFormat =~ m((.*)/(.*))) {
    $q->param('mode', $1);
    $q->param('format', $2);
 }
-if ($ENV{XML2RFC_INPUT}) {
+# TODO here: look at $input for .mk?d/.xml
+if ($ENV{XML2RFC_INPUTTYPE}) {
     print "using ENV{XML2RFC_INPUT}\n" if $debug;
-    $q->param('input', $ENV{XML2RFC_INPUT});
+    $q->param('inputtype', $ENV{XML2RFC_INPUTTYPE});
 }
 my $inputtype = checkValue('inputtype', @inputtypes);
 my $mode = checkValue('mode', @modes);

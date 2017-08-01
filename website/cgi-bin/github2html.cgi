@@ -15,9 +15,9 @@ if ($fn eq '') {
     print "You lose. No path information provided\n";
 } else {
     if ($fn =~ /[.]mk?d/) {
-        $ENV{XML2RFC_INPUT} = 'kramdown';
+        $ENV{XML2RFC_INPUTTYPE} = 'kramdown';
     } else {
-        $ENV{XML2RFC_INPUT} = 'xml2rfc';
+        $ENV{XML2RFC_INPUTTYPE} = 'xml2rfc';
     }
     $ENV{XML2RFC_MODEASFORMAT} = 'html/ascii';
     system("./xml2rfc-dev.cgi");
