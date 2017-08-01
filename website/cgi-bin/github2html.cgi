@@ -10,11 +10,20 @@ $fn =~ s(/../)(/)g;
 $fn =~ s/['"]//gi;
 
 $ENV{XML2RFC_URL} = "https://raw.githubusercontent.com/$fn";
-$ENV{XML2RFC_MODEASFORMAT} = 'html/ascii';
-system("./xml2rfc-dev.cgi");
+if ($fn eq '') {
+    print "Content-Type: text/plain\n\n";
+    print "You lose. No path information provided\n";
+} else {
+    if ($fn =~ /[.]mk?d/) {
+        $ENV{XML2RFC_INPUT} = 'kramdown';
+    } else {
+        $ENV{XML2RFC_INPUT} = 'xml2rfc';
+    }
+    $ENV{XML2RFC_MODEASFORMAT} = 'html/ascii';
+    system("./xml2rfc-dev.cgi");
+}
 
 ####### use a given pattern to untaint a value
-####### default to the entire value
 sub untaint {
     my $str = shift;
     my $pat = shift;

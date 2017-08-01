@@ -117,6 +117,7 @@ if (($input eq '') || ($inputfn eq '')) {
     print "Getting URL=" . untaint($url) . "\n" if $debug;
     my ($content, $err) = wget($url);
     userError($err) if ($err ne '');
+    # TODO == grab extension from above output, or filename if in text
     $input = "url.xml";
     $inputfn = "/tmp/CGItemp$$.txt";
     createFile($inputfn, $content);
@@ -131,6 +132,10 @@ if ($ENV{XML2RFC_MODEASFORMAT}) {
 if ($modeAsFormat =~ m((.*)/(.*))) {
    $q->param('mode', $1);
    $q->param('format', $2);
+}
+if ($ENV{XML2RFC_INPUT}) {
+    print "using ENV{XML2RFC_INPUT}\n" if $debug;
+    $q->param('input', $ENV{XML2RFC_INPUT});
 }
 my $inputtype = checkValue('inputtype', @inputtypes);
 my $mode = checkValue('mode', @modes);
