@@ -16,10 +16,8 @@ if ($fn eq '') {
     $ENV{XML2RFC_URL} = "https://raw.githubusercontent.com/$fn";
     if ($fn =~ /[.]mk?d/) {
         $ENV{XML2RFC_INPUTTYPE} = 'kramdown';
-	print "using kramdown\n";
     } else {
         $ENV{XML2RFC_INPUTTYPE} = 'xml2rfc';
-	print "using xml\n";
     }
     $ENV{XML2RFC_MODEASFORMAT} = 'txt/ascii';
     system("./xml2rfc-dev.cgi");
