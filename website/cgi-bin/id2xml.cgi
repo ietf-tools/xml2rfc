@@ -53,6 +53,7 @@ if (($input eq '') || ($inputfn eq '')) {
     $inputfn = "/tmp/CGItemp$$.txt";
     createFile($inputfn, $content);
 }
+my $striponly = checkValue('striponly', 'no', 'yes');
 
 my $inputfndir = "$inputfn.dir";
 my $type     = checkValue('type', 'ascii', 'binary', 'toframe', 'towindow', 'tofile');
@@ -186,7 +187,9 @@ exit;
 sub callId2xml {
     my $suffix = shift;
     my $tmpout = getTempFileWithSuffix($suffix);
-    my ($ret, $out, $err) = runCommand("umask 0;/usr/local/bin/id2xml -o $tmpout $curfile", $curfile, $tmpout, "Running id2xml-rfc2629");
+    my $s = "";
+    $s = " --strip-only " if $striponly eq 'yes';
+    my ($ret, $out, $err) = runCommand("umask 0;/usr/local/bin/id2xml $s -o $tmpout $curfile", $curfile, $tmpout, "Running id2xml-rfc2629");
     $curfile = $tmpout;
     print "id2xml ret=$ret\n" if $debug;
     print "out='$out'\n" if $debug;
@@ -407,6 +410,7 @@ sub printHeaders {
 
 ####### return a proper content-type value
 sub getContentType {
+    return "text/plain" if $striponly eq 'yes';
     return "application/xml";
 }
 
@@ -415,7 +419,7 @@ sub getContentType {
 sub getOutputName {
     my ($outputfn, $mode, $format) = @_;
     $outputfn = basename($outputfn);
-    $outputfn =~ s/\.txt$/.xml.txt/;
+    $outputfn =~ s/\.txt$/.xml.txt/ if $striponly ne 'yes';
     $outputfn = untaint($outputfn, '([^<>\s;&]*)');
     return $outputfn;
 }
