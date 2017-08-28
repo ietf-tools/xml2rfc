@@ -267,8 +267,12 @@ def urlkeep(text):
                              .replace('/' + zwsp_char + '/' + zwsp_char, '/' + wj_char +'/' + wj_char) \
                              .replace('-', '-' + wj_char) \
                              .replace(':', ':' + wj_char)
-    return re.sub('(?<=http:)\S*', replacer, text)
-
+                             
+    if 'http://' in text:
+        return re.sub('(?<=http:)\S*', replacer, text)
+    if 'https://' in text:
+        return re.sub('(?<=https:)\S*', replacer, text)
+    return text
 
 def safeReplaceUnicode(tree):
     """ Traverses an lxml.etree ElementTree and replaces unicode characters 
