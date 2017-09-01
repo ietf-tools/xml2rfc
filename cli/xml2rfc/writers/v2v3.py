@@ -361,7 +361,7 @@ class V2v3XmlWriter:
             #debug.say('Wrap %s content ...'%(p.tag))
             self.wrap_content(p)
         p = e.getparent()
-        pp = p.getparent()
+        #pp = p.getparent()
         if p.tag == 't':
             #debug.say('Promote %s (parent %s, grandparent %s) ...'%(e.tag, p.tag, pp.tag))
             self.promote(e, p)
@@ -910,7 +910,6 @@ class V2v3XmlWriter:
                 l.remove(t)
         else:
             self.replace(e, None, "<vspace/> deprecated and removed")
-        l = t2.getparent()
 
     # 3.10.1.  "blankLines" Attribute
     # 
@@ -928,15 +927,20 @@ class V2v3XmlWriter:
     def attribute_anchor(self, e, p):
         k = 'anchor'
         if k in e.keys():
-            e.set(k, idref(e.get(k).strip()))
+            v = e.get(k)
+            id = idref(v.strip())
+            if id != v:
+                e.set(k, id)
                 
 
     def attribute_xreftarget(self, e, p):
         k = 'target'
         if k in e.keys():
-            e.set(k, idref(e.get(k).strip()))
+            v = e.get(k)
+            id = idref(v.strip())
+            if id != v:
+                e.set(k, id)
 
-                
     def attribute_yes_no(self, e, p):
         for k,v in e.attrib.items():
             if   v == 'yes':

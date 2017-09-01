@@ -29,7 +29,7 @@ class HtmlRfcWriter(BaseRfcWriter):
     """
     # HTML Specific Defaults that are not provided in templates or XML
     html_defaults = { 
-        'references_url': 'http://tools.ietf.org/html/',
+        'references_url': 'https://tools.ietf.org/html/',
     }
 
     def __init__(self, xmlrfc, quiet=None, options=default_options,
@@ -774,7 +774,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             description = abs_t.text
         keywords = self.r.findall('front/keyword')
         keyword_list = [keyword.text for keyword in keywords if keyword.text]
-        generator = "xml2rfc version %s - http://tools.ietf.org/tools/xml2rfc" % xml2rfc.__version__
+        generator = "xml2rfc version %s - https://tools.ietf.org/tools/xml2rfc" % xml2rfc.__version__
 
         # Build ISO8601 date string
         docDate = ''

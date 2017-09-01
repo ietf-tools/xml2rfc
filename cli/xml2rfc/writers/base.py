@@ -90,6 +90,9 @@ class BaseRfcWriter:
     # Boilerplate text
     boilerplate = {}
 
+    # The RFC Editor's switchover date for https URLs
+    boilerplate_https_date = datetime.datetime(year=2017, month=8, day=21)
+
     # Document stream names
     boilerplate['document_stream'] = {}
     boilerplate['document_stream']['IETF'] = \
@@ -225,6 +228,10 @@ class BaseRfcWriter:
         'Information about the current status of this document, any errata, '
         'and how to provide feedback on it may be obtained at '
         'http://www.rfc-editor.org/info/rfc%s.')
+    boilerplate['status']['p3_s'] = (
+        'Information about the current status of this document, any errata, '
+        'and how to provide feedback on it may be obtained at '
+        'https://www.rfc-editor.org/info/rfc%s.')
 
     # 'Status of this Memo' boilerplate for drafts
     boilerplate['status']['draft'] = [
@@ -237,6 +244,17 @@ class BaseRfcWriter:
        'and may be updated, replaced, or obsoleted by other documents at any '
        'time.  It is inappropriate to use Internet-Drafts as reference '
        'material or to cite them other than as "work in progress."']
+    boilerplate['status']['draft_s'] = [
+       'Internet-Drafts are working documents of the Internet Engineering '
+       'Task Force (IETF).  Note that other groups may also distribute '
+       'working documents as Internet-Drafts.  The list of current Internet-'
+       'Drafts is at https://datatracker.ietf.org/drafts/current/.',
+       #
+       'Internet-Drafts are draft documents valid for a maximum of six months '
+       'and may be updated, replaced, or obsoleted by other documents at any '
+       'time.  It is inappropriate to use Internet-Drafts as reference '
+       'material or to cite them other than as "work in progress."']
+
     boilerplate['draft_expire'] = \
        'This Internet-Draft will expire on %s.'
 
@@ -256,6 +274,13 @@ class BaseRfcWriter:
         'This document is subject to BCP 78 and the IETF Trust\'s Legal '
         'Provisions Relating to IETF Documents '
         '(http://trustee.ietf.org/license-info) in effect on the date of '
+        'publication of this document.  Please review these documents '
+        'carefully, as they describe your rights and restrictions with respect '
+        'to this document.')
+    boilerplate['base_copyright_body_s'] = (
+        'This document is subject to BCP 78 and the IETF Trust\'s Legal '
+        'Provisions Relating to IETF Documents '
+        '(https://trustee.ietf.org/license-info) in effect on the date of '
         'publication of this document.  Please review these documents '
         'carefully, as they describe your rights and restrictions with respect '
         'to this document.')
@@ -315,7 +340,7 @@ class BaseRfcWriter:
 
     # -------------------------------------------------------------------------
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.datetime.now()):
         if not quiet is None:
             options.quiet = quiet
         self.options = options
@@ -1041,7 +1066,8 @@ class BaseRfcWriter:
             self.write_paragraph('  '.join(p2))
             
             # Write third paragraph
-            self.write_paragraph(self.boilerplate['status']['p3'] % self.rfcnumber)
+            key = 'p3' if self.date < self.boilerplate_https_date else 'p3_s'
+            self.write_paragraph(self.boilerplate['status'][key] % self.rfcnumber)
 
         else:  # Draft
             # Start by checking for an ipr header
@@ -1052,7 +1078,8 @@ class BaseRfcWriter:
                 self.write_paragraph(self.boilerplate['ipr_200811_status'])
 
             # Write the standard draft status
-            for par in self.boilerplate['status']['draft']:
+            key = 'draft' if self.date < self.boilerplate_https_date else 'draft_s'
+            for par in self.boilerplate['status'][key]:
                 self.write_paragraph(par)
 
             # Write expiration string, if it was generated
@@ -1073,7 +1100,8 @@ class BaseRfcWriter:
 
         # Write next paragraph which may be modified by ipr
         ipr = self.r.attrib.get('ipr', self.defaults['ipr'])
-        body = self.boilerplate['base_copyright_body']
+        key = 'base_copyright_body' if self.date < self.boilerplate_https_date else 'base_copyright_body_s'
+        body = self.boilerplate[key]
         if '200902' in ipr and self.r.attrib.get('submissionType', 
                                    self.defaults['submissionType']) == 'IETF':
             body += '  ' + self.boilerplate['ipr_200902_copyright_ietfbody']
