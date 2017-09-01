@@ -1,3 +1,24 @@
+xml2rfc (2.8.0) ietf; urgency=low
+
+  This is a small feature release which changes URLs in boilerplate to
+  use https: instead of http:.  There are also some bugfixes.
+
+  * Include notes when doing index processing.  Fixes issue #335.
+
+  * Include erefs with text equal to the URL in the URIs section.  See 
+    issue #334.
+
+  * Changed the use of http: to https: in many places.  In the generation 
+    of RFCs, the code uses a switchover date of August 21, 2017 when deciding 
+    whether to insert http: or https: URLs.  In practice, this means that RFCs 
+    with a date of September 2017 or later will get https:.  Also fixed URL 
+    line-breaking prevention to apply to https: URLS.  Fixes issue #333.
+
+  * In urlkeep(), prevent breaking also for https:, not only http: URLs
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  01 Sep 2017 04:56:28 -0700
+
+
 xml2rfc (2.7.0) ietf; urgency=low
 
   This introduces the vocabulary v2 to v3 converter, which reads
