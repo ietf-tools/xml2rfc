@@ -5,7 +5,8 @@ PNG= blue-stripe.png stripe.png
 HTML= experimental.html index.html old.html xml2rfcFAQ.html rfc7749.html
 INS= $(HTML) $(PNG) $(CSS)
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
-DERIVATIVES= experimental-debug.html index-debug.html old-debug.html \
+DERIVATIVES= experimental-debug.html index-debug.html \
+	index-tee.html index-tee-debug.html old-debug.html \
 	experimental-new.html experimental-new-debug.html \
 	experimental-tee.html experimental-tee-debug.html \
 
@@ -21,10 +22,16 @@ experimental-new-debug.html: experimental-debug.html
 	sed 's/xml2rfc-dev.cgi/xml2rfc-new.cgi/' < experimental-debug.html > experimental-new-debug.html
 
 experimental-tee.html: experimental.html
-	sed 's/xml2rfc-dev.cgi/xml2rfc-tee.cgi/' < experimental.html > experimental-tee.html
+	sed 's/xml2rfc-dev.cgi/tee-xml2rfc-dev.cgi/' < experimental.html > experimental-tee.html
 
 experimental-tee-debug.html: experimental-debug.html
-	sed 's/xml2rfc-dev.cgi/xml2rfc-tee.cgi/' < experimental-debug.html > experimental-tee-debug.html
+	sed 's/xml2rfc-dev.cgi/tee-xml2rfc-dev.cgi/' < experimental-debug.html > experimental-tee-debug.html
+
+index-tee.html: index.html
+	sed 's/xml2rfc.cgi/tee-xml2rfc.cgi/' < index.html > index-tee.html
+
+index-tee-debug.html: index-debug.html
+	sed 's/xml2rfc.cgi/tee-xml2rfc.cgi/' < index-debug.html > index-tee-debug.html
 
 index-debug.html: index.html
 	sed < index.html -e '/start debug section/s/!-- ! //' -e '/end debug section/s/ --//' > index-debug.html
@@ -35,7 +42,7 @@ old-debug.html: old.html
 install: all
 	@XML2RFC2VERSION=`/usr/local/bin/xml2rfc --version`; \
 	for i in $(INS) $(DERIVATIVES); do \
-	    if [ $$i -nt $(WEB)/$$i ];then \
+	    if [ ! -f $(WEB)/$$i -o $$i -nt $(WEB)/$$i ];then \
 	        : echo cp $$i $(WEB)/$$i; \
 	        echo sed "s/XML2RFC2VERSION/$$XML2RFC2VERSION/g" '<' $$i '>' $(WEB)/$$i; \
 	        sed "s/XML2RFC2VERSION/$$XML2RFC2VERSION/g" < $$i > $(WEB)/$$i; \
