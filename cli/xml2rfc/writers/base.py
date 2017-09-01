@@ -1132,6 +1132,12 @@ class BaseRfcWriter:
             for t in abstract.findall('t'):
                 self.write_t_rec(t)
 
+        # Optional notes
+        for note in self.r.findall('front/note'):
+            self.write_heading(note.attrib.get('title', 'Note'))
+            for t in note.findall('t'):
+                self.write_t_rec(t)
+
         # Middle sections
         middle = self.r.find('middle')
         if middle is not None:
