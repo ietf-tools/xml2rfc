@@ -440,10 +440,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if element.text and len(element.text)>0:
                     line.append(element.text.strip())
                     self.eref_count += 1
-                    if element.text.strip() != element.attrib['target'].strip():
-                        line.append(' [' + str(self.eref_count) + ']')
-                        if self.indexmode:
-                            self.eref_list.append([self.eref_count, element])
+                    line.append(' [' + str(self.eref_count) + ']')
+                    if self.indexmode:
+                        self.eref_list.append([self.eref_count, element])
                 else:
                     line.append('<' + element.attrib['target'].strip() + '>')
             elif element.tag == 'iref':
