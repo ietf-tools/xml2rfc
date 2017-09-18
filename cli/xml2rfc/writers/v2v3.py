@@ -72,8 +72,10 @@ class V2v3XmlWriter:
             v3_rng.assertValid(self.root)
             log.note("The document validates according to the RFC7991 schema")
         except Exception as e:
-            log.error('\nInvalid document: %s' % (e,))
-            return None
+            # These warnings are occasionally incorrect -- disable this
+            # output for now:
+            #log.warn('\nInvalid document: %s' % (e,))
+            e = e
 
     def add_xinclude(self):
         for e in self.root.xpath('.//back//reference'):
@@ -382,6 +384,26 @@ class V2v3XmlWriter:
     def element_artwork(self, e, p):
         e.text = CDATA(e.text)          # prevent text from being mucked up by other processors
         stripattr(e, ['height', '{http://www.w3.org/XML/1998/namespace}space', 'width', ])
+        if re.search(r'^\s*<CODE BEGINS>', e.text):
+            # We have source code.  Permitted attributes: anchor, name,
+            # source, type.
+            e = self.replace(e, 'sourcecode')
+            match = re.search(r'(?s)^\s*<CODE BEGINS>(\s+file\s+"([^"]*)")?(.*?)(<CODE ENDS>(.*))?$', e.text)
+            file = match.group(1)
+            name = match.group(2)
+            body = match.group(3)
+            ends = match.group(4)
+            tail = match.group(5)
+            if file and name:
+                e.set('name', name)
+            e.text = CDATA(body)
+            if not ends:
+                self.warn("Found <CODE BEGINS> without matching <CODE ENDS>")
+            if ends and tail.strip() != "":
+                self.warn("Found non-whitespace content after <CODE ENDS>")
+                e.tail = tail
+            stripattr(e, ['align', 'alt', 'height', 'suppress-title', 'width', ])
+
 
     # 2.25.  <figure>
     # 
@@ -423,15 +445,16 @@ class V2v3XmlWriter:
     def element_figure(self, e, p):
         comments = []
         artwork = e.find('./artwork')
-        for attr in ['alt', 'src', ]:
-            if attr in e.attrib:
-                fattr = e.get(attr)
-                if attr in artwork.attrib:
-                    aattr = artwork.get(attr)
-                    if fattr != aattr:
-                        comments.append('Warning: The "%s" attribute on artwork differs from the one on figure.  Using only "%s" on artwork.' % (attr, attr))
-                else:
-                    artwork.set(attr, fattr)
+        if not artwork is None:
+            for attr in ['alt', 'src', ]:
+                if attr in e.attrib:
+                    fattr = e.get(attr)
+                    if attr in artwork.attrib:
+                        aattr = artwork.get(attr)
+                        if fattr != aattr:
+                            comments.append('Warning: The "%s" attribute on artwork differs from the one on figure.  Using only "%s" on artwork.' % (attr, attr))
+                    else:
+                        artwork.set(attr, fattr)
         stripattr(e, ['align', 'alt', 'height', 'src', 'suppress-title', 'width', ])
 
     # 2.25.7.  "title" Attribute
