@@ -693,7 +693,7 @@ class V2v3XmlWriter:
             attribs['group'] = e.get('counter')
             comments.append("Converting <list counter=...> to <%s group=...> " % tag)
         #
-        attribs['spacing'] = 'compact' if e.pis['compact'] in ['yes', 'true'] else 'normal'
+        attribs['spacing'] = 'compact' if hasattr(e, 'pis') and e.pis['compact'] in ['yes', 'true'] else 'normal'
         #
         stripattr(e, ['counter', 'style', ])
         l = self.element(tag, **attribs)
@@ -706,7 +706,8 @@ class V2v3XmlWriter:
             for t in l.findall('./t'):
                 dt = self.element('dt')
                 dt.text = t.get('hangText')
-                del t.attrib['hangText']
+                if not dt.text is None:
+                    del t.attrib['hangText']
                 i = l.index(t)
                 l.insert(i, dt)
                 self.replace(t, 'dd')
