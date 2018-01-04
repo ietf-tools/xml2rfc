@@ -1,8 +1,19 @@
+xml2rfc (2.8.3) ietf; urgency=low
+
+  * Changed the python 3 code that reads in an xml file to read as binary, 
+    in order to not run into issues with unicode conversion before we have had 
+    time to look at the encoding attribute of the <xml/> element.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  04 Jan 2018 05:25:04 -0800
+
+
 xml2rfc (2.8.2) ietf; urgency=low
 
-  * Modified the V2v3 conversion writer to work with generic lxml.etree 
-    instances, and fixed a failure that could occur for hanging style lists 
-    without hangText attributes.
+  * Modified the V2v3 conversion writer to work with generic lxml.etree
+    instances.
+
+  * Fixed a failure that could occur for hanging style lists without hangText
+    attributes.
 
   * Tweaked mkrelease to work without the old tools control files and tools 
     feeds being present.
