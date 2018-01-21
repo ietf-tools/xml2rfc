@@ -435,9 +435,11 @@ class XmlRfcParser:
             xml2rfc.log.write('Parsing file', self.source)
 
         if six.PY2:
-            self.text = open(self.source, "rU").read()
+            with open(self.source, "rU") as f:
+                self.text = f.read()
         else:
-            self.text = open(self.source, "rUb").read()
+            with open(self.source, "rb", newline=None) as f:
+                self.text = f.read()
 
         # Get an iterating parser object
         file = six.BytesIO(self.text)
