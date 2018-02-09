@@ -496,6 +496,9 @@ class PrepToolWriter:
         gtag = g.tag if g != None else None
         if not (gtag in ['reference', ] or ptag in ['reference', ]):
             defaults = self.get_attribute_defaults(e.tag)
+            for k in ['keepWithNext', 'keepWithPrevious', 'toc']:
+                if k in defaults:
+                    del defaults[k]
             for k in defaults:
                 if not k in e.attrib:
                     #debug.say('Setting <%s %s="%s">' % (e.tag, k, defaults[k]))
@@ -928,7 +931,7 @@ class PrepToolWriter:
             self.back_section_number = self.back_section_number[:level+1]
         section_number = self.back_section_number[:]
         section_number[0] = chr(0x60+section_number[0])
-        e.set('pn', 'section-%s' % ('.'.join([ str(n) for n in section_number ]), ))
+        e.set('pn', 'appendix-%s' % ('.'.join([ str(n) for n in section_number ]), ))
         self.prev_section_level = level
 
     def paragraph_add_number(self, e, p):
@@ -1249,7 +1252,7 @@ class PrepToolWriter:
     #        for RFCs at the moment, this entire feature might be
                 elif awtype == 'binary-art':
                     # keep svg in src attribute
-                    if scheme in ['file', 'http', 'https']:
+                    if scheme in ['http', 'https']:
                         with urlopen(src) as f:
                             data = f.read()
                             if six.PY2:
@@ -1258,6 +1261,8 @@ class PrepToolWriter:
                                 mediatype = f.info().get_content_type()
                         src = build_dataurl(mediatype, data)
                         e.set('src', src)
+                    elif scheme == 'file':
+                        self.err(e, "Won't guess media-type of file '%s', please use the data: scheme instead." % (src, ))
 
     #    6.  If an <artwork> element does not have type='svg' or
     #        type='binary-art' and there is an "src" attribute, the data needs
@@ -1393,7 +1398,7 @@ class PrepToolWriter:
     #        one does not exist, give an error.
             converted_from = e.find('.//link[@rel="convertedFrom"]')
             if converted_from is None:
-                self.err(e, "Expected a <link> with rel='convertedFrom' providing the datatracker url for the origin draft.")
+                self.warn(e, "Expected a <link> with rel='convertedFrom' providing the datatracker url for the origin draft.")
             else:
                 converted_from_href = converted_from.get('href', '')
                 if not converted_from_href.startswith("https://datatracker.ietf.org/doc/draft-"):
