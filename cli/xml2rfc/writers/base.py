@@ -203,11 +203,11 @@ class BaseRfcWriter:
     boilerplate['status']['p2end_ietf_bcp'] = \
         'Further information on BCPs is available in Section 2 of RFC 7841.'
     boilerplate['status']['p2end_ietf_other'] = \
-        'Not all documents approved by the IESG are a candidate for any ' \
+        'Not all documents approved by the IESG are candidates for any ' \
         'level of Internet Standard; see Section 2 of RFC 7841.'
     boilerplate['status']['p2end_other'] = \
-        'Documents approved for publication by the %s are not a ' \
-        'candidate for any level of Internet Standard; see Section 2 of RFC ' \
+        'Documents approved for publication by the %s are not ' \
+        'candidates for any level of Internet Standard; see Section 2 of RFC ' \
         '7841.'
 
     boilerplate['status_5741']['p2end_ietf_std'] = \
@@ -216,11 +216,11 @@ class BaseRfcWriter:
     boilerplate['status_5741']['p2end_ietf_bcp'] = \
         'Further information on BCPs is available in Section 2 of RFC 5741.'
     boilerplate['status_5741']['p2end_ietf_other'] = \
-        'Not all documents approved by the IESG are a candidate for any ' \
+        'Not all documents approved by the IESG are candidates for any ' \
         'level of Internet Standard; see Section 2 of RFC 5741.'
     boilerplate['status_5741']['p2end_other'] = \
-        'Documents approved for publication by the %s are not a ' \
-        'candidate for any level of Internet Standard; see Section 2 of RFC ' \
+        'Documents approved for publication by the %s are not ' \
+        'candidates for any level of Internet Standard; see Section 2 of RFC ' \
         '5741.'
 
     # Paragraph 3
