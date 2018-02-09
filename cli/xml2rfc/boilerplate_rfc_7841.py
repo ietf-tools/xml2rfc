@@ -63,7 +63,7 @@ boilerplate_status_of_memo = {
             Task Force (IETF).  It represents the consensus of the IETF community.
             It has received public review and has been approved for publication
             by the Internet Engineering Steering Group (IESG).  Not all documents
-            approved by the IESG are a candidate for any level of Internet
+            approved by the IESG are candidates for any level of Internet
             Standard; see Section 2 of RFC 7841. 
             """,
 
@@ -85,7 +85,7 @@ boilerplate_status_of_memo = {
             community.  This document is a product of the Internet Engineering
             Task Force (IETF).  It has been approved for publication by the
             Internet Engineering Steering Group (IESG).  Not all documents
-            approved by the IESG are a candidate for any level of Internet
+            approved by the IESG are candidates for any level of Internet
             Standard; see Section 2 of RFC 7841. 
             """,
 
@@ -109,7 +109,7 @@ boilerplate_status_of_memo = {
             Task Force (IETF).  It represents the consensus of the IETF community.
             It has received public review and has been approved for publication by
             the Internet Engineering Steering Group (IESG).  Not all documents
-            approved by the IESG are a candidate for any level of Internet
+            approved by the IESG are candidates for any level of Internet
             Standard; see Section 2 of RFC 7841. 
             """,
 
@@ -130,7 +130,7 @@ boilerplate_status_of_memo = {
             community.  This document is a product of the Internet Engineering Task Force
             (IETF).  It has been approved for publication by the Internet
             Engineering Steering Group (IESG).  Not all documents approved by the
-            IESG are a candidate for any level of Internet Standard; see Section 2
+            IESG are candidates for any level of Internet Standard; see Section 2
             of RFC 7841. 
             """,
 
@@ -153,7 +153,7 @@ boilerplate_status_of_memo = {
             (IETF).  It represents the consensus of the IETF community.  It has
             received public review and has been approved for publication by the
             Internet Engineering Steering Group (IESG).  Not all documents
-            approved by the IESG are a candidate for any level of Internet
+            approved by the IESG are candidates for any level of Internet
             Standard; see Section 2 of RFC 7841. 
             """,
 
@@ -173,7 +173,7 @@ boilerplate_status_of_memo = {
             This document is a product of the Internet Engineering Task Force
             (IETF).  It has been approved for publication by the Internet
             Engineering Steering Group (IESG).  Not all documents approved by the
-            IESG are a candidate for any level of Internet Standard; see Section 2
+            IESG are candidates for any level of Internet Standard; see Section 2
             of RFC 7841.   
             """,
 
@@ -199,7 +199,7 @@ boilerplate_status_of_memo = {
             Board (IAB) and represents information that the IAB has deemed
             valuable to provide for permanent record.  It represents the consensus of the
             Internet Architecture Board (IAB).  Documents approved for
-            publication by the IAB are not a candidate for any level of Internet
+            publication by the IAB are not candidates for any level of Internet
             Standard; see Section 2 of RFC 7841.
             """,
 
@@ -220,7 +220,7 @@ boilerplate_status_of_memo = {
             community.  This document is a product of the Internet Architecture
             Board (IAB) and represents information that the IAB has deemed
             valuable to provide for permanent record.  Documents approved for
-            publication by the IAB are not a candidate for any level of Internet
+            publication by the IAB are not candidates for any level of Internet
             Standard; see Section 2 of RFC 7841.
             """,
 
@@ -243,7 +243,7 @@ boilerplate_status_of_memo = {
             (IAB) and represents information that the IAB has deemed valuable
             to provide for permanent record.  It represents the consensus of the Internet
             Architecture Board (IAB).  Documents approved for publication
-            by the IAB are not a candidate for any level of Internet Standard; see
+            by the IAB are not candidates for any level of Internet Standard; see
             Section 2 of RFC 7841.
             """,
 
@@ -263,7 +263,7 @@ boilerplate_status_of_memo = {
             This document is a product of the Internet Architecture Board
             (IAB) and represents information that the IAB has deemed valuable
             to provide for permanent record.  Documents approved for publication
-            by the IAB are not a candidate for any level of Internet Standard; see
+            by the IAB are not candidates for any level of Internet Standard; see
             Section 2 of RFC 7841.
             """,
 
@@ -317,7 +317,7 @@ boilerplate_status_of_memo = {
             suitable for deployment.  This RFC represents the individual
             opinion(s) of one or more members of the {group_name} Research Group
             of the Internet Research Task Force (IRTF).  Documents approved for
-            publication by the IRSG are not a candidate for any level of Internet
+            publication by the IRSG are not candidates for any level of Internet
             Standard; see Section 2 of RFC 7841.
             """,
 
@@ -340,7 +340,7 @@ boilerplate_status_of_memo = {
             Task Force (IRTF).  The IRTF publishes the results of Internet-related
             research and development activities.  These results might not be
             suitable for deployment.  Documents approved for publication by the
-            IRSG are not a candidate for any level of Internet Standard; see
+            IRSG are not candidates for any level of Internet Standard; see
             Section 2 of RFC 7841.
             """,
 
@@ -411,7 +411,7 @@ boilerplate_status_of_memo = {
             Task Force (IRTF).  The IRTF publishes the results of Internet-related
             research and development activities.  These results might not be
             suitable for deployment.  Documents approved for publication by the
-            IRSG are not a candidate for any level of Internet Standard; see
+            IRSG are not candidates for any level of Internet Standard; see
             Section 2 of RFC 7841.
             """,
 
@@ -479,7 +479,7 @@ boilerplate_status_of_memo = {
             (IRTF).  The IRTF publishes the results of Internet-related
             research and development activities.  These results might not be
             suitable for deployment.  Documents approved for publication by the
-            IRSG are not a candidate for any level of Internet Standard; see
+            IRSG are not candidates for any level of Internet Standard; see
             Section 2 of RFC 7841.
             """,
 
@@ -506,7 +506,7 @@ boilerplate_status_of_memo = {
             independently of any other RFC stream.  The RFC Editor has chosen to publish this
             document at its discretion and makes no statement about its value
             for implementation or deployment.  Documents approved for publication
-            by the RFC Editor are not a candidate for any level of Internet
+            by the RFC Editor are not candidates for any level of Internet
             Standard; see Section 2 of RFC 7841.
             """,
 
@@ -534,7 +534,7 @@ boilerplate_status_of_memo = {
             other RFC stream.  The RFC Editor has chosen to publish this
             document at its discretion and makes no statement about its value
             for implementation or deployment.  Documents approved for
-            publication by the RFC Editor are not a candidate for any level of
+            publication by the RFC Editor are not candidates for any level of
             Internet Standard; see Section 2 of RFC 7841.
             """,
 
@@ -561,7 +561,7 @@ boilerplate_status_of_memo = {
             other RFC stream.  The RFC Editor has chosen to publish this
             document at its discretion and makes no statement about its value
             for implementation or deployment.  Documents approved for
-            publication by the RFC Editor are not a candidate for any level of
+            publication by the RFC Editor are not candidates for any level of
             Internet Standard; see Section 2 of RFC 7841.
             """,
 
