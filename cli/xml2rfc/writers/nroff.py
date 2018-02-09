@@ -226,7 +226,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def write_title(self, text, docName=None, source_line=None):
         self._lb()
         self.write_text(text, align='center', source_line=source_line)
-        if docName:
+        if docName and not self.rfcnumber:
             self.write_text(docName, align='center')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, level=1):

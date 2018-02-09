@@ -577,7 +577,7 @@ class RawTextRfcWriter(BaseRfcWriter):
     def write_title(self, title, docName=None, source_line=None):
         """ Write the document title and (optional) name """
         self.write_text(title, leading_blankline=True, align='center', source_line=source_line)
-        if docName:
+        if docName and not self.rfcnumber:
             self.write_text(docName, align='center')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \

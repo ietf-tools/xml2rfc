@@ -20,8 +20,8 @@ except ImportError:
 
 def slugify(s):
     s = s.strip().lower()
-    s = re.sub(r'[^\w\s/|-]', '', s)
-    s = re.sub(r'[-_\s/|]+', '_', s)
+    s = re.sub(r'[^\w\s/|@=-]', '', s)
+    s = re.sub(r'[-_\s/|@=]+', '_', s)
     s = s.strip('_')
     return s
 
@@ -298,6 +298,10 @@ class V2v3XmlWriter:
             './/*[@*="yes" or @*="no"]',      # convert old attribute false/true
         ]
 
+        # replace the vocabulary v2 dtd, but keep some entity definitions.
+        tree = self.root.getroottree()
+        tree.docinfo.system_url = "rfc2629-xhtml.ent"
+
         for s in selectors:
             slug = slugify(s.replace('self::', '').replace(' or ','_'))
             if '@' in s:
@@ -527,16 +531,20 @@ class V2v3XmlWriter:
         front = e.find('./front')
         title = e.find('./front/title')
         i = front.index(title) + 1
-        if 'category' in e.attrib:
-            attr = {'name': e.get('category'), 'value': '', }
-            if 'seriesNo' in e.attrib:
-                attr['value'] = e.get('seriesNo')
+        if 'category' in e.attrib and 'seriesNo' in e.attrib:
+            attr = {
+                'name': e.get('category'),
+                'value': e.get('seriesNo')
+            }
             front.insert(i, self.element('seriesInfo', **attr))
+            stripattr(e, ['seriesNo', ]) # keep 'category' for use in preptool
         if 'number' in e.attrib:
-            front.insert(i, self.element('seriesInfo', name="RFC", value=e.get('category')))
-        if 'docName' in e.attrib:
+            front.insert(i, self.element('seriesInfo', name="RFC", value=e.get('number')))
+            if 'docName' in e.attrib:
+                e.insert(0, self.element('link', rel='convertedFrom', href="https://datatracker.ietf.org/doc/%s"%(e.get('docName'), )))
+        elif 'docName' in e.attrib:
             front.insert(i, self.element('seriesInfo', name="Internet-Draft", value=e.get('docName')))
-        stripattr(e, ['category', 'docName', 'number', 'seriesNo' 'xi'])
+        stripattr(e, ['docName', 'number', 'xi'])
 
     # 2.47.  <seriesInfo>
     # 

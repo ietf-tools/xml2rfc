@@ -9,7 +9,7 @@
        attribute number { text }?,
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
-       attribute category { text }?,
+       attribute category { "std" | "bcp" | "exp" | "info" | "historic" }?,
        attribute mode { text }?,
        [ a:defaultValue = "false" ]
        attribute consensus { "no" | "yes" | "false" | "true" }?,
@@ -478,6 +478,11 @@
        [ a:defaultValue = "default" ]
        attribute format { "default" | "title" | "counter" | "none" }?,
        attribute derivedContent { text }?,
+       [ a:defaultValue = "of" ]
+       attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
+       attribute section { text }?,
+       attribute relative { text }?,
+       attribute derivedLink { text }?,
        text
      }
 
@@ -910,7 +915,6 @@
        attribute asciiName { text }?,
        attribute asciiValue { text }?,
        attribute status { text }?,
-       [ a:defaultValue = "IETF" ]
        attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
        empty
      }

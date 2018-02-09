@@ -427,12 +427,12 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.7.1dev0 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.9.0b1 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Gieben, R." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-gieben-writing-rfcs-pandoc-02" />
-  <meta name="dct.issued" scheme="ISO8601" content="2013-1" />
+  <meta name="dct.issued" scheme="ISO8601" content="2013-01-01" />
   <meta name="dct.abstract" content="This memo presents a technique for using Pandoc syntax as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  " />
   <meta name="description" content="This memo presents a technique for using Pandoc syntax as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  " />
 
@@ -453,7 +453,7 @@
 </tr>
 <tr>
 <td class="left">Intended status: Informational</td>
-<td class="right">January 2013</td>
+<td class="right">January 1, 2013</td>
 </tr>
 <tr>
 <td class="left">Expires: July 5, 2013</td>
@@ -978,7 +978,7 @@ See [](#pandoc-constructs)
 <h1 id="rfc.section.7.8.1">
 <a href="#rfc.section.7.8.1">7.8.1.</a> <a href="#references-2" id="references-2">References</a>
 </h1>
-<p id="rfc.section.7.8.1.p.1">The caption is <em>always</em> translated to a <samp>title</samp> attribute. If a table has a caption, it will <em>also</em> get a reference. The reference anchor attribute will be: <samp>tab:</samp> + <samp>first 10 (normalized) characters from the caption</samp>.  Where normalized means: </p>
+<p id="rfc.section.7.8.1.p.1">The caption is <em>always</em> translated to a <samp>title</samp> attribute. If a table has a caption, it will <em>also</em> get a reference. The reference anchor attribute will be: <samp>tab-</samp> + <samp>first 10 (normalized) characters from the caption</samp>.  Where normalized means: </p>
 <p></p>
 
 <ul>
@@ -986,7 +986,7 @@ See [](#pandoc-constructs)
 <li>Spaces and single quotes (') are translated to a minus <samp>-</samp>; </li>
 <li>Uppercase letters translated to lowercase.  </li>
 </ul>
-<p id="rfc.section.7.8.1.p.3">So the first table with a caption will get <samp>tab:a-caption-</samp> for reference use. See for instance </p>
+<p id="rfc.section.7.8.1.p.3">So the first table with a caption will get <samp>tab-a-caption-</samp> for reference use. See for instance </p>
 <p id="rfc.section.7.8.1.p.4">This anchoring is completely handled from within the <samp>xslt</samp>. Note that duplicate anchors are an XML validation error which will make <samp>xml2rfc</samp> fail.  </p>
 <h1 id="rfc.section.7.9">
 <a href="#rfc.section.7.9">7.9.</a> <a href="#indexes" id="indexes">Indexes</a>
@@ -1282,10 +1282,10 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
 </li>
 </ol>
 <h1 id="rfc.appendix.A.8">
-<a href="#rfc.appendix.A.8">A.8.</a> <a href="#table-tests" id="table-tests">Table Tests</a>
+<a href="#rfc.appendix.A.8">A.8.</a> <a href="#anchor-table-tests" id="anchor-table-tests">Table Tests</a>
 </h1>
 <div id="rfc.table.1"></div>
-<div id="tab:demonstrat"></div>
+<div id="tab-demonstrat"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
 <caption>
         Demonstration of simple table
@@ -1319,7 +1319,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
 </tbody>
 </table>
 <div id="rfc.table.2"></div>
-<div id="tab:here-s-the"></div>
+<div id="tab-here-s-the"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
 <caption>
         Here's the caption. It, too, may span multiple lines. This is a
@@ -1348,7 +1348,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
 </table>
 <p><a name="index.table.simple"></a> </p>
 <div id="rfc.table.3"></div>
-<div id="tab:sample-gri"></div>
+<div id="tab-sample-gri"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
 <caption>
         Sample grid table.
@@ -1393,11 +1393,11 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
 </table>
 <p id="rfc.section.A.8.p.3">This table has no caption, and therefor no reference. But you can refer to some of the other tables, with for instance: </p>
 <pre>
-See [](#tab:here-s-the)
+See [](#tab-here-s-the)
 </pre>
-<p id="rfc.section.A.8.p.4">Which will become "See <a href="#tab:here-s-the" class="xref">Table 2</a>".  </p>
+<p id="rfc.section.A.8.p.4">Which will become "See <a href="#tab-here-s-the" class="xref">Table 2</a>".  </p>
 <p><a name="index.table.grid"></a> </p>
-<p id="rfc.section.A.8.p.6">We should also be able to refer to the table numbers directly, to say things like 'Look at Tables <a href="#tab:demonstrat" class="xref">1</a>, <a href="#tab:here-s-the" class="xref">2</a> and <a href="#tab:sample-gri" class="xref">3</a>.'</p>
+<p id="rfc.section.A.8.p.6">We should also be able to refer to the table numbers directly, to say things like 'Look at Tables <a href="#tab-demonstrat" class="xref">1</a>, <a href="#tab-here-s-the" class="xref">2</a> and <a href="#tab-sample-gri" class="xref">3</a>.'</p>
 <h1 id="rfc.appendix.A.9">
 <a href="#rfc.appendix.A.9">A.9.</a> <a href="#numbered-examples" id="numbered-examples">Numbered examples</a>
 </h1>
@@ -1407,7 +1407,7 @@ See [](#tab:here-s-the)
 <ol><li>Another bla bla..  </li></ol>
 <p id="rfc.section.A.9.p.3">as (1) shows...  </p>
 <h1 id="rfc.appendix.A.10">
-<a href="#rfc.appendix.A.10">A.10.</a> <a href="#figure-tests" id="figure-tests">Figure tests</a>
+<a href="#rfc.appendix.A.10">A.10.</a> <a href="#anchor-figure-tests" id="anchor-figure-tests">Figure tests</a>
 </h1>
 <div id="rfc.figure.4"></div>
 <div id="fig-this-is-th"></div>

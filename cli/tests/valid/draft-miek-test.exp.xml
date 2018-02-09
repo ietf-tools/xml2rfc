@@ -29,7 +29,7 @@
         <uri>http://miek.nl/</uri>
       </address>
     </author>
-    <date month="January" year="2013"/>
+    <date month="January" year="2013" day="1"/>
     <area>General</area>
     <workgroup>RFC Beautification Working Group</workgroup>
     <keyword>RFC</keyword>
@@ -388,7 +388,7 @@ See [](#pandoc-constructs)
         </figure>
         <t>Is translated to <spanx style="verb" xml:space="preserve">&lt;texttable&gt;</spanx> element in <spanx style="verb" xml:space="preserve">xml2rfc</spanx>. You can choose multiple styles as input, but they all are converted to the same style (plain <spanx style="verb" xml:space="preserve">&lt;texttable&gt;</spanx>) table in <spanx style="verb" xml:space="preserve">xml2rfc</spanx>. The column alignment is copied over to the generated XML.  </t>
         <section title="References" anchor="references-2" toc="default" numbered="true">
-          <t>The caption is <spanx style="emph" xml:space="preserve">always</spanx> translated to a <spanx style="verb" xml:space="preserve">title</spanx> attribute. If a table has a caption, it will <spanx style="emph" xml:space="preserve">also</spanx> get a reference. The reference anchor attribute will be: <spanx style="verb" xml:space="preserve">tab:</spanx> + <spanx style="verb" xml:space="preserve">first 10 (normalized) characters from the caption</spanx>.  Where normalized means: </t>
+          <t>The caption is <spanx style="emph" xml:space="preserve">always</spanx> translated to a <spanx style="verb" xml:space="preserve">title</spanx> attribute. If a table has a caption, it will <spanx style="emph" xml:space="preserve">also</spanx> get a reference. The reference anchor attribute will be: <spanx style="verb" xml:space="preserve">tab-</spanx> + <spanx style="verb" xml:space="preserve">first 10 (normalized) characters from the caption</spanx>.  Where normalized means: </t>
           <t>
             <list style="symbols">
               <t>Take the first 10 characters of the caption (i.e. this is the text <spanx style="emph" xml:space="preserve">after</spanx> the string <spanx style="verb" xml:space="preserve">Table:</spanx>); </t>
@@ -396,7 +396,7 @@ See [](#pandoc-constructs)
               <t>Uppercase letters translated to lowercase.  </t>
             </list>
           </t>
-          <t>So the first table with a caption will get <spanx style="verb" xml:space="preserve">tab:a-caption-</spanx> for reference use. See for instance </t>
+          <t>So the first table with a caption will get <spanx style="verb" xml:space="preserve">tab-a-caption-</spanx> for reference use. See for instance </t>
           <t>This anchoring is completely handled from within the <spanx style="verb" xml:space="preserve">xslt</spanx>. Note that duplicate anchors are an XML validation error which will make <spanx style="verb" xml:space="preserve">xml2rfc</spanx> fail.  </t>
         </section>
       </section>
@@ -684,8 +684,8 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
           </list>
         </t>
       </section>
-      <section title="Table Tests" anchor="table-tests" toc="default" numbered="true">
-        <texttable anchor="tab:demonstrat" title="&#10;        Demonstration of simple table&#10;        syntax.&#10;      " suppress-title="false" align="center" style="full">
+      <section title="Table Tests" anchor="anchor-table-tests" toc="default" numbered="true">
+        <texttable anchor="tab-demonstrat" title="&#10;        Demonstration of simple table&#10;        syntax.&#10;      " suppress-title="false" align="center" style="full">
           <ttcol align="right">Right </ttcol>
           <ttcol align="left">Left </ttcol>
           <ttcol align="center">Center </ttcol>
@@ -703,7 +703,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
           <c>1 </c>
           <c>1 </c>
         </texttable>
-        <texttable anchor="tab:here-s-the" title="&#10;        Here's the caption. It, too, may span multiple lines. This is a&#10;        multiline table. This is verbatim text.&#10;      " suppress-title="false" align="center" style="full">
+        <texttable anchor="tab-here-s-the" title="&#10;        Here's the caption. It, too, may span multiple lines. This is a&#10;        multiline table. This is verbatim text.&#10;      " suppress-title="false" align="center" style="full">
           <ttcol align="center" width="16%">Centered Header </ttcol>
           <ttcol align="left" width="11%">Default Aligned </ttcol>
           <ttcol align="right" width="22%">Right Aligned </ttcol>
@@ -718,7 +718,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
           <c>Here's another one. Note the blank line between rows.  </c>
         </texttable>
         <t><iref item="table" subitem="simple" primary="false"/> </t>
-        <texttable anchor="tab:sample-gri" title="&#10;        Sample grid table.&#10;      " suppress-title="false" align="center" style="full">
+        <texttable anchor="tab-sample-gri" title="&#10;        Sample grid table.&#10;      " suppress-title="false" align="center" style="full">
           <ttcol align="left" width="22%">Fruit </ttcol>
           <ttcol align="left" width="22%">Price </ttcol>
           <ttcol align="left" width="29%">Advantages </ttcol>
@@ -744,12 +744,12 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
         <t>This table has no caption, and therefor no reference. But you can refer to some of the other tables, with for instance: </t>
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
-See [](#tab:here-s-the)
+See [](#tab-here-s-the)
 </artwork>
         </figure>
-        <t>Which will become "See <xref target="tab:here-s-the" pageno="false" format="default"/>".  </t>
+        <t>Which will become "See <xref target="tab-here-s-the" pageno="false" format="default"/>".  </t>
         <t><iref item="table" subitem="grid" primary="false"/> </t>
-        <t>We should also be able to refer to the table numbers directly, to say things like 'Look at Tables <xref target="tab:demonstrat" format="counter" pageno="false"/>, <xref target="tab:here-s-the" format="counter" pageno="false"/> and <xref target="tab:sample-gri" format="counter" pageno="false"/>.'</t>
+        <t>We should also be able to refer to the table numbers directly, to say things like 'Look at Tables <xref target="tab-demonstrat" format="counter" pageno="false"/>, <xref target="tab-here-s-the" format="counter" pageno="false"/> and <xref target="tab-sample-gri" format="counter" pageno="false"/>.'</t>
       </section>
       <section title="Numbered examples" anchor="numbered-examples" toc="default" numbered="true">
         <t>This is another example: </t>
@@ -760,7 +760,7 @@ See [](#tab:here-s-the)
         </t>
         <t>as (1) shows...  </t>
       </section>
-      <section title="Figure tests" anchor="figure-tests" toc="default" numbered="true">
+      <section title="Figure tests" anchor="anchor-figure-tests" toc="default" numbered="true">
         <figure anchor="fig-this-is-th" align="center" title="This is the caption, with text in `typewriter`. Which isnt converted to a &lt;spanx&gt; style, because this is copied as-is." suppress-title="false" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 This is a figure

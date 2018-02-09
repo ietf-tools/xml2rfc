@@ -19,7 +19,15 @@
         <attribute name="updates" a:defaultValue=""/>
       </optional>
       <optional>
-        <attribute name="category"/>
+        <attribute name="category">
+          <choice>
+            <value>std</value>
+            <value>bcp</value>
+            <value>exp</value>
+            <value>info</value>
+            <value>historic</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <attribute name="mode"/>
@@ -1089,6 +1097,25 @@
       <optional>
         <attribute name="derivedContent"/>
       </optional>
+      <optional>
+        <attribute name="displayFormat" a:defaultValue="of">
+          <choice>
+            <value>of</value>
+            <value>comma</value>
+            <value>parens</value>
+            <value>bare</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="section"/>
+      </optional>
+      <optional>
+        <attribute name="relative"/>
+      </optional>
+      <optional>
+        <attribute name="derivedLink"/>
+      </optional>
       <text/>
     </element>
   </define>
@@ -2059,7 +2086,7 @@
         <attribute name="status"/>
       </optional>
       <optional>
-        <attribute name="stream" a:defaultValue="IETF">
+        <attribute name="stream">
           <choice>
             <value>IETF</value>
             <value>IAB</value>

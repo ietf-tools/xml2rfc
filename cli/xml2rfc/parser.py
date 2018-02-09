@@ -374,7 +374,7 @@ class XmlRfcParser:
 
 
     """ XML parser container with callbacks to construct an RFC tree """
-    def __init__(self, source, verbose=False, quiet=False,
+    def __init__(self, source, verbose=False, quiet=False, options=None,
                  cache_path=None, templates_path=None, library_dirs=None,
                  no_network=False, network_locs=[
                      'https://xml2rfc.ietf.org/public/rfc/',
@@ -394,7 +394,10 @@ class XmlRfcParser:
         self.templates_path = templates_path or \
                               os.path.join(os.path.dirname(xml2rfc.__file__),
                                            'templates')
-        self.default_dtd_path = os.path.join(self.templates_path, 'rfc2629.dtd')
+        if options and options.vocabulary == 'v2':
+            self.default_dtd_path = os.path.join(self.templates_path, 'rfc2629.dtd')
+        else:
+            self.default_dtd_path = None
 
         for prefix, value in self.nsmap.items():
             lxml.etree.register_namespace(prefix, value)
@@ -517,6 +520,7 @@ class XmlRfcParser:
         file = six.BytesIO(self.text)
         tree = lxml.etree.parse(file, parser)
         xmlrfc = XmlRfc(tree, self.default_dtd_path, nsmap=self.nsmap)
+        xmlrfc.source = self.source
 
         # Evaluate processing instructions before root element
         xmlrfc._eval_pre_pi()
@@ -670,12 +674,12 @@ class XmlRfc:
         else:
             dtd = self.tree.docinfo.externalDTD
             
-        if not dtd:
+        if not dtd and self.default_dtd_path:
             # No explicit DTD filename OR declaration in document!
             xml2rfc.log.warn('No DTD given, defaulting to', self.default_dtd_path)
             return self.validate(dtd_path=self.default_dtd_path)
 
-        if dtd.validate(self.getroot()):
+        if not dtd or dtd.validate(self.getroot()):
             # The document was valid
             return True, []
         else:

@@ -1,3 +1,44 @@
+xml2rfc (2.9.0) ietf; urgency=low
+
+  This release introduces preptool functionality, through a --preptool output
+  mode.  With reservation for some points for which issues has been raised,
+  this follows the spedicfication in RFC7998.
+
+  The preptool currently takes vocabulary v3 input, and produces prepped
+  output.  When work on the text formatter commences, the idea is that the
+  input xml source will always be run through v2v3 conversion and preptool
+  processing before the output formatting, in order to increase consistency
+  and reduce complexity of the output formatter.
+
+  There are also some changes which are not related to the preptool
+  functionality: The tox tests have been changed to add testing under Python
+  3.6, and removed test runs for Python 3.3.  Although there is no intention
+  of breaking compatibility with Python 3.3, it may happen eventually since
+  there will not be any release testing with that version of Python.
+
+  The v2v3 converter in some cases could insert <seriesInfo> elements with
+  only a name= attribute, because the required seriesNo= attribute on <rfc>
+  was missing.  This has been changed.
+
+  In order to work around a debilitating issue with relax-ng validation in
+  libxml2 (time to validate increases exponentially with number of attributes
+  on the root element: https://bugzilla.gnome.org/show_bug.cgi?id=133736)
+  some empty attributes on <rfc> are removed during processing; for instance
+  obsoletes="" and updates="".  They don't contribute information, but
+  increase validation time with a factor ~20.
+
+  In order to identify the unicode scripts needed to display a document,
+  a module to efficiently identify the scripts related to unicode codepoints
+  has been written.  The 'uniscripts' module which was originally intended to
+  be used for this turned out not to be viable.  The new 'scripts' module can
+  be broken out for separate release as a library module, if desired.
+
+  In order to work with vocabulary v3 input, the parser has been slightly
+  modified to not do input validation according to rfc2629.dtd if not
+  appropriate.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  31 Jan 2018 19:11:40 +0100
+
 xml2rfc (2.8.5) ietf; urgency=low
 
   * Changed a file open under python3 to use the newline= parameter to open()

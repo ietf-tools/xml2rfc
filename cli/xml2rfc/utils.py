@@ -4,8 +4,16 @@
 
 # Internal utitlity functions.  Not meant for public usage.
 
+import base64
 import re
+import six
 import textwrap
+
+if six.PY2:
+    from urllib import quote
+else:
+    from urllib.request import quote
+    
 
 try:
     import debug
@@ -543,3 +551,12 @@ _slash_replacements = [
 ];
 
             
+def build_dataurl(mime, data, base64enc=False):
+    if base64enc:
+        data = quote(base64.b64encode(data))
+        url = "data:%s;base64,%s" % (mime, data)
+    else:
+        data = quote(data)
+        url = "data:%s,%s" % (mime, data)
+    return url
+

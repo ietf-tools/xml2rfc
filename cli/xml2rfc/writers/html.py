@@ -767,7 +767,11 @@ class HtmlRfcWriter(BaseRfcWriter):
         background_image = (self.pis['background'] and 
             "background-image:url('%s');" % self.pis['background'] or '')
         title = self.r.find('front/title').text or ''
-        docName = self.r.attrib.get('docName', '')
+        
+        if self.rfcnumber:
+            docName = ''
+        else:
+            docName = self.r.attrib.get('docName', '') 
         description = ''
         abs_t = self.r.find('front/abstract/t')
         if abs_t is not None and abs_t.text:
@@ -784,11 +788,11 @@ class HtmlRfcWriter(BaseRfcWriter):
             docDate = date.attrib.get('year', '')
             try:
                 month = datetime.datetime.strptime(date.attrib.get('month', ''), '%B').month
-                docDate += "-%s" % month
+                docDate += "-%02d" % int(month)
             except ValueError:
                 pass
             if date.attrib.get('day'):
-                docDate += "-%s" % date.attrib.get('day')
+                docDate += "-%02d" % int(date.attrib.get('day'))
 
         # Build author string
         authors = self._format_author_string(self.r.findall('front/author'))

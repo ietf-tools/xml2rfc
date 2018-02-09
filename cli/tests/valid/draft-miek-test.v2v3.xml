@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent" [
 <!ENTITY pandocMiddle PUBLIC "" "README.xml">
 <!ENTITY pandocBack PUBLIC "" "back.xml">
 <!ENTITY pandocRefVim PUBLIC "" "bib/reference.github.vim.xml">
 <!ENTITY pandocRef2119 PUBLIC "" "bib/reference.RFC.2119.xml">
 <!ENTITY pandocRef4641 PUBLIC "" "bib/reference.RFC.4641.xml">
 ]>
-<rfc ipr="trust200902" obsoletes="" updates="" submissionType="IETF" xml:lang="en" tocInclude="true" symRefs="true" sortRefs="true">
+<rfc ipr="trust200902" category="info" obsoletes="" updates="" submissionType="IETF" xml:lang="en" tocInclude="true" symRefs="true" sortRefs="true">
   <!--generate a table of contents -->
   <!--use anchors instead of numbers for references -->
   <!--alphabetize the references -->
@@ -17,7 +17,6 @@
   <front>
     <title abbrev="Pandoc2rfc Version 2">Writing I-Ds and RFCs using Pandoc and xml2rfc 2.x</title>
     <seriesInfo name="Internet-Draft" value="draft-gieben-writing-rfcs-pandoc-02"/>
-    <seriesInfo name="info" value=""/>
     <author initials="R." surname="Gieben" fullname="R. (Miek) Gieben">
       <organization>Google</organization>
       <address>
@@ -34,7 +33,7 @@
         <uri>http://miek.nl/</uri>
       </address>
     </author>
-    <date month="January" year="2013"/>
+    <date month="January" year="2013" day="1"/>
     <area>General</area>
     <workgroup>RFC Beautification Working Group</workgroup>
     <keyword>RFC</keyword>
@@ -443,13 +442,13 @@ See [](#pandoc-constructs)
         <t>Is translated to <tt>&lt;texttable&gt;</tt> element in <tt>xml2rfc</tt>. You can choose multiple styles as input, but they all are converted to the same style (plain <tt>&lt;texttable&gt;</tt>) table in <tt>xml2rfc</tt>. The column alignment is copied over to the generated XML.  </t>
         <section anchor="references-2" toc="default" numbered="true">
           <name>References</name>
-          <t>The caption is <em>always</em> translated to a <tt>title</tt> attribute. If a table has a caption, it will <em>also</em> get a reference. The reference anchor attribute will be: <tt>tab:</tt> + <tt>first 10 (normalized) characters from the caption</tt>.  Where normalized means: </t>
+          <t>The caption is <em>always</em> translated to a <tt>title</tt> attribute. If a table has a caption, it will <em>also</em> get a reference. The reference anchor attribute will be: <tt>tab-</tt> + <tt>first 10 (normalized) characters from the caption</tt>.  Where normalized means: </t>
           <ul spacing="compact">
             <li>Take the first 10 characters of the caption (i.e. this is the text <em>after</em> the string <tt>Table:</tt>); </li>
             <li>Spaces and single quotes (') are translated to a minus <tt>-</tt>; </li>
             <li>Uppercase letters translated to lowercase.  </li>
           </ul>
-          <t>So the first table with a caption will get <tt>tab:a-caption-</tt> for reference use. See for instance </t>
+          <t>So the first table with a caption will get <tt>tab-a-caption-</tt> for reference use. See for instance </t>
           <t>This anchoring is completely handled from within the <tt>xslt</tt>. Note that duplicate anchors are an XML validation error which will make <tt>xml2rfc</tt> fail.  </t>
         </section>
       </section>
@@ -791,7 +790,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
           </li>
         </ol>
       </section>
-      <section anchor="table-tests" toc="default" numbered="true">
+      <section anchor="anchor-table-tests" toc="default" numbered="true">
         <name>Table Tests</name>
         <table anchor="tab-demonstrat">
           <name>Demonstration of simple table
@@ -899,7 +898,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         <t>This table has no caption, and therefor no reference. But you can refer to some of the other tables, with for instance: </t>
         <figure>
           <artwork name="" type="" align="left" alt=""><![CDATA[
-See [](#tab:here-s-the)
+See [](#tab-here-s-the)
 ]]></artwork>
         </figure>
         <t>Which will become "See <xref target="tab-here-s-the" format="default"/>".  </t>
@@ -914,7 +913,7 @@ See [](#tab:here-s-the)
         </ol>
         <t>as (1) shows...  </t>
       </section>
-      <section anchor="figure-tests" toc="default" numbered="true">
+      <section anchor="anchor-figure-tests" toc="default" numbered="true">
         <name>Figure tests</name>
         <figure anchor="fig-this-is-th">
           <name>This is the caption, with text in `typewriter`. Which isnt converted to a &lt;spanx&gt; style, because this is copied as-is.</name>

@@ -63,18 +63,20 @@ def main():
                                        'The destination filename will be based '
                                        'on the input filename, unless an '
                                        'argument is given to --basename.')
-    formatgroup.add_option('', '--text', dest='text', action='store_true',
+    formatgroup.add_option('', '--text', action='store_true',
                            help='outputs to a text file with proper page breaks')
-    formatgroup.add_option('', '--html', dest='html', action='store_true',
+    formatgroup.add_option('', '--html', action='store_true',
                            help='outputs to an html file')
-    formatgroup.add_option('', '--nroff', dest='nroff', action='store_true',
+    formatgroup.add_option('', '--nroff', action='store_true',
                            help='outputs to an nroff file')
-    formatgroup.add_option('', '--raw', dest='raw', action='store_true',
+    formatgroup.add_option('', '--raw', action='store_true',
                            help='outputs to a text file, unpaginated')
-    formatgroup.add_option('', '--exp', dest='exp', action='store_true',
+    formatgroup.add_option('', '--exp', action='store_true',
                            help='outputs to an XML file with all references expanded')
-    formatgroup.add_option('', '--v2v3', dest='v2v3', action='store_true',
+    formatgroup.add_option('', '--v2v3', action='store_true',
                            help='convert vocabulary version 2 XML to version 3')
+    formatgroup.add_option('', '--preptool', action='store_true',
+                           help='run preptool on the input')
     optionparser.add_option_group(formatgroup)
 
 
@@ -110,7 +112,7 @@ def main():
     value_options.add_option('-d', '--dtd', dest='dtd', help='specify an alternate dtd file')
     value_options.add_option('-D', '--date', dest='datestring', metavar='DATE',
                             default=datetime.datetime.today().strftime("%Y-%m-%d"),
-                            help='run as if thedate is DATE (format: yyyy-mm-dd)')
+                            help='run as if the date is DATE (format: yyyy-mm-dd)')
     value_options.add_option('-f', '--filename', dest='filename', metavar='FILE',
                             help='Deprecated.  The same as -o.')
     value_options.add_option('-o', '--out', dest='output_filename', metavar='FILE',
@@ -128,6 +130,11 @@ def main():
                            help='with --v2v3: replace reference elements with RFC and Internet-Draft'
                            ' seriesInfo with the appropriate XInclude element'
                        )
+    formatoptions.add_option('', '--rfc', action='store_true',
+                           help='with --preptool: prep for an RFC'
+                       )
+
+
     optionparser.add_option_group(formatoptions)
 
     # --- Parse and validate arguments ---------------------------------
@@ -143,7 +150,16 @@ def main():
     if sys.argv[0].endswith('v2v3'):
         options.v2v3 = True
         options.utf8 = True
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, ] if o])
+    # Default (this may change over time):
+    options.vocabulary = 'v2'
+    if options.preptool:
+        options.vocabulary = 'v3'
+        options.no_dtd = True
+    if options.v2v3:
+        options.vocabulary = 'v2'
+    if options.rfc and not options.preptool:
+        sys.exit('The --rfc option can be used only with --preptool')
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, options.preptool, ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
                  'use --basename instead.')
@@ -226,61 +242,83 @@ def main():
             # all comments and PI's preserved.  We can assume there are no
             # parse errors at this point since we didnt call sys.exit() during
             # parsing.
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.exp.xml'
+                options.output_filename = filename
             new_xmlrfc = parser.parse(remove_comments=False, quiet=True)
             expwriter = xml2rfc.ExpandedXmlWriter(new_xmlrfc,
                                                   options=options,
                                                   date=options.date)
-            filename = options.output_filename
-            if not filename:
-                filename = basename + '.exp.xml'
             expwriter.write(filename)
+            options.output_filename = None
 
         if options.html:
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.html'
+                options.output_filename = filename
             htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
                                                options=options,
                                                date=options.date,
                                                templates_dir=globals().get('_TEMPLATESPATH', None))
-            filename = options.output_filename
-            if not filename:
-                filename = basename + '.html'
             htmlwriter.write(filename)
+            options.output_filename = None
 
         if options.raw:
-            rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc,
-                                                 options=options,
-                                                 date=options.date)
             filename = options.output_filename
             if not filename:
                 filename = basename + '.raw.txt'
+                options.output_filename = filename
+            rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc,
+                                                 options=options,
+                                                 date=options.date)
             rawwriter.write(filename)
+            options.output_filename = None
 
         if options.text:
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.txt'
+                options.output_filename = filename
             pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc,
                                                          options=options,
                                                          date=options.date,
                                                          omit_headers=options.omit_headers,
                                                      )
-            filename = options.output_filename
-            if not filename:
-                filename = basename + '.txt'
             pagedwriter.write(filename)
+            options.output_filename = None
 
         if options.nroff:
-            nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc,
-                                                 options=options,
-                                                 date=options.date)
             filename = options.output_filename
             if not filename:
                 filename = basename + '.nroff'
+                options.output_filename = filename
+            nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc,
+                                                 options=options,
+                                                 date=options.date)
             nroffwriter.write(filename)
+            options.output_filename = None
 
         if options.v2v3:
             xmlrfc = parser.parse(remove_comments=False, quiet=True)
-            v2v3writer = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
             filename = options.output_filename
             if not filename:
                 filename = basename + '.v2v3.xml'
+                options.output_filename = filename
+            v2v3writer = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
             v2v3writer.write(filename)
+            options.output_filename = None
+
+        if options.preptool:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.prepped.xml'
+                options.output_filename = filename
+            preptool = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date)
+            preptool.write(filename)
+            options.output_filename = None
 
 
     except xml2rfc.RfcWriterError as e:
