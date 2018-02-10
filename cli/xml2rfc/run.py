@@ -133,7 +133,9 @@ def main():
     formatoptions.add_option('', '--rfc', action='store_true',
                            help='with --preptool: prep for an RFC'
                        )
-
+    formatoptions.add_option('', '--liberal', action='store_true',
+                           help='with --preptool: accept already prepped input'
+                       )
 
     optionparser.add_option_group(formatoptions)
 
@@ -147,11 +149,12 @@ def main():
     source = args[0]
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)
+    # Default (this may change over time):
+    options.vocabulary = 'v2'
+    # Option constraints
     if sys.argv[0].endswith('v2v3'):
         options.v2v3 = True
         options.utf8 = True
-    # Default (this may change over time):
-    options.vocabulary = 'v2'
     if options.preptool:
         options.vocabulary = 'v3'
         options.no_dtd = True
@@ -166,6 +169,9 @@ def main():
     if num_formats < 1:
         # Default to paginated text output
         options.text = True
+    if options.debug:
+        options.verbose = True
+    #
     if options.cache:
         if not os.path.exists(options.cache):
             try:
@@ -198,7 +204,7 @@ def main():
                                   templates_path=globals().get('_TEMPLATESPATH', None),
                               )
     try:
-        xmlrfc = parser.parse(remove_pis=options.remove_pis)
+        xmlrfc = parser.parse(remove_pis=options.remove_pis, normalize=True)
     except xml2rfc.parser.XmlRfcError as e:
         xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e)
         sys.exit(1)

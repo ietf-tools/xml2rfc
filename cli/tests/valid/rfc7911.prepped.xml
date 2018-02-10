@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rfc category="std" consensus="true" indexInclude="true" ipr="trust200902" prepTime="2018-02-09" scripts="Common,Latin" sortRefs="false" submissionType="IETF" symRefs="true" tocDepth="3" tocInclude="true" version="3" xml:lang="en">
+<rfc category="std" consensus="true" indexInclude="true" ipr="trust200902" prepTime="2018-02-10" scripts="Common,Latin" sortRefs="false" submissionType="IETF" symRefs="true" tocDepth="3" tocInclude="true" version="3" xml:lang="en">
   <link href="https://dx.doi.org/10.17487/rfc7911" rel="describedBy"/>
   <link href="urn:issn:2070-1721" rel="item"/>
   <link href="https://datatracker.ietf.org/doc/draft-ietf-idr-add-paths" rel="convertedFrom"/>
@@ -60,7 +60,11 @@
     </author>
     <date day="1" month="07" year="2016"/>
     <abstract pn="section-abstract">
-      <t pn="section-abstract-1">This document defines a BGP extension that allows the advertisement of multiple paths for the same address prefix without the new paths implicitly replacing any previous ones. The essence of the extension is that each path is identified by a Path Identifier in addition to the address prefix.</t>
+      <t pn="section-abstract-1">This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. The essence of the extension is
+      that each path is identified by a Path Identifier in addition to the
+      address prefix.</t>
     </abstract>
     <boilerplate>
       <section numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.1">
@@ -105,23 +109,55 @@
   <middle>
     <section numbered="true" toc="include" removeInRFC="false" pn="section-1">
       <name slugifiedName="name-introduction">Introduction</name>
-      <t pn="section-1-1">The BGP specification <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> defines an Update-Send Process to advertise the routes chosen by the Decision Process to other BGP speakers. No provisions are made to allow the advertisement of multiple paths for the same address prefix or Network Layer Reachability Information (NLRI).  In fact, a route with the same NLRI as a previously advertised route implicitly replaces the previous advertisement.</t>
-      <t pn="section-1-2">This document defines a BGP extension that allows the advertisement of multiple paths for the same address prefix without the new paths implicitly replacing any previous ones. The essence of the extension is that each path is identified by a Path Identifier in addition to the address prefix.</t>
-      <t pn="section-1-3">The availability of the additional paths can help reduce or eliminate persistent route oscillations <xref format="default" target="RFC3345" displayFormat="of" pageno="false" derivedContent="RFC3345"/>.  It can also help with optimal routing and routing convergence in a network by providing potential alternate or backup paths, respectively.</t>
+      <t pn="section-1-1">The BGP specification <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> defines an Update-Send Process to advertise the
+      routes chosen by the Decision Process to other BGP speakers. No
+      provisions are made to allow the advertisement of multiple paths for the
+      same address prefix or Network Layer Reachability Information (NLRI).
+      In fact, a route with the same NLRI as a previously advertised route
+      implicitly replaces the previous advertisement.</t>
+      <t pn="section-1-2">This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. The essence of the extension is
+      that each path is identified by a Path Identifier in addition to the
+      address prefix.</t>
+      <t pn="section-1-3">The availability of the additional paths can help reduce or eliminate
+      persistent route oscillations <xref format="default" target="RFC3345" displayFormat="of" pageno="false" derivedContent="RFC3345"/>.  It can also help with optimal routing and routing 
+      convergence in a network by providing potential alternate or backup paths, 
+      respectively.</t>
       <section numbered="true" toc="include" removeInRFC="false" pn="section-1.1">
         <name slugifiedName="name-specification-of-requiremen">Specification of Requirements</name>
-        <t pn="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref format="default" target="RFC2119" displayFormat="of" pageno="false" derivedContent="RFC2119"/>.</t>
+        <t pn="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <xref format="default" target="RFC2119" displayFormat="of" pageno="false" derivedContent="RFC2119"/>.</t>
       </section>
     </section>
     <section numbered="true" toc="include" removeInRFC="false" pn="section-2">
       <name slugifiedName="name-how-to-identify-a-path">How to Identify a Path</name>
-      <t pn="section-2-1">As defined in <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/>, a path refers to the information reported in the Path Attribute field of an UPDATE message. As the procedures specified in <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> allow only the advertisement of one path for a particular address prefix, a path for an address prefix from a BGP peer can be keyed on the address prefix.</t>
-      <t pn="section-2-2">In order for a BGP speaker to advertise multiple paths for the same address prefix, a new identifier (termed "Path Identifier" hereafter) needs to be introduced so that a particular path for an address prefix can be identified by the combination of the address prefix and the Path Identifier.</t>
-      <t pn="section-2-3">The assignment of the Path Identifier for a path by a BGP speaker is purely a local matter. However, the Path Identifier MUST be assigned in such a way that the BGP speaker is able to use the (Prefix, Path Identifier) to uniquely identify a path advertised to a neighbor. A BGP speaker that re-advertises a route MUST generate its own Path Identifier to be associated with the re-advertised route. A BGP speaker that receives a route should not assume that the identifier carries any particular semantics.</t>
+      <t pn="section-2-1">As defined in <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/>, a path refers to the information reported in the
+      Path Attribute field of an UPDATE message. As the procedures specified
+      in <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> allow only
+      the advertisement of one path for a particular address prefix, a path
+      for an address prefix from a BGP peer can be keyed on the address
+      prefix.</t>
+      <t pn="section-2-2">In order for a BGP speaker to advertise multiple paths for the same
+      address prefix, a new identifier (termed "Path Identifier" hereafter)
+      needs to be introduced so that a particular path for an address prefix
+      can be identified by the combination of the address prefix and the Path
+      Identifier.</t>
+      <t pn="section-2-3">The assignment of the Path Identifier for a path by a BGP speaker is
+      purely a local matter. However, the Path Identifier MUST be assigned in
+      such a way that the BGP speaker is able to use the (Prefix, Path
+      Identifier) to uniquely identify a path advertised to a neighbor. A BGP
+      speaker that re-advertises a route MUST generate its own Path Identifier
+      to be associated with the re-advertised route. A BGP speaker that
+      receives a route should not assume that the identifier carries any
+      particular semantics.</t>
     </section>
     <section anchor="code" numbered="true" toc="include" removeInRFC="false" pn="section-3">
       <name slugifiedName="name-extended-nlri-encodings">Extended NLRI Encodings</name>
-      <t pn="section-3-1">In order to carry the Path Identifier in an UPDATE message, the NLRI encoding MUST be extended by prepending the Path Identifier field, which is of four octets.</t>
+      <t pn="section-3-1">In order to carry the Path Identifier in an UPDATE message, the NLRI
+      encoding MUST be extended by prepending the Path Identifier field, which
+      is of four octets.</t>
       <t pn="section-3-2">For example, the NLRI encoding specified in <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> is extended as the following:</t>
       <figure align="left" suppress-title="false" pn="figure-1">
         <artwork name="" type="" align="left" alt="" pn="section-3-3">
@@ -137,7 +173,10 @@
     </section>
     <section anchor="capa" numbered="true" toc="include" removeInRFC="false" pn="section-4">
       <name slugifiedName="name-add-path-capability">ADD-PATH Capability</name>
-      <t pn="section-4-1">The ADD-PATH Capability is a BGP capability <xref format="default" target="RFC5492" displayFormat="of" pageno="false" derivedContent="RFC5492"/>, with Capability Code 69. The Capability Length field of this capability is variable. The Capability Value field consists of one or more of the following tuples:</t>
+      <t pn="section-4-1">The ADD-PATH Capability is a BGP capability <xref format="default" target="RFC5492" displayFormat="of" pageno="false" derivedContent="RFC5492"/>, with Capability Code
+      69. The Capability Length field of this capability is
+      variable. The Capability Value field consists of one or more of the
+      following tuples:</t>
       <figure align="left" suppress-title="false" pn="figure-2">
         <artwork name="" type="" align="left" alt="" pn="section-4-2">
              +------------------------------------------------+
@@ -165,35 +204,101 @@
         <li pn="section-4-13">
           <t pn="section-4-14">Send/Receive: </t>
           <ul spacing="compact" empty="false" pn="section-4-15">
-            <li pn="section-4-16">This field indicates whether the sender is (a) able to receive multiple paths from its peer (value 1), (b) able to send multiple paths to its peer (value 2), or (c) both (value 3) for the &lt;AFI, SAFI&gt;.</li>
-            <li pn="section-4-17">If any other value is received, then the capability SHOULD be treated as not understood and ignored <xref format="default" target="RFC5492" displayFormat="of" pageno="false" derivedContent="RFC5492"/>.</li>
+            <li pn="section-4-16">This field indicates whether the sender is (a) able to
+              receive multiple paths from its peer (value 1), (b) able to send
+              multiple paths to its peer (value 2), or (c) both (value 3) for
+              the &lt;AFI, SAFI&gt;.</li>
+            <li pn="section-4-17">If any other value is received, then the capability SHOULD be
+              treated as not understood and ignored <xref format="default" target="RFC5492" displayFormat="of" pageno="false" derivedContent="RFC5492"/>.</li>
           </ul>
         </li>
       </ul>
-      <t pn="section-4-18">A BGP speaker that wishes to indicate support for multiple AFI/SAFIs MUST do so by including the information in a single instance of the ADD-PATH Capability.</t>
+      <t pn="section-4-18">A BGP speaker that wishes to indicate support for multiple
+      AFI/SAFIs MUST do so by including the information in a single instance of
+      the ADD-PATH Capability.</t>
     </section>
     <section anchor="ops" numbered="true" toc="include" removeInRFC="false" pn="section-5">
       <name slugifiedName="name-operation">Operation</name>
-      <t pn="section-5-1">The Path Identifier specified in <xref target="code" format="default" displayFormat="of" pageno="false" derivedContent="Section 3"/> can be used to advertise multiple paths for the same address prefix without subsequent advertisements replacing the previous ones. Apart from the fact that this is now possible, the route advertisement rules of <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> are not changed. In particular, a new advertisement for a given address prefix and a given Path Identifier replaces a previous advertisement for the same address prefix and Path Identifier. If a BGP speaker receives a message to withdraw a prefix with a Path Identifier not seen before, it SHOULD silently ignore it.</t>
-      <t pn="section-5-2">For a BGP speaker to be able to send multiple paths to its peer, that BGP speaker MUST advertise the ADD-PATH Capability with the Send/Receive field set to either 2 or 3, and MUST receive from its peer the ADD-PATH Capability with the Send/Receive field set to either 1 or 3, for the corresponding &lt;AFI, SAFI&gt;.</t>
-      <t pn="section-5-3">A BGP speaker MUST follow the procedures defined in <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> when generating an UPDATE message for a particular &lt;AFI, SAFI&gt; to a peer unless the BGP speaker advertises the ADD-PATH Capability to the peer indicating its ability to send multiple paths for the &lt;AFI, SAFI&gt;, and also receives the ADD-PATH Capability from the peer indicating its ability to receive multiple paths for the &lt;AFI, SAFI&gt;, in which case the speaker MUST generate a route update for the &lt;AFI, SAFI&gt; based on the combination of the address prefix and the Path Identifier, and use the extended NLRI encodings specified in this document. The peer SHALL act accordingly in processing an UPDATE message related to a particular &lt;AFI, SAFI&gt;.</t>
-      <t pn="section-5-4">A BGP speaker SHOULD include the best route <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> when more than one path is advertised to a neighbor, unless it is a path received from that neighbor.</t>
-      <t pn="section-5-5">As the Path Identifiers are locally assigned, and may or may not be persistent across a control plane restart of a BGP speaker, an implementation SHOULD take special care so that the underlying forwarding plane of a "Receiving Speaker" as described in <xref format="default" target="RFC4724" displayFormat="of" pageno="false" derivedContent="RFC4724"/> is not affected during the graceful restart of a BGP session.</t>
+      <t pn="section-5-1">The Path Identifier specified in <xref target="code" format="default" displayFormat="of" pageno="false" derivedContent="Section 3"/> can be used to
+      advertise multiple paths for the same address prefix without subsequent
+      advertisements replacing the previous ones. Apart from the fact that
+      this is now possible, the route advertisement rules of <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> are not changed. In
+      particular, a new advertisement for a given address prefix and a given
+      Path Identifier replaces a previous advertisement for the same address
+      prefix and Path Identifier. If a BGP speaker receives a message to
+      withdraw a prefix with a Path Identifier not seen before, it SHOULD
+      silently ignore it.</t>
+      <t pn="section-5-2">For a BGP speaker to be able to send multiple paths to its peer, that
+      BGP speaker MUST advertise the ADD-PATH Capability with the Send/Receive
+      field set to either 2 or 3, and MUST receive from its peer the ADD-PATH
+      Capability with the Send/Receive field set to either 1 or 3, for the
+      corresponding &lt;AFI, SAFI&gt;.</t>
+      <t pn="section-5-3">A BGP speaker MUST follow the procedures defined in <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> when generating an
+      UPDATE message for a particular &lt;AFI, SAFI&gt; to a peer unless the
+      BGP speaker advertises the ADD-PATH Capability to the peer indicating
+      its ability to send multiple paths for the &lt;AFI, SAFI&gt;, and also
+      receives the ADD-PATH Capability from the peer indicating its ability to
+      receive multiple paths for the &lt;AFI, SAFI&gt;, in which case the
+      speaker MUST generate a route update for the &lt;AFI, SAFI&gt; based on
+      the combination of the address prefix and the Path Identifier, and use
+      the extended NLRI encodings specified in this document. The peer SHALL
+      act accordingly in processing an UPDATE message related to a particular
+      &lt;AFI, SAFI&gt;.</t>
+      <t pn="section-5-4">A BGP speaker SHOULD include the best route <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="RFC4271"/> when more than one path is
+      advertised to a neighbor, unless it is a path received from
+      that neighbor.</t>
+      <t pn="section-5-5">As the Path Identifiers are locally assigned, and may or may not be
+      persistent across a control plane restart of a BGP speaker, an
+      implementation SHOULD take special care so that the underlying
+      forwarding plane of a "Receiving Speaker" as described in <xref format="default" target="RFC4724" displayFormat="of" pageno="false" derivedContent="RFC4724"/> is not affected
+      during the graceful restart of a BGP session.</t>
     </section>
     <section numbered="true" toc="include" removeInRFC="false" pn="section-6">
       <name slugifiedName="name-deployment-considerations">Deployment Considerations</name>
-      <t pn="section-6-1">The extension proposed in this document provides a mechanism for a BGP speaker to advertise multiple paths over a BGP session. Care needs to be taken in its deployment to ensure consistent routing and forwarding in a network <xref format="default" target="ADDPATH" displayFormat="of" pageno="false" derivedContent="ADDPATH"/>.</t>
-      <t pn="section-6-2">The only explicit indication that the encoding described in <xref target="code" format="default" displayFormat="of" pageno="false" derivedContent="Section 3"/> is in use in a particular BGP session is the exchange of Capabilities described in <xref target="capa" format="default" displayFormat="of" pageno="false" derivedContent="Section 4"/>.  If the exchange is successful <xref format="default" target="RFC5492" displayFormat="of" pageno="false" derivedContent="RFC5492"/>, then the BGP speakers will be able to process all BGP UPDATES properly, as described in <xref target="ops" format="default" displayFormat="of" pageno="false" derivedContent="Section 5"/>.  However, if, for example, a packet analyzer is used on the wire to examine an active BGP session, it may not be able to properly decode the BGP UPDATES because it lacks prior knowledge of the exchanged Capabilities.</t>
-      <t pn="section-6-3">When deployed as a provider edge router or a peering router that interacts with external neighbors, a BGP speaker usually advertises at most one path to the internal neighbors in a network. In the case where the speaker is configured to advertise multiple paths to the internal neighbors, and additional information is needed for the application, the speaker could use attributes such as the Edge_Discriminator attribute <xref format="default" target="FAST" displayFormat="of" pageno="false" derivedContent="FAST"/>. The use of that type of additional information is outside the scope of this document.</t>
+      <t pn="section-6-1">The extension proposed in this document provides a mechanism for a
+      BGP speaker to advertise multiple paths over a BGP session. Care needs
+      to be taken in its deployment to ensure consistent routing and
+      forwarding in a network <xref format="default" target="ADDPATH" displayFormat="of" pageno="false" derivedContent="ADDPATH"/>.</t>
+      <t pn="section-6-2">The only explicit indication that the encoding described in <xref target="code" format="default" displayFormat="of" pageno="false" derivedContent="Section 3"/>
+      is in use in a particular BGP session is the exchange of Capabilities
+      described in <xref target="capa" format="default" displayFormat="of" pageno="false" derivedContent="Section 4"/>.  If the exchange is successful <xref format="default" target="RFC5492" displayFormat="of" pageno="false" derivedContent="RFC5492"/>, then the BGP speakers
+      will be able to process all BGP UPDATES properly, as described in <xref target="ops" format="default" displayFormat="of" pageno="false" derivedContent="Section 5"/>.
+      However, if, for example, a packet analyzer is used on the wire to examine 
+      an active BGP session, it may not be able to properly decode the BGP UPDATES
+      because it lacks prior knowledge of the exchanged Capabilities.</t>
+      <t pn="section-6-3">When deployed as a provider edge router or a peering router that
+      interacts with external neighbors, a BGP speaker usually advertises at
+      most one path to the internal neighbors in a network. In the case where the
+      speaker is configured to advertise multiple paths to the internal
+      neighbors, and additional information is needed for the application, the
+      speaker could use attributes such as the Edge_Discriminator attribute
+      <xref format="default" target="FAST" displayFormat="of" pageno="false" derivedContent="FAST"/>. The use of that type of
+      additional information is outside the scope of this document.</t>
     </section>
     <section numbered="true" toc="include" removeInRFC="false" pn="section-7">
       <name slugifiedName="name-iana-considerations">IANA Considerations</name>
-      <t pn="section-7-1">IANA has assigned the value 69 for the ADD-PATH Capability described in this document. This registration is in the "Capability Codes" registry.</t>
+      <t pn="section-7-1">IANA has assigned the value 69 for the ADD-PATH Capability
+      described in this document. This registration is in the "Capability
+      Codes" registry.</t>
     </section>
     <section numbered="true" toc="include" removeInRFC="false" pn="section-8">
       <name slugifiedName="name-security-considerations">Security Considerations</name>
-      <t pn="section-8-1">This document defines a BGP extension that allows the advertisement of multiple paths for the same address prefix without the new paths implicitly replacing any previous ones. As a result, multiple paths for a large number of prefixes may be received by a BGP speaker, potentially depleting memory resources or even causing network-wide instability, which can be considered a denial-of-service attack.  Note that this is not a new vulnerability, but one that is present in the base BGP specification <xref format="default" target="RFC4272" displayFormat="of" pageno="false" derivedContent="RFC4272"/>.</t>
-      <t pn="section-8-2">The use of the ADD-PATH Capability is intended to address specific needs related to, for example, <xref target="STOP-OSC" format="default" displayFormat="of" pageno="false" derivedContent="eliminating route oscillations that were induced by the MULTI_EXIT_DISC (MED) attribute">eliminating route oscillations that were induced by the MULTI_EXIT_DISC (MED) attribute</xref>.  While describing the applications for the ADD-PATH Capability is outside the scope of this document, users are encouraged to examine their behavior and potential impact by studying the best practices described in <xref format="default" target="ADDPATH" displayFormat="of" pageno="false" derivedContent="ADDPATH"/>.</t>
+      <t pn="section-8-1">This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. As a result, multiple paths for
+      a large number of prefixes may be received by a BGP speaker, potentially
+      depleting memory resources or even causing network-wide instability, which
+      can be considered a denial-of-service attack.  Note that this is not a new
+      vulnerability, but one that is present in the base BGP specification <xref format="default" target="RFC4272" displayFormat="of" pageno="false" derivedContent="RFC4272"/>.</t>
+      <t pn="section-8-2">
+  The use of the ADD-PATH Capability is intended to address specific
+  needs related to, for example, <xref target="STOP-OSC" format="default" displayFormat="of" pageno="false" derivedContent="eliminating route oscillations that&#10;  were induced by the MULTI_EXIT_DISC (MED) attribute">eliminating route oscillations that
+  were induced by the MULTI_EXIT_DISC (MED) attribute</xref>.
+
+  While describing the applications for the
+      ADD-PATH Capability is outside the scope of this document, users
+      are encouraged to examine their behavior and potential impact by
+      studying the best practices described in <xref format="default" target="ADDPATH" displayFormat="of" pageno="false" derivedContent="ADDPATH"/>.</t>
       <t pn="section-8-3">Security concerns in the base operation of <xref format="default" target="RFC4271" displayFormat="of" pageno="false" derivedContent="BGP">BGP</xref> also apply.</t>
     </section>
   </middle>
@@ -410,8 +515,13 @@
     </references>
     <section numbered="false" toc="include" removeInRFC="false" pn="appendix-a">
       <name slugifiedName="name-acknowledgments">Acknowledgments</name>
-      <t pn="appendix-a-1">We would like to thank David Cook and Naiming Shen for their contributions to the design and development of the extension.</t>
-      <t pn="appendix-a-2">Many people have made valuable comments and suggestions, including Rex Fernando, Eugene Kim, Danny McPherson, Dave Meyer, Pradosh Mohapatra, Keyur Patel, Robert Raszuk, Eric Rosen, Srihari Sangli, Dan Tappan, Mark Turner, Jeff Haas, Jay Borkenhagen, Mach Chen, Denis Ovsienko, Carlos Pignataro, Meral Shirazipour, and Kathleen Moriarty.</t>
+      <t pn="appendix-a-1">We would like to thank David Cook and Naiming Shen for their
+      contributions to the design and development of the extension.</t>
+      <t pn="appendix-a-2">Many people have made valuable comments and suggestions, including
+      Rex Fernando, Eugene Kim, Danny McPherson, Dave Meyer, Pradosh
+      Mohapatra, Keyur Patel, Robert Raszuk, Eric Rosen, Srihari Sangli, Dan
+      Tappan, Mark Turner, Jeff Haas, Jay Borkenhagen, Mach Chen, Denis Ovsienko,
+      Carlos Pignataro, Meral Shirazipour, and Kathleen Moriarty.</t>
     </section>
   </back>
 </rfc>

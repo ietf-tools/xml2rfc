@@ -17,7 +17,7 @@ try:
 except ImportError:
     pass
 
-default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False, debug=False))
+default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False, debug=False, liberal=False))
 
 class _RfcItem:
     """ A unique ID object for an anchored RFC element.

@@ -164,7 +164,7 @@ MINOR=${REST%.*}
 MAINT=${REST#*.}
 VER="$(printf %d.%d.%d $MAJOR $MINOR $MAINT)"
 NEXT=$(( $MAINT + 1 ))
-DEV="$(printf %d.%d.%d.dev1 $MAJOR $MINOR $NEXT)"
+DEV="$(printf %d.%d.%ddev1 $MAJOR $MINOR $NEXT)"
 
 note "Checking that changelog information is available"
 changes=$( sed -n "/^$PROJ ($VER.*)/,/^ -- /p" changelog )
@@ -181,8 +181,8 @@ $do svn info $REPO/tags/${WORK:+$WORK/}$VER 2>&1 | $do egrep -q "(Not a valid UR
 note "  Ok"
 
 note "\nUpdating the version info in $VERFILE and settings.py"
-sed -i -r -e "/^__version__/s/'[\.0-9]+(dev[0-9]+)?'/'$VER'/" $VERFILE
-sed -i -r -e "/version=/s/'[\.0-9]+(-dev[0-9]?)?'/'$VER'/" setup.py
+$do sed -i -r -e "/^__version__/s/'[\.0-9]+(dev[0-9]+)?'/'$VER'/" $VERFILE
+$do sed -i -r -e "/version=/s/'[\.0-9]+(-dev[0-9]?)?'/'$VER'/" setup.py
 
 note "\nVerifying that we're now reporting the correct version"
 $do make install
@@ -204,8 +204,8 @@ note "\nCreating new tag 'tags/${WORK:+$WORK/}$VER' from $SRC"
 $do svn cp $REPO/$SRC $REPO/tags/${WORK:+$WORK/}$VER -m "Creating new tag 'tags/${WORK:+$WORK/}$VER' from $SRC"
 
 note "\nUpdating version info to indicate development mode"
-$do sed -i -r -e "/^__version__/s/'[\.0-9]+(-dev[0-9]?)?\"/'$NEXT'/" $VERFILE
-$do sed -i -r -e "/version=/s/'[\.0-9]+(-dev[0-9]?)?\"/'$NEXT'/" setup.py
+$do sed -i -r -e "/^__version__/s/'[\.0-9]+(dev[0-9]?)?\"/'$NEXT'/" $VERFILE
+$do sed -i -r -e "/version=/s/'[\.0-9]+(dev[0-9]?)?\"/'$NEXT'/" setup.py
 
 note "\nCommitting the updated version"
 $do svn commit $VERFILE setup.py -m "Set version info back to development mode"
@@ -223,7 +223,10 @@ Release notes:
 $changes
 
 The preferred way to install xml2rfc is by doing 'pip install xml2rfc',
-and 'pip install --upgrade xml2rfc' to upgrade.
+and 'pip install --upgrade xml2rfc' to upgrade.  If there are system-
+installed python modules which pip will not upgrade, you may have to
+use 'pip install --upgrade --no-deps xml2rfc' and install dependencies
+manually.
 
 The new version is also available through SVN checkout, with
   'svn checkout $REPO/tags/${WORK:+$WORK/}$VER'
@@ -232,11 +235,11 @@ Regards,
 
 	Henrik
 	(via the mkrelease script)
-" > ~/src/db/release-mail-v$VER.txt
+" > ./mail/release-mail-v$VER.txt
 note "\nSend mail to interested parties"
-cat ~/src/db/release-mail-v$VER.txt | $do mail -s "New xml2rfc release: v$VER" -c henrik@levkowetz.com  -c glen@amsl.com -c mlarson@amsl.com -c rjs@nostrum.com -c housley@vigilsec.com -c arusso@amsl.com -c sginoZa@amsl.com -c mferguson@amsl.com $contributors rse@rfc-editor.org
+cat ./mail/release-mail-v$VER.txt | $do mail -s "New xml2rfc release: v$VER" -c henrik@levkowetz.com  -c glen@amsl.com -c mlarson@amsl.com -c rjs@nostrum.com -c housley@vigilsec.com -c arusso@amsl.com -c sginoza@amsl.com -c mferguson@amsl.com $contributors rse@rfc-editor.org
 note "\nSend mail to mailing lists (avoiding too many addressees"
-cat ~/src/db/release-mail-v$VER.txt | $do mail -s "New xml2rfc release: v$VER" xml2rfc@ietf.org -c rfc-markdown@ietf.org -c codesprints@ietf.org
+cat ./mail/release-mail-v$VER.txt | $do mail -s "New xml2rfc release: v$VER" xml2rfc@ietf.org -c rfc-markdown@ietf.org -c codesprints@ietf.org
 
 #$do toolsfeed control changelog /www/tools.ietf.org/tools/atomfeed.xml
 $do toolpush /www/tools.ietf.org/tools/atomfeed.xml

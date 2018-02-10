@@ -79,7 +79,7 @@ def slugify_name(name):
 class PrepToolWriter:
     """ Writes an XML file where the input has been modified according to RFC 7998"""
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None):
         if not quiet is None:
             options.quiet = quiet
         self.xmlrfc = xmlrfc
@@ -106,7 +106,7 @@ class PrepToolWriter:
         self.prev_section_level = 0
         self.prev_paragraph_section = None
         #
-
+        self.liberal = liberal if liberal != None else options.liberal
 
     def get_attribute_defaults(self, tag):
         if not tag in self.attribute_defaults:
@@ -122,13 +122,15 @@ class PrepToolWriter:
         attrib.update(kwargs)
         return etree.Element(tag, **attrib)
 
+    def note(self, e, text):
+        lnum = getattr(e, 'sourceline', 0)
+        msg = "%s(%s): Note: %s" % (self.xmlrfc.source, lnum+1, text)
+        log.write(msg)
+
     def warn(self, e, text):
         lnum = getattr(e, 'sourceline', 0)
         msg = "%s(%s): Warning: %s" % (self.xmlrfc.source, lnum+1, text)
-        if self.options.debug:
-            raise RuntimeError(msg)
-        else:
-            log.write(msg)
+        log.write(msg)
 
     def err(self, e, text, trace=False):
         lnum = getattr(e, 'sourceline', 0)
@@ -161,7 +163,7 @@ class PrepToolWriter:
             self.warn(e, 'Invalid document %s running preptool: %s' % (when, e,))
             return False
 
-    def write(self, filename, options=default_options):
+    def write(self, filename):
         """ Public method to write the XML document to a file """
 
         self.prep()
@@ -298,7 +300,8 @@ class PrepToolWriter:
             ss = s.split(';')[0]
             func = getattr(self, func_name, None)
             if func:
-                #log.note("Calling %s()" % func_name)
+                if self.options.debug:
+                    log.note("Calling %s()" % func_name)
                 for e in self.tree.xpath(ss):
                     func(e, e.getparent())
                     selector_visits[s] += 1
@@ -468,8 +471,12 @@ class PrepToolWriter:
     #    Fill in the "prepTime" attribute of <rfc> with the current datetime.
     def insert_preptime(self, e, p):
         if 'prepTime' in e.attrib:
-            self.die(e, "Did not expect a prepTime= attribute for <rfc>, but found '%s'" % (e.get('prepTime')))
-        e.set('prepTime', datetime.date.today().strftime('%Y-%m-%d'))
+            if self.liberal:
+                self.note(e, "Scanning alredy prepped source dated %s" % (e.get('prepTime'), ))
+            else:
+                self.die(e, "Did not expect a prepTime= attribute for <rfc>, but found '%s'" % (e.get('prepTime')))
+        else:
+            e.set('prepTime', datetime.date.today().strftime('%Y-%m-%d'))
 
     # 5.2.5.  <ol> Group "start" Insertion
     # 
@@ -680,11 +687,12 @@ class PrepToolWriter:
             old_bp = e.find('boilerplate')
             new_bp = self.element('boilerplate')
             if old_bp != None:
-                children = old_bp.getchildren()
-                if len(children):
-                    self.warn(old_bp, "Expected no <bolerplate> element, but found one.  Replacing the content with new boilerplate")
-                new_bp = self.element('boilerplate')
-                e.replace(old_bp, new_bp)
+                if not self.liberal:
+                    children = old_bp.getchildren()
+                    if len(children):
+                        self.warn(old_bp, "Expected no <boilerplate> element, but found one.  Replacing the content with new boilerplate")
+                    new_bp = self.element('boilerplate')
+                    e.replace(old_bp, new_bp)
             else:
                 e.append(new_bp)
 
@@ -721,38 +729,41 @@ class PrepToolWriter:
         # consensus: "false" | "true"
         # category: "std" | "bcp" | "exp" | "info" | "historic"
         if self.options.rfc:
-            stream = self.root.get('submissionType')
-            category = self.root.get('category')
-            consensus = self.root.get('consensus')
-            workgroup = self.root.find('./front/workgroup')
-            #
-            group = workgroup.text if workgroup != None else None
-            format_dict = { 'rfc_number': self.rfcnumber }
-            if group:
-                format_dict['group_name'] = group
-            #
-            if stream == 'IRTF' and workgroup == None:
-                consensus = 'n/a'
-            elif stream == 'independent':
-                consensus = 'n/a'
-            #
-            section = self.element('section', numbered='false')
-            name = self.element('name')
-            name.text = "Status of this Memo"
-            section.append(name)
-            try:
-                for para in boilerplate_status_of_memo[stream][category][consensus]:
-                    t = self.element('t')
-                    t.text = para.format(**format_dict)
-                    section.append(t)
-            except KeyError as exception:
-                if str(exception) in ["'rfc_number'", "'group_name'"]:
-                    # Error in string expansion
-                    self.die(p, 'Expected to have a value for %s when expanding the "Status of this Memo" boilerplate, but found none.' % str(exception))
-                else:
-                    # Error in boilerplate dictionary indexes
-                    self.die(self.root, 'Unexpected attribute combination(%s): <rfc submissionType="%s" category="%s" consensus="%s">' % (exception, stream, category, consensus))
-            e.append(section)
+            if self.liberal and e.xpath('./section/name[text()="Status of this Memo"]'):
+                self.note(e, "Boilerplate 'Status of this Memo' section exists, leaving it in place")
+            else:
+                stream = self.root.get('submissionType')
+                category = self.root.get('category')
+                consensus = self.root.get('consensus')
+                workgroup = self.root.find('./front/workgroup')
+                #
+                group = workgroup.text if workgroup != None else None
+                format_dict = { 'rfc_number': self.rfcnumber }
+                if group:
+                    format_dict['group_name'] = group
+                #
+                if stream == 'IRTF' and workgroup == None:
+                    consensus = 'n/a'
+                elif stream == 'independent':
+                    consensus = 'n/a'
+                #
+                section = self.element('section', numbered='false')
+                name = self.element('name')
+                name.text = "Status of this Memo"
+                section.append(name)
+                try:
+                    for para in boilerplate_status_of_memo[stream][category][consensus]:
+                        t = self.element('t')
+                        t.text = para.format(**format_dict)
+                        section.append(t)
+                except KeyError as exception:
+                    if str(exception) in ["'rfc_number'", "'group_name'"]:
+                        # Error in string expansion
+                        self.die(p, 'Expected to have a value for %s when expanding the "Status of this Memo" boilerplate, but found none.' % str(exception))
+                    else:
+                        # Error in boilerplate dictionary indexes
+                        self.die(self.root, 'Unexpected attribute combination(%s): <rfc submissionType="%s" category="%s" consensus="%s">' % (exception, stream, category, consensus))
+                e.append(section)
 
     # 5.4.2.3.  "Copyright Notice" Insertion
     # 
@@ -763,43 +774,46 @@ class PrepToolWriter:
     #    described in A.1 of [RFC7991].
     def boilerplate_insert_copyright_notice(self, e, p):
         if self.options.rfc:
-            tlp_2_start_date = datetime.date(year=2009, month=2, day=15)
-            tlp_3_start_date = datetime.date(year=2009, month=9, day=12)
-            tlp_4_start_date = datetime.date(year=2009, month=12, day=28)
-            ipr = self.root.get('ipr').lower()
-            subtype = self.root.get('submissionType')
-            if not ipr:
-                self.die(self.root, "Missing ipr attribute on <rfc> element.")
-            if not ipr.endswith('trust200902'):
-                self.die(self.root, "Unknown ipr attribute: %s" % (self.root.get('ipr'), ))
-            #
-            if   self.date < tlp_2_start_date:
-                self.die(e, "Cannot insert copyright statements earlier than TLP2.0, effective %s" % (tlp_2_start_date))
-            elif self.date < tlp_3_start_date:
-                tlp = "2.0"
-                stream = "n/a"
-            elif self.date < tlp_4_start_date:
-                tlp = "3.0"
-                stream = "n/a"
+            if self.liberal and e.xpath('./section/name[text()="Copyright Notice"]'):
+                self.note(e, "Boilerplate 'Copyright Notice' section exists, leaving it in place")
             else:
-                tlp = "4.0"
-                stream = 'IETF' if subtype == 'IETF' else 'alt'
-            section = self.element('section', numbered='false')
-            name = self.element('name')
-            name.text = "Copyright Notice"
-            section.append(name)
-            paras = boilerplate_tlp[tlp][stream][:]
-            if   ipr.startswith('nomodification'):
-                paras += boilerplate_tlp[tlp]['noModification'][:]
-            elif ipr.startswith('noderivatives'):
-                paras += boilerplate_tlp[tlp]['noDerivatives'][:]
-            elif ipr.startswith('pre5378'):
-                paras += boilerplate_tlp[tlp]['pre5378'][:]
-            for para in paras:
-                t = self.element('t')
-                t.text = para.format(year=self.date.year)
-                section.append(t)
-            e.append(section)
+                tlp_2_start_date = datetime.date(year=2009, month=2, day=15)
+                tlp_3_start_date = datetime.date(year=2009, month=9, day=12)
+                tlp_4_start_date = datetime.date(year=2009, month=12, day=28)
+                ipr = self.root.get('ipr').lower()
+                subtype = self.root.get('submissionType')
+                if not ipr:
+                    self.die(self.root, "Missing ipr attribute on <rfc> element.")
+                if not ipr.endswith('trust200902'):
+                    self.die(self.root, "Unknown ipr attribute: %s" % (self.root.get('ipr'), ))
+                #
+                if   self.date < tlp_2_start_date:
+                    self.die(e, "Cannot insert copyright statements earlier than TLP2.0, effective %s" % (tlp_2_start_date))
+                elif self.date < tlp_3_start_date:
+                    tlp = "2.0"
+                    stream = "n/a"
+                elif self.date < tlp_4_start_date:
+                    tlp = "3.0"
+                    stream = "n/a"
+                else:
+                    tlp = "4.0"
+                    stream = 'IETF' if subtype == 'IETF' else 'alt'
+                section = self.element('section', numbered='false')
+                name = self.element('name')
+                name.text = "Copyright Notice"
+                section.append(name)
+                paras = boilerplate_tlp[tlp][stream][:]
+                if   ipr.startswith('nomodification'):
+                    paras += boilerplate_tlp[tlp]['noModification'][:]
+                elif ipr.startswith('noderivatives'):
+                    paras += boilerplate_tlp[tlp]['noDerivatives'][:]
+                elif ipr.startswith('pre5378'):
+                    paras += boilerplate_tlp[tlp]['pre5378'][:]
+                for para in paras:
+                    t = self.element('t')
+                    t.text = para.format(year=self.date.year)
+                    section.append(t)
+                e.append(section)
         
     # 5.2.7.  Section "toc" attribute
     # 
@@ -1379,7 +1393,8 @@ class PrepToolWriter:
     def check_links_required(self, e, p):
         if self.options.rfc:
             item_href = "urn:issn:2070-1721"
-            if not e.find('.//link[@rel="item"][@href="%s"]' % (item_href, )):
+            urnlink = e.find('.//link[@rel="item"][@href="%s"]' % (item_href, ))
+            if urnlink is None :
                 e.insert(0, self.element('link', rel='item', href=item_href))
     #    3.  If in RFC production mode, check if there is a <link> element
     #        with a DOI for this RFC; if not, add one of the form <link
@@ -1391,7 +1406,8 @@ class PrepToolWriter:
     #        content of the href attribute is expected to change in the
     #        future.
             doi_href = "https://dx.doi.org/10.17487/rfc%s" % self.rfcnumber
-            if not e.find('.//link[@rel="describedBy"]'):
+            doilink = e.find('.//link[@rel="describedBy"]')
+            if doilink is None:
                 e.insert(0, self.element('link', rel='describedBy', href=doi_href))
 
     # 

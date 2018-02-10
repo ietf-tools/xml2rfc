@@ -432,7 +432,7 @@ class XmlRfcParser:
     def delete_cache(self, path=None):
         self.cachingResolver.delete_cache(path=path)
 
-    def parse(self, remove_comments=True, remove_pis=False, quiet=False, strip_cdata=True):
+    def parse(self, remove_comments=True, remove_pis=False, quiet=False, strip_cdata=True, normalize=False):
         """ Parses the source XML file and returns an XmlRfc instance """
         if not (self.quiet or quiet):
             xml2rfc.log.write('Parsing file', self.source)
@@ -572,8 +572,10 @@ class XmlRfcParser:
                 if isinstance(element, AnnotatedElement):
                     element.pis = pis
                     xmlrfc._elements_cache.append(element)                    
+
         # Finally, do any extra formatting on the RFC before returning
-        xmlrfc._format_whitespace()
+        if normalize:
+            xmlrfc._format_whitespace()
 
         return xmlrfc
 
