@@ -11,6 +11,8 @@ import six
 import sys
 import unicodedata
 
+from codecs import open
+
 try:
     import debug
     debug.debug = True
@@ -1207,12 +1209,13 @@ class PrepToolWriter:
                     if awtext:
                         # keep svg in src attribute
                         if scheme in ['file', 'http', 'https']:
-                            with urlopen(src) as f:
-                                data = f.read()
-                                if six.PY2:
-                                    mediatype = f.info().gettype()
-                                else:
-                                    mediatype = f.info().get_content_type()
+                            f = urlopen(src)
+                            data = f.read()
+                            if six.PY2:
+                                mediatype = f.info().gettype()
+                            else:
+                                mediatype = f.info().get_content_type()
+                            f.close()
                             src = build_dataurl(mediatype, data)
                             e.set('src', src)
 
@@ -1222,8 +1225,9 @@ class PrepToolWriter:
     #           "originalSrc" attribute, add an "originalSrc" attribute with
     #           the value of the URI and remove the "src" attribute.
                     else:
-                        with urlopen(src) as f:
-                            data = f.read()
+                        f = urlopen(src)
+                        data = f.read()
+                        f.close()
                         svg = etree.fromstring(data)
                         e.append(svg)
                         del e.attrib['src']
@@ -1474,7 +1478,7 @@ class PrepToolWriter:
             "cref", "dd", "dt", "li", "td", "th", "tt", "em", "strong", "sub", "sup", ])
         for c in e.iter():
             p = c.getparent()
-            if p and p.tag in skip_parents:
+            if p != None and p.tag in skip_parents:
                 continue
             if c.tail != None:
                 if c.tail.strip() == '':

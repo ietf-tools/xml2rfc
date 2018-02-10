@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 
 import intervaltree
 import os
+from codecs import open
 
 try:
     import debug
@@ -16,7 +17,7 @@ scripts = intervaltree.IntervalTree()
 def init():
     # Clocked to less than 0.2 seconds on a 2GHz core 08 Feb 2018
     fn = os.path.join(os.path.dirname(__file__), 'data', 'Scripts.txt')
-    with open(fn) as f:
+    with open(fn, encoding='utf-8') as f:
         text = f.read()
     for line in text.splitlines():
         if line.startswith('#'):
