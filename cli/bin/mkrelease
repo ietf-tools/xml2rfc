@@ -167,7 +167,7 @@ NEXT=$(( $MAINT + 1 ))
 DEV="$(printf %d.%d.%d.dev1 $MAJOR $MINOR $NEXT)"
 
 note "Checking that changelog information is available"
-changes=$( sed -n "/^$PROJ ($VER.*)/,/^ -- /p" changelog | awk '{ if (line) print line ; line=$0 }' )
+changes=$( sed -n "/^$PROJ ($VER.*)/,/^ -- /p" changelog )
 [ "$changes" ] || die "No changelog information for $VER found"
 
 contributors=$(echo "$changes" | sed 's/\.[ \t\n]/ /'| tr -c "a-z0-9.@-" "\n" | sort | uniq | grep '@' | sed -r -e 's/^\.+//' -e 's/\.+$//' -e 's/^/-c /' || true)
@@ -180,12 +180,6 @@ note "Verifying that version $VER doesn't already exist..."
 $do svn info $REPO/tags/${WORK:+$WORK/}$VER 2>&1 | $do egrep -q "(Not a valid URL|URL .* non-existent)" || die "The tag '$VER' already exists (or there was an error testing for it)."
 note "  Ok"
 
-note "Committing the changelog..."
-$do svn commit changelog -m "Changelog entry for $VER"
-
-note "Verifying there's no uncommitted changes..."
-$do svn st | grep "^[AMGRD] " && die "There seems to be uncommitted changes in this working copy"
-
 note "\nUpdating the version info in $VERFILE and settings.py"
 sed -i -r -e "/^__version__/s/'[\.0-9]+(dev[0-9]+)?'/'$VER'/" $VERFILE
 sed -i -r -e "/version=/s/'[\.0-9]+(-dev[0-9]?)?'/'$VER'/" setup.py
@@ -196,6 +190,12 @@ $do [ $(xml2rfc --version) = $VER ] || die "Xml2rfc reported the wrong version n
 
 note "\nCommitting version information for version $VER: $MSG"
 $do svn commit $VERFILE setup.py -m "Set version info to release version $VER before tagging."
+
+note "Committing the changelog..."
+$do svn commit changelog -m "Changelog entry for $VER"
+
+note "Verifying there's no uncommitted changes..."
+$do svn st | grep "^[AMGRD] " && die "There seems to be uncommitted changes in this working copy"
 
 note "\nDoing the upload"
 $do make upload
