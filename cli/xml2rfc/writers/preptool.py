@@ -112,7 +112,7 @@ class PrepToolWriter:
         if not tag in self.attribute_defaults:
             attr = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:attribute" % tag, namespaces=ns)
             defaults = dict( (a.get('name'), a.get("{%s}defaultValue"%ns['a'], None)) for a in attr )
-            keys = list(defaults.keys())
+            keys = list( set(defaults.keys()) - set(['keepWithNext', 'keepWithPrevious', 'toc', ]))
             keys.sort()
             self.attribute_defaults[tag] = OrderedDict( (k, defaults[k]) for k in keys if defaults[k] )
         return self.attribute_defaults[tag]
@@ -505,9 +505,6 @@ class PrepToolWriter:
         gtag = g.tag if g != None else None
         if not (gtag in ['reference', ] or ptag in ['reference', ]):
             defaults = self.get_attribute_defaults(e.tag)
-            for k in ['keepWithNext', 'keepWithPrevious', 'toc']:
-                if k in defaults:
-                    del defaults[k]
             for k in defaults:
                 if not k in e.attrib:
                     #debug.say('Setting <%s %s="%s">' % (e.tag, k, defaults[k]))
