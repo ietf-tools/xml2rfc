@@ -296,6 +296,7 @@ class V2v3XmlWriter:
             # handle mixed block/non-block content surrounding all block nodes
             './/*[self::artwork or self::dl or self::figure or self::ol or self::sourcecode or self::t or self::ul]',
             './/*[@*="yes" or @*="no"]',      # convert old attribute false/true
+            '.;pretty_print_prep()',
         ]
 
         # replace the vocabulary v2 dtd, but keep some entity definitions.
@@ -303,7 +304,7 @@ class V2v3XmlWriter:
         tree.docinfo.system_url = "rfc2629-xhtml.ent"
 
         for s in selectors:
-            slug = slugify(s.replace('self::', '').replace(' or ','_'))
+            slug = slugify(s.replace('self::', '').replace(' or ','_').replace(';','_'))
             if '@' in s:
                 func_name = 'attribute_%s' % slug
             elif "()" in s:
@@ -312,13 +313,16 @@ class V2v3XmlWriter:
                 if not slug:
                     slug = 'rfc'
                 func_name = 'element_%s' % slug
+            # get rid of selector annotation
+            ss = s.split(';')[0]
             func = getattr(self, func_name, None)
             if func:
-                #log.note("Processing %s" % slug)
-                for e in self.root.xpath(s):
+                if self.options.debug:
+                    log.note("Calling %s()" % func_name)
+                for e in self.root.xpath(ss):
                     func(e, e.getparent())
             else:
-                log.note("No handler for %s" % slug)
+                log.warn("No handler for function %s, slug %s" % (func_name, slug, ))
 
     # ----------------------------------------------------------------------
 
@@ -965,7 +969,7 @@ class V2v3XmlWriter:
                 e.set(k, id)
                 
 
-    def attribute_xreftarget(self, e, p):
+    def attribute_xref_target(self, e, p):
         k = 'target'
         if k in e.keys():
             v = e.get(k)
@@ -979,3 +983,17 @@ class V2v3XmlWriter:
                 e.set(k, 'true')
             elif v == 'no':
                 e.set(k, 'false')
+
+    def pretty_print_prep(self, e, p):
+        # apply this to elements that can't appear with text, i.e., don't have
+        # any of these as parent:
+        skip_parents = set([
+            "annotation", "blockquote", "preamble", "postamble", "name", "refcontent", "c", "t",
+            "cref", "dd", "dt", "li", "td", "th", "tt", "em", "strong", "sub", "sup", ])
+        for c in e.iter():
+            p = c.getparent()
+            if p != None and p.tag in skip_parents:
+                continue
+            if c.tail != None:
+                if c.tail.strip() == '':
+                    c.tail = None        
