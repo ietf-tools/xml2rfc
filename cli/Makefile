@@ -62,7 +62,7 @@ CHECKOUTPUT=	\
 
 %.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test 
 	@echo "Diffing .nroff.txt against regular .txt"
-	doc=$(basename $@); diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
+	@doc=$(basename $@); diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo checking v3 validity
 	doc=$(basename $@); xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.v2v3.xml
 	doc=$(basename $@); xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
@@ -79,10 +79,11 @@ tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out
 
 %.test: %
 	@echo "Diffing $< against master"
-	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output"; exit 1; }
+	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output"; exit 1; }
 
 %.nroff.txt: %.nroff
-	if [ "$(findstring /rfc,$<)" = "/rfc" ]; then groff -ms -Kascii -Tascii $< | ./fix.pl > $@; else groff -ms -Kascii -Tascii $< | ./fix.pl | sed 1,2d > $@; fi
+	@echo "Creating $@ from $<"
+	@if [ "$(findstring /rfc,$<)" = "/rfc" ]; then groff -ms -Kascii -Tascii $< | ./fix.pl > $@; else groff -ms -Kascii -Tascii $< | ./fix.pl | sed 1,2d > $@; fi
 
 # ----------------------------------------------------------------------
 
@@ -127,7 +128,8 @@ utf8test: cleantmp  env/bin/python install
 
 v3featuretest: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network --utf8 --base tmp/ --prep tests/input/draft-v3-features.xml
-	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-v3-features.prepped.xml tmp/draft-v3-features.prepped.xml || { echo "Diff failed for $$doc$$type output"; exit 1; } 
+	@ echo "Diffing draft-v3-features.prepped.xml against master"
+	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-v3-features.prepped.xml tmp/draft-v3-features.prepped.xml || { echo "Diff failed for $$doc$$type output"; exit 1; } 
 
 
 cleantmp:
