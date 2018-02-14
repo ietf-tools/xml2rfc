@@ -5,6 +5,7 @@
 # Internal utitlity functions.  Not meant for public usage.
 
 import base64
+import calendar
 import re
 import six
 import textwrap
@@ -559,4 +560,13 @@ def build_dataurl(mime, data, base64enc=False):
         data = quote(data)
         url = "data:%s,%s" % (mime, data)
     return url
+
+def normalize_month(month):
+    if len(month) < 3:
+        xml2rfc.log.error("Expected a month name with at least 3 letters, found '%s'" % (month, ))
+    for i, m in enumerate(calendar.month_name):
+        if m and m.lower().startswith(month.lower()):
+            month = '%02d' % (i)
+    assert month.isdigit()
+    return month
 
