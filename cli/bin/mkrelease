@@ -182,7 +182,7 @@ note "  Ok"
 
 note "\nUpdating the version info in $VERFILE and settings.py"
 $do sed -i -r -e "/^__version__/s/'[\.0-9]+(dev[0-9]+)?'/'$VER'/" $VERFILE
-$do sed -i -r -e "/version=/s/'[\.0-9]+(-dev[0-9]?)?'/'$VER'/" setup.py
+$do sed -i -r -e "/version=/s/'[\.0-9]+(dev[0-9]?)?'/'$VER'/" setup.py
 
 note "\nVerifying that we're now reporting the correct version"
 $do make install
