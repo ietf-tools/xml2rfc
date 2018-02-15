@@ -1,3 +1,42 @@
+xml2rfc (2.9.3) ietf; urgency=medium
+
+  * Changed the way <date> defaults are calculated.  Previously, today's
+    date were used to populate missing day if month and year matched, and
+    to populate month if year matched.  However, if today's date lay in an
+    adjoining month, even if it was within days of that month, the day
+    would be set to the first of the given month.  This commit changes that,
+    to use the last day of the month instead of the first of the month, if
+    the month is the previous month to today's date.  This will result in
+    a different derived date than earlier, closer to today's date.  This
+    fixes issue #337.
+
+  * Fixed a bug in a preptool.py error message.  Reverted a prettyprinting 
+    change which caused inconsistent behaviour between writers.
+
+  * Moved normalize_month() to utils, for use in multiple writers.
+
+  * Made the makefile less verbose.
+
+  * Improved the pretty-printing of v2v3 output.  Fixed a bug in the 
+    attribute_xref_target() handler name that prevented it from being called.
+
+  * Removed whitespace normalization from v2v3 writer.
+
+  * Moved handling of exempted default attributes in preptool inside 
+    get_attribute_defaults(), for consistency.
+
+  * Added an option --liberal to permit re-processing of prepped source 
+    without error exit.  This mode will be needed when we make the preptool 
+    part of the default processing pipeline.  Also removed whitespace 
+    normalization for v2v3, exp, and preptool output, in order to not change 
+    authors' text formatting when not needed.
+
+  * Lowered the requirement on six to 1.4.1 in order to make installation
+    easier on some systems with locked system python libs that include six.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  15 Feb 2018 06:56:03 -0800
+
+
 xml2rfc (2.9.2) ietf; urgency=medium
 
   * Fixed issues with packaging and with execution under python 2.7.  
