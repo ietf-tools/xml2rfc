@@ -33,7 +33,7 @@ from lxml import etree
 from xml2rfc import log
 from xml2rfc.boilerplate_rfc_7841 import boilerplate_status_of_memo
 from xml2rfc.boilerplate_tlp import boilerplate_tlp
-from xml2rfc.utils import build_dataurl
+from xml2rfc.utils import build_dataurl, normalize_month
 from xml2rfc.writers.base import default_options
 from xml2rfc.writers.v2v3 import slugify
 from xml2rfc.scripts import get_scripts
@@ -44,14 +44,6 @@ ns={
 }
 
 refname_mapping = {}
-
-def normalize_month(month):
-    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    for i, m in enumerate(months):
-        if m.lower().startswith(month.lower()):
-            month = '%02d' % (i+1)
-    assert month.isdigit()
-    return month
 
 # This is used to enforce global uniqueness on slugs:
 seen_slugs = set([])
@@ -432,7 +424,7 @@ class PrepToolWriter:
                 day = "1"
             if month and not month.isdigit():
                 if len(month) < 3:
-                    self.err("Expected a month name with at least 3 letters, found '%s'" % (month, ))
+                    self.err(e, "Expected a month name with at least 3 letters, found '%s'" % (month, ))
                 month = normalize_month(month)
             if not year:
                 year = str(today.year)

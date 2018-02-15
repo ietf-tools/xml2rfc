@@ -983,17 +983,3 @@ class V2v3XmlWriter:
                 e.set(k, 'true')
             elif v == 'no':
                 e.set(k, 'false')
-
-    def pretty_print_prep(self, e, p):
-        # apply this to elements that can't appear with text, i.e., don't have
-        # any of these as parent:
-        skip_parents = set([
-            "annotation", "blockquote", "preamble", "postamble", "name", "refcontent", "c", "t",
-            "cref", "dd", "dt", "li", "td", "th", "tt", "em", "strong", "sub", "sup", ])
-        for c in e.iter():
-            p = c.getparent()
-            if p != None and p.tag in skip_parents:
-                continue
-            if c.tail != None:
-                if c.tail.strip() == '':
-                    c.tail = None        

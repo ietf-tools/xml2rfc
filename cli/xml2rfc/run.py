@@ -252,7 +252,7 @@ def main():
             if not filename:
                 filename = basename + '.exp.xml'
                 options.output_filename = filename
-            new_xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            new_xmlrfc = parser.parse(remove_comments=False, quiet=True, normalize=False)
             expwriter = xml2rfc.ExpandedXmlWriter(new_xmlrfc,
                                                   options=options,
                                                   date=options.date)
