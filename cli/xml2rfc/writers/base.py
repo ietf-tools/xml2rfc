@@ -2,6 +2,7 @@
 # Copyright The IETF Trust 2011, All Rights Reserved
 # --------------------------------------------------
 
+import calendar
 import codecs
 import datetime
 import textwrap
@@ -91,7 +92,7 @@ class BaseRfcWriter:
     boilerplate = {}
 
     # The RFC Editor's switchover date for https URLs
-    boilerplate_https_date = datetime.datetime(year=2017, month=8, day=21)
+    boilerplate_https_date = datetime.date(year=2017, month=8, day=21)
 
     # Document stream names
     boilerplate['document_stream'] = {}
@@ -340,7 +341,7 @@ class BaseRfcWriter:
 
     # -------------------------------------------------------------------------
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.datetime.now()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
         if not quiet is None:
             options.quiet = quiet
         self.options = options
@@ -541,60 +542,50 @@ class BaseRfcWriter:
         today = self.date
         date = self.r.find('front/date')
         assert date is not None, "Bug in schema validation: no date element in document"
+        year = date.attrib.get('year', str(today.year))
+        if not year.isdigit():
+            xml2rfc.log.error("Expected a numeric year, found '%s'" % (year, ))
+        year = int(year)
+        #
+        month = date.attrib.get('month')
+        if not month:
+            if year != today.year:
+                xml2rfc.log.error("Cannot handle a <date> with year different than this year, and no month.  Using today's date.")
+                year = today.year
+            month = today.month
+        else:
+            if not month.isdigit():
+                month = xml2rfc.utils.normalize_month(month)
+            month = int(month)
+        #
+        day = date.attrib.get('day')
+        if day is None:
+            temp_date = datetime.date(year=year, month=month, day=1)
+            if today.year == year and today.month == month:
+                day = today.day
+            elif abs(today - temp_date) < datetime.timedelta(days=34):
+                if datetime.date(year=year, month=month, day=1) < today:
+                    # wrong month, and the first day of that month is earlier
+                    # than today.  Use the last day of the month
+                    day = calendar.monthrange(year, month)[1]
+                else:
+                    # wrong month, later than this month.  Use the first day.
+                    day = 1
+            else:
+                day = 1
+        else:
+            day = int(day)
 
-        year = date.attrib.get('year', '')
-        month = date.attrib.get('month', '')
-        day = date.attrib.get('day', '')
-        if not year or (year == str(today.year) and\
-           (not month or month.lower() == today.strftime("%B").lower() or \
-            month.lower() == today.strftime("%b").lower())):
-            # Set everything to today
-            date.attrib['year'] = today.strftime('%Y')
-            date.attrib['month'] = today.strftime('%B')
-            if self.draft and not day:
-                date.attrib['day'] = today.strftime('%d')
-                if date.attrib['day'][0] == '0':
-                    date.attrib['day'] = today.strftime('%d').replace('0', '')
-        elif year != str(today.year) and not month:
-            xml2rfc.log.error("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
-
-        try:
-            # Full month name
-            datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%B')
-        except ValueError:
-            try:
-                # Abbreviated month name
-                d = datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%b')
-                date.attrib['month'] = d.strftime('%B')
-            except ValueError:
-                xml2rfc.log.warn("Year and/or month are incorrect values in <date/> element: %s" % lxml.etree.tostring(date))
-        except TypeError:
-            pass
-
-        self.date = datetime.datetime.strptime(date.attrib['year']+date.attrib['month']+date.attrib.get('day','1'), '%Y%B%d')
+        self.date = datetime.date(year=year, month=month, day=day)
 
         # Setup the expiration string for drafts as published date + six months
-        # FIXME: The following code undoes some of the code above.  Determine
-        # which should actually be in effect, and get rid of the other.
         if self.draft:
-            date = self.r.find('front/date')
-
-            month = date.attrib.get('month', '')
-            year = date.attrib.get('year', '')
-            day = date.attrib.get('day', '1')  # Default to first of month
-            try:
-                start_date = datetime.datetime.strptime(year + month + day, \
-                                                        '%Y%B%d')
-            except ValueError:
-                try:
-                    start_date = datetime.datetime.strptime(year + month + day, \
-                                                            '%Y%b%d')
-                except ValueError:
-                    start_date = today
-
-            expire_date = start_date + datetime.timedelta(185)
+            if not date.get('day'):
+                date.set('day', str(day))
+            if not date.get('month'):
+                date.set('month', str(month))
+            expire_date = self.date + datetime.timedelta(185)
             self.expire_string = expire_date.strftime('%B %d, %Y').replace(' 0', ' ')
-
 
     def _format_counter(self, text, count, list_length=1):
         """ Return a proper string for a formatted list bullet.  Allowed types:
@@ -1047,7 +1038,7 @@ class BaseRfcWriter:
                 p2.append(self.boilerplate['status'].get(stream, ''))
 
             # Last sentence of p2
-            if self.date < datetime.datetime(year=2016, month=6, day=1):
+            if self.date < datetime.date(year=2016, month=6, day=1):
                 status="status_5741"
             else:
                 status="status"         # Current boilerplate
