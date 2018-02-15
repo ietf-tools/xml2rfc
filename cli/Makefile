@@ -108,7 +108,7 @@ cachetest: cleantmp install
 
 rfctest: cleantmp env/bin/python install $(rfctests)
 
-drafttest: cleantmp env/bin/python install $(drafttests)
+drafttest: cleantmp env/bin/python install $(drafttests) dateshifttest
 
 # rfctest: cleantmp env/bin/python install $(rfctests)
 # 	@ xml2rfc --cache tests/cache --no-network --utf8tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp --v2v3 --prep
@@ -130,6 +130,10 @@ v3featuretest: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network --utf8 --base tmp/ --prep tests/input/draft-v3-features.xml
 	@ echo "Diffing draft-v3-features.prepped.xml against master"
 	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-v3-features.prepped.xml tmp/draft-v3-features.prepped.xml || { echo "Diff failed for $$doc$$type output"; exit 1; } 
+
+dateshifttest: cleantmp install
+	@ xml2rfc --cache tests/cache --no-network --date 2013-02-01 --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml
+	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
 
 cleantmp:
