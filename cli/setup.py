@@ -83,6 +83,7 @@ setup(
     long_description=long_description,
     download_url = "https://pypi.python.org/pypi/xml2rfc",
     classifiers= [
+        'Development Status :: 5 - Production',
         'Environment :: Console',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
