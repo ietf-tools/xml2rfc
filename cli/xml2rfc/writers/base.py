@@ -771,6 +771,8 @@ class BaseRfcWriter:
             month = date.attrib.get('month', '')
             day = date.attrib.get('day', '')
             if month:
+                if month.isdigit():
+                    month = calendar.month_name[int(month)]
                 month = month + ' '
             if day:
                 day = day + ', '

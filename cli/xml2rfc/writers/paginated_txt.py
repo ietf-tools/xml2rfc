@@ -4,6 +4,7 @@
 
 # Python libs
 import datetime
+import calendar
 
 try:
     import debug
@@ -192,6 +193,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         date = self.r.find('front/date')
         if date is not None:
             month = date.attrib.get('month', '')
+            if month.isdigit():
+                month = calendar.month_name[int(month)]
             year = date.attrib.get('year', '')
             self.right_header = month + ' ' + year
         authors = self.r.findall('front/author')

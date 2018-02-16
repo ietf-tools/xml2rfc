@@ -10,6 +10,7 @@ import string
 import sys
 import datetime
 import cgi
+import calendar
 
 try:
     import debug
@@ -618,6 +619,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             date = reference.find('front/date')
             if date is not None:
                 month = date.attrib.get('month', '')
+                if month.isdigit():
+                    month = calendar.month_name[int(month)]
                 year = date.attrib.get('year', '')
                 if month or year:
                     title_a.tail += ', '
