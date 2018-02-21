@@ -28,7 +28,7 @@ except ImportError:
 
 
 def display_version(self, opt, value, parser):
-    print(xml2rfc.__version__)
+    print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
     sys.exit()
 
 
