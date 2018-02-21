@@ -542,7 +542,10 @@ class BaseRfcWriter:
         today = self.date
         date = self.r.find('front/date')
         assert date is not None, "Bug in schema validation: no date element in document"
-        year = date.attrib.get('year', str(today.year))
+        year = date.attrib.get('year')
+        if not year:
+            year = str(self.date.year)
+            date.set('year', year)
         if not year.isdigit():
             xml2rfc.log.error("Expected a numeric year, found '%s'" % (year, ))
         year = int(year)
@@ -553,6 +556,7 @@ class BaseRfcWriter:
                 xml2rfc.log.error("Cannot handle a <date> with year different than this year, and no month.  Using today's date.")
                 year = today.year
             month = today.month
+            date.set('month', str(month))
         else:
             if not month.isdigit():
                 month = xml2rfc.utils.normalize_month(month)
