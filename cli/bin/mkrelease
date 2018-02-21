@@ -186,7 +186,7 @@ $do sed -i -r -e "/version=/s/'[\.0-9]+(dev[0-9]?)?'/'$VER'/" setup.py
 
 note "\nVerifying that we're now reporting the correct version"
 $do make install
-$do [ $(xml2rfc --version) = $VER ] || die "Xml2rfc reported the wrong version number"
+$do [ $(xml2rfc --version | awk '{print $2}') = $VER ] || die "Xml2rfc reported the wrong version number"
 
 note "\nCommitting version information for version $VER: $MSG"
 $do svn commit $VERFILE setup.py -m "Set version info to release version $VER before tagging."
