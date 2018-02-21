@@ -1088,7 +1088,7 @@ class BaseRfcWriter:
         date = self.r.find('front/date')
         year = ''
         if date is not None:
-            year = date.attrib.get('year', '')
+            year = date.attrib.get('year', self.date.year)
         self.write_paragraph(self.boilerplate['base_copyright_header'] % year)
 
         # Write next paragraph which may be modified by ipr
