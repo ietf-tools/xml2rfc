@@ -189,6 +189,7 @@ $do make install
 $do [ $(xml2rfc --version | awk '{print $2}') = $VER ] || die "Xml2rfc reported the wrong version number"
 
 note "\nCommitting version information for version $VER: $MSG"
+$do svn update
 $do svn commit $VERFILE setup.py -m "Set version info to release version $VER before tagging."
 
 note "Committing the changelog..."
