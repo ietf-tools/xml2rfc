@@ -1222,6 +1222,10 @@ class BaseRfcWriter:
             rfcnum = self.r.attrib.get('number', None)
             if (not docName or not docName.strip()) and not rfcnum:
                 xml2rfc.log.warn("No (or empty) 'docName' attribute in the <rfc/> element -- can't insert draft name on first page.")
+            if '.' in docName:
+                xml2rfc.log.warn("The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
+            if not rfcnum and not re.search('-\d\d$', docName):
+                xml2rfc.log.warn("The 'docName' attribute of the <rfc/> element should have a revision number as the last component: docName=\"draft-foo-bar-02\".")
             self.write_title(title.text, docName, title.sourceline)
 
         # Abstract
