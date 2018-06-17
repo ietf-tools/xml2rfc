@@ -73,7 +73,7 @@ Changelog
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.9.7',
+    version='2.9.8',
     author='Henrik Levkowetz, Josh Bothun',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
