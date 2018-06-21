@@ -334,9 +334,9 @@ def main():
 if __name__ == '__main__':
 
     major, minor = sys.version_info[:2]
-    if not major == 2 and minor >= 6:
+    if not (major == 2 and minor >= 6) and not major == 3:
         print ("")
-        print ("The xml2rfc script requires python 2, with a version of 2.6 or higher.")
+        print ("The xml2rfc script requires python 2, with a version of 2.6 or higher, or python 3.")
         print ("Can't proceed, quitting.")
         exit()
 
