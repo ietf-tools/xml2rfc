@@ -7,10 +7,15 @@ import re
 import lxml.etree
 import datetime
 import traceback as tb
+
 from io import open
+from lxml import etree
+from lxml.etree import Element, Comment, CDATA
+
 from xml2rfc import log
+from xml2rfc.utils import find_duplicate_ids, hastext, isempty
 from xml2rfc.writers.base import default_options
-from lxml.etree import Element, Comment, CDATA, _Comment
+
 
 try:
     import debug
@@ -40,30 +45,23 @@ def copyattr(a, b):
         v = a.get(k)
         b.set(k, v)
 
-def isempty(e):
-    return not ((len(e) and any([ not isinstance(c, _Comment) for c in e.iterchildren() ]))
-                or (e.text and e.text.strip()) or (e.tail and e.tail.strip()))
-
-def isblock(e):
-    return e.tag in [ 'artwork', 'dl', 'figure', 'ol', 'sourcecode', 't', 'ul', ]
-
-def iscomment(e):
-    return isinstance(e, _Comment)
-
-def hastext(e):
-    head = [ e.text ] if e.text and e.text.strip() else []
-    items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
-    return items
-
-class V2v3XmlWriter:
+class V2v3XmlWriter(object):
     """ Writes an XML file with v2 constructs converted to v3"""
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
         if not quiet is None:
             options.quiet = quiet
         self.xmlrfc = xmlrfc
-        self.root = xmlrfc.getroot()
+        self.tree = xmlrfc.tree
+        self.root = self.tree.getroot()
         self.options = options
+        self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
+        self.schema = etree.ElementTree(file=self.v3_rng_file)
+
+    def warn(self, e, text):
+        lnum = getattr(e, 'sourceline', 0)
+        msg = "%s(%s): Warning: %s" % (self.xmlrfc.source, lnum, text)
+        log.write(msg)
 
     def validate(self):
         v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
@@ -72,10 +70,10 @@ class V2v3XmlWriter:
             v3_rng.assertValid(self.root)
             log.note("The document validates according to the RFC7991 schema")
         except Exception as e:
-            # These warnings are occasionally incorrect -- disable this
-            # output for now:
-            #log.warn('\nInvalid document: %s' % (e,))
-            e = e
+            dups = find_duplicate_ids(self.schema, self.tree)
+            for attr, id, e in dups:
+                self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
+            log.warn('\nInvalid document: %s' % (e,))
 
     def add_xinclude(self):
         for e in self.root.xpath('.//back//reference'):
@@ -147,6 +145,7 @@ class V2v3XmlWriter:
         n = self.element(tag)
         n.text = e.text
         n.tail = e.tail
+        n.sourceline = e.sourceline
         copyattr(e, n)
         for c in e.iterchildren():
             n.append(c)                 # moves c from e to n
@@ -163,29 +162,31 @@ class V2v3XmlWriter:
         if not isinstance(comments, list):
             comments = [comments]
         p = a.getparent()
-        i = p.index(a)
-        c = None
-        if self.options.verbose:
-            for comment in comments:
-                c = Comment(" v2v3: %s " % comment.strip())
-                p.insert(i, c)
-                i += 1
-        if not b is None:
-            if a.text and a.text.strip():
-                b.text = a.text
-            if a.tail and a.tail.strip():
-                b.tail = a.tail
-            copyattr(a, b)
-            for child in a.iterchildren():
-                b.append(child)         # moves child from a to b
-            p.replace(a, b)
-        else:
-            if a.tail:
-                if c is None:
-                    p.text = p.text + ' ' + a.tail if p.text else a.tail
-                else:
-                    c.tail = a.tail
-            p.remove(a)
+        if p != None:
+            i = p.index(a)
+            c = None
+            if self.options.verbose:
+                for comment in comments:
+                    c = Comment(" v2v3: %s " % comment.strip())
+                    p.insert(i, c)
+                    i += 1
+            if not b is None:
+                if a.text and a.text.strip():
+                    b.text = a.text
+                if a.tail and a.tail.strip():
+                    b.tail = a.tail
+                b.sourceline = a.sourceline
+                copyattr(a, b)
+                for child in a.iterchildren():
+                    b.append(child)         # moves child from a to b
+                p.replace(a, b)
+            else:
+                if a.tail:
+                    if c is None:
+                        p.text = p.text + ' ' + a.tail if p.text else a.tail
+                    else:
+                        c.tail = a.tail
+                p.remove(a)
         return b
 
     def move_after(self, a, b, comments=None):
@@ -257,6 +258,12 @@ class V2v3XmlWriter:
                                             # 2.5.4.  "height" Attribute
                                             # 2.5.8.  "width" Attribute
                                             # 2.5.9.  "xml:space" Attribute
+            './/back',
+            # We need to process preamble and postamble before figure,
+            # because artwork or sourcecode within a figure could later be
+            # promoted and the figure discarded.
+            './/postamble',                 # 3.5.  <postamble>
+            './/preamble',                  # 3.6.  <preamble>
             './/figure',                    # 2.25.  <figure>
                                             # 2.25.1.  "align" Attribute
                                             # 2.25.2.  "alt" Attribute
@@ -279,8 +286,6 @@ class V2v3XmlWriter:
                                             # 2.66.2.  "pageno" Attribute
             './/facsimile',                 # 3.2.  <facsimile>
             './/format',                    # 3.3.  <format>
-            './/postamble',                 # 3.5.  <postamble>
-            './/preamble',                  # 3.6.  <preamble>
             './/spanx',                     # 3.7.  <spanx>
             './/texttable',                 # 3.8.  <texttable>
             './/vspace',                    # 3.10.  <vspace>
@@ -300,7 +305,7 @@ class V2v3XmlWriter:
         ]
 
         # replace the vocabulary v2 dtd, but keep some entity definitions.
-        tree = self.root.getroottree()
+        tree = self.tree
         tree.docinfo.system_url = "rfc2629-xhtml.ent"
 
         for s in selectors:
@@ -324,6 +329,8 @@ class V2v3XmlWriter:
             else:
                 log.warn("No handler for function %s, slug %s" % (func_name, slug, ))
 
+        return self.tree
+
     # ----------------------------------------------------------------------
 
     # 1.3.2.  New Attributes for Existing Elements
@@ -346,6 +353,8 @@ class V2v3XmlWriter:
                     v = 'true'
                 rfc_element.set(a, v)
                 self.replace(e, None, 'Moved %s PI to <rfc %s="%s"' % (k, a, v))
+        else:
+            self.replace(e, None, 'Removed %s PI"' % (k,))
 
     # 1.3.4.  Additional Changes from v2
     # 
@@ -390,9 +399,10 @@ class V2v3XmlWriter:
     # 
     #    Deprecated.
     def element_artwork(self, e, p):
-        e.text = CDATA(e.text)          # prevent text from being mucked up by other processors
+        if e.text:
+            e.text = CDATA(e.text)          # prevent text from being mucked up by other processors
         stripattr(e, ['height', '{http://www.w3.org/XML/1998/namespace}space', 'width', ])
-        if re.search(r'^\s*<CODE BEGINS>', e.text):
+        if e.text and re.search(r'^\s*<CODE BEGINS>', e.text):
             # We have source code.  Permitted attributes: anchor, name,
             # source, type.
             e = self.replace(e, 'sourcecode')
@@ -410,7 +420,24 @@ class V2v3XmlWriter:
             if ends and tail.strip() != "":
                 self.warn("Found non-whitespace content after <CODE ENDS>")
                 e.tail = tail
-            stripattr(e, ['align', 'alt', 'height', 'suppress-title', 'width', ])
+            stripattr(e, ['height', 'suppress-title', 'width', ])
+            if self.options.strict:
+                stripattr(e, ['align', 'alt', ])
+
+    def element_back(self, e, p):
+        # XXXX The RFCs don't say anything about the text rendering of
+        # references.  The following transforms multiple <references> in
+        # <back> to be encapsulated within one <references>.
+        references = list(e.iterchildren('references'))
+        if len(references) > 1:
+            pos = e.index(references[0])
+            refs = self.element('references')
+            name = self.element('name')
+            name.text = "References"
+            refs.append(name)
+            e.insert(pos, refs)
+            for r in references:
+                refs.append(r)          # moves r
 
 
     # 2.25.  <figure>
@@ -452,18 +479,35 @@ class V2v3XmlWriter:
     # 
     def element_figure(self, e, p):
         comments = []
-        artwork = e.find('./artwork')
-        if not artwork is None:
-            for attr in ['alt', 'src', ]:
+        embedded = e.find('./artwork')
+        if embedded == None:
+            embedded = e.find('./sourcecode')
+        if embedded != None:
+            for attr in ['align', 'alt', 'src', ]:
                 if attr in e.attrib:
                     fattr = e.get(attr)
-                    if attr in artwork.attrib:
-                        aattr = artwork.get(attr)
+                    if attr in embedded.attrib:
+                        aattr = embedded.get(attr)
                         if fattr != aattr:
                             comments.append('Warning: The "%s" attribute on artwork differs from the one on figure.  Using only "%s" on artwork.' % (attr, attr))
                     else:
-                        artwork.set(attr, fattr)
-        stripattr(e, ['align', 'alt', 'height', 'src', 'suppress-title', 'width', ])
+                        if embedded.tag == 'artwork' or attr == 'src':
+                            embedded.set(attr, fattr)
+                    stripattr(e, [ attr ])
+            # if we have <artwork> and either no anchor and no title, or suppress-title='true',
+            # then promote the <artwork> and get rid of the <figure>
+        if embedded != None and ((not e.get('anchor') and (not e.get('title')) or e.get('suppress-title') == 'true')
+            and e.find('name')==None and e.find('preamble')==None and e.find('postamble')==None ):
+            pos = p.index(e)
+            embedded.tail = e.tail
+            p.remove(e)
+            p.insert(pos, embedded)
+        else:
+            stripattr(e, ['height', 'src', 'suppress-title', 'width', ])
+            if self.options.strict:
+                stripattr(e, ['align', 'alt', ])
+
+
 
     # 2.25.7.  "title" Attribute
     # 
@@ -532,23 +576,38 @@ class V2v3XmlWriter:
 #             "historic": "Historic",
 #             "info": "Informational",
 #         }
+        def equal(e1, e2):
+            return etree.tostring(e1) == etree.tostring(e2)
         front = e.find('./front')
         title = e.find('./front/title')
-        i = front.index(title) + 1
+        i = front.index(title) + 1 if title!=None else 0
+        series = front.xpath('seriesInfo')
         if 'category' in e.attrib and 'seriesNo' in e.attrib:
             attr = {
                 'name': e.get('category'),
                 'value': e.get('seriesNo')
             }
-            front.insert(i, self.element('seriesInfo', **attr))
+            new = self.element('seriesInfo', **attr)
+            if not [ s for s in series if equal(s, new) ]:
+                front.insert(i, new)
             stripattr(e, ['seriesNo', ]) # keep 'category' for use in preptool
         if 'number' in e.attrib:
-            front.insert(i, self.element('seriesInfo', name="RFC", value=e.get('number')))
+            new = self.element('seriesInfo', name="RFC", value=e.get('number'))
+            if not [ s for s in series if equal(s, new) ]:
+                front.insert(i, new)
             if 'docName' in e.attrib:
                 e.insert(0, self.element('link', rel='convertedFrom', href="https://datatracker.ietf.org/doc/%s"%(e.get('docName'), )))
         elif 'docName' in e.attrib:
-            front.insert(i, self.element('seriesInfo', name="Internet-Draft", value=e.get('docName')))
-        stripattr(e, ['docName', 'number', 'xi'])
+            value=e.get('docName')
+            if '.' in value:
+                log.warn("The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
+            if not re.search('-\d\d$', value):
+                log.warn("The 'docName' attribute of the <rfc/> element should have a revision number as the last component when submitted: docName=\"draft-foo-bar-02\".")
+            new = self.element('seriesInfo', name="Internet-Draft", value=value)
+            if not [ s for s in series if equal(s, new) ]:
+                front.insert(i, new)
+
+        stripattr(e, ['xi', ])
 
     # 2.47.  <seriesInfo>
     # 
@@ -566,7 +625,7 @@ class V2v3XmlWriter:
     def element_t(self, e, p):
         if p.tag != 'list':
             stripattr(e, ['hangText', ])
-            
+
     # 
     # 
     # 2.66.  <xref>
@@ -671,11 +730,13 @@ class V2v3XmlWriter:
                 elif parent.tag == 'ul':
                     style = 'symbols'
                 elif parent.tag == 'ol':
-                    nstyle = parent.get('style')
-                    if nstyle in ['a', 'A']:
-                        style = 'letters'
-                    elif nstyle == '1':
-                        style = 'numbers'
+                    style = 'inherit'
+                    nstyle = parent.get('type')
+                    # alternate letter case in sub-lists:
+                    if   nstyle in 'ai':
+                        nstyle = nstyle.upper()
+                    elif nstyle in 'AI':
+                        nstyle = nstyle.lower()                        
                 if style:
                     break
         if not style:
@@ -683,11 +744,13 @@ class V2v3XmlWriter:
         #
         if   style == 'empty':
             tag = 'ul'
+            attribs['empty'] = 'true'
         elif style == 'symbols':
             tag = 'ul'
         elif style == 'hanging':
             tag = 'dl'
-        elif style == 'numbers':
+            attribs["hanging"] = "false"
+        elif style in ['numbers', 'inherit']:
             tag = 'ol'
             attribs['type'] = nstyle if nstyle else '1'
         elif style == 'letters':
@@ -705,7 +768,7 @@ class V2v3XmlWriter:
             attribs['group'] = e.get('counter')
             comments.append("Converting <list counter=...> to <%s group=...> " % tag)
         #
-        attribs['spacing'] = 'compact' if hasattr(e, 'pis') and e.pis['compact'] in ['yes', 'true'] else 'normal'
+        attribs['spacing'] = 'compact' if hasattr(e, 'pis') and e.pis['subcompact'] in ['yes', 'true'] else 'normal'
         #
         stripattr(e, ['counter', 'style', ])
         l = self.element(tag, **attribs)
@@ -720,6 +783,13 @@ class V2v3XmlWriter:
                 dt.text = t.get('hangText')
                 if not dt.text is None:
                     del t.attrib['hangText']
+                # Convert <vspace> at the start of hanging list text to
+                # attribute hanging='true' on <dl>
+                if not t.text:
+                    if t[0].tag == 'vspace':
+                        t.text = t[0].tail
+                        t.remove(t[0])
+                    l.set('hanging', 'true')
                 i = l.index(t)
                 l.insert(i, dt)
                 self.replace(t, 'dd')
@@ -848,6 +918,7 @@ class V2v3XmlWriter:
         tr = None
         align = []
         table = self.element('table')
+        table.sourceline = e.sourceline
         copyattr(e, table)
         for x in e.iterchildren():
             if   x.tag == 'preamble':
@@ -882,6 +953,7 @@ class V2v3XmlWriter:
                 # will be handled separately
                 pass
         stripattr(table, ['align', 'style', 'suppress-title',])
+        #stripattr(table, ['style', 'suppress-title',])
         p.replace(e, table)
 
 
@@ -983,3 +1055,17 @@ class V2v3XmlWriter:
                 e.set(k, 'true')
             elif v == 'no':
                 e.set(k, 'false')
+
+    def pretty_print_prep(self, e, p):
+        # apply this to elements that can't appear with text, i.e., don't have
+        # any of these as parent:
+        skip_parents = set([
+            "annotation", "blockquote", "preamble", "postamble", "name", "refcontent", "c", "t",
+            "cref", "dd", "dt", "li", "td", "th", "tt", "em", "strong", "sub", "sup", ])
+        for c in e.iter():
+            p = c.getparent()
+            if p != None and p.tag in skip_parents:
+                continue
+            if c.tail != None:
+                if c.tail.strip() == '':
+                    c.tail = None

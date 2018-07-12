@@ -7,8 +7,18 @@
 #         'noDerivativesTrust200811',
 
 
+
+
+
 boilerplate_tlp = {
     "2.0": {
+        # From https://trustee.ietf.org/license-info/IETF-TLP-2.htm
+        "draft": [
+            """
+            This Internet-Draft is submitted in full conformance
+            with the provisions of BCP 78 and BCP 79.
+            """
+        ],
         "n/a": [
             """
             Copyright (c) {year} IETF Trust and the persons identified as
@@ -53,6 +63,13 @@ boilerplate_tlp = {
         ],
     },
     "3.0": {
+        # From https://trustee.ietf.org/license-info/IETF-TLP-3.htm
+        "draft": [
+            """
+            This Internet-Draft is submitted to IETF in full conformance with
+            the provisions of BCP 78 and BCP 79.
+            """
+        ],
         "n/a": [
             """
             Copyright (c) {year} IETF Trust and the persons identified as
@@ -101,6 +118,13 @@ boilerplate_tlp = {
         ],
     },
     "4.0": {
+        # From https://trustee.ietf.org/license-info/IETF-TLP-4.htm
+        "draft": [
+            """
+            This Internet-Draft is submitted in full conformance with the
+            provisions of BCP 78 and BCP 79.
+            """
+        ],
         "IETF": [
             """
             Copyright (c) {year} IETF Trust and the persons identified as the document
@@ -163,6 +187,13 @@ boilerplate_tlp = {
         ],
     },
     "5.0": {
+        # From https://trustee.ietf.org/license-info/IETF-TLP-5.htm
+        "draft": [
+            """
+            This Internet-Draft is submitted in full conformance with the
+            provisions of BCP 78 and BCP 79.
+            """
+        ],
         "IETF": [
             """
             Copyright (c) {year} IETF Trust and the persons identified as the
@@ -171,7 +202,7 @@ boilerplate_tlp = {
             """
             This document is subject to BCP 78 and the IETF Trust's Legal
             Provisions Relating to IETF Documents
-            (http://trustee.ietf.org/license-info) in effect on the date of
+            ({scheme}://trustee.ietf.org/license-info) in effect on the date of
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document. Code Components extracted from this
@@ -188,7 +219,7 @@ boilerplate_tlp = {
             """
             This document is subject to BCP 78 and the IETF Trust's Legal
             Provisions Relating to IETF Documents
-            (http://trustee.ietf.org/license-info) in effect on the date of
+            ({scheme}://trustee.ietf.org/license-info) in effect on the date of
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document.

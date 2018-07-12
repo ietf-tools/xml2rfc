@@ -5,7 +5,7 @@
 <?rfc symrefs="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" consensus="yes" submissionType="IETF" ipr="trust200902" obsoletes="" updates="" xml:lang="en">
+<rfc number="7911" category="std" consensus="yes" submissionType="IETF" ipr="trust200902" docName="draft-ietf-idr-add-paths" obsoletes="" updates="" xml:lang="en">
   <link href="https://datatracker.ietf.org/doc/draft-ietf-idr-add-paths" rel="convertedFrom"/>
   <front>
     <title abbrev="ADD-PATH">Advertisement of Multiple Paths in BGP</title>
@@ -124,8 +124,7 @@
       encoding MUST be extended by prepending the Path Identifier field, which
       is of four octets.</t>
       <t>For example, the NLRI encoding specified in <xref format="default" target="RFC4271"/> is extended as the following:</t>
-      <figure>
-        <artwork name="" type="" align="left" alt=""><![CDATA[
+      <artwork name="" type="" align="left" alt=""><![CDATA[
                +--------------------------------+
                | Path Identifier (4 octets)     |
                +--------------------------------+
@@ -133,9 +132,7 @@
                +--------------------------------+
                | Prefix (variable)              |
                +--------------------------------+]]></artwork>
-      </figure>
       <t>The usage of the extended NLRI encodings is specified in <xref target="ops" format="default"/>.</t>
-      <?rfc needLines="20" ?>
     </section>
     <section anchor="capa" numbered="true" toc="default">
       <name>ADD-PATH Capability</name>
@@ -143,8 +140,7 @@
       69. The Capability Length field of this capability is
       variable. The Capability Value field consists of one or more of the
       following tuples:</t>
-      <figure>
-        <artwork name="" type="" align="left" alt=""><![CDATA[
+      <artwork name="" type="" align="left" alt=""><![CDATA[
              +------------------------------------------------+
              | Address Family Identifier (2 octets)           |
              +------------------------------------------------+
@@ -152,24 +148,23 @@
              +------------------------------------------------+
              | Send/Receive (1 octet)                         |
              +------------------------------------------------+]]></artwork>
-      </figure>
       <t>The meaning and use of the fields are as follows: </t>
-      <ul spacing="compact">
+      <ul empty="true" spacing="normal">
         <li>
           <t>Address Family Identifier (AFI): </t>
-          <ul spacing="compact">
+          <ul spacing="normal">
             <li>This field is the same as the one used in <xref format="default" target="RFC4760"/>.</li>
           </ul>
         </li>
         <li>
           <t>Subsequent Address Family Identifier (SAFI): </t>
-          <ul spacing="compact">
+          <ul spacing="normal">
             <li>This field is the same as the one used in <xref format="default" target="RFC4760"/>.</li>
           </ul>
         </li>
         <li>
           <t>Send/Receive: </t>
-          <ul spacing="compact">
+          <ul spacing="normal">
             <li>This field indicates whether the sender is (a) able to
               receive multiple paths from its peer (value 1), (b) able to send
               multiple paths to its peer (value 2), or (c) both (value 3) for
@@ -270,218 +265,221 @@
   </middle>
   <back>
     <references>
-      <name>Normative References</name>
-      <reference anchor="RFC4271" target="http://www.rfc-editor.org/info/rfc4271">
-        <front>
-          <title>A Border Gateway Protocol 4 (BGP-4)</title>
-          <seriesInfo name="DOI" value="10.17487/RFC4271"/>
-          <seriesInfo name="RFC" value="4271"/>
-          <author initials="Y." surname="Rekhter" fullname="Y. Rekhter" role="editor">
-            <organization/>
-          </author>
-          <author initials="T." surname="Li" fullname="T. Li" role="editor">
-            <organization/>
-          </author>
-          <author initials="S." surname="Hares" fullname="S. Hares" role="editor">
-            <organization/>
-          </author>
-          <date year="2006" month="January"/>
-          <abstract>
-            <t>This document discusses the Border Gateway Protocol (BGP), which is an inter-Autonomous System routing protocol.</t>
-            <t>The primary function of a BGP speaking system is to exchange network reachability information with other BGP systems.  This network reachability information includes information on the list of Autonomous Systems (ASes) that reachability information traverses. This information is sufficient for constructing a graph of AS connectivity for this reachability from which routing loops may be pruned, and, at the AS level, some policy decisions may be enforced.</t>
-            <t>BGP-4 provides a set of mechanisms for supporting Classless Inter-Domain Routing (CIDR).  These mechanisms include support for advertising a set of destinations as an IP prefix, and eliminating the concept of network "class" within BGP.  BGP-4 also introduces mechanisms that allow aggregation of routes, including aggregation of AS paths.</t>
-            <t>This document obsoletes RFC 1771.  [STANDARDS-TRACK]</t>
-          </abstract>
-        </front>
-      </reference>
-      <reference anchor="RFC5492" target="http://www.rfc-editor.org/info/rfc5492">
-        <front>
-          <title>Capabilities Advertisement with BGP-4</title>
-          <seriesInfo name="DOI" value="10.17487/RFC5492"/>
-          <seriesInfo name="RFC" value="5492"/>
-          <author initials="J." surname="Scudder" fullname="J. Scudder">
-            <organization/>
-          </author>
-          <author initials="R." surname="Chandra" fullname="R. Chandra">
-            <organization/>
-          </author>
-          <date year="2009" month="February"/>
-          <abstract>
-            <t>This document defines an Optional Parameter, called Capabilities, that is expected to facilitate the introduction of new capabilities in the Border Gateway Protocol (BGP) by providing graceful capability advertisement without requiring that BGP peering be terminated.</t>
-            <t>This document obsoletes RFC 3392.  [STANDARDS-TRACK]</t>
-          </abstract>
-        </front>
-      </reference>
-      <reference anchor="RFC4760" target="http://www.rfc-editor.org/info/rfc4760">
-        <front>
-          <title>Multiprotocol Extensions for BGP-4</title>
-          <seriesInfo name="DOI" value="10.17487/RFC4760"/>
-          <seriesInfo name="RFC" value="4760"/>
-          <author initials="T." surname="Bates" fullname="T. Bates">
-            <organization/>
-          </author>
-          <author initials="R." surname="Chandra" fullname="R. Chandra">
-            <organization/>
-          </author>
-          <author initials="D." surname="Katz" fullname="D. Katz">
-            <organization/>
-          </author>
-          <author initials="Y." surname="Rekhter" fullname="Y. Rekhter">
-            <organization/>
-          </author>
-          <date year="2007" month="January"/>
-          <abstract>
-            <t>This document defines extensions to BGP-4 to enable it to carry routing information for multiple Network Layer protocols (e.g., IPv6, IPX, L3VPN, etc.).  The extensions are backward compatible - a router that supports the extensions can interoperate with a router that doesn't support the extensions.  [STANDARDS-TRACK]</t>
-          </abstract>
-        </front>
-      </reference>
-      <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
-        <front>
-          <title>Key words for use in RFCs to Indicate Requirement Levels</title>
-          <seriesInfo name="DOI" value="10.17487/RFC2119"/>
-          <seriesInfo name="RFC" value="2119"/>
-          <seriesInfo name="BCP" value="14"/>
-          <author initials="S." surname="Bradner" fullname="S. Bradner">
-            <organization/>
-          </author>
-          <date year="1997" month="March"/>
-          <abstract>
-            <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized. This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
-          </abstract>
-        </front>
-      </reference>
-    </references>
-    <references>
-      <name>Informative References</name>
-      <reference anchor="RFC3345" target="http://www.rfc-editor.org/info/rfc3345">
-        <front>
-          <title>Border Gateway Protocol (BGP) Persistent Route Oscillation Condition</title>
-          <seriesInfo name="DOI" value="10.17487/RFC3345"/>
-          <seriesInfo name="RFC" value="3345"/>
-          <author initials="D." surname="McPherson" fullname="D. McPherson">
-            <organization/>
-          </author>
-          <author initials="V." surname="Gill" fullname="V. Gill">
-            <organization/>
-          </author>
-          <author initials="D." surname="Walton" fullname="D. Walton">
-            <organization/>
-          </author>
-          <author initials="A." surname="Retana" fullname="A. Retana">
-            <organization/>
-          </author>
-          <date year="2002" month="August"/>
-        </front>
-      </reference>
-      <!--draft-ietf-idr-route-oscillation-stop IESG State: IESG Evaluation::Revised
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <reference anchor="RFC4271" target="http://www.rfc-editor.org/info/rfc4271">
+          <front>
+            <title>A Border Gateway Protocol 4 (BGP-4)</title>
+            <seriesInfo name="DOI" value="10.17487/RFC4271"/>
+            <seriesInfo name="RFC" value="4271"/>
+            <author initials="Y." surname="Rekhter" fullname="Y. Rekhter" role="editor">
+              <organization/>
+            </author>
+            <author initials="T." surname="Li" fullname="T. Li" role="editor">
+              <organization/>
+            </author>
+            <author initials="S." surname="Hares" fullname="S. Hares" role="editor">
+              <organization/>
+            </author>
+            <date year="2006" month="January"/>
+            <abstract>
+              <t>This document discusses the Border Gateway Protocol (BGP), which is an inter-Autonomous System routing protocol.</t>
+              <t>The primary function of a BGP speaking system is to exchange network reachability information with other BGP systems.  This network reachability information includes information on the list of Autonomous Systems (ASes) that reachability information traverses. This information is sufficient for constructing a graph of AS connectivity for this reachability from which routing loops may be pruned, and, at the AS level, some policy decisions may be enforced.</t>
+              <t>BGP-4 provides a set of mechanisms for supporting Classless Inter-Domain Routing (CIDR).  These mechanisms include support for advertising a set of destinations as an IP prefix, and eliminating the concept of network "class" within BGP.  BGP-4 also introduces mechanisms that allow aggregation of routes, including aggregation of AS paths.</t>
+              <t>This document obsoletes RFC 1771.  [STANDARDS-TRACK]</t>
+            </abstract>
+          </front>
+        </reference>
+        <reference anchor="RFC5492" target="http://www.rfc-editor.org/info/rfc5492">
+          <front>
+            <title>Capabilities Advertisement with BGP-4</title>
+            <seriesInfo name="DOI" value="10.17487/RFC5492"/>
+            <seriesInfo name="RFC" value="5492"/>
+            <author initials="J." surname="Scudder" fullname="J. Scudder">
+              <organization/>
+            </author>
+            <author initials="R." surname="Chandra" fullname="R. Chandra">
+              <organization/>
+            </author>
+            <date year="2009" month="February"/>
+            <abstract>
+              <t>This document defines an Optional Parameter, called Capabilities, that is expected to facilitate the introduction of new capabilities in the Border Gateway Protocol (BGP) by providing graceful capability advertisement without requiring that BGP peering be terminated.</t>
+              <t>This document obsoletes RFC 3392.  [STANDARDS-TRACK]</t>
+            </abstract>
+          </front>
+        </reference>
+        <reference anchor="RFC4760" target="http://www.rfc-editor.org/info/rfc4760">
+          <front>
+            <title>Multiprotocol Extensions for BGP-4</title>
+            <seriesInfo name="DOI" value="10.17487/RFC4760"/>
+            <seriesInfo name="RFC" value="4760"/>
+            <author initials="T." surname="Bates" fullname="T. Bates">
+              <organization/>
+            </author>
+            <author initials="R." surname="Chandra" fullname="R. Chandra">
+              <organization/>
+            </author>
+            <author initials="D." surname="Katz" fullname="D. Katz">
+              <organization/>
+            </author>
+            <author initials="Y." surname="Rekhter" fullname="Y. Rekhter">
+              <organization/>
+            </author>
+            <date year="2007" month="January"/>
+            <abstract>
+              <t>This document defines extensions to BGP-4 to enable it to carry routing information for multiple Network Layer protocols (e.g., IPv6, IPX, L3VPN, etc.).  The extensions are backward compatible - a router that supports the extensions can interoperate with a router that doesn't support the extensions.  [STANDARDS-TRACK]</t>
+            </abstract>
+          </front>
+        </reference>
+        <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
+          <front>
+            <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+            <seriesInfo name="DOI" value="10.17487/RFC2119"/>
+            <seriesInfo name="RFC" value="2119"/>
+            <seriesInfo name="BCP" value="14"/>
+            <author initials="S." surname="Bradner" fullname="S. Bradner">
+              <organization/>
+            </author>
+            <date year="1997" month="March"/>
+            <abstract>
+              <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized. This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
+            </abstract>
+          </front>
+        </reference>
+      </references>
+      <references>
+        <name>Informative References</name>
+        <reference anchor="RFC3345" target="http://www.rfc-editor.org/info/rfc3345">
+          <front>
+            <title>Border Gateway Protocol (BGP) Persistent Route Oscillation Condition</title>
+            <seriesInfo name="DOI" value="10.17487/RFC3345"/>
+            <seriesInfo name="RFC" value="3345"/>
+            <author initials="D." surname="McPherson" fullname="D. McPherson">
+              <organization/>
+            </author>
+            <author initials="V." surname="Gill" fullname="V. Gill">
+              <organization/>
+            </author>
+            <author initials="D." surname="Walton" fullname="D. Walton">
+              <organization/>
+            </author>
+            <author initials="A." surname="Retana" fullname="A. Retana">
+              <organization/>
+            </author>
+            <date year="2002" month="August"/>
+          </front>
+        </reference>
+        <!--draft-ietf-idr-route-oscillation-stop IESG State: IESG Evaluation::Revised
 I-D Needed -->
-      <reference anchor="STOP-OSC">
-        <front>
-          <title>BGP Persistent Route Oscillation Solutions</title>
-          <seriesInfo name="Work in Progress," value="draft-ietf-idr-route-oscillation-stop-03"/>
-          <author initials="D" surname="Walton" fullname="Daniel Walton">
-            <organization/>
-          </author>
-          <author initials="A" surname="Retana" fullname="Alvaro Retana">
-            <organization/>
-          </author>
-          <author initials="E" surname="Chen" fullname="Enke Chen">
-            <organization/>
-          </author>
-          <author initials="J" surname="Scudder" fullname="John Scudder">
-            <organization/>
-          </author>
-          <date month="April" day="30" year="2016"/>
-        </front>
-      </reference>
-      <!--draft-ietf-idr-add-paths-guidelines IESG State: I-D Exists -->
-      <reference anchor="ADDPATH">
-        <front>
-          <title>Best Practices for Advertisement of Multiple Paths in IBGP</title>
-          <seriesInfo name="Work in Progress," value="draft-ietf-idr-add-paths-guidelines-08"/>
-          <author initials="J" surname="Uttaro" fullname="Jim Uttaro">
-            <organization/>
-          </author>
-          <author initials="P" surname="Francois" fullname="Pierre Francois">
-            <organization/>
-          </author>
-          <author initials="K" surname="Patel" fullname="Keyur Patel">
-            <organization/>
-          </author>
-          <author initials="J" surname="Haas" fullname="Jeffrey Haas">
-            <organization/>
-          </author>
-          <author initials="A" surname="Simpson" fullname="Adam Simpson">
-            <organization/>
-          </author>
-          <author initials="R" surname="Fragassi" fullname="Roberto Fragassi">
-            <organization/>
-          </author>
-          <date month="April" day="25" year="2016"/>
-        </front>
-      </reference>
-      <!--draft-pmohapat-idr-fast-conn-restore IESG State: Expired -->
-      <reference anchor="FAST">
-        <front>
-          <title>Fast Connectivity Restoration Using BGP Add-path</title>
-          <seriesInfo name="Work in Progress," value="draft-pmohapat-idr-fast-conn-restore-03"/>
-          <author initials="P" surname="Mohapatra" fullname="Pradosh Mohapatra">
-            <organization/>
-          </author>
-          <author initials="R" surname="Fernando" fullname="Rex Fernando">
-            <organization/>
-          </author>
-          <author initials="C" surname="Filsfils" fullname="Clarence Filsfils">
-            <organization/>
-          </author>
-          <author initials="R" surname="Raszuk" fullname="Robert Raszuk">
-            <organization/>
-          </author>
-          <date month="January" day="22" year="2013"/>
-        </front>
-      </reference>
-      <reference anchor="RFC4724" target="http://www.rfc-editor.org/info/rfc4724">
-        <front>
-          <title>Graceful Restart Mechanism for BGP</title>
-          <seriesInfo name="DOI" value="10.17487/RFC4724"/>
-          <seriesInfo name="RFC" value="4724"/>
-          <author initials="S." surname="Sangli" fullname="S. Sangli">
-            <organization/>
-          </author>
-          <author initials="E." surname="Chen" fullname="E. Chen">
-            <organization/>
-          </author>
-          <author initials="R." surname="Fernando" fullname="R. Fernando">
-            <organization/>
-          </author>
-          <author initials="J." surname="Scudder" fullname="J. Scudder">
-            <organization/>
-          </author>
-          <author initials="Y." surname="Rekhter" fullname="Y. Rekhter">
-            <organization/>
-          </author>
-          <date year="2007" month="January"/>
-          <abstract>
-            <t>This document describes a mechanism for BGP that would help minimize the negative effects on routing caused by BGP restart.  An End-of-RIB marker is specified and can be used to convey routing convergence information.  A new BGP capability, termed "Graceful Restart Capability", is defined that would allow a BGP speaker to express its ability to preserve forwarding state during BGP restart.  Finally, procedures are outlined for temporarily retaining routing information across a TCP session termination/re-establishment.</t>
-            <t>The mechanisms described in this document are applicable to all routers, both those with the ability to preserve forwarding state during BGP restart and those without (although the latter need to implement only a subset of the mechanisms described in this document).  [STANDARDS-TRACK]</t>
-          </abstract>
-        </front>
-      </reference>
-      <reference anchor="RFC4272" target="http://www.rfc-editor.org/info/rfc4272">
-        <front>
-          <title>BGP Security Vulnerabilities Analysis</title>
-          <seriesInfo name="DOI" value="10.17487/RFC4272"/>
-          <seriesInfo name="RFC" value="4272"/>
-          <author initials="S." surname="Murphy" fullname="S. Murphy">
-            <organization/>
-          </author>
-          <date year="2006" month="January"/>
-          <abstract>
-            <t>Border Gateway Protocol 4 (BGP-4), along with a host of other infrastructure protocols designed before the Internet environment became perilous, was originally designed with little consideration for protection of the information it carries.  There are no mechanisms internal to BGP that protect against attacks that modify, delete, forge, or replay data, any of which has the potential to disrupt overall network routing behavior.</t>
-            <t>This document discusses some of the security issues with BGP routing data dissemination.  This document does not discuss security issues with forwarding of packets.  This memo provides information for the Internet community.</t>
-          </abstract>
-        </front>
-      </reference>
+        <reference anchor="STOP-OSC">
+          <front>
+            <title>BGP Persistent Route Oscillation Solutions</title>
+            <seriesInfo name="Work in Progress," value="draft-ietf-idr-route-oscillation-stop-03"/>
+            <author initials="D" surname="Walton" fullname="Daniel Walton">
+              <organization/>
+            </author>
+            <author initials="A" surname="Retana" fullname="Alvaro Retana">
+              <organization/>
+            </author>
+            <author initials="E" surname="Chen" fullname="Enke Chen">
+              <organization/>
+            </author>
+            <author initials="J" surname="Scudder" fullname="John Scudder">
+              <organization/>
+            </author>
+            <date month="April" day="30" year="2016"/>
+          </front>
+        </reference>
+        <!--draft-ietf-idr-add-paths-guidelines IESG State: I-D Exists -->
+        <reference anchor="ADDPATH">
+          <front>
+            <title>Best Practices for Advertisement of Multiple Paths in IBGP</title>
+            <seriesInfo name="Work in Progress," value="draft-ietf-idr-add-paths-guidelines-08"/>
+            <author initials="J" surname="Uttaro" fullname="Jim Uttaro">
+              <organization/>
+            </author>
+            <author initials="P" surname="Francois" fullname="Pierre Francois">
+              <organization/>
+            </author>
+            <author initials="K" surname="Patel" fullname="Keyur Patel">
+              <organization/>
+            </author>
+            <author initials="J" surname="Haas" fullname="Jeffrey Haas">
+              <organization/>
+            </author>
+            <author initials="A" surname="Simpson" fullname="Adam Simpson">
+              <organization/>
+            </author>
+            <author initials="R" surname="Fragassi" fullname="Roberto Fragassi">
+              <organization/>
+            </author>
+            <date month="April" day="25" year="2016"/>
+          </front>
+        </reference>
+        <!--draft-pmohapat-idr-fast-conn-restore IESG State: Expired -->
+        <reference anchor="FAST">
+          <front>
+            <title>Fast Connectivity Restoration Using BGP Add-path</title>
+            <seriesInfo name="Work in Progress," value="draft-pmohapat-idr-fast-conn-restore-03"/>
+            <author initials="P" surname="Mohapatra" fullname="Pradosh Mohapatra">
+              <organization/>
+            </author>
+            <author initials="R" surname="Fernando" fullname="Rex Fernando">
+              <organization/>
+            </author>
+            <author initials="C" surname="Filsfils" fullname="Clarence Filsfils">
+              <organization/>
+            </author>
+            <author initials="R" surname="Raszuk" fullname="Robert Raszuk">
+              <organization/>
+            </author>
+            <date month="January" day="22" year="2013"/>
+          </front>
+        </reference>
+        <reference anchor="RFC4724" target="http://www.rfc-editor.org/info/rfc4724">
+          <front>
+            <title>Graceful Restart Mechanism for BGP</title>
+            <seriesInfo name="DOI" value="10.17487/RFC4724"/>
+            <seriesInfo name="RFC" value="4724"/>
+            <author initials="S." surname="Sangli" fullname="S. Sangli">
+              <organization/>
+            </author>
+            <author initials="E." surname="Chen" fullname="E. Chen">
+              <organization/>
+            </author>
+            <author initials="R." surname="Fernando" fullname="R. Fernando">
+              <organization/>
+            </author>
+            <author initials="J." surname="Scudder" fullname="J. Scudder">
+              <organization/>
+            </author>
+            <author initials="Y." surname="Rekhter" fullname="Y. Rekhter">
+              <organization/>
+            </author>
+            <date year="2007" month="January"/>
+            <abstract>
+              <t>This document describes a mechanism for BGP that would help minimize the negative effects on routing caused by BGP restart.  An End-of-RIB marker is specified and can be used to convey routing convergence information.  A new BGP capability, termed "Graceful Restart Capability", is defined that would allow a BGP speaker to express its ability to preserve forwarding state during BGP restart.  Finally, procedures are outlined for temporarily retaining routing information across a TCP session termination/re-establishment.</t>
+              <t>The mechanisms described in this document are applicable to all routers, both those with the ability to preserve forwarding state during BGP restart and those without (although the latter need to implement only a subset of the mechanisms described in this document).  [STANDARDS-TRACK]</t>
+            </abstract>
+          </front>
+        </reference>
+        <reference anchor="RFC4272" target="http://www.rfc-editor.org/info/rfc4272">
+          <front>
+            <title>BGP Security Vulnerabilities Analysis</title>
+            <seriesInfo name="DOI" value="10.17487/RFC4272"/>
+            <seriesInfo name="RFC" value="4272"/>
+            <author initials="S." surname="Murphy" fullname="S. Murphy">
+              <organization/>
+            </author>
+            <date year="2006" month="January"/>
+            <abstract>
+              <t>Border Gateway Protocol 4 (BGP-4), along with a host of other infrastructure protocols designed before the Internet environment became perilous, was originally designed with little consideration for protection of the information it carries.  There are no mechanisms internal to BGP that protect against attacks that modify, delete, forge, or replay data, any of which has the potential to disrupt overall network routing behavior.</t>
+              <t>This document discusses some of the security issues with BGP routing data dissemination.  This document does not discuss security issues with forwarding of packets.  This memo provides information for the Internet community.</t>
+            </abstract>
+          </front>
+        </reference>
+      </references>
     </references>
     <section numbered="false" toc="default">
       <name>Acknowledgments</name>

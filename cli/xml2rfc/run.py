@@ -117,6 +117,8 @@ def main():
                             help='Deprecated.  The same as -o.')
     value_options.add_option('-o', '--out', dest='output_filename', metavar='FILE',
                             help='specify an explicit output filename')
+    value_options.add_option('-p', '--path', dest='output_path', metavar='PATH',
+                            help='specify the directory path for output files')
     optionparser.add_option_group(value_options)
 
 
@@ -126,15 +128,30 @@ def main():
                            help='with --text: calculate page breaks, and emit form feeds and page top'
                            ' spacing, but omit headers and footers from the paginated format'
                        )
+    formatoptions.add_option('', '--legacy', default=True, action='store_true',
+                           help='with --text: use the legacy text formatter, rather than the new one.'
+                       )
+    formatoptions.add_option('', '--legacy-list-symbols', default=False, action='store_true',
+                           help='with --text: use the legacy list bullet symbols, rather than the new ones.'
+                       )
+    formatoptions.add_option('', '--legacy-date-format', default=False, action='store_true',
+                           help='with --text: use the legacy date format, rather than the new one.'
+                       )
+    formatoptions.add_option('', '--list-symbols', metavar='4*CHAR',
+                           help='with --text: use the characters given as list bullet symbols.'
+                       )
+    formatoptions.add_option('', '--v3', dest='legacy', action='store_false',
+                           help='with --text: use the v3 text formatter, rather than the legacy one.'
+                       )
     formatoptions.add_option('', '--add-xinclude', action='store_true',
                            help='with --v2v3: replace reference elements with RFC and Internet-Draft'
                            ' seriesInfo with the appropriate XInclude element'
                        )
-    formatoptions.add_option('', '--rfc', action='store_true',
-                           help='with --preptool: prep for an RFC'
-                       )
-    formatoptions.add_option('', '--liberal', action='store_true',
+    formatoptions.add_option('', '--accept-prepped', action='store_true',
                            help='with --preptool: accept already prepped input'
+                       )
+    formatoptions.add_option('', '--strict', action='store_true',
+                           help='with --v2v3: be strict about stripping some deprecated attributes'
                        )
 
     optionparser.add_option_group(formatoptions)
@@ -158,14 +175,21 @@ def main():
     if options.preptool:
         options.vocabulary = 'v3'
         options.no_dtd = True
+    else:
+        if options.accept_prepped:
+            sys.exit("You can only use --accept-prepped together with --preptool.")            
     if options.v2v3:
         options.vocabulary = 'v2'
-    if options.rfc and not options.preptool:
-        sys.exit('The --rfc option can be used only with --preptool')
+    if options.basename:
+        if options.output_path:
+            sys.exit('--path and --basename has the same functionality, please use only --path')
+        else:
+            options.output_path = options.basename
+            options.basename = None
     num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, options.preptool, ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
-                 'use --basename instead.')
+                 'use --path instead.')
     if num_formats < 1:
         # Default to paginated text output
         options.text = True
@@ -191,6 +215,21 @@ def main():
     if options.omit_headers and not options.text:
         sys.exit("You can only use --no-headers with paginated text output.")
 
+    if options.text and not options.legacy:
+        if options.legacy_list_symbols and options.list_symbols:
+            sys.exit("You cannot specify both --list-symbols and --legacy_list_symbols.")
+        if options.list_symbols:
+            options.list_symbols = tuple(list(options.list_symbols))
+        elif options.legacy_list_symbols:
+            options.list_symbols = ('o', '*', '+', '-')
+        else:
+            options.list_symbols = ('*', '-', 'o', '+')
+    else:
+        if options.legacy_list_symbols:
+            sys.exit("You can only use --legacy_list_symbols with v3 text output.")
+        if options.list_symbols:
+            sys.exit("You can only use --list_symbols with v3 text output.")
+
     # Setup warnings module
     # xml2rfc.log.warn_error = options.warn_error and True or False
     xml2rfc.log.quiet = options.quiet and True or False
@@ -214,6 +253,9 @@ def main():
         xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e.error_log)
         sys.exit(1)
         
+    # Remember if we're building an RFC
+    options.rfc = xmlrfc.tree.getroot().get('number')
+
     # Validate the document unless disabled
     if not options.no_dtd:
         ok, errors = xmlrfc.validate(dtd_path=options.dtd)
@@ -234,11 +276,11 @@ def main():
     try:
         source_path, source_base = os.path.split(source)
         source_name, source_ext  = os.path.splitext(source_base)
-        if options.basename:
-            if os.path.isdir(options.basename):
-                basename = os.path.join(options.basename, source_name)
+        if options.output_path:
+            if os.path.isdir(options.output_path):
+                basename = os.path.join(options.output_path, source_name)
             else:
-                basename = options.basename
+                sys.exit("The given output path '%s' is not a directory, cannot place output files there" % (options.output_path, ))
         else:
             # Create basename based on input
             basename = os.path.join(source_path, source_name)
@@ -282,7 +324,7 @@ def main():
             rawwriter.write(filename)
             options.output_filename = None
 
-        if options.text:
+        if options.text and options.legacy:
             filename = options.output_filename
             if not filename:
                 filename = basename + '.txt'
@@ -322,8 +364,24 @@ def main():
             if not filename:
                 filename = basename + '.prepped.xml'
                 options.output_filename = filename
+            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            xmlrfc.tree = v2v3.convert2to3()
             preptool = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date)
             preptool.write(filename)
+            options.output_filename = None
+
+        if options.text and not options.legacy:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.txt'
+                options.output_filename = filename
+            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            xmlrfc.tree = v2v3.convert2to3()
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True)
+            xmlrfc.tree = prep.prep()
+            textwriter = xml2rfc.TextWriter(xmlrfc, options=options, date=options.date)
+            textwriter.write(filename)
             options.output_filename = None
 
 

@@ -619,6 +619,7 @@
         <choice>
           <ref name="artwork"/>
           <ref name="aside"/>
+          <ref name="author"/>
           <ref name="blockquote"/>
           <ref name="dl"/>
           <ref name="figure"/>
@@ -891,6 +892,14 @@
           </choice>
         </attribute>
         <optional>
+          <attribute name="bare" a:defaultValue="false">
+            <choice>
+              <value>false</value>
+              <value>true</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
           <attribute name="pn"/>
         </optional>
       </optional>
@@ -1098,7 +1107,7 @@
         <attribute name="derivedContent"/>
       </optional>
       <optional>
-        <attribute name="displayFormat" a:defaultValue="of">
+        <attribute name="sectionFormat" a:defaultValue="of">
           <choice>
             <value>of</value>
             <value>comma</value>
@@ -1139,6 +1148,9 @@
             <value>bare</value>
           </choice>
         </attribute>
+      </optional>
+      <optional>
+        <attribute name="derivedContent"/>
       </optional>
       <attribute name="section"/>
       <optional>
@@ -1695,10 +1707,10 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="colspan" a:defaultValue="0"/>
+        <attribute name="colspan" a:defaultValue="1"/>
       </optional>
       <optional>
-        <attribute name="rowspan" a:defaultValue="0"/>
+        <attribute name="rowspan" a:defaultValue="1"/>
       </optional>
       <optional>
         <attribute name="align" a:defaultValue="left">
@@ -1755,10 +1767,10 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="colspan" a:defaultValue="0"/>
+        <attribute name="colspan" a:defaultValue="1"/>
       </optional>
       <optional>
-        <attribute name="rowspan" a:defaultValue="0"/>
+        <attribute name="rowspan" a:defaultValue="1"/>
       </optional>
       <optional>
         <attribute name="align" a:defaultValue="left">
@@ -2009,12 +2021,17 @@
       <optional>
         <ref name="name"/>
       </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="reference"/>
-          <ref name="referencegroup"/>
-        </choice>
-      </zeroOrMore>
+      <choice>
+        <oneOrMore>
+          <ref name="references"/>
+        </oneOrMore>
+        <zeroOrMore>
+          <choice>
+            <ref name="reference"/>
+            <ref name="referencegroup"/>
+          </choice>
+        </zeroOrMore>
+      </choice>
     </element>
   </define>
   <define name="reference">

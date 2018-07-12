@@ -1,3 +1,53 @@
+xml2rfc (2.10.0) ietf; urgency=medium
+
+  This release introduces the vocabulary v3 text formatter.  In order to
+  invoke this formatter, use the regular --text switch for text output, and
+  add the --v3 switch to specify the v3 text formatter.
+
+  Xml2rfc in v3 text formatter mode accepts any valid xml2rfc input file, but
+  since the actual formatter only understands the XML elements and attributes
+  which have not been deprecated by RFC7991, it first applies the xml2rfc v2v3
+  converter in order to transform any deprecated markup to the elements and
+  attributes it understands, and then applies the preptool in order to
+  normalize the input before it starts rendering.
+
+  This is the first release of the v3 text formatter, and there are some
+  known rough edges and deficiencies:
+
+  - The current table output renders all table borders.  This differs from
+    the v2 formatter, and will be remedied in a later release.  The reason
+    for doing the first release with this rendering of tables is that the
+    table layout options have changed substantially with the possibility of
+    using rowspans, and the table layout code is much more complex than for v2
+    as a consequence.  With all table borders visible, the initial testing of
+    the layout code has been easier than if horizontal borders were not
+    rendered.
+
+  - The statement of work for the text formatter coding does not include
+    paginated output, and as a consequence the Table of Contents is much less
+    informative than it would be if it was able to show the page for each ToC
+    entry.
+
+  - The xml2rfc v3 vocabulary (RFC 7991) does not provide 'align' attributes
+    for tables, which means that the ability to center and right-align tables
+    is lost.  All tables are left-aligned. (Alignment of text within each cell
+    is still supported, though.)
+
+  - The index generation (using <iref> elements) has some known issues, which
+    will also be fixed in a subsequent release.
+
+  The v3 schema used in this release differs from the schema specified in
+  RFC7991 in some respects.  A separate document will be published with
+  details about the changes: draft-levkowetz-xml2rfc-v3-implementation-notes.
+  The issues leading to the changes will also be entered in the document 
+  issue trackers and sent to the xml2rfc-dev mailing list for discussion.
+
+  Feedback on the v3 text formatter will be appreciated.  Please send feedback
+  to xml2rfc-dev@ietf.org or henrik@levkowetz.com.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  12 Jul 2018 13:05:17 +0000
+
+
 xml2rfc (2.9.9) ietf; urgency=medium
 
   * Applied patch from scott@kitterman.com to let run.py run under python 

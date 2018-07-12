@@ -616,9 +616,9 @@ class BaseRfcWriter:
         if '%d' in text:
             text = text.replace(r'%d', str(count)).ljust(decimal_width+extra_width)
         elif '%c' in text:
-            text = text.replace(r'%c', xml2rfc.utils.int2letter(count-1)).ljust(letter_width+extra_width)
+            text = text.replace(r'%c', xml2rfc.utils.int2letter(count)).ljust(letter_width+extra_width)
         elif '%C' in text:
-            text = text.replace(r'%C', xml2rfc.utils.int2letter(count-1).upper()).ljust(letter_width+extra_width)
+            text = text.replace(r'%C', xml2rfc.utils.int2letter(count).upper()).ljust(letter_width+extra_width)
         elif '%i' in text:
             text = text.replace(r'%i', xml2rfc.utils.int2roman(count)).ljust(roman_width+extra_width)
         elif '%I' in text:

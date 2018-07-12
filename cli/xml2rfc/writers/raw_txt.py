@@ -50,7 +50,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.inline_tags = ['xref', 'eref', 'iref', 'cref', 'spanx']
         
         # Custom textwrapper object
-        self.wrapper = xml2rfc.utils.MyTextWrapper(width=self.width,
+        self.wrapper = xml2rfc.utils.TextWrapper(width=self.width,
                                                    fix_sentence_endings=True)
 
     def _length(self, text):
@@ -98,7 +98,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         subsequent = ' ' * (indent + sub_indent)
         if bullet:
             initial = ' ' * indent
-            bullet_parts = self.wrapper.wrap(bullet, initial_indent=initial, subsequent_indent=initial,
+            bullet_parts = self.wrapper.wrap(bullet, initial=initial,
                                              fix_doublespace=False, drop_whitespace=False)
             if len(bullet_parts) > 1:
                 buf.extend(bullet_parts[:-1])
@@ -115,11 +115,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # Strip initial whitespace
                 string = string.lstrip()
             if wrap_urls:
-                par = self.wrapper.wrap(string, initial_indent=initial, subsequent_indent=subsequent,
+                par = self.wrapper.wrap(string, initial=initial, subsequent_indent=subsequent,
                                         fix_sentence_endings=fix_sentence_endings,
                                         fix_doublespace=fix_doublespace)
             else:
-                par = self.wrapper.wrap(xml2rfc.utils.urlkeep(string), initial_indent=initial,
+                par = self.wrapper.wrap(xml2rfc.utils.urlkeep(string), initial=initial,
                                         subsequent_indent=subsequent,
                                         fix_sentence_endings=fix_sentence_endings,
                                         fix_doublespace=fix_doublespace)

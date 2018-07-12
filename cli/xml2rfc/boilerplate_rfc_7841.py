@@ -5,7 +5,7 @@ from __future__ import unicode_literals, print_function
 # The following text entries, derived from RFC 7841, were taken from
 # https://www.rfc-editor.org/materials/status-memos.txt on 01 Feb 2018
 
-boilerplate_status_of_memo = {
+boilerplate_rfc_status_of_memo = {
     'IETF': {
         'std': {
             'true' : ["""
@@ -24,7 +24,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -45,7 +45,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -70,7 +70,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -92,7 +92,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -116,7 +116,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -137,7 +137,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -160,7 +160,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -180,7 +180,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -206,7 +206,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -227,7 +227,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -250,7 +250,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -270,7 +270,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -299,7 +299,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -324,7 +324,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -347,7 +347,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -372,7 +372,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -396,7 +396,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -418,7 +418,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -443,7 +443,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -465,7 +465,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -486,7 +486,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -513,7 +513,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -541,7 +541,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],
@@ -568,7 +568,7 @@ boilerplate_status_of_memo = {
             """
             Information about the current status of this document, any
             errata, and how to provide feedback on it may be obtained at
-            http://www.rfc-editor.org/info/rfc{rfc_number}.
+            {scheme}://www.rfc-editor.org/info/rfc{rfc_number}.
             """
             ,
             ],

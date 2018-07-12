@@ -147,11 +147,12 @@ class CachingResolver(lxml.etree.Resolver):
             If REQUEST ends with '.dtd' or '.ent' then
               If REQUEST is an absolute path (local or network) then
                 Return REQUEST
+              Else
+                Try TEMPLATE_DIR + REQUEST, otherwise
+                Return SOURCE_DIR + REQUEST
             Else
-              Try TEMPLATE_DIR + REQUEST, otherwise
-              Return SOURCE_DIR + REQUEST
-            Else
-              If REQUEST doesn't end with '.xml' then append '.xml'
+              If REQUEST doesn't end with '.xml' then
+                append '.xml'
               If REQUEST is an absolute path (local or network) then
                 Return REQUEST
               Else
@@ -365,6 +366,12 @@ class CachingResolver(lxml.etree.Resolver):
 
 class AnnotatedElement(lxml.etree.ElementBase):
     pis = None
+    def get(self, key, default=None):
+        value = super(AnnotatedElement, self).get(key, default)
+        if value == default:
+            return value
+        else:
+            return six.text_type(value)
 
 class XmlRfcParser:
 

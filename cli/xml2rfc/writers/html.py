@@ -235,7 +235,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             elif format == 'counter':
                 text = item.counter
             elif format == 'title':
-                text = item.title.strip()
+                text = item.title.strip() if item.title else ''
             else:
                 # Default
                 text = item.autoName

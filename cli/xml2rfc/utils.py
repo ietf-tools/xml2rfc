@@ -6,15 +6,17 @@
 
 import base64
 import calendar
+import math
 import re
 import six
 import textwrap
+
+from lxml.etree import _Comment
 
 if six.PY2:
     from urllib import quote
 else:
     from urllib.request import quote
-    
 
 try:
     import debug
@@ -24,7 +26,7 @@ except ImportError:
 
 import xml2rfc.log
 
-class MyTextWrapper(textwrap.TextWrapper):
+class TextWrapper(textwrap.TextWrapper):
     """ Subclass that overrides a few things in the standard implementation """
     def __init__(self, **kwargs):
         textwrap.TextWrapper.__init__(self, **kwargs)
@@ -103,14 +105,20 @@ class MyTextWrapper(textwrap.TextWrapper):
             text = re.sub(re.escape(key), val, text)
         return text
 
-    def wrap(self, text, initial_indent='', subsequent_indent='',
+    def wrap(self, text, initial='', subsequent_indent=None, width=None,
         fix_doublespace=True, fix_sentence_endings=True, drop_whitespace=True):
         """ Mirrored implementation of wrap which replaces characters properly
-            also lets you easily specify indentation on the fly
+            and also lets you easily specify indentation on the fly
         """
         # Set indentation
-        self.initial_indent = initial_indent
-        self.subsequent_indent = subsequent_indent
+        _width = self.width
+        if width != None:
+            self.width = width
+        self.initial_indent = initial
+        if subsequent_indent == None:
+            self.subsequent_indent = initial
+        else:
+            self.subsequent_indent = subsequent_indent
         self.fix_sentence_endings = fix_sentence_endings
         self.drop_whitespace = drop_whitespace
 
@@ -119,7 +127,7 @@ class MyTextWrapper(textwrap.TextWrapper):
 
         # Maybe remove double (and more) spaces, except when they might be between sentences
         if fix_doublespace:
-            text = re.sub("([^].!?])  +", r"\1 ", text)
+            text = re.sub("([^.!?])  +", r"\1 ", text)
             text = re.sub("([.!?])   +", r"\1  ", text)
 
         # prevent breaking "Section N.N" and "Appendix X.X"
@@ -128,7 +136,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         # Replace some characters after splitting has occured
         parts = self._split(text)
         chunks = []
-        max_word_len = self.width - len(subsequent_indent)
+        max_word_len = self.width - len(self.subsequent_indent)
         for chunk in parts:
             chunk2 = self.replace(chunk)
             if len(chunk2) > max_word_len:
@@ -146,10 +154,12 @@ class MyTextWrapper(textwrap.TextWrapper):
         # Original implementation
         if self.fix_sentence_endings:
             self._fix_sentence_endings(chunks)
-        return self._wrap_chunks(chunks)
+        wrapped = self._wrap_chunks(chunks)
+        self.width = _width
+        return wrapped
 
     def fill(self, *args, **kwargs):
-        return "\n".join(self.wrap(*args, **kwargs))
+        return "\n".join(self.wrap(*args, **kwargs)).replace(u'\u00A0', ' ')
 
 
 def justify_inline(left_str, center_str, right_str, width=72):
@@ -239,7 +249,7 @@ def baseX_to_num(s, digits=DEFAULT_DIGITS):
 # Use the generic base conversion to create list letters
 
 def int2letter(num):
-    return num_to_baseX(num, "abcdefghijklmnopqrstuvwxyz")
+    return num_to_baseX(num-1, "abcdefghijklmnopqrstuvwxyz")
 
 def int2roman(number):
     numerals = { 
@@ -257,6 +267,8 @@ def int2roman(number):
         900 : "cm", 
         1000 : "m" 
     }
+    if number > 3999:
+        raise NotImplementedError("Can't handle roman numerals larger than 3999")
     result = ""
     for value, numeral in sorted(numerals.items(), reverse=True):
         while number >= value:
@@ -264,6 +276,45 @@ def int2roman(number):
             number -= value
     return result
 
+
+roman_max_widths = { 1:1,  2:2,  3:3,  4:3,  5:3,  6:3,  7:3,  8:4,  9:4,
+                10:4, 11:4, 12:4, 13:4, 14:4, 15:4, 16:4, 17:4, 18:5, 19:5,
+                20:5, 21:5, 22:5, 23:5, 24:5, 25:5, 26:5, 27:5, 28:6, 29:6, }
+
+def update_roman_max_widths(n):
+    global roman_max_widths
+    if n > 3999:
+        raise NotImplementedError("Can't handle roman numerals larger than 3999")
+    m = len(roman_max_widths)
+    wmax = 0
+    for i in range(n+32):
+        w = len(int2roman(i))
+        if w > wmax:
+            wmax = w
+        if n > m:
+            roman_max_widths[n] = wmax
+
+def num_width(type, num):
+    """
+    Return the largest width taken by the numbering of a list
+    with num items (without punctuation)
+    """
+    global roman_max_widths
+    if   type in ['a','A','c','C',]:
+        return int(math.log(num, 26))+1
+    elif type in ['1','d',]:
+        return int(math.log(num, 10))+1
+    elif type in ['o','O',]:
+        return int(math.log(num, 8))+1
+    elif type in ['x','X',]:
+        return int(math.log(num, 16))+1
+    elif type in ['i','I',]:
+        m = len(roman_max_widths)
+        if num > m:
+            update_roman_max_widths(num)
+        return roman_max_widths[num]
+    else:
+        raise ValueError("Unexpected type argument to num_width(): '%s'" % (type, ))
 
 def urlkeep(text):
     """ Insert word join XML entities on forward slashes and hyphens
@@ -329,6 +380,7 @@ def _replace_unicode_characters(str):
 # Auto-generated from comments in rfc2629-xhtml.ent
 _unicode_replacements = {
     u'\x09': ' ',
+    u'\xa0': ' ',
     u'\xa1': '!',
     u'\xa2': '[cents]',
     u'\xa3': 'GBP',
@@ -569,4 +621,82 @@ def normalize_month(month):
             month = '%02d' % (i)
     assert month.isdigit()
     return month
+
+namespaces={
+    'x':    'http://relaxng.org/ns/structure/1.0',
+    'a':    'http://relaxng.org/ns/compatibility/annotations/1.0',
+    'xml':  'http://www.w3.org/XML/1998/namespace',
+}
+
+def find_duplicate_ids(schema, tree):
+    dups = []
+    # get attributes specified with data type "ID"
+    id_data = schema.xpath("/x:grammar/x:define/x:element//x:attribute/x:data[@type='ID']", namespaces=namespaces)
+    attr = set([ i.getparent().get('name') for i in id_data ])
+    # Check them one by one
+    for a in attr:
+        seen = set()
+        for e in tree.xpath('.//*[@%s]' % a):
+            id = e.get(a)
+            if id != None and id in seen:
+                dups.append((a, id, e))
+            else:
+                seen.add(id)
+    return dups
+
+def isempty(e):
+    "Return True if e has no children and no text content"
+    return not ((len(e) and any([ not isinstance(c, _Comment) for c in e.iterchildren() ]))
+                or (e.text and e.text.strip()) or (e.tail and e.tail.strip()))
+
+def isblock(e):
+    "Return True if e is a block level element"
+    return e.tag in [ 'artwork', 'dl', 'figure', 'ol', 'sourcecode', 't', 'ul', ]
+
+def iscomment(e):
+    "Return True if e is a comment"
+    return isinstance(e, _Comment)
+
+def hastext(e):
+    "Return a list of text-level immediate children"
+    head = [ e.text ] if e.text and e.text.strip() else []
+    items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
+    return items
+
+def extract_date(e, today):
+    day = e.get('day')
+    month = e.get('month')
+    year = e.get('year', str(today.year))
+    #
+    if not year.isdigit():
+        xml2rfc.log.warn(e, "Expected a numeric year, but found '%s'" % year)
+        year = today.year
+    year = int(year)
+    if not month:
+        if year == today.year:
+            month = today.month
+    else:
+        if not month.isdigit():
+            month = normalize_month(month)
+        month = int(month)
+    if day:
+        if not day.isdigit():
+            xml2rfc.log.warn(e, "Expected a numeric day, but found '%s'" % day)
+            day = today.day
+        day = int(day)
+    return year, month, day
+
+def format_date(year, month, day, legacy):
+    if month:
+        month = calendar.month_name[month]
+        if day:
+            if legacy:
+                date = '%s %s, %s' % (month, day, year)
+            else:
+                date = '%s %s %s' % (day, month, year)
+        else:
+            date = '%s %s' % (month, year)
+    else:
+        date = '%s' % year
+    return date
 

@@ -274,6 +274,7 @@
        name?,
        (artwork
         | aside
+	| author
         | blockquote
         | dl
         | figure
@@ -388,7 +389,9 @@
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
        ([ a:defaultValue = "false" ]
-        attribute empty { "false" | "true" },
+        attribute empty { "false" | "true"},
+	[ a:defaultValue = "false" ]
+        attribute bare { "false" | "true"}?,
         attribute pn { text }?)?,
        li+
      }
@@ -479,7 +482,7 @@
        attribute format { "default" | "title" | "counter" | "none" }?,
        attribute derivedContent { text }?,
        [ a:defaultValue = "of" ]
-       attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
+       attribute sectionFormat { "of" | "comma" | "parens" | "bare" }?,
        attribute section { text }?,
        attribute relative { text }?,
        attribute derivedLink { text }?,
@@ -493,6 +496,7 @@
        attribute target { xsd:IDREF },
        [ a:defaultValue = "of" ]
        attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
+       attribute derivedContent { text }?,
        attribute section { text },
        attribute relative { text }?,
        attribute derivedLink { text }?,
@@ -756,8 +760,8 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       [ a:defaultValue = "0" ] attribute colspan { text }?,
-       [ a:defaultValue = "0" ] attribute rowspan { text }?,
+       [ a:defaultValue = "1" ] attribute colspan { text }?,
+       [ a:defaultValue = "1" ] attribute rowspan { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -781,8 +785,8 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       [ a:defaultValue = "0" ] attribute colspan { text }?,
-       [ a:defaultValue = "0" ] attribute rowspan { text }?,
+       [ a:defaultValue = "1" ] attribute colspan { text }?,
+       [ a:defaultValue = "1" ] attribute rowspan { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -883,7 +887,7 @@
        attribute anchor { xsd:ID }?,
        attribute title { text }?,
        name?,
-       (reference | referencegroup)*
+       (references+ | (reference | referencegroup)*)
      }
 
    reference =

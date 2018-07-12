@@ -8,7 +8,8 @@ from xml2rfc.writers.nroff import NroffRfcWriter
 from xml2rfc.writers.expanded_xml import ExpandedXmlWriter
 from xml2rfc.writers.v2v3 import V2v3XmlWriter
 from xml2rfc.writers.preptool import PrepToolWriter
+from xml2rfc.writers.text import TextWriter
 
 __all__ = ['BaseRfcWriter', 'RawTextRfcWriter', 'PaginatedTextRfcWriter',
            'HtmlRfcWriter', 'NroffRfcWriter', 'ExpandedXmlWriter',
-           'RfcWriterError', 'V2v3XmlWriter', 'PrepToolWriter', ]
+           'RfcWriterError', 'V2v3XmlWriter', 'PrepToolWriter', 'TextWriter', ]
