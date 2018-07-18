@@ -1311,7 +1311,7 @@ class TextWriter:
             for i in range(t):
                 l = left[i]
                 r = right[i]
-                assert len(l)+len(r)<70
+                #assert len(l)+len(r)<70
                 w = 72-len(l)-len(r)
                 lines.append(l+' '*w+r)
             return '\n'.join(lines).rstrip()+'\n'
@@ -1768,7 +1768,12 @@ class TextWriter:
     # 
     #        *  <ul> elements (Section 2.63)
     def render_note(self, e, width, **kwargs):
-        kwargs['joiners'].update({ None:       joiner('', '\n\n', '', 3, 0), })
+        kwargs['joiners'].update(
+            {
+                None:       joiner('', '\n\n', '', 3, 0),
+                'name':     joiner('', ': ', '', 0, 0),
+            }
+        )
         text = ""
         if e[0].tag != 'name':
             text = "Note"
@@ -3294,7 +3299,7 @@ class TextWriter:
                     cell = cells[i][j]
                     cell.colspan = intattr(c, 'colspan')
                     cell.rowspan = intattr(c, 'rowspan')
-                    cell.text = self.inner_text_renderer(c).strip() or ''
+                    cell.text = self.inner_text_renderer(c, width, **kwargs).strip() or ''
                     cell.minwidth = max([ len(w) for w in cell.text.split() ]) if cell.text else 0
                     cell.type = p.tag
                     cell.top = '-'
@@ -3920,7 +3925,7 @@ class TextWriter:
         target = e.get('target')
         link   = e.get('derivedContent')
         text   = e.text or ''
-        format = e.get('format')
+        format = e.get('format','default')
         if link is None:
             self.die(e, "Found an <xref> without derivedContent: %s" % (etree.tostring(e),))
         if   format == 'counter':
@@ -3935,13 +3940,16 @@ class TextWriter:
             else:
                 t = self.root.find('.//*[@anchor="%s"]'%(target, ))
                 pn = t.get('pn')
-                type, num = pn.split('-')[:2]
-                ref = '%s %s'%(type.capitalize(), num)
-                if text != ref:
-                    if text:
-                        text += ' (%s)'%ref
-                    else:
-                        text = ref
+                if pn is None:
+                    self.warn(e, "Found an <xref referring to an element without pn: %s" % (etree.tostring(t),))
+                else:
+                    type, num = pn.split('-')[:2]
+                    ref = '%s %s'%(type.capitalize(), num)
+                    if text != ref:
+                        if text:
+                            text += ' (%s)'%ref
+                        else:
+                            text = ref
         elif format == 'title':
             text = link
         else:
