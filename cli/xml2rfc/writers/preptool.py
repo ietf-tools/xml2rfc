@@ -622,7 +622,7 @@ class PrepToolWriter:
         if not self.options.rfc:
             warning_text = "This %s is to be removed before publishing as an RFC." % e.tag
             top_para = e.find('t')
-            if top_para.text != warning_text:
+            if top_para==None or top_para.text != warning_text:
                 name = e.xpath('name')
                 pos = 1 if name != None else 0
                 t = self.element('t')
