@@ -2,6 +2,7 @@
 
 d=`date +%Y-%m-%d-%H-%M-%S`
 exec 2>/var/tmp/xm.$d.err 
-pwd 1>&2
+pwd > /var/tmp/xm.$d.pwd
+env > /var/tmp/xm.$d.env
 
 tee /var/tmp/xm.$d.input | ./xml2rfc.cgi | tee /var/tmp/xm.$d.output
