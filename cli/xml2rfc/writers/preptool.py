@@ -169,8 +169,11 @@ class PrepToolWriter:
         log.write(msg)
 
     def err(self, e, text, trace=False):
-        lnum = getattr(e, 'sourceline', 0)
-        msg = "%s(%s): Error: %s" % (self.xmlrfc.source, lnum, text)
+        lnum = getattr(e, 'sourceline', None)
+        if lnum:
+            msg = "%s(%s): Error: %s" % (self.xmlrfc.source, lnum, text)
+        else:
+            msg = "%s: Error: %s" % (self.xmlrfc.source, text)
         if trace or self.options.debug:
             raise RuntimeError(msg)
         else:
@@ -312,7 +315,10 @@ class PrepToolWriter:
         #    xml:base attribute).  The tool may be configurable with a limit on
         #    the depth of recursion.
 
-        self.tree.xinclude()
+        try:
+            self.tree.xinclude()
+        except etree.XIncludeError as e:
+            self.die(None, "XInclude processing failed: %s" % e)
 
         # Set up reference mapping for later use.
         refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
