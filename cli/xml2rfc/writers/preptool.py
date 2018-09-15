@@ -12,6 +12,7 @@ import unicodedata
 
 from codecs import open
 from collections import namedtuple
+from contextlib import closing
 
 try:
     import debug
@@ -1335,6 +1336,7 @@ class PrepToolWriter:
         src = e.get('src','').strip()
         if src:
             original_src = src
+            data = None
             scheme, netloc, path, query, fragment = self.check_src_scheme(e, src)
 
     #    2.  If an <artwork> element has a "src" attribute with a "file:"
@@ -1366,7 +1368,9 @@ class PrepToolWriter:
 
             if src:                             # Test again, after check_src_file_path()
                 awtype = e.get('type')
-                if awtype == 'svg':
+                if awtype is None:
+                    self.warn(e, "No 'type' attribute value provided for <artwork>, cannot process source %s" % src)
+                elif awtype == 'svg':
 
     #        *  If the "src" URI scheme is "data:", fill the content of the
     #           <artwork> element with that data and remove the "src"
@@ -1430,7 +1434,7 @@ class PrepToolWriter:
                 elif awtype == 'binary-art':
                     # keep svg in src attribute
                     if scheme in ['http', 'https']:
-                        with urlopen(src) as f:
+                        with closing(urlopen(src)) as f:
                             data = f.read()
                             if six.PY2:
                                 mediatype = f.info().gettype()
@@ -1458,11 +1462,13 @@ class PrepToolWriter:
     #           "originalSrc" attribute with the value of the URI and remove
     #           the "src" attribute.
                 else:
-                    with urlopen(src) as f:
+                    with closing(urlopen(src)) as f:
                         data = f.read()
-                    debug.type('data')
                     e.text = data
                     del e.attrib['src']
+
+                if src and not data:
+                    self.warn(e, "No image data found in source %s" % src)
 
     # 5.5.2.  <sourcecode> Processing
 
@@ -1514,7 +1520,7 @@ class PrepToolWriter:
     #           the value of the URI and remove the "src" attribute.
 
             if src:                             # Test again, after check_src_file_path()
-                with urlopen(src) as f:
+                with closing(urlopen(src)) as f:
                     data = f.read()
                 e.text = data
                 del e.attrib['src']

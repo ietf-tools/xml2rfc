@@ -409,7 +409,7 @@ class TextWriter:
     #    See Section 5 for a description of how to deal with issues of using
     #    "&" and "<" characters in artwork.
     def render_artwork(self, e, width, **kwargs):
-        text = (e.text and e.text.expandtabs()) or "(Artwork only available as %s: <%s>)" % (e.get('type'), e.get('originalSrc'))
+        text = (e.text and e.text.expandtabs()) or "(Artwork only available as %s: <%s>)" % (e.get('type', '(unknown type)'), e.get('originalSrc'))
         text += e.tail or ''
         text = text.strip('\n')
         text = '\n'.join( [ l.rstrip() for l in text.splitlines() ] )
