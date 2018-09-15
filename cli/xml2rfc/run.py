@@ -172,6 +172,7 @@ def main():
     if sys.argv[0].endswith('v2v3'):
         options.v2v3 = True
         options.utf8 = True
+    #
     if options.preptool:
         options.vocabulary = 'v3'
         options.no_dtd = True
@@ -180,12 +181,15 @@ def main():
             sys.exit("You can only use --accept-prepped together with --preptool.")            
     if options.v2v3:
         options.vocabulary = 'v2'
+        options.no_dtd = True
+    #
     if options.basename:
         if options.output_path:
             sys.exit('--path and --basename has the same functionality, please use only --path')
         else:
             options.output_path = options.basename
             options.basename = None
+    #
     num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, options.preptool, ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
@@ -214,8 +218,9 @@ def main():
     options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
     if options.omit_headers and not options.text:
         sys.exit("You can only use --no-headers with paginated text output.")
-
+    #
     if options.text and not options.legacy:
+        options.no_dtd = True
         if options.legacy_list_symbols and options.list_symbols:
             sys.exit("You cannot specify both --list-symbols and --legacy_list_symbols.")
         if options.list_symbols:
