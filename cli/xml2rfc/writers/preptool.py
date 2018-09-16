@@ -243,6 +243,7 @@ class PrepToolWriter:
         ## Everything from the semicolon to the end of the string is stripped
         ## before the selector is used.
         selectors = [
+            './/keyword',                       # 2.28.   Keyword
                                                 # 5.1.1.  XInclude Processing
                                                 # 5.1.2.  DTD Removal
             '//processing-instruction()',       # 5.1.3.  Processing Instruction Removal
@@ -369,6 +370,24 @@ class PrepToolWriter:
                     log.note("Selector '%s' has not matched" % (s))
 
         return self.tree
+
+    # ----------------------------------------------------------------
+    # 2.28.  <keyword>
+    # 
+    #    Specifies a keyword applicable to the document.
+    # 
+    #    Note that each element should only contain a single keyword; for
+    #    multiple keywords, the element can simply be repeated.
+    # 
+    #    Keywords are used both in the RFC Index and in the metadata of
+    #    generated document representations.
+    # 
+    #    This element appears as a child element of <front> (Section 2.26).
+    # 
+    #    Content model: only text content.
+    def element_keyword(self, e, p):
+        if ',' in e.text or ' ' in e.text:
+            self.warn(e, "Expected a single keyword in the <keyword/> element, but found '%s'" % (e.text, ))
 
     # ----------------------------------------------------------------
 
