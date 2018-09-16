@@ -287,17 +287,17 @@ class TextWriter:
     def text_or_block_renderer(self, text, e, width, **kw):
         # This handles the case where the element has two alternative content
         # models, either text or block-level children; deal with them
-        # separately
+        # separately.  Return text and whether this was plain text.
         kwargs = copy.deepcopy(kw)
         if utils.hastext(e):
             e = copy.deepcopy(e)
             e.tag = 't'
-            return self.join(text, e, width, **kwargs)
+            return self.join(text, e, width, **kwargs).lstrip(), True
         else:
             for c in e.getchildren():
                 text = self.join(text, c, width, **kwargs)
                 kwargs.pop('first', None)
-        return text
+            return text, False
 
 
     # --- element rendering functions ------------------------------------------
@@ -800,7 +800,8 @@ class TextWriter:
     # 
     #    This element appears as a child element of <td> (Section 2.56) and
     #    <th> (Section 2.58).
-
+    def render_br(self, e, width, **kwargs):
+        return '\n'
 
     # 2.13.  <city>
     # 
@@ -943,7 +944,7 @@ class TextWriter:
         term_width = max( len(l) for l in term.splitlines() ) + len(kwargs['joiners']['dd'].join)
         ind = term_width - kwargs['joiners']['dd'].indent
         kwargs['first'] = 0 if newline else ind
-        text = self.text_or_block_renderer('', e, width, **kwargs).lstrip()
+        text, __ = self.text_or_block_renderer('', e, width, **kwargs)
         return text
 
 
@@ -1427,9 +1428,7 @@ class TextWriter:
                 #
                 category = self.root.get('category', '')
                 series_no = self.root.get('seriesNo')
-                if category and not category in strings.series_name:
-                    self.warn(self.root, "Expected a known category, one of %s, but found '%s'" % (','.join(strings.series_name.keys()), category, ))
-                elif category and series_no:
+                if category and series_no and category in strings.series_name:
                     left.append('%s: %s (if approved)' % (strings.series_name[category], series_no))
                 else:
                     pass
@@ -1640,7 +1639,8 @@ class TextWriter:
     def render_li(self, e, width, **kwargs):
         p = e.getparent()
         text = p._initial_text(e, p)
-        text += self.text_or_block_renderer('', e, width, **kwargs).lstrip()
+        tt, __ = self.text_or_block_renderer('', e, width, **kwargs)
+        text += tt
         return text
 
     def get_ol_li_initial_text(self, e, p):
@@ -1745,7 +1745,6 @@ class TextWriter:
     #    o  <tt> elements (Section 2.62)
     # 
     #    o  <xref> elements (Section 2.66)
-    #@debug.trace
     def render_name(self, e, width, **kwargs):
         hang=kwargs['joiners'][e.tag].hang
         return fill(self.inner_text_renderer(e).strip(), width=width-hang, hang=hang)
@@ -2761,7 +2760,6 @@ class TextWriter:
     #    o  "exclude"
     # 
     #    o  "default" (default)
-    #@debug.trace
     def render_section(self, e, width, **kwargs):
         kwargs['joiners'].update({
             None:       joiner('', '\n\n', '', 3, 0), # default
@@ -3190,6 +3188,7 @@ class TextWriter:
             height  = None
             element = None
             padding = 0
+            foldable= True
 
         def show(cells, attr='', note=''):
             debug.say('')
@@ -3308,8 +3307,11 @@ class TextWriter:
                     cell = cells[i][j]
                     cell.colspan = intattr(c, 'colspan')
                     cell.rowspan = intattr(c, 'rowspan')
-                    cell.text = self.inner_text_renderer(c, width, **kwargs).strip() or ''
-                    cell.minwidth = max([ len(w) for w in cell.text.split() ]) if cell.text else 0
+                    cell.text, cell.foldable = self.text_or_block_renderer('', c, width, **kwargs) or ('', True)
+                    if cell.foldable:
+                        cell.minwidth = max([ len(w) for w in cell.text.split() ]) if cell.text else 0
+                    else:
+                        cell.minwidth = max([ len(l) for l in cell.text.splitlines() ])
                     cell.type = p.tag
                     cell.top = '-'
                     cell.bot = '-'
@@ -3349,6 +3351,7 @@ class TextWriter:
         del w
         #show(cells, 'colwidth', 'after adjusted cell widths')
 
+
         # ----------------------------------------------------------------------
         # Add padding if possible. Pad widest first.
         reqwidth = sum([ c.colwidth for c in cells[0] ]) + cols + 1
@@ -3369,6 +3372,17 @@ class TextWriter:
         #show(cells, 'colwidth', 'after padding')
 
         # ----------------------------------------------------------------------
+        # Set up initial cell.wrapped values
+        for i in range(rows):
+            for j in range(cols):
+                cell = cells[i][j]
+                if cell.text:
+                    if cell.foldable:
+                        cell.wrapped = fill(cell.text, width=cell.colwidth, fix_sentence_endings=False).splitlines()
+                    else:
+                        cell.wrapped = cell.text.splitlines()
+
+        # ----------------------------------------------------------------------
         # Make columns wider, if possible
         while excess > 0:
             maxpos = (None, None)
@@ -3376,6 +3390,8 @@ class TextWriter:
             for i in range(rows):
                 for j in range(cols):
                     cell = cells[i][j]
+                    if not cell.foldable:
+                        continue
                     if cell.origin == (i,j):
                         w = sum([ cells[i][k].colwidth for k in range(j, j+cell.colspan)])+ cell.colspan-1 - cell.padding
                         r = cell.rowspan
