@@ -397,12 +397,13 @@ class XmlRfcParser:
         self.no_network = no_network
         self.network_locs = network_locs
 
-        if six.PY2:
-            with open(self.source, "rU") as f:
-                self.text = f.read()
-        else:
-            with open(self.source, "rb", newline=None) as f:
-                self.text = f.read()
+        if self.source:
+            if six.PY2:
+                with open(self.source, "rU") as f:
+                    self.text = f.read()
+            else:
+                with open(self.source, "rb", newline=None) as f:
+                    self.text = f.read()
 
         # Initialize templates directory
         self.templates_path = templates_path or \
