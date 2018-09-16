@@ -740,7 +740,16 @@ class TextWriter:
     #    (Section 2.56), <th> (Section 2.58), and <tt> (Section 2.62).
     # 
     #    Content model: only text content.
-
+    def render_bcp14(self, e, width, **kwargs):
+        # according to RFC 2119 and 8174
+        permitted_words = [ "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+            "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", "OPTIONAL", ]
+        if not e.text in permitted_words:
+            self.warn(e, "Expected one of the permitted words or phrases from RFC 2119 and RFC 8174 in <bcp14/>, "
+                         "but found '%s'." % (etree.tostring(e).strip()))
+            return e.text               # Return plain text without any emphasis
+        else:
+            return e.text               # This will be more refined in the html renderer
 
     # 2.10.  <blockquote>
     # 
