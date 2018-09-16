@@ -397,6 +397,13 @@ class XmlRfcParser:
         self.no_network = no_network
         self.network_locs = network_locs
 
+        if six.PY2:
+            with open(self.source, "rU") as f:
+                self.text = f.read()
+        else:
+            with open(self.source, "rb", newline=None) as f:
+                self.text = f.read()
+
         # Initialize templates directory
         self.templates_path = templates_path or \
                               os.path.join(os.path.dirname(xml2rfc.__file__),
@@ -443,13 +450,6 @@ class XmlRfcParser:
         """ Parses the source XML file and returns an XmlRfc instance """
         if not (self.quiet or quiet):
             xml2rfc.log.write('Parsing file', self.source)
-
-        if six.PY2:
-            with open(self.source, "rU") as f:
-                self.text = f.read()
-        else:
-            with open(self.source, "rb", newline=None) as f:
-                self.text = f.read()
 
         # Get an iterating parser object
         file = six.BytesIO(self.text)
