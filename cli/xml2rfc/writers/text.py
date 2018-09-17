@@ -292,7 +292,7 @@ class TextWriter:
         if utils.hastext(e):
             e = copy.deepcopy(e)
             e.tag = 't'
-            return self.join(text, e, width, **kwargs).lstrip(), True
+            return self.join(text, e, width, **kwargs), True
         else:
             for c in e.getchildren():
                 text = self.join(text, c, width, **kwargs)
@@ -772,7 +772,25 @@ class TextWriter:
     #    Name of person or document the text in this element is quoted from.
     #    A formatter should render this as visible text at the end of the
     #    quotation.
-
+    def render_blockquote(self, e, width, **kwargs):
+        kwargs['joiners'].update({ 't':       joiner('', '\n\n', '', 0, 0), })
+        frm  = e.get('quotedFrom')
+        cite = e.get('cite')
+        text, plain = self.text_or_block_renderer('', e, width-3, **kwargs)
+        if plain:
+            text = fill(text, width=width-3, **kwargs)
+        if frm  or cite:
+            text += '\n\n'
+        if frm:
+            text += "-- %s\n" % fill(frm, width=width-6, hang=3)
+        if cite:
+            text += "   %s\n" % fill(cite, width=width-6, hang=3)
+        lines = []
+        for l in text.splitlines():
+            lines.append('|  '+l)
+        text = '\n'.join(lines)
+        text = indent(text, indent=kwargs.get('indent', 0))
+        return text
 
     # 2.11.  <boilerplate>
     # 
@@ -945,7 +963,7 @@ class TextWriter:
         ind = term_width - kwargs['joiners']['dd'].indent
         kwargs['first'] = 0 if newline else ind
         text, __ = self.text_or_block_renderer('', e, width, **kwargs)
-        return text
+        return text.lstrip()
 
 
     # 2.19.  <displayreference>
@@ -1640,7 +1658,7 @@ class TextWriter:
         p = e.getparent()
         text = p._initial_text(e, p)
         tt, __ = self.text_or_block_renderer('', e, width, **kwargs)
-        text += tt
+        text += tt.lstrip()
         return text
 
     def get_ol_li_initial_text(self, e, p):
@@ -3309,9 +3327,10 @@ class TextWriter:
                     cell.rowspan = intattr(c, 'rowspan')
                     cell.text, cell.foldable = self.text_or_block_renderer('', c, width, **kwargs) or ('', True)
                     if cell.foldable:
-                        cell.minwidth = max([ len(w) for w in cell.text.split() ]) if cell.text else 0
+                        cell.text = cell.text.strip()
+                        cell.minwidth = max([ len(word) for word in cell.text.split() ]) if cell.text else 0
                     else:
-                        cell.minwidth = max([ len(l) for l in cell.text.splitlines() ])
+                        cell.minwidth = max([ len(line) for line in cell.text.splitlines() ])
                     cell.type = p.tag
                     cell.top = '-'
                     cell.bot = '-'
