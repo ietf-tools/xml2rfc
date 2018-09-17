@@ -1148,7 +1148,8 @@ class PrepToolWriter:
             anchor = p.get('anchor')
             if not anchor:
                 anchor = p.get('pn')
-                p.set('anchor', anchor)
+                if anchor:
+                    p.set('anchor', anchor)
             self.index_entries.append(index_item(item, sub, anchor, None))
 
     # 5.4.8.  <xref> Processing
@@ -1642,9 +1643,12 @@ class PrepToolWriter:
             t = self.element('t')
             li.append(t)
             for i in item_entries:
-                xref = self.element('xref', target=i.anchor, format='default', derivedContent=i.item)
-                xref.text = i.item
-                t.append(xref)
+                if i.anchor:
+                    xref = self.element('xref', target=i.anchor, format='default', derivedContent=i.item)
+                    xref.text = i.item
+                    t.append(xref)
+                else:
+                    self.err(e, "Did not expect an <iref> here")
             subs = [ i.sub for i in item_entries if i.sub ]
             if subs:
                 ul = self.element('ul', empty='true', spacing='compact', bare="true")
