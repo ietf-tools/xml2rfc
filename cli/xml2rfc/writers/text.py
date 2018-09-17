@@ -54,6 +54,7 @@ def fill(*args, **kwargs):
     initial=' '*(first+indent)
     subsequent_indent = ' '*(indent+hang)
     result = wrapper.fill(*args, initial=initial, subsequent_indent=subsequent_indent, **kwargs)
+    result = result.replace('\u2028','\n')
     return result
 
 def center(text, width, **kwargs):
@@ -167,6 +168,7 @@ class TextWriter:
         text = text.replace(u'\u00A0', u' ')
         text = text.replace(u'\u2011', u'-')
         text = text.replace(u'\u200B', u'')
+        text = text.replace(u'\u2028', u'\n')
 
         if self.errors:
             log.write("Not creating output file due to errors (see above)")
@@ -819,7 +821,7 @@ class TextWriter:
     #    This element appears as a child element of <td> (Section 2.56) and
     #    <th> (Section 2.58).
     def render_br(self, e, width, **kwargs):
-        return '\n'
+        return '\u2028' + e.tail.strip()
 
     # 2.13.  <city>
     # 
