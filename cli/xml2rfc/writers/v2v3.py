@@ -366,7 +366,8 @@ class V2v3XmlWriter(object):
             pass
         elif p.tag == 'reference':
             title = p.find('./front/title')
-            self.move_after(e, title, "Moved <seriesInfo/> inside <front/> element")
+            if title != None:
+                self.move_after(e, title, "Moved <seriesInfo/> inside <front/> element")
 
     # 1.3.4.  Additional Changes from v2
     #
