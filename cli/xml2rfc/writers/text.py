@@ -964,8 +964,10 @@ class TextWriter:
         term_width = max( len(l) for l in term.splitlines() ) + len(kwargs['joiners']['dd'].join)
         ind = term_width - kwargs['joiners']['dd'].indent
         kwargs['first'] = 0 if newline else ind
-        text, __ = self.text_or_block_renderer('', e, width, **kwargs)
-        return text.lstrip()
+        text, foldable = self.text_or_block_renderer('', e, width, **kwargs)
+        if foldable:
+            text = text.lstrip()
+        return text
 
 
     # 2.19.  <displayreference>
@@ -3895,13 +3897,13 @@ class TextWriter:
         depth = len([ a for a in e.iterancestors(e.tag) ])
         symbols = self.options.list_symbols
         e._symbol = ' ' if empty else symbols[depth%len(symbols)]
+
         #
         indent = len(e._symbol)+2
         if e._bare:
             first = self.render(e[0], width, **kwargs)
             if first:
                 indent = min(8, len(first.split()[0])+2)
-
         #
         kwargs['joiners'].update({
             None:   joiner('', ljoin, '', indent, 0),
