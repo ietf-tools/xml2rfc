@@ -1019,7 +1019,8 @@ class PrepToolWriter:
         children.sort(key=lambda x: refname_mapping[x.get('anchor')].upper() )
         for c in children:
             e.remove(c)
-        e[-1].tail = ''
+        if len(e):
+            e[-1].tail = ''
         for c in children:
             e.append(c)
 
