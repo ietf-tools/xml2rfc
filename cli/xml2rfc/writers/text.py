@@ -3332,9 +3332,9 @@ class TextWriter:
                     cell.text, cell.foldable = self.text_or_block_renderer('', c, width, **kwargs) or ('', True)
                     if cell.foldable:
                         cell.text = cell.text.strip()
-                        cell.minwidth = max([ len(word) for word in cell.text.split() ]) if cell.text else 0
+                        cell.minwidth = max([0]+[ len(word) for word in cell.text.split() ]) if cell.text else 0
                     else:
-                        cell.minwidth = max([ len(line) for line in cell.text.splitlines() ])
+                        cell.minwidth = max([0]+[ len(line) for line in cell.text.splitlines() ])
                     cell.type = p.tag
                     cell.top = '-'
                     cell.bot = '-'
