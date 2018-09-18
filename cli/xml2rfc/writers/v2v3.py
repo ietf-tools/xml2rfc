@@ -605,7 +605,7 @@ class V2v3XmlWriter(object):
             if not re.search('-\d\d$', value):
                 log.warn("The 'docName' attribute of the <rfc/> element should have a revision number as the last component when submitted: docName=\"draft-foo-bar-02\".")
             new = self.element('seriesInfo', name="Internet-Draft", value=value)
-            if not [ s for s in series if equal(s, new) ]:
+            if not 'Internet-Draft' in [ s.get('name') for s in series ]:
                 front.insert(i, new)
 
         stripattr(e, ['xi', ])
