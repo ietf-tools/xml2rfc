@@ -455,7 +455,7 @@ class PrepToolWriter:
     #    RFCs.
     def front_insert_series_info(self, e, p):
         series = e.xpath('seriesInfo')
-        if not series:
+        if series == None:
             title = e.find('title')
             if title != None:
                 pos = e.index(title)+1
@@ -465,7 +465,7 @@ class PrepToolWriter:
             name, ext  = base.split('.', 1)
             if self.options.rfc:
                 if not name.startswith('rfc'):
-                    self.die(e, "Expected a filename starting with 'rfc' in --rfc mode, but found '%s'" % (name, ))
+                    self.die(e, "Expected a filename starting with 'rfc' in RFC mode, but found '%s'" % (name, ))
                 num = name[3:]
                 if not num.isdigit():
                     self.die(e, "Expected to find the RFC number in the file name in --rfc mode, but found '%s'" % (num, ))
@@ -1648,7 +1648,7 @@ class PrepToolWriter:
                     xref.text = i.item
                     t.append(xref)
                 else:
-                    self.err(e, "Did not expect an <iref> here")
+                    self.err(e, "Did not expect an <iref> here, skipping it")
             subs = [ i.sub for i in item_entries if i.sub ]
             if subs:
                 ul = self.element('ul', empty='true', spacing='compact', bare="true")
