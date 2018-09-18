@@ -186,7 +186,7 @@ class PrepToolWriter:
         log.write("Cannot continue, quitting now")
         sys.exit(1)
 
-    def validate(self, when):
+    def validate(self, when, warn=False):
         # Note: Our schema doesn't permit xi:include elements, so the documnet
         # must have expanded those before validation.
 
@@ -202,7 +202,6 @@ class PrepToolWriter:
         for attr, id, e in dups:
             self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
 
-
         v3_rng = etree.RelaxNG(file=self.v3_rng_file)
 
         try:
@@ -212,8 +211,11 @@ class PrepToolWriter:
         except Exception as e:
             # These warnings are occasionally incorrect -- disable this
             # output for now:
-            self.warn(None, 'Invalid document %s running preptool: %s' % (when, e,))
-            return False
+            if warn:
+                self.warn(None, 'Invalid document %s running preptool: %s' % (when, e,))
+                return False
+            else:
+                self.die(None, 'Invalid document %s running preptool: %s' % (when, e,))
 
     def write(self, filename):
         """ Public method to write the XML document to a file """
@@ -1105,7 +1107,9 @@ class PrepToolWriter:
             sect_tags = ['abstract', 'note', 'section', 'references' ]
             skip_tags = ['reference', ]
             if s.tag in sect_tags:
-                prefix = s.get('pn')+'-'
+                if not s.get('pn'):
+                    self.warn(s, "Expected a pn number, found none in <%s>" % (s.tag, ))
+                prefix = s.get('pn', 'unknown-unknown')+'-'
                 num = 0
             for c in s:
                 if c.tag in para_tags:
@@ -1557,7 +1561,9 @@ class PrepToolWriter:
             if name is None:
                 self.die(s, "No name entry found for section, can't continue: %s" % (etree.tostring(s)))
             numbered = s.get('numbered')=='true' or s.tag=='references'
-            num = s.get('pn').split('-', 1)[1].replace('-', ' ').title() if numbered else ''
+            if not s.get('pn'):
+                self.warn(s, "Expected a pn number, found none in <%s>" % (s.tag, ))
+            num = s.get('pn','unknown-unknown').split('-', 1)[1].replace('-', ' ').title() if numbered else ''
             if num.startswith('Appendix'):
                 num = num.replace('.', ' ', 1)
             #
@@ -1817,7 +1823,7 @@ class PrepToolWriter:
         attrib = copy.deepcopy(e.attrib) 
         for k in attrib.keys():
             del e.attrib[k]
-        if not self.validate('after'):
+        if not self.validate('after', warn=True):
             log.note("Schema validation failed for input document")
         keys = list(attrib.keys())
         keys.sort()

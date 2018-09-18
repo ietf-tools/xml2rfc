@@ -2791,7 +2791,7 @@ class TextWriter:
             'artwork':  joiner('', '\n\n', '', 3, 0),
         })
         text = ""
-        pn = e.get('pn')
+        pn = e.get('pn', 'unknown-unknown')
         if e.get('numbered') == 'true':
             text = pn.split('-',1)[1].replace('-', ' ').title() +'.'
             if text.startswith('Appendix'):
