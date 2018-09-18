@@ -734,6 +734,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         refkeys = []
         refsource = {}
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
+        i = 0
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
             authors = ref.findall('front/author')
