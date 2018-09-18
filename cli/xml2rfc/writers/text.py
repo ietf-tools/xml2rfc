@@ -749,9 +749,9 @@ class TextWriter:
         if not e.text in permitted_words:
             self.warn(e, "Expected one of the permitted words or phrases from RFC 2119 and RFC 8174 in <bcp14/>, "
                          "but found '%s'." % (etree.tostring(e).strip()))
-            return e.text               # Return plain text without any emphasis
+            return e.text + (e.tail or '') # Return plain text without any emphasis
         else:
-            return e.text               # This will be more refined in the html renderer
+            return e.text + (e.tail or '') # This will be more refined in the html renderer
 
     # 2.10.  <blockquote>
     # 
