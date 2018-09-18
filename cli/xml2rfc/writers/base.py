@@ -428,6 +428,8 @@ class BaseRfcWriter:
             item = _RfcItem(autoName, autoAnchor, counter=counter, title=title,
                            anchor=anchor, toc=toc, level=level, appendix=appendix)
         else:
+            if not title:
+                raise RfcWriterError("No title available when trying to insert index item for anchor %s" % anchor)
             autoAnchor = 'rfc.' + re.sub('[^A-Za-z0-9]+', '_', title).lower()
             item = _RfcItem(title, autoAnchor, title=title)
         self._index.append(item)
