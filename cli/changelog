@@ -1,3 +1,65 @@
+xml2rfc (2.10.1) ietf; urgency=medium
+
+  This is primarily a bugfix release, to handle issues people have reported
+  with the new vocabulary v3 text formatter:
+
+  * Fixed an issue where the v2 text formatter could blow up for some v3
+    documents, rather than exit with a message.
+
+  * Fixed a problem in the v2v3 converter that could cause an Internet-Draft
+    <seriesInfo> element to be inserted even if one was alredy present.
+
+  * Tweaked the <seriesInfo> insertion code slightly, and expanded an error
+    message slightly.
+
+  * Fixed a couple of places where bad input could cause exceptions.  Fixes 
+    issue #366.
+
+  * Fixed a case where max() could be given an empty sequence.
+
+  * Tweaked the handling of <ul> with structured <li> content.  Fixes issue 
+    #365.
+
+  * Improved the handling of <br>.
+
+  * Added render_blockquote().  This fixes issue #359.
+
+  * Fixed a problem in the plaintext formatter where table cells were not 
+    filled in if the table was wider than the available width.  Also added 
+    support for formatted table cell content.
+
+  * Added a check in preptool for <keyword> elements containing multiple 
+    keywords.  Fixes issue #353.
+
+  * Moved the reading of input files to avoid multiple reads.  Fixes issue 
+    #352.
+
+  * Added a renderer for <bcp14> elements.
+
+  * Added error messages for empty artwork files.  Tweaked the error 
+    message for missing artwork text.  Addresses issue #370
+
+  * Forced no_dtd when running v2v3 to avoid complaints when converting an 
+    alredy converted file, and also with the v3 text formatter.
+
+  * Added a try/except around xinclude in order to provide error message  
+    without traceback on missing include files.
+
+  * Removed an assert that prevented rendering of document top when some 
+    elements are so long that the line width will be more than 72 characters.  
+    Added support for <note> with <name>.  Added <xref> format default for 
+    included references.  Added a warning for <xref>s without 'pn' attribute 
+    (which can happen if the <xref> is pointing at an element for which pn is 
+    not generated (this is probably an error in RFC 7998).  Fixes issue #346
+
+  * Tweaked the preptool to handle removeInRFC='true' elements that lacks <t> 
+    children.
+
+  * Added xml2rfc-dev@ietf.org to the release notification addresses.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Sep 2018 04:31:57 -0700
+
+
 xml2rfc (2.10.0) ietf; urgency=medium
 
   This release introduces the vocabulary v3 text formatter.  In order to
