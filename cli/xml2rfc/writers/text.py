@@ -746,7 +746,8 @@ class TextWriter:
         # according to RFC 2119 and 8174
         permitted_words = [ "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
             "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", "OPTIONAL", ]
-        if not e.text in permitted_words:
+        text = re.sub('\s+', ' ', e.text, re.UNICODE).strip()
+        if not text in permitted_words:
             self.warn(e, "Expected one of the permitted words or phrases from RFC 2119 and RFC 8174 in <bcp14/>, "
                          "but found '%s'." % (etree.tostring(e).strip()))
             return e.text + (e.tail or '') # Return plain text without any emphasis
