@@ -187,9 +187,8 @@ class PrepToolWriter:
         sys.exit(1)
 
     def validate(self, when, warn=False):
-        # Note: Our schema doesn't permit xi:include elements, so the documnet
-        # must have expanded those before validation.
-
+        # Note: Our schema doesn't permit xi:include elements, so the document
+        # must have had XInclude processing done before calling validate()
 
         # The lxml Relax NG validator checks that xsd:ID values are unique,
         # but unfortunately the error messages are completely unhelpful (lxml
@@ -211,11 +210,14 @@ class PrepToolWriter:
         except Exception as e:
             # These warnings are occasionally incorrect -- disable this
             # output for now:
+            for error in e.error_log:
+                msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, error.path)
+                log.write(msg)
             if warn:
-                self.warn(None, 'Invalid document %s running preptool: %s' % (when, e,))
+                self.warn(None, 'Invalid document %s running preptool.' % (when, ))
                 return False
             else:
-                self.die(None, 'Invalid document %s running preptool: %s' % (when, e,))
+                self.die(None, 'Invalid document %s running preptool.' % (when, ))
 
     def write(self, filename):
         """ Public method to write the XML document to a file """
