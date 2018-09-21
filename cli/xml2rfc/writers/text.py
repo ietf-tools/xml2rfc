@@ -3017,14 +3017,18 @@ class TextWriter:
     #    failure when it encounters an unexpected type or no type is
     #    specified.
     def render_sourcecode(self, e, width, **kwargs):
-        text = "<CODE BEGINS>"
-        file = e.get('name')
-        if file:
-            text += ' file "%s"' % file
-        text += '\n'
+        markers = e.get('markers')
+        text = ''
+        if markers:
+            text += '<CODE BEGINS>'
+            file = e.get('name')
+            if file:
+                text += ' file "%s"' % file
+                text += '\n'
         text += self.render_artwork(e, width, **kwargs)
-        text += '\n'
-        text += '<CODE ENDS>'
+        if markers:
+            text += '\n'
+            text += '<CODE ENDS>'
         return text
         
 
