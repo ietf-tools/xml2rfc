@@ -1191,10 +1191,11 @@ class TextWriter:
     #    (such as "https://") and thus not be relative to the URL of the
     #    current document.
     def render_eref(self, e, width, **kwargs):
-        target = e.get('target')
+        target = e.get('target', '')
         if not target:
             self.warn(e, "Expected the 'target' attribute to have a value, but found %s" % (etree.tostring(e), ))
-        link = "(%s)" % target if target else ''
+        if e.text and target:
+            target = "(%s)" % target
         text = ' '.join([ t for t in [e.text, link] if t ])
         text += e.tail or ''
         return text
