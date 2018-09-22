@@ -3025,7 +3025,7 @@ class TextWriter:
             file = e.get('name')
             if file:
                 text += ' file "%s"' % file
-                text += '\n'
+            text += '\n'
         text += self.render_artwork(e, width, **kwargs)
         if markers:
             text += '\n'
