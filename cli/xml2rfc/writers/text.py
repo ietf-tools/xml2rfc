@@ -1196,7 +1196,7 @@ class TextWriter:
             self.warn(e, "Expected the 'target' attribute to have a value, but found %s" % (etree.tostring(e), ))
         if e.text and target:
             target = "(%s)" % target
-        text = ' '.join([ t for t in [e.text, link] if t ])
+        text = ' '.join([ t for t in [e.text, target] if t ])
         text += e.tail or ''
         return text
             
