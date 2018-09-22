@@ -84,24 +84,26 @@ class V2v3XmlWriter(object):
                     if num and num.isdigit():
                         xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                     nsmap=self.xmlrfc.nsmap,
+                                    line=e.sourceline,
                                     href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.%s.xml"%num)
                         i = p.index(e)
                         p.remove(e)
                         p.insert(i, xi)
                     else:
-                        self.warn('Invalid value in %s' % lxml.etree.tostring(e))
+                        self.warn(e, 'Invalid value in %s' % lxml.etree.tostring(e))
                 elif si.get('name') == 'Internet-Draft':
                     name = si.get('value', '')
                     if name:
                         tag = name[len('draft-'):] if name.startswith('draft-') else name
                         xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                     nsmap=self.xmlrfc.nsmap,
+                                    line=e.sourceline,
                                     href="https://xml2rfc.tools.ietf.org/publicrfc/bibxml3/reference.I-D.%s.xml"%tag)
                         i = p.index(e)
                         p.remove(e)
                         p.insert(i, xi)
                     else:
-                        self.warn('Invalid value in %s' % lxml.etree.tostring(e))
+                        self.warn(e, 'Invalid value in %s' % lxml.etree.tostring(e))
         lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap)
 
 
@@ -130,22 +132,19 @@ class V2v3XmlWriter(object):
 
     # --- Element Operations -------------------------------------------
 
-    def element(self, tag, *args, **kwargs):
+    def element(self, tag, line=None, **kwargs):
         e = Element(tag, **kwargs)
         if self.options.debug:
             filename, lineno, caller, code = tb.extract_stack()[-2]
             e.set('line', str(lineno))
-        if args:
-            assert len(args) == 1
-            text = args[0]
-            e.text = text
+        if line:
+            e.sourceline = line
         return e
 
     def copy(self, e, tag):
-        n = self.element(tag)
+        n = self.element(tag, line=e.sourceline)
         n.text = e.text
         n.tail = e.tail
-        n.sourceline = e.sourceline
         copyattr(e, n)
         for c in e.iterchildren():
             n.append(c)                 # moves c from e to n
@@ -187,6 +186,8 @@ class V2v3XmlWriter(object):
                     else:
                         c.tail = a.tail
                 p.remove(a)
+        if b != None:
+            b.sourceline = a.sourceline
         return b
 
     def move_after(self, a, b, comments=None):
@@ -221,7 +222,7 @@ class V2v3XmlWriter(object):
         assert t.tag == 't'
         pp = t.getparent()
         i = pp.index(t)+1
-        t2 = self.element('t')
+        t2 = self.element('t', line=e.sourceline)
         t2.text = e.tail
         e.tail = None
         for s in e.itersiblings():
@@ -236,8 +237,9 @@ class V2v3XmlWriter(object):
 
     def wrap_content(self, e, t=None):
         if t is None:
-            t = self.element('t')
+            t = self.element('t', line=e.sourceline)
         t.text = e.text
+        t.sourceline = e.sourceline
         e.text = None
         for c in e.iterchildren():
             t.append(c)
@@ -377,8 +379,10 @@ class V2v3XmlWriter(object):
         # check if we have any text or non-block-elements next to the
         # element.  If so, embed in <t/> and then promote the element.
         nixmix_tags = [ 'blockquote', 'li', 'dd', 'td', 'th']
-        if p.tag in nixmix_tags and hastext(p):
-            #debug.say('Wrap %s content ...'%(p.tag))
+        text_items = hastext(p)
+        if p.tag in nixmix_tags and text_items:
+            if self.options.verbose:
+                self.warn(e, "Found mixed content in <%s>: Both <%s> and inline content: '%s'" % (p.tag, e.tag, (' '.join(str(t) for t in text_items))[:40].strip().replace('\n',' ')))
             self.wrap_content(p)
         p = e.getparent()
         #pp = p.getparent()
@@ -417,9 +421,9 @@ class V2v3XmlWriter(object):
                 e.set('name', name)
             e.text = CDATA(body)
             if not ends:
-                self.warn("Found <CODE BEGINS> without matching <CODE ENDS>")
+                self.warn(e, "Found <CODE BEGINS> without matching <CODE ENDS>")
             if ends and tail.strip() != "":
-                self.warn("Found non-whitespace content after <CODE ENDS>")
+                self.warn(e, "Found non-whitespace content after <CODE ENDS>")
                 e.tail = tail
             stripattr(e, ['height', 'suppress-title', 'width', ])
             if self.options.strict:
@@ -432,8 +436,8 @@ class V2v3XmlWriter(object):
         references = list(e.iterchildren('references'))
         if len(references) > 1:
             pos = e.index(references[0])
-            refs = self.element('references')
-            name = self.element('name')
+            refs = self.element('references', line=references[0].sourceline)
+            name = self.element('name', line=references[0].sourceline)
             name.text = "References"
             refs.append(name)
             e.insert(pos, refs)
@@ -530,7 +534,7 @@ class V2v3XmlWriter(object):
     # 
     #    Deprecated.
     def attribute_title(self, e, p):
-        n = self.element('name')
+        n = self.element('name', line=e.sourceline)
         n.text = e.get('title').strip()
         if n.text:
             e.insert(0, n)
@@ -588,23 +592,23 @@ class V2v3XmlWriter(object):
                 'name': e.get('category'),
                 'value': e.get('seriesNo')
             }
-            new = self.element('seriesInfo', **attr)
+            new = self.element('seriesInfo', line=e.sourceline, **attr)
             if not [ s for s in series if equal(s, new) ]:
                 front.insert(i, new)
             stripattr(e, ['seriesNo', ]) # keep 'category' for use in preptool
         if 'number' in e.attrib:
-            new = self.element('seriesInfo', name="RFC", value=e.get('number'))
+            new = self.element('seriesInfo', name="RFC", value=e.get('number'), line=e.sourceline)
             if not [ s for s in series if equal(s, new) ]:
                 front.insert(i, new)
             if 'docName' in e.attrib:
-                e.insert(0, self.element('link', rel='convertedFrom', href="https://datatracker.ietf.org/doc/%s"%(e.get('docName'), )))
+                e.insert(0, self.element('link', rel='convertedFrom', href="https://datatracker.ietf.org/doc/%s"%(e.get('docName'), ), line=e.sourceline))
         elif 'docName' in e.attrib:
             value=e.get('docName')
             if '.' in value:
                 log.warn("The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
             if not re.search('-\d\d$', value):
                 log.warn("The 'docName' attribute of the <rfc/> element should have a revision number as the last component when submitted: docName=\"draft-foo-bar-02\".")
-            new = self.element('seriesInfo', name="Internet-Draft", value=value)
+            new = self.element('seriesInfo', name="Internet-Draft", value=value, line=e.sourceline)
             if not 'Internet-Draft' in [ s.get('name') for s in series ]:
                 front.insert(i, new)
 
@@ -780,7 +784,7 @@ class V2v3XmlWriter(object):
                 self.replace(t, 'li')
         elif tag == 'dl':
             for t in l.findall('./t'):
-                dt = self.element('dt')
+                dt = self.element('dt', line=t.sourceline)
                 dt.text = t.get('hangText')
                 if not dt.text is None:
                     del t.attrib['hangText']
@@ -918,8 +922,7 @@ class V2v3XmlWriter(object):
         tbody = None
         tr = None
         align = []
-        table = self.element('table')
-        table.sourceline = e.sourceline
+        table = self.element('table', line=e.sourceline)
         copyattr(e, table)
         for x in e.iterchildren():
             if   x.tag == 'preamble':
@@ -927,9 +930,9 @@ class V2v3XmlWriter(object):
                 pass
             elif x.tag == 'ttcol':
                 if colcount == 0:
-                    thead = self.element('thead')
+                    thead = self.element('thead', line=x.sourceline)
                     table.append(thead)
-                    tr = self.element('tr')
+                    tr = self.element('tr', line=x.sourceline)
                     thead.append(tr)
                 align.append(x.get('align', None))
                 th = self.copy(x, 'th')
@@ -939,10 +942,10 @@ class V2v3XmlWriter(object):
             elif x.tag == 'c':
                 col = cellcount % colcount
                 if cellcount == 0:
-                    tbody = self.element('tbody')
+                    tbody = self.element('tbody', line=x.sourceline)
                     table.append(tbody)
                 if col == 0:
-                    tr = self.element('tr')
+                    tr = self.element('tr', line=x.sourceline)
                     tbody.append(tr)
                 td = self.copy(x, 'td')
                 if align[col]:
@@ -1005,7 +1008,7 @@ class V2v3XmlWriter(object):
         l = t.getparent()
         if l.tag in ['dd', 'li', ]:
             i = l.index(t) + 1
-            t2 = self.element('t')
+            t2 = self.element('t', line=e.sourceline)
             if e.tail and e.tail.strip():
                 t2.text = e.tail
             for s in e.itersiblings():
@@ -1070,3 +1073,4 @@ class V2v3XmlWriter(object):
             if c.tail != None:
                 if c.tail.strip() == '':
                     c.tail = None
+
