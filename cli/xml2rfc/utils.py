@@ -651,7 +651,7 @@ def isempty(e):
 
 def isblock(e):
     "Return True if e is a block level element"
-    return e.tag in [ 'artwork', 'dl', 'figure', 'ol', 'sourcecode', 't', 'ul', ]
+    return e.tag in [ 'artwork', 'dl', 'figure', 'ol', 'sourcecode', 't', 'ul', 'blockquote', ]
 
 def iscomment(e):
     "Return True if e is a comment"
