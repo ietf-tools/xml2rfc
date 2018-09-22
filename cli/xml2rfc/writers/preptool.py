@@ -211,9 +211,8 @@ class PrepToolWriter:
             # These warnings are occasionally incorrect -- disable this
             # output for now:
             for error in e.error_log:
-                if not hasattr(error, 'path'):
-                    error.path = '(element xpath not available)'
-                msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, error.path)
+                path = getattr(error, 'path', '(element path not available)')
+                msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, path)
                 log.write(msg)
             if warn:
                 self.warn(None, 'Invalid document %s running preptool.' % (when, ))
