@@ -166,7 +166,10 @@ class PrepToolWriter:
 
     def warn(self, e, text):
         lnum = getattr(e, 'sourceline', 0)
-        msg = "%s(%s): Warning: %s" % (self.xmlrfc.source, lnum, text)
+        if lnum:
+            msg = "%s(%s): Warning: %s" % (self.xmlrfc.source, lnum, text)
+        else:
+            msg = "%s: Warning: %s" % (self.xmlrfc.source, text)
         log.write(msg)
 
     def err(self, e, text, trace=False):
@@ -208,10 +211,15 @@ class PrepToolWriter:
             log.note("The document validates according to the RFC7991 schema %s running preptool" % (when, ))
             return True
         except Exception as e:
+            lxmlver = etree.LXML_VERSION[:3]
+            if lxmlver < (3, 8, 0):
+                self.warn(None, "The available version of the lxml library (%s) does not provide xpath "
+                          "information as part of validation errors.  Upgrade to version 3.8.0 or "
+                          "higher for better error messages." % ('.'.join(str(v) for v in lxmlver), ))
             # These warnings are occasionally incorrect -- disable this
             # output for now:
             for error in e.error_log:
-                path = getattr(error, 'path', '(element path not available)')
+                path = getattr(error, 'path', '')
                 msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, path)
                 log.write(msg)
             if warn:
