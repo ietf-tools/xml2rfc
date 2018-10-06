@@ -3556,8 +3556,9 @@ class TextWriter:
             children = children[1:]
             title = self.join(title, name, width, **kwargs)
         text = self.build_table(e, width, **kwargs)
-        text = align(text, e.get('align', 'left'), width)
-        text += '\n\n'+center(title, width).rstrip()
+        table_width = min([ width, max( len(l) for l in text.splitlines() ) ])
+        text += '\n\n'+center(title, table_width).rstrip()
+        text = align(text, e.get('align', 'center'), width)
         return text
 
 
