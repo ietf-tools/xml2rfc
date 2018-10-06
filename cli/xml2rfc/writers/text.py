@@ -61,7 +61,10 @@ def center(text, width, **kwargs):
     "Fold and center the given text"
     # avoid centered text extending all the way to the margins
     kwargs['width'] = width-4
-    lines = wrapper.wrap(text, **kwargs)
+    lines = text.splitlines()
+    if max([ len(l) for l in lines ]+[0]) > width:
+        # need to reflow
+        lines = wrapper.wrap(text, **kwargs)
     for i in range(len(lines)):
         lines[i] = lines[i].center(width).rstrip()
     text = '\n'.join(lines).replace('\u00A0', ' ')
@@ -3797,10 +3800,12 @@ class TextWriter:
 
     def render_title_front(self, e, width, **kwargs):
         pp = e.getparent().getparent()
+        title = e.text.strip()
+        title = fill(title, width=width, **kwargs)
+        title = center(title, width)
         if self.options.rfc:
-            return center(fill(e.text.strip(), width=width, **kwargs), width)
+            return title
         else:
-            title = center(fill(e.text.strip(), width=width, **kwargs), width)
             if pp.tag == 'rfc':
                 doc_name = self.root.get('docName')
                 if doc_name:
