@@ -564,7 +564,7 @@ class PrepToolWriter:
             else:
                 self.die(e, "Did not expect a prepTime= attribute for <rfc>, but found '%s'" % (e.get('prepTime')))
         else:
-            e.set('prepTime', datetime.date.today().strftime('%Y-%m-%d'))
+            e.set('prepTime', datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'))
 
     # 5.2.5.  <ol> Group "start" Insertion
     # 
