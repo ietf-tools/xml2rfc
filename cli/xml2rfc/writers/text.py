@@ -3023,14 +3023,14 @@ class TextWriter:
     def render_sourcecode(self, e, width, **kwargs):
         markers = e.get('markers')
         text = ''
-        if markers == 'true':
+        if markers:
             text += '<CODE BEGINS>'
             file = e.get('name')
             if file:
                 text += ' file "%s"' % file
             text += '\n'
         text += self.render_artwork(e, width, **kwargs)
-        if markers == 'true':
+        if markers:
             text += '\n'
             text += '<CODE ENDS>'
         return text

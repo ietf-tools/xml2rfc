@@ -411,7 +411,6 @@ class V2v3XmlWriter(object):
             # We have source code.  Permitted attributes: anchor, name,
             # source, type.
             e = self.replace(e, 'sourcecode')
-            e.set('markers', 'true')
             match = re.search(r'(?s)^\s*<CODE BEGINS>(\s+file\s+"([^"]*)")?(.*?)(<CODE ENDS>(.*))?$', e.text)
             file = match.group(1)
             name = match.group(2)
@@ -426,7 +425,7 @@ class V2v3XmlWriter(object):
             if ends and tail.strip() != "":
                 self.warn(e, "Found non-whitespace content after <CODE ENDS>")
                 e.tail = tail
-            stripattr(e, ['align', 'height', 'suppress-title', 'width', ])
+            stripattr(e, ['height', 'suppress-title', 'width', ])
             if self.options.strict:
                 stripattr(e, ['alt', ])
 
