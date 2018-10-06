@@ -1059,18 +1059,25 @@ class TextWriter:
         compact = e.get('spacing') == 'compact'
         tjoin  = '\n' if compact else '\n\n'
         #
-        indent = 3
-        for dt in e.iterchildren('dt'):
-            dt._text = self.inner_text_renderer(dt)
-            l = len(dt._text)
-            if l+2 > indent:
-                indent = l+2
-        if newline:
-            if indent > 15:                   # XXX Somewhat arbitrary choice
-                indent = 3
+        indent = e.get('indent', None)
+        if indent and not indent.isdigit():
+            self.warn(e, "Expected indent to have a numeric value, found '%s'" % indent)
+            indent = None
+        if indent is None:
+            indent = 3
+            for dt in e.iterchildren('dt'):
+                dt._text = self.inner_text_renderer(dt)
+                l = len(dt._text)
+                if l+2 > indent:
+                    indent = l+2
+            if newline:
+                if indent > 15:                   # XXX Somewhat arbitrary choice
+                    indent = 3
+            else:
+                if indent > 24:                   # XXX Somewhat arbitrary choice
+                    indent = 3
         else:
-            if indent > 24:                   # XXX Somewhat arbitrary choice
-                indent = 3
+            indent = int(indent)
         kwargs['joiners'] = {
             None:       joiner('', tjoin, '', 0, 0),
             'dt':       joiner('', tjoin, '', 0, 0),

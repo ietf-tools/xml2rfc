@@ -779,11 +779,14 @@ class V2v3XmlWriter(object):
         stripattr(e, ['counter', 'style', ])
         l = self.element(tag, **attribs)
         self.replace(e, l, comments)
+        indent = l.get('hangIndent')
         stripattr(l, ['hangIndent'])
         if tag in ['ol', 'ul']:
             for t in l.findall('./t'):
                 self.replace(t, 'li')
         elif tag == 'dl':
+            if indent:
+                l.set('indent', indent)
             for t in l.findall('./t'):
                 dt = self.element('dt', line=t.sourceline)
                 dt.text = t.get('hangText')
