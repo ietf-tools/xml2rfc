@@ -1053,7 +1053,7 @@ class TextWriter:
     # 
     #    o  "compact"
     def render_dl(self, e, width, **kwargs):
-        newline = e.get('hanging') == 'true'
+        newline = e.get('newline') == 'true'
         djoin  = '\n' if newline else '  '
         #
         compact = e.get('spacing') == 'compact'

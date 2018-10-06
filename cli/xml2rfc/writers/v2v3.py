@@ -755,7 +755,7 @@ class V2v3XmlWriter(object):
             tag = 'ul'
         elif style == 'hanging':
             tag = 'dl'
-            attribs["hanging"] = "false"
+            attribs["newline"] = "false"
         elif style in ['numbers', 'inherit']:
             tag = 'ol'
             attribs['type'] = nstyle if nstyle else '1'
@@ -798,7 +798,7 @@ class V2v3XmlWriter(object):
                     if t[0].tag == 'vspace':
                         t.text = t[0].tail
                         t.remove(t[0])
-                    l.set('hanging', 'true')
+                    l.set('newline', 'true')
                 i = l.index(t)
                 l.insert(i, dt)
                 self.replace(t, 'dd')
