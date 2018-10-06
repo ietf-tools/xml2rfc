@@ -442,34 +442,35 @@ Table of Contents
 2.1.  Definitions
 
    Media Resource
-      An entity on the speech processing server that can be controlled
-      through MRCPv2.
+                  An entity on the speech processing server that can be
+                  controlled through MRCPv2.
 
-   MRCP Server
-      Aggregate of one or more "Media Resource" entities on a server,
-      exposed through MRCPv2.  Often, 'server' in this document refers
-      to an MRCP server.
+   MRCP Server   
+                  Aggregate of one or more "Media Resource" entities on
+                  a server, exposed through MRCPv2.  Often, 'server' in
+                  this document refers to an MRCP server.
 
-   MRCP Client
-      An entity controlling one or more Media Resources through MRCPv2
-      ("Client" for short).
+   MRCP Client   
+                  An entity controlling one or more Media Resources
+                  through MRCPv2 ("Client" for short).
 
-   DTMF
-      Dual-Tone Multi-Frequency; a method of transmitting key presses
-      in-band, either as actual tones (Q.23 [Q.23]) or as named tone
-      events (RFC 4733 [RFC4733]).
+   DTMF          
+                  Dual-Tone Multi-Frequency; a method of transmitting
+                  key presses in-band, either as actual tones (Q.23
+                  [Q.23]) or as named tone events (RFC 4733 [RFC4733]).
 
-   Endpointing
-      The process of automatically detecting the beginning and end of
-      speech in an audio stream.  This is critical both for speech
-      recognition and for automated recording as one would find in voice
-      mail systems.
+   Endpointing   
+                  The process of automatically detecting the beginning
+                  and end of speech in an audio stream.  This is
+                  critical both for speech recognition and for automated
+                  recording as one would find in voice mail systems.
 
-   Hotword Mode
-      A mode of speech recognition where a stream of utterances is
-      evaluated for match against a small set of command words.  This is
-      generally employed either to trigger some action or to control the
-      subsequent grammar to be used for further recognition.
+   Hotword Mode  
+                  A mode of speech recognition where a stream of
+                  utterances is evaluated for match against a small set
+                  of command words.  This is generally employed either
+                  to trigger some action or to control the subsequent
+                  grammar to be used for further recognition.
 
 2.2.  State-Machine Diagrams
 
@@ -569,49 +570,56 @@ Table of Contents
    processing resources to its clients.
 
    Basic Synthesizer
-      A speech synthesizer resource that has very limited capabilities
-      and can generate its media stream exclusively from concatenated
-      audio clips.  The speech data is described using a limited subset
-      of the Speech Synthesis Markup Language (SSML) [W3C.REC-speech-
-      synthesis-20040907] elements.  A basic synthesizer MUST support
-      the SSML tags <speak>, <audio>, <say-as>, and <mark>.
+                  A speech synthesizer resource that has very limited
+                  capabilities and can generate its media stream
+                  exclusively from concatenated audio clips.  The speech
+                  data is described using a limited subset of the Speech
+                  Synthesis Markup Language (SSML) [W3C.REC-speech-
+                  synthesis-20040907] elements.  A basic synthesizer
+                  MUST support the SSML tags <speak>, <audio>, <say-as>,
+                  and <mark>.
 
    Speech Synthesizer
-      A full-capability speech synthesis resource that can render speech
-      from text.  Such a synthesizer MUST have full SSML [W3C.REC-
-      speech-synthesis-20040907] support.
+                  A full-capability speech synthesis resource that can
+                  render speech from text.  Such a synthesizer MUST have
+                  full SSML [W3C.REC-speech-synthesis-20040907] support.
 
-   Recorder
-      A resource capable of recording audio and providing a URI pointer
-      to the recording.  A recorder MUST provide endpointing
-      capabilities for suppressing silence at the beginning and end of a
-      recording, and MAY also suppress silence in the middle of a
-      recording.  If such suppression is done, the recorder MUST
-      maintain timing metadata to indicate the actual timestamps of the
-      recorded media.
+   Recorder      
+                  A resource capable of recording audio and providing a
+                  URI pointer to the recording.  A recorder MUST provide
+                  endpointing capabilities for suppressing silence at
+                  the beginning and end of a recording, and MAY also
+                  suppress silence in the middle of a recording.  If
+                  such suppression is done, the recorder MUST maintain
+                  timing metadata to indicate the actual timestamps of
+                  the recorded media.
 
    DTMF Recognizer
-      A recognizer resource capable of extracting and interpreting Dual-
-      Tone Multi-Frequency (DTMF) [Q.23] digits in a media stream and
-      matching them against a supplied digit grammar.  It could also do
-      a semantic interpretation based on semantic tags in the grammar.
+                  A recognizer resource capable of extracting and
+                  interpreting Dual-Tone Multi-Frequency (DTMF) [Q.23]
+                  digits in a media stream and matching them against a
+                  supplied digit grammar.  It could also do a semantic
+                  interpretation based on semantic tags in the grammar.
 
    Speech Recognizer
-      A full speech recognition resource that is capable of receiving a
-      media stream containing audio and interpreting it to recognition
-      results.  It also has a natural language semantic interpreter to
-      post-process the recognized data according to the semantic data in
-      the grammar and provide semantic results along with the recognized
-      input.  The recognizer MAY also support enrolled grammars, where
-      the client can enroll and create new personal grammars for use in
-      future recognition operations.
+                  A full speech recognition resource that is capable of
+                  receiving a media stream containing audio and
+                  interpreting it to recognition results.  It also has a
+                  natural language semantic interpreter to post-process
+                  the recognized data according to the semantic data in
+                  the grammar and provide semantic results along with
+                  the recognized input.  The recognizer MAY also support
+                  enrolled grammars, where the client can enroll and
+                  create new personal grammars for use in future
+                  recognition operations.
 
    Speaker Verifier
-      A resource capable of verifying the authenticity of a claimed
-      identity by matching a media stream containing spoken input to a
-      pre-existing voiceprint.  This may also involve matching the
-      caller's voice against more than one voiceprint, also called
-      multi-verification or speaker identification.
+                  A resource capable of verifying the authenticity of a
+                  claimed identity by matching a media stream containing
+                  spoken input to a pre-existing voiceprint.  This may
+                  also involve matching the caller's voice against more
+                  than one voiceprint, also called multi-verification or
+                  speaker identification.
 
 3.2.  Server and Resource Addressing
 
@@ -1916,27 +1924,28 @@ Table of Contents
    The different cache-directive options allow the client to ask the
    server to override the default cache expiration mechanisms:
 
-   max-age    Indicates that the client can tolerate the server using
-              content whose age is no greater than the specified time in
-              seconds.  Unless a "max-stale" directive is also included,
-              the client is not willing to accept a response based on
-              stale data.
+   max-age        Indicates that the client can tolerate the server
+                  using content whose age is no greater than the
+                  specified time in seconds.  Unless a "max-stale"
+                  directive is also included, the client is not willing
+                  to accept a response based on stale data.
 
-   min-fresh  Indicates that the client is willing to accept a server
-              response with cached data whose expiration is no less than
-              its current age plus the specified time in seconds.  If
-              the server's cache time-to-live exceeds the client-
-              supplied min-fresh value, the server MUST NOT utilize
-              cached content.
+   min-fresh      Indicates that the client is willing to accept a
+                  server response with cached data whose expiration is
+                  no less than its current age plus the specified time
+                  in seconds.  If the server's cache time-to-live
+                  exceeds the client-supplied min-fresh value, the
+                  server MUST NOT utilize cached content.
 
-   max-stale  Indicates that the client is willing to allow a server to
-              utilize cached data that has exceeded its expiration time.
-              If "max-stale" is assigned a value, then the client is
-              willing to allow the server to use cached data that has
-              exceeded its expiration time by no more than the specified
-              number of seconds.  If no value is assigned to "max-
-              stale", then the client is willing to allow the server to
-              use stale data of any age.
+   max-stale      Indicates that the client is willing to allow a server
+                  to utilize cached data that has exceeded its
+                  expiration time.  If "max-stale" is assigned a value,
+                  then the client is willing to allow the server to use
+                  cached data that has exceeded its expiration time by
+                  no more than the specified number of seconds.  If no
+                  value is assigned to "max-stale", then the client is
+                  willing to allow the server to use stale data of any
+                  age.
 
    If the server cache is requested to use stale response/data without
    validation, it MAY do so only if this does not conflict with any
