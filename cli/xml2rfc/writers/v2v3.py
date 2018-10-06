@@ -427,7 +427,7 @@ class V2v3XmlWriter(object):
                 e.tail = tail
             stripattr(e, ['height', 'suppress-title', 'width', ])
             if self.options.strict:
-                stripattr(e, ['align', 'alt', ])
+                stripattr(e, ['alt', ])
 
     def element_back(self, e, p):
         # XXXX The RFCs don't say anything about the text rendering of
@@ -508,9 +508,9 @@ class V2v3XmlWriter(object):
             p.remove(e)
             p.insert(pos, embedded)
         else:
-            stripattr(e, ['height', 'src', 'suppress-title', 'width', ])
+            stripattr(e, ['align', 'height', 'src', 'suppress-title', 'width', ])
             if self.options.strict:
-                stripattr(e, ['align', 'alt', ])
+                stripattr(e, ['alt', ])
 
 
 
