@@ -1,3 +1,45 @@
+xml2rfc (2.11.0) ietf; urgency=medium
+
+  This release is a result of the issue discussions on xml2rfc-dev, and
+  attempt to follow the discussion and projected resolution of issues #36-#40.
+  This results in a number of incompatibilities with previous releases, with
+  respect to the v3 tools, as expected.  The v2 tools are unaffected.
+  Details:
+
+  * Changed the default table alignment to 'center', in order to match v2.
+
+  * Changed the <dl> 'hanging' attribute name to 'newline', based on the 
+    discussion of issue #38, in the schema, v2v3 converter and text formatter.
+
+  * Added an attribute 'indent' to <dl> in the schema, according to the 
+    discussion of issue #39.  Added v2v3 and text support for the same.
+
+  * Added markers='true' in the v2v3 converter for sourcecode with markers,
+    and tweaked render_sourcecode() to honour the 'markers' setting.
+
+  * Removed the disallowed align attribute on sourcecode.
+
+  * Removed <br> from the schema, according to the resolution of issue #37.
+
+  * Tweaked the handling of the document title to only reflow if needed, 
+    with some refactoring.
+
+  * Corrected the handling of the align attribute on <artwork> and <figure>.
+
+  * Changed <prepTime> to hold an RFC 3339 timestamp with seconds 
+    resolution.
+
+  * Fixed a couple of issues with v2v3 conversion warnings, and added 
+    source line information for all elements created during conversion.
+
+  * Fixed a buglet in sourcode rendering.
+
+  * Added a warning about lxml versions that lack validation error xpath 
+    information, and tweaked the warn() method.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  07 Oct 2018 12:52:24 -0700
+
+
 xml2rfc (2.10.3) ietf; urgency=medium
 
   This bugfix release works around a problem with lxml versions before 3.8.0,
