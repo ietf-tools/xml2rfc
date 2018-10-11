@@ -619,7 +619,8 @@ def normalize_month(month):
     for i, m in enumerate(calendar.month_name):
         if m and m.lower().startswith(month.lower()):
             month = '%02d' % (i)
-    assert month.isdigit()
+    if not month.isdigit():
+        xml2rfc.log.error("Expected a month name, found '%s'" % (month, ))
     return month
 
 namespaces={
