@@ -44,16 +44,19 @@ def indent(text, indent=3, hang=0):
             lines.append('')
     return '\n'.join(lines)
 
-def fill(*args, **kwargs):
+def fill(text, **kwargs):
     kwargs.pop('joiners', None)
     kwargs.pop('prev', None)
     #
     indent = kwargs.pop('indent', 0)
     hang   = kwargs.pop('hang', 0)
     first  = kwargs.pop('first', 0)
+    keep   = kwargs.pop('keep_url', False)
     initial=' '*(first+indent)
     subsequent_indent = ' '*(indent+hang)
-    result = wrapper.fill(*args, initial=initial, subsequent_indent=subsequent_indent, **kwargs)
+    if keep:
+        text = utils.urlkeep(text)
+    result = wrapper.fill(text, initial=initial, subsequent_indent=subsequent_indent, **kwargs)
     result = result.replace('\u2028','\n')
     return result
 
@@ -813,7 +816,8 @@ class TextWriter:
             numbered = c.get('numbered')
             if not numbered == 'false':
                 self.err(c, "Expected boilerplate section to have numbered='false', but found '%s'" % (numbered, ))
-            text = self.join(text, c, width, **kwargs)
+            keep_url = True if self.options.rfc else False
+            text = self.join(text, c, width, keep_url=keep_url, **kwargs)
         return text
 
     # 2.12.  <br>
@@ -1142,10 +1146,7 @@ class TextWriter:
     def render_email(self, e, width, **kwargs):
         text = ''
         if e.text:
-            if self.options.rfc:
-                text = fill("EMail: %s"%e.text, width=width, **kwargs)
-            else:
-                text = fill("Email: %s"%e.text, width=width, **kwargs)
+            text = fill("Email: %s"%e.text, width=width, **kwargs)
         return text
 
     # 2.24.  <eref>
@@ -1394,9 +1395,9 @@ class TextWriter:
                 #       *  Internet Research Task Force
                 #       *  Independent Submission
                 stream_text = {
-                    'IETF':         'Internet Engineering Task Force',
-                    'IAB':          'Internet Architecture Board',
-                    'IRTF':         'Internet Research Task Force',
+                    'IETF':         'Internet Engineering Task Force (IETF)',
+                    'IAB':          'Internet Architecture Board (IAB)',
+                    'IRTF':         'Internet Research Task Force (IRTF)',
                     'independent':  'Independent Submission',
                 }
                 stream = self.root.get('submissionType')
@@ -2251,7 +2252,7 @@ class TextWriter:
         for c in elements:
             text = self.join(text, c, width, **kwargs)
         text += '.'
-        text = fill(text, width=width, fix_sentence_endings=False, **kwargs).lstrip()
+        text = fill(text, width=width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip()
 
         for ctag in ('annotation', ):
             for c in e.iterdescendants(ctag):
