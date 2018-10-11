@@ -172,7 +172,7 @@ class V2v3XmlWriter(object):
             if not b is None:
                 if a.text and a.text.strip():
                     b.text = a.text
-                if a.tail and a.tail.strip():
+                if a.tail != None:
                     b.tail = a.tail
                 b.sourceline = a.sourceline
                 copyattr(a, b)
@@ -960,7 +960,7 @@ class V2v3XmlWriter(object):
             elif x.tag == 'postamble':
                 # will be handled separately
                 pass
-        stripattr(table, ['align', 'style', 'suppress-title',])
+        stripattr(table, ['style', 'suppress-title',])
         #stripattr(table, ['style', 'suppress-title',])
         p.replace(e, table)
 
