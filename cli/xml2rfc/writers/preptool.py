@@ -988,7 +988,7 @@ class PrepToolWriter:
     def reference_sort_series_info(self, e, p):
         def series_order(s):
             name = s.get('name')
-            series_order = { 'STD': 1, 'BCP': 2, 'RFC': 3, 'DOI': 4, }
+            series_order = { 'STD': 1, 'BCP': 2, 'FYI': 3, 'RFC': 4, 'DOI': 5, }
             if name in series_order:
                 return series_order[name]
             else:
