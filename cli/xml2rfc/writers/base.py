@@ -19,7 +19,9 @@ except ImportError:
     pass
 
 default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False, debug=False,
-                            liberal=False, rfc=False, legacy_date_format=True, list_symbols=('*', '-', 'o', '+')))
+                            liberal=False, rfc=False, legacy_date_format=True, strict=False,
+                            list_symbols=('*', '-', 'o', '+'),
+                        ))
 
 class _RfcItem:
     """ A unique ID object for an anchored RFC element.
