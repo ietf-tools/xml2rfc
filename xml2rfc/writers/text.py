@@ -5,7 +5,6 @@ from __future__ import unicode_literals, print_function, division
 import copy
 import datetime
 import inspect
-import os
 import re
 import sys
 import six
@@ -23,8 +22,11 @@ except ImportError:
 
 
 from xml2rfc import log, strings
-from xml2rfc.writers.base import default_options
+from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc import utils
+from xml2rfc.uniscripts import is_script
+from xml2rfc.util.date import extract_date, get_expiry_date, format_date
+from xml2rfc.util.name import short_author_name, short_author_ascii_name
 
 
 wrapper = utils.TextWrapper(width=72, break_on_hyphens=False)
@@ -96,69 +98,13 @@ def minwidth(text):
     return min([ len(w) for w in words ]+[0])
 
 
-class TextWriter:
+class TextWriter(BaseV3Writer):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
-        self.xmlrfc = xmlrfc
-        self.tree = xmlrfc.tree
-        self.root = self.tree.getroot()
-        self.options = options
-        self.date = date
-        self.index_items = []
-        self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
-        self.schema = etree.ElementTree(file=self.v3_rng_file)
-        self.inline_tags = set(['bcp14', 'cref', 'em', 'eref', 'iref', 'relref', 'strong', 'sub', 'sup', 'tt', 'xref'])
-        self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
-        self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
-        #
-        self.errors = []
-        if options.debug:
-            found_handlers = []
-            missing_handlers = []
-            for tag in self.element_tags:
-                func_name = "render_%s" % (tag.lower(),)
-                if getattr(self, func_name, False):
-                    found_handlers.append(func_name)
-                else:
-                    missing_handlers.append(func_name)
-            debug.pprint('found_handlers')
-            debug.show('len(found_handlers)')
-            debug.pprint('missing_handlers')
-            debug.show('len(missing_handlers)')
+        super(TextWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
 
-    def msg(self, e, label, text):
-        lnum = getattr(e, 'sourceline')
-        file = getattr(e, 'base')
-        if lnum or file:
-            msg = "%s(%s): %s: %s" % (file or self.xmlrfc.source, lnum+1, label, text, )
-        else:
-            msg = "%s: %s" % (label, text, )
-        log.write(msg)
-        return msg
-
-    def note(self, e, text):
-        self.msg(e, 'Note', text)
-
-    def warn(self, e, text):
-        self.msg(e, 'Warning', text)
-
-    def err(self, e, text, trace=False):
-        msg = self.msg(e, 'Error', text)
-        if trace or self.options.debug:
-            raise RuntimeError(msg)
-        self.errors.append(msg)
-
-    def die(self, e, text, trace=False):
-        self.err(e, text, trace)
-        log.write("Cannot continue, quitting now")
-        sys.exit(1)
-
-    def get_valid_child_tags(self, tag):
-        refs = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:ref" % tag, namespaces=utils.namespaces)
-        names = set([ r.get('name') for r in refs ])
-        return names
     def write(self, filename):
-        """ Public method to write the XML document to a file """
+        """Write the document to a file """
         joiners = {
             None:   joiner('', '\n\n', '', 0, 0),
             #'':     joiner('', ' ', '', 0, 0),
@@ -527,6 +473,17 @@ class TextWriter:
     # 2.6.1.  "anchor" Attribute
     # 
     #    Document-wide unique identifier for this aside.
+    def render_aside(self, e, width, **kwargs):
+        kwargs['joiners'].update({ 't':       joiner('', '\n\n', '', 0, 0), })
+        text, plain = self.text_or_block_renderer('', e, width-3, **kwargs)
+        if plain:
+            text = fill(text, width=width-3, **kwargs)
+        lines = []
+        for l in text.splitlines():
+            lines.append('   |  '+l)
+        text = '\n'.join(lines)
+        text = indent(text, indent=kwargs.get('indent', 0))
+        return text
 
 
     # 2.7.  <author>
@@ -634,33 +591,10 @@ class TextWriter:
         return text
 
     def render_author_front(self, e, **kwargs):
-        ascii_initials = e.get('asciiInitials', '').strip()
-        if ascii_initials and not ascii_initials.endswith('.'):
-            ascii_initials += '.'
-        ascii_surname  = e.get('asciiSurname', '').strip()
-        initials = e.get('initials', '').strip()
-        if initials and not initials.endswith('.'):
-            initials += '.'
-        surname  = e.get('surname', '').strip()
-        fullname = e.get('fullname', '').strip()
-        name = None
-        if (   initials and ascii_initials
-            or surname  and ascii_surname):
-            name = '%s %s (%s %s)' % (initials, surname, ascii_initials, ascii_surname)
-        elif initials and surname:
-            name = '%s %s' % (initials, surname)
-        elif surname:
-            name = surname
-        elif initials:
-            self.warn(e, "Expected an author surname to go with initials, but found none: %s" % (etree.tostring(e), ))
-        elif fullname and len(fullname.split())>1:
-            parts = fullname.split()
-            initials = ' '.join([ "%s."%n[0].upper() for n in parts[:-1] ])
-            surname  = parts[-1]
-            name = "%s %s" % (initials, surname)
-        else:
-            self.warn(e, "Expected author surname and initials for the front page rendering, but found none: %s" % (etree.tostring(e), ))
-
+        name = short_author_name(e)
+        if not is_script(name, 'Latin'):
+            aname = short_author_ascii_name(e)
+            name = '%s (%s)' % (name, aname)
         #
         o = e.find('./organization')
         if o != None:
@@ -951,8 +885,8 @@ class TextWriter:
     def render_date(self, e, width, **kwargs):
         #pp = e.getparent().getparent()
         #if pp.tag == 'rfc':
-        year, month, day = utils.extract_date(e, self.date)
-        date = utils.format_date(year, month, day, self.options.legacy_date_format)
+        year, month, day = extract_date(e, self.date)
+        date = format_date(year, month, day, self.options.legacy_date_format)
         return date
 
 
@@ -1394,14 +1328,8 @@ class TextWriter:
                 #       *  Internet Architecture Board
                 #       *  Internet Research Task Force
                 #       *  Independent Submission
-                stream_text = {
-                    'IETF':         'Internet Engineering Task Force (IETF)',
-                    'IAB':          'Internet Architecture Board (IAB)',
-                    'IRTF':         'Internet Research Task Force (IRTF)',
-                    'independent':  'Independent Submission',
-                }
                 stream = self.root.get('submissionType')
-                left.append(stream_text[stream])
+                left.append(strings.stream_name[stream])
                 #
                 #    Request for Comments:  <RFC number>  This indicates the RFC number,
                 #       assigned by the RFC Editor upon publication of the document.  This
@@ -1443,12 +1371,12 @@ class TextWriter:
                 #       Practice, Experimental, Informational, or Historic.  This element
                 #       is unchanged.
                 if category:
-                    if category in strings.category:
-                        left.append('Category: %s' % (strings.category[category], ))
+                    if category in strings.category_name:
+                        left.append('Category: %s' % (strings.category_name[category], ))
                     else:
-                        self.warn(self.root, "Expected a known category, one of %s, but found '%s'" % (','.join(strings.category.keys()), category, ))
+                        self.warn(self.root, "Expected a known category, one of %s, but found '%s'" % (','.join(strings.category_name.keys()), category, ))
                 else:
-                    self.warn(self.root, "Expected a category, one of %s, but found none" % (','.join(strings.category.keys()), ))
+                    self.warn(self.root, "Expected a category, one of %s, but found none" % (','.join(strings.category_name.keys()), ))
                 #
                 left.append('ISSN: 2070-1721')
                 #
@@ -1476,18 +1404,15 @@ class TextWriter:
                     left += wrap('Updates', updates, ' (if approved)')
                 #
                 if category:
-                    if category in strings.category:
-                        left.append('Intended status: %s' % (strings.category[category], ))
+                    if category in strings.category_name:
+                        left.append('Intended status: %s' % (strings.category_name[category], ))
                     else:
-                        self.warn(self.root, "Expected a known category, one of %s, but found '%s'" % (','.join(strings.category.keys()), category, ))
+                        self.warn(self.root, "Expected a known category, one of %s, but found '%s'" % (','.join(strings.category_name.keys()), category, ))
                 else:
-                    self.warn(self.root, "Expected a category, one of %s, but found none" % (','.join(strings.category.keys()), ))
+                    self.warn(self.root, "Expected a category, one of %s, but found none" % (','.join(strings.category_name.keys()), ))
                 #
-                year, month, day = utils.extract_date(self.root.find('./front/date'), self.date)
-                if not day:
-                    day = self.date.day
-                exp = datetime.date(year=year, month=month, day=day) + datetime.timedelta(days=185)
-                left.append('Expires: %s' % utils.format_date(exp.year, exp.month, exp.day, self.options.legacy_date_format))
+                exp = get_expiry_date(self.root, self.date)
+                left.append('Expires: %s' % format_date(exp.year, exp.month, exp.day, self.options.legacy_date_format))
             return left
         #
         def get_right(front):
@@ -4018,6 +3943,8 @@ class TextWriter:
                             text += ' (%s)'%ref
                         else:
                             text = ref
+            if text != link:
+                self.warn(e, 'Preptool specification failure: <xref> content should be "%s", but found derivedContent="%s"' % (text, link))
         elif format == 'title':
             text = link
         else:
