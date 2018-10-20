@@ -1,13 +1,14 @@
-# Copied from https://github.com/leoboiko/uniscripts
 # -*- coding: utf-8 -*-
+# Copied from https://github.com/leoboiko/uniscripts and modified.
 
 '''Python interface to query Unicode UCD script data (UAX #24).
 
 Tests whether a character belongs to a script, and so on.  This module is quite
 dumb and slow.
 '''
+from __future__ import absolute_import
 
-from unidata import RANGES#, SCRIPT_ABBREVS
+from .unidata import RANGES#, SCRIPT_ABBREVS
 
 def in_any_seq(item, seq_seq):
     """Returns: true if item is present in any sequence of the sequence of sequences.

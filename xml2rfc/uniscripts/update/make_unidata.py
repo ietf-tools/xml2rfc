@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-import sys
-import fileinput
 
 Scripts='Scripts.txt'
 ScriptExtensions='ScriptExtensions.txt'

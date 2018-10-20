@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-import sys
-import fileinput
+
 import pprint
 
 Scripts='Scripts.txt'
@@ -96,6 +95,6 @@ if 'Unknown' not in RANGES.keys():
 
 print('RANGES = ',)
 pprint.pprint(RANGES)
-
+print('')
 print('SCRIPT_ABBREVS = ',)
 pprint.pprint(SCRIPT_ABBREVS)
