@@ -103,7 +103,7 @@ setup(
         ],
     },
 
-    packages=['xml2rfc', 'xml2rfc/writers'],
+    packages=['xml2rfc', 'xml2rfc/writers', 'xml2rfc/util', 'xml2rfc/uniscripts', ],
     package_data={'xml2rfc': [
         'templates/*',
         'data/*',
