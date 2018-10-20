@@ -8,10 +8,18 @@ series_name = {
     'info': 'FYI',
 }
 
-category = {
+category_name = {
+    'rfc':      'Request for Comments',
     'std':      'Standards Track',
     'bcp':      'Best Current Practice',
     'exp':      'Experimental',
     'info':     'Informational',
     'historic': 'Historic',
+}
+
+stream_name = {
+    'IETF':         'Internet Engineering Task Force (IETF)',
+    'IAB':          'Internet Architecture Board (IAB)',
+    'IRTF':         'Internet Research Task Force (IRTF)',
+    'independent':  'Independent Submission',
 }
