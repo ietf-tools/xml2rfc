@@ -134,11 +134,12 @@ class V2v3XmlWriter(object):
 
     def element(self, tag, line=None, **kwargs):
         e = Element(tag, **kwargs)
-        if self.options.debug:
-            filename, lineno, caller, code = tb.extract_stack()[-2]
-            e.set('line', str(lineno))
         if line:
             e.sourceline = line
+        elif self.options.debug:
+            filename, lineno, caller, code = tb.extract_stack()[-2]
+            e.base = os.path.basename(filename)
+            e.sourceline = lineno
         return e
 
     def copy(self, e, tag):
@@ -404,7 +405,7 @@ class V2v3XmlWriter(object):
     # 
     #    Deprecated.
     def element_artwork(self, e, p):
-        if e.text:
+        if e.text and e.text.strip():
             e.text = CDATA(e.text)          # prevent text from being mucked up by other processors
         stripattr(e, ['height', '{http://www.w3.org/XML/1998/namespace}space', 'width', ])
         if e.text and re.search(r'^\s*<CODE BEGINS>', e.text):
@@ -583,7 +584,7 @@ class V2v3XmlWriter(object):
 #             "info": "Informational",
 #         }
         def equal(e1, e2):
-            return etree.tostring(e1) == etree.tostring(e2)
+            return (e1.get('name'), e1.get('value')) ==  (e2.get('name'), e2.get('value'))
         front = e.find('./front')
         title = e.find('./front/title')
         i = front.index(title) + 1 if title!=None else 0
