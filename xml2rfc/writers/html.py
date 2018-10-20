@@ -1657,15 +1657,15 @@ class HtmlWriter(BaseV3Writer):
     def render_xref(self, h, e, **kwargs):
         # possible attributes:
         target  = e.get('target')
-        pageno  = e.get('pageno')
-        format  = e.get('format')
+        #pageno  = e.get('pageno')
+        #format  = e.get('format')
         section = e.get('section')
         relative= e.get('relative')
-        link    = e.get('derivedLink')
-        format  = e.get('sectionFormat')
+        #link    = e.get('derivedLink')
+        #sformat  = e.get('sectionFormat')
         content = e.get('derivedContent', '')
         if content is None:
-            self.die(e, "Found an <%s> without derivedContent: %s" % (e.tag, etree.tostring(e),))
+            self.die(e, "Found an <%s> without derivedContent: %s" % (e.tag, lxml.etree.tostring(e),))
         if not (section or relative):
             # plain xref
             a = build.a(content, {'class': 'xref'}, href='#%s'%target)
