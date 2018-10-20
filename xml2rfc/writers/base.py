@@ -7,8 +7,11 @@ import codecs
 import datetime
 import textwrap
 import lxml
+import os
 import re
+import sys
 import xml2rfc.log
+import xml2rfc.util
 import xml2rfc.utils
 from optparse import Values
 
@@ -562,7 +565,7 @@ class BaseRfcWriter:
             date.set('month', str(month))
         else:
             if not month.isdigit():
-                month = xml2rfc.utils.normalize_month(month)
+                month = xml2rfc.util.date.normalize_month(month)
             month = int(month)
         #
         day = date.attrib.get('day')
@@ -1475,3 +1478,70 @@ class BaseRfcWriter:
     def write_to_file(self, file):
         """ Writes the finished buffer to a file """
         raise NotImplementedError('write_to_file() needs to be overridden')
+
+
+        
+class BaseV3Writer(object):
+
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+        self.xmlrfc = xmlrfc
+        self.tree = xmlrfc.tree
+        self.root = self.tree.getroot()
+        self.options = options
+        self.date = date
+        self.index_items = []
+        self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
+        self.schema = lxml.etree.ElementTree(file=self.v3_rng_file)
+        self.inline_tags = set(['bcp14', 'cref', 'em', 'eref', 'iref', 'relref', 'strong', 'sub', 'sup', 'tt', 'xref'])
+        self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
+        self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
+        #
+        self.errors = []
+        if options.debug:
+            found_handlers = []
+            missing_handlers = []
+            for tag in self.element_tags:
+                func_name = "render_%s" % (tag.lower(),)
+                if getattr(self, func_name, False):
+                    found_handlers.append(func_name)
+                else:
+                    missing_handlers.append(func_name)
+            debug.pprint('found_handlers')
+            debug.show('len(found_handlers)')
+            debug.pprint('missing_handlers')
+            debug.show('len(missing_handlers)')
+
+    def msg(self, e, label, text):
+        lnum = getattr(e, 'sourceline')
+        file = getattr(e, 'base')
+        if lnum or file:
+            msg = "%s(%s): %s: %s" % (file or self.xmlrfc.source, lnum+1, label, text, )
+        else:
+            msg = "(No source line available): %s: %s" % (label, text, )
+        xml2rfc.log.write(msg)
+        return msg
+
+    def note(self, e, text):
+        self.msg(e, 'Note', text)
+
+    def warn(self, e, text):
+        self.msg(e, 'Warning', text)
+
+    def err(self, e, text, trace=False):
+        msg = self.msg(e, 'Error', text)
+        if trace or self.options.debug:
+            raise RuntimeError(msg)
+        self.errors.append(msg)
+
+    def die(self, e, text, trace=False):
+        self.err(e, text, trace)
+        xml2rfc.log.write("Cannot continue, quitting now")
+        sys.exit(1)
+
+#     def get_valid_child_tags(self, tag):
+#         refs = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:ref" % tag, namespaces=utils.namespaces)
+#         names = set([ r.get('name') for r in refs ])
+#         return names
+
+    def write(self, filename):
+        raise NotImplementedError()
