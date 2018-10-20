@@ -5,7 +5,6 @@
 # Internal utitlity functions.  Not meant for public usage.
 
 import base64
-import calendar
 import math
 import re
 import six
@@ -25,6 +24,10 @@ except ImportError:
     pass
 
 import xml2rfc.log
+
+
+# ----------------------------------------------------------------------
+# Text wrapping
 
 class TextWrapper(textwrap.TextWrapper):
     """ Subclass that overrides a few things in the standard implementation """
@@ -191,24 +194,9 @@ def justify_inline(left_str, center_str, right_str, width=72):
             output[i] = right[i]
     return ''.join(output)
 
-def formatXmlWhitespace(tree):
-    """ Traverses an lxml.etree ElementTreeand properly formats whitespace
-    
-        We replace newlines with single spaces, unless it ends with a
-        period then we replace the newline with two spaces.
-    """
-    for element in tree.iter():
-        # Preserve formatting on artwork
-        if element.tag != 'artwork':
-            if element.text is not None:
-                element.text = re.sub('\s*\n\s*', ' ', \
-                               re.sub('\.\s*\n\s*', '.  ', \
-                               element.text.lstrip()))
+# ----------------------------------------------------------------------
+# Other text operations
 
-            if element.tail is not None:
-                element.tail = re.sub('\s*\n\s*', ' ', \
-                               re.sub('\.\s*\n\s*', '.  ', \
-                               element.tail))
 
 def ascii_split(text):
     """ We have unicode strings, but we want to split only on the ASCII
@@ -219,6 +207,24 @@ def ascii_split(text):
         return text.split()
     return re.split("[ \t\n\r\f\v]+", text)
 
+
+def urlkeep(text):
+    """ Insert word join XML entities on forward slashes and hyphens
+        in a URL so that it stays on one line
+    """
+    wj_char = u'\u2060'
+    zwsp_char = u'\u200B'
+    def replacer(match):
+        return match.group(0).replace('/', '/' + zwsp_char) \
+                             .replace('/' + zwsp_char + '/' + zwsp_char, '/' + wj_char +'/' + wj_char) \
+                             .replace('-', '-' + wj_char) \
+                             .replace(':', ':' + wj_char)
+                             
+    if 'http://' in text:
+        return re.sub('(?<=http:)\S*', replacer, text)
+    if 'https://' in text:
+        return re.sub('(?<=https:)\S*', replacer, text)
+    return text
 
 # ----------------------------------------------------------------------
 # Base conversions.
@@ -245,7 +251,7 @@ def baseX_to_num(s, digits=DEFAULT_DIGITS):
    for c in s: num = num * X + ctopos[c]
    return num
 
-# ----------------------------------------------------------------------
+
 # Use the generic base conversion to create list letters
 
 def int2letter(num):
@@ -316,23 +322,28 @@ def num_width(type, num):
     else:
         raise ValueError("Unexpected type argument to num_width(): '%s'" % (type, ))
 
-def urlkeep(text):
-    """ Insert word join XML entities on forward slashes and hyphens
-        in a URL so that it stays on one line
+# ----------------------------------------------------------------------
+# Tree operations
+
+def formatXmlWhitespace(tree):
+    """ Traverses an lxml.etree ElementTree and properly formats whitespace
+    
+        We replace newlines with single spaces, unless it ends with a
+        period then we replace the newline with two spaces.
     """
-    wj_char = u'\u2060'
-    zwsp_char = u'\u200B'
-    def replacer(match):
-        return match.group(0).replace('/', '/' + zwsp_char) \
-                             .replace('/' + zwsp_char + '/' + zwsp_char, '/' + wj_char +'/' + wj_char) \
-                             .replace('-', '-' + wj_char) \
-                             .replace(':', ':' + wj_char)
-                             
-    if 'http://' in text:
-        return re.sub('(?<=http:)\S*', replacer, text)
-    if 'https://' in text:
-        return re.sub('(?<=https:)\S*', replacer, text)
-    return text
+    for element in tree.iter():
+        # Preserve formatting on artwork
+        if element.tag != 'artwork':
+            if element.text is not None:
+                element.text = re.sub('\s*\n\s*', ' ', \
+                               re.sub('\.\s*\n\s*', '.  ', \
+                               element.text.lstrip()))
+
+            if element.tail is not None:
+                element.tail = re.sub('\s*\n\s*', ' ', \
+                               re.sub('\.\s*\n\s*', '.  ', \
+                               element.tail))
+
 
 def safeReplaceUnicode(tree):
     """ Traverses an lxml.etree ElementTree and replaces unicode characters 
@@ -358,6 +369,46 @@ def safeReplaceUnicode(tree):
             except UnicodeEncodeError:
                 element.attrib[key] = \
                 _replace_unicode_characters(element.attrib[key])
+
+
+def safeTagSlashedWords(tree):
+    """ Traverses an lxml.etree ElementTree and replace words seperated
+        by slashes if they are on the list
+    """
+    slashList = {}
+    for element in _slash_replacements:
+        slashList[element] = re.sub(u'/', u'\u200B/\u200B', element)
+        
+    for element in tree.iter():
+        if element.text:
+            element.text = _replace_slashed_words(element.text, slashList)
+        if element.tail:
+            element.tail = _replace_slashed_words(element.tail, slashList)
+        # I do not know that this makes any sense
+        # for key in element.attrib.keys():
+        #    element.attrib[key] = \
+        #        _replace_slashed_words(element.attrib[key], slashList)
+
+
+def find_duplicate_ids(schema, tree):
+    dups = []
+    # get attributes specified with data type "ID"
+    id_data = schema.xpath("/x:grammar/x:define/x:element//x:attribute/x:data[@type='ID']", namespaces=namespaces)
+    attr = set([ i.getparent().get('name') for i in id_data ])
+    # Check them one by one
+    for a in attr:
+        seen = set()
+        for e in tree.xpath('.//*[@%s]' % a):
+            id = e.get(a)
+            if id != None and id in seen:
+                dups.append((a, id, e))
+            else:
+                seen.add(id)
+    return dups
+
+
+# ----------------------------------------------------------------------
+# Unicode operations
 
 
 def _replace_unicode_characters(str):
@@ -564,24 +615,6 @@ def parse_pi(pi, pis):
         return tmp_dict
     return {}
 
-def safeTagSlashedWords(tree):
-    """ Traverses an lxml.etree ElementTree and replace words seperated
-        by slashes if they are on the list
-    """
-    slashList = {}
-    for element in _slash_replacements:
-        slashList[element] = re.sub(u'/', u'\u200B/\u200B', element)
-        
-    for element in tree.iter():
-        if element.text:
-            element.text = _replace_slashed_words(element.text, slashList)
-        if element.tail:
-            element.tail = _replace_slashed_words(element.tail, slashList)
-        # I do not know that this makes any sense
-        # for key in element.attrib.keys():
-        #    element.attrib[key] = \
-        #        _replace_slashed_words(element.attrib[key], slashList)
-
 
 def _replace_slashed_words(str, slashList):
     """ replace slashed separated words the list with
@@ -613,37 +646,16 @@ def build_dataurl(mime, data, base64enc=False):
         url = "data:%s,%s" % (mime, data)
     return url
 
-def normalize_month(month):
-    if len(month) < 3:
-        xml2rfc.log.error("Expected a month name with at least 3 letters, found '%s'" % (month, ))
-    for i, m in enumerate(calendar.month_name):
-        if m and m.lower().startswith(month.lower()):
-            month = '%02d' % (i)
-    if not month.isdigit():
-        xml2rfc.log.error("Expected a month name, found '%s'" % (month, ))
-    return month
-
 namespaces={
     'x':    'http://relaxng.org/ns/structure/1.0',
     'a':    'http://relaxng.org/ns/compatibility/annotations/1.0',
     'xml':  'http://www.w3.org/XML/1998/namespace',
 }
 
-def find_duplicate_ids(schema, tree):
-    dups = []
-    # get attributes specified with data type "ID"
-    id_data = schema.xpath("/x:grammar/x:define/x:element//x:attribute/x:data[@type='ID']", namespaces=namespaces)
-    attr = set([ i.getparent().get('name') for i in id_data ])
-    # Check them one by one
-    for a in attr:
-        seen = set()
-        for e in tree.xpath('.//*[@%s]' % a):
-            id = e.get(a)
-            if id != None and id in seen:
-                dups.append((a, id, e))
-            else:
-                seen.add(id)
-    return dups
+
+# ----------------------------------------------------------------------
+# Element operations
+
 
 def isempty(e):
     "Return True if e has no children and no text content"
@@ -663,41 +675,4 @@ def hastext(e):
     head = [ e.text ] if e.text and e.text.strip() else []
     items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
     return items
-
-def extract_date(e, today):
-    day = e.get('day')
-    month = e.get('month')
-    year = e.get('year', str(today.year))
-    #
-    if not year.isdigit():
-        xml2rfc.log.warn(e, "Expected a numeric year, but found '%s'" % year)
-        year = today.year
-    year = int(year)
-    if not month:
-        if year == today.year:
-            month = today.month
-    else:
-        if not month.isdigit():
-            month = normalize_month(month)
-        month = int(month)
-    if day:
-        if not day.isdigit():
-            xml2rfc.log.warn(e, "Expected a numeric day, but found '%s'" % day)
-            day = today.day
-        day = int(day)
-    return year, month, day
-
-def format_date(year, month, day, legacy):
-    if month:
-        month = calendar.month_name[month]
-        if day:
-            if legacy:
-                date = '%s %s, %s' % (month, day, year)
-            else:
-                date = '%s %s %s' % (day, month, year)
-        else:
-            date = '%s %s' % (month, year)
-    else:
-        date = '%s' % year
-    return date
 
