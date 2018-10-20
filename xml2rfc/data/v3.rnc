@@ -94,6 +94,7 @@
        attribute xml:lang { text }?,
        attribute abbrev { text }?,
        attribute ascii { text }?,
+       attribute asciiAbbrev { text }?,
        text
      }
 
@@ -228,7 +229,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        (dl | ol | t | ul)+
      }
 
@@ -237,7 +238,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute title { text }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        [ a:defaultValue = "false" ]
        attribute removeInRFC { "true" | "false" }?,
        name?,
@@ -263,7 +264,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        attribute title { text }?,
        [ a:defaultValue = "true" ]
        attribute numbered { "true" | "false" }?,
@@ -292,7 +293,7 @@
      element name {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-       attribute slugifiedName { text }?,
+       attribute slugifiedName { xsd:ID }?,
        (text | cref | eref | relref | tt | xref)*
      }
 
@@ -301,7 +302,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        attribute hangText { text }?,
        [ a:defaultValue = "false" ]
        attribute keepWithNext { "false" | "true" }?,
@@ -329,8 +330,8 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
-       (artwork | dl | figure | iref | \list | ol | t | table | ul)*
+       attribute pn { xsd:ID }?,
+       (artwork | dl | figure | iref | ol | t | table | ul)*
      }
 
    blockquote =
@@ -338,7 +339,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        attribute cite { text }?,
        attribute quotedFrom { text }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -363,7 +364,7 @@
        [ a:defaultValue = "empty" ] attribute style { text }?,
        attribute hangIndent { text }?,
        attribute counter { text }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        t+
      }
 
@@ -377,7 +378,7 @@
        attribute group { text }?,
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        li+
      }
 
@@ -392,7 +393,7 @@
         attribute empty { "false" | "true"},
 	[ a:defaultValue = "false" ]
         attribute bare { "false" | "true"}?,
-        attribute pn { text }?)?,
+        attribute pn { xsd:ID }?)?,
        li+
      }
 
@@ -401,7 +402,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
@@ -427,7 +428,7 @@
        [ a:defaultValue = "true" ]
        attribute newline { "false" | "true" }?,
        attribute indent { text }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        (dt, dd)+
      }
 
@@ -436,7 +437,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        (text
         | bcp14
         | cref
@@ -456,7 +457,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
@@ -520,7 +521,7 @@
        [ a:defaultValue = "" ] attribute subitem { text }?,
        [ a:defaultValue = "false" ]
        attribute primary { "true" | "false" }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        empty
      }
 
@@ -641,7 +642,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        [ a:defaultValue = "" ] attribute title { text }?,
        [ a:defaultValue = "false" ]
        attribute suppress-title { "true" | "false" }?,
@@ -666,7 +667,7 @@
        [ a:defaultValue = "center" ]
        attribute align { "left" | "center" | "right" }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        name?,
        iref*,
        thead?,
@@ -698,7 +699,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        attribute xml:space { text }?,
        [ a:defaultValue = "" ] attribute name { text }?,
        [ a:defaultValue = "" ] attribute type { text }?,
@@ -711,14 +712,14 @@
        attribute originalSrc { text }?,
        (text* | svg)
      }
-   include "https://www.rfc-editor.org/materials/format/SVG-1.2-RFC.rnc"
+   include "SVG-1.2-RFC.rnc"
 
    sourcecode =
      element sourcecode {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        [ a:defaultValue = "" ] attribute name { text }?,
        [ a:defaultValue = "" ] attribute type { text }?,
        [ a:defaultValue = "false" ] 
@@ -879,7 +880,7 @@
      element references {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-       attribute pn { text }?,
+       attribute pn { xsd:ID }?,
        attribute anchor { xsd:ID }?,
        attribute title { text }?,
        name?,
