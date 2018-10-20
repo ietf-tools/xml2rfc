@@ -9,12 +9,17 @@ CACHE_PREFIX = ''
 NET_SUBDIRS  = ['bibxml', 'bibxml2', 'bibxml3', 'bibxml4', 'bibxml5']
 
 from xml2rfc.parser import  XmlRfcError, CachingResolver, XmlRfcParser, XmlRfc
-from xml2rfc.writers import BaseRfcWriter, RawTextRfcWriter, PaginatedTextRfcWriter
-from xml2rfc.writers import HtmlRfcWriter, NroffRfcWriter, ExpandedXmlWriter
-from xml2rfc.writers import RfcWriterError, V2v3XmlWriter, PrepToolWriter, TextWriter
 
+from xml2rfc.writers import ( BaseRfcWriter, RawTextRfcWriter, PaginatedTextRfcWriter,
+	 HtmlRfcWriter, NroffRfcWriter, ExpandedXmlWriter, RfcWriterError,
+         V2v3XmlWriter, PrepToolWriter, TextWriter, HtmlWriter,
+     )
+
+# This defines what 'from xml2rfc import *' actually imports:
 __all__ = ['XmlRfcError', 'CachingResolver', 'XmlRfcParser', 'XmlRfc',
            'BaseRfcWriter', 'RawTextRfcWriter', 'PaginatedTextRfcWriter',
            'HtmlRfcWriter', 'NroffRfcWriter', 'ExpandedXmlWriter',
-           'RfcWriterError', 'V2v3XmlWriter', 'PrepToolWriter', 'TextWriter', ]
+           'RfcWriterError', 'V2v3XmlWriter', 'PrepToolWriter', 'TextWriter',
+           'HtmlWriter',
+       ]
 
