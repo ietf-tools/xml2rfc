@@ -8,6 +8,7 @@ import os
 import re
 import six
 import sys
+import traceback as tb
 import unicodedata
 
 from codecs import open
@@ -31,14 +32,16 @@ from collections import OrderedDict
 from lxml import etree
 
 
-from xml2rfc import log
-from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
+from xml2rfc import log, strings
 from xml2rfc.boilerplate_id_guidelines import boilerplate_draft_status_of_memo
+from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.boilerplate_tlp import boilerplate_tlp
-from xml2rfc.utils import build_dataurl, namespaces, find_duplicate_ids, extract_date, format_date
+from xml2rfc.scripts import get_scripts
+from xml2rfc.uniscripts import is_script
+from xml2rfc.util.date import extract_date, format_date, normalize_month
+from xml2rfc.utils import build_dataurl, namespaces, find_duplicate_ids
 from xml2rfc.writers.base import default_options
 from xml2rfc.writers.v2v3 import slugify
-from xml2rfc.scripts import get_scripts
 
 pnprefix = {
     # tag: prefix
@@ -64,14 +67,6 @@ def uniq(l):
             seen.add(i)
             ll.append(i)
     return ll
-
-def normalize_month(month):
-    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    for i, m in enumerate(months):
-        if m.lower().startswith(month.lower()):
-            month = '%02d' % (i+1)
-    assert month.isdigit()
-    return month
 
 # This is used to enforce global uniqueness on slugs:
 seen_slugs = set([])
@@ -157,6 +152,10 @@ class PrepToolWriter:
         e = etree.Element(tag, **attrib)
         if line:
             e.sourceline = line
+        elif self.options.debug:
+            filename, lineno, caller, code = tb.extract_stack()[-2]
+            e.base = os.path.basename(filename)
+            e.sourceline = lineno
         return e
 
     def note(self, e, text):
@@ -287,6 +286,8 @@ class PrepToolWriter:
             './/reference;sort_series_info()',  #         <reference> sort <seriesInfo>
             './/name;insert_slugified_name()',  # 5.4.4.  <name> Slugification
             './/references;sort()',             # 5.4.5.  <reference> Sorting
+            './back;insert_index()',
+            './back;insert_author_address()',
                                                 # 5.4.6.  "pn" Numbering
             './/boilerplate//section;add_number()',
             './front//abstract;add_number()',
@@ -303,8 +304,6 @@ class PrepToolWriter:
             './/artwork',                       # 5.5.1.  <artwork> Processing
             './/sourcecode',                    # 5.5.2.  <sourcecode> Processing
             #
-            './back;insert_index()',
-            './back;insert_author_address()',
             './/boilerplate;insert_table_of_contents()',
             './/*[@removeInRFC="true"]',        # 5.6.1.  <note> Removal
             './/cref;removal()',                # 5.6.2.  <cref> Removal
@@ -537,7 +536,7 @@ class PrepToolWriter:
             date = datetime.datetime.strptime(datestr, "%Y-%m-%d").date()
             if abs(date - datetime.date.today()) > datetime.timedelta(days=3):
                 self.warn(e, "The document date (%s) is more than 3 days away from today's date" % date)
-            n = self.element('date', year=year, month=month)
+            n = self.element('date', year=year, month=month, line=d.sourceline)
             if day:
                 n.set('day', day)
             e.replace(d, n)
@@ -715,11 +714,23 @@ class PrepToolWriter:
     #    "surname" element (respectively).  If the two are the same, remove
     #    the "ascii*" element and issue a warning about the removal.
     def element_front_author(self, e, p):
+        fullname = e.get('fullname')
+        initials = e.get('initials')
+        surname  = e.get('surname')
+        organization = e.find('organization')
+        org = organization.text if organization != None and organization.text else None
+        if not ((initials and surname) or fullname or org):
+            self.err(e, "Expected <author> to have initials, surname and fullname or organization")
+        if (initials or surname) and not fullname:
+            e.set('fullname', ' '.join( n for n in [initials, surname] if n ))
         for a in ['fullname', 'initials', 'surname']:
             aa = 'ascii'+a.capitalize()
             keys = e.keys()
             if   aa in keys and not a in keys:
                 self.err(e, "Expected a %s= attribute to match the %s= attribute, but found none" % (a, aa))
+            elif a in keys and not aa in keys:
+                if not is_script(e.get(a), 'Latin'):
+                    self.err(e, "Expected an %s= attribute to match the unicode %s value" % (aa, a))
             elif a in keys and aa in keys:
                 if e.get(a).strip() == e.get(aa).strip():
                     del e.attrib[aa]
@@ -842,7 +853,7 @@ class PrepToolWriter:
             else:
                 e.remove(existing_status_of_memo)
         #
-        section = self.element('section', numbered='false', toc='exclude')
+        section = self.element('section', numbered='false', toc='exclude', anchor='status-of-memo')
         name = self.element('name')
         name.text = "Status of This Memo"
         section.append(name)
@@ -854,6 +865,8 @@ class PrepToolWriter:
             category = self.root.get('category')
             consensus = self.root.get('consensus')
             workgroup = self.root.find('./front/workgroup')
+            if not category in strings.category_name:
+                self.err(self.root, "Expected a known category, one of %s, but found '%s'" % (','.join(strings.category.keys()), category, ))
             #
             group = workgroup.text if workgroup != None else None
             format_dict.update({ 'rfc_number': self.rfcnumber })
@@ -931,7 +944,7 @@ class PrepToolWriter:
             stream = 'IETF' if subtype == 'IETF' else 'alt'
         format_dict = {'year': self.date.year, }
         format_dict['scheme'] = 'http' if self.date < self.boilerplate_https_date else 'https'
-        section = self.element('section', numbered='false', toc='exclude')
+        section = self.element('section', numbered='false', toc='exclude', anchor='copyright')
         name = self.element('name')
         name.text = "Copyright Notice"
         section.append(name)
@@ -1160,11 +1173,7 @@ class PrepToolWriter:
             else:
                 pn = slugify_name('%s-%s-%s' % (pnprefix[e.tag], item, self.iref_number))
             e.set('pn', pn)
-            anchor = p.get('anchor')
-            if not anchor:
-                anchor = p.get('pn')
-                if anchor:
-                    p.set('anchor', anchor)
+            anchor = pn
             self.index_entries.append(index_item(item, sub, anchor, None))
 
     # 5.4.8.  <xref> Processing
@@ -1225,8 +1234,9 @@ class PrepToolWriter:
         if t is None:
             t = self.root.find('.//*[@pn="%s"]'%(target, ))
             if t is None:
-                self.die(e, "Found no element to match the <xref> target attribute '%s'" % (target, ))
-            t.set('anchor', t.get('pn'))
+                t = self.root.find('.//*[@slugifiedName="%s"]'%(target, ))
+                if t is None:
+                    self.die(e, "Found no element to match the <xref> target attribute '%s'" % (target, ))
         #
         if e.text and e.text.strip():
             content = e.text.strip()
@@ -1247,7 +1257,7 @@ class PrepToolWriter:
                 content = num
             elif format == 'default':
                 if t.tag in [ 'reference', 'referencegroup' ]:
-                    content = '[%s]' % refname_mapping[t.get('anchor')]
+                    content = '%s' % refname_mapping[t.get('anchor')]
                 else:
                     type, num = split_pn(t, pn)
                     content = "%s %s" % (type.capitalize(), num)
@@ -1289,11 +1299,11 @@ class PrepToolWriter:
         #
         label = 'Section'
         section = e.get('section')
-        if section is None:
+        relative = e.get('relative')
+        if relative != None and section is None:
             self.err("Cannot render an <%s> with a relative= attribute without also having a section= attribute." % (e.tag))
         if t.tag != 'reference':
             self.err(e, "Expected the target of an <%s> with a section= attribute to be a <reference>, found <%s>" % (e.tag, t.tag, ))
-        relative = e.get('relative')
         if relative is None:
             for s in t.xpath('.//seriesInfo'):
                 if s.get('name') in ['RFC', 'Internet-Draft']:
@@ -1324,6 +1334,9 @@ class PrepToolWriter:
                 content = '{target} (Section {section})'.format(**values)
             elif part_format == 'bare':
                 content = '{section}'.format(**values)
+        attr = e.get('derivedContent')
+        if attr and attr != content:
+            self.err(e, "When processing <xref>, found derivedContent='%s' when trying to set it to '%s'" % (attr, content))
         e.set('derivedContent', content)
 
     # 5.5.  Inclusion
@@ -1420,7 +1433,7 @@ class PrepToolWriter:
                     svg = None
                     if awtext:
                         # keep svg in src attribute
-                        if scheme in ['file', 'http', 'https']:
+                        if scheme in ['file', 'http', 'https', 'data']:
                             f = urlopen(src)
                             data = f.read()
                             if six.PY2:
@@ -1453,7 +1466,7 @@ class PrepToolWriter:
                             desc = self.element('desc', line=e.sourceline)
                             desc.text = alt
                             desc.sourceline = e.sourceline
-                            svg.append(desc)
+                            #svg.append(desc)
 
     #    5.  If an <artwork> element has type='binary-art', the data needs to
     #        be in an "src" attribute with a URI scheme of "data:".  If the
@@ -1576,26 +1589,28 @@ class PrepToolWriter:
                 self.warn(s, "Expected a pn number, found none in <%s>" % (s.tag, ))
             num = s.get('pn','unknown-unknown').split('-', 1)[1].replace('-', ' ').title() if numbered else ''
             if num.startswith('Appendix'):
-                num = num.replace('.', ' ', 1)
+                # Replace the first dot for later use in derivedContent
+                num = num.replace('.', ' ', 1) 
             #
             t = self.element('t')
-            anchor = s.get('anchor')
-            if not anchor:
-                anchor = s.get('pn')
-                if not anchor:
-                    self.die(s, "No anchor and no pn entry found for section, can't continue: %s" % (etree.tostring(s)))
-                s.set('anchor', anchor)
-            xref = self.element('xref', target=anchor, format='counter', derivedContent=num)
-            xref.tail = ('.'+self.spacer) if num else ''
+            pn = s.get('pn')
+            if not pn:
+                self.die(s, "No no pn entry found for section, can't continue: %s" % (etree.tostring(s)))
+            xref = self.element('xref', target=pn, format='counter', derivedContent=num)
+            xref.tail = ('.'+self.spacer) if num else self.spacer
             t.append(xref)
-            if name.text:
-                xref.tail += name.text
-            for c in name:
-                cc = copy.deepcopy(c)
-                if 'anchor' in cc.keys():
-                    cc.set('anchor', slugify('toc-'+cc.get('anchor')))
-                t.append(cc)
-            t.tail = name.tail
+            # <xref> can only contain text, not markup. so we need to reduce
+            # the name content to plain text:
+            text = ''.join(name.itertext()).strip()
+            if text:
+                slug = name.get('slugifiedName')
+                if not slug:
+                    self.warn(name, "Internal error: missing slugifiedName for %s" % (etree.tostring(name)))
+                    slug = slugify_name('name-'+text)
+                    name.set('slugifiedName', slug)
+                xref = self.element('xref', target=slug, format='default', derivedContent=text)
+                xref.text = text
+                t.append(xref)
             return t
         def toc_entries(e):
             toc = e.get('toc')
@@ -1618,7 +1633,7 @@ class PrepToolWriter:
                     return sub
             return []
         if self.root.get('tocInclude') == 'true':
-            toc = self.element('section', numbered='false', toc='exclude')
+            toc = self.element('section', numbered='false', toc='exclude', anchor='toc')
             name = self.element('name')
             name.text = "Table of Contents"
             toc.append(name)
@@ -1717,12 +1732,13 @@ class PrepToolWriter:
         if self.prepped:
             return
         authors = self.root.findall('./front/author')
-        s = self.element('section', toc='include', numbered='false', pn='authors-addresses', anchor='authors-addresses')
+        s = self.element('section', toc='include', numbered='false', anchor='authors-addresses')
         n = self.element('name')
         if len(authors) > 1:
             n.text = "Authors' Addresses"
         else:
             n.text = "Author's Address"
+        n.set('slugifiedName', slugify_name('name-'+n.text))
         s.append(n)
         for a in authors:
             s.append(copy.copy(a))
