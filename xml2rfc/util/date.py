@@ -27,7 +27,7 @@ def extract_date(e, today):
     year = e.get('year', str(today.year))
     #
     if not year.isdigit():
-        xml2rfc.log.warn(e, "Expected a numeric year, but found '%s'" % year)
+        xml2rfc.log.warn("Expected a numeric year, but found '%s'" % year)
         year = today.year
     year = int(year)
     if not month:
@@ -39,13 +39,20 @@ def extract_date(e, today):
         month = int(month)
     if day:
         if not day.isdigit():
-            xml2rfc.log.warn(e, "Expected a numeric day, but found '%s'" % day)
+            xml2rfc.log.warn("Expected a numeric day, but found '%s'" % day)
             day = today.day
         day = int(day)
     return year, month, day
 
+def format_date_iso(year, month, day):
+    if   year and month and day:
+        return '%4d-%02d-%02d' % (year, month, day)
+    elif year and month:
+        return '%4d-%02d' % (year, month)
+    elif year:
+        return '%4d' % (year)
 
-def format_date(year, month, day, legacy):
+def format_date(year, month, day, legacy=False):
     if month:
         month = calendar.month_name[month]
         if day:

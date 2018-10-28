@@ -5,7 +5,6 @@
 # Internal utitlity functions.  Not meant for public usage.
 
 import base64
-import math
 import re
 import six
 import textwrap
@@ -225,102 +224,6 @@ def urlkeep(text):
     if 'https://' in text:
         return re.sub('(?<=https:)\S*', replacer, text)
     return text
-
-# ----------------------------------------------------------------------
-# Base conversions.
-# From http://tech.vaultize.com/2011/08/python-patterns-number-to-base-x-and-the-other-way/
-
-DEFAULT_DIGITS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
- 
-def num_to_baseX(num, digits=DEFAULT_DIGITS):
-   if num < 0: return '-' + num_to_baseX(-num)
-   if num == 0: return digits[0]
-   X = len(digits)
-   s = ''
-   while num > 0:
-        s = digits[num % X] + s
-        num //= X
- 
-   return s
- 
-def baseX_to_num(s, digits=DEFAULT_DIGITS):
-   if s[0] == '-': return -1 * baseX_to_num(s[1:])
-   ctopos = dict([(c, pos) for pos, c in enumerate(digits)])
-   X = len(digits)
-   num = 0
-   for c in s: num = num * X + ctopos[c]
-   return num
-
-
-# Use the generic base conversion to create list letters
-
-def int2letter(num):
-    return num_to_baseX(num-1, "abcdefghijklmnopqrstuvwxyz")
-
-def int2roman(number):
-    numerals = { 
-        1 : "i", 
-        4 : "iv", 
-        5 : "v", 
-        9 : "ix", 
-        10 : "x", 
-        40 : "xl", 
-        50 : "l", 
-        90 : "xc", 
-        100 : "c", 
-        400 : "cd", 
-        500 : "d", 
-        900 : "cm", 
-        1000 : "m" 
-    }
-    if number > 3999:
-        raise NotImplementedError("Can't handle roman numerals larger than 3999")
-    result = ""
-    for value, numeral in sorted(numerals.items(), reverse=True):
-        while number >= value:
-            result += numeral
-            number -= value
-    return result
-
-
-roman_max_widths = { 1:1,  2:2,  3:3,  4:3,  5:3,  6:3,  7:3,  8:4,  9:4,
-                10:4, 11:4, 12:4, 13:4, 14:4, 15:4, 16:4, 17:4, 18:5, 19:5,
-                20:5, 21:5, 22:5, 23:5, 24:5, 25:5, 26:5, 27:5, 28:6, 29:6, }
-
-def update_roman_max_widths(n):
-    global roman_max_widths
-    if n > 3999:
-        raise NotImplementedError("Can't handle roman numerals larger than 3999")
-    m = len(roman_max_widths)
-    wmax = 0
-    for i in range(n+32):
-        w = len(int2roman(i))
-        if w > wmax:
-            wmax = w
-        if n > m:
-            roman_max_widths[n] = wmax
-
-def num_width(type, num):
-    """
-    Return the largest width taken by the numbering of a list
-    with num items (without punctuation)
-    """
-    global roman_max_widths
-    if   type in ['a','A','c','C',]:
-        return int(math.log(num, 26))+1
-    elif type in ['1','d',]:
-        return int(math.log(num, 10))+1
-    elif type in ['o','O',]:
-        return int(math.log(num, 8))+1
-    elif type in ['x','X',]:
-        return int(math.log(num, 16))+1
-    elif type in ['i','I',]:
-        m = len(roman_max_widths)
-        if num > m:
-            update_roman_max_widths(num)
-        return roman_max_widths[num]
-    else:
-        raise ValueError("Unexpected type argument to num_width(): '%s'" % (type, ))
 
 # ----------------------------------------------------------------------
 # Tree operations
@@ -650,6 +553,7 @@ namespaces={
     'x':    'http://relaxng.org/ns/structure/1.0',
     'a':    'http://relaxng.org/ns/compatibility/annotations/1.0',
     'xml':  'http://www.w3.org/XML/1998/namespace',
+    's':    'http://www.w3.org/2000/svg',
 }
 
 
@@ -676,3 +580,6 @@ def hastext(e):
     items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
     return items
 
+def is_htmlblock(h):
+    return h.tag in [ 'address', 'blockquote', 'div', 'dl', 'fieldset', 'form', 'h1', 'h2', 'h3',
+                      'h4', 'h5', 'h6', 'hr', 'noscript', 'ol', 'p', 'pre', 'table', 'ul', ]
