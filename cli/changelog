@@ -1,3 +1,28 @@
+xml2rfc (2.12.0) ietf; urgency=medium
+
+  This release introduces the vocabulary v3 html formatter.  In order to
+  invoke this formatter, use the regular --html switch for html output, and
+  add the --v3 switch to specify the v3 html formatter.
+
+  In v3 html formatter mode, xml2rfc accepts any valid xml2rfc input file, but
+  since the actual formatter only understands the XML elements and attributes
+  which have not been deprecated by RFC7991, it first applies the xml2rfc v2v3
+  converter in order to transform any deprecated markup to the elements and
+  attributes it understands, and then applies the preptool in order to
+  normalize the input before it starts rendering.
+
+  This is the first release of the v3 html formatter.  It is quite feature
+  complete, but has been tested only on a limited number of documents, so
+  expect that there could be some rough edges.
+
+  In building the html v3 formatter, a number of rough edges were also
+  discovered in the schema, RFC 7991; html format output, RFC 7992; and
+  preptool specification, RFC 7998.  The modifications applied in the code
+  are described in draft-levkowetz-xml2rfc-v3-implementation-notes-05.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  28 Oct 2018 13:45:04 -0700
+
+
 xml2rfc (2.11.1) ietf; urgency=medium
 
   * Changed linebreaking for URLs in boilerplate and references to the old 
