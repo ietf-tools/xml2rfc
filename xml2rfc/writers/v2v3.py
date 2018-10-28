@@ -427,9 +427,7 @@ class V2v3XmlWriter(object):
             if ends and tail.strip() != "":
                 self.warn(e, "Found non-whitespace content after <CODE ENDS>")
                 e.tail = tail
-            stripattr(e, ['align', 'height', 'suppress-title', 'width', ])
-            if self.options.strict:
-                stripattr(e, ['alt', ])
+            stripattr(e, ['align', 'alt', 'height', 'suppress-title', 'width', ])
 
     def element_back(self, e, p):
         # XXXX The RFCs don't say anything about the text rendering of
