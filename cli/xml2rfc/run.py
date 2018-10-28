@@ -12,12 +12,12 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 if script_dir in sys.path:
     sys.path.remove(script_dir)
 
+import datetime
+import json
+import lxml.etree
 import optparse
 import os
 import xml2rfc
-import lxml.etree
-import datetime
-
 
 try:
     import debug
@@ -48,6 +48,18 @@ def print_pi_help(self, opt, value, parser):
             print('    %-20s  %s' % (k,v))
     sys.exit()
 
+def extract_anchor_info(xml):
+    info = {
+        'version': 1,
+        'sections': {},
+        }
+    for item in xml.xpath('./middle//section'):
+        anchor = item.get('anchor')
+        label  = item.get('pn')
+        if anchor and label and not anchor.startswith('anchor-'):
+            info['sections'][anchor] = label.replace('section-','')
+    return info
+
 def main():
     # Populate options
     formatter = optparse.IndentedHelpFormatter(max_help_position=40)
@@ -77,6 +89,8 @@ def main():
                            help='convert vocabulary version 2 XML to version 3')
     formatgroup.add_option('', '--preptool', action='store_true',
                            help='run preptool on the input')
+    formatgroup.add_option('', '--info', action='store_true',
+                           help='generate a JSON file with anchor to section lookup information')
     optionparser.add_option_group(formatgroup)
 
 
@@ -190,7 +204,7 @@ def main():
             options.output_path = options.basename
             options.basename = None
     #
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, options.preptool, ] if o])
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, options.preptool, options.info, ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
                  'use --path instead.')
@@ -234,6 +248,16 @@ def main():
             sys.exit("You can only use --legacy_list_symbols with v3 text output.")
         if options.list_symbols:
             sys.exit("You can only use --list_symbols with v3 text output.")
+
+    if not options.legacy:
+        if options.nroff:
+            sys.exit("You can only use --nroff in legacy mode")
+        if options.raw:
+            sys.exit("You can only use --raw in legacy mode")
+        if options.exp:
+            sys.exit("You can only use --exp in legacy mode")
+
+    # ------------------------------------------------------------------
 
     # Setup warnings module
     # xml2rfc.log.warn_error = options.warn_error and True or False
@@ -389,6 +413,22 @@ def main():
             textwriter.write(filename)
             options.output_filename = None
 
+        if options.info:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.json'
+                options.output_filename = filename
+            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            xmlrfc.tree = v2v3.convert2to3()
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True)
+            xmlrfc.tree = prep.prep()
+            info = extract_anchor_info(xmlrfc.tree)
+            with open(filename, 'w') as fp:
+                json.dump(info, fp, indent=2, ensure_ascii=False, encoding='utf-8')
+            if not options.quiet:
+                xml2rfc.log.write('Created file', filename)
+            
 
     except xml2rfc.RfcWriterError as e:
         xml2rfc.log.error('Unable to convert the document: ' + args[0],  
