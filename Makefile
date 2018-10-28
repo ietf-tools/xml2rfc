@@ -2,10 +2,18 @@
 # much as documentation as it is for invocation.
 
 #svnrev	:= $(shell svn info | grep ^Revision | awk '{print $$2}' )
+
+# This is needed to avoid randomised order of html element attributes under
+# py27 - py35.  For py36 and later, dictionary key order is insertion order,
+# so the test masters for lxml-generated html output have to be different for
+# python 3 versions 3.6 and higher, compared to 2.7 - 3.5
+export PYTHONHASHSEED = 0
+
 datetime_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T_ ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]
 version_regex =  [Vv]ersion [2N]\(\.[0-9N]\+\)\+\(\.dev\)\?
 date_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]
 
+py = $(shell python -c 'import sys; print("py%s%s" %(sys.version_info.major,sys.version_info.minor))')
 
 rfcxml= \
 	rfc6787.xml		\
@@ -60,25 +68,31 @@ CHECKOUTPUT=	\
 #
 # Generic rules
 
-%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test %.text.test
+%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test %.text.test %.v3.$(py).html.test
 	@echo "Diffing .nroff.txt against regular .txt"
 	@doc=$(basename $@); diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo checking v3 validity
 	doc=$(basename $@); xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.v2v3.xml
 	doc=$(basename $@); xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
 
-tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml : tests/input/%.xml install
+tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt tests/out/%.exp.xml : tests/input/%.xml install
 	@ echo "\nProcessing $<"
 	xml2rfc --cache tests/cache --no-network --base tests/out/ --raw --legacy --text --nroff --html --exp --v2v3 --strict $<
+
+tests/out/%.v2v3.xml: tests/input/%.xml install
+	xml2rfc --cache tests/cache --no-network --base tests/out/ --v2v3 --strict --legacy-date-format $< --out $@
+
+tests/out/%.prepped.xml: tests/input/%.xml install
+	xml2rfc --cache tests/cache --no-network --utf8 --out $@ --prep $<
 
 tests/out/%.text: tests/input/%.xml install
 	xml2rfc --cache tests/cache --no-network --base tests/out/ --text --v3 --strict --legacy-date-format $< --out $@
 
-.PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text %.prepped.xml %.nroff.txt
+tests/out/%.v3.$(py).html: tests/input/%.xml install
+	xml2rfc --cache tests/cache --no-network --base tests/out/ --html --v3 --external --strict --legacy-date-format $< --out $@
 
+.PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt 
 
-%.prepped.xml: %.v2v3.xml
-	xml2rfc --cache tests/cache --no-network --utf8 --out $@ --prep $<
 
 %.test: %
 	@echo "Diffing $< against master"
