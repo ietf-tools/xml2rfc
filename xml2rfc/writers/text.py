@@ -27,7 +27,8 @@ from xml2rfc import utils
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, get_expiry_date, format_date
 from xml2rfc.util.name import short_author_name, short_author_ascii_name
-
+from xml2rfc.util.num import ol_style_formatter, num_width
+from xml2rfc.util.postal import get_normalized_address_info, format_address
 
 wrapper = utils.TextWrapper(width=72, break_on_hyphens=False)
 seen = set()
@@ -1860,22 +1861,6 @@ class TextWriter(BaseV3Writer):
     #    "type='%d.'".
     def render_ol(self, e, width, **kwargs):
         # setup and validation
-        int2str = {
-            None:   lambda n: tuple(),
-            'a':    lambda n: tuple([utils.int2letter(n)]),
-            'A':    lambda n: tuple([utils.int2letter(n).upper()]),
-            'c':    lambda n: tuple([utils.int2letter(n)]),
-            'C':    lambda n: tuple([utils.int2letter(n).upper()]),
-            '1':    lambda n: tuple([n]),
-            'd':    lambda n: tuple([n]),
-            'i':    lambda n: tuple([utils.int2roman(n)]),
-            'I':    lambda n: tuple([utils.int2roman(n).upper()]),
-            'o':    lambda n: tuple(['%o'%n]),
-            'O':    lambda n: tuple(['%O'%n]),
-            'x':    lambda n: tuple(['%x'%n]),
-            'X':    lambda n: tuple(['%X'%n]),
-        }
-        #
         start = e.get('start')
         if not start.isdigit():
             self.warn(e, "Expected a numeric value for the 'start' attribute, but found %s" % (etree.tostring(e), ))
@@ -1894,19 +1879,19 @@ class TextWriter(BaseV3Writer):
                 fspec = formspec.group(0)
                 e._format = type.replace(fspec, '%s')
             else:
-                self.err(e, "Expected a <ol> format specification of '%%' followed by upper- or lower-case of one of c,d,i,o,x; but found '%s'" % (type, ))
+                self.err(e, "Expected an <ol> format specification of '%%' followed by upper- or lower-case letter, of one of c,d,i,o,x; but found '%s'" % (type, ))
                 fchar = 'd'
                 e._format = '%s'
         else:
             fchar = type
             e._format = '%s.'
-        e._int2str = int2str[fchar]
+        e._int2str = ol_style_formatter[fchar]
         e._initial_text = self.get_ol_li_initial_text
         #
         compact = e.get('spacing') == 'compact'
         ljoin  = '\n' if compact else '\n\n'
         #
-        indent = len(e._format % (' '*utils.num_width(fchar, len(list(e))))) + len('  ')
+        indent = len(e._format % (' '*num_width(fchar, len(list(e))))) + len('  ')
         e._padding = indent
         kwargs['joiners'].update({
             None:   joiner('', ljoin, '', indent, 0),
@@ -2012,36 +1997,48 @@ class TextWriter(BaseV3Writer):
     # 
     #       One or more <postalLine> elements (Section 2.38)
     def render_postal(self, e, width, **kwargs):
+        latin = kwargs.pop('latin', False)
+        adr = get_normalized_address_info(e, latin=latin)
+        adr['street_address'] = '\n'.join(adr['street_address'] )
         kwargs['joiners'] = { None: joiner('', '\n', '', 0, 0), }
-        if e.find('./postalLine') != None:
-            text = ''
-            for c in e.getchildren():
-                text = self.join(text, c, width, **kwargs)
+        if adr:
+            try:
+                text = format_address(adr, latin=latin)
+                text = text.strip()+'\n\n'
+                return text
+            except:
+                debug.pprint('adr')
+                raise
         else:
-            lines = []
-            for street in e.findall('street'):
-                if street.text:
-                    lines.append(street.text)
-            cityline = []
-            city = e.find('city')
-            if city is not None and city.text:
-                cityline.append(city.text)
-            region = e.find('region')
-            if region is not None and region.text:
-                if len(cityline) > 0: cityline.append(', ');
-                cityline.append(region.text)
-            code = e.find('code')
-            if code is not None and code.text:
-                if len(cityline) > 0: cityline.append('  ');
-                cityline.append(code.text)
-            if len(cityline) > 0:
-                lines.append(''.join(cityline))
-            country = e.find('country')
-            if country is not None and country.text:
-                lines.append(country.text)
-            text = '\n'.join(lines)
-        text = text.strip() + '\n\n'
-        return text
+            if e.find('./postalLine') != None:
+                text = ''
+                for c in e.getchildren():
+                    text = self.join(text, c, width, **kwargs)
+            else:
+                lines = []
+                for street in e.findall('street'):
+                    if street.text:
+                        lines.append(street.text)
+                cityline = []
+                city = e.find('city')
+                if city is not None and city.text:
+                    cityline.append(city.text)
+                region = e.find('region')
+                if region is not None and region.text:
+                    if len(cityline) > 0: cityline.append(', ');
+                    cityline.append(region.text)
+                code = e.find('code')
+                if code is not None and code.text:
+                    if len(cityline) > 0: cityline.append('  ');
+                    cityline.append(code.text)
+                if len(cityline) > 0:
+                    lines.append(''.join(cityline))
+                country = e.find('country')
+                if country is not None and country.text:
+                    lines.append(country.text)
+                text = '\n'.join(lines)
+            text = text.strip() + '\n\n'
+            return text
 
     # 2.38.  <postalLine>
     # 
@@ -3931,7 +3928,13 @@ class TextWriter(BaseV3Writer):
                         text += ' '
                     text += ref
             else:
-                t = self.root.find('.//*[@anchor="%s"]'%(target, ))
+                t = self.root.find('.//*[@pn="%s"]'%(target, ))
+                if t is None:
+                    t = self.root.find('.//*[@anchor="%s"]'%(target, ))
+                    if t is None:
+                        t = self.root.find('.//*[@slugifiedName="%s"]'%(target, ))
+                if t.tag == 'name':
+                    t = t.getparent()
                 pn = t.get('pn')
                 if pn is None:
                     self.warn(e, "Found an <xref referring to an element without pn: %s" % (etree.tostring(t),))
@@ -3943,7 +3946,7 @@ class TextWriter(BaseV3Writer):
                             text += ' (%s)'%ref
                         else:
                             text = ref
-            if text != link:
+            if text != link and self.options.debug:
                 self.warn(e, 'Preptool specification failure: <xref> content should be "%s", but found derivedContent="%s"' % (text, link))
         elif format == 'title':
             text = link
