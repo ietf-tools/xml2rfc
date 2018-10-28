@@ -622,13 +622,13 @@ class BaseRfcWriter:
         if '%d' in text:
             text = text.replace(r'%d', str(count)).ljust(decimal_width+extra_width)
         elif '%c' in text:
-            text = text.replace(r'%c', xml2rfc.utils.int2letter(count)).ljust(letter_width+extra_width)
+            text = text.replace(r'%c', xml2rfc.util.num.int2letter(count)).ljust(letter_width+extra_width)
         elif '%C' in text:
-            text = text.replace(r'%C', xml2rfc.utils.int2letter(count).upper()).ljust(letter_width+extra_width)
+            text = text.replace(r'%C', xml2rfc.util.num.int2letter(count).upper()).ljust(letter_width+extra_width)
         elif '%i' in text:
-            text = text.replace(r'%i', xml2rfc.utils.int2roman(count)).ljust(roman_width+extra_width)
+            text = text.replace(r'%i', xml2rfc.util.num.int2roman(count)).ljust(roman_width+extra_width)
         elif '%I' in text:
-            text = text.replace(r'%I', xml2rfc.utils.int2roman(count).upper()).ljust(roman_width+extra_width)
+            text = text.replace(r'%I', xml2rfc.util.num.int2roman(count).upper()).ljust(roman_width+extra_width)
         elif '%o' in text:
             text = text.replace(r'%o', oct(count).replace("0","",1)).replace("o","",1).ljust(octal_width+extra_width)
         elif '%x' in text:
