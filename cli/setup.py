@@ -73,7 +73,7 @@ Changelog
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.11.1',
+    version='2.12.0',
     author='Henrik Levkowetz, Josh Bothun',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
@@ -103,7 +103,7 @@ setup(
         ],
     },
 
-    packages=['xml2rfc', 'xml2rfc/writers'],
+    packages=['xml2rfc', 'xml2rfc/writers', 'xml2rfc/util', 'xml2rfc/uniscripts', ],
     package_data={'xml2rfc': [
         'templates/*',
         'data/*',
