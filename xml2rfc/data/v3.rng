@@ -284,20 +284,16 @@
       <optional>
         <attribute name="xml:lang"/>
       </optional>
-      <choice>
-        <zeroOrMore>
-          <choice>
-            <ref name="city"/>
-            <ref name="code"/>
-            <ref name="country"/>
-            <ref name="region"/>
-            <ref name="street"/>
-          </choice>
-        </zeroOrMore>
-        <oneOrMore>
+      <zeroOrMore>
+        <choice>
+          <ref name="city"/>
+          <ref name="code"/>
+          <ref name="country"/>
           <ref name="postalLine"/>
-        </oneOrMore>
-      </choice>
+          <ref name="region"/>
+          <ref name="street"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="street">
@@ -942,6 +938,9 @@
         <attribute name="anchor">
           <data type="ID"/>
         </attribute>
+      </optional>
+      <optional>
+        <attribute name="derivedCounter"/>
       </optional>
       <optional>
         <attribute name="pn">
@@ -2094,6 +2093,9 @@
       <attribute name="anchor">
         <data type="ID"/>
       </attribute>
+      <optional>
+        <attribute name="derivedAnchor"/>
+      </optional>
       <optional>
         <attribute name="target"/>
       </optional>

@@ -113,7 +113,7 @@
      element postal {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-       ((city | code | country | region | street)* | postalLine+)
+       (city | code | country | postalLine | region | street)*
      }
 
    street =
@@ -402,6 +402,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
+       attribute derivedCounter { text }?,
        attribute pn { xsd:ID }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
@@ -892,6 +893,7 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID },
+       attribute derivedAnchor { text }?,
        attribute target { text }?,
        [ a:defaultValue = "true" ]
        attribute quoteTitle { "true" | "false" }?,
