@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- - - -  SVG 1.2 RFC RNC schema; Nevil Brownlee, Thu 26 Jan 2016 (NZST) -->
-<grammar ns="http://www.w3.org/2000/svg" xmlns:ns1="http://www.w3.org/1999/xlink" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<!-- - - -  SVG 1.2 RFC rnc schema;  Nevil Brownlee, Tue Jan 16 2018 (NZDT) -->
+<grammar ns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <define name="rfc-color">
     <choice>
-      <!-- SVG-1.2-RFC doesn't allow color or grayscale -->
+      <!-- SVG-1.2-RFC doesn't allow "color or grey-scale" -->
       <value>black</value>
       <value>white</value>
       <value>#000000</value>
       <value>#FFFFFF</value>
       <value>#ffffff</value>
+      <value>currentColor</value>
       <value>inherit</value>
     </choice>
   </define>
@@ -214,8 +215,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -382,23 +385,22 @@
         <attribute name="viewBox"/>
       </optional>
       <optional>
-        <attribute name="zoomAndPan">
-          <value>disable</value>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="version">
-          <value type="string">1.2</value>
+          <choice>
+            <value type="string">1.0</value>
+            <value type="string">1.1</value>
+            <value type="string">1.2</value>
+          </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="baseProfile">
-          <value type="string">tiny</value>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="contentScriptType">
-          <data type="string"/>
+          <choice>
+            <value type="string">none</value>
+            <value type="string">tiny</value>
+            <value type="string">basic</value>
+            <value type="string">full</value>
+          </choice>
         </attribute>
       </optional>
       <optional>
@@ -406,22 +408,6 @@
           <choice>
             <value type="string">none</value>
             <data type="string"/>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="timelineBegin">
-          <choice>
-            <value type="string">onLoad</value>
-            <value type="string">onStart</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="playbackOrder">
-          <choice>
-            <value type="string">all</value>
-            <value type="string">forwardOnly</value>
           </choice>
         </attribute>
       </optional>
@@ -438,8 +424,6 @@
           <ref name="polygon"/>
           <ref name="solidColor"/>
           <ref name="textArea"/>
-          <ref name="linearGradient"/>
-          <ref name="radialGradient"/>
           <ref name="text"/>
           <ref name="g"/>
           <ref name="defs"/>
@@ -532,31 +516,6 @@
             <value>default</value>
             <value>preserve</value>
           </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
         </attribute>
       </optional>
       <interleave>
@@ -743,31 +702,6 @@
             <value>default</value>
             <value>preserve</value>
           </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
         </attribute>
       </optional>
       <interleave>
@@ -1161,8 +1095,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -1227,31 +1163,6 @@
         </group>
       </interleave>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="d">
           <data type="string"/>
         </attribute>
@@ -1261,13 +1172,7 @@
           <data type="string"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="style">
-          <data type="string"/>
-        </attribute>
-      </optional>
       <zeroOrMore>
-        <!-- Added to SVG-1.2-RFC (Inkscape) -->
         <choice>
           <ref name="desc"/>
           <ref name="svgTitle"/>
@@ -1565,8 +1470,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -1631,31 +1538,6 @@
         </group>
       </interleave>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="x">
           <data type="string"/>
         </attribute>
@@ -1685,13 +1567,7 @@
           <data type="string"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="style">
-          <data type="string"/>
-        </attribute>
-      </optional>
       <zeroOrMore>
-        <!-- Added to SVG-1.2-RFC (Inkscape) -->
         <choice>
           <ref name="desc"/>
           <ref name="svgTitle"/>
@@ -1989,8 +1865,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -2055,31 +1933,6 @@
         </group>
       </interleave>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="cx">
           <data type="string"/>
         </attribute>
@@ -2094,13 +1947,7 @@
           <data type="string"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="style">
-          <data type="string"/>
-        </attribute>
-      </optional>
       <zeroOrMore>
-        <!-- Added to SVG-1.2-RFC (Inkscape) -->
         <choice>
           <ref name="desc"/>
           <ref name="svgTitle"/>
@@ -2398,8 +2245,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -2463,31 +2312,6 @@
           </optional>
         </group>
       </interleave>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
       <optional>
         <attribute name="x1">
           <data type="string"/>
@@ -2806,8 +2630,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -2872,31 +2698,6 @@
         </group>
       </interleave>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="rx">
           <data type="string"/>
         </attribute>
@@ -2916,13 +2717,7 @@
           <data type="string"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="style">
-          <data type="string"/>
-        </attribute>
-      </optional>
       <zeroOrMore>
-        <!-- Added to SVG-1.2-RFC (Inkscape) -->
         <choice>
           <ref name="desc"/>
           <ref name="svgTitle"/>
@@ -3220,8 +3015,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -3285,31 +3082,6 @@
           </optional>
         </group>
       </interleave>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
       <optional>
         <attribute name="points">
           <data type="string"/>
@@ -3613,8 +3385,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -3679,42 +3453,11 @@
         </group>
       </interleave>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="points">
           <data type="string"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="style">
-          <data type="string"/>
-        </attribute>
-      </optional>
       <zeroOrMore>
-        <!-- Added to SVG-1.2-RFC (Inkscape) -->
         <choice>
           <ref name="desc"/>
           <ref name="svgTitle"/>
@@ -3921,8 +3664,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -4276,8 +4021,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -4422,31 +4169,6 @@
             <value>default</value>
             <value>preserve</value>
           </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
         </attribute>
       </optional>
       <optional>
@@ -4493,767 +4215,6 @@
           <ref name="a_2"/>
         </choice>
       </oneOrMore>
-    </element>
-  </define>
-  <define name="linearGradient">
-    <element name="linearGradient">
-      <interleave>
-        <group>
-          <optional>
-            <attribute name="fill-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="fill">
-              <choice>
-                <value>none</value>
-                <ref name="rfc-color"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="fill-rule">
-              <choice>
-                <value>inherit</value>
-                <value>nonzero</value>
-                <value>evenodd</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-dasharray">
-              <choice>
-                <value>inherit</value>
-                <value>none</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-dashoffset">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-linecap">
-              <choice>
-                <value>butt</value>
-                <value>round</value>
-                <value>square</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-linejoin">
-              <choice>
-                <value>miter</value>
-                <value>round</value>
-                <value>bevel</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-miterlimit">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-width">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="color">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="color-rendering">
-              <choice>
-                <value>auto</value>
-                <value>optimizeSpeed</value>
-                <value>optimizeQuality</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <optional>
-          <attribute name="vector-effect">
-            <choice>
-              <value>none</value>
-              <value>non-scaling-stroke</value>
-              <value>inherit</value>
-            </choice>
-          </attribute>
-        </optional>
-        <group>
-          <optional>
-            <attribute name="direction">
-              <choice>
-                <value>ltr</value>
-                <value>rtl</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="unicode-bidi">
-              <choice>
-                <value>normal</value>
-                <value>embed</value>
-                <value>bidi-override</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="solid-color">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="solid-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="display-align">
-              <choice>
-                <value>auto</value>
-                <value>before</value>
-                <value>center</value>
-                <value>after</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="line-increment">
-              <choice>
-                <value>auto</value>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="stop-color">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stop-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="font-family">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-size">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-style">
-              <choice>
-                <value>normal</value>
-                <value>italic</value>
-                <value>oblique</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-variant">
-              <choice>
-                <value>normal</value>
-                <value>small-caps</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-weight">
-              <choice>
-                <value>normal</value>
-                <value>bold</value>
-                <value>bolder</value>
-                <value>lighter</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="text-anchor">
-              <choice>
-                <value>start</value>
-                <value>middle</value>
-                <value>end</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="text-align">
-              <choice>
-                <value>start</value>
-                <value>center</value>
-                <value>end</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-      </interleave>
-      <optional>
-        <attribute name="gradientUnits">
-          <choice>
-            <value>userSpaceOnUse</value>
-            <value>objectBoundingBox</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <choice>
-          <attribute name="id">
-            <data type="NCName"/>
-          </attribute>
-          <attribute name="xml:id">
-            <data type="NCName"/>
-          </attribute>
-        </choice>
-      </optional>
-      <optional>
-        <attribute name="xml:base">
-          <choice>
-            <data type="anyURI"/>
-            <data type="string"/>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="xml:lang">
-          <optional>
-            <data type="language"/>
-          </optional>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="class">
-          <data type="NMTOKENS"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="role">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="rel">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="rev">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="typeof">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="content">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="datatype">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="resource">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="about">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="property">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="xml:space">
-          <choice>
-            <value>default</value>
-            <value>preserve</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="x1">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="y1">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="x2">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="y2">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="desc"/>
-          <ref name="svgTitle"/>
-        </choice>
-      </zeroOrMore>
-    </element>
-  </define>
-  <define name="radialGradient">
-    <element name="radialGradient">
-      <interleave>
-        <group>
-          <optional>
-            <attribute name="fill-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="fill">
-              <choice>
-                <value>none</value>
-                <ref name="rfc-color"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="fill-rule">
-              <choice>
-                <value>inherit</value>
-                <value>nonzero</value>
-                <value>evenodd</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-dasharray">
-              <choice>
-                <value>inherit</value>
-                <value>none</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-dashoffset">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-linecap">
-              <choice>
-                <value>butt</value>
-                <value>round</value>
-                <value>square</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-linejoin">
-              <choice>
-                <value>miter</value>
-                <value>round</value>
-                <value>bevel</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-miterlimit">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-width">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="color">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="color-rendering">
-              <choice>
-                <value>auto</value>
-                <value>optimizeSpeed</value>
-                <value>optimizeQuality</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <optional>
-          <attribute name="vector-effect">
-            <choice>
-              <value>none</value>
-              <value>non-scaling-stroke</value>
-              <value>inherit</value>
-            </choice>
-          </attribute>
-        </optional>
-        <group>
-          <optional>
-            <attribute name="direction">
-              <choice>
-                <value>ltr</value>
-                <value>rtl</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="unicode-bidi">
-              <choice>
-                <value>normal</value>
-                <value>embed</value>
-                <value>bidi-override</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="solid-color">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="solid-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="display-align">
-              <choice>
-                <value>auto</value>
-                <value>before</value>
-                <value>center</value>
-                <value>after</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="line-increment">
-              <choice>
-                <value>auto</value>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="stop-color">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stop-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="font-family">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-size">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-style">
-              <choice>
-                <value>normal</value>
-                <value>italic</value>
-                <value>oblique</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-variant">
-              <choice>
-                <value>normal</value>
-                <value>small-caps</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-weight">
-              <choice>
-                <value>normal</value>
-                <value>bold</value>
-                <value>bolder</value>
-                <value>lighter</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="text-anchor">
-              <choice>
-                <value>start</value>
-                <value>middle</value>
-                <value>end</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="text-align">
-              <choice>
-                <value>start</value>
-                <value>center</value>
-                <value>end</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-      </interleave>
-      <optional>
-        <attribute name="gradientUnits">
-          <choice>
-            <value>userSpaceOnUse</value>
-            <value>objectBoundingBox</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <choice>
-          <attribute name="id">
-            <data type="NCName"/>
-          </attribute>
-          <attribute name="xml:id">
-            <data type="NCName"/>
-          </attribute>
-        </choice>
-      </optional>
-      <optional>
-        <attribute name="xml:base">
-          <choice>
-            <data type="anyURI"/>
-            <data type="string"/>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="xml:lang">
-          <optional>
-            <data type="language"/>
-          </optional>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="class">
-          <data type="NMTOKENS"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="role">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="rel">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="rev">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="typeof">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="content">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="datatype">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="resource">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="about">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="property">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="xml:space">
-          <choice>
-            <value>default</value>
-            <value>preserve</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="cx">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="cy">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="r">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="desc"/>
-          <ref name="svgTitle"/>
-        </choice>
-      </zeroOrMore>
     </element>
   </define>
   <define name="text">
@@ -5455,8 +4416,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -5604,31 +4567,6 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="transform">
           <choice>
             <data type="string"/>
@@ -5651,13 +4589,7 @@
           <data type="string"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="style">
-          <data type="string"/>
-        </attribute>
-      </optional>
       <oneOrMore>
-        <!-- Added to SVG-1.2-RFC (Inkscape) -->
         <choice>
           <ref name="desc"/>
           <ref name="svgTitle"/>
@@ -5867,8 +4799,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -6016,31 +4950,6 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="transform">
           <choice>
             <data type="string"/>
@@ -6048,24 +4957,7 @@
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="style">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <!-- Added to SVG-1.2-RFC (for Inkscape) -->
-        <attribute name="visibility">
-          <choice>
-            <value>visible</value>
-            <value>hidden</value>
-            <value>collapse</value>
-            <value>inherit</value>
-          </choice>
-        </attribute>
-      </optional>
       <zeroOrMore>
-        <!-- Added to SVG-1.2-RFC (for LibreOffice) -->
         <choice>
           <ref name="desc"/>
           <ref name="svgTitle"/>
@@ -6078,8 +4970,6 @@
           <ref name="polygon"/>
           <ref name="solidColor"/>
           <ref name="textArea"/>
-          <ref name="linearGradient"/>
-          <ref name="radialGradient"/>
           <ref name="text"/>
           <ref name="g"/>
           <ref name="defs"/>
@@ -6288,8 +5178,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -6449,8 +5341,6 @@
           <ref name="polygon"/>
           <ref name="solidColor"/>
           <ref name="textArea"/>
-          <ref name="linearGradient"/>
-          <ref name="radialGradient"/>
           <ref name="text"/>
           <ref name="g"/>
           <ref name="defs"/>
@@ -6659,8 +5549,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -6808,31 +5700,6 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="transform">
           <choice>
             <data type="string"/>
@@ -6841,22 +5708,22 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:show">
+        <attribute name="xlink:show">
           <value>embed</value>
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:actuate">
+        <attribute name="xlink:actuate">
           <value>onLoad</value>
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:type">
+        <attribute name="xlink:type">
           <value>simple</value>
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:role">
+        <attribute name="xlink:role">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -6864,7 +5731,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:arcrole">
+        <attribute name="xlink:arcrole">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -6872,10 +5739,10 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:title"/>
+        <attribute name="xlink:title"/>
       </optional>
       <optional>
-        <attribute name="ns1:href">
+        <attribute name="xlink:href">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -6983,31 +5850,6 @@
             <value>default</value>
             <value>preserve</value>
           </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
         </attribute>
       </optional>
       <interleave>
@@ -7207,8 +6049,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -7281,7 +6125,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:show">
+        <attribute name="xlink:show">
           <choice>
             <value>new</value>
             <value>replace</value>
@@ -7289,17 +6133,17 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:actuate">
+        <attribute name="xlink:actuate">
           <value>onRequest</value>
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:type">
+        <attribute name="xlink:type">
           <value>simple</value>
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:role">
+        <attribute name="xlink:role">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -7307,7 +6151,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:arcrole">
+        <attribute name="xlink:arcrole">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -7315,10 +6159,10 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:title"/>
+        <attribute name="xlink:title"/>
       </optional>
       <optional>
-        <attribute name="ns1:href">
+        <attribute name="xlink:href">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -7350,381 +6194,10 @@
           <ref name="polygon"/>
           <ref name="solidColor"/>
           <ref name="textArea"/>
-          <ref name="linearGradient"/>
-          <ref name="radialGradient"/>
           <ref name="text"/>
           <ref name="g"/>
           <ref name="defs"/>
           <ref name="use"/>
-        </choice>
-      </zeroOrMore>
-    </element>
-  </define>
-  <define name="stop">
-    <element name="stop">
-      <interleave>
-        <group>
-          <optional>
-            <attribute name="fill-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="fill">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="fill-rule">
-              <choice>
-                <value>inherit</value>
-                <value>nonzero</value>
-                <value>evenodd</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-dasharray">
-              <choice>
-                <value>inherit</value>
-                <value>none</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-dashoffset">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-linecap">
-              <choice>
-                <value>butt</value>
-                <value>round</value>
-                <value>square</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-linejoin">
-              <choice>
-                <value>miter</value>
-                <value>round</value>
-                <value>bevel</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-miterlimit">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stroke-width">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="color">
-              <ref name="rfc-color"/>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="color-rendering">
-              <choice>
-                <value>auto</value>
-                <value>optimizeSpeed</value>
-                <value>optimizeQuality</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <optional>
-          <attribute name="vector-effect">
-            <choice>
-              <value>none</value>
-              <value>non-scaling-stroke</value>
-              <value>inherit</value>
-            </choice>
-          </attribute>
-        </optional>
-        <group>
-          <optional>
-            <attribute name="direction">
-              <choice>
-                <value>ltr</value>
-                <value>rtl</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="unicode-bidi">
-              <choice>
-                <value>normal</value>
-                <value>embed</value>
-                <value>bidi-override</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="solid-color">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="solid-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="display-align">
-              <choice>
-                <value>auto</value>
-                <value>before</value>
-                <value>center</value>
-                <value>after</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="line-increment">
-              <choice>
-                <value>auto</value>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="stop-color">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="stop-opacity">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <attribute name="font-family">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-size">
-              <choice>
-                <value>inherit</value>
-                <data type="string"/>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-style">
-              <choice>
-                <value>normal</value>
-                <value>italic</value>
-                <value>oblique</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-variant">
-              <choice>
-                <value>normal</value>
-                <value>small-caps</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="font-weight">
-              <choice>
-                <value>normal</value>
-                <value>bold</value>
-                <value>bolder</value>
-                <value>lighter</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="text-anchor">
-              <choice>
-                <value>start</value>
-                <value>middle</value>
-                <value>end</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="text-align">
-              <choice>
-                <value>start</value>
-                <value>center</value>
-                <value>end</value>
-                <value>inherit</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
-      </interleave>
-      <optional>
-        <choice>
-          <attribute name="id">
-            <data type="NCName"/>
-          </attribute>
-          <attribute name="xml:id">
-            <data type="NCName"/>
-          </attribute>
-        </choice>
-      </optional>
-      <optional>
-        <attribute name="xml:base">
-          <choice>
-            <data type="anyURI"/>
-            <data type="string"/>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="xml:lang">
-          <optional>
-            <data type="language"/>
-          </optional>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="class">
-          <data type="NMTOKENS"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="role">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="rel">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="rev">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="typeof">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="content">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="datatype">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="resource">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="about">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="property">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="xml:space">
-          <choice>
-            <value>default</value>
-            <value>preserve</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="offset">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="desc"/>
-          <ref name="svgTitle"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -7928,8 +6401,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -8074,31 +6549,6 @@
             <value>default</value>
             <value>preserve</value>
           </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
         </attribute>
       </optional>
       <optional>
@@ -8323,8 +6773,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -8472,31 +6924,6 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="x">
           <data type="string"/>
         </attribute>
@@ -8601,31 +7028,6 @@
             <value>default</value>
             <value>preserve</value>
           </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
         </attribute>
       </optional>
       <interleave>
@@ -8825,8 +7227,10 @@
           <optional>
             <attribute name="font-family">
               <choice>
+                <value>serif</value>
+                <value>sans-serif</value>
+                <value>monospace</value>
                 <value>inherit</value>
-                <data type="string"/>
               </choice>
             </attribute>
           </optional>
@@ -8899,7 +7303,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:show">
+        <attribute name="xlink:show">
           <choice>
             <value>new</value>
             <value>replace</value>
@@ -8907,17 +7311,17 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:actuate">
+        <attribute name="xlink:actuate">
           <value>onRequest</value>
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:type">
+        <attribute name="xlink:type">
           <value>simple</value>
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:role">
+        <attribute name="xlink:role">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -8925,7 +7329,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:arcrole">
+        <attribute name="xlink:arcrole">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -8933,10 +7337,10 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="ns1:title"/>
+        <attribute name="xlink:title"/>
       </optional>
       <optional>
-        <attribute name="ns1:href">
+        <attribute name="xlink:href">
           <choice>
             <data type="anyURI"/>
             <data type="string"/>
@@ -9050,32 +7454,7 @@
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="requiredFeatures">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredExtensions">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFormats">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="requiredFonts">
-          <data type="string"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="systemLanguage">
-          <data type="string"/>
-        </attribute>
-      </optional>
     </element>
   </define>
 </grammar>
-<!-- - - -  End of SVG 1.2 RFC RNC schema -->
+<!-- - - -  End of SVG 1.2 RFC rnc schema -->

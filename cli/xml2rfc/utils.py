@@ -5,8 +5,6 @@
 # Internal utitlity functions.  Not meant for public usage.
 
 import base64
-import calendar
-import math
 import re
 import six
 import textwrap
@@ -25,6 +23,10 @@ except ImportError:
     pass
 
 import xml2rfc.log
+
+
+# ----------------------------------------------------------------------
+# Text wrapping
 
 class TextWrapper(textwrap.TextWrapper):
     """ Subclass that overrides a few things in the standard implementation """
@@ -191,24 +193,9 @@ def justify_inline(left_str, center_str, right_str, width=72):
             output[i] = right[i]
     return ''.join(output)
 
-def formatXmlWhitespace(tree):
-    """ Traverses an lxml.etree ElementTreeand properly formats whitespace
-    
-        We replace newlines with single spaces, unless it ends with a
-        period then we replace the newline with two spaces.
-    """
-    for element in tree.iter():
-        # Preserve formatting on artwork
-        if element.tag != 'artwork':
-            if element.text is not None:
-                element.text = re.sub('\s*\n\s*', ' ', \
-                               re.sub('\.\s*\n\s*', '.  ', \
-                               element.text.lstrip()))
+# ----------------------------------------------------------------------
+# Other text operations
 
-            if element.tail is not None:
-                element.tail = re.sub('\s*\n\s*', ' ', \
-                               re.sub('\.\s*\n\s*', '.  ', \
-                               element.tail))
 
 def ascii_split(text):
     """ We have unicode strings, but we want to split only on the ASCII
@@ -219,102 +206,6 @@ def ascii_split(text):
         return text.split()
     return re.split("[ \t\n\r\f\v]+", text)
 
-
-# ----------------------------------------------------------------------
-# Base conversions.
-# From http://tech.vaultize.com/2011/08/python-patterns-number-to-base-x-and-the-other-way/
-
-DEFAULT_DIGITS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
- 
-def num_to_baseX(num, digits=DEFAULT_DIGITS):
-   if num < 0: return '-' + num_to_baseX(-num)
-   if num == 0: return digits[0]
-   X = len(digits)
-   s = ''
-   while num > 0:
-        s = digits[num % X] + s
-        num //= X
- 
-   return s
- 
-def baseX_to_num(s, digits=DEFAULT_DIGITS):
-   if s[0] == '-': return -1 * baseX_to_num(s[1:])
-   ctopos = dict([(c, pos) for pos, c in enumerate(digits)])
-   X = len(digits)
-   num = 0
-   for c in s: num = num * X + ctopos[c]
-   return num
-
-# ----------------------------------------------------------------------
-# Use the generic base conversion to create list letters
-
-def int2letter(num):
-    return num_to_baseX(num-1, "abcdefghijklmnopqrstuvwxyz")
-
-def int2roman(number):
-    numerals = { 
-        1 : "i", 
-        4 : "iv", 
-        5 : "v", 
-        9 : "ix", 
-        10 : "x", 
-        40 : "xl", 
-        50 : "l", 
-        90 : "xc", 
-        100 : "c", 
-        400 : "cd", 
-        500 : "d", 
-        900 : "cm", 
-        1000 : "m" 
-    }
-    if number > 3999:
-        raise NotImplementedError("Can't handle roman numerals larger than 3999")
-    result = ""
-    for value, numeral in sorted(numerals.items(), reverse=True):
-        while number >= value:
-            result += numeral
-            number -= value
-    return result
-
-
-roman_max_widths = { 1:1,  2:2,  3:3,  4:3,  5:3,  6:3,  7:3,  8:4,  9:4,
-                10:4, 11:4, 12:4, 13:4, 14:4, 15:4, 16:4, 17:4, 18:5, 19:5,
-                20:5, 21:5, 22:5, 23:5, 24:5, 25:5, 26:5, 27:5, 28:6, 29:6, }
-
-def update_roman_max_widths(n):
-    global roman_max_widths
-    if n > 3999:
-        raise NotImplementedError("Can't handle roman numerals larger than 3999")
-    m = len(roman_max_widths)
-    wmax = 0
-    for i in range(n+32):
-        w = len(int2roman(i))
-        if w > wmax:
-            wmax = w
-        if n > m:
-            roman_max_widths[n] = wmax
-
-def num_width(type, num):
-    """
-    Return the largest width taken by the numbering of a list
-    with num items (without punctuation)
-    """
-    global roman_max_widths
-    if   type in ['a','A','c','C',]:
-        return int(math.log(num, 26))+1
-    elif type in ['1','d',]:
-        return int(math.log(num, 10))+1
-    elif type in ['o','O',]:
-        return int(math.log(num, 8))+1
-    elif type in ['x','X',]:
-        return int(math.log(num, 16))+1
-    elif type in ['i','I',]:
-        m = len(roman_max_widths)
-        if num > m:
-            update_roman_max_widths(num)
-        return roman_max_widths[num]
-    else:
-        raise ValueError("Unexpected type argument to num_width(): '%s'" % (type, ))
 
 def urlkeep(text):
     """ Insert word join XML entities on forward slashes and hyphens
@@ -333,6 +224,29 @@ def urlkeep(text):
     if 'https://' in text:
         return re.sub('(?<=https:)\S*', replacer, text)
     return text
+
+# ----------------------------------------------------------------------
+# Tree operations
+
+def formatXmlWhitespace(tree):
+    """ Traverses an lxml.etree ElementTree and properly formats whitespace
+    
+        We replace newlines with single spaces, unless it ends with a
+        period then we replace the newline with two spaces.
+    """
+    for element in tree.iter():
+        # Preserve formatting on artwork
+        if element.tag != 'artwork':
+            if element.text is not None:
+                element.text = re.sub('\s*\n\s*', ' ', \
+                               re.sub('\.\s*\n\s*', '.  ', \
+                               element.text.lstrip()))
+
+            if element.tail is not None:
+                element.tail = re.sub('\s*\n\s*', ' ', \
+                               re.sub('\.\s*\n\s*', '.  ', \
+                               element.tail))
+
 
 def safeReplaceUnicode(tree):
     """ Traverses an lxml.etree ElementTree and replaces unicode characters 
@@ -358,6 +272,46 @@ def safeReplaceUnicode(tree):
             except UnicodeEncodeError:
                 element.attrib[key] = \
                 _replace_unicode_characters(element.attrib[key])
+
+
+def safeTagSlashedWords(tree):
+    """ Traverses an lxml.etree ElementTree and replace words seperated
+        by slashes if they are on the list
+    """
+    slashList = {}
+    for element in _slash_replacements:
+        slashList[element] = re.sub(u'/', u'\u200B/\u200B', element)
+        
+    for element in tree.iter():
+        if element.text:
+            element.text = _replace_slashed_words(element.text, slashList)
+        if element.tail:
+            element.tail = _replace_slashed_words(element.tail, slashList)
+        # I do not know that this makes any sense
+        # for key in element.attrib.keys():
+        #    element.attrib[key] = \
+        #        _replace_slashed_words(element.attrib[key], slashList)
+
+
+def find_duplicate_ids(schema, tree):
+    dups = []
+    # get attributes specified with data type "ID"
+    id_data = schema.xpath("/x:grammar/x:define/x:element//x:attribute/x:data[@type='ID']", namespaces=namespaces)
+    attr = set([ i.getparent().get('name') for i in id_data ])
+    # Check them one by one
+    for a in attr:
+        seen = set()
+        for e in tree.xpath('.//*[@%s]' % a):
+            id = e.get(a)
+            if id != None and id in seen:
+                dups.append((a, id, e))
+            else:
+                seen.add(id)
+    return dups
+
+
+# ----------------------------------------------------------------------
+# Unicode operations
 
 
 def _replace_unicode_characters(str):
@@ -564,24 +518,6 @@ def parse_pi(pi, pis):
         return tmp_dict
     return {}
 
-def safeTagSlashedWords(tree):
-    """ Traverses an lxml.etree ElementTree and replace words seperated
-        by slashes if they are on the list
-    """
-    slashList = {}
-    for element in _slash_replacements:
-        slashList[element] = re.sub(u'/', u'\u200B/\u200B', element)
-        
-    for element in tree.iter():
-        if element.text:
-            element.text = _replace_slashed_words(element.text, slashList)
-        if element.tail:
-            element.tail = _replace_slashed_words(element.tail, slashList)
-        # I do not know that this makes any sense
-        # for key in element.attrib.keys():
-        #    element.attrib[key] = \
-        #        _replace_slashed_words(element.attrib[key], slashList)
-
 
 def _replace_slashed_words(str, slashList):
     """ replace slashed separated words the list with
@@ -613,37 +549,17 @@ def build_dataurl(mime, data, base64enc=False):
         url = "data:%s,%s" % (mime, data)
     return url
 
-def normalize_month(month):
-    if len(month) < 3:
-        xml2rfc.log.error("Expected a month name with at least 3 letters, found '%s'" % (month, ))
-    for i, m in enumerate(calendar.month_name):
-        if m and m.lower().startswith(month.lower()):
-            month = '%02d' % (i)
-    if not month.isdigit():
-        xml2rfc.log.error("Expected a month name, found '%s'" % (month, ))
-    return month
-
 namespaces={
     'x':    'http://relaxng.org/ns/structure/1.0',
     'a':    'http://relaxng.org/ns/compatibility/annotations/1.0',
     'xml':  'http://www.w3.org/XML/1998/namespace',
+    's':    'http://www.w3.org/2000/svg',
 }
 
-def find_duplicate_ids(schema, tree):
-    dups = []
-    # get attributes specified with data type "ID"
-    id_data = schema.xpath("/x:grammar/x:define/x:element//x:attribute/x:data[@type='ID']", namespaces=namespaces)
-    attr = set([ i.getparent().get('name') for i in id_data ])
-    # Check them one by one
-    for a in attr:
-        seen = set()
-        for e in tree.xpath('.//*[@%s]' % a):
-            id = e.get(a)
-            if id != None and id in seen:
-                dups.append((a, id, e))
-            else:
-                seen.add(id)
-    return dups
+
+# ----------------------------------------------------------------------
+# Element operations
+
 
 def isempty(e):
     "Return True if e has no children and no text content"
@@ -664,40 +580,6 @@ def hastext(e):
     items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
     return items
 
-def extract_date(e, today):
-    day = e.get('day')
-    month = e.get('month')
-    year = e.get('year', str(today.year))
-    #
-    if not year.isdigit():
-        xml2rfc.log.warn(e, "Expected a numeric year, but found '%s'" % year)
-        year = today.year
-    year = int(year)
-    if not month:
-        if year == today.year:
-            month = today.month
-    else:
-        if not month.isdigit():
-            month = normalize_month(month)
-        month = int(month)
-    if day:
-        if not day.isdigit():
-            xml2rfc.log.warn(e, "Expected a numeric day, but found '%s'" % day)
-            day = today.day
-        day = int(day)
-    return year, month, day
-
-def format_date(year, month, day, legacy):
-    if month:
-        month = calendar.month_name[month]
-        if day:
-            if legacy:
-                date = '%s %s, %s' % (month, day, year)
-            else:
-                date = '%s %s %s' % (day, month, year)
-        else:
-            date = '%s %s' % (month, year)
-    else:
-        date = '%s' % year
-    return date
-
+def is_htmlblock(h):
+    return h.tag in [ 'address', 'blockquote', 'div', 'dl', 'fieldset', 'form', 'h1', 'h2', 'h3',
+                      'h4', 'h5', 'h6', 'hr', 'noscript', 'ol', 'p', 'pre', 'table', 'ul', ]

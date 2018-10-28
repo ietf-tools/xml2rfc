@@ -245,6 +245,9 @@
       <optional>
         <attribute name="ascii"/>
       </optional>
+      <optional>
+        <attribute name="asciiAbbrev"/>
+      </optional>
       <text/>
     </element>
   </define>
@@ -281,20 +284,16 @@
       <optional>
         <attribute name="xml:lang"/>
       </optional>
-      <choice>
-        <zeroOrMore>
-          <choice>
-            <ref name="city"/>
-            <ref name="code"/>
-            <ref name="country"/>
-            <ref name="region"/>
-            <ref name="street"/>
-          </choice>
-        </zeroOrMore>
-        <oneOrMore>
+      <zeroOrMore>
+        <choice>
+          <ref name="city"/>
+          <ref name="code"/>
+          <ref name="country"/>
           <ref name="postalLine"/>
-        </oneOrMore>
-      </choice>
+          <ref name="region"/>
+          <ref name="street"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="street">
@@ -495,7 +494,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <oneOrMore>
         <choice>
@@ -519,7 +520,9 @@
         <attribute name="title"/>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <attribute name="removeInRFC" a:defaultValue="false">
@@ -582,7 +585,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <attribute name="title"/>
@@ -646,7 +651,9 @@
         <attribute name="xml:lang"/>
       </optional>
       <optional>
-        <attribute name="slugifiedName"/>
+        <attribute name="slugifiedName">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <zeroOrMore>
         <choice>
@@ -674,7 +681,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <attribute name="hangText"/>
@@ -730,7 +739,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <zeroOrMore>
         <choice>
@@ -760,7 +771,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <attribute name="cite"/>
@@ -817,7 +830,9 @@
         <attribute name="counter"/>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <oneOrMore>
         <ref name="t"/>
@@ -855,7 +870,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <oneOrMore>
         <ref name="li"/>
@@ -899,7 +916,9 @@
           </attribute>
         </optional>
         <optional>
-          <attribute name="pn"/>
+          <attribute name="pn">
+            <data type="ID"/>
+          </attribute>
         </optional>
       </optional>
       <oneOrMore>
@@ -921,7 +940,12 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="derivedCounter"/>
+      </optional>
+      <optional>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <choice>
         <oneOrMore>
@@ -988,7 +1012,9 @@
         <attribute name="indent"/>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <oneOrMore>
         <ref name="dt"/>
@@ -1010,7 +1036,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <zeroOrMore>
         <choice>
@@ -1044,7 +1072,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <choice>
         <oneOrMore>
@@ -1198,7 +1228,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <empty/>
     </element>
@@ -1415,7 +1447,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <attribute name="title" a:defaultValue=""/>
@@ -1495,7 +1529,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <ref name="name"/>
@@ -1555,7 +1591,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <attribute name="xml:space"/>
@@ -1613,7 +1651,9 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <attribute name="name" a:defaultValue=""/>
@@ -2015,7 +2055,9 @@
         <attribute name="xml:lang"/>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <optional>
         <attribute name="anchor">
@@ -2052,6 +2094,9 @@
       <attribute name="anchor">
         <data type="ID"/>
       </attribute>
+      <optional>
+        <attribute name="derivedAnchor"/>
+      </optional>
       <optional>
         <attribute name="target"/>
       </optional>

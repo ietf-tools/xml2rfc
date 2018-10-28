@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rfc category="exp" consensus="false" docName="draft-v3-features" indexInclude="true" ipr="trust200902" prepTime="2018-10-11T05:50:27" scripts="Cherokee,Common,Cyrillic,Greek,Latin" sortRefs="true" submissionType="IETF" symRefs="true" tocDepth="3" tocInclude="true" version="3">
+<rfc category="exp" consensus="false" docName="draft-v3-features" indexInclude="true" ipr="trust200902" prepTime="2018-10-28T12:20:18" scripts="Cherokee,Common,Cyrillic,Greek,Latin" sortRefs="true" submissionType="IETF" symRefs="true" tocDepth="3" tocInclude="true" version="3">
   <link rel="canonical" href="https://greenbytes.de/tech/webdav/rfc2629xslt/v3test.html"/>
   <front>
     <title>xml2rfc V3 Feature Tests</title>
@@ -17,7 +17,8 @@
       <organization ascii="Geometry Labs">Εργαστήριο γεωμετρία</organization>
       <address>
         <postal>
-          <city ascii="Phytagorio">Πυθαγόρειο</city>
+          <city ascii="Pythagoreio">Πυθαγόρειο</city>
+          <region ascii="Samos">Σάμος</region>
           <country ascii="Greece">Ελλάδα</country>
         </postal>
       </address>
@@ -36,7 +37,7 @@
       </t>
     </note>
     <boilerplate>
-      <section numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.1">
+      <section anchor="status-of-memo" numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.1">
         <name slugifiedName="name-status-of-this-memo">Status of This Memo</name>
         <t pn="section-boilerplate.1-1">This Internet-Draft is submitted in full conformance with the
         provisions of BCP 78 and BCP 79.</t>
@@ -50,7 +51,7 @@
         material or to cite them other than as "work in progress."</t>
         <t pn="section-boilerplate.1-4">This Internet-Draft will expire on 17 October 2017.</t>
       </section>
-      <section numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.2">
+      <section anchor="copyright" numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.2">
         <name slugifiedName="name-copyright-notice">Copyright Notice</name>
         <t pn="section-boilerplate.2-1">Copyright (c) 2017 IETF Trust and the persons identified as the document
             authors. All rights reserved.</t>
@@ -64,179 +65,189 @@
             Legal Provisions and are provided without warranty as described in the
             Simplified BSD License.</t>
       </section>
-      <section numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.3">
+      <section anchor="toc" numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.3">
         <name slugifiedName="name-table-of-contents">Table of Contents</name>
         <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1">
-          <li pn="section-boilerplate.3-2">
-            <t pn="section-boilerplate.3-3"><xref derivedContent="1" format="counter" target="section-1"/>.  Text Styles</t>
-            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-4">
-              <li pn="section-boilerplate.3-5">
-                <t pn="section-boilerplate.3-6"><xref derivedContent="1.1" format="counter" target="section-1.1"/>.  em/strong</t>
+          <li pn="section-boilerplate.3-1.1">
+            <t pn="section-boilerplate.3-1.1.1"><xref derivedContent="1" format="counter" sectionFormat="of" target="section-1"/>.  <xref derivedContent="Text Styles" format="title" sectionFormat="of" target="name-text-styles">Text Styles</xref></t>
+            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.1.2">
+              <li pn="section-boilerplate.3-1.1.2.1">
+                <t pn="section-boilerplate.3-1.1.2.1.1"><xref derivedContent="1.1" format="counter" sectionFormat="of" target="section-1.1"/>.  <xref derivedContent="em/strong" format="title" sectionFormat="of" target="name-em-strong">em/strong</xref></t>
               </li>
-              <li pn="section-boilerplate.3-7">
-                <t pn="section-boilerplate.3-8"><xref derivedContent="1.2" format="counter" target="section-1.2"/>.  tt</t>
+              <li pn="section-boilerplate.3-1.1.2.2">
+                <t pn="section-boilerplate.3-1.1.2.2.1"><xref derivedContent="1.2" format="counter" sectionFormat="of" target="section-1.2"/>.  <xref derivedContent="tt" format="title" sectionFormat="of" target="name-tt">tt</xref></t>
               </li>
-              <li pn="section-boilerplate.3-9">
-                <t pn="section-boilerplate.3-10"><xref derivedContent="1.3" format="counter" target="section-1.3"/>.  bcp14</t>
+              <li pn="section-boilerplate.3-1.1.2.3">
+                <t pn="section-boilerplate.3-1.1.2.3.1"><xref derivedContent="1.3" format="counter" sectionFormat="of" target="section-1.3"/>.  <xref derivedContent="bcp14" format="title" sectionFormat="of" target="name-bcp14">bcp14</xref></t>
               </li>
-              <li pn="section-boilerplate.3-11">
-                <t pn="section-boilerplate.3-12"><xref derivedContent="1.4" format="counter" target="section-1.4"/>.  sup/sub</t>
-              </li>
-            </ul>
-          </li>
-          <li pn="section-boilerplate.3-13">
-            <t pn="section-boilerplate.3-14"><xref derivedContent="2" format="counter" target="section-2"/>.  Section Titles</t>
-            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-15">
-              <li pn="section-boilerplate.3-16">
-                <t pn="section-boilerplate.3-17"><xref derivedContent="2.1" format="counter" target="titlenameelement"/>.  Title in <tt>&lt;name&gt;</tt> element, including markup</t>
-              </li>
-              <li pn="section-boilerplate.3-18">
-                <t pn="section-boilerplate.3-19"><xref derivedContent="2.2" format="counter" target="titlexref"/>.  Title with <tt>xref</tt>: <xref target="titlexref" format="default" derivedContent="Section 2.2"/></t>
-              </li>
-              <li pn="section-boilerplate.3-20">
-                <t pn="section-boilerplate.3-21"><xref derivedContent="2.3" format="counter" target="titleid"/>.  Title with <cref anchor="toc_titleidid" display="true">id</cref></t>
+              <li pn="section-boilerplate.3-1.1.2.4">
+                <t pn="section-boilerplate.3-1.1.2.4.1"><xref derivedContent="1.4" format="counter" sectionFormat="of" target="section-1.4"/>.  <xref derivedContent="sup/sub" format="title" sectionFormat="of" target="name-sup-sub">sup/sub</xref></t>
               </li>
             </ul>
           </li>
-          <li pn="section-boilerplate.3-22">
-            <t pn="section-boilerplate.3-23"><xref derivedContent="3" format="counter" target="section-3"/>.  Renaming References</t>
-          </li>
-          <li pn="section-boilerplate.3-24">
-            <t pn="section-boilerplate.3-25"><xref derivedContent="4" format="counter" target="lists"/>.  Lists</t>
-            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-26">
-              <li pn="section-boilerplate.3-27">
-                <t pn="section-boilerplate.3-28"><xref derivedContent="4.1" format="counter" target="section-4.1"/>.  Definition Lists</t>
+          <li pn="section-boilerplate.3-1.2">
+            <t pn="section-boilerplate.3-1.2.1"><xref derivedContent="2" format="counter" sectionFormat="of" target="section-2"/>.  <xref derivedContent="Section Titles" format="title" sectionFormat="of" target="name-section-titles">Section Titles</xref></t>
+            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.2.2">
+              <li pn="section-boilerplate.3-1.2.2.1">
+                <t pn="section-boilerplate.3-1.2.2.1.1"><xref derivedContent="2.1" format="counter" sectionFormat="of" target="section-2.1"/>.  <xref derivedContent="Title in &lt;name&gt; element, including markup" format="title" sectionFormat="of" target="name-title-in-name-element-inclu">Title in &lt;name&gt; element, including markup</xref></t>
               </li>
-              <li pn="section-boilerplate.3-29">
-                <t pn="section-boilerplate.3-30"><xref derivedContent="4.2" format="counter" target="section-4.2"/>.  Ordered Lists</t>
-                <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-31">
-                  <li pn="section-boilerplate.3-32">
-                    <t pn="section-boilerplate.3-33"><xref derivedContent="4.2.1" format="counter" target="section-4.2.1"/>.  Styles</t>
+              <li pn="section-boilerplate.3-1.2.2.2">
+                <t pn="section-boilerplate.3-1.2.2.2.1"><xref derivedContent="2.2" format="counter" sectionFormat="of" target="section-2.2"/>.  <xref derivedContent="Title with xref:" format="title" sectionFormat="of" target="name-title-with-xref">Title with xref:</xref></t>
+              </li>
+              <li pn="section-boilerplate.3-1.2.2.3">
+                <t pn="section-boilerplate.3-1.2.2.3.1"><xref derivedContent="2.3" format="counter" sectionFormat="of" target="section-2.3"/>.  <xref derivedContent="Title with id" format="title" sectionFormat="of" target="name-title-with-id">Title with id</xref></t>
+              </li>
+            </ul>
+          </li>
+          <li pn="section-boilerplate.3-1.3">
+            <t pn="section-boilerplate.3-1.3.1"><xref derivedContent="3" format="counter" sectionFormat="of" target="section-3"/>.  <xref derivedContent="Renaming References" format="title" sectionFormat="of" target="name-renaming-references">Renaming References</xref></t>
+          </li>
+          <li pn="section-boilerplate.3-1.4">
+            <t pn="section-boilerplate.3-1.4.1"><xref derivedContent="4" format="counter" sectionFormat="of" target="section-4"/>.  <xref derivedContent="Lists" format="title" sectionFormat="of" target="name-lists">Lists</xref></t>
+            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.4.2">
+              <li pn="section-boilerplate.3-1.4.2.1">
+                <t pn="section-boilerplate.3-1.4.2.1.1"><xref derivedContent="4.1" format="counter" sectionFormat="of" target="section-4.1"/>.  <xref derivedContent="Definition Lists" format="title" sectionFormat="of" target="name-definition-lists">Definition Lists</xref></t>
+              </li>
+              <li pn="section-boilerplate.3-1.4.2.2">
+                <t pn="section-boilerplate.3-1.4.2.2.1"><xref derivedContent="4.2" format="counter" sectionFormat="of" target="section-4.2"/>.  <xref derivedContent="Ordered Lists" format="title" sectionFormat="of" target="name-ordered-lists">Ordered Lists</xref></t>
+                <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.4.2.2.2">
+                  <li pn="section-boilerplate.3-1.4.2.2.2.1">
+                    <t pn="section-boilerplate.3-1.4.2.2.2.1.1"><xref derivedContent="4.2.1" format="counter" sectionFormat="of" target="section-4.2.1"/>.  <xref derivedContent="Styles" format="title" sectionFormat="of" target="name-styles">Styles</xref></t>
                   </li>
                 </ul>
               </li>
-              <li pn="section-boilerplate.3-34">
-                <t pn="section-boilerplate.3-35"><xref derivedContent="4.3" format="counter" target="section-4.3"/>.  Unordered Lists</t>
+              <li pn="section-boilerplate.3-1.4.2.3">
+                <t pn="section-boilerplate.3-1.4.2.3.1"><xref derivedContent="4.3" format="counter" sectionFormat="of" target="section-4.3"/>.  <xref derivedContent="Unordered Lists" format="title" sectionFormat="of" target="name-unordered-lists">Unordered Lists</xref></t>
               </li>
-              <li pn="section-boilerplate.3-36">
-                <t pn="section-boilerplate.3-37"><xref derivedContent="4.4" format="counter" target="section-4.4"/>.  Unordered Lists (multi-paragraph / nested)</t>
+              <li pn="section-boilerplate.3-1.4.2.4">
+                <t pn="section-boilerplate.3-1.4.2.4.1"><xref derivedContent="4.4" format="counter" sectionFormat="of" target="section-4.4"/>.  <xref derivedContent="Unordered Lists (multi-paragraph / nested)" format="title" sectionFormat="of" target="name-unordered-lists-multi-parag">Unordered Lists (multi-paragraph / nested)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-38">
-                <t pn="section-boilerplate.3-39"><xref derivedContent="4.5" format="counter" target="section-4.5"/>.  Unordered Lists (empty=true)</t>
+              <li pn="section-boilerplate.3-1.4.2.5">
+                <t pn="section-boilerplate.3-1.4.2.5.1"><xref derivedContent="4.5" format="counter" sectionFormat="of" target="section-4.5"/>.  <xref derivedContent="Unordered Lists (empty=true)" format="title" sectionFormat="of" target="name-unordered-lists-emptytrue">Unordered Lists (empty=true)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-40">
-                <t pn="section-boilerplate.3-41"><xref derivedContent="4.6" format="counter" target="section-4.6"/>.  Referring to list items</t>
-              </li>
-            </ul>
-          </li>
-          <li pn="section-boilerplate.3-42">
-            <t pn="section-boilerplate.3-43"><xref derivedContent="5" format="counter" target="section-5"/>.  <tt>&lt;blockquote&gt;</tt></t>
-          </li>
-          <li pn="section-boilerplate.3-44">
-            <t pn="section-boilerplate.3-45"><xref derivedContent="6" format="counter" target="section-6"/>.  <tt>&lt;aside&gt;</tt></t>
-          </li>
-          <li pn="section-boilerplate.3-46">
-            <t pn="section-boilerplate.3-47"><xref derivedContent="7" format="counter" target="section-7"/>.  <tt>&lt;sourcecode&gt;</tt></t>
-          </li>
-          <li pn="section-boilerplate.3-48">
-            <t pn="section-boilerplate.3-49"><xref derivedContent="8" format="counter" target="section-8"/>.  <tt>SVG</tt></t>
-            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-50">
-              <li pn="section-boilerplate.3-51">
-                <t pn="section-boilerplate.3-52"><xref derivedContent="8.1" format="counter" target="section-8.1"/>.  inline (with @alt attribute)</t>
-              </li>
-              <li pn="section-boilerplate.3-53">
-                <t pn="section-boilerplate.3-54"><xref derivedContent="8.2" format="counter" target="section-8.2"/>.  inline (left)</t>
-              </li>
-              <li pn="section-boilerplate.3-55">
-                <t pn="section-boilerplate.3-56"><xref derivedContent="8.3" format="counter" target="section-8.3"/>.  inline (centered)</t>
-              </li>
-              <li pn="section-boilerplate.3-57">
-                <t pn="section-boilerplate.3-58"><xref derivedContent="8.4" format="counter" target="section-8.4"/>.  inline (right)</t>
-              </li>
-              <li pn="section-boilerplate.3-59">
-                <t pn="section-boilerplate.3-60"><xref derivedContent="8.5" format="counter" target="section-8.5"/>.  included (type svg)</t>
+              <li pn="section-boilerplate.3-1.4.2.6">
+                <t pn="section-boilerplate.3-1.4.2.6.1"><xref derivedContent="4.6" format="counter" sectionFormat="of" target="section-4.6"/>.  <xref derivedContent="Referring to list items" format="title" sectionFormat="of" target="name-referring-to-list-items">Referring to list items</xref></t>
               </li>
             </ul>
           </li>
-          <li pn="section-boilerplate.3-61">
-            <t pn="section-boilerplate.3-62"><xref derivedContent="9" format="counter" target="section-9"/>.  <tt>&lt;figure&gt;</tt>/<tt>&lt;name&gt;</tt></t>
+          <li pn="section-boilerplate.3-1.5">
+            <t pn="section-boilerplate.3-1.5.1"><xref derivedContent="5" format="counter" sectionFormat="of" target="section-5"/>.  <xref derivedContent="&lt;blockquote&gt;" format="title" sectionFormat="of" target="name-blockquote">&lt;blockquote&gt;</xref></t>
           </li>
-          <li pn="section-boilerplate.3-63">
-            <t pn="section-boilerplate.3-64"><xref derivedContent="10" format="counter" target="section-10"/>.  Tables</t>
-            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-65">
-              <li pn="section-boilerplate.3-66">
-                <t pn="section-boilerplate.3-67"><xref derivedContent="10.1" format="counter" target="section-10.1"/>.  Bare Table (unnamed, no anchor, with iref)</t>
+          <li pn="section-boilerplate.3-1.6">
+            <t pn="section-boilerplate.3-1.6.1"><xref derivedContent="6" format="counter" sectionFormat="of" target="section-6"/>.  <xref derivedContent="&lt;aside&gt;" format="title" sectionFormat="of" target="name-aside">&lt;aside&gt;</xref></t>
+          </li>
+          <li pn="section-boilerplate.3-1.7">
+            <t pn="section-boilerplate.3-1.7.1"><xref derivedContent="7" format="counter" sectionFormat="of" target="section-7"/>.  <xref derivedContent="&lt;sourcecode&gt;" format="title" sectionFormat="of" target="name-sourcecode">&lt;sourcecode&gt;</xref></t>
+          </li>
+          <li pn="section-boilerplate.3-1.8">
+            <t pn="section-boilerplate.3-1.8.1"><xref derivedContent="8" format="counter" sectionFormat="of" target="section-8"/>.  <xref derivedContent="SVG" format="title" sectionFormat="of" target="name-svg">SVG</xref></t>
+            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.8.2">
+              <li pn="section-boilerplate.3-1.8.2.1">
+                <t pn="section-boilerplate.3-1.8.2.1.1"><xref derivedContent="8.1" format="counter" sectionFormat="of" target="section-8.1"/>.  <xref derivedContent="inline (with @alt attribute)" format="title" sectionFormat="of" target="name-inline-with-alt-attribute">inline (with @alt attribute)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-68">
-                <t pn="section-boilerplate.3-69"><xref derivedContent="10.2" format="counter" target="section-10.2"/>.  Bare Table (unnamed, with anchor, not referenced)</t>
+              <li pn="section-boilerplate.3-1.8.2.2">
+                <t pn="section-boilerplate.3-1.8.2.2.1"><xref derivedContent="8.2" format="counter" sectionFormat="of" target="section-8.2"/>.  <xref derivedContent="inline (left)" format="title" sectionFormat="of" target="name-inline-left">inline (left)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-70">
-                <t pn="section-boilerplate.3-71"><xref derivedContent="10.3" format="counter" target="section-10.3"/>.  Bare Table (unnamed, with anchor, referenced)</t>
+              <li pn="section-boilerplate.3-1.8.2.3">
+                <t pn="section-boilerplate.3-1.8.2.3.1"><xref derivedContent="8.3" format="counter" sectionFormat="of" target="section-8.3"/>.  <xref derivedContent="inline (centered)" format="title" sectionFormat="of" target="name-inline-centered">inline (centered)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-72">
-                <t pn="section-boilerplate.3-73"><xref derivedContent="10.4" format="counter" target="section-10.4"/>.  Named Table</t>
+              <li pn="section-boilerplate.3-1.8.2.4">
+                <t pn="section-boilerplate.3-1.8.2.4.1"><xref derivedContent="8.4" format="counter" sectionFormat="of" target="section-8.4"/>.  <xref derivedContent="inline (right)" format="title" sectionFormat="of" target="name-inline-right">inline (right)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-74">
-                <t pn="section-boilerplate.3-75"><xref derivedContent="10.5" format="counter" target="section-10.5"/>.  Aligned Table 1</t>
+              <li pn="section-boilerplate.3-1.8.2.5">
+                <t pn="section-boilerplate.3-1.8.2.5.1"><xref derivedContent="8.5" format="counter" sectionFormat="of" target="section-8.5"/>.  <xref derivedContent="included (type svg)" format="title" sectionFormat="of" target="name-included-type-svg">included (type svg)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-76">
-                <t pn="section-boilerplate.3-77"><xref derivedContent="10.6" format="counter" target="section-10.6"/>.  Colspan 1</t>
+            </ul>
+          </li>
+          <li pn="section-boilerplate.3-1.9">
+            <t pn="section-boilerplate.3-1.9.1"><xref derivedContent="9" format="counter" sectionFormat="of" target="section-9"/>.  <xref derivedContent="&lt;figure&gt;/&lt;name&gt;" format="title" sectionFormat="of" target="name-figure-name">&lt;figure&gt;/&lt;name&gt;</xref></t>
+          </li>
+          <li pn="section-boilerplate.3-1.10">
+            <t pn="section-boilerplate.3-1.10.1"><xref derivedContent="10" format="counter" sectionFormat="of" target="section-10"/>.  <xref derivedContent="Tables" format="title" sectionFormat="of" target="name-tables">Tables</xref></t>
+            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.10.2">
+              <li pn="section-boilerplate.3-1.10.2.1">
+                <t pn="section-boilerplate.3-1.10.2.1.1"><xref derivedContent="10.1" format="counter" sectionFormat="of" target="section-10.1"/>.  <xref derivedContent="Bare Table (unnamed, no anchor, with iref)" format="title" sectionFormat="of" target="name-bare-table-unnamed-no-ancho">Bare Table (unnamed, no anchor, with iref)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-78">
-                <t pn="section-boilerplate.3-79"><xref derivedContent="10.7" format="counter" target="section-10.7"/>.  Rowspan 1</t>
+              <li pn="section-boilerplate.3-1.10.2.2">
+                <t pn="section-boilerplate.3-1.10.2.2.1"><xref derivedContent="10.2" format="counter" sectionFormat="of" target="section-10.2"/>.  <xref derivedContent="Bare Table (unnamed, with anchor, not referenced)" format="title" sectionFormat="of" target="name-bare-table-unnamed-with-anc">Bare Table (unnamed, with anchor, not referenced)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-80">
-                <t pn="section-boilerplate.3-81"><xref derivedContent="10.8" format="counter" target="section-10.8"/>.  References</t>
+              <li pn="section-boilerplate.3-1.10.2.3">
+                <t pn="section-boilerplate.3-1.10.2.3.1"><xref derivedContent="10.3" format="counter" sectionFormat="of" target="section-10.3"/>.  <xref derivedContent="Bare Table (unnamed, with anchor, referenced)" format="title" sectionFormat="of" target="name-bare-table-unnamed-with-anch">Bare Table (unnamed, with anchor, referenced)</xref></t>
               </li>
-              <li pn="section-boilerplate.3-82">
-                <t pn="section-boilerplate.3-83"><xref derivedContent="10.9" format="counter" target="section-10.9"/>.  Markup in Table Cells</t>
+              <li pn="section-boilerplate.3-1.10.2.4">
+                <t pn="section-boilerplate.3-1.10.2.4.1"><xref derivedContent="10.4" format="counter" sectionFormat="of" target="section-10.4"/>.  <xref derivedContent="Named Table" format="title" sectionFormat="of" target="name-named-table">Named Table</xref></t>
               </li>
-              <li pn="section-boilerplate.3-84">
-                <t pn="section-boilerplate.3-85"><xref derivedContent="10.10" format="counter" target="section-10.10"/>.  Examples from existing RFCs</t>
-                <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-86">
-                  <li pn="section-boilerplate.3-87">
-                    <t pn="section-boilerplate.3-88"><xref derivedContent="10.10.1" format="counter" target="section-10.10.1"/>.  RFC 7541</t>
+              <li pn="section-boilerplate.3-1.10.2.5">
+                <t pn="section-boilerplate.3-1.10.2.5.1"><xref derivedContent="10.5" format="counter" sectionFormat="of" target="section-10.5"/>.  <xref derivedContent="Aligned Table 1" format="title" sectionFormat="of" target="name-aligned-table-1">Aligned Table 1</xref></t>
+              </li>
+              <li pn="section-boilerplate.3-1.10.2.6">
+                <t pn="section-boilerplate.3-1.10.2.6.1"><xref derivedContent="10.6" format="counter" sectionFormat="of" target="section-10.6"/>.  <xref derivedContent="Colspan 1" format="title" sectionFormat="of" target="name-colspan-1">Colspan 1</xref></t>
+              </li>
+              <li pn="section-boilerplate.3-1.10.2.7">
+                <t pn="section-boilerplate.3-1.10.2.7.1"><xref derivedContent="10.7" format="counter" sectionFormat="of" target="section-10.7"/>.  <xref derivedContent="Rowspan 1" format="title" sectionFormat="of" target="name-rowspan-1">Rowspan 1</xref></t>
+              </li>
+              <li pn="section-boilerplate.3-1.10.2.8">
+                <t pn="section-boilerplate.3-1.10.2.8.1"><xref derivedContent="10.8" format="counter" sectionFormat="of" target="section-10.8"/>.  <xref derivedContent="References" format="title" sectionFormat="of" target="name-references">References</xref></t>
+              </li>
+              <li pn="section-boilerplate.3-1.10.2.9">
+                <t pn="section-boilerplate.3-1.10.2.9.1"><xref derivedContent="10.9" format="counter" sectionFormat="of" target="section-10.9"/>.  <xref derivedContent="Markup in Table Cells" format="title" sectionFormat="of" target="name-markup-in-table-cells">Markup in Table Cells</xref></t>
+              </li>
+              <li pn="section-boilerplate.3-1.10.2.10">
+                <t pn="section-boilerplate.3-1.10.2.10.1"><xref derivedContent="10.10" format="counter" sectionFormat="of" target="section-10.10"/>.  <xref derivedContent="Examples from existing RFCs" format="title" sectionFormat="of" target="name-examples-from-existing-rfcs">Examples from existing RFCs</xref></t>
+                <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.10.2.10.2">
+                  <li pn="section-boilerplate.3-1.10.2.10.2.1">
+                    <t pn="section-boilerplate.3-1.10.2.10.2.1.1"><xref derivedContent="10.10.1" format="counter" sectionFormat="of" target="section-10.10.1"/>.  <xref derivedContent="RFC 7541" format="title" sectionFormat="of" target="name-rfc-7541">RFC 7541</xref></t>
                   </li>
                 </ul>
               </li>
             </ul>
           </li>
-          <li pn="section-boilerplate.3-89">
-            <t pn="section-boilerplate.3-90"><xref derivedContent="11" format="counter" target="section-11"/>.  Section References</t>
-            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-91">
-              <li pn="section-boilerplate.3-92">
-                <t pn="section-boilerplate.3-93"><xref derivedContent="11.1" format="counter" target="section-11.1"/>.  By Section Number</t>
+          <li pn="section-boilerplate.3-1.11">
+            <t pn="section-boilerplate.3-1.11.1"><xref derivedContent="11" format="counter" sectionFormat="of" target="section-11"/>.  <xref derivedContent="Section References" format="title" sectionFormat="of" target="name-section-references">Section References</xref></t>
+            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.11.2">
+              <li pn="section-boilerplate.3-1.11.2.1">
+                <t pn="section-boilerplate.3-1.11.2.1.1"><xref derivedContent="11.1" format="counter" sectionFormat="of" target="section-11.1"/>.  <xref derivedContent="By Section Number" format="title" sectionFormat="of" target="name-by-section-number">By Section Number</xref></t>
               </li>
-              <li pn="section-boilerplate.3-94">
-                <t pn="section-boilerplate.3-95"><xref derivedContent="11.2" format="counter" target="section-11.2"/>.  By Relative URI</t>
+              <li pn="section-boilerplate.3-1.11.2.2">
+                <t pn="section-boilerplate.3-1.11.2.2.1"><xref derivedContent="11.2" format="counter" sectionFormat="of" target="section-11.2"/>.  <xref derivedContent="By Relative URI" format="title" sectionFormat="of" target="name-by-relative-uri">By Relative URI</xref></t>
               </li>
-              <li pn="section-boilerplate.3-96">
-                <t pn="section-boilerplate.3-97"><xref derivedContent="11.3" format="counter" target="section-11.3"/>.  To "References"</t>
+              <li pn="section-boilerplate.3-1.11.2.3">
+                <t pn="section-boilerplate.3-1.11.2.3.1"><xref derivedContent="11.3" format="counter" sectionFormat="of" target="section-11.3"/>.  <xref derivedContent="To &quot;References&quot;" format="title" sectionFormat="of" target="name-to-references">To "References"</xref></t>
               </li>
-              <li pn="section-boilerplate.3-98">
-                <t pn="section-boilerplate.3-99"><xref derivedContent="11.4" format="counter" target="section-11.4"/>.  To Unnumbered Section</t>
+              <li pn="section-boilerplate.3-1.11.2.4">
+                <t pn="section-boilerplate.3-1.11.2.4.1"><xref derivedContent="11.4" format="counter" sectionFormat="of" target="section-11.4"/>.  <xref derivedContent="To Unnumbered Section" format="title" sectionFormat="of" target="name-to-unnumbered-section">To Unnumbered Section</xref></t>
               </li>
             </ul>
           </li>
-          <li pn="section-boilerplate.3-100"><t pn="section-boilerplate.3-101"><xref derivedContent="12" format="counter" target="some.references"/>.  Some References</t></li>
-          <li pn="section-boilerplate.3-102">
-            <t pn="section-boilerplate.3-103"><xref derivedContent="Appendix A" format="counter" target="section-appendix.a"/>.  Change Log</t>
+          <li pn="section-boilerplate.3-1.12">
+            <t pn="section-boilerplate.3-1.12.1"><xref derivedContent="12" format="counter" sectionFormat="of" target="section-12"/>.  <xref derivedContent="Some References" format="title" sectionFormat="of" target="name-some-references">Some References</xref></t>
           </li>
-          <li pn="section-boilerplate.3-104">
-            <t pn="section-boilerplate.3-105"><xref derivedContent="" format="counter" target="contributors"/>Contributors</t>
+          <li pn="section-boilerplate.3-1.13">
+            <t pn="section-boilerplate.3-1.13.1"><xref derivedContent="Appendix A" format="counter" sectionFormat="of" target="section-appendix.a"/>.  <xref derivedContent="Change Log" format="title" sectionFormat="of" target="name-change-log">Change Log</xref></t>
           </li>
-          <li pn="section-boilerplate.3-106">
-            <t pn="section-boilerplate.3-107"><xref derivedContent="" format="counter" target="authors-addresses"/>Authors' Addresses</t>
+          <li pn="section-boilerplate.3-1.14">
+            <t pn="section-boilerplate.3-1.14.1"><xref derivedContent="Appendix B" format="counter" sectionFormat="of" target="section-appendix.b"/>.  <xref derivedContent="Another Change Log only containing Subsections" format="title" sectionFormat="of" target="name-another-change-log-only-con">Another Change Log only containing Subsections</xref></t>
+            <ul bare="true" empty="true" spacing="compact" pn="section-boilerplate.3-1.14.2">
+              <li pn="section-boilerplate.3-1.14.2.1">
+                <t pn="section-boilerplate.3-1.14.2.1.1"><xref derivedContent="B.1" format="counter" sectionFormat="of" target="section-b.1"/>.  <xref derivedContent="Test" format="title" sectionFormat="of" target="name-test">Test</xref></t>
+              </li>
+            </ul>
+          </li>
+          <li pn="section-boilerplate.3-1.15">
+            <t pn="section-boilerplate.3-1.15.1"><xref derivedContent="" format="counter" sectionFormat="of" target="section-appendix.c"/>  <xref derivedContent="Contributors" format="title" sectionFormat="of" target="name-contributors">Contributors</xref></t>
+          </li>
+          <li pn="section-boilerplate.3-1.16">
+            <t pn="section-boilerplate.3-1.16.1"><xref derivedContent="" format="counter" sectionFormat="of" target="section-appendix.e"/>  <xref derivedContent="Authors' Addresses" format="title" sectionFormat="of" target="name-authors-addresses">Authors' Addresses</xref></t>
           </li>
         </ul>
       </section>
     </boilerplate>
   </front>
   <middle>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-1" anchor="section-1">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-1">
       <name slugifiedName="name-text-styles">Text Styles</name>
       <iref item="Text Styles" primary="false" pn="iref-text-styles-1"/>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-1.1" anchor="section-1.1">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-1.1">
         <name slugifiedName="name-em-strong">em/strong</name>
         <t pn="section-1.1-1">
           This is <em>emphasized</em>. This is <strong>strong</strong>.
@@ -244,19 +255,19 @@
           So is <strong><em>this</em></strong>.
         </t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-1.2" anchor="section-1.2">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-1.2">
         <name slugifiedName="name-tt">tt</name>
         <t pn="section-1.2-1">
           This is <tt>monospaced</tt>.
         </t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-1.3" anchor="section-1.3">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-1.3">
         <name slugifiedName="name-bcp14">bcp14</name>
         <t pn="section-1.3-1">
           This is a BCP14 <bcp14>MUST</bcp14>.
         </t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-1.4" anchor="section-1.4">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-1.4">
         <name slugifiedName="name-sup-sub">sup/sub</name>
         <t pn="section-1.4-1">
           This is regular text.
@@ -308,7 +319,7 @@
         </t>
       </section>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-2" anchor="section-2">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-2">
       <name slugifiedName="name-section-titles">Section Titles</name>
       <iref item="Markup in titles" primary="false" pn="iref-markup-in-titles-2"/>
       <section anchor="titlenameelement" numbered="true" removeInRFC="false" toc="include" pn="section-2.1">
@@ -317,11 +328,11 @@
           Test.
         </t>
         <t pn="section-2.1-2">
-          The title of this section is "<xref target="titlenameelement" format="title" derivedContent="Title in  &lt;name&gt;  element, including markup"/>".
+          The title of this section is "<xref target="titlenameelement" format="title" sectionFormat="of" derivedContent="Title in  &lt;name&gt;  element, including markup"/>".
         </t>
       </section>
       <section anchor="titlexref" numbered="true" removeInRFC="false" toc="include" pn="section-2.2">
-        <name slugifiedName="name-title-with-xref">Title with <tt>xref</tt>: <xref target="titlexref" format="default" derivedContent="Section 2.2"/></name>
+        <name slugifiedName="name-title-with-xref">Title with <tt>xref</tt>: <xref target="titlexref" format="default" sectionFormat="of" derivedContent="Section 2.2"/></name>
         <t pn="section-2.2-1">
           Test.
         </t>
@@ -329,222 +340,222 @@
       <section anchor="titleid" numbered="true" removeInRFC="false" toc="include" pn="section-2.3">
         <name slugifiedName="name-title-with-id">Title with <cref anchor="titleidid" display="true">id</cref></name>
         <t pn="section-2.3-1">
-          Test: a <xref target="titleidid" format="default" derivedContent="reference to the comment">reference to the comment</xref>.
+          Test: a <xref target="titleidid" format="default" sectionFormat="of" derivedContent="reference to the comment">reference to the comment</xref>.
         </t>
       </section>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-3" anchor="section-3">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-3">
       <name slugifiedName="name-renaming-references">Renaming References</name>
       <iref item="Reference renaming" primary="false" pn="iref-reference-renaming-3"/>
       <t pn="section-3-1">
-        Test: <xref target="REFTEST" format="default" derivedContent="[0REFTEST]"/>.
+        Test: <xref target="REFTEST" format="default" sectionFormat="of" derivedContent="0REFTEST"/>.
       </t>
     </section>
     <section anchor="lists" numbered="true" removeInRFC="false" toc="include" pn="section-4">
       <name slugifiedName="name-lists">Lists</name>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.1" anchor="section-4.1">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.1">
         <name slugifiedName="name-definition-lists">Definition Lists</name>
         <t pn="section-4.1-1">newline=default/spacing=default</t>
         <dl newline="true" spacing="normal" pn="section-4.1-2">
-          <dt pn="section-4.1-3">Term1</dt>
-          <dd pn="section-4.1-4">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
-          <dt pn="section-4.1-5">Term2</dt>
-          <dd pn="section-4.1-6">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
+          <dt pn="section-4.1-2.1">Term1</dt>
+          <dd pn="section-4.1-2.2">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
+          <dt pn="section-4.1-2.3">Term2</dt>
+          <dd pn="section-4.1-2.4">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
         </dl>
-        <t pn="section-4.1-7">newline=true/spacing=default</t>
-        <dl newline="true" spacing="normal" pn="section-4.1-8">
-          <dt pn="section-4.1-9">Term1</dt>
-          <dd pn="section-4.1-10">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
-          <dt pn="section-4.1-11">Term2</dt>
-          <dd pn="section-4.1-12">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
+        <t pn="section-4.1-3">newline=true/spacing=default</t>
+        <dl newline="true" spacing="normal" pn="section-4.1-4">
+          <dt pn="section-4.1-4.1">Term1</dt>
+          <dd pn="section-4.1-4.2">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
+          <dt pn="section-4.1-4.3">Term2</dt>
+          <dd pn="section-4.1-4.4">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
         </dl>
-        <t pn="section-4.1-13">newline=false/spacing=default</t>
-        <dl newline="false" spacing="normal" pn="section-4.1-14">
-          <dt pn="section-4.1-15">Term1</dt>
-          <dd pn="section-4.1-16">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
-          <dt pn="section-4.1-17">Term2</dt>
-          <dd pn="section-4.1-18">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
+        <t pn="section-4.1-5">newline=false/spacing=default</t>
+        <dl newline="false" spacing="normal" pn="section-4.1-6">
+          <dt pn="section-4.1-6.1">Term1</dt>
+          <dd pn="section-4.1-6.2">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
+          <dt pn="section-4.1-6.3">Term2</dt>
+          <dd pn="section-4.1-6.4">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
         </dl>
-        <t pn="section-4.1-19">newline=default/spacing=compact</t>
-        <dl spacing="compact" newline="true" pn="section-4.1-20">
-          <dt pn="section-4.1-21">Term1</dt>
-          <dd pn="section-4.1-22">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
-          <dt pn="section-4.1-23">Term2</dt>
-          <dd pn="section-4.1-24">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
+        <t pn="section-4.1-7">newline=default/spacing=compact</t>
+        <dl spacing="compact" newline="true" pn="section-4.1-8">
+          <dt pn="section-4.1-8.1">Term1</dt>
+          <dd pn="section-4.1-8.2">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
+          <dt pn="section-4.1-8.3">Term2</dt>
+          <dd pn="section-4.1-8.4">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
         </dl>
-        <t pn="section-4.1-25">newline=false/spacing=compact</t>
-        <dl newline="false" spacing="compact" pn="section-4.1-26">
-          <dt pn="section-4.1-27">Term1</dt>
-          <dd pn="section-4.1-28">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
-          <dt pn="section-4.1-29">Term2</dt>
-          <dd pn="section-4.1-30">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
+        <t pn="section-4.1-9">newline=false/spacing=compact</t>
+        <dl newline="false" spacing="compact" pn="section-4.1-10">
+          <dt pn="section-4.1-10.1">Term1</dt>
+          <dd pn="section-4.1-10.2">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
+          <dt pn="section-4.1-10.3">Term2</dt>
+          <dd pn="section-4.1-10.4">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
         </dl>
-        <t pn="section-4.1-31">newline=true/spacing=compact</t>
-        <dl newline="true" spacing="compact" pn="section-4.1-32">
-          <dt pn="section-4.1-33">Term1</dt>
-          <dd pn="section-4.1-34">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
-          <dt pn="section-4.1-35">Term2</dt>
-          <dd pn="section-4.1-36">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
+        <t pn="section-4.1-11">newline=true/spacing=compact</t>
+        <dl newline="true" spacing="compact" pn="section-4.1-12">
+          <dt pn="section-4.1-12.1">Term1</dt>
+          <dd pn="section-4.1-12.2">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</dd>
+          <dt pn="section-4.1-12.3">Term2</dt>
+          <dd pn="section-4.1-12.4">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</dd>
         </dl>
-        <t pn="section-4.1-37">markup</t>
-        <dl newline="true" spacing="compact" pn="section-4.1-38">
-          <dt anchor="listitem" pn="section-4.1-39">
+        <t pn="section-4.1-13">markup</t>
+        <dl newline="true" spacing="compact" pn="section-4.1-14">
+          <dt anchor="listitem" pn="section-4.1-14.1">
             <em>Term1</em>
           </dt>
-          <dd pn="section-4.1-40">Description1. <tt>Description1</tt>. Description1. <strong>Description1</strong>.</dd>
+          <dd pn="section-4.1-14.2">Description1. <tt>Description1</tt>. Description1. <strong>Description1</strong>.</dd>
         </dl>
-        <t pn="section-4.1-41">multi-paragraph</t>
-        <dl newline="true" spacing="normal" pn="section-4.1-42">
-          <dt pn="section-4.1-43">
+        <t pn="section-4.1-15">multi-paragraph</t>
+        <dl newline="true" spacing="normal" pn="section-4.1-16">
+          <dt pn="section-4.1-16.1">
             <em>Term1</em>
           </dt>
-          <dd pn="section-4.1-44">
-            <t pn="section-4.1-45">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</t>
-            <t pn="section-4.1-46">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</t>
+          <dd pn="section-4.1-16.2">
+            <t pn="section-4.1-16.2.1">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</t>
+            <t pn="section-4.1-16.2.2">Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2. Description2.</t>
           </dd>
         </dl>
-        <t pn="section-4.1-47">nested list</t>
-        <dl newline="true" spacing="normal" pn="section-4.1-48">
-          <dt pn="section-4.1-49">Term1</dt>
-          <dd pn="section-4.1-50">
-            <t pn="section-4.1-51">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</t>
-            <dl newline="true" spacing="normal" pn="section-4.1-52">
-              <dt pn="section-4.1-53">Term1b</dt>
-              <dd pn="section-4.1-54">Description 1b.</dd>
+        <t pn="section-4.1-17">nested list</t>
+        <dl newline="true" spacing="normal" pn="section-4.1-18">
+          <dt pn="section-4.1-18.1">Term1</dt>
+          <dd pn="section-4.1-18.2">
+            <t pn="section-4.1-18.2.1">Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1. Description1.</t>
+            <dl newline="true" spacing="normal" pn="section-4.1-18.2.2">
+              <dt pn="section-4.1-18.2.2.1">Term1b</dt>
+              <dd pn="section-4.1-18.2.2.2">Description 1b.</dd>
             </dl>
           </dd>
-          <dt pn="section-4.1-55">Term2</dt>
-          <dd pn="section-4.1-56">
-            <dl newline="true" spacing="normal" pn="section-4.1-57">
-              <dt pn="section-4.1-58">Term2b</dt>
-              <dd pn="section-4.1-59">Description 2b.</dd>
+          <dt pn="section-4.1-18.3">Term2</dt>
+          <dd pn="section-4.1-18.4">
+            <dl newline="true" spacing="normal" pn="section-4.1-18.4.1">
+              <dt pn="section-4.1-18.4.1.1">Term2b</dt>
+              <dd pn="section-4.1-18.4.1.2">Description 2b.</dd>
             </dl>
           </dd>
         </dl>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.2" anchor="section-4.2">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.2">
         <name slugifiedName="name-ordered-lists">Ordered Lists</name>
         <ol spacing="normal" start="1" type="1" pn="section-4.2-1">
-          <li anchor="ol1" pn="section-4.2-2">One</li>
-          <li pn="section-4.2-3">Two <strong>2</strong></li>
-          <li pn="section-4.2-4">Three <em>3</em></li>
+          <li anchor="ol1" pn="section-4.2-1.1" derivedCounter="1.">One</li>
+          <li pn="section-4.2-1.2" derivedCounter="2.">Two <strong>2</strong></li>
+          <li pn="section-4.2-1.3" derivedCounter="3.">Three <em>3</em></li>
         </ol>
-        <t pn="section-4.2-5">
-          List item <xref target="ol1" format="counter" derivedContent="4.2"/> is "One".
+        <t pn="section-4.2-2">
+          List item <xref target="ol1" format="counter" sectionFormat="of" derivedContent="1."/> is "One".
         </t>
-        <ol start="4" spacing="normal" type="1" pn="section-4.2-6">
-          <li anchor="ol4" pn="section-4.2-7">
-            <t pn="section-4.2-8">The quick brown fox jumps over the lazy dog.</t>
-            <t pn="section-4.2-9">
+        <ol start="4" spacing="normal" type="1" pn="section-4.2-3">
+          <li anchor="ol4" pn="section-4.2-3.1" derivedCounter="4.">
+            <t pn="section-4.2-3.1.1">The quick brown fox jumps over the lazy dog.</t>
+            <t pn="section-4.2-3.1.2">
               <em>The quick brown fox jumps over the lazy dog.</em>
             </t>
           </li>
         </ol>
-        <t pn="section-4.2-10">
-          List item <xref target="ol4" format="counter" derivedContent="4.2"/> is the list above.
+        <t pn="section-4.2-4">
+          List item <xref target="ol4" format="counter" sectionFormat="of" derivedContent="4."/> is the list above.
         </t>
-        <ol group="oltest1" anchor="olt1" start="1" spacing="normal" type="1" pn="section-4.2-11">
-          <li pn="section-4.2-12">list 1 / item 1</li>
-          <li pn="section-4.2-13">list 1 / item 2</li>
+        <ol group="oltest1" anchor="olt1" start="1" spacing="normal" type="1" pn="section-4.2-5">
+          <li pn="section-4.2-5.1" derivedCounter="1.">list 1 / item 1</li>
+          <li pn="section-4.2-5.2" derivedCounter="2.">list 1 / item 2</li>
         </ol>
-        <t pn="section-4.2-14">The items below should continue ordering from above.</t>
-        <ol group="oltest1" anchor="olt2" start="3" spacing="normal" type="1" pn="section-4.2-15">
-          <li pn="section-4.2-16">list 1 / item 3</li>
-          <li pn="section-4.2-17">list 1 / item 4</li>
+        <t pn="section-4.2-6">The items below should continue ordering from above.</t>
+        <ol group="oltest1" anchor="olt2" start="3" spacing="normal" type="1" pn="section-4.2-7">
+          <li pn="section-4.2-7.1" derivedCounter="3.">list 1 / item 3</li>
+          <li pn="section-4.2-7.2" derivedCounter="4.">list 1 / item 4</li>
         </ol>
-        <t pn="section-4.2-18">The items below should be numbered starting with 17.</t>
-        <ol group="oltest1" start="17" anchor="olt3" spacing="normal" type="1" pn="section-4.2-19">
-          <li pn="section-4.2-20">list 1 / item 17</li>
-          <li pn="section-4.2-21">list 1 / item 18</li>
+        <t pn="section-4.2-8">The items below should be numbered starting with 17.</t>
+        <ol group="oltest1" start="17" anchor="olt3" spacing="normal" type="1" pn="section-4.2-9">
+          <li pn="section-4.2-9.1" derivedCounter="17.">list 1 / item 17</li>
+          <li pn="section-4.2-9.2" derivedCounter="18.">list 1 / item 18</li>
         </ol>
-        <t pn="section-4.2-22">The items below should be numbered starting with 19.</t>
-        <ol group="oltest1" anchor="olt4" start="5" spacing="normal" type="1" pn="section-4.2-23">
-          <li pn="section-4.2-24">list 1 / item 19</li>
-          <li pn="section-4.2-25">list 1 / item 20</li>
+        <t pn="section-4.2-10">The items below should be numbered starting with 19.</t>
+        <ol group="oltest1" anchor="olt4" start="19" spacing="normal" type="1" pn="section-4.2-11">
+          <li pn="section-4.2-11.1" derivedCounter="19.">list 1 / item 19</li>
+          <li pn="section-4.2-11.2" derivedCounter="20.">list 1 / item 20</li>
         </ol>
-        <section numbered="true" removeInRFC="false" toc="include" pn="section-4.2.1" anchor="section-4.2.1">
+        <section numbered="true" removeInRFC="false" toc="include" pn="section-4.2.1">
           <name slugifiedName="name-styles">Styles</name>
           <t pn="section-4.2.1-1">1</t>
           <ol type="1" spacing="normal" start="1" pn="section-4.2.1-2">
-            <li pn="section-4.2.1-3">1</li>
-            <li pn="section-4.2.1-4">2</li>
-            <li anchor="olstyle1item3" pn="section-4.2.1-5">3 (check: <xref target="olstyle1item3" format="counter" derivedContent="4.2.1"/>)</li>
+            <li pn="section-4.2.1-2.1" derivedCounter="1.">1</li>
+            <li pn="section-4.2.1-2.2" derivedCounter="2.">2</li>
+            <li anchor="olstyle1item3" pn="section-4.2.1-2.3" derivedCounter="3.">3 (check: <xref target="olstyle1item3" format="counter" sectionFormat="of" derivedContent="3."/>)</li>
           </ol>
-          <t pn="section-4.2.1-6">a</t>
-          <ol type="a" spacing="normal" start="1" pn="section-4.2.1-7">
-            <li pn="section-4.2.1-8">a</li>
-            <li pn="section-4.2.1-9">b</li>
-            <li anchor="olstyleaitem3" pn="section-4.2.1-10">c (check: <xref target="olstyleaitem3" format="counter" derivedContent="4.2.1"/>)</li>
+          <t pn="section-4.2.1-3">a</t>
+          <ol type="a" spacing="normal" start="1" pn="section-4.2.1-4">
+            <li pn="section-4.2.1-4.1" derivedCounter="a.">a</li>
+            <li pn="section-4.2.1-4.2" derivedCounter="b.">b</li>
+            <li anchor="olstyleaitem3" pn="section-4.2.1-4.3" derivedCounter="c.">c (check: <xref target="olstyleaitem3" format="counter" sectionFormat="of" derivedContent="c."/>)</li>
           </ol>
-          <t pn="section-4.2.1-11">A</t>
-          <ol type="A" spacing="normal" start="1" pn="section-4.2.1-12">
-            <li pn="section-4.2.1-13">A</li>
-            <li pn="section-4.2.1-14">B</li>
-            <li anchor="olstyleAitem3" pn="section-4.2.1-15">C (check: <xref target="olstyleAitem3" format="counter" derivedContent="4.2.1"/>)</li>
+          <t pn="section-4.2.1-5">A</t>
+          <ol type="A" spacing="normal" start="1" pn="section-4.2.1-6">
+            <li pn="section-4.2.1-6.1" derivedCounter="A.">A</li>
+            <li pn="section-4.2.1-6.2" derivedCounter="B.">B</li>
+            <li anchor="olstyleAitem3" pn="section-4.2.1-6.3" derivedCounter="C.">C (check: <xref target="olstyleAitem3" format="counter" sectionFormat="of" derivedContent="C."/>)</li>
           </ol>
-          <t pn="section-4.2.1-16">i</t>
-          <ol type="i" spacing="normal" start="1" pn="section-4.2.1-17">
-            <li pn="section-4.2.1-18">i</li>
-            <li pn="section-4.2.1-19">ii</li>
-            <li anchor="olstyleiitem3" pn="section-4.2.1-20">iii (check: <xref target="olstyleiitem3" format="counter" derivedContent="4.2.1"/>)</li>
+          <t pn="section-4.2.1-7">i</t>
+          <ol type="i" spacing="normal" start="1" pn="section-4.2.1-8">
+            <li pn="section-4.2.1-8.1" derivedCounter="i.">i</li>
+            <li pn="section-4.2.1-8.2" derivedCounter="ii.">ii</li>
+            <li anchor="olstyleiitem3" pn="section-4.2.1-8.3" derivedCounter="iii.">iii (check: <xref target="olstyleiitem3" format="counter" sectionFormat="of" derivedContent="iii."/>)</li>
           </ol>
-          <t pn="section-4.2.1-21">I</t>
-          <ol type="I" spacing="normal" start="1" pn="section-4.2.1-22">
-            <li pn="section-4.2.1-23">I</li>
-            <li pn="section-4.2.1-24">II</li>
-            <li anchor="olstyleIitem3" pn="section-4.2.1-25">III (check: <xref target="olstyleIitem3" format="counter" derivedContent="4.2.1"/>)</li>
+          <t pn="section-4.2.1-9">I</t>
+          <ol type="I" spacing="normal" start="1" pn="section-4.2.1-10">
+            <li pn="section-4.2.1-10.1" derivedCounter="I.">I</li>
+            <li pn="section-4.2.1-10.2" derivedCounter="II.">II</li>
+            <li anchor="olstyleIitem3" pn="section-4.2.1-10.3" derivedCounter="III.">III (check: <xref target="olstyleIitem3" format="counter" sectionFormat="of" derivedContent="III."/>)</li>
           </ol>
-          <t pn="section-4.2.1-26">REC%d</t>
-          <ol type="REC%d" spacing="normal" start="1" pn="section-4.2.1-27">
-            <li pn="section-4.2.1-28">REC1</li>
-            <li pn="section-4.2.1-29">REC2</li>
-            <li anchor="olstyleRECditem3" pn="section-4.2.1-30">REC3 (check: <xref target="olstyleRECditem3" format="counter" derivedContent="4.2.1"/>)</li>
+          <t pn="section-4.2.1-11">REC%d</t>
+          <ol type="REC%d" spacing="normal" start="1" pn="section-4.2.1-12">
+            <li pn="section-4.2.1-12.1" derivedCounter="REC1">REC1</li>
+            <li pn="section-4.2.1-12.2" derivedCounter="REC2">REC2</li>
+            <li anchor="olstyleRECditem3" pn="section-4.2.1-12.3" derivedCounter="REC3">REC3 (check: <xref target="olstyleRECditem3" format="counter" sectionFormat="of" derivedContent="REC3"/>)</li>
           </ol>
-          <t pn="section-4.2.1-31">REC%c with start=5</t>
-          <ol type="REC%c" start="5" spacing="normal" pn="section-4.2.1-32">
-            <li pn="section-4.2.1-33">e</li>
-            <li pn="section-4.2.1-34">f</li>
-            <li anchor="olstyleRECc5item3" pn="section-4.2.1-35">g (check: <xref target="olstyleRECc5item3" format="counter" derivedContent="4.2.1"/>)</li>
+          <t pn="section-4.2.1-13">REC%c with start=5</t>
+          <ol type="REC%c" start="5" spacing="normal" pn="section-4.2.1-14">
+            <li pn="section-4.2.1-14.1" derivedCounter="RECe">e</li>
+            <li pn="section-4.2.1-14.2" derivedCounter="RECf">f</li>
+            <li anchor="olstyleRECc5item3" pn="section-4.2.1-14.3" derivedCounter="RECg">g (check: <xref target="olstyleRECc5item3" format="counter" sectionFormat="of" derivedContent="RECg"/>)</li>
           </ol>
-          <t pn="section-4.2.1-36">REC%i grouped</t>
-          <ol type="REC%i" group="listi" start="1" spacing="normal" pn="section-4.2.1-37">
-            <li pn="section-4.2.1-38">i</li>
+          <t pn="section-4.2.1-15">REC%i grouped</t>
+          <ol type="REC%i" group="listi" start="1" spacing="normal" pn="section-4.2.1-16">
+            <li pn="section-4.2.1-16.1" derivedCounter="RECi">i</li>
           </ol>
-          <t pn="section-4.2.1-39">REC%i grouped, continued</t>
-          <ol type="REC%i" group="listi" start="2" spacing="normal" pn="section-4.2.1-40">
-            <li anchor="olstyleRECi2item3" pn="section-4.2.1-41">ii (check: <xref target="olstyleRECi2item3" format="counter" derivedContent="4.2.1"/>)</li>
+          <t pn="section-4.2.1-17">REC%i grouped, continued</t>
+          <ol type="REC%i" group="listi" start="2" spacing="normal" pn="section-4.2.1-18">
+            <li anchor="olstyleRECi2item3" pn="section-4.2.1-18.1" derivedCounter="RECii">ii (check: <xref target="olstyleRECi2item3" format="counter" sectionFormat="of" derivedContent="RECii"/>)</li>
           </ol>
         </section>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.3" anchor="section-4.3">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.3">
         <name slugifiedName="name-unordered-lists">Unordered Lists</name>
         <ul anchor="ullabel" bare="false" empty="false" spacing="normal" pn="section-4.3-1">
-          <li pn="section-4.3-2">One</li>
-          <li pn="section-4.3-3">Two <strong>2</strong></li>
-          <li pn="section-4.3-4">Three <em>3</em></li>
+          <li pn="section-4.3-1.1">One</li>
+          <li pn="section-4.3-1.2">Two <strong>2</strong></li>
+          <li pn="section-4.3-1.3">Three <em>3</em></li>
         </ul>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.4" anchor="section-4.4">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.4">
         <name slugifiedName="name-unordered-lists-multi-parag">Unordered Lists (multi-paragraph / nested)</name>
         <ul bare="false" empty="false" spacing="normal" pn="section-4.4-1">
-          <li pn="section-4.4-2">
-            <t keepWithNext="true" pn="section-4.4-3">The quick brown fox jumps over the lazy dog.</t>
-            <t pn="section-4.4-4">
+          <li pn="section-4.4-1.1">
+            <t keepWithNext="true" pn="section-4.4-1.1.1">The quick brown fox jumps over the lazy dog.</t>
+            <t pn="section-4.4-1.1.2">
               <em>The quick brown fox jumps over the lazy dog.</em>
             </t>
           </li>
-          <li pn="section-4.4-5">
-            <t pn="section-4.4-6">Two <strong>2</strong></t>
+          <li pn="section-4.4-1.2">
+            <t pn="section-4.4-1.2.1">Two <strong>2</strong></t>
           </li>
-          <li pn="section-4.4-7">
-            <t pn="section-4.4-8">Three <em>3</em></t>
+          <li pn="section-4.4-1.3">
+            <t pn="section-4.4-1.3.1">Three <em>3</em></t>
           </li>
-          <li pn="section-4.4-9">
-            <t pn="section-4.4-10">sub list</t>
-            <ul bare="false" empty="false" spacing="normal" pn="section-4.4-11">
-              <li pn="section-4.4-12">A</li>
-              <li pn="section-4.4-13">B</li>
-              <li pn="section-4.4-14">C</li>
+          <li pn="section-4.4-1.4">
+            <t pn="section-4.4-1.4.1">sub list</t>
+            <ul bare="false" empty="false" spacing="normal" pn="section-4.4-1.4.2">
+              <li pn="section-4.4-1.4.2.1">A</li>
+              <li pn="section-4.4-1.4.2.2">B</li>
+              <li pn="section-4.4-1.4.2.3">C</li>
             </ul>
           </li>
         </ul>
@@ -557,25 +568,25 @@
           <li>C</li>
         </ul>
       </section>-->
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.5" anchor="section-4.5">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.5">
         <name slugifiedName="name-unordered-lists-emptytrue">Unordered Lists (empty=true)</name>
         <ul empty="true" bare="false" spacing="normal" pn="section-4.5-1">
-          <li pn="section-4.5-2">A</li>
-          <li pn="section-4.5-3">B</li>
-          <li pn="section-4.5-4">C</li>
+          <li pn="section-4.5-1.1">A</li>
+          <li pn="section-4.5-1.2">B</li>
+          <li pn="section-4.5-1.3">C</li>
         </ul>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.6" anchor="section-4.6">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-4.6">
         <name slugifiedName="name-referring-to-list-items">Referring to list items</name>
-        <t pn="section-4.6-1">(default) see <xref target="ol1" format="default" derivedContent="Section 4.2"/>.</t>
-        <t pn="section-4.6-2">(counter) see <xref target="ol1" format="counter" derivedContent="4.2"/>.</t>
-        <t pn="section-4.6-3">(title) see <xref target="ol1" format="title" derivedContent="ol1"/>.</t>
-        <t pn="section-4.6-4">(default, TEXTCONTENT) see <xref target="ol1" format="default" derivedContent="TEXTCONTENT">TEXTCONTENT</xref>.</t>
-        <t pn="section-4.6-5">(counter, TEXTCONTENT) see <xref target="ol1" format="counter" derivedContent="TEXTCONTENT">TEXTCONTENT</xref>.</t>
-        <t pn="section-4.6-6">(title, TEXTCONTENT) see <xref target="ol1" format="title" derivedContent="TEXTCONTENT">TEXTCONTENT</xref>.</t>
+        <t pn="section-4.6-1">(default) see <xref target="listitem" format="default" sectionFormat="of" derivedContent="Section 4.1"/>.</t>
+        <t pn="section-4.6-2">(counter) see <xref target="listitem" format="default" sectionFormat="of" derivedContent="Section 4.1"/>.</t>
+        <t pn="section-4.6-3">(title) see <xref target="listitem" format="title" sectionFormat="of" derivedContent="listitem"/>.</t>
+        <t pn="section-4.6-4">(default, TEXTCONTENT) see <xref target="listitem" format="default" sectionFormat="of" derivedContent="TEXTCONTENT">TEXTCONTENT</xref>.</t>
+        <t pn="section-4.6-5">(counter, TEXTCONTENT) see <xref target="listitem" format="counter" sectionFormat="of" derivedContent="TEXTCONTENT">TEXTCONTENT</xref>.</t>
+        <t pn="section-4.6-6">(title, TEXTCONTENT) see <xref target="listitem" format="title" sectionFormat="of" derivedContent="TEXTCONTENT">TEXTCONTENT</xref>.</t>
       </section>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-5" anchor="section-5">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-5">
       <name slugifiedName="name-blockquote">
         <tt>&lt;blockquote&gt;</tt>
       </name>
@@ -583,42 +594,42 @@
         Let's cite:
       </t>
       <blockquote cite="http://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog" anchor="quote" pn="section-5-2">
-        <t anchor="quickbrownfox" pn="section-5-3">
+        <t anchor="quickbrownfox" pn="section-5-2.1">
           "The quick brown fox jumps over the lazy dog" is an English-language pangram - a phrase that contains all of the letters of the alphabet. It is used to show fonts and to test typewriters and computer keyboards, and in other applications involving all of the letters in the English alphabet. Owing to its brevity and coherence, it has become widely known.
         </t>
-        <ol anchor="blockquotelist" spacing="normal" start="1" type="1" pn="section-5-4">
-          <li pn="section-5-5">one</li>
-          <li pn="section-5-6">two</li>
+        <ol anchor="blockquotelist" spacing="normal" start="1" type="1" pn="section-5-2.2">
+          <li pn="section-5-2.2.1" derivedCounter="1.">one</li>
+          <li pn="section-5-2.2.2" derivedCounter="2.">two</li>
         </ol>
-        <t pn="section-5-7">
-          The parts above have anchors (<xref target="quickbrownfox" format="default" derivedContent="Section 5"/> and <xref target="blockquotelist" format="default" derivedContent="Section 5"/>), but this one does not.
+        <t pn="section-5-2.3">
+          The parts above have anchors (<xref target="quickbrownfox" format="default" sectionFormat="of" derivedContent="Section 5, Paragraph 2.1"/> and <xref target="blockquotelist" format="default" sectionFormat="of" derivedContent="Section 5, Paragraph 2.2"/>), but this one does not.
         </t>
       </blockquote>
-      <t pn="section-5-8">without block content:</t>
-      <blockquote cite="http://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog" anchor="quote2" pn="section-5-9">
+      <t pn="section-5-3">without block content:</t>
+      <blockquote cite="http://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog" anchor="quote2" pn="section-5-4">
           "The quick brown fox jumps over the lazy dog" is an English-language pangram - a phrase that contains all of the letters of the alphabet. It is used to show fonts and to test typewriters and computer keyboards, and in other applications involving all of the letters in the English alphabet. Owing to its brevity and coherence, it has become widely known.
       </blockquote>
-      <t pn="section-5-10">with "quotedFrom":</t>
-      <blockquote anchor="quote3" quotedFrom="Abraham Lincoln" pn="section-5-11">
+      <t pn="section-5-5">with "quotedFrom":</t>
+      <blockquote anchor="quote3" quotedFrom="Abraham Lincoln" cite="http://www.abrahamlincolnonline.org/lincoln/speeches/gettysburg.htm" pn="section-5-6">
         Four score and seven years ago our fathers
         brought forth on this continent, a new nation, conceived
         in Liberty, and dedicated to the proposition that all men
         are created equal.
       </blockquote>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-6" anchor="section-6">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-6">
       <name slugifiedName="name-aside">
         <tt>&lt;aside&gt;</tt>
       </name>
       <aside anchor="aside1" pn="section-6-1">
-        <t anchor="asidep1" pn="section-6-2"><strong>Note:</strong> this is an <tt>aside</tt>.
+        <t anchor="asidep1" pn="section-6-1.1"><strong>Note:</strong> this is an <tt>aside</tt>.
         </t>
-        <t anchor="asidep2" pn="section-6-3">
+        <t anchor="asidep2" pn="section-6-1.2">
           A second paragraph.
         </t>
       </aside>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-7" anchor="section-7">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-7">
       <name slugifiedName="name-sourcecode">
         <tt>&lt;sourcecode&gt;</tt>
       </name>
@@ -627,90 +638,94 @@
       <t pn="section-7-3">Text after...</t>
       <t pn="section-7-4">Inside figure</t>
       <sourcecode markers="false" pn="section-7-5">DEF</sourcecode>
+      <t pn="section-7-6">ABNF</t>
+      <sourcecode type="abnf" markers="false" pn="section-7-7">
+foo = bar
+      </sourcecode>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-8" anchor="section-8">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-8">
       <name slugifiedName="name-svg">
         <tt>SVG</tt>
       </name>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.1" anchor="section-8.1">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.1">
         <name slugifiedName="name-inline-with-alt-attribute">inline (with @alt attribute)</name>
         <t pn="section-8.1-1">Text before...</t>
-        <artwork alt="IETF Logo" align="left" pn="section-8.1-2">
+        <artwork alt="IETF Logo" type="svg" align="left" pn="section-8.1-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/>
-            <path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/>
+            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/>
+            <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/>
             <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
           </svg>
         </artwork>
         <t pn="section-8.1-3">Text after...</t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.2" anchor="section-8.2">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.2">
         <name slugifiedName="name-inline-left">inline (left)</name>
         <t pn="section-8.2-1">Text before...</t>
-        <artwork align="left" pn="section-8.2-2">
+        <artwork align="left" type="svg" pn="section-8.2-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/>
-            <path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/>
+            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/>
+            <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/>
             <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
           </svg>
         </artwork>
         <t pn="section-8.2-3">Text after...</t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.3" anchor="section-8.3">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.3">
         <name slugifiedName="name-inline-centered">inline (centered)</name>
         <t pn="section-8.3-1">Text before...</t>
-        <artwork align="center" pn="section-8.3-2">
+        <artwork align="center" type="svg" pn="section-8.3-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/>
-            <path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/>
+            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/>
+            <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/>
             <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
           </svg>
         </artwork>
         <t pn="section-8.3-3">Text after...</t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.4" anchor="section-8.4">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.4">
         <name slugifiedName="name-inline-right">inline (right)</name>
         <t pn="section-8.4-1">Text before...</t>
-        <artwork align="right" pn="section-8.4-2">
+        <artwork align="right" type="svg" pn="section-8.4-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/>
-            <path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/>
+            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/>
+            <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/>
             <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
           </svg>
         </artwork>
         <t pn="section-8.4-3">Text after...</t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.5" anchor="section-8.5">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-8.5">
         <name slugifiedName="name-included-type-svg">included (type svg)</name>
         <figure align="left" suppress-title="false" pn="figure-1">
-          <name slugifiedName="name-references-of">References of <xref target="RFC7991" format="default" derivedContent="[RFC7991]"/></name>
-          <artwork alt="(external file)" type="svg" align="left" pn="section-8.5-1" originalSrc="rfc7991.references.svg"><![CDATA[
-	  ]]><svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-   <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/><path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/><path d="M3,26h5v5h-5zM168,26h5v5h-5z"/><desc>(external file)</desc></svg></artwork>
-          <artwork alt="(external file with internal ascii art)" type="svg" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22175%22%20height%3D%2257%22%20viewBox%3D%220%200%20175%2057%22%3E%0A%20%20%20%3Cpath%20d%3D%22M60%2C2l12%2C12l-12%2C12l-12-12zM88%2C2l12%2C12l-12%2C12l-12-12zM116%2C2l12%2C12l-12%2C12l-12-12zM18%2C16l12%2C12l-12%2C12l-12-12zM46%2C16l12%2C12l-12%2C12l-12-12zM74%2C16l12%2C12l-12%2C12l-12-12zM102%2C16l12%2C12l-12%2C12l-12-12zM130%2C16l12%2C12l-12%2C12l-12-12zM158%2C16l12%2C12l-12%2C12l-12-12zM60%2C30l12%2C12l-12%2C12l-12-12zM88%2C30l12%2C12l-12%2C12l-12-12zM116%2C30l12%2C12l-12%2C12l-12-12z%22%20/%3E%0A%20%20%20%3Cpath%20stroke-width%3D%220.5%22%20d%3D%22M7%2C27h26l13%2C13l14-14l14%2C14l28-28l14%2C14l14-14l15%2C15h26v3h-27l-14-14l-14%2C14l-14-14l-28%2C28l-14-14l-14%2C14l-14-14h-25z%22/%3E%0A%20%20%20%3Cpath%20d%3D%22M3%2C26h5v5h-5zM168%2C26h5v5h-5z%22/%3E%0A%3C/svg%3E%0A" align="left" pn="section-8.5-2" originalSrc="rfc7991.references.svg"><![CDATA[
+          <name slugifiedName="name-references-of">References of <xref target="RFC7991" format="default" sectionFormat="of" derivedContent="RFC7991"/></name>
+          <artwork alt="(external file)" type="svg" align="left" pn="section-8.5-1.1" originalSrc="rfc7991.references.svg">
+	  <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
+   <desc>(external file)</desc><path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/><path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/><path d="M3,26h5v5h-5zM168,26h5v5h-5z"/></svg></artwork>
+          <artwork alt="(external file with internal ascii art)" type="svg" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22175%22%20height%3D%2257%22%20viewBox%3D%220%200%20175%2057%22%3E%0A%20%20%20%3Cpath%20d%3D%22M60%2C2l12%2C12l-12%2C12l-12-12zM88%2C2l12%2C12l-12%2C12l-12-12zM116%2C2l12%2C12l-12%2C12l-12-12zM18%2C16l12%2C12l-12%2C12l-12-12zM46%2C16l12%2C12l-12%2C12l-12-12zM74%2C16l12%2C12l-12%2C12l-12-12zM102%2C16l12%2C12l-12%2C12l-12-12zM130%2C16l12%2C12l-12%2C12l-12-12zM158%2C16l12%2C12l-12%2C12l-12-12zM60%2C30l12%2C12l-12%2C12l-12-12zM88%2C30l12%2C12l-12%2C12l-12-12zM116%2C30l12%2C12l-12%2C12l-12-12z%22%20fill%3D%22black%22%3E%3C/path%3E%0A%20%20%20%3Cpath%20stroke%3D%22black%22%20stroke-width%3D%220.5%22%20d%3D%22M7%2C27h26l13%2C13l14-14l14%2C14l28-28l14%2C14l14-14l15%2C15h26v3h-27l-14-14l-14%2C14l-14-14l-28%2C28l-14-14l-14%2C14l-14-14h-25z%22%20fill%3D%22white%22%3E%3C/path%3E%0A%20%20%20%3Cpath%20d%3D%22M3%2C26h5v5h-5zM168%2C26h5v5h-5z%22%3E%3C/path%3E%0A%3C/svg%3E%0A" align="left" pn="section-8.5-1.2" originalSrc="rfc7991.references.svg"><![CDATA[
 	     +-----+
 	     |     |
 	     +-----+
 	  ]]></artwork>
         </figure>
-        <t anchor="node1" pn="section-8.5-3">
-          This paragraph has the anchor '<xref target="node1" format="default" derivedContent="Section 8.5"/>'
+        <t anchor="node1" pn="section-8.5-2">
+          This paragraph has the anchor '<xref target="node1" format="default" sectionFormat="of" derivedContent="Section 8.5, Paragraph 2"/>'
           which will be in conflict with an id attribute in the included SVG.
         </t>
       </section>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-9" anchor="section-9">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-9">
       <name slugifiedName="name-figure-name"><tt>&lt;figure&gt;</tt>/<tt>&lt;name&gt;</tt></name>
       <figure align="left" suppress-title="false" pn="figure-2">
         <name slugifiedName="name-figure-name-2"><tt>&lt;figure&gt;</tt>/<tt>&lt;name&gt;</tt></name>
-        <artwork align="left" pn="section-9-1"><![CDATA[ABC]]></artwork>
+        <artwork align="left" pn="section-9-1.1"><![CDATA[ABC]]></artwork>
       </figure>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-10" anchor="section-10">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-10">
       <name slugifiedName="name-tables">Tables</name>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.1" anchor="section-10.1">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.1">
         <name slugifiedName="name-bare-table-unnamed-no-ancho">Bare Table (unnamed, no anchor, with iref)</name>
-        <table align="center" pn="table-1" anchor="table-1">
+        <table align="center" pn="table-1">
           <iref item="Bare Table" primary="false" pn="iref-bare-table-4"/>
           <thead>
             <tr>
@@ -726,7 +741,7 @@
           </tbody>
         </table>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.2" anchor="section-10.2">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.2">
         <name slugifiedName="name-bare-table-unnamed-with-anc">Bare Table (unnamed, with anchor, not referenced)</name>
         <table anchor="table.bare.unreferenced" align="center" pn="table-2">
           <thead>
@@ -743,7 +758,7 @@
           </tbody>
         </table>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.3" anchor="section-10.3">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.3">
         <name slugifiedName="name-bare-table-unnamed-with-anch">Bare Table (unnamed, with anchor, referenced)</name>
         <table anchor="table.bare.referenced" align="center" pn="table-3">
           <thead>
@@ -759,11 +774,11 @@
             </tr>
           </tbody>
         </table>
-        <t pn="section-10.3-1">
-          See <xref target="table.bare.referenced" format="default" derivedContent="Table 3"/>.
+        <t pn="section-10.3-2">
+          See <xref target="table.bare.referenced" format="default" sectionFormat="of" derivedContent="Table 3"/>.
         </t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.4" anchor="section-10.4">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.4">
         <name slugifiedName="name-named-table">Named Table</name>
         <table align="center" pn="table-4">
           <name slugifiedName="name-table-name">Table Name</name>
@@ -781,7 +796,7 @@
           </tbody>
         </table>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.5" anchor="section-10.5">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.5">
         <name slugifiedName="name-aligned-table-1">Aligned Table 1</name>
         <table align="center" pn="table-5">
           <thead>
@@ -800,7 +815,7 @@
           </tbody>
         </table>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.6" anchor="section-10.6">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.6">
         <name slugifiedName="name-colspan-1">Colspan 1</name>
         <table align="center" pn="table-6">
           <thead>
@@ -818,7 +833,7 @@
           </tbody>
         </table>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.7" anchor="section-10.7">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.7">
         <name slugifiedName="name-rowspan-1">Rowspan 1</name>
         <table align="center" pn="table-7">
           <thead>
@@ -841,7 +856,7 @@
           </tbody>
         </table>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.8" anchor="section-10.8">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.8">
         <name slugifiedName="name-references">References</name>
         <table anchor="rt-table" align="center" pn="table-8">
           <thead anchor="rt-thead">
@@ -858,7 +873,7 @@
           </tbody>
         </table>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.9" anchor="section-10.9">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.9">
         <name slugifiedName="name-markup-in-table-cells">Markup in Table Cells</name>
         <table anchor="markuptable" align="center" pn="table-9">
           <thead>
@@ -869,33 +884,33 @@
           </thead>
           <tbody>
             <tr>
-              <td align="left" colspan="1" rowspan="1">The <em>quick</em> <sup>brown</sup> <sub>fox</sub> <strong>jumps</strong> over the lazy <bcp14>OPTIONAL</bcp14> <tt>dog</tt>. <xref target="markuptable" format="default" derivedContent="Table 9"/> <eref target="https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog"/> <cref display="true">comment</cref></td>
+              <td align="left" colspan="1" rowspan="1">The <em>quick</em> <sup>brown</sup> <sub>fox</sub> <strong>jumps</strong> over the lazy <bcp14>OPTIONAL</bcp14> <tt>dog</tt>. <xref target="markuptable" format="default" sectionFormat="of" derivedContent="Table 9"/> <eref target="https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog"/> <cref display="true">comment</cref></td>
               <td align="left" colspan="1" rowspan="1">
-                <t pn="section-10.9-1">
+                <t pn="section-10.9-1.0.0.0.1">
                   Paragraph 1
                 </t>
-                <t pn="section-10.9-2">
+                <t pn="section-10.9-1.0.0.0.2">
                   Paragraph 2
                 </t>
-                <sourcecode markers="false" pn="section-10.9-3">Source code</sourcecode>
-                <ol spacing="normal" start="1" type="1" pn="section-10.9-4">
-                  <li pn="section-10.9-5">Ordered List</li>
+                <sourcecode markers="false" pn="section-10.9-1.0.0.0.3">Source code</sourcecode>
+                <ol spacing="normal" start="1" type="1" pn="section-10.9-1.0.0.0.4">
+                  <li pn="section-10.9-1.0.0.0.4.1" derivedCounter="1.">Ordered List</li>
                 </ol>
-                <ul bare="false" empty="false" spacing="normal" pn="section-10.9-6">
-                  <li pn="section-10.9-7">Unordered List</li>
+                <ul bare="false" empty="false" spacing="normal" pn="section-10.9-1.0.0.0.5">
+                  <li pn="section-10.9-1.0.0.0.5.1">Unordered List</li>
                 </ul>
-                <dl newline="true" spacing="normal" pn="section-10.9-8">
-                  <dt pn="section-10.9-9">Definition</dt>
-                  <dd pn="section-10.9-10">List</dd>
+                <dl newline="true" spacing="normal" pn="section-10.9-1.0.0.0.6">
+                  <dt pn="section-10.9-1.0.0.0.6.1">Definition</dt>
+                  <dd pn="section-10.9-1.0.0.0.6.2">List</dd>
                 </dl>
               </td>
             </tr>
           </tbody>
         </table>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.10" anchor="section-10.10">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-10.10">
         <name slugifiedName="name-examples-from-existing-rfcs">Examples from existing RFCs</name>
-        <section numbered="true" removeInRFC="false" toc="include" pn="section-10.10.1" anchor="section-10.10.1">
+        <section numbered="true" removeInRFC="false" toc="include" pn="section-10.10.1">
           <name slugifiedName="name-rfc-7541">RFC 7541</name>
           <t pn="section-10.10.1-1">
             (&lt;tfoot&gt; added for testing purposes)
@@ -903,10 +918,10 @@
           <table align="center" pn="table-10">
             <thead>
               <tr>
-                <th align="left" colspan="1" rowspan="1">sym</th>
-                <th align="left" colspan="1" rowspan="1">code as bits aligned to MSB                                       </th>
-                <th align="left" colspan="1" rowspan="1">code as hex aligned to LSB</th>
-                <th align="left" colspan="1" rowspan="1">len in bits</th>
+                <th align="center" colspan="1" rowspan="1">sym</th>
+                <th align="center" colspan="1" rowspan="1">code as bits aligned to MSB                                       </th>
+                <th align="center" colspan="1" rowspan="1">code as hex aligned to LSB</th>
+                <th align="center" colspan="1" rowspan="1">len in bits</th>
               </tr>
             </thead>
             <tbody>
@@ -4778,74 +4793,74 @@
         </section>
       </section>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-11" anchor="section-11">
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-11">
       <name slugifiedName="name-section-references">Section References</name>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-11.1" anchor="section-11.1">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-11.1">
         <name slugifiedName="name-by-section-number">By Section Number</name>
         <t pn="section-11.1-1">
           "of":
-          See <relref target="RFC7991" displayFormat="of" section="1" derivedLink="https://rfc-editor/info/rfc7991#section-1" derivedContent="Section 1 of [RFC7991]"/>.
+          See <relref target="RFC7991" displayFormat="of" section="1" derivedLink="https://www.rfc-editor.org/info/rfc7991section-1" derivedContent="RFC7991"/>.
         </t>
         <t pn="section-11.1-2">
           "comma":
-          See <relref target="RFC7991" displayFormat="comma" section="2.2" derivedLink="https://rfc-editor/info/rfc7991#section-2.2" derivedContent="[RFC7991], Section 2.2"/>.
+          See <relref target="RFC7991" displayFormat="comma" section="2.2" derivedLink="https://www.rfc-editor.org/info/rfc7991section-2.2" derivedContent="RFC7991"/>.
         </t>
         <t pn="section-11.1-3">
           "parens":
-          See <relref target="RFC7991" displayFormat="parens" section="A" derivedLink="https://rfc-editor/info/rfc7991#section-A" derivedContent="[RFC7991] (Section A)"/>.
+          See <relref target="RFC7991" displayFormat="parens" section="A" derivedLink="https://www.rfc-editor.org/info/rfc7991section-A" derivedContent="RFC7991"/>.
         </t>
         <t pn="section-11.1-4">
           "bare":
-          See <relref target="RFC7991" displayFormat="bare" section="B" derivedLink="https://rfc-editor/info/rfc7991#section-B" derivedContent="B"/>.
+          See <relref target="RFC7991" displayFormat="bare" section="B" derivedLink="https://www.rfc-editor.org/info/rfc7991section-B" derivedContent="RFC7991"/>.
         </t>
         <t pn="section-11.1-5">
           (default):
-          See <relref target="RFC7991" section="1" derivedLink="https://rfc-editor/info/rfc7991#section-1" derivedContent="Section 1 of [RFC7991]"/>.
+          See <relref target="RFC7991" section="1" displayFormat="of" derivedLink="https://www.rfc-editor.org/info/rfc7991section-1" derivedContent="RFC7991"/>.
         </t>
         <t pn="section-11.1-6">
           With text content:
-          See <relref target="RFC7991" section="2" derivedLink="https://rfc-editor/info/rfc7991#section-2" derivedContent="the wonderful Section 2 of RFC 7991">the wonderful Section 2 of RFC 7991</relref>.
+          See <relref target="RFC7991" section="2" displayFormat="of" derivedLink="https://www.rfc-editor.org/info/rfc7991section-2" derivedContent="the wonderful Section 2 of RFC 7991">the wonderful Section 2 of RFC 7991</relref>.
         </t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-11.2" anchor="section-11.2">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-11.2">
         <name slugifiedName="name-by-relative-uri">By Relative URI</name>
         <t pn="section-11.2-1">
           "of":
-          See <relref target="SVG11" displayFormat="of" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/#intro.html" derivedContent="Section 1 of [SVG11]"/>.
+          See <relref target="SVG11" displayFormat="of" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/intro.html" derivedContent="SVG11"/>.
         </t>
         <t pn="section-11.2-2">
           "comma":
-          See <relref target="SVG11" displayFormat="comma" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/#intro.html" derivedContent="[SVG11], Section 1"/>.
+          See <relref target="SVG11" displayFormat="comma" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/intro.html" derivedContent="SVG11"/>.
         </t>
         <t pn="section-11.2-3">
           "parens":
-          See <relref target="SVG11" displayFormat="parens" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/#intro.html" derivedContent="[SVG11] (Section 1)"/>.
+          See <relref target="SVG11" displayFormat="parens" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/intro.html" derivedContent="SVG11"/>.
         </t>
         <t pn="section-11.2-4">
           "bare":
-          See <relref target="SVG11" displayFormat="bare" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/#intro.html" derivedContent="1"/>.
+          See <relref target="SVG11" displayFormat="bare" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/intro.html" derivedContent="SVG11"/>.
         </t>
         <t pn="section-11.2-5">
           (default):
-          See <relref target="SVG11" displayFormat="of" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/#intro.html" derivedContent="Section 1 of [SVG11]"/>.
+          See <relref target="SVG11" displayFormat="of" section="1" relative="intro.html" derivedLink="http://www.w3.org/TR/2003/REC-SVG11-20030114/intro.html" derivedContent="SVG11"/>.
         </t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-11.3" anchor="section-11.3">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-11.3">
         <name slugifiedName="name-to-references">To "References"</name>
         <t pn="section-11.3-1">
-          See <xref target="some.references" format="default" derivedContent="Section 12"/>, where the title is "<xref format="title" target="some.references" derivedContent="Some References"/>".
+          See <xref target="some.references" format="default" sectionFormat="of" derivedContent="Section 12"/>, where the title is "<xref format="title" target="some.references" sectionFormat="of" derivedContent="Some References"/>".
         </t>
         <t pn="section-11.3-2">
-          See <xref target="some.references" format="default" derivedContent="references below">references below</xref>.
+          See <xref target="some.references" format="default" sectionFormat="of" derivedContent="references below">references below</xref>.
         </t>
       </section>
-      <section numbered="true" removeInRFC="false" toc="include" pn="section-11.4" anchor="section-11.4">
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-11.4">
         <name slugifiedName="name-to-unnumbered-section">To Unnumbered Section</name>
         <t pn="section-11.4-1">
-          See <xref target="contributors" format="default" derivedContent="Section appendix.b"/>, where the title is "<xref format="title" target="contributors" derivedContent="Contributors"/>".
+          See <xref target="contributors" format="default" sectionFormat="of" derivedContent="Appendix C"/>, where the title is "<xref format="title" target="contributors" sectionFormat="of" derivedContent="Contributors"/>".
         </t>
         <t pn="section-11.4-2">
-          See <xref target="contributors" format="default" derivedContent="contributors below">contributors below</xref>.
+          See <xref target="contributors" format="default" sectionFormat="of" derivedContent="contributors below">contributors below</xref>.
         </t>
       </section>
     </section>
@@ -4857,7 +4872,7 @@
       <name slugifiedName="name-some-references">Some References</name>
 
 
-      <reference anchor="REFTEST" quoteTitle="true">
+      <reference anchor="REFTEST" quoteTitle="true" derivedAnchor="0REFTEST">
         <front>
           <title>Reference Test</title>
           <author initials="J." asciiInitials="J." surname="Reschke" asciiSurname="Reschke" fullname="Julian Reschke" asciiFullname="Julian Reschke">
@@ -4866,16 +4881,16 @@
           <date month="November" year="2014"/>
         </front>
         <refcontent>additional prose goes <em>here</em></refcontent>
-        <annotation>Due to a <tt>&lt;displayreference&gt;</tt> element, this should be listed as "<xref target="REFTEST" format="default" derivedContent="[0REFTEST]"/>".</annotation>
+        <annotation>Due to a <tt>&lt;displayreference&gt;</tt> element, this should be listed as "<xref target="REFTEST" derivedContent="0REFTEST"/>".</annotation>
       </reference>
-      <reference anchor="DUP" quoteTitle="true">
+      <reference anchor="DUP" quoteTitle="true" derivedAnchor="DUP">
         <front>
           <title>Reference Duplicate Test</title>
           <author initials="J." surname="Reschke" fullname="Julian Reschke"/>
           <date month="July" year="2016"/>
         </front>
       </reference>
-      <reference anchor="DUPTEST" quoteTitle="true">
+      <reference anchor="DUPTEST" quoteTitle="true" derivedAnchor="DUP">
         <front>
           <title>Another Reference Duplicate Test</title>
           <author initials="J." surname="Reschke" fullname="Julian Reschke"/>
@@ -4883,7 +4898,7 @@
         </front>
         <annotation>Oops.</annotation>
       </reference>
-      <reference anchor="GOST3410" quoteTitle="true">
+      <reference anchor="GOST3410" quoteTitle="true" derivedAnchor="GOST3410">
         <front>
           <title>Information technology.  Cryptographic data security.  Signature and verification processes of [electronic] digital signature.</title>
           <seriesInfo name="GOST" value="R 34.10-2001"/>
@@ -4893,7 +4908,7 @@
         <refcontent>Gosudarstvennyi Standard of Russian Federation, Правительственная комиссия России по стандартам (Government Committee of Russia for Standards)</refcontent>
         <annotation>(In Russian)</annotation>
       </reference>
-      <reference anchor="RFC7991" quoteTitle="true" target="https://rfc-editor/info/rfc7991">
+      <reference anchor="RFC7991" quoteTitle="true" target="https://www.rfc-editor.org/info/rfc7991" derivedAnchor="RFC7991">
         <front>
           <title>The "xml2rfc" Version 3 Vocabulary</title>
           <seriesInfo name="RFC" value="7991"/>
@@ -4901,7 +4916,7 @@
           <date month="December" year="2016"/>
         </front>
       </reference>
-      <reference anchor="RFC7996" target="https://www.rfc-editor.org/info/rfc7996" xml:base="tests/cache/reference.RFC.7996.xml" quoteTitle="true">
+      <reference anchor="RFC7996" target="https://www.rfc-editor.org/info/rfc7996" xml:base="tests/cache/reference.RFC.7996.xml" quoteTitle="true" derivedAnchor="RFC7996">
         <front>
           <title>SVG Drawings for RFCs: SVG 1.2 RFC</title>
           <author initials="N." surname="Brownlee" fullname="N. Brownlee">
@@ -4915,7 +4930,7 @@
         <seriesInfo name="RFC" value="7996"/>
         <seriesInfo name="DOI" value="10.17487/RFC7996"/>
       </reference>
-      <reference anchor="STPETER" quoteTitle="true">
+      <reference anchor="STPETER" quoteTitle="true" derivedAnchor="STPETER">
         <front>
           <title ascii="STPETER's document">ᏚᎢᎵᎬᎢᎬᏒ's document</title>
           <author>
@@ -4924,7 +4939,7 @@
         </front>
         <annotation>A document where the author element specifies just an organization, and both title and organization name have an ASCII equivalent.</annotation>
       </reference>
-      <reference anchor="SVG11" target="http://www.w3.org/TR/2003/REC-SVG11-20030114/" quoteTitle="true">
+      <reference anchor="SVG11" target="http://www.w3.org/TR/2003/REC-SVG11-20030114/" quoteTitle="true" derivedAnchor="SVG11">
         <front>
           <title>Scalable Vector Graphics (SVG) 1.1 Specification</title>
           <seriesInfo name="W3C Recommendation" value="REC-SVG11-20030114"/>
@@ -4938,7 +4953,7 @@
     <eref target="http://www.w3.org/TR/SVG11/"/>.
   </annotation>
       </reference>
-      <reference anchor="UNQUOTED" quoteTitle="false">
+      <reference anchor="UNQUOTED" quoteTitle="false" derivedAnchor="UNQUOTED">
         <front>
           <title>Reference Test</title>
           <author initials="J." surname="Reschke" fullname="Julian Reschke"/>
@@ -4946,7 +4961,7 @@
         </front>
         <annotation>(The title above should not be quoted)</annotation>
       </reference>
-      <reference anchor="XML" target="http://www.w3.org/TR/2008/REC-xml-20081126/" quoteTitle="true">
+      <reference anchor="XML" target="http://www.w3.org/TR/2008/REC-xml-20081126/" quoteTitle="true" derivedAnchor="XML">
         <front>
           <title>Extensible Markup Language (XML) 1.0 (Fifth Edition)</title>
           <seriesInfo name="W3C Recommendation" value="REC-xml-20081126"/>
@@ -4963,84 +4978,92 @@
   </annotation>
       </reference>
     </references>
-    <section removeInRFC="true" numbered="true" toc="include" pn="section-appendix.a" anchor="section-appendix.a">
+    <section removeInRFC="true" numbered="true" toc="include" pn="section-appendix.a">
       <name slugifiedName="name-change-log">Change Log</name>
       <t pn="section-appendix.a-1">This section is to be removed before publishing as an RFC.</t>
       <t pn="section-appendix.a-2">
     Foo bar.
   </t>
     </section>
-    <section numbered="false" anchor="contributors" removeInRFC="false" toc="include" pn="section-appendix.b">
+    <section removeInRFC="true" numbered="true" toc="include" pn="section-appendix.b">
+      <name slugifiedName="name-another-change-log-only-con">Another Change Log only containing Subsections</name>
+      <t pn="section-appendix.b-1">This section is to be removed before publishing as an RFC.</t>
+      <section numbered="true" removeInRFC="false" toc="include" pn="section-b.1">
+        <name slugifiedName="name-test">Test</name>
+        <t pn="section-b.1-1">Foo</t>
+      </section>
+    </section>
+    <section numbered="false" anchor="contributors" removeInRFC="false" toc="include" pn="section-appendix.c">
       <name slugifiedName="name-contributors">Contributors</name>
-      <t pn="section-appendix.b-1">
+      <t pn="section-appendix.c-1">
     Foo bar.
   </t>
     </section>
-    <section numbered="false" removeInRFC="false" toc="exclude" pn="section-appendix.c">
+    <section numbered="false" removeInRFC="false" toc="exclude" pn="section-appendix.d">
       <name slugifiedName="name-index">Index</name>
-      <t anchor="rfc.index.index" pn="section-appendix.c-1">
-        <xref derivedContent="B" format="default" target="rfc.index.B">B</xref>
-        <xref derivedContent="M" format="default" target="rfc.index.M">M</xref>
-        <xref derivedContent="R" format="default" target="rfc.index.R">R</xref>
-        <xref derivedContent="T" format="default" target="rfc.index.T">T</xref>
+      <t anchor="rfc.index.index" pn="section-appendix.d-1">
+        <xref derivedContent="B" format="default" sectionFormat="of" target="rfc.index.B">B</xref>
+        <xref derivedContent="M" format="default" sectionFormat="of" target="rfc.index.M">M</xref>
+        <xref derivedContent="R" format="default" sectionFormat="of" target="rfc.index.R">R</xref>
+        <xref derivedContent="T" format="default" sectionFormat="of" target="rfc.index.T">T</xref>
       </t>
-      <ul bare="true" empty="true" spacing="compact" pn="section-appendix.c-2">
-        <li pn="section-appendix.c-3">
-          <t anchor="rfc.index.B" pn="section-appendix.c-4">
-            <xref derivedContent="B" format="default" target="rfc.index.B">B</xref>
+      <ul bare="true" empty="true" spacing="compact" pn="section-appendix.d-2">
+        <li pn="section-appendix.d-2.1">
+          <t anchor="rfc.index.B" pn="section-appendix.d-2.1.1">
+            <xref derivedContent="B" format="default" sectionFormat="of" target="rfc.index.B">B</xref>
           </t>
-          <ul bare="true" empty="true" spacing="compact" pn="section-appendix.c-5">
-            <li pn="section-appendix.c-6">
-              <t pn="section-appendix.c-7">Bare Table</t>
-              <t pn="section-appendix.c-8">
-                <xref derivedContent="Bare Table" format="default" target="table-1">Bare Table</xref>
+          <ul bare="true" empty="true" spacing="compact" pn="section-appendix.d-2.1.2">
+            <li pn="section-appendix.d-2.1.2.1">
+              <t pn="section-appendix.d-2.1.2.1.1">Bare Table</t>
+              <t pn="section-appendix.d-2.1.2.1.2">
+                <xref derivedContent="Bare Table" format="default" sectionFormat="of" target="table-1">Bare Table</xref>
               </t>
             </li>
           </ul>
         </li>
-        <li pn="section-appendix.c-9">
-          <t anchor="rfc.index.M" pn="section-appendix.c-10">
-            <xref derivedContent="M" format="default" target="rfc.index.M">M</xref>
+        <li pn="section-appendix.d-2.2">
+          <t anchor="rfc.index.M" pn="section-appendix.d-2.2.1">
+            <xref derivedContent="M" format="default" sectionFormat="of" target="rfc.index.M">M</xref>
           </t>
-          <ul bare="true" empty="true" spacing="compact" pn="section-appendix.c-11">
-            <li pn="section-appendix.c-12">
-              <t pn="section-appendix.c-13">Markup in titles</t>
-              <t pn="section-appendix.c-14">
-                <xref derivedContent="Markup in titles" format="default" target="section-2">Markup in titles</xref>
+          <ul bare="true" empty="true" spacing="compact" pn="section-appendix.d-2.2.2">
+            <li pn="section-appendix.d-2.2.2.1">
+              <t pn="section-appendix.d-2.2.2.1.1">Markup in titles</t>
+              <t pn="section-appendix.d-2.2.2.1.2">
+                <xref derivedContent="Markup in titles" format="default" sectionFormat="of" target="section-2">Markup in titles</xref>
               </t>
             </li>
           </ul>
         </li>
-        <li pn="section-appendix.c-15">
-          <t anchor="rfc.index.R" pn="section-appendix.c-16">
-            <xref derivedContent="R" format="default" target="rfc.index.R">R</xref>
+        <li pn="section-appendix.d-2.3">
+          <t anchor="rfc.index.R" pn="section-appendix.d-2.3.1">
+            <xref derivedContent="R" format="default" sectionFormat="of" target="rfc.index.R">R</xref>
           </t>
-          <ul bare="true" empty="true" spacing="compact" pn="section-appendix.c-17">
-            <li pn="section-appendix.c-18">
-              <t pn="section-appendix.c-19">Reference renaming</t>
-              <t pn="section-appendix.c-20">
-                <xref derivedContent="Reference renaming" format="default" target="section-3">Reference renaming</xref>
+          <ul bare="true" empty="true" spacing="compact" pn="section-appendix.d-2.3.2">
+            <li pn="section-appendix.d-2.3.2.1">
+              <t pn="section-appendix.d-2.3.2.1.1">Reference renaming</t>
+              <t pn="section-appendix.d-2.3.2.1.2">
+                <xref derivedContent="Reference renaming" format="default" sectionFormat="of" target="section-3">Reference renaming</xref>
               </t>
             </li>
           </ul>
         </li>
-        <li pn="section-appendix.c-21">
-          <t anchor="rfc.index.T" pn="section-appendix.c-22">
-            <xref derivedContent="T" format="default" target="rfc.index.T">T</xref>
+        <li pn="section-appendix.d-2.4">
+          <t anchor="rfc.index.T" pn="section-appendix.d-2.4.1">
+            <xref derivedContent="T" format="default" sectionFormat="of" target="rfc.index.T">T</xref>
           </t>
-          <ul bare="true" empty="true" spacing="compact" pn="section-appendix.c-23">
-            <li pn="section-appendix.c-24">
-              <t pn="section-appendix.c-25">Text Styles</t>
-              <t pn="section-appendix.c-26">
-                <xref derivedContent="Text Styles" format="default" target="section-1">Text Styles</xref>
+          <ul bare="true" empty="true" spacing="compact" pn="section-appendix.d-2.4.2">
+            <li pn="section-appendix.d-2.4.2.1">
+              <t pn="section-appendix.d-2.4.2.1.1">Text Styles</t>
+              <t pn="section-appendix.d-2.4.2.1.2">
+                <xref derivedContent="Text Styles" format="default" sectionFormat="of" target="section-1">Text Styles</xref>
               </t>
             </li>
           </ul>
         </li>
       </ul>
     </section>
-    <section anchor="authors-addresses" numbered="false" pn="authors-addresses" removeInRFC="false" toc="include">
-      <name>Authors' Addresses</name>
+    <section anchor="authors-addresses" numbered="false" removeInRFC="false" toc="include" pn="section-appendix.e">
+      <name slugifiedName="name-authors-addresses">Authors' Addresses</name>
       <author fullname="Julian Reschke" initials="J." surname="Reschke" role="editor">
         <address>
           <postal>
@@ -5054,7 +5077,8 @@
         <organization ascii="Geometry Labs">Εργαστήριο γεωμετρία</organization>
         <address>
           <postal>
-            <city ascii="Phytagorio">Πυθαγόρειο</city>
+            <city ascii="Pythagoreio">Πυθαγόρειο</city>
+            <region ascii="Samos">Σάμος</region>
             <country ascii="Greece">Ελλάδα</country>
           </postal>
         </address>

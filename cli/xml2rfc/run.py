@@ -136,43 +136,55 @@ def main():
     optionparser.add_option_group(value_options)
 
 
-    formatoptions = optparse.OptionGroup(optionparser, 'Format Options', 
-                                       ' Some formats accept additional format-specific options')
-    formatoptions.add_option('', '--no-headers', dest='omit_headers', action='store_true',
-                           help='with --text: calculate page breaks, and emit form feeds and page top'
-                           ' spacing, but omit headers and footers from the paginated format'
-                       )
-    formatoptions.add_option('', '--legacy', default=True, action='store_true',
-                           help='with --text: use the legacy text formatter, rather than the new one.'
-                       )
-    formatoptions.add_option('', '--legacy-list-symbols', default=False, action='store_true',
-                           help='with --text: use the legacy list bullet symbols, rather than the new ones.'
-                       )
-    formatoptions.add_option('', '--legacy-date-format', default=False, action='store_true',
-                           help='with --text: use the legacy date format, rather than the new one.'
-                       )
-    formatoptions.add_option('', '--list-symbols', metavar='4*CHAR',
-                           help='with --text: use the characters given as list bullet symbols.'
-                       )
-    formatoptions.add_option('', '--v3', dest='legacy', action='store_false',
-                           help='with --text: use the v3 text formatter, rather than the legacy one.'
-                       )
-    formatoptions.add_option('', '--add-xinclude', action='store_true',
-                           help='with --v2v3: replace reference elements with RFC and Internet-Draft'
-                           ' seriesInfo with the appropriate XInclude element'
-                       )
-    formatoptions.add_option('', '--accept-prepped', action='store_true',
-                           help='with --preptool: accept already prepped input'
-                       )
-    formatoptions.add_option('', '--strict', action='store_true',
-                           help='with --v2v3: be strict about stripping some deprecated attributes'
-                       )
-
+    formatoptions = optparse.OptionGroup(optionparser, 'Format Options')
+    formatoptions.add_option('--v3', dest='legacy', action='store_false',
+                           help='with --text and --html: use the v3 formatter, rather than the legacy one.')
+    formatoptions.add_option('--legacy', default=True, action='store_true',
+                           help='with --text and --html: use the legacy text formatter, rather than the v3 one.')
     optionparser.add_option_group(formatoptions)
+
+    textoptions = optparse.OptionGroup(optionparser, 'Text Format Options')
+    textoptions.add_option('--no-headers', dest='omit_headers', action='store_true',
+                           help='calculate page breaks, and emit form feeds and page top'
+                           ' spacing, but omit headers and footers from the paginated format')
+    textoptions.add_option('--legacy-list-symbols', default=False, action='store_true',
+                           help='use the legacy list bullet symbols, rather than the new ones.')
+    textoptions.add_option('--legacy-date-format', default=False, action='store_true',
+                           help='use the legacy date format, rather than the new one.')
+    textoptions.add_option('--list-symbols', metavar='4*CHAR',
+                           help='use the characters given as list bullet symbols.')
+    optionparser.add_option_group(textoptions)
+
+    htmloptions = optparse.OptionGroup(optionparser, 'Html Format Options')
+    htmloptions.add_option('--css', default=None,
+                           help='Use the given CSS file instead of the builtin')
+    htmloptions.add_option('--external-css', action='store_true', default=False,
+                           help='place css in an external file')
+    htmloptions.add_option('--rfc-base-url', default="https://www.rfc-editor.org/info/",
+                           help='Base URL for RFC links')
+    htmloptions.add_option('--id-base-url', default="https://www.ietf.org/archive/id/",
+                           help='Base URL for Internet-Draft links')
+    optionparser.add_option_group(htmloptions)
+
+    v2v3options = optparse.OptionGroup(optionparser, 'V2-V3 Converter Options')
+    v2v3options.add_option('--add-xinclude', action='store_true',
+                           help='replace reference elements with RFC and Internet-Draft'
+                           ' seriesInfo with the appropriate XInclude element')
+    v2v3options.add_option('--strict', action='store_true',
+                           help='be strict about stripping some deprecated attributes')
+    optionparser.add_option_group(v2v3options)
+
+    preptooloptions = optparse.OptionGroup(optionparser, 'Preptool Options')
+    preptooloptions.add_option('--accept-prepped', action='store_true',
+                           help='accept already prepped input')
+    optionparser.add_option_group(preptooloptions)
+
 
     # --- Parse and validate arguments ---------------------------------
 
     (options, args) = optionparser.parse_args()
+    # Some additional values not exposed as options
+    options.doi_base_url = "https://doi.org/"
 
     if len(args) < 1:
         optionparser.print_help()
@@ -330,7 +342,7 @@ def main():
             expwriter.write(filename)
             options.output_filename = None
 
-        if options.html:
+        if options.html and options.legacy:
             filename = options.output_filename
             if not filename:
                 filename = basename + '.html'
@@ -409,8 +421,22 @@ def main():
             xmlrfc.tree = v2v3.convert2to3()
             prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True)
             xmlrfc.tree = prep.prep()
-            textwriter = xml2rfc.TextWriter(xmlrfc, options=options, date=options.date)
-            textwriter.write(filename)
+            writer = xml2rfc.TextWriter(xmlrfc, options=options, date=options.date)
+            writer.write(filename)
+            options.output_filename = None
+
+        if options.html and not options.legacy:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.html'
+                options.output_filename = filename
+            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            xmlrfc.tree = v2v3.convert2to3()
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True)
+            xmlrfc.tree = prep.prep()
+            writer = xml2rfc.HtmlWriter(xmlrfc, options=options, date=options.date)
+            writer.write(filename)
             options.output_filename = None
 
         if options.info:
@@ -428,7 +454,6 @@ def main():
                 json.dump(info, fp, indent=2, ensure_ascii=False, encoding='utf-8')
             if not options.quiet:
                 xml2rfc.log.write('Created file', filename)
-            
 
     except xml2rfc.RfcWriterError as e:
         xml2rfc.log.error('Unable to convert the document: ' + args[0],  
