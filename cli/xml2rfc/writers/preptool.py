@@ -234,7 +234,7 @@ class PrepToolWriter:
         self.prep()
         if self.errors:
             log.write("Not creating output file due to errors (see above)")
-            return
+            return self.errors
 
         # Use lxml's built-in serialization
         file = open(filename, 'w', encoding='utf-8')
