@@ -25,7 +25,8 @@
       <organization ascii="Geometry Labs">&#917;&#961;&#947;&#945;&#963;&#964;&#942;&#961;&#953;&#959; &#947;&#949;&#969;&#956;&#949;&#964;&#961;&#943;&#945;</organization>
       <address>
         <postal>
-          <city ascii="Phytagorio">&#928;&#965;&#952;&#945;&#947;&#972;&#961;&#949;&#953;&#959;</city>
+          <city ascii="Pythagoreio">&#928;&#965;&#952;&#945;&#947;&#972;&#961;&#949;&#953;&#959;</city>
+	  <region ascii="Samos">Σάμος</region>
           <country ascii="Greece">&#917;&#955;&#955;&#940;&#948;&#945;</country>
         </postal>
       </address>
@@ -368,12 +369,12 @@
       </section>
       <section>
         <name>Referring to list items</name>
-        <t>(default) see <xref target="ol1"/>.</t>
-        <t>(counter) see <xref target="ol1" format="counter"/>.</t>
-        <t>(title) see <xref target="ol1" format="title"/>.</t>
-        <t>(default, TEXTCONTENT) see <xref target="ol1">TEXTCONTENT</xref>.</t>
-        <t>(counter, TEXTCONTENT) see <xref target="ol1" format="counter">TEXTCONTENT</xref>.</t>
-        <t>(title, TEXTCONTENT) see <xref target="ol1" format="title">TEXTCONTENT</xref>.</t>
+        <t>(default) see <xref target="listitem"/>.</t>
+        <t>(counter) see <xref target="listitem"/>.</t>
+        <t>(title) see <xref target="listitem" format="title"/>.</t>
+        <t>(default, TEXTCONTENT) see <xref target="listitem">TEXTCONTENT</xref>.</t>
+        <t>(counter, TEXTCONTENT) see <xref target="listitem" format="counter">TEXTCONTENT</xref>.</t>
+        <t>(title, TEXTCONTENT) see <xref target="listitem" format="title">TEXTCONTENT</xref>.</t>
       </section>
     </section>
     <section>
@@ -398,7 +399,7 @@
           "The quick brown fox jumps over the lazy dog" is an English-language pangram - a phrase that contains all of the letters of the alphabet. It is used to show fonts and to test typewriters and computer keyboards, and in other applications involving all of the letters in the English alphabet. Owing to its brevity and coherence, it has become widely known.
       </blockquote>
       <t>with "quotedFrom":</t>
-      <blockquote anchor="quote3" quotedFrom="Abraham Lincoln">
+      <blockquote anchor="quote3" quotedFrom="Abraham Lincoln" cite="http://www.abrahamlincolnonline.org/lincoln/speeches/gettysburg.htm">
         Four score and seven years ago our fathers
         brought forth on this continent, a new nation, conceived
         in Liberty, and dedicated to the proposition that all men
@@ -425,6 +426,10 @@
         <preamble>Inside figure</preamble>
         <sourcecode>DEF</sourcecode>
       </figure>
+      <t>ABNF</t>
+      <sourcecode type="abnf">
+foo = bar
+      </sourcecode>
     </section>
     <section>
       <name><tt>SVG</tt></name>
@@ -432,11 +437,13 @@
         <name>inline (with @alt attribute)</name>
         <figure>
           <preamble>Text before...</preamble>
-          <artwork alt="IETF Logo"><svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/>
-            <path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/>
-            <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
-          </svg></artwork>
+          <artwork alt="IETF Logo" type="svg">
+	     <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
+		<path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/>
+		<path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/>
+		<path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
+	     </svg>
+	  </artwork>
           <postamble>Text after...</postamble>
         </figure>
       </section>
@@ -444,11 +451,13 @@
         <name>inline (left)</name>
         <figure>
           <preamble>Text before...</preamble>
-          <artwork align="left"><svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/>
-            <path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/>
-            <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
-          </svg></artwork>
+          <artwork align="left" type="svg">
+	     <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
+		<path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/>
+		<path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/>
+		<path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
+	     </svg>
+	  </artwork>
           <postamble>Text after...</postamble>
         </figure>
       </section>
@@ -456,11 +465,13 @@
         <name>inline (centered)</name>
         <figure>
           <preamble>Text before...</preamble>
-          <artwork align="center"><svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/>
-            <path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/>
-            <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
-          </svg></artwork>
+          <artwork align="center" type="svg">
+	     <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
+		<path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/>
+		<path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/>
+		<path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
+	     </svg>
+	  </artwork>
           <postamble>Text after...</postamble>
         </figure>
       </section>
@@ -468,11 +479,13 @@
         <name>inline (right)</name>
         <figure>
           <preamble>Text before...</preamble>
-          <artwork align="right"><svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-            <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z"/>
-            <path stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z"/>
-            <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
-          </svg></artwork>
+          <artwork align="right" type="svg">
+	     <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
+		<path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"/>
+		<path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"/>
+		<path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
+	     </svg>
+	  </artwork>
           <postamble>Text after...</postamble>
         </figure>
       </section>
@@ -698,10 +711,10 @@
           <table>
             <thead>
 <tr>
-<th>sym</th>
-<th>code as bits&#x2028;aligned to MSB                                       </th>
-<th>code&#x2028;as hex&#x2028;aligned&#x2028;to LSB</th>
-<th>len&#x2028;in&#x2028;bits</th>
+<th align='center'>sym</th>
+<th align='center'>code as bits&#x2028;aligned to MSB                                       </th>
+<th align='center'>code&#x2028;as hex&#x2028;aligned&#x2028;to LSB</th>
+<th align='center'>len&#x2028;in&#x2028;bits</th>
 </tr>
             </thead>
             <tbody>
@@ -2604,14 +2617,14 @@
 </reference>
 <reference anchor="REFTEST">
   <front>
-    <title >Reference Test</title>
+    <title>Reference Test</title>
     <author initials="J." asciiInitials="J." surname="Reschke" asciiSurname="Reschke" fullname="Julian Reschke" asciiFullname="Julian Reschke">
-      <organization >greenbytes GmbH</organization>
+      <organization>greenbytes GmbH</organization>
     </author>
     <date month="November" year="2014"/>
   </front>
   <refcontent>additional prose goes <em>here</em></refcontent>
-  <annotation>Due to a <tt>&lt;displayreference&gt;</tt> element, this should be listed as "<xref target="REFTEST" format="default"/>".</annotation>
+  <annotation>Due to a <tt>&lt;displayreference&gt;</tt> element, this should be listed as "<xref target="REFTEST" />".</annotation>
 </reference>
 <reference anchor="DUP">
   <front>
@@ -2693,6 +2706,13 @@
   <t>
     Foo bar.
   </t>
+</section>
+<section removeInRFC="true">
+  <name>Another Change Log only containing Subsections</name>
+  <section>
+    <name>Test</name>
+    <t>Foo</t>
+  </section>
 </section>
 <section numbered="false" anchor="contributors">
   <name>Contributors</name>

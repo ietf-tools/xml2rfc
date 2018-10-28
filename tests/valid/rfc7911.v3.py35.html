@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en" class="RFC">
+<head>
+<meta charset="utf-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>Advertisement of Multiple Paths in BGP</title>
+<meta content="Daniel Walton" name="author">
+<meta content="Alvaro Retana" name="author">
+<meta content="Enke Chen" name="author">
+<meta content="John Scudder" name="author">
+<meta content="This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. The essence of the extension is
+      that each path is identified by a Path Identifier in addition to the
+      address prefix." name="description">
+<meta content="xml2rfc 2.11.1" name="generator">
+<link rel="alternate" type="application/rfc+xml" href="tests/input/rfc7911.xml">
+<link rel="license" href="#copyright">
+<style type="text/css">/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.nohang > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #3E8EDE;
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre, code {
+  background-color: #f9f9f9;
+  font-family: 'Roboto Mono', monospace;
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #777;
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.reference dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.reference dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.reference .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #b76427;
+  background-color: rgba(249, 232, 105, 0.3);
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: rgba(249, 232, 105, 0.3);
+  border-radius: 3px;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    font-family: 'Noto Serif', "Times New Roman", Times, serif;
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre, code {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+.art-text pre {
+  line-height: 1.12;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+</style>
+<link href="rfc-local.css" type="text/css" rel="stylesheet">
+<link href="https://dx.doi.org/10.17487/rfc7911" rel="describedBy">
+<link href="urn:issn:2070-1721" rel="item">
+<link href="https://datatracker.ietf.org/doc/draft-ietf-idr-add-paths" rel="convertedFrom">
+</head>
+<body>
+<div class="document-information"><dl id="identifiers">
+<dt class="label-stream">Stream:</dt>
+<dd class="stream">Internet Engineering Task Force (IETF)</dd>
+<dt class="label-rfc">RFC:</dt>
+<dd class="rfc"><a href="https://www.rfc-editor.org/rfc/rfc7911.txt" class="eref">7911</a></dd>
+<dt class="label-category">Category:</dt>
+<dd class="category">Standards Track</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published"><time datetime="2016-07" class="published">July 2016</time></dd>
+<dt class="label-issn">ISSN:</dt>
+<dd class="issn">2070-1721</dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+<div class="author-name">D. Walton</div>
+<div class="org">Cumulus Networks</div>
+</div>
+<div class="author">
+<div class="author-name">A. Retana</div>
+<div class="org">Cisco Systems, Inc.</div>
+</div>
+<div class="author">
+<div class="author-name">E. Chen</div>
+<div class="org">Cisco Systems, Inc.</div>
+</div>
+<div class="author">
+<div class="author-name">J. Scudder</div>
+<div class="org">Juniper Networks</div>
+</div>
+</dd>
+</dl></div>
+<h1 id="title">Advertisement of Multiple Paths in BGP</h1>
+<section id="section-abstract"><h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. The essence of the extension is
+      that each path is identified by a Path Identifier in addition to the
+      address prefix.</p></section><section id="section-boilerplate.1"><div id="status-of-memo">
+<h2 id="name-status-of-this-memo"><a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a></h2>
+<p id="section-boilerplate.1-1">This is an Internet Standards Track document.</p>
+<p id="section-boilerplate.1-2">This document is a product of the Internet Engineering Task Force
+            (IETF).  It represents the consensus of the IETF community.  It has
+            received public review and has been approved for publication by
+            the Internet Engineering Steering Group (IESG).  Further
+            information on Internet Standards is available in Section 2 of 
+            RFC 7841.</p>
+<p id="section-boilerplate.1-3">Information about the current status of this document, any
+            errata, and how to provide feedback on it may be obtained at
+            http://www.rfc-editor.org/info/rfc7911.</p>
+</div></section><section id="section-boilerplate.2"><div id="copyright">
+<h2 id="name-copyright-notice"><a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a></h2>
+<p id="section-boilerplate.2-1">Copyright (c) 2016 IETF Trust and the persons identified as the document
+            authors. All rights reserved.</p>
+<p id="section-boilerplate.2-2">This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (http://trustee.ietf.org/license-info) in effect on the date of
+            publication of this document. Please review these documents carefully,
+            as they describe your rights and restrictions with respect to this
+            document. Code Components extracted from this document must include
+            Simplified BSD License text as described in Section 4.e of the Trust
+            Legal Provisions and are provided without warranty as described in the
+            Simplified BSD License.</p>
+</div></section><section id="section-boilerplate.3"><div id="toc">
+<a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents"><a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a></h2>
+<nav class="toc"><ul class="toc">
+<li id="section-boilerplate.3-2" class="toc">
+<p id="section-boilerplate.3-3"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+<ul class="toc"><li id="section-boilerplate.3-5" class="toc"><p id="section-boilerplate.3-6"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-specification-of-requiremen" class="xref">Specification of Requirements</a></p></li></ul>
+</li>
+<li id="section-boilerplate.3-7" class="toc"><p id="section-boilerplate.3-8"><a href="#section-2" class="xref">2</a>.  <a href="#name-how-to-identify-a-path" class="xref">How to Identify a Path</a></p></li>
+<li id="section-boilerplate.3-9" class="toc"><p id="section-boilerplate.3-10"><a href="#section-3" class="xref">3</a>.  <a href="#name-extended-nlri-encodings" class="xref">Extended NLRI Encodings</a></p></li>
+<li id="section-boilerplate.3-11" class="toc"><p id="section-boilerplate.3-12"><a href="#section-4" class="xref">4</a>.  <a href="#name-add-path-capability" class="xref">ADD-PATH Capability</a></p></li>
+<li id="section-boilerplate.3-13" class="toc"><p id="section-boilerplate.3-14"><a href="#section-5" class="xref">5</a>.  <a href="#name-operation" class="xref">Operation</a></p></li>
+<li id="section-boilerplate.3-15" class="toc"><p id="section-boilerplate.3-16"><a href="#section-6" class="xref">6</a>.  <a href="#name-deployment-considerations" class="xref">Deployment Considerations</a></p></li>
+<li id="section-boilerplate.3-17" class="toc"><p id="section-boilerplate.3-18"><a href="#section-7" class="xref">7</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p></li>
+<li id="section-boilerplate.3-19" class="toc"><p id="section-boilerplate.3-20"><a href="#section-8" class="xref">8</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p></li>
+<li id="section-boilerplate.3-21" class="toc">
+<p id="section-boilerplate.3-22"><a href="#section-9" class="xref">9</a>.  <a href="#name-references" class="xref">References</a></p>
+<ul class="toc">
+<li id="section-boilerplate.3-24" class="toc"><p id="section-boilerplate.3-25"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p></li>
+<li id="section-boilerplate.3-26" class="toc"><p id="section-boilerplate.3-27"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p></li>
+</ul>
+</li>
+<li id="section-boilerplate.3-28" class="toc"><p id="section-boilerplate.3-29"><a href="#section-appendix.a" class="xref"></a>  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p></li>
+<li id="section-boilerplate.3-30" class="toc"><p id="section-boilerplate.3-31"><a href="#section-appendix.b" class="xref"></a>  <a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p></li>
+</ul></nav>
+</div></section><section id="section-1"><h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+</h2>
+<p id="section-1-1">The BGP specification <span>[<a href="#RFC4271" class="xref">RFC4271</a>] defines an Update-Send Process to advertise the
+      routes chosen by the Decision Process to other BGP speakers. No
+      provisions are made to allow the advertisement of multiple paths for the
+      same address prefix or Network Layer Reachability Information (NLRI).
+      In fact, a route with the same NLRI as a previously advertised route
+      implicitly replaces the previous advertisement.</span></p>
+<p id="section-1-2">This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. The essence of the extension is
+      that each path is identified by a Path Identifier in addition to the
+      address prefix.</p>
+<p id="section-1-3">The availability of the additional paths can help reduce or eliminate
+      persistent route oscillations <span>[<a href="#RFC3345" class="xref">RFC3345</a>].  It can also help with optimal routing and routing 
+      convergence in a network by providing potential alternate or backup paths, 
+      respectively.</span></p>
+<section id="section-1.1"><h3 id="name-specification-of-requiremen">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-specification-of-requiremen" class="section-name selfRef">Specification of Requirements</a>
+</h3>
+<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <span>[<a href="#RFC2119" class="xref">RFC2119</a>].</span></p></section></section><section id="section-2"><h2 id="name-how-to-identify-a-path">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-how-to-identify-a-path" class="section-name selfRef">How to Identify a Path</a>
+</h2>
+<p id="section-2-1">As defined in <span>[<a href="#RFC4271" class="xref">RFC4271</a>], a path refers to the information reported in the
+      Path Attribute field of an UPDATE message. As the procedures specified
+      in </span><span>[<a href="#RFC4271" class="xref">RFC4271</a>] allow only
+      the advertisement of one path for a particular address prefix, a path
+      for an address prefix from a BGP peer can be keyed on the address
+      prefix.</span></p>
+<p id="section-2-2">In order for a BGP speaker to advertise multiple paths for the same
+      address prefix, a new identifier (termed "Path Identifier" hereafter)
+      needs to be introduced so that a particular path for an address prefix
+      can be identified by the combination of the address prefix and the Path
+      Identifier.</p>
+<p id="section-2-3">The assignment of the Path Identifier for a path by a BGP speaker is
+      purely a local matter. However, the Path Identifier MUST be assigned in
+      such a way that the BGP speaker is able to use the (Prefix, Path
+      Identifier) to uniquely identify a path advertised to a neighbor. A BGP
+      speaker that re-advertises a route MUST generate its own Path Identifier
+      to be associated with the re-advertised route. A BGP speaker that
+      receives a route should not assume that the identifier carries any
+      particular semantics.</p></section><section id="section-3"><div id="code">
+<h2 id="name-extended-nlri-encodings">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-extended-nlri-encodings" class="section-name selfRef">Extended NLRI Encodings</a>
+</h2>
+<p id="section-3-1">In order to carry the Path Identifier in an UPDATE message, the NLRI
+      encoding MUST be extended by prepending the Path Identifier field, which
+      is of four octets.</p>
+<p id="section-3-2">For example, the NLRI encoding specified in <span>[<a href="#RFC4271" class="xref">RFC4271</a>] is extended as the following:</span></p>
+<div id="section-3-3" class="artwork art-text" text-align="left"><pre>
+               +--------------------------------+
+               | Path Identifier (4 octets)     |
+               +--------------------------------+
+               | Length (1 octet)               |
+               +--------------------------------+
+               | Prefix (variable)              |
+               +--------------------------------+</pre></div>
+<p id="section-3-4">The usage of the extended NLRI encodings is specified in <a href="#ops" class="xref">Section 5</a>.</p>
+</div></section><section id="section-4"><div id="capa">
+<h2 id="name-add-path-capability">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-add-path-capability" class="section-name selfRef">ADD-PATH Capability</a>
+</h2>
+<p id="section-4-1">The ADD-PATH Capability is a BGP capability <span>[<a href="#RFC5492" class="xref">RFC5492</a>], with Capability Code
+      69. The Capability Length field of this capability is
+      variable. The Capability Value field consists of one or more of the
+      following tuples:</span></p>
+<div id="section-4-2" class="artwork art-text" text-align="left"><pre>
+             +------------------------------------------------+
+             | Address Family Identifier (2 octets)           |
+             +------------------------------------------------+
+             | Subsequent Address Family Identifier (1 octet) |
+             +------------------------------------------------+
+             | Send/Receive (1 octet)                         |
+             +------------------------------------------------+</pre></div>
+<p id="section-4-3">The meaning and use of the fields are as follows: </p>
+<ul>
+<li id="section-4-5">
+<p id="section-4-6">Address Family Identifier (AFI): </p>
+<ul><li id="section-4-8">This field is the same as the one used in <span>[<a href="#RFC4760" class="xref">RFC4760</a>].</span>
+</li></ul>
+</li>
+<li id="section-4-9">
+<p id="section-4-10">Subsequent Address Family Identifier (SAFI): </p>
+<ul><li id="section-4-12">This field is the same as the one used in <span>[<a href="#RFC4760" class="xref">RFC4760</a>].</span>
+</li></ul>
+</li>
+<li id="section-4-13">
+<p id="section-4-14">Send/Receive: </p>
+<ul>
+<li id="section-4-16">This field indicates whether the sender is (a) able to
+              receive multiple paths from its peer (value 1), (b) able to send
+              multiple paths to its peer (value 2), or (c) both (value 3) for
+              the &lt;AFI, SAFI&gt;.</li>
+<li id="section-4-17">If any other value is received, then the capability SHOULD be
+              treated as not understood and ignored <span>[<a href="#RFC5492" class="xref">RFC5492</a>].</span>
+</li>
+</ul>
+</li>
+</ul>
+<p id="section-4-18">A BGP speaker that wishes to indicate support for multiple
+      AFI/SAFIs MUST do so by including the information in a single instance of
+      the ADD-PATH Capability.</p>
+</div></section><section id="section-5"><div id="ops">
+<h2 id="name-operation">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-operation" class="section-name selfRef">Operation</a>
+</h2>
+<p id="section-5-1">The Path Identifier specified in <a href="#code" class="xref">Section 3</a> can be used to
+      advertise multiple paths for the same address prefix without subsequent
+      advertisements replacing the previous ones. Apart from the fact that
+      this is now possible, the route advertisement rules of <span>[<a href="#RFC4271" class="xref">RFC4271</a>] are not changed. In
+      particular, a new advertisement for a given address prefix and a given
+      Path Identifier replaces a previous advertisement for the same address
+      prefix and Path Identifier. If a BGP speaker receives a message to
+      withdraw a prefix with a Path Identifier not seen before, it SHOULD
+      silently ignore it.</span></p>
+<p id="section-5-2">For a BGP speaker to be able to send multiple paths to its peer, that
+      BGP speaker MUST advertise the ADD-PATH Capability with the Send/Receive
+      field set to either 2 or 3, and MUST receive from its peer the ADD-PATH
+      Capability with the Send/Receive field set to either 1 or 3, for the
+      corresponding &lt;AFI, SAFI&gt;.</p>
+<p id="section-5-3">A BGP speaker MUST follow the procedures defined in <span>[<a href="#RFC4271" class="xref">RFC4271</a>] when generating an
+      UPDATE message for a particular &lt;AFI, SAFI&gt; to a peer unless the
+      BGP speaker advertises the ADD-PATH Capability to the peer indicating
+      its ability to send multiple paths for the &lt;AFI, SAFI&gt;, and also
+      receives the ADD-PATH Capability from the peer indicating its ability to
+      receive multiple paths for the &lt;AFI, SAFI&gt;, in which case the
+      speaker MUST generate a route update for the &lt;AFI, SAFI&gt; based on
+      the combination of the address prefix and the Path Identifier, and use
+      the extended NLRI encodings specified in this document. The peer SHALL
+      act accordingly in processing an UPDATE message related to a particular
+      &lt;AFI, SAFI&gt;.</span></p>
+<p id="section-5-4">A BGP speaker SHOULD include the best route <span>[<a href="#RFC4271" class="xref">RFC4271</a>] when more than one path is
+      advertised to a neighbor, unless it is a path received from
+      that neighbor.</span></p>
+<p id="section-5-5">As the Path Identifiers are locally assigned, and may or may not be
+      persistent across a control plane restart of a BGP speaker, an
+      implementation SHOULD take special care so that the underlying
+      forwarding plane of a "Receiving Speaker" as described in <span>[<a href="#RFC4724" class="xref">RFC4724</a>] is not affected
+      during the graceful restart of a BGP session.</span></p>
+</div></section><section id="section-6"><h2 id="name-deployment-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-deployment-considerations" class="section-name selfRef">Deployment Considerations</a>
+</h2>
+<p id="section-6-1">The extension proposed in this document provides a mechanism for a
+      BGP speaker to advertise multiple paths over a BGP session. Care needs
+      to be taken in its deployment to ensure consistent routing and
+      forwarding in a network <span>[<a href="#ADDPATH" class="xref">ADDPATH</a>].</span></p>
+<p id="section-6-2">The only explicit indication that the encoding described in <a href="#code" class="xref">Section 3</a>
+      is in use in a particular BGP session is the exchange of Capabilities
+      described in <a href="#capa" class="xref">Section 4</a>.  If the exchange is successful <span>[<a href="#RFC5492" class="xref">RFC5492</a>], then the BGP speakers
+      will be able to process all BGP UPDATES properly, as described in </span><a href="#ops" class="xref">Section 5</a>.
+      However, if, for example, a packet analyzer is used on the wire to examine 
+      an active BGP session, it may not be able to properly decode the BGP UPDATES
+      because it lacks prior knowledge of the exchanged Capabilities.</p>
+<p id="section-6-3">When deployed as a provider edge router or a peering router that
+      interacts with external neighbors, a BGP speaker usually advertises at
+      most one path to the internal neighbors in a network. In the case where the
+      speaker is configured to advertise multiple paths to the internal
+      neighbors, and additional information is needed for the application, the
+      speaker could use attributes such as the Edge_Discriminator attribute
+      <span>[<a href="#FAST" class="xref">FAST</a>]. The use of that type of
+      additional information is outside the scope of this document.</span></p></section><section id="section-7"><h2 id="name-iana-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+</h2>
+<p id="section-7-1">IANA has assigned the value 69 for the ADD-PATH Capability
+      described in this document. This registration is in the "Capability
+      Codes" registry.</p></section><section id="section-8"><h2 id="name-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+</h2>
+<p id="section-8-1">This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. As a result, multiple paths for
+      a large number of prefixes may be received by a BGP speaker, potentially
+      depleting memory resources or even causing network-wide instability, which
+      can be considered a denial-of-service attack.  Note that this is not a new
+      vulnerability, but one that is present in the base BGP specification <span>[<a href="#RFC4272" class="xref">RFC4272</a>].</span></p>
+<p id="section-8-2">
+  The use of the ADD-PATH Capability is intended to address specific
+  needs related to, for example, <span>[<a href="#STOP-OSC" class="xref">eliminating route oscillations that
+  were induced by the MULTI_EXIT_DISC (MED) attribute</a>].
+
+  While describing the applications for the
+      ADD-PATH Capability is outside the scope of this document, users
+      are encouraged to examine their behavior and potential impact by
+      studying the best practices described in </span><span>[<a href="#ADDPATH" class="xref">ADDPATH</a>].</span></p>
+<p id="section-8-3">Security concerns in the base operation of <span>[<a href="#RFC4271" class="xref">BGP</a>] also apply.</span></p></section><references id="section-9"><h2 id="name-references"><a href="#name-references" class="section-name selfRef">References</a></h2>
+<references id="section-9.1"><h3 id="name-normative-references"><a href="#name-normative-references" class="section-name selfRef">Normative References</a></h3>
+<reference id="RFC2119"><front><span class="refTitle">Key words for use in RFCs to Indicate Requirement Levels</span><seriesInfo></seriesInfo><seriesInfo></seriesInfo><seriesInfo></seriesInfo><author><organization></organization></author><time datetime="1997-03">March 1997</time></front></reference><reference id="RFC4271"><front><span class="refTitle">A Border Gateway Protocol 4 (BGP-4)</span><seriesInfo></seriesInfo><seriesInfo></seriesInfo><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><time datetime="2006-01">January 2006</time></front></reference><reference id="RFC4760"><front><span class="refTitle">Multiprotocol Extensions for BGP-4</span><seriesInfo></seriesInfo><seriesInfo></seriesInfo><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><time datetime="2007-01">January 2007</time></front></reference><reference id="RFC5492"><front><span class="refTitle">Capabilities Advertisement with BGP-4</span><seriesInfo></seriesInfo><seriesInfo></seriesInfo><author><organization></organization></author><author><organization></organization></author><time datetime="2009-02">February 2009</time></front></reference></references><references id="section-9.2"><h3 id="name-informative-references"><a href="#name-informative-references" class="section-name selfRef">Informative References</a></h3>
+<reference id="ADDPATH"><front><span class="refTitle">Best Practices for Advertisement of Multiple Paths in IBGP</span><seriesInfo></seriesInfo><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><time datetime="2016-04-25">April 25, 2016</time></front></reference><reference id="FAST"><front><span class="refTitle">Fast Connectivity Restoration Using BGP Add-path</span><seriesInfo></seriesInfo><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><time datetime="2013-01-22">January 22, 2013</time></front></reference><reference id="RFC3345"><front><span class="refTitle">Border Gateway Protocol (BGP) Persistent Route Oscillation Condition</span><seriesInfo></seriesInfo><seriesInfo></seriesInfo><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><time datetime="2002-08">August 2002</time></front></reference><reference id="RFC4272"><front><span class="refTitle">BGP Security Vulnerabilities Analysis</span><seriesInfo></seriesInfo><seriesInfo></seriesInfo><author><organization></organization></author><time datetime="2006-01">January 2006</time></front></reference><reference id="RFC4724"><front><span class="refTitle">Graceful Restart Mechanism for BGP</span><seriesInfo></seriesInfo><seriesInfo></seriesInfo><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><time datetime="2007-01">January 2007</time></front></reference><reference id="STOP-OSC"><front><span class="refTitle">BGP Persistent Route Oscillation Solutions</span><seriesInfo></seriesInfo><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><author><organization></organization></author><time datetime="2016-04-30">April 30, 2016</time></front></reference></references></references><section id="section-appendix.a"><h2 id="name-acknowledgments"><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a></h2>
+<p id="section-appendix.a-1">We would like to thank David Cook and Naiming Shen for their
+      contributions to the design and development of the extension.</p>
+<p id="section-appendix.a-2">Many people have made valuable comments and suggestions, including
+      Rex Fernando, Eugene Kim, Danny McPherson, Dave Meyer, Pradosh
+      Mohapatra, Keyur Patel, Robert Raszuk, Eric Rosen, Srihari Sangli, Dan
+      Tappan, Mark Turner, Jeff Haas, Jay Borkenhagen, Mach Chen, Denis Ovsienko,
+      Carlos Pignataro, Meral Shirazipour, and Kathleen Moriarty.</p></section><section id="section-appendix.b"><div id="authors-addresses">
+<h2 id="name-authors-addresses"><a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a></h2>
+<author><organization>Cumulus Networks</organization><address>
+<postal><street>185 E. Dana Street</street><city>Mountain View</city><region>CA</region><code>94041</code><country>United States of America</country></postal><email>dwalton@cumulusnetworks.com</email>
+</address></author><author><organization>Cisco Systems, Inc.</organization><address>
+<postal><street>Kit Creek Rd.</street><city>Research Triangle Park</city><region>NC</region><code>27709</code><country>United States of America</country></postal><email>aretana@cisco.com</email>
+</address></author><author><organization>Cisco Systems, Inc.</organization><address>
+<postal><street>170 W. Tasman Dr.</street><city>San Jose</city><region>CA</region><code>95134</code><country>United States of America</country></postal><email>enkechen@cisco.com</email>
+</address></author><author><organization>Juniper Networks</organization><address>
+<postal><street>1194 N. Mathilda Ave</street><city>Sunnyvale</city><region>CA</region><code>94089</code><country>United States of America</country></postal><email>jgs@juniper.net</email>
+</address></author>
+</div></section><script type="text/javascript">var toc = document.getElementById("toc");
+var tocToggle = toc.querySelector("h2");
+var tocNav = toc.querySelector("nav");
+
+// mobile menu toggle
+tocToggle.onclick = function(event) {
+    if (window.innerWidth < 1024) {
+ var tocNavDisplay = tocNav.currentStyle ? tocNav.currentStyle.display : getComputedStyle(tocNav, null).display;
+ if (tocNavDisplay == "none") {
+     tocNav.style.display = "block";
+ } else {
+     tocNav.style.display = "none";
+ }
+    }
+}
+
+// toc anchor scroll to anchor
+tocNav.addEventListener("click", function (event) {
+    event.preventDefault();
+    if (event.target.nodeName == 'A') {
+ if (window.innerWidth < 1024) {
+     tocNav.style.display = "none";
+ }
+ var href = event.target.getAttribute("href");
+ var anchorId = href.substr(1);
+ var anchor =  document.getElementById(anchorId);
+ anchor.scrollIntoView(true);
+ window.history.pushState("","",href);
+    }
+});
+
+// switch toc mode when window resized
+window.onresize = function () {
+    if (window.innerWidth < 1024) {
+ tocNav.style.display = "none";
+    } else {
+ tocNav.style.display = "block";
+    }
+}
+</script>
+</body>
+</html>
