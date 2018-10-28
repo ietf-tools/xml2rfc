@@ -146,7 +146,7 @@ def main():
                            help='Use the given CSS file instead of the builtin')
     htmloptions.add_option('--external-css', action='store_true', default=False,
                            help='place css in an external file')
-    htmloptions.add_option('--rfc-base-url', default="https://www.rfc-editor.org/rfc/",
+    htmloptions.add_option('--rfc-base-url', default="https://www.rfc-editor.org/info/",
                            help='Base URL for RFC links')
     htmloptions.add_option('--id-base-url', default="https://www.ietf.org/archive/id/",
                            help='Base URL for Internet-Draft links')
@@ -169,6 +169,8 @@ def main():
     # --- Parse and validate arguments ---------------------------------
 
     (options, args) = optionparser.parse_args()
+    # Some additional values not exposed as options
+    options.doi_base_url = "https://doi.org/"
 
     if len(args) < 1:
         optionparser.print_help()
