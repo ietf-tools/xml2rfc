@@ -2,18 +2,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function, division
 
-import copy
 import datetime
-#import inspect
+import i18naddress
 import lxml
 import os
 import re
 #import sys
-#import six
+import six
 
 from io import open
-from lxml.html.builder import E as build
-#from collections import namedtuple
+from lxml.html import html_parser
+from lxml.html.builder import ElementMaker
+
+if six.PY2:
+    from urllib import urlopen
+elif six.PY3:
+    from urllib.request import urlopen
 
 try:
     import debug
@@ -22,9 +26,16 @@ except ImportError:
     pass
 
 import xml2rfc
-from xml2rfc import log, strings, util as utils, uniscripts
+from xml2rfc import log, strings
 from xml2rfc.writers.base import default_options, BaseV3Writer
-from xml2rfc.util.name import full_author_name, full_org_name
+from xml2rfc.uniscripts import is_script
+from xml2rfc.util.date import extract_date, format_date, format_date_iso, get_expiry_date
+from xml2rfc.util.name import ( full_author_name, short_author_role,
+                                ref_author_name_first, ref_author_name_last, 
+                                short_author_name_set, full_author_name_set,
+                                short_org_name_set, full_org_name, full_org_ascii_name, )
+from xml2rfc.util.postal import get_normalized_address_info
+from xml2rfc.utils import namespaces, is_htmlblock
 
 #from xml2rfc import utils
 
@@ -32,10 +43,122 @@ from xml2rfc.util.name import full_author_name, full_org_name
 
 seen = set()
 
-def wrap(e, tag, **kwargs):
+def wrap(h, tag, **kwargs):
     w = build(tag, **kwargs)
-    w.append(e)
+    w.append(h)
     return w
+
+def slugify(s):
+    s = s.strip().lower()
+    s = re.sub(r'[^\w\s/|-]', '', s)
+    s = re.sub(r'[-_\s/|]+', '-', s)
+    s = s.strip('-')
+    return s
+
+def wrap_ascii(tag, conj, name, ascii, role='', classes=None):
+    role = ('','') if role in ['',None] else (', ', role)
+    if ascii:
+        e = build(tag,
+                build.span(conj, name, classes='non-ascii'),
+                ' (',
+                build.span(ascii, classes='ascii'),
+                ')',
+                *role,
+                classes=classes
+            )
+    else:
+        e = build(tag, conj, name, *role, classes=classes)
+    return e
+
+#def wrap_ascii_div(
+
+
+class ClassElementMaker(ElementMaker):
+
+    def __call__(self, tag, *children, **attrib):
+        classes = attrib.pop('classes', None)
+        elem = super(ClassElementMaker, self).__call__(tag, *children, **attrib)
+        if classes:
+            elem.set('class', classes)
+        return elem
+build = ClassElementMaker(makeelement=html_parser.makeelement)
+
+class ExtendingElementMaker(ClassElementMaker):
+
+    def __call__(self, tag, parent, precursor, *children, **attrib):
+        elem = super(ExtendingElementMaker, self).__call__(tag, *children, **attrib)
+        #
+        child = elem
+        if precursor != None:
+            pn = precursor.get('pn')
+            sn = precursor.get('slugifiedName')
+            an = precursor.get('anchor')
+            if   pn != None:
+                elem.set('id', pn)
+                if an != None and is_htmlblock(elem):
+                    child = wrap(elem, 'div', id=an)
+            elif sn != None:
+                elem.set('id', sn)
+            elif an != None:
+                elem.set('id', an)
+            if not elem.text or elem.text.strip() == '':
+                elem.text = precursor.text
+            elem.tail = precursor.tail
+        if parent != None:
+            parent.append(child)
+        return elem
+add  = ExtendingElementMaker(makeelement=html_parser.makeelement)
+
+
+pilcrow = '\u00b6'
+mdash   = '\u2014'
+
+# ------------------------------------------------------------------------------
+# Address formatting functions, based on i18naddress functions, but rewritten to
+# produce html entities, rather than text lines.
+
+hcard_properties = {
+        'name':             'fn',
+        'company_name':     'org',
+        'street_address':   'street-address',
+        'postal_code':      'postal-code',
+        'city':             'locality',
+        'city_area':        'region',
+        'country_area':     'region',
+        'sorting_code':     'postal-code',
+        'country_name':     'country-name'
+}
+
+def _format_address_line(line_format, address, rules):
+    def _get_field(name):
+        field = []
+        values = address.get(name, '')
+        if not isinstance(values, list):
+            values = [ values ]
+        for value in values:
+            if value:
+                field.append(build.span(value, classes=hcard_properties[name]))
+        return field
+
+    replacements = {
+        '%%%s' % code: _get_field(field_name)
+        for code, field_name in i18naddress.FIELD_MAPPING.items()}
+
+    field_entries = re.split('(%.)', line_format)
+    fields = [ f for n in field_entries for f in replacements.get(n, n) ]
+    return fields
+
+def format_address(address, latin=False):
+    rules = i18naddress.get_validation_rules(address)
+    address_format = (
+        rules.address_latin_format if latin else rules.address_format)
+    address_line_formats = address_format.split('%n')
+    address_lines = [
+        build.div(*_format_address_line(lf, address, rules))
+        for lf in address_line_formats]
+    address_lines.append(build.div(build.span(address['country_name'], classes='country-name')))
+    address_lines = filter(lambda n: n!=None, address_lines)
+    return address_lines
 
 # ------------------------------------------------------------------------------
 
@@ -43,6 +166,17 @@ class HtmlWriter(BaseV3Writer):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
         super(HtmlWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
+        self.anchor_tags = self.get_tags_with_anchor()
+
+    def get_tags_with_anchor(self):
+        anchor_nodes = self.schema.xpath("//x:define/x:element//x:attribute[@name='anchor']", namespaces=namespaces)
+        element_nodes = set()
+        for a in anchor_nodes:
+            for e in a.iterancestors():
+                if e.tag.endswith('element'):
+                    element_nodes.add(e.get('name'))
+                    break
+        return element_nodes
 
     def write(self, filename):
         self.filename = filename
@@ -81,37 +215,61 @@ class HtmlWriter(BaseV3Writer):
             log.write('Created file', filename)
 
 
-    def render(self, h, e, **kw):
-        kwargs = copy.deepcopy(kw)
-        func_name = "render_%s" % (e.tag.lower(),)
-        func = getattr(self, func_name, self.default_renderer)
-        if func == self.default_renderer:
-            if e.tag in self.__class__.deprecated_element_tags:
-                self.warn(e, "Was asked to render a deprecated element: <%s>", (e.tag, ))
-            elif not e.tag in seen:
-                self.warn(e, "No renderer for <%s> found" % (e.tag, ))
-                seen.add(e.tag)
-        res = func(h, e, **kwargs)
+    def render(self, h, x):
+        func_name = "render_%s" % (x.tag.lower(),)
+        func = getattr(self, func_name, None)
+        if func == None:
+            func = self.default_renderer
+            if x.tag in self.__class__.deprecated_element_tags:
+                self.warn(x, "Was asked to render a deprecated element: <%s>", (x.tag, ))
+            elif not x.tag in seen:
+                self.warn(x, "No renderer for <%s> found" % (x.tag, ))
+                seen.add(x.tag)
+        res = func(h, x)
         return res
 
 
-    def default_renderer(self, h, e, **kwargs):
-        hh = build(e.tag, e.text or '')
-        hh.tail = e.tail
-        for c in e.getchildren():
-            self.render(hh, c, **kwargs)
-        h.append(hh)
+    def default_renderer(self, h, x):
+        hh = add(x.tag, h, x)
+        for c in x.getchildren():
+            self.render(hh, c)
+        return hh
 
-    def inner_text_renderer(self, h, e, **kwargs):
-        h.text = e.text
-        for c in e.getchildren():
-            self.render(h, c, **kwargs)
-        h.tail = e.tail
+    def skip_renderer(self, h, x):
+        part = self.part
+        for c in x.getchildren():
+            self.part = part
+            self.render(h, c)
+
+    def address_line_renderer(self, h, x, classes=None):
+        if x.text:
+            div = build.div(build.span(x.text.strip(), classes=classes))
+            h.append(div)
+        else:
+            div = None
+        return div
+
+    def inline_text_renderer(self, h, x):
+        h.text = x.text
+        for c in x.getchildren():
+            self.render(h, c)
+        h.tail = x.tail
+
+    def null_renderer(self, h, x):
+        return None
+
+    def maybe_add_pilcrow(self, e):
+        if len(e.xpath('.//*[@class="pilcrow"]')) == 0:
+            id = e.get('id')
+            if id:
+                add.a(e, None, pilcrow, classes='pilcrow', href='#%s'%id)
+            else:
+                self.warn(e, 'Tried to add a pilcrow to <%s>, but found no "id" attribute' % e.tag)
 
     # --- element rendering functions ------------------------------------------
 
-    def render_rfc(self, h, e, **kwargs):
-        self.part = e.tag
+    def render_rfc(self, h, x):
+        self.part = x.tag
     # 6.2.  Root Element
     # 
     #    The root element of the document is <html>.  This element includes a
@@ -125,17 +283,16 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <html lang="en" class="RFC">
 
-        classes = ' '.join( i.get('name') for i in e.xpath('./front/seriesInfo') )
+        classes = ' '.join( i.get('name') for i in x.xpath('./front/seriesInfo') )
         #
-        html = h if h != None else build.html({'class':classes}, lang='en')
+        html = h if h != None else build.html(classes=classes, lang='en')
 
     # 6.3.  <head> Element
     # 
     #    The root <html> will contain a <head> element that contains the
     #    following elements, as needed.
 
-        head = build.head()
-        html.append(head)
+        head = add.head(html, None)
 
     # 6.3.1.  Charset Declaration
     # 
@@ -147,21 +304,19 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <meta charset="utf-8">
 
-        head.append( build.meta(charset='utf-8') )
+        add.meta(head, None, charset='utf-8')
 
-        # This is not required
-        meta = build.meta()
+        # This is not required by the RFC, but is good practice
+        meta = add.meta(head, None, content='text/html; charset=utf-8')
         meta.set('http-equiv', 'Content-Type')
-        meta.set('content', 'text/html; charset=utf-8')
-        head.append(meta)
 
     # 6.3.2.  Document Title
     # 
     #    The contents of the <title> element from the XML source will be
     #    placed inside an HTML <title> element in the header.
 
-        title = e.find('./front/title').text
-        head.append( build.title(title) )
+        title = x.find('./front/title')
+        add.title(head, title)
 
     # 6.3.3.  Document Metadata
     # 
@@ -171,27 +326,29 @@ class HtmlWriter(BaseV3Writer):
     #       "asciiFullname"s of all of the <author>s from the <front> of the
     #       XML source
 
-        for a in e.xpath('./front/author'):
+        for a in x.xpath('./front/author'):
             name = full_author_name(a)
             if not name:
                 name = full_org_name(a)
-            head.append( build.meta(name='author', content=name ))
+            add.meta(head, None, name='author', content=name )
 
     #    o  description - the <abstract> from the XML source
 
-        abstract = ' '.join(e.find('./front/abstract').itertext())
-        head.append( build.meta(name='description', content=abstract) )
+        abstract = x.find('./front/abstract')
+        if abstract != None:
+            abstract_text = ' '.join(abstract.itertext())
+            add.meta(head, None, name='description', content=abstract_text)
 
     #    o  generator - the name and version number of the software used to
     #       create the HTML
 
         generator = "%s %s" % (xml2rfc.NAME, xml2rfc.__version__)
-        head.append( build.meta(name='generator', content=generator))
+        add.meta(head, None, name='generator', content=generator)
         
     #    o  keywords - comma-separated <keyword>s from the XML source
 
-        for keyword in e.xpath('./front/keyword'):
-            head.append( build.meta(name='keyword', content=keyword.text))
+        for keyword in x.xpath('./front/keyword'):
+            add.meta(head, None, name='keyword', content=keyword.text)
 
     #    For example:
     # 
@@ -213,7 +370,7 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <link rel="alternate" type="application/rfc+xml" href="source.xml">
 
-        head.append( build.link(rel='alternate', type='application/rfc+xml', href=self.xmlrfc.source))
+        add.link(head, None, rel='alternate', type='application/rfc+xml', href=self.xmlrfc.source)
 
     # 6.3.5.  Link to License
     # 
@@ -224,7 +381,7 @@ class HtmlWriter(BaseV3Writer):
     #    <link rel="license"
     #       href="https://trustee.ietf.org/trust-legal-provisions.html">
 
-        head.append( build.link(rel='license', href="https://trustee.ietf.org/license-info/IETF-TLP-5.htm"))
+        add.link(head, None, rel='license', href="#copyright")
 
     # 6.3.6.  Style
     # 
@@ -257,11 +414,10 @@ class HtmlWriter(BaseV3Writer):
             cssout = os.path.join(os.path.dirname(self.filename), 'xml2rfc.css')
             with open(cssout, 'w', encoding='utf-8') as f:
                 f.write(css)
-            head.append(build.link(rel="stylesheet", href="xml2rfc.css", type="text/css"))
+            add.link(head, None, rel="stylesheet", href="xml2rfc.css", type="text/css")
         else:
-            style = build.style(css, type="text/css")
-            head.append(style)
-        head.append(build.link(rel="stylesheet", href="rfc-local.css", type="text/css"))
+            add.style(head, None, css, type="text/css")
+        add.link(head, None, rel="stylesheet", href="rfc-local.css", type="text/css")
 
     # 6.3.7.  Links
     # 
@@ -269,11 +425,10 @@ class HtmlWriter(BaseV3Writer):
     #    header.  Note: the HTML <link> element does not include a closing
     #    slash.
 
-        for link in e.xpath('./link'):
+        for link in x.xpath('./link'):
             head.append(link)
 
-        body = build.body()
-        html.append(body)
+        body = add.body(html, None)
 
     # 6.4.  Page Headers and Footers
     # 
@@ -309,32 +464,33 @@ class HtmlWriter(BaseV3Writer):
         if False:
             # Is this pure placeholder, or does it need data from the document?
             body.append(
-                build.table({'class': 'ears'},
+                build.table(
                     build.thead(
                         build.tr(
-                            build.td({'class': 'left'}, "Left"),
-                            build.td({'class': 'middle'}, "Middle"),
-                            build.td({'class': 'right'}, "Right"),
+                            build.td("Left", classes='left'),
+                            build.td("Middle", classes='center'),
+                            build.td("Right", classes='right'),
                         ),
                     ),
                     build.tfoot(
                         build.tr(
-                            build.td({'class': 'left'}, "Left"),
-                            build.td({'class': 'middle'}, "Middle"),
-                            build.td({'class': 'right'}, "[Page]"),
+                            build.td("Left", classes='left'),
+                            build.td("Middle", classes='center'),
+                            build.td("[Page]", classes='right'),
                         ),
                     ),
+                    classes='ears',
                 )
             )
 
-        for c in [ e.find('./front'), e.find('./middle'), e.find('./back'), ]:
+        for c in [ e for e in [ x.find('front'), x.find('middle'), x.find('back') ] if e != None]:
             self.part = c.tag
-            self.render(body, c, **kwargs)
+            self.render(body, c)
 
         jsin  = self.options.css or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'xml2rfc.js')
         with open(jsin, encoding='utf-8') as f:
             js = f.read()
-        body.append( build.script(js, type='text/javascript'))
+        add.script(body, None, js, type='text/javascript')
 
         return html
 
@@ -352,14 +508,15 @@ class HtmlWriter(BaseV3Writer):
     #    </section>
     # 
 
-    def render_abstract(self, h, e, **kwargs):
-        if self.part != 'front':
-            return
-        section = build.section(id=e.get('pn'))
-        section.append( build.h2( build.a('Abstract', {'class':'selfRef'}, href="#abstract"), id="abstract"))
-        for c in e.getchildren():
-            self.render(section, c, **kwargs)
-        h.append(section)
+    def render_abstract(self, h, x):
+        if self.part == 'front':
+            section = add.section(h, x)
+            section.append( build.h2( build.a('Abstract', classes='selfRef', href="#abstract"), id="abstract"))
+            for c in x.getchildren():
+                self.render(section, c)
+            return section
+        else:
+            return None
 
     # 9.2.  <address>
     # 
@@ -394,7 +551,43 @@ class HtmlWriter(BaseV3Writer):
     #        <div class="org">Cisco Systems, Inc.</div>
     #      </div>
     #    </address>
-    # 
+
+    ## The above text is reasonable for author name and org, but nonsense for
+    ## the <address> element.  The following text will be used:
+    ##
+    ## The <address> element will be rendered as a sequence of <div> elements,
+    ## each corresponding to a child element of <address>.  Element classes
+    ## will be taken from hcard, as specified on http://microformats.org/wiki/hcard
+    ## 
+    ##   <address class="vcard">
+    ##
+    ##     <!-- ... name, role, and organization elements ... -->
+    ##
+    ##      <div class="adr">
+    ##        <div class="street-address">1 Main Street</div>
+    ##        <div class="street-address">Suite 1</div>
+    ##        <div class="city-region-code">
+    ##          <span class="city">Denver</span>,&nbsp;
+    ##          <span class="region">CO</span>&nbsp;
+    ##          <span class="postal-code">80202</span>
+    ##        </div>
+    ##        <div class="country-name">USA</div>
+    ##      </div>
+    ##      <div class="tel">
+    ##        <span>Phone:</span>
+    ##        <a class="tel" href="tel:+1-720-555-1212">+1-720-555-1212</a>
+    ##      </div>
+    ##      <div class="fax">
+    ##        <span>Fax:</span>
+    ##        <span class="tel">+1-303-555-1212</span>
+    ##      </div>
+    ##      <div class="email">
+    ##        <span>Email:</span>
+    ##        <a class="email" href="mailto:author@example.com">author@example.com</a>
+    ##      </div>
+    ##    </address>
+    render_address = skip_renderer
+
     # 9.3.  <annotation>
     # 
     #    This element is rendered as the text ", " (a comma and a space)
@@ -403,7 +596,12 @@ class HtmlWriter(BaseV3Writer):
     #    elements from the children of the <annotation> tag.
     # 
     #     <span class="annotation">Some <em>thing</em>.</span>
-    # 
+    def render_annotation(self, h, x):
+        span = add.span(h, x, classes='annotation')
+        for c in x.getchildren():
+            self.render(span, c)
+        return span
+
     # 9.4.  <area>
     # 
     #    Not currently rendered to HTML.
@@ -416,7 +614,10 @@ class HtmlWriter(BaseV3Writer):
     #    pilcrow.  If the "align" attribute has the value "right", the CSS
     #    class "alignRight" will be added.  If the "align" attribute has the
     #    value "center", the CSS class "alignCenter" will be added.
-    # 
+    def render_artwork(self, h, x):
+        type = x.get('type')
+        align = x.get('align', 'left')
+
     # 9.5.1.  Text Artwork
     # 
     #    Text artwork is rendered inside an HTML <pre> element, which is
@@ -442,7 +643,21 @@ class HtmlWriter(BaseV3Writer):
     #      </pre>
     #      <a class="pilcrow" href="#s-1-2">&para;</a>
     #    </div>
-    # 
+        if type not in ['svg', 'binary-art', ]:
+            if not x.text or not x.text.strip():
+                self.err(x, 'Expected ascii-art artwork for <artwork type="%s">, but found %s...' % (x.get('type',''), lxml.etree.tostring(x)[:128]))
+                return None
+            else:
+                pre = build.pre(x.text.expandtabs())
+                classes = 'artwork art-text align%s' % align.capitalize()
+                if type and type != 'text':
+                    classes += ' art-%s' % type
+                div = add.div(h, x, pre, classes=classes)
+                div.text = None
+                if x.getparent().tag != 'figure':
+                    self.maybe_add_pilcrow(div)
+                return div
+            
     # 9.5.2.  SVG Artwork
     # 
     #    SVG artwork will be included inline.  The SVG is wrapped in a <div>
@@ -466,7 +681,30 @@ class HtmlWriter(BaseV3Writer):
     #      </svg>
     #      <a href="#s-2-17" class="pilcrow">&para;</a>
     #    </div>
-    # 
+        elif type == 'svg':
+            classes = 'artwork art-svg align%s' % align.capitalize()
+            div = add.div(h, x, classes=classes)
+            div.text = None
+            src = x.get('src')
+            if src:
+                if not src.startswith('data:'):
+                    self.err(x, "Internal error: Got an <artwork> src: attribute that did not start with 'data:' after prepping")
+                f = urlopen(src)
+                data = f.read()
+                svg = lxml.etree.fromstring(data)
+            else:
+                svg = x.find('s:svg', namespaces=namespaces)
+            if svg == None:
+                self.err(x, 'Expected <svg> content inside <artwork type="svg">, but did not find it:\n   %s ...' % (lxml.etree.tostring(x)[:256], ))
+                return None
+            div.append(svg)
+            if x.getparent().tag != 'figure':
+                self.maybe_add_pilcrow(div)
+            else:
+                if x.get('align') == 'right':
+                    add.span(div, None)
+
+
     # 9.5.3.  Other Artwork
     # 
     #    Other artwork will have a "src" attribute that uses the "data" URI
@@ -483,7 +721,17 @@ class HtmlWriter(BaseV3Writer):
     #           src="data:image/gif;charset=utf-8;base64,...">
     #      <a class="pilcrow" href="#s-2-58">&para;</a>
     #    </div>
-    # 
+        elif type == 'binary-art':
+            div = add.div(h, x, classes='artwork art-svg')
+            data = x.get('src')
+            if data:
+                del div.attrib['src']
+                add.img(div, None, src=data)
+            else:
+                self.err(x, 'Expected <img> data given by src="" for <artwork type="binary-art">, but did not find it: %s ...' % (lxml.etree.tostring(x)[:128], ))
+            if x.getparent().tag != 'figure':
+                self.maybe_add_pilcrow(div)
+
     # 9.6.  <aside>
     # 
     #    This element is rendered as an HTML <aside> element, with all child
@@ -495,12 +743,17 @@ class HtmlWriter(BaseV3Writer):
     #        <a class="pilcrow" href="#s-2.1-2.1">&para;</a>
     #      </p>
     #    </aside>
+    render_aside = default_renderer
+        
+
     # 
     # 9.7.  <author>
     # 
     #    The <author> element is used in several places in the output.
     #    Different rendering is used for each.
-    def render_author(self, h, e, **kwargs):
+    def render_author(self, h, x):
+        if len(x)==0 and len(x.attrib)==0:
+            return None
 
     # 9.7.1.  Authors in Document Information
     # 
@@ -541,35 +794,17 @@ class HtmlWriter(BaseV3Writer):
     #      </div>
     #    </div>
         if   self.part == 'front':
-            name = utils.name.short_author_name(e)
-            aname = utils.name.short_author_ascii_name(e)
-            
-            def wrap_nonascii(e, name, ascii):
-                if uniscripts.is_script(name, 'Latin'):
-                    div = build.div(name)
-                    if e.get('role') == 'editor':
-                        div.append( build.span({'class': 'editor'}, "Ed.") )
-                else:
-                    div = build.div()
-                    div.append( build.span({'class': 'non-ascii'}, name))
-                    if e.get('role') == 'editor':
-                        div.append( build.span({'class': 'editor'}, "Ed.") )
-                    div.append( build.span({'class': 'ascii'}, '(%s)' % ascii))
-                return div
-                
-            div = build.div({'class': 'author'})
+            name, ascii = short_author_name_set(x)
+            role = short_author_role(x)
+            div = add.div(h, x, classes='author')
+            if role:
+                role = build.span(role, classes=x.get('role'))
             if name:
-                ndiv = wrap_nonascii(e, name, aname)
-                ndiv.set('class', 'author-name')
-                div.append(ndiv)
-
-            org  = utils.name.short_org_name(e)
-            aorg = utils.name.short_org_ascii_name(e)
+                div.append(wrap_ascii('div', '', name, ascii, role, classes='author-name'))
+            org, ascii  = short_org_name_set(x)
             if org:
-                odiv = wrap_nonascii(e.find('organization'), org, aorg)
-                odiv.set('class', 'org')
-                div.append(odiv)
-            h.append(div)
+                div.append(wrap_ascii('div', '', org, ascii, None, classes='org'))
+            return div
 
     # 9.7.2.  Authors of This Document
     # 
@@ -580,7 +815,6 @@ class HtmlWriter(BaseV3Writer):
     #    The HTML <address> element will contain an HTML <div> with CSS class
     #    "nameRole".  That div will contain an HTML <span> element with CSS
     #    class "fn" containing the value of the "fullname" attribute of the
-    # 
     #    <author> XML element and an HTML <span> element with CSS class "role"
     #    containing the value of the "role" attribute of the <author> XML
     #    element (if there is a role).  Parentheses will surround the <span
@@ -625,10 +859,38 @@ class HtmlWriter(BaseV3Writer):
     #        </div>
     #      </div>
     #    </address>
-
         elif self.part == 'back':
-            self.default_renderer(h, e, **kwargs)
-
+            name, ascii  = full_author_name_set(x)
+            # ascii is set only if name has codepoint not in Latin script blocks
+            role = x.get('role')
+            # 
+            addr = add.address(h, x, classes='vcard')
+            #
+            name_div  = build.div(classes='nameRole')
+            if role:
+                add.span(name_div, None, name, '(', build.span(role, classes='role'), ')', classes='fn')
+            else:
+                add.span(name_div, None, name, classes='fn')
+            #
+            if ascii:
+                ascii_div = build.div(classes='nameRole')
+                if role:
+                    add.span(ascii_div, None, ascii, '(', build.span(role, classes='role'), ')', classes='fn')
+                else:
+                    add.span(ascii_div, None, ascii, classes='fn')
+                #
+                ascii_div = add.div(addr, None, ascii_div, classes='ascii')
+                for c in x.getchildren():
+                    self.render(ascii_div, c)
+                add.div(addr, None, 'Additional contact information:', classes='alternative-contact')
+                nonasc_div = add.div(addr, None, name_div, classes='non-ascii')
+                for c in x.getchildren():
+                    self.render(nonasc_div, c)
+            else:
+                addr.append(name_div)
+                for c in x.getchildren():
+                    self.render(addr, c)
+            return addr
     # 
     # 9.7.3.  Authors of References
     # 
@@ -640,10 +902,32 @@ class HtmlWriter(BaseV3Writer):
     #    <span class="refAuthor">Flanagan, H.</span> and
     #    <span class="refAuthor">N. Brownlee</span>
         elif self.part == 'references':
-            self.default_renderer(h, e, **kwargs)
+            prev  = x.getprevious()
+            next  = x.getnext()
+            role = short_author_role(x)
+            if   prev == None or prev.tag != 'author':
+                # single autor or the first author in a list
+                name, ascii = ref_author_name_first(x)
+                span = wrap_ascii('span', '', name, ascii, role, classes='refAuthor')
+            elif prev != None and prev.tag == 'author' and next != None and next.tag == 'author':
+                # not first and not last author in a list
+                name, ascii = ref_author_name_first(x)
+                span = wrap_ascii('span', ', ', name, ascii, role, classes='refAuthor')
+            elif prev != None and prev.tag == 'author' and prev.getprevious() != None and prev.getprevious().tag == 'author':
+                # last author in a list of authors
+                name, ascii = ref_author_name_last(x)
+                span = wrap_ascii('span', ', and ', name, ascii, role, classes='refAuthor')
+            elif prev != None and prev.tag == 'author':
+                # second author of two
+                name, ascii = ref_author_name_last(x)
+                span = wrap_ascii('span', ' and ', name, ascii, role, classes='refAuthor')
+            else:
+                self.err(x, "Internal error, unexpected state when rendering authors.")
+            h.append(span)
+            return span
 
         else:
-            self.err(e, "Did not expect to be asked to render <%s> while in <%s>" % (e.tag, e.getparent().tag))
+            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
 
     # 9.8.  <back>
     # 
@@ -681,9 +965,7 @@ class HtmlWriter(BaseV3Writer):
     #        <a class="selfRef" href="#n-unimportant">Unimportant</a>
     #      </h2>
     #    </section>
-    def render_back(self, h, e, **kwargs):
-        self.default_renderer(h, e, **kwargs)
-
+    render_back = skip_renderer
 
     # 9.9.  <bcp14>
     # 
@@ -691,7 +973,9 @@ class HtmlWriter(BaseV3Writer):
     #    <span> element with the CSS class "bcp14".
     # 
     #    You <span class="bcp14">MUST</span> be joking.
-    # 
+    def render_bcp14(self, h, x):
+        return add.span(h, x, classes='bcp14')
+
     # 9.10.  <blockquote>
     # 
     #    This element renders in a way similar to the HTML <blockquote>
@@ -718,7 +1002,21 @@ class HtmlWriter(BaseV3Writer):
     #      </p>
     #      <cite>&mdash; <a href="http://...">Abraham Lincoln</a></cite>
     #    </blockquote>
-    # 
+    def render_blockquote(self, h, x):
+        frm  = x.get('quotedFrom')
+        cite = x.get('cite')
+        quote = add.blockquote(h, x)
+        if cite:
+            quote.set('cite', cite)
+        for c in x.getchildren():
+            self.render(quote, c)
+        self.maybe_add_pilcrow(quote)
+        if frm:
+            if cite:
+                frm = build.a(frm, href=cite)
+            add.cite(quote, None, mdash, ' ', frm)
+        return quote
+
     # 9.11.  <boilerplate>
     # 
     #    The Status of This Memo and the Copyright statement, together
@@ -736,9 +1034,7 @@ class HtmlWriter(BaseV3Writer):
     #        <a href="#s-boilerplate-1-1" class="pilcrow">&para;</a>
     #      </p>
     #    ...
-    def render_boilerplate(self, h, e, **kwargs):
-        for c in e.getchildren():
-            self.render(h, c, **kwargs)
+    render_boilerplate = skip_renderer
 
     # 9.12.  <br>
     # 
@@ -753,6 +1049,9 @@ class HtmlWriter(BaseV3Writer):
     #    "locality".
     # 
     #    <span class="locality">Guilford</span>
+    def render_city(self, h, x):
+        return self.address_line_renderer(h, x, classes='locality')
+
     # 
     # 9.14.  <code>
     # 
@@ -760,14 +1059,18 @@ class HtmlWriter(BaseV3Writer):
     #    code".
     # 
     #    <span class="postal-code">GU16 7HF<span>
-    # 
+    def render_code(self, h, x):
+        return self.address_line_renderer(h, x, classes='locality')
+
     # 9.15.  <country>
     # 
     #    This element is rendered as a <div> element with CSS class "country-
     #    name".
     # 
     #    <div class="country-name">England</div>
-    # 
+    def render_country(self, h, x):
+        return self.address_line_renderer(h, x, classes='country-name')
+
     # 9.16.  <cref>
     # 
     #    This element is rendered as a <span> element with CSS class "cref".
@@ -778,7 +1081,15 @@ class HtmlWriter(BaseV3Writer):
     #    <span class="cref" id="crefAnchor">Just a brief comment
     #    about something that we need to remember later.
     #    <span class="crefSource">--life</span></span>
-    # 
+    def render_cref(self, h, x):
+        span = add.span(h, x, classes='cref')
+        for c in x.getchildren():
+            self.render(span, c)
+        source = x.get('source')
+        if source:
+            add.span(span, None, source, classes='crefSource')
+        return span
+
     # 9.17.  <date>
     # 
     #    This element is rendered as the HTML <time> element.  If the "year",
@@ -792,17 +1103,27 @@ class HtmlWriter(BaseV3Writer):
     #    "refDate".
     # 
     #    <time datetime="2014-10" class="published">October 2014</time>
-    # 
+    def render_date(self, h, x):
+        parts = extract_date(x, self.options.date)
+        text = format_date(*parts, legacy=self.options.legacy_date_format)
+        datetime = format_date_iso(*parts)
+        time = add.time(h, x, text, datetime=datetime)
+        if x.getparent() == self.root.find('front'):
+            time.set('class', 'published')
+        return time
+
     # 9.18.  <dd>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_dd = default_renderer
+
     # 9.19.  <displayreference>
     # 
     #    This element does not affect the HTML output, but it is used in the
     #    generation of the <reference>, <referencegroup>, <relref>, and <xref>
     #    elements.
-    # 
+    render_displayreference = null_renderer
+
     # 9.20.  <dl>
     # 
     #    This element is directly rendered as its HTML counterpart.
@@ -811,12 +1132,9 @@ class HtmlWriter(BaseV3Writer):
     #    add the "dlHanging" class.
     # 
     #    If the spacing attribute is "compact", add the "dlCompact" class.
-    def render_dl(self, h, e, **kwargs):
-        classes = kwargs.get('classes', [])
-        #
-        dl = build.dl()
-        newline = e.get('newline')
-        spacing = e.get('spacing')
+    def render_dl(self, h, x):
+        newline = x.get('newline')
+        spacing = x.get('spacing')
         classes = []
         if   newline == 'true':
             classes.append('dlNewline')
@@ -824,18 +1142,23 @@ class HtmlWriter(BaseV3Writer):
             classes.append('dlParallel')
         if   spacing == 'compact':
             classes.append('dlCompact')
-        dl.set('class', ' '.join(classes))
-        for c in e.getchildren():
-            self.render(dl, c, **kwargs)
+        classes = ' '.join(classes)
+        dl = add.dl(h, x, classes=classes)
+        for c in x.getchildren():
+            self.render(dl, c)
+        return dl
 
     # 9.21.  <dt>
     # 
     #    This element is directly rendered as its HTML counterpart.
+    render_dt = default_renderer
+
     # 
     # 9.22.  <em>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_em = default_renderer
+
     # 9.23.  <email>
     # 
     #    This element is rendered as an HTML <div> containing the string
@@ -848,6 +1171,16 @@ class HtmlWriter(BaseV3Writer):
     #      <span>Email:</span>
     #      <a class="email" href="mailto:joe@example.com">joe@example.com</a>
     #    </div>
+    def render_email(self, h, x):
+        value = x.text.strip()
+        cls = 'email'
+        div = add.div(h, None,
+                    build.span("Email:"), '\n',
+                    build.a(value, href='mailto:%s'%value, classes=cls),
+                    classes=cls,
+                )
+        return div
+
     # 
     # 9.24.  <eref>
     # 
@@ -856,7 +1189,9 @@ class HtmlWriter(BaseV3Writer):
     #    class of "eref".
     # 
     #    <a href="https://..." class="eref">the text</a>
-    # 
+    def render_eref(self, h, x):
+        return add.a(h, x, href=x.get('target'))
+
     # 9.25.  <figure>
     # 
     #    This element renders as the HTML <figure> element, containing the
@@ -874,12 +1209,30 @@ class HtmlWriter(BaseV3Writer):
     #        </a>
     #      </figcaption>
     #    </figure>
-    # 
+    def render_figure(self, h, x):
+        figure = add.figure(h, x)
+        anchor = x.get('anchor')
+        if anchor:
+            div = add.div(figure, None, id=anchor)
+        else:
+            div = add.div(figure, None)
+        for c in x.iterchildren('artwork', 'sourcecode'):
+            self.render(div, c)
+        pn = x.get('pn')
+        caption = add.figcaption(figure, None)
+        a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn)
+        name = x.find('name')
+        if name != None:
+            a.tail = '\n'
+            a = add.a(caption, name, href='#%s'%name.get('slugifiedName'), classes='selfRef')
+            self.inline_text_renderer(a, name)
+        return div
+
     # 9.26.  <front>
     # 
     #    See "Document Information" (Section 6.5) for information on this
     #    element.
-    def render_front(self, h, e, **kwargs):
+    def render_front(self, h, x):
         if self.part == 'front':
             # 6.5.  Document Information
             # 
@@ -936,83 +1289,84 @@ class HtmlWriter(BaseV3Writer):
             #   * Intended Status: <Cagegory Name>
             #   * Expires: <Date>
 
+            def entry(dl, name, value):
+                cls = slugify(name)
+                dl.append( build.dt('%s:'%name, classes='label-%s'%cls))
+                dl.append( build.dd(value, classes=cls))
+
             dl = build.dl(id='identifiers')
-            h.append( build.div({'class': 'document-information'}, dl ))
+            h.append( build.div(dl, classes='document-information' ))
             if self.options.rfc:
                 # Stream
                 stream = self.root.get('submissionType')
-                dl.append( build.dt('Stream:'))
-                dl.append( build.dd({'class':'stream'}, strings.stream_name[stream]))
+                entry(dl, 'Stream', strings.stream_name[stream])
                 # Series info
-                for series in e.xpath('./seriesInfo'):
-                    dl.append( build.dt('%s:' % series.get('name')))
-                    dl.append(build.dd({'class':'series'}, series.get('value')))
-
+                for series in x.xpath('./seriesInfo'):
+                    self.render_seriesinfo(dl, series)
                 for section in ['obsoletes', 'updates']:
                     items = self.root.get(section)
                     if items:
-                        dl.append( build.dt('%s:'%section.capitalize()) )
-                        dd = build.dd({'class': section})
+                        alist = []
                         for num in items.split(','):
                             num = num.strip()
-                            a = build.a(num, {'class':'eref'}, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%num))
+                            a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%num), classes='eref')
                             a.tail = ' '
-                            dd.append(a)
-                        dl.append( dd )
+                            alist.append(a)
+                        entry(dl, section.title(), *alist)
 
                 category = self.root.get('category', '')
                 if category:
-                    dl.append( build.dt('Category:'))
-                    dl.append( build.dd({'class': category.lower()}, strings.category_name[category] ))
-                dl.append( build.dt('ISSN:'))
-                dl.append( build.dd({'class':'issn'}, '2070-1721'))
+                    entry(dl, 'Category', strings.category_name[category])
+                # Publication date
+                entry(dl, 'Published', self.render_date(None, x.find('date')))
+                # ISSN
+                entry(dl, 'ISSN', '2070-1721')
 
             else:
                 # Workgroup
-                for wg in e.xpath('./workgroup'):
-                    dl.append( build.dt('Workgroup:'))
-                    dl.append( build.dd({'class':'workgroup'}, wg))
-                for series in e.xpath('./seriesInfo'):
-                    dl.append( build.dt('%s:' % series.get('name')))
-                    dl.append( build.dd({'class':'series'}, series.get('value')))
-
+                for wg in x.xpath('./workgroup'):
+                    entry(dl, 'Workgroup', wg)
+                # Internet-Draft
+                for series in x.xpath('./seriesInfo'):
+                    entry(dl, series.get('name'), series.get('value'))
+                # Obsoletes and Updates
                 for section in ['obsoletes', 'updates']:
                     items = self.root.get(section)
                     if items:
-                        dl.append( build.dt('%s:'%section.capitalize()) )
-                        dd = build.dd({'class': section})
+                        alist = []
                         for num in items.split(','):
                             num = num.strip()
-                            a = build.a(num, {'class':'eref'}, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%num))
+                            a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%num), classes='eref')
                             a.tail = ' '
-                            dd.append(a)
-                        dl.append( dd )
-
+                            alist.append(a)
+                        entry(dl, section.title(), *alist)
+                # Publication date
+                entry(dl, 'Published', self.render_date(None, x.find('date')))
                 # Intended category
                 category = self.root.get('category', '')
                 if category:
-                    dl.append( build.dt('Intended Status:'))
-                    dl.append( build.dd({'class': category.lower()}, strings.category_name[category] ))
+                    entry(dl, 'Intended Status', strings.category_name[category])
                 # Expiry date
-                exp = utils.date.get_expiry_date(self.root, self.date)
-                dl.append( build.dt('Expires'))
-                dl.append( build.dd({'class': 'date'}, utils.date.format_date(exp.year, exp.month, exp.day, self.options.legacy_date_format) ))
+                exp = get_expiry_date(self.root, self.date)
+                expdate = build.date(year=str(exp.year), month=str(exp.month))
+                if exp.day:
+                    expdate.set('day', str(exp.day))
+                entry(dl, 'Expires', self.render_date(None, expdate))
 
-            authors = e.xpath('./author')
-            dl.append( build.dt('Authors:' if len(authors)>1 else 'Author:') )
-            dd = build.dd({'class':'authors'})
-            dl.append(dd)
+            authors = x.xpath('./author')
+            dl.append( build.dt('Authors:' if len(authors)>1 else 'Author:', classes='label-authors' ))
+            dd = add.dd(dl, None, classes='authors')
             for a in authors:
-                self.render(dd, a, **kwargs)
+                self.render(dd, a)
 
-            for c in e.iterchildren('title', 'abstract', 'note', 'boilerplate'):
-                self.render(h, c, **kwargs)
+            for c in x.iterchildren('title', 'abstract', 'note', 'boilerplate'):
+                self.render(h, c)
 
         elif self.part == 'references':
-            self.default_renderer(h, e, **kwargs)
+            self.default_renderer(h, x)
         else:
-            self.err(e, "Did not expect to be asked to render <%s> while in <%s>" % (e.tag, e.getparent().tag))
-            
+            self.err(x, "Did not expect to be asked to render <%s> while in <%s> (self.part: %s)" % (x.tag, x.getparent().tag, self.part))
+        
 
     # 9.27.  <iref>
     # 
@@ -1020,7 +1374,9 @@ class HtmlWriter(BaseV3Writer):
     #    "id" attribute consisting of the <iref> element's "irefid" attribute:
     # 
     #    <span class="iref" id="s-Paragraphs-first-1"/>
-    # 
+    def render_iref(self, h, x):
+        return add.span(h, x, classes='iref', id=x.get('pn'))
+
     # 9.28.  <keyword>
     # 
     #    Each <keyword> element renders its text into the <meta> keywords in
@@ -1035,16 +1391,25 @@ class HtmlWriter(BaseV3Writer):
     #    pilcrow is added.
     # 
     #    <li id="s-2-7">Item <a href="#s-2-7" class="pilcrow">&para;</a></li>
-    def render_li(self, h, e, **kwargs):
-        li = build.li()
-        classes = h.get('class')
-        if classes:
-            li.set('class', classes)
-        h.append(li)
-        self.inner_text_renderer(li, e, **kwargs)
+    def render_li_ul(self, h, x):
+        li = add.li(h, x, classes=h.get('class', ''))
+        for c in x.getchildren():
+            self.render(li, c)
+        self.maybe_add_pilcrow(li)
+        return li
 
-
-
+    def render_li(self, h, x):
+        p = x.getparent()
+        if   p.tag == 'ul':
+            li = self.render_li_ul(h, x)
+        elif p.tag == 'dl':
+            li = self.render_li_dl(h, x)
+        elif p.tag == 'ol':
+            li = self.render_li_ol(h, x)
+        else:
+            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, p.tag))
+            li = None
+        return li
 
     # 9.30.  <link>
     # 
@@ -1053,46 +1418,43 @@ class HtmlWriter(BaseV3Writer):
     # 9.31.  <middle>
     # 
     #    This element does not add any direct output to HTML.
-
-    def render_middle(self, h, e, **kwargs):
-        self.default_renderer(h, e, **kwargs)
-
+    render_middle = skip_renderer
 
     # 9.32.  <name>
     # 
     #    This element is never rendered directly; it is only rendered when
     #    considering a parent element, such as <figure>, <references>,
     #    <section>, or <table>.
-    def render_name(self, s, e, **kwargs):
-        p = e.getparent()
-        if p.tag in [ 'note', 'section', 'references' ]:
+    def render_name(self, s, x):
+        p = x.getparent()
+        if   p.tag in [ 'note', 'section', 'references' ]:
             pn = p.get('pn')
             prefix, number = pn.split('-', 1)
             number += '.'
             if re.search(r'^[a-z]', number):
-                __, num = number.split('.', 1)
+                num = number.split('.', 1)[1]
             else:
                 num = number
             level = min([6, len(num.split('.')) ])
             tag = 'h%d' % level
-            h = build(tag, id=e.get('slugifiedName'))
+            h = build(tag, id=x.get('slugifiedName'))
             s.append(h)
             #
             numbered = p.get('numbered')
             if numbered == 'true':
-                a_number = build.a(number, {'class': 'selfRef'}, href='#%s'%pn)
+                a_number = build.a(number, '\u00a0', href='#%s'%pn, classes='section-number selfRef')
                 h.append( a_number)
-            a_title = build.a({'class': 'selfRef'})
+            a_title = build.a(href='#%s'%x.get('slugifiedName'), classes='section-name selfRef')
+            self.inline_text_renderer(a_title, x)
             h.append(a_title)
-            anchor = p.get('anchor')
-            if anchor:
-                a_title.set('href', '#%s'%anchor)
-            self.inner_text_renderer(a_title, e, **kwargs)
+            return h
+        elif p.tag in [ 'table', 'figure' ]:
+            return None
         else:
-            self.warn(e, "Did not expect to be asked to render <%s> while in <%s>" % (e.tag, e.getparent().tag))
-            self.default_renderer(s, e, **kwargs)
+            self.warn(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
+            self.default_renderer(s, x)
 
-    # 
+
     # 9.33.  <note>
     # 
     #    This element is rendered like a <section> element, but without a
@@ -1109,7 +1471,8 @@ class HtmlWriter(BaseV3Writer):
     #        <a href="#s-note-1-1" class="pilcrow">&para;</a>
     #      </p>
     #    </section>
-    # 
+
+
     # 9.34.  <ol>
     # 
     #    The output created from an <ol> element depends upon the "style"
@@ -1120,7 +1483,16 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    The group attribute is not copied; the input XML should have start
     #    values added by a prep tool for all grouped <ol> elements.
-    # 
+    def render_ol(self, h, x):
+        type = x.get('type')
+        if len(type) > 1 and '%' in type:
+            ol = add.dl(h, x, classes='olPercent', **x.attrib)
+        else:
+            ol = add.ol(h, x, classes=x.get('spacing'), **x.attrib)
+        for c in x.getchildren():
+            self.render(ol, c)
+        return ol
+
     # 9.34.1.  Percent Styles
     # 
     #    If the style attribute includes the character "%", the output is a
@@ -1132,7 +1504,15 @@ class HtmlWriter(BaseV3Writer):
     #      <dt>Requirement xviii:</dt>
     #      <dd>Wheels on a big rig</dd>
     #    </dl>
-    # 
+    def render_li_dl(self, h, x):
+        label = x.get('derivedCounter')
+        dt = add.dt(h, None, label)
+        dd = add.dd(h, x)
+        for c in x.getchildren():
+            self.render(dd, c)
+        self.maybe_add_pilcrow(dd)
+        return dt, dd
+
     # 9.34.2.  Standard Styles
     # 
     #    For all other styles, an <ol> tag is emitted, with any "style"
@@ -1141,7 +1521,13 @@ class HtmlWriter(BaseV3Writer):
     #    <ol class="compact" type="I" start="18">
     #      <li>Wheels on a big rig</li>
     #    </ol>
-    # 
+    def render_li_ol(self, h, x):
+        li = add.li(h, x)
+        for c in x.getchildren():
+            self.render(li, c)
+        self.maybe_add_pilcrow(li)
+        return li
+
     # 9.35.  <organization>
     # 
     #    This element is rendered as an HTML <div> tag with CSS class "org".
@@ -1155,7 +1541,18 @@ class HtmlWriter(BaseV3Writer):
     #      <span class="non-ascii">Test Org</span>
     #      (<span class="ascii">TEST ORG</span>)
     #    </div>
-    # 
+    def render_organization(self, h, x):
+        if self.part == 'back':
+            p  = x.getparent()
+            script = h.get('class')
+            if script == 'ascii':
+                div = add.div(h, x, full_org_ascii_name(p), classes='org')
+            else:
+                div = add.div(h, x, full_org_name(p), classes='org')
+        else:
+            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
+        return div
+
     # 9.36.  <phone>
     # 
     #    This element is rendered as an HTML <div> tag containing the string
@@ -1169,7 +1566,21 @@ class HtmlWriter(BaseV3Writer):
     #      <a class="tel" href="tel:+1-720-555-1212">+1-720-555-1212</a>
     #      <span class="type">VOICE</span>
     #    </div>
-    # 
+    def render_phone(self, h, x):
+        # The content of <span class="type">VOICE</span> seems to violate the
+        # vcard types (they identify things like 'Home', 'Work', etc) and
+        # will be skipped.  The 
+        if not x.text:
+            return None
+        value = x.text.strip()
+        cls = 'tel'
+        div = add.div(h, None,
+                    build.span("Phone:"), '\n',
+                    build.a(value, href='tel:%s'%value, classes=cls),
+                    classes=cls,
+                )
+        return div
+
     # 9.37.  <postal>
     # 
     #    This element renders as an HTML <div> with CSS class "adr", unless it
@@ -1205,7 +1616,28 @@ class HtmlWriter(BaseV3Writer):
     #      </div>
     #      <div class="country-name">United States of America</div>
     #    </div>
-    # 
+    ##
+    ##  Much of the description above is much too americentric, and also
+    ##  conflicts with hCard.  Examples from hCard will be used instead,
+    ##  and addresses rendered in a format appropriate for their country.
+    ##  
+    ##   <span class="adr">
+    ##      <span class="street-address">12 rue Danton</span>
+    ##      <span class="postal-code">94270</span>
+    ##      <span class="locality">Le Kremlin-Bicetre</span>
+    ##      <span class="country-name">France</span>
+    ##   </span>    
+    def render_postal(self, h, x):
+        latin = h.get('class') == 'ascii'
+        adr = get_normalized_address_info(x, latin=latin)
+        if adr:
+            for item in format_address(adr, latin=latin):
+                h.append(item)
+        else:
+            # render elements in found order
+            for c in x.getchildren():
+                self.render(h, c)
+
     # 9.38.  <postalLine>
     # 
     #    This element renders as the text contained by the element, followed
@@ -1221,13 +1653,21 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <pre class="label">In care of:
     #    Computer Sciences Division</pre>
-    # 
+    def render_postalline(self, h, x):
+        return self.address_line_renderer(h, x, classes='extended-address')
+
     # 9.39.  <refcontent>
     # 
     #    This element renders as an HTML <span> with CSS class "refContent".
     # 
     #    <span class="refContent">Self-published pamphlet</span>
-    # 
+    def render_refcontent(self, h, x):
+        span = add.span(h, x, classes='refContent')
+        for c in x.getchildren():
+            self.render(span, c)
+        return span
+
+
     # 9.40.  <reference>
     # 
     #    If the parent of this element is not a <referencegroup>, this element
@@ -1255,7 +1695,33 @@ class HtmlWriter(BaseV3Writer):
     #    <div class="refInstance" id="RFC5730">
     #      ...
     #    </div>
-    # 
+    def render_reference(self, h, x):
+        p = x.getparent()
+        if p.tag != 'referencegroup':
+            dl = add.dl(h, x, classes='reference')
+            add.dt(dl, x, '[%s]'%x.get('derivedAnchor'))
+            dd = add.dd(dl, None)
+            # Deal with parts in the correct order
+            for c in x.iterdescendants('author'):
+                self.render(dd, c)
+            for ctag in ('title', 'refcontent', 'seriesInfo', 'date', ):
+                for c in x.iterdescendants(ctag):
+                    if len(dd):
+                        dd[-1].tail = ', '
+                    self.render(dd, c)
+            target = x.get('target')
+            if target:
+                dd.append( build.span(', <', build.a(target, href=target), '>') )
+            if len(dd):
+                dd[-1].tail = '. '
+            for ctag in ('annotation', ):
+                for c in x.iterdescendants(ctag):
+                    self.render(dd, c)
+            return dl
+        else:
+            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
+
+
     # 9.41.  <referencegroup>
     # 
     #    A <referencegroup> is translated into a <dt> <dd> pair, with the
@@ -1313,9 +1779,10 @@ class HtmlWriter(BaseV3Writer):
     #      </section>
     #      ...
     #    </section>
-    def render_references(self, h, e, **kwargs):
-        self.part = e.tag
-        self.default_renderer(h, e, **kwargs)
+    def render_references(self, h, x):
+        self.part = x.tag
+        self.render_section(h, x)
+
 
     # 
     # 9.43.  <region>
@@ -1323,6 +1790,9 @@ class HtmlWriter(BaseV3Writer):
     #    This element is rendered as a <span> tag with CSS class "region".
     # 
     #    <span class="region">Colorado</span>
+    def render_region(self, h, x):
+        return self.address_line_renderer(h, x, classes='region')
+
     # 
     # 9.44.  <relref>
     # 
@@ -1338,8 +1808,8 @@ class HtmlWriter(BaseV3Writer):
     #    element).  When used, this <a class='xref'> HTML tag is always
     #    surrounded by square brackets, for example, "[<a class='xref'
     #    href='#foo'>foo</a>]".
-    def render_relref(self, h, e, **kwargs):
-        self.render_xref(h, e, **kwargs)
+    def render_relref(self, h, x):
+        return self.render_xref(h, x)
 
 
     # 9.44.1.  displayFormat='of'
@@ -1424,12 +1894,12 @@ class HtmlWriter(BaseV3Writer):
     #    See <a class="relref"
     #    href="http://www.rfc-editor.org/info/rfc9999#s-2.3">Section
     #    2.3</a> and ...
-    # 
+
     # 9.45.  <rfc>
     # 
     #    Various attributes of this element are represented in different parts
     #    of the HTML document.
-    # 
+
     # 9.46.  <section>
     # 
     #    This element is rendered as an HTML <section> element, containing an
@@ -1446,21 +1916,23 @@ class HtmlWriter(BaseV3Writer):
     #      <p id="s-1-1">Paragraph <a href="#s-1-1" class="pilcrow">&para;</a>
     #      </p>
     #    </section>
-    def render_section(self, h, e, **kwargs):
-        pn = e.get('pn')
-        section = build.section(id=pn)
+    def render_section(self, h, x):
+        section = add(x.tag, h, x)
         #
-        anchor = e.get('anchor')
+        hh = section
+        anchor = x.get('anchor')
         if anchor:
             div = build.div(id=anchor)
             section.append(div)
             hh = div
-        else:
-            hh = section
+            if anchor == 'toc':
+                add.a(div, None, "\u25b2", href="#", onclick="scroll(0,0)", classes="toplink")
         #
-        for c in e.getchildren():
-            self.render(hh, c, **kwargs)
-        h.append(section)
+        for c in x.getchildren():
+            self.render(hh, c)
+        return hh
+    render_note = render_section
+#    render_references = render_section
 
     # 9.47.  <seriesInfo>
     # 
@@ -1468,7 +1940,33 @@ class HtmlWriter(BaseV3Writer):
     #    "seriesInfo".
     # 
     #    <span class="seriesInfo">RFC 5646</span>
-    # 
+    ## This is different from what's shown in the sample documents, _and_
+    ## different from what's shown in Section 6.5.  Following the sample doc
+    ## here.
+    def render_seriesinfo(self, h, x):
+        def entry(dl, name, value):
+            cls = slugify(name)
+            dl.append( build.dt('%s:'%name, classes='label-%s'%cls))
+            dl.append( build.dd(value, classes=cls))
+        #
+        name  = x.get('name') 
+        value = x.get('value')
+        if   self.part == 'front':
+            if   name == 'RFC':
+                value = build.a(value, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%value), classes='eref')
+            elif name == 'DOI':
+                value = build.a(value, href=os.path.join(self.options.doi_base_url, value), classes='eref')
+            elif name == 'Internet-Draft':
+                value = build.a(value, href=os.path.join(self.options.id_base_url, value), classes='eref')
+            entry(h, name, value)
+            return h
+        elif self.part == 'references':
+            span = add.span(h, x, name, value)
+            return span
+        else:
+            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
+
+
     # 9.48.  <sourcecode>
     # 
     #    This element is rendered in an HTML <pre> element with a CSS class of
@@ -1490,26 +1988,49 @@ class HtmlWriter(BaseV3Writer):
     #        return 0;
     #    }
     #    </pre>
-    # 
+    def render_sourcecode(self, h, x):
+        file = x.get('name')
+        type = x.get('type')
+        mark = x.get('markers') == 'true'
+        classes = 'sourcecode'
+        if type:
+            classes += ' lang-%s' % type
+        div = add.div(h, x)
+        div.text = None
+        pre = add.pre(div, None, x.text, classes=classes)
+        if mark:
+            text = pre.text.strip()
+            text = (' file "%s"\n%s' % (file, text)) if text else '\n%s' % text
+            text = "<CODE BEGINS>%s\n<CODE ENDS>" % text
+            pre.text = text
+        self.maybe_add_pilcrow(div)
+        return div
+
+
     # 9.49.  <street>
     # 
     #    This element renders as an HTML <div> element with CSS class "street-
     #    address".
     # 
     #    <div class="street-address">1899 Wynkoop St, Suite 600</div>
-    # 
+    def render_street(self, h, x):
+        return self.address_line_renderer(h, x, classes='street-address')
+
     # 9.50.  <strong>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_strong = default_renderer
+
     # 9.51.  <sub>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_sub = default_renderer
+
     # 9.52.  <sup>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_sup = default_renderer
+
     # 9.53.  <t>
     # 
     #    This element is rendered as an HTML <p> element.  A pilcrow
@@ -1517,49 +2038,75 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <p id="s-1-1">A paragraph.
     #      <a href="#s-1-1" class="pilcrow">&para;</a></p>
-    def render_t(self, h, e, **kwargs):
-        id = e.get('anchor') or e.get('pn')
-        if id is None:
-            debug.show('h')
-            debug.show('lxml.etree.tostring(h)')
-            debug.show('e')
-            debug.show('e.text')
-        if (e.tail and e.tail.strip()) or h.tag not in ['li', 'p', ] :
-            p = build.p(e.text or '', id=id)
-            p.tail = e.tail
-            h.append(p)
-            hh = p
-        else:
-            hh = h
-        for c in e.getchildren():
-            self.render(hh, c, **kwargs)
-
+    def render_t(self, h, x):
+        anchor = x.get('anchor')
+        if anchor:
+            h = add.div(h, None, id=anchor)
+        p = add.p(h, x)
+        for c in x.getchildren():
+            self.render(p, c)
+        add.a(p, None, pilcrow, classes='pilcrow', href='#%s'%x.get('pn'))
+        return p
 
     # 
     # 9.54.  <table>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    def render_table(self, h, x):
+        table = add.table(h, x)
+        caption = add.caption(table, None, align='bottom')
+        pn = x.get('pn')
+        name = x.find('name')
+        anchor = x.get('anchor')
+        if anchor:
+            caption.set('id', anchor)
+        a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn)
+        if name != None:
+            a.tail = '\n'
+            a = add.a(caption, name, href='#%s'%name.get('slugifiedName'), classes='selfRef')
+            self.inline_text_renderer(a, name)
+        for c in x.getchildren():
+            self.render(table, c)
+        return table
+
     # 9.55.  <tbody>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_tbody = default_renderer
+
     # 9.56.  <td>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    def render_td(self, h, x):
+        classes = "text-%s" % x.get('align')
+        hh = add(x.tag, h, x, classes=classes)
+        hh.set('align', x.get('align','left'))
+        hh.set('rowspan', x.get('rowspan', '1'))
+        hh.set('colspan', x.get('colspan', '1'))
+        for c in x.getchildren():
+            self.render(hh, c)
+
     # 9.57.  <tfoot>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_tfoot = default_renderer
+
     # 9.58.  <th>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    def render_th(self, h, x):
+        classes = "text-%s" % x.get('align')
+        hh = add(x.tag, h, x, classes=classes)
+        hh.set('rowspan', x.get('rowspan', '1'))
+        hh.set('colspan', x.get('colspan', '1'))
+        for c in x.getchildren():
+            self.render(hh, c)
+
     # 9.59.  <thead>
-    # 
+    #
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_thead = default_renderer
+ 
     # 9.60.  <title>
     # 
     #    The title of the document appears in a <title> element in the <head>
@@ -1577,35 +2124,48 @@ class HtmlWriter(BaseV3Writer):
     #    <span>.
     # 
     #    <span class="refTitle">"Tags for Identifying Languages"</span>
-    def render_title(self, h, e, **kwargs):
-        pp = e.getparent().getparent()
-        title = e.text
-        if self.part == 'references':
+    def render_title(self, h, x):
+        pp = x.getparent().getparent()
+        title = x.text
+        if pp.get("quoteTitle") == 'true':
+            title = '"%s"' % title
+        ascii = x.get('ascii')
+        if ascii and not is_script(title, 'Latin'):
             if pp.get("quoteTitle") == 'true':
-                title = '"%s"' % title
-            span = build.span({'class':'refTitle'}, title)
-            h.append(span)
+                ascii = '"%s"' % ascii
+        #
+        if self.part == 'references':
+            if title:
+                span = wrap_ascii('span', '', title, ascii, '', classes='refTitle')
+                h.append(span)
+                return span
         else:
             h1 = build.h1(title, id='title')
             h.append(h1)
+            return h1
 
     # 9.61.  <tr>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    # 
+    render_tr = default_renderer
+
     # 9.62.  <tt>
     # 
     #    This element is rendered as an HTML <code> element.
-    # 
+    def render_tt(self, h, x):
+        hh = add.code(h, x)
+        for c in x.getchildren():
+            self.render(hh, c)
+
     # 9.63.  <ul>
     # 
     #    This element is directly rendered as its HTML counterpart.  If the
     #    "spacing" attribute has the value "compact", a CSS class of
     #    "ulCompact" will be added.  If the "empty" attribute has the value
     #    "true", a CSS class of "ulEmpty" will be added.
-    def render_ul(self, h, e, **kwargs):
+    def render_ul(self, h, x):
         ul = build.ul()
-        p = e.getparent()
+        p = x.getparent()
         panchor = p.get('anchor')
         classes = h.get('class', '')
         if panchor in ['toc', ]:
@@ -1614,10 +2174,16 @@ class HtmlWriter(BaseV3Writer):
         else:
             hh = ul
         h.append(hh)
+        if x.get('empty')=='true':
+            if not 'ulEmpty' in classes:
+                if classes:
+                    classes += ' '
+                classes += 'ulEmpty' 
         if classes:
             ul.set('class', classes)
-        for c in e.getchildren():
-            self.render(ul, c, **kwargs)
+        for c in x.getchildren():
+            self.render(ul, c)
+        return ul
 
     # 
     # 9.64.  <uri>
@@ -1631,7 +2197,16 @@ class HtmlWriter(BaseV3Writer):
     #      <a href="http://www.example.com"
     #         class="url">http://www.example.com</a>
     #    </div>
-    # 
+    def render_uri(self, h, x):
+        value = x.text.strip()
+        cls = 'url'
+        div = add.div(h, None,
+                    build.span("URI:"), '\n',
+                    build.a(value, href=value, classes=cls),
+                    classes=cls,
+                )
+        return div
+
     # 9.65.  <workgroup>
     # 
     #    This element does not add any direct output to HTML.
@@ -1654,46 +2229,169 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    [<a class="xref" href="#RFC1234">RFC1234</a>]
     # 
-    def render_xref(self, h, e, **kwargs):
+    def render_xref(self, h, x):
         # possible attributes:
-        target  = e.get('target')
-        #pageno  = e.get('pageno')
-        #format  = e.get('format')
-        section = e.get('section')
-        relative= e.get('relative')
-        #link    = e.get('derivedLink')
-        #sformat  = e.get('sectionFormat')
-        content = e.get('derivedContent', '')
+        target  = x.get('target')
+        #pageno  = x.get('pageno')
+        #format  = x.get('format')
+        section = x.get('section')
+        relative= x.get('relative')
+        #sformat  = x.get('sectionFormat')
+        content = x.get('derivedContent', '')
         if content is None:
-            self.die(e, "Found an <%s> without derivedContent: %s" % (e.tag, lxml.etree.tostring(e),))
+            self.die(x, "Found an <%s> without derivedContent: %s" % (x.tag, lxml.etree.tostring(x),))
         if not (section or relative):
             # plain xref
-            a = build.a(content, {'class': 'xref'}, href='#%s'%target)
+            a = build.a(content, href='#%s'%target, classes='xref')
             a.tail = ''
             if target in self.refname_mapping:
-                hh = build.span('[', a, ']', e.tail or '')
+                if (x.text and x.text.strip()):
+                    a = build.a(target, href='#%s'%target, classes='xref')
+                    hh = build.span(content, ' [', a, ']', x.tail or '')
+                else:
+                    hh = build.span('[', a, ']', x.tail or '')
             else:
-                a.tail = e.tail
+                a.tail = x.tail
                 hh = a
             h.append(hh)
-        
-            
+            return hh
+        else:
+            link    = x.get('derivedLink')
+            format  = x.get('displayFormat', x.get('sectionFormat'))
+            # 9.44.1.  displayFormat='of'
+            # 
+            #    The output is an <a class='relref'> HTML tag, with contents of
+            #    "Section " and the value of the "section" attribute.  This is
+            #    followed by the word "of" (surrounded by whitespace).  This is
+            #    followed by the <a class='xref'> HTML tag (surrounded by square
+            #    brackets).
+            # 
+            #    For example, with an input of:
+            # 
+            #    See <relref section="2.3" target="RFC9999" displayFormat="of"
+            #    derivedLink="http://www.rfc-editor.org/info/rfc9999#s-2.3"/>
+            #    for an overview.
+            # 
+            #    The HTML generated will be:
+            # 
+            #    See <a class="relref"
+            #    href="http://www.rfc-editor.org/info/rfc9999#s-2.3">Section
+            #    2.3</a> of [<a class="xref" href="#RFC9999">RFC9999</a>]
+            #    for an overview.
+            if format == 'of':
+                span = add.span(h, None,
+                    build.a('Section %s'%section, href=link, classes='relref'),
+                    ' of [',
+                    build.a(content, href='#%s'%target, classes='xref'),
+                    ']',
+                )
+                return span
+
+            # 9.44.2.  displayFormat='comma'
+            # 
+            #    The output is an <a class='xref'> HTML tag (wrapped by square
+            #    brackets), followed by a comma (","), followed by whitespace,
+            #    followed by an <a class='relref'> HTML tag, with contents of
+            #    "Section " and the value of the "section" attribute.
+            # 
+            #    For example, with an input of:
+            # 
+            #    See <relref section="2.3" target="RFC9999" displayFormat="comma"
+            #    derivedLink="http://www.rfc-editor.org/info/rfc9999#s-2.3"/>,
+            #    for an overview.
+            # 
+            #    The HTML generated will be:
+            # 
+            #    See [<a class="xref" href="#RFC9999">RFC9999</a>], <a class="relref"
+            #    href="http://www.rfc-editor.org/info/rfc9999#s-2.3">Section 2.3</a>,
+            #    for an overview.
+            elif format == 'comma':
+                span = add.span(h, None,
+                    '[',
+                    build.a(content, href='#%s'%target, classes='xref'),
+                    '], ',
+                    build.a('Section %s'%section, href=link, classes='relref'),
+                )
+                return span
+
+
+            # 9.44.3.  displayFormat='parens'
+            # 
+            #    The output is an <a> element with "href" attribute whose value is the
+            #    value of the "target" attribute prepended by "#", and whose content
+            #    is the value of the "target" attribute; the entire element is wrapped
+            #    in square brackets.  This is followed by whitespace.  This is
+            #    followed by an <a> element whose "href" attribute is the value of the
+            #    "derivedLink" attribute and whose content is the value of the
+            #    "derivedRemoteContent" attribute; the entire element is wrapped in
+            #    parentheses.
+            # 
+            #    For example, if Section 2.3 of RFC 9999 has the title "Protocol
+            #    Overview", for an input of:
+            # 
+            #    See <relref section="2.3" target="RFC9999" displayFormat="parens"
+            #    derivedLink="http://www.rfc-editor.org/info/rfc9999#s-2.3"
+            #    derivedRemoteContent="Section 2.3"/> for an overview.
+            # 
+            #    The HTML generated will be:
+            # 
+            #    See [<a class="relref" href="#RFC9999">RFC9999</a>]
+            #    (<a class="relref"
+            #    href="http://www.rfc-editor.org/info/rfc9999#s-2.3">Section
+            #    2.3</a>) for an overview.
+            elif format == 'parens':
+                span = add.span(h, None,
+                    '[',
+                    build.a(content, href='#%s'%target, classes='xref'),
+                    '] (',
+                    build.a('Section %s'%section, href=link, classes='relref'),
+                    ')',
+                )
+                return span
+
+            # 
+            # 9.44.4.  displayFormat='bare'
+            # 
+            #    The output is an <a> element whose "href" attribute is the value of
+            #    the "derivedLink" attribute and whose content is the value of the
+            #    "derivedRemoteContent" attribute.
+            # 
+            #    For this input:
+            # 
+            #    See <relref section="2.3" target="RFC9999" displayFormat="bare"
+            #    derivedLink="http://www.rfc-editor.org/info/rfc9999#s-2.3"
+            #    derivedRemoteContent="Section 2.3"/> and ...
+            # 
+            #    The HTML generated will be:
+            # 
+            #    See <a class="relref"
+            #    href="http://www.rfc-editor.org/info/rfc9999#s-2.3">Section
+            #    2.3</a> and ...
+            elif format == 'bare':
+                span = add.span(h, None,
+                    build.a('Section %s'%section, href=link, classes='relref'),
+                )
+                return span
+            else:
+                self.err(x, 'Unexpected value combination: section: %s  relative: %s  format: %s' %(section, relative, format))
+
+
     # --------------------------------------------------------------------------
     # Post processing
     def post_process(self, h):
-        for e in h.iter():
-            if e.text and e.text.strip() and '\u2028' in e.text:
-                parts = e.text.split('\u2028')
-                e.text = parts[0]
+        for x in h.iter():
+            if x.text and x.text.strip() and '\u2028' in x.text:
+                parts = x.text.split('\u2028')
+                x.text = parts[0]
                 for t in parts[1:]:
                     br = build.br()
                     br.tail = t
-                    e.append( br )
-            if e.tail and e.tail.strip() and '\u2028' in e.tail:
-                p = e.getparent()
-                i = p.index(e)+1
-                parts = e.tail.split('\u2028')
-                e.tail = parts[0]
+                    x.append( br )
+            if x.tail and x.tail.strip() and '\u2028' in x.tail:
+                p = x.getparent()
+                i = p.index(x)+1
+                parts = x.tail.split('\u2028')
+                x.tail = parts[0]
                 for t in parts[1:]:
                     br = build.br()
                     br.tail = t
