@@ -601,7 +601,7 @@ class V2v3XmlWriter(object):
             if not [ s for s in series if equal(s, new) ]:
                 front.insert(i, new)
             if 'docName' in e.attrib:
-                e.insert(0, self.element('link', rel='convertedFrom', href="https://datatracker.ietf.org/doc/%s"%(e.get('docName'), ), line=e.sourceline))
+                e.insert(0, self.element('link', rel='prev', href="https://datatracker.ietf.org/doc/%s"%(e.get('docName'), ), line=e.sourceline))
         elif 'docName' in e.attrib:
             value=e.get('docName')
             if '.' in value:
