@@ -12,6 +12,7 @@ export PYTHONHASHSEED = 0
 datetime_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T_ ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]
 version_regex =  [Vv]ersion [2N]\(\.[0-9N]\+\)\+\(\.dev\)\?
 date_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]
+generator_regex = name="generator"
 
 py = $(shell python -c 'import sys; print("py%s%s" %(sys.version_info.major,sys.version_info.minor))')
 
@@ -60,7 +61,7 @@ pytests:
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
 	for type in .raw.txt .txt .nroff .html .exp.xml .v2v3.xml .prepped.xml ; do					\
-	  diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for $$doc$$type output"; exit 1; } \
+	  diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for $$doc$$type output (1)"; exit 1; } \
 	done ; if [ $$type = ascii ]; then echo "Diff nroff output with xml2rfc output:";\
 	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
 
@@ -96,7 +97,7 @@ tests/out/%.v3.$(py).html: tests/input/%.xml install
 
 %.test: %
 	@echo "Diffing $< against master"
-	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output"; exit 1; }
+	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (2)"; exit 1; }
 
 %.nroff.txt: %.nroff
 	@echo "Creating $@ from $<"
@@ -146,7 +147,7 @@ utf8test: cleantmp  env/bin/python install
 v3featuretest: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network --utf8 --base tmp/ --prep tests/input/draft-v3-features.xml
 	@ echo "Diffing draft-v3-features.prepped.xml against master"
-	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-v3-features.prepped.xml tmp/draft-v3-features.prepped.xml || { echo "Diff failed for $$doc$$type output"; exit 1; } 
+	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-v3-features.prepped.xml tmp/draft-v3-features.prepped.xml || { echo "Diff failed for $$doc$$type output (3)"; exit 1; } 
 
 dateshifttest: cleantmp install
 	@ xml2rfc --cache tests/cache --no-network --date 2013-02-01 --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml
@@ -155,8 +156,8 @@ dateshifttest: cleantmp install
 elementstest: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network --utf8 --out tmp/elements.text --text --v3 tests/input/elements.xml
 	@ xml2rfc --cache tests/cache --no-network --utf8 --out tmp/elements.prepped.xml --prep tests/input/elements.xml
-	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.text tmp/elements.text || { echo "Diff failed for $$doc$$type output"; exit 1; } 
-	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.prepped.xml tmp/elements.prepped.xml || { echo "Diff failed for $$doc$$type output"; exit 1; } 
+	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.text tmp/elements.text || { echo "Diff failed for $$doc$$type output (4)"; exit 1; } 
+	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.prepped.xml tmp/elements.prepped.xml || { echo "Diff failed for $$doc$$type output (5)"; exit 1; } 
 
 cleantmp:
 	[ -d tmp ] || mkdir -p tmp
