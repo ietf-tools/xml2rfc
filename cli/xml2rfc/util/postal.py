@@ -48,7 +48,7 @@ def get_normalized_address_info(x, latin=True):
                 country_element = c
                 break
     if country_info:
-        country_name = get_value(country_element)
+        country_name = get_value(country_element, latin=latin)
         if re.match('[A-Z]{2,3}', country_name):
             country_name = country_info.name
         adr = {
@@ -61,7 +61,7 @@ def get_normalized_address_info(x, latin=True):
             }
         for c in children:
             # Some of these will overwrite data if there are multiple elements
-            value = get_value(c)
+            value = get_value(c, latin=latin)
             if c.tag == 'street':
                 adr['street_address'].append(value)
             elif c.tag == 'postalLine':

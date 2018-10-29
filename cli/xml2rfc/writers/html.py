@@ -161,9 +161,9 @@ def format_address(address, latin=False):
         rules.address_latin_format if latin else rules.address_format)
     address_line_formats = address_format.split('%n')
     address_lines = [
-        build.div(*_format_address_line(lf, address, rules))
+        build.div(*_format_address_line(lf, address, rules), dir='auto')
         for lf in address_line_formats]
-    address_lines.append(build.div(build.span(address['country_name'], classes='country-name')))
+    address_lines.append(build.div(build.span(address['country_name'], classes='country-name'), dir='auto'))
     address_lines = filter(lambda n: n!=None, address_lines)
     return address_lines
 
@@ -869,7 +869,7 @@ class HtmlWriter(BaseV3Writer):
             # 
             addr = add.address(h, x, classes='vcard')
             #
-            name_div  = build.div(classes='nameRole')
+            name_div  = build.div(classes='nameRole', dir="auto")
             if role:
                 add.span(name_div, None, name, ' (', build.span(role, classes='role'), ')', classes='fn')
             else:
@@ -1555,7 +1555,7 @@ class HtmlWriter(BaseV3Writer):
             if script == 'ascii':
                 div = add.div(h, x, full_org_ascii_name(p), classes='org')
             else:
-                div = add.div(h, x, full_org_name(p), classes='org')
+                div = add.div(h, x, full_org_name(p), classes='org', dir='auto')
         else:
             self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
         return div
