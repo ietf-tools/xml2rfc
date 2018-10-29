@@ -1,6 +1,6 @@
-# --------------------------------------------------
-# Copyright The IETF Trust 2011, All Rights Reserved
-# --------------------------------------------------
+# Copyright The IETF Trust 2018, All Rights Reserved
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, print_function, division
 
 # Internal utitlity functions.  Not meant for public usage.
 
@@ -581,5 +581,5 @@ def hastext(e):
     return items
 
 def is_htmlblock(h):
-    return h.tag in [ 'address', 'blockquote', 'div', 'dl', 'fieldset', 'form', 'h1', 'h2', 'h3',
-                      'h4', 'h5', 'h6', 'hr', 'noscript', 'ol', 'p', 'pre', 'table', 'ul', ]
+    return h.tag in set([ 'address', 'article', 'aside', 'blockquote', 'div', 'dl', 'figure',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'ul', ])
