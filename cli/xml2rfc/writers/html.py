@@ -80,6 +80,8 @@ class ClassElementMaker(ElementMaker):
         elem = super(ClassElementMaker, self).__call__(tag, *children, **attrib)
         if classes:
             elem.set('class', classes)
+        if is_htmlblock(elem) and (elem.tail is None or elem.tail.strip() == ''):
+            elem.tail = '\n'
         return elem
 build = ClassElementMaker(makeelement=html_parser.makeelement)
 
@@ -87,6 +89,7 @@ class ExtendingElementMaker(ClassElementMaker):
 
     def __call__(self, tag, parent, precursor, *children, **attrib):
         elem = super(ExtendingElementMaker, self).__call__(tag, *children, **attrib)
+        is_block = is_htmlblock(elem)
         #
         child = elem
         if precursor != None:
@@ -95,7 +98,7 @@ class ExtendingElementMaker(ClassElementMaker):
             an = precursor.get('anchor')
             if   pn != None:
                 elem.set('id', pn)
-                if an != None and is_htmlblock(elem):
+                if an != None and is_block:
                     child = wrap(elem, 'div', id=an)
             elif sn != None:
                 elem.set('id', sn)
@@ -106,6 +109,10 @@ class ExtendingElementMaker(ClassElementMaker):
             elem.tail = precursor.tail
         if parent != None:
             parent.append(child)
+        if is_block and (elem.tail is None or elem.tail.strip() == ''):
+            elem.tail = '\n'
+        if is_block and child != elem and (child.tail is None or child.tail.strip() == ''):
+            child.tail = '\n'
         return elem
 add  = ExtendingElementMaker(makeelement=html_parser.makeelement)
 
@@ -306,10 +313,6 @@ class HtmlWriter(BaseV3Writer):
 
         add.meta(head, None, charset='utf-8')
 
-        # This is not required by the RFC, but is good practice
-        meta = add.meta(head, None, content='text/html; charset=utf-8')
-        meta.set('http-equiv', 'Content-Type')
-
     # 6.3.2.  Document Title
     # 
     #    The contents of the <title> element from the XML source will be
@@ -490,7 +493,7 @@ class HtmlWriter(BaseV3Writer):
         jsin  = self.options.css or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'xml2rfc.js')
         with open(jsin, encoding='utf-8') as f:
             js = f.read()
-        add.script(body, None, js, type='text/javascript')
+        add.script(body, None, js)
 
         return html
 
@@ -868,14 +871,14 @@ class HtmlWriter(BaseV3Writer):
             #
             name_div  = build.div(classes='nameRole')
             if role:
-                add.span(name_div, None, name, '(', build.span(role, classes='role'), ')', classes='fn')
+                add.span(name_div, None, name, ' (', build.span(role, classes='role'), ')', classes='fn')
             else:
                 add.span(name_div, None, name, classes='fn')
             #
             if ascii:
                 ascii_div = build.div(classes='nameRole')
                 if role:
-                    add.span(ascii_div, None, ascii, '(', build.span(role, classes='role'), ')', classes='fn')
+                    add.span(ascii_div, None, ascii, ' (', build.span(role, classes='role'), ')', classes='fn')
                 else:
                     add.span(ascii_div, None, ascii, classes='fn')
                 #
@@ -1211,13 +1214,8 @@ class HtmlWriter(BaseV3Writer):
     #    </figure>
     def render_figure(self, h, x):
         figure = add.figure(h, x)
-        anchor = x.get('anchor')
-        if anchor:
-            div = add.div(figure, None, id=anchor)
-        else:
-            div = add.div(figure, None)
         for c in x.iterchildren('artwork', 'sourcecode'):
-            self.render(div, c)
+            self.render(figure, c)
         pn = x.get('pn')
         caption = add.figcaption(figure, None)
         a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn)
@@ -1226,7 +1224,7 @@ class HtmlWriter(BaseV3Writer):
             a.tail = '\n'
             a = add.a(caption, name, href='#%s'%name.get('slugifiedName'), classes='selfRef')
             self.inline_text_renderer(a, name)
-        return div
+        return figure
 
     # 9.26.  <front>
     # 
@@ -1325,7 +1323,7 @@ class HtmlWriter(BaseV3Writer):
             else:
                 # Workgroup
                 for wg in x.xpath('./workgroup'):
-                    entry(dl, 'Workgroup', wg)
+                    entry(dl, 'Workgroup', wg.text)
                 # Internet-Draft
                 for series in x.xpath('./seriesInfo'):
                     entry(dl, series.get('name'), series.get('value'))
@@ -1399,15 +1397,14 @@ class HtmlWriter(BaseV3Writer):
         return li
 
     def render_li(self, h, x):
-        p = x.getparent()
-        if   p.tag == 'ul':
+        if   h.tag == 'ul':
             li = self.render_li_ul(h, x)
-        elif p.tag == 'dl':
+        elif h.tag == 'dl':
             li = self.render_li_dl(h, x)
-        elif p.tag == 'ol':
+        elif h.tag == 'ol':
             li = self.render_li_ol(h, x)
         else:
-            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, p.tag))
+            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, h.tag))
             li = None
         return li
 
@@ -1442,6 +1439,8 @@ class HtmlWriter(BaseV3Writer):
             #
             numbered = p.get('numbered')
             if numbered == 'true':
+                if number.startswith('appendix'):
+                    number = number.replace('.', ' ', 1).title()
                 a_number = build.a(number, '\u00a0', href='#%s'%pn, classes='section-number selfRef')
                 h.append( a_number)
             a_title = build.a(href='#%s'%x.get('slugifiedName'), classes='section-name selfRef')
@@ -1471,7 +1470,14 @@ class HtmlWriter(BaseV3Writer):
     #        <a href="#s-note-1-1" class="pilcrow">&para;</a>
     #      </p>
     #    </section>
-
+    def render_note(self, h, x):
+        classes = 'note'
+        if x.get('removeInRFC') == 'true':
+            classes += ' rfcEditorRemove'
+        section = add.section(h, x, classes=classes)
+        for c in x.getchildren():
+            self.render(section, c)
+        return section
 
     # 9.34.  <ol>
     # 
@@ -1486,9 +1492,10 @@ class HtmlWriter(BaseV3Writer):
     def render_ol(self, h, x):
         type = x.get('type')
         if len(type) > 1 and '%' in type:
-            ol = add.dl(h, x, classes='olPercent', **x.attrib)
+            ol = add.dl(h, x, classes='olPercent')
         else:
-            ol = add.ol(h, x, classes=x.get('spacing'), **x.attrib)
+            attrib = dict([ (k,v) for (k,v) in x.attrib.items() if k in ['start', 'type', ] ])
+            ol = add.ol(h, x, classes=x.get('spacing'), **attrib)
         for c in x.getchildren():
             self.render(ol, c)
         return ol
@@ -1699,7 +1706,7 @@ class HtmlWriter(BaseV3Writer):
         p = x.getparent()
         if p.tag != 'referencegroup':
             dl = add.dl(h, x, classes='reference')
-            add.dt(dl, x, '[%s]'%x.get('derivedAnchor'))
+            add.dt(dl, None, '[%s]'%x.get('derivedAnchor'))
             dd = add.dd(dl, None)
             # Deal with parts in the correct order
             for c in x.iterdescendants('author'):
@@ -1781,7 +1788,10 @@ class HtmlWriter(BaseV3Writer):
     #    </section>
     def render_references(self, h, x):
         self.part = x.tag
-        self.render_section(h, x)
+        section = add.section(h, x)
+        for c in x.getchildren():
+            self.render(section, c)
+        return section
 
 
     # 
@@ -1918,20 +1928,14 @@ class HtmlWriter(BaseV3Writer):
     #    </section>
     def render_section(self, h, x):
         section = add(x.tag, h, x)
-        #
-        hh = section
         anchor = x.get('anchor')
-        if anchor:
-            div = build.div(id=anchor)
-            section.append(div)
-            hh = div
-            if anchor == 'toc':
-                add.a(div, None, "\u25b2", href="#", onclick="scroll(0,0)", classes="toplink")
-        #
+        if anchor == 'toc':
+            add.a(section, None, "\u25b2", href="#", onclick="scroll(0,0)", classes="toplink")
         for c in x.getchildren():
-            self.render(hh, c)
-        return hh
-    render_note = render_section
+            self.render(section, c)
+        return section
+
+
 #    render_references = render_section
 
     # 9.47.  <seriesInfo>
@@ -2039,9 +2043,6 @@ class HtmlWriter(BaseV3Writer):
     #    <p id="s-1-1">A paragraph.
     #      <a href="#s-1-1" class="pilcrow">&para;</a></p>
     def render_t(self, h, x):
-        anchor = x.get('anchor')
-        if anchor:
-            h = add.div(h, None, id=anchor)
         p = add.p(h, x)
         for c in x.getchildren():
             self.render(p, c)
@@ -2054,12 +2055,9 @@ class HtmlWriter(BaseV3Writer):
     #    This element is directly rendered as its HTML counterpart.
     def render_table(self, h, x):
         table = add.table(h, x)
-        caption = add.caption(table, None, align='bottom')
+        caption = add.caption(table, None)
         pn = x.get('pn')
         name = x.find('name')
-        anchor = x.get('anchor')
-        if anchor:
-            caption.set('id', anchor)
         a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn)
         if name != None:
             a.tail = '\n'
@@ -2080,7 +2078,6 @@ class HtmlWriter(BaseV3Writer):
     def render_td(self, h, x):
         classes = "text-%s" % x.get('align')
         hh = add(x.tag, h, x, classes=classes)
-        hh.set('align', x.get('align','left'))
         hh.set('rowspan', x.get('rowspan', '1'))
         hh.set('colspan', x.get('colspan', '1'))
         for c in x.getchildren():
@@ -2210,7 +2207,8 @@ class HtmlWriter(BaseV3Writer):
     # 9.65.  <workgroup>
     # 
     #    This element does not add any direct output to HTML.
-    # 
+    render_workgroup = null_renderer
+
     # 9.66.  <xref>
     # 
     #    This element is rendered as an HTML <a> element containing an
@@ -2238,21 +2236,25 @@ class HtmlWriter(BaseV3Writer):
         relative= x.get('relative')
         #sformat  = x.get('sectionFormat')
         content = x.get('derivedContent', '')
+        in_name = len(list(x.iterancestors('name'))) > 0
         if content is None:
             self.die(x, "Found an <%s> without derivedContent: %s" % (x.tag, lxml.etree.tostring(x),))
         if not (section or relative):
             # plain xref
-            a = build.a(content, href='#%s'%target, classes='xref')
-            a.tail = ''
-            if target in self.refname_mapping:
-                if (x.text and x.text.strip()):
-                    a = build.a(target, href='#%s'%target, classes='xref')
-                    hh = build.span(content, ' [', a, ']', x.tail or '')
-                else:
-                    hh = build.span('[', a, ']', x.tail or '')
+            if in_name:
+                hh = build.em(content, classes="xref")
             else:
-                a.tail = x.tail
-                hh = a
+                a = build.a(content, href='#%s'%target, classes='xref')
+                a.tail = ''
+                if target in self.refname_mapping:
+                    if (x.text and x.text.strip()):
+                        a = build.a(target, href='#%s'%target, classes='xref')
+                        hh = build.span(content, ' [', a, ']', x.tail or '')
+                    else:
+                        hh = build.span('[', a, ']', x.tail or '')
+                else:
+                    a.tail = x.tail
+                    hh = a
             h.append(hh)
             return hh
         else:
