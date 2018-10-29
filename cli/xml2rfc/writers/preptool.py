@@ -1858,7 +1858,7 @@ class PrepToolWriter:
             item_href = "urn:issn:2070-1721"
             urnlink = e.find('.//link[@rel="item"][@href="%s"]' % (item_href, ))
             if urnlink is None :
-                e.insert(0, self.element('link', rel='item', href=item_href))
+                e.insert(0, self.element('link', rel='alternate', href=item_href))
     #    3.  If in RFC production mode, check if there is a <link> element
     #        with a DOI for this RFC; if not, add one of the form <link
     #        rel="describedBy" href="https://dx.doi.org/10.17487/rfcdd"> where
@@ -1869,9 +1869,9 @@ class PrepToolWriter:
     #        content of the href attribute is expected to change in the
     #        future.
             doi_href = "https://dx.doi.org/10.17487/rfc%s" % self.rfcnumber
-            doilink = e.find('.//link[@rel="describedBy"]')
+            doilink = e.find('.//link[@href="%s"]' % (doi_href, ))
             if doilink is None:
-                e.insert(0, self.element('link', rel='describedBy', href=doi_href))
+                e.insert(0, self.element('link', rel='alternate', href=doi_href))
 
     # 
     #    4.  If in RFC production mode, check if there is a <link> element
@@ -1879,13 +1879,13 @@ class PrepToolWriter:
     #        form <link rel="convertedFrom"
     #        href="https://datatracker.ietf.org/doc/draft-tttttttttt/">.  If
     #        one does not exist, give an error.
-            converted_from = e.find('.//link[@rel="convertedFrom"]')
+            converted_from = e.find('.//link[@rel="prev"]')
             if converted_from is None:
-                self.warn(e, "Expected a <link> with rel='convertedFrom' providing the datatracker url for the origin draft.")
+                self.warn(e, "Expected a <link> with rel='prev' providing the datatracker url for the origin draft.")
             else:
                 converted_from_href = converted_from.get('href', '')
                 if not converted_from_href.startswith("https://datatracker.ietf.org/doc/draft-"):
-                    self.err(converted_from, "Expected the <link rel='convertedFrom'> href= to have the form 'https://datatracker.ietf.org/doc/draft-...', but found '%s'" % (converted_from_href, ))
+                    self.err(converted_from, "Expected the <link rel='prev'> href= to have the form 'https://datatracker.ietf.org/doc/draft-...', but found '%s'" % (converted_from_href, ))
 
     # 5.6.4.  XML Comment Removal
     # 
