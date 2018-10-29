@@ -5,6 +5,7 @@
 # Python libs
 import datetime
 import calendar
+import six
 
 try:
     import debug
@@ -83,7 +84,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             # Extend the number of lines if greater
             if need > needLines:
                 needLines = need
-        self.break_hints[where] = (int(needLines), type)
+        self.break_hints[where] = (needLines, type)
             
 
     def write_with_break_hint(self, writer, type, *args, **kwargs):
@@ -100,8 +101,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
     def needLines(self, count):
         """Deal with the PI directive needLines"""
+        if isinstance(count, six.string_types):
+            if count.isdigit():
+                count = int(count)
+            else:
+                xml2rfc.log.warn('Expected a numeric value for needLines, but got "%s".  Using 3.' % count)
+                count = 3
         try:
-            if int(count) < 0:
+            if count < 0:
                 self._set_break_hint(1, 'break', len(self.buf))
             else:
                 self._set_break_hint(count, 'raw', len(self.buf))
