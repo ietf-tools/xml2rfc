@@ -2,7 +2,6 @@
 # -*- mode: python -*-
 
 import os
-import pprint
 from urllib.request import urlopen
 
 Scripts='Scripts.txt'
@@ -128,11 +127,8 @@ if 'Unknown' not in RANGES.keys():
     RANGES['Unknown'] = []
 
 
-print('RANGES = ',)
-pprint.pprint(RANGES)
+print('RANGES = ', RANGES)
 print('')
-print('SCRIPT_ABBREVS = ',)
-pprint.pprint(SCRIPT_ABBREVS)
+print('SCRIPT_ABBREVS = ', SCRIPT_ABBREVS)
 print('')
-print('BIDI_RANGES = ',)
-pprint.pprint(BIDI_RANGES)
+print('BIDI_RANGES = ', BIDI_RANGES)
