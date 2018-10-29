@@ -1,3 +1,60 @@
+xml2rfc (2.12.1) ietf; urgency=medium
+
+  This release provides some additional polish over release 2.12.0, and also a
+  few bugfixes.  The primary focus for this release has been HTML compliance
+  based on the W3C validator at https://validator.w3.org/.  Valid HTML 5 is
+  now generated for all documents used during testing.  From the commit log:
+
+  * Fixed a number of issues with the v3 html renderer, to improve the 
+    generated html.  Many of these were caught by the W3C validator at validator.w3.org:
+
+    - removed the <meta http-equiv="Content-Type" ...> element, as it should
+      not appear when there is a <meta charset=...> element
+
+    - removed type="text/javascript" from a <script> element (superfluous)
+
+    - removed a number of extraneous wrapping divs with identical id attributes
+
+    - corrected the generation of <dt><dd> items for xml <ol> entries with
+      percentage list types
+
+    - removed some attributes on html entries for xml <ol> lists that had
+      incorrectly been transferred from the xml
+
+    - corrected the block element generated for <references> to <section>
+
+    - fixed an issue where <xref> in <name> would generate nested html <a>
+      elements
+
+  * Also fixed some other issue:
+
+    - added a newline tail for block elements, to improve readability
+
+    - added missing space between author name and (editor)
+
+    - fixed the renderer for <note> to generate html <section> elements with
+      the right class attribute
+
+    - refactored the generation of enclosing divs to hold id="$anchor" to be
+      more consistent, with less code
+
+    - modified the rendering of <xref> with text content to more closely match
+      the historic rendering
+
+  * Updated python-version specific test masters.  Tox runs for py27, py34,
+    py35, and py36 aren now all clean.
+
+  * Changed some invalid <link> rel= values to valid ones in the preptool
+
+  * Tweaked the list of html block-level elements we use to control <div>
+    wrapping
+
+  * Disallowed <iref> as a direct child of <table> in the schema, as it
+    results in invalid html with the rendering specified in RFC 7992.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  29 Oct 2018 05:19:31 -0700
+
+
 xml2rfc (2.12.0) ietf; urgency=medium
 
   This release introduces the vocabulary v3 html formatter.  In order to
