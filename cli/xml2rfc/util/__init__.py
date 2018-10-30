@@ -2,6 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from xml2rfc.util import name, num, date
+from xml2rfc.util import name, num, date, postal
 
-__all__ = ['name', 'num', 'date', ]
+__all__ = ['name', 'num', 'date', 'postal', ]
