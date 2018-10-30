@@ -1,3 +1,35 @@
+xml2rfc (2.12.2) ietf; urgency=medium
+
+  This bugfix release corrects a default setting for --v3 modes so they do not
+  try to apply DTD validation.  It refines the internationalised address
+  layout, and does re-factoring in a number of places.  Non-Latin author names
+  and addresses in Right-To-Left scripts are now properly aligned in the
+  Authors' Addresses section.  It also fixes an issue where needLines PI
+  settings were ineffectual under python2.7, and caused exceptions under
+  python3.5 and higher.  
+
+  Excerpted from the commit log:
+
+  * Changed the HTML renderer to properly place organisation in i18n 
+    address layout, and added back the role indication that was lost in 
+    previous i18n address layout work.
+
+  * Updated run.py to apply the --no-dtd option to all --v3 formats, fixing 
+    an issue in 2.12.1 with running --html --v3 on a converted --v2v3 file.
+
+  * Fixed an issue with needLines when set to a string value.
+
+  * Added simple bidi-support to author addresses, in order to have 
+    addresses in right-to-left scripts align properly.  Fixed a bug in the 
+    handling of non-Latin address information.
+
+  * Tweaked the vcard width to avoid having author names and addresses in 
+    right-to-left script end up far to the right, away from the ASCII 
+    information.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  30 Oct 2018 15:02:12 -0700
+
+
 xml2rfc (2.12.1) ietf; urgency=medium
 
   This release provides some additional polish over release 2.12.0, and also a
