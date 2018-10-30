@@ -161,7 +161,7 @@ dateshifttest: cleantmp install
 elementstest: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network --utf8 --out tmp/elements.text --text --v3 tests/input/elements.xml
 	@ xml2rfc --cache tests/cache --no-network --utf8 --out tmp/elements.prepped.xml --prep tests/input/elements.xml
-	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.text tmp/elements.text || { echo "Diff failed for tmp/elements.txt output (4)"; exit 1; } 
+	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.text tmp/elements.text || { echo "Diff failed for tmp/elements.text output (4)"; exit 1; } 
 	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.prepped.xml tmp/elements.prepped.xml || { echo "Diff failed for tmp/elements.prepped.xml output (5)"; exit 1; } 
 
 cleantmp:
