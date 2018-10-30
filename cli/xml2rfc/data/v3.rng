@@ -284,20 +284,76 @@
       <optional>
         <attribute name="xml:lang"/>
       </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="city"/>
-          <ref name="code"/>
-          <ref name="country"/>
+      <choice>
+        <zeroOrMore>
+          <choice>
+            <ref name="city"/>
+            <ref name="code"/>
+            <ref name="country"/>
+            <ref name="region"/>
+            <ref name="street"/>
+          </choice>
+        </zeroOrMore>
+        <oneOrMore>
           <ref name="postalLine"/>
-          <ref name="region"/>
-          <ref name="street"/>
-        </choice>
-      </zeroOrMore>
+        </oneOrMore>
+        <interleave>
+          <ref name="country"/>
+          <optional>
+            <ref name="region"/>
+          </optional>
+          <optional>
+            <ref name="city"/>
+          </optional>
+          <optional>
+            <ref name="cityarea"/>
+          </optional>
+          <optional>
+            <ref name="code"/>
+          </optional>
+          <optional>
+            <ref name="sortingcode"/>
+          </optional>
+          <zeroOrMore>
+            <ref name="street"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="ext"/>
+          </zeroOrMore>
+        </interleave>
+      </choice>
+    </element>
+  </define>
+  <define name="ext">
+    <element name="ext">
+      <optional>
+        <attribute name="xml:base"/>
+      </optional>
+      <optional>
+        <attribute name="xml:lang"/>
+      </optional>
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
     </element>
   </define>
   <define name="street">
     <element name="street">
+      <optional>
+        <attribute name="xml:base"/>
+      </optional>
+      <optional>
+        <attribute name="xml:lang"/>
+      </optional>
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="cityarea">
+    <element name="cityarea">
       <optional>
         <attribute name="xml:base"/>
       </optional>
@@ -340,6 +396,20 @@
   </define>
   <define name="code">
     <element name="code">
+      <optional>
+        <attribute name="xml:base"/>
+      </optional>
+      <optional>
+        <attribute name="xml:lang"/>
+      </optional>
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="sortingcode">
+    <element name="sortingcode">
       <optional>
         <attribute name="xml:base"/>
       </optional>

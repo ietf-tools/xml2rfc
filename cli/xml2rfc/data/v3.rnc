@@ -113,11 +113,36 @@
      element postal {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-       (city | code | country | postalLine | region | street)*
+       ((city | code | country | region | street)* 
+        | postalLine+
+        | (country 
+	   & region?
+	   & city? 
+	   & cityarea? 
+	   & code? 
+	   & sortingcode? 
+	   & street*
+	   & ext*))
+     }
+
+   ext =
+     element ext {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute ascii { text }?,
+       text
      }
 
    street =
      element street {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute ascii { text }?,
+       text
+     }
+
+   cityarea =
+     element cityarea {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute ascii { text }?,
@@ -142,6 +167,14 @@
 
    code =
      element code {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute ascii { text }?,
+       text
+     }
+
+   sortingcode =
+     element sortingcode {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute ascii { text }?,
