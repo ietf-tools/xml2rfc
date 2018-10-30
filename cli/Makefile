@@ -94,6 +94,11 @@ tests/out/%.v3.$(py).html: tests/input/%.xml install
 
 .PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt 
 
+%.prepped.xml: %.v2v3.xml
+	xml2rfc --cache tests/cache --no-network --utf8 --out $@ --prep $<
+
+%.v2v3.text: %.v2v3.xml
+	xml2rfc --cache tests/cache --no-network --utf8 --out $@ --text --v3 $<
 
 %.test: %
 	@echo "Diffing $< against master"
