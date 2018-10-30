@@ -8,20 +8,6 @@ import pycountry
 import re
 import xml2rfc.log
 
-from xml2rfc.util.name import full_author_name, full_author_ascii_name, full_org_name, full_org_ascii_name
-
-address_hcard_properties = {
-        'name':             'fn',
-        'company_name':     'org',
-        'street_address':   'street-address',
-        'postal_code':      'postal-code',
-        'city':             'locality',
-        'city_area':        'region',
-        'country_area':     'region',
-        'sorting_code':     'postal-code',
-        'country_name':     'country-name'
-}
-
 def get_value(e, latin=True):
     if latin:
         value = e.get('ascii') or e.text or ''
@@ -49,9 +35,6 @@ def get_iso_country_info(e):
     return country_info
 
 def get_normalized_address_info(x, latin=True):
-    author = x.getparent()
-    name = full_author_ascii_name(author) if latin else full_author_name(author)
-    company = full_org_ascii_name(author) if latin else full_org_name(author)
     children = list(x.getchildren())
     country_info = None
     country_element = x.find('country')
@@ -69,12 +52,8 @@ def get_normalized_address_info(x, latin=True):
         if re.match('[A-Z]{2,3}', country_name):
             country_name = country_info.name
         adr = {
-                'name': name,
-                'company_name': company,
                 'street_address': [],
-                'sorting_code': '',
                 'postal_code': '',
-                'city_area': '',
                 'city': '',
                 'country_area': '',
                 'country_code': country_info.alpha_2,
@@ -83,14 +62,10 @@ def get_normalized_address_info(x, latin=True):
         for c in children:
             # Some of these will overwrite data if there are multiple elements
             value = get_value(c, latin=latin)
-            if   c.tag == 'street':
-                adr['street_address'].append(value)
-            elif c.tag == 'ext':
+            if c.tag == 'street':
                 adr['street_address'].append(value)
             elif c.tag == 'postalLine':
                 adr['street_address'].append(value)
-            elif c.tag == 'cityarea':
-                adr['city_area'] = value
             elif c.tag == 'city':
                 adr['city'] = value
             elif c.tag == 'region':
