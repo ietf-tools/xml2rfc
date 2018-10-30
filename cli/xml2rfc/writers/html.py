@@ -33,7 +33,7 @@ from xml2rfc.util.date import extract_date, format_date, format_date_iso, get_ex
 from xml2rfc.util.name import ( full_author_name, short_author_role,
                                 ref_author_name_first, ref_author_name_last, 
                                 short_author_name_set, full_author_name_set,
-                                short_org_name_set, full_org_name, full_org_ascii_name, )
+                                short_org_name_set, full_org_name, )
 from xml2rfc.util.postal import get_normalized_address_info, address_hcard_properties
 from xml2rfc.utils import namespaces, is_htmlblock
 
@@ -128,13 +128,26 @@ def _format_address_line(line_format, address, rules):
     def _get_field(name):
         field = []
         values = address.get(name, '')
+        if isinstance(values, list):
+            values = [ v for v in values if v ]
         if values:
             if isinstance(values, list):
                 for value in values[:-1]:
                     field.append(build.div(value, classes=address_hcard_properties[name]))
                 field.append(build.span(values[-1], classes=address_hcard_properties[name]))
             else:
-                field.append(build.span(values, classes=address_hcard_properties[name]))
+                span = None
+                if name == 'name':
+                    role = address.get('role', '')
+                    if role:
+                        span = build.span(values,
+                            ' (',
+                            build.span(role, classes='role'),
+                            ')',
+                            classes=address_hcard_properties[name])
+                if span == None:
+                    span = build.span(values, classes=address_hcard_properties[name])
+                field.append(span)
         return field
 
     replacements = {
@@ -859,32 +872,19 @@ class HtmlWriter(BaseV3Writer):
             # 
             addr = add.address(h, x, classes='vcard')
             #
-            name_div  = build.div(classes='nameRole', dir="auto")
-            if role:
-                add.span(name_div, None, name, ' (', build.span(role, classes='role'), ')', classes='fn')
-            else:
-                add.span(name_div, None, name, classes='fn')
-            #
             if ascii:
-                ascii_div = build.div(classes='nameRole')
-                if role:
-                    add.span(ascii_div, None, ascii, ' (', build.span(role, classes='role'), ')', classes='fn')
-                else:
-                    add.span(ascii_div, None, ascii, classes='fn')
-                #
-                ascii_div = add.div(addr, None, ascii_div, classes='ascii')
+                ascii_div = add.div(addr, None, classes='ascii')
                 for c in x.getchildren():
                     self.render(ascii_div, c)
                 add.div(addr, None, 'Additional contact information:', classes='alternative-contact')
-                nonasc_div = add.div(addr, None, name_div, classes='non-ascii')
+                nonasc_div = add.div(addr, None, classes='non-ascii')
                 for c in x.getchildren():
                     self.render(nonasc_div, c)
             else:
-                addr.append(name_div)
                 for c in x.getchildren():
                     self.render(addr, c)
             return addr
-    # 
+
     # 9.7.3.  Authors of References
     # 
     #    In the output generated from a reference element, author tags are
@@ -1544,17 +1544,18 @@ class HtmlWriter(BaseV3Writer):
     #      <span class="non-ascii">Test Org</span>
     #      (<span class="ascii">TEST ORG</span>)
     #    </div>
-    def render_organization(self, h, x):
-        if self.part == 'back':
-            p  = x.getparent()
-            script = h.get('class')
-            if script == 'ascii':
-                div = add.div(h, x, full_org_ascii_name(p), classes='org')
-            else:
-                div = add.div(h, x, full_org_name(p), classes='org', dir='auto')
-        else:
-            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
-        return div
+#     def render_organization(self, h, x):
+#         if self.part == 'back':
+#             p  = x.getparent()
+#             script = h.get('class')
+#             if script == 'ascii':
+#                 div = add.div(h, x, full_org_ascii_name(p), classes='org')
+#             else:
+#                 div = add.div(h, x, full_org_name(p), classes='org', dir='auto')
+#         else:
+#             self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
+#         return div
+    render_organization = null_renderer
 
     # 9.36.  <phone>
     # 
