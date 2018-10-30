@@ -8,15 +8,21 @@ import pycountry
 import re
 import xml2rfc.log
 
+try:
+    import debug
+    debug.debug = True
+except ImportError:
+    pass
+
 from xml2rfc.util.name import full_author_name, full_author_ascii_name, full_org_name, full_org_ascii_name
 
 address_hcard_properties = {
-        'name':             'fn',
+        'name':             'fn nameRole',
         'company_name':     'org',
         'street_address':   'street-address',
         'postal_code':      'postal-code',
         'city':             'locality',
-        'city_area':        'region',
+        'city_area':        'locality',
         'country_area':     'region',
         'sorting_code':     'postal-code',
         'country_name':     'country-name'
@@ -49,19 +55,18 @@ def get_iso_country_info(e):
     return country_info
 
 def get_normalized_address_info(x, latin=True):
-    author = x.getparent()
+    author = x.getparent().getparent()
     name = full_author_ascii_name(author) if latin else full_author_name(author)
+    role = author.get('role')
     company = full_org_ascii_name(author) if latin else full_org_name(author)
-    children = list(x.getchildren())
     country_info = None
     country_element = x.find('country')
     if country_element != None and country_element.text:
         country_info = get_iso_country_info(country_element)
     if not country_info:
-        for i, c in enumerate(children):
+        for c in x.getchildren():
             country_info = get_iso_country_info(c)
             if country_info:
-                del children[i]
                 country_element = c
                 break
     if country_info:
@@ -70,6 +75,7 @@ def get_normalized_address_info(x, latin=True):
             country_name = country_info.name
         adr = {
                 'name': name,
+                'role': role,
                 'company_name': company,
                 'street_address': [],
                 'sorting_code': '',
@@ -80,7 +86,9 @@ def get_normalized_address_info(x, latin=True):
                 'country_code': country_info.alpha_2,
                 'country_name': country_name,
             }
-        for c in children:
+        for c in x.getchildren():
+            if c == country_element:
+                continue
             # Some of these will overwrite data if there are multiple elements
             value = get_value(c, latin=latin)
             if   c.tag in ['street', 'ext', 'postalLine', 'pobox']:
@@ -104,6 +112,10 @@ def get_normalized_address_info(x, latin=True):
 def _format_address_line(line_format, address, rules):
     def _get_field(name):
         value = address.get(name, '')
+        if name == 'name':
+            role = address.get('role', '')
+            if role:
+                value += ' (%s)' % role
         return value
 
     replacements = {
