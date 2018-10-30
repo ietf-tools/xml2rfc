@@ -34,7 +34,7 @@ from xml2rfc.util.name import ( full_author_name, short_author_role,
                                 ref_author_name_first, ref_author_name_last, 
                                 short_author_name_set, full_author_name_set,
                                 short_org_name_set, full_org_name, full_org_ascii_name, )
-from xml2rfc.util.postal import get_normalized_address_info
+from xml2rfc.util.postal import get_normalized_address_info, address_hcard_properties
 from xml2rfc.utils import namespaces, is_htmlblock
 
 #from xml2rfc import utils
@@ -124,27 +124,17 @@ mdash   = '\u2014'
 # Address formatting functions, based on i18naddress functions, but rewritten to
 # produce html entities, rather than text lines.
 
-hcard_properties = {
-        'name':             'fn',
-        'company_name':     'org',
-        'street_address':   'street-address',
-        'postal_code':      'postal-code',
-        'city':             'locality',
-        'city_area':        'region',
-        'country_area':     'region',
-        'sorting_code':     'postal-code',
-        'country_name':     'country-name'
-}
-
 def _format_address_line(line_format, address, rules):
     def _get_field(name):
         field = []
         values = address.get(name, '')
-        if not isinstance(values, list):
-            values = [ values ]
-        for value in values:
-            if value:
-                field.append(build.span(value, classes=hcard_properties[name]))
+        if values:
+            if isinstance(values, list):
+                for value in values[:-1]:
+                    field.append(build.div(value, classes=address_hcard_properties[name]))
+                field.append(build.span(values[-1], classes=address_hcard_properties[name]))
+            else:
+                field.append(build.span(values, classes=address_hcard_properties[name]))
         return field
 
     replacements = {
@@ -1055,6 +1045,9 @@ class HtmlWriter(BaseV3Writer):
     def render_city(self, h, x):
         return self.address_line_renderer(h, x, classes='locality')
 
+    def render_cityarea(self, h, x):
+        return self.address_line_renderer(h, x, classes='locality')
+
     # 
     # 9.14.  <code>
     # 
@@ -1063,7 +1056,10 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <span class="postal-code">GU16 7HF<span>
     def render_code(self, h, x):
-        return self.address_line_renderer(h, x, classes='locality')
+        return self.address_line_renderer(h, x, classes='postal-code')
+
+    def render_sortingcode(self, h, x):
+        return self.address_line_renderer(h, x, classes='postal-code')
 
     # 9.15.  <country>
     # 
@@ -2019,6 +2015,13 @@ class HtmlWriter(BaseV3Writer):
     #    <div class="street-address">1899 Wynkoop St, Suite 600</div>
     def render_street(self, h, x):
         return self.address_line_renderer(h, x, classes='street-address')
+
+    def render_ext(self, h, x):
+        return self.address_line_renderer(h, x, classes='extended-address')
+
+    def render_pobox(self, h, x):
+        return self.address_line_renderer(h, x, classes='post-office-box')
+
 
     # 9.50.  <strong>
     # 

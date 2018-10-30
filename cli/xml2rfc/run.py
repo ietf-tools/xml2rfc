@@ -246,7 +246,6 @@ def main():
         sys.exit("You can only use --no-headers with paginated text output.")
     #
     if options.text and not options.legacy:
-        options.no_dtd = True
         if options.legacy_list_symbols and options.list_symbols:
             sys.exit("You cannot specify both --list-symbols and --legacy_list_symbols.")
         if options.list_symbols:
@@ -262,6 +261,7 @@ def main():
             sys.exit("You can only use --list_symbols with v3 text output.")
 
     if not options.legacy:
+        options.no_dtd = True        
         if options.nroff:
             sys.exit("You can only use --nroff in legacy mode")
         if options.raw:
