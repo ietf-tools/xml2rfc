@@ -563,7 +563,8 @@ class TextWriter(BaseV3Writer):
         kwargs['joiners'] = {
             None:       joiner('', '\n', '', 0, 0),  # default 
         }
-        text = self.render_author_name(e, width, **kwargs)
+        #text = self.render_author_name(e, width, **kwargs)
+        text = ''
         for c in e.iterchildren('address'):
             text = self.join(text, c, width, **kwargs)
         text = text.rstrip() + '\n\n'
@@ -2010,6 +2011,8 @@ class TextWriter(BaseV3Writer):
                 debug.pprint('adr')
                 raise
         else:
+            author = e.getparent().getparent()
+            text = self.render_author_name(author, width, **kwargs)
             if e.find('./postalLine') != None:
                 text = ''
                 for c in e.getchildren():
@@ -2024,6 +2027,7 @@ class TextWriter(BaseV3Writer):
                 if city is not None and city.text:
                     cityline.append(city.text)
                 region = e.find('region')
+                debug.mark()
                 if region is not None and region.text:
                     if len(cityline) > 0: cityline.append(', ');
                     cityline.append(region.text)
