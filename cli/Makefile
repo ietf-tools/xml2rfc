@@ -149,20 +149,13 @@ utf8test: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network --utf8 --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep tests/input/utf8.xml
 	doc=utf8 ; postnrofffix="cat" ; type=utf8; $(CHECKOUTPUT)
 
-v3featuretest: cleantmp  env/bin/python install
-	@ xml2rfc --cache tests/cache --no-network --utf8 --base tmp/ --prep tests/input/draft-v3-features.xml
-	@ echo "Diffing draft-v3-features.prepped.xml against master"
-	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-v3-features.prepped.xml tmp/draft-v3-features.prepped.xml || { echo "Diff failed for $$doc$$type output (3)"; exit 1; } 
+v3featuretest: tests/out/draft-v3-features.prepped.xml.test
 
 dateshifttest: cleantmp install
 	@ xml2rfc --cache tests/cache --no-network --date 2013-02-01 --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml
 	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
-elementstest: cleantmp  env/bin/python install
-	@ xml2rfc --cache tests/cache --no-network --utf8 --out tmp/elements.text --text --v3 tests/input/elements.xml
-	@ xml2rfc --cache tests/cache --no-network --utf8 --out tmp/elements.prepped.xml --prep tests/input/elements.xml
-	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.text tmp/elements.text || { echo "Diff failed for tmp/elements.text output (4)"; exit 1; } 
-	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/elements.prepped.xml tmp/elements.prepped.xml || { echo "Diff failed for tmp/elements.prepped.xml output (5)"; exit 1; } 
+elementstest: tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.v3.$(py).html.test
 
 cleantmp:
 	[ -d tmp ] || mkdir -p tmp
