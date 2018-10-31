@@ -16,16 +16,34 @@ except ImportError:
 
 from xml2rfc.util.name import full_author_name, full_author_ascii_name, full_org_name, full_org_ascii_name
 
+address_field_mapping = dict(i18naddress.FIELD_MAPPING)
+address_field_mapping.update({'E':'extended_address', 'Y':'country_name'})
+
+address_field_elements = {
+    # mapping from address fields to element tags
+#    'name':             'fullname',
+#    'company_name':     'organization',
+    'extended_address': '<extaddr>',
+    'street_address':   '<street>',
+    'sorting_code':     '<sortingcode>',
+    'postal_code':      '<code>',
+    'city_area':        '<cityarea>',
+    'city':             '<city>',
+    'country_area':     '<region>',
+    'country_name':     '<country>',
+}
+
 address_hcard_properties = {
-        'name':             'fn nameRole',
-        'company_name':     'org',
-        'street_address':   'street-address',
-        'postal_code':      'postal-code',
-        'city':             'locality',
-        'city_area':        'locality',
-        'country_area':     'region',
-        'sorting_code':     'postal-code',
-        'country_name':     'country-name'
+    'name':             'fn nameRole',
+    'company_name':     'org',
+    'extended_address': 'extended-address',
+    'street_address':   'street-address',
+    'sorting_code':     'postal-code',
+    'postal_code':      'postal-code',
+    'city_area':        'locality',
+    'city':             'locality',
+    'country_area':     'region',
+    'country_name':     'country-name'
 }
 
 def get_value(e, latin=True):
@@ -54,7 +72,7 @@ def get_iso_country_info(e):
         pass
     return country_info
 
-def get_normalized_address_info(x, latin=True):
+def get_normalized_address_info(writer, x, latin=True):
     author = x.getparent().getparent()
     name = full_author_ascii_name(author) if latin else full_author_name(author)
     role = author.get('role')
@@ -77,6 +95,7 @@ def get_normalized_address_info(x, latin=True):
                 'name': name,
                 'role': role,
                 'company_name': company,
+                'extended_address': [],
                 'street_address': [],
                 'sorting_code': '',
                 'postal_code': '',
@@ -91,7 +110,9 @@ def get_normalized_address_info(x, latin=True):
                 continue
             # Some of these will overwrite data if there are multiple elements
             value = get_value(c, latin=latin)
-            if   c.tag in ['street', 'ext', 'postalLine', 'pobox']:
+            if   c.tag == 'extaddr':
+                adr['extended_address'].append(value)
+            elif c.tag in ['street', 'postalLine', 'pobox']:
                 adr['street_address'].append(value)
             elif c.tag == 'cityarea':
                 adr['city_area'] = value
@@ -103,7 +124,28 @@ def get_normalized_address_info(x, latin=True):
                 adr['postal_code'] = value
             elif c.tag == 'sortingcode':
                 adr['sorting_code'] = value
+
+        # Address validation
+        address_format, rules = get_address_format_rules(adr, latin)
+        parts = [ address_field_mapping[c] for c in re.findall(r'%([A-Z])', address_format)  if not c in ['N', 'O'] ]
+        elements = [ address_field_elements[p] for p in parts ]
+        list_parts = False
+        for e in adr:
+            if adr[e] and not (e in parts or e in ['name', 'role', 'company_name', 'country_code', ]):
+                list_parts = True
+                writer.warn(x, "Address part filled in, but not recognized: %s: %s" % (e, adr[e]))
+        try:
+            i18naddress.normalize_address(adr)
+        except i18naddress.InvalidAddress as e:
+            list_parts = True
+            writer.warn(x, "Address check failed for author %s." % full_author_name(author, latin))
+            for item in e.errors:
+                writer.msg(x, '', "  Unexpected address info: %s: %s" % (address_field_elements[item], (adr[item]) or '(empty)'))
+        if list_parts:
+            writer.note(x, "Recognized address elements for %s are: %s" % (rules.country_name.title(), ', '.join(elements)))
+
     else:
+        writer.warn(x, "Did not find a recognized country entry for author %s" % full_author_name(author, latin))
         adr = None
     return adr
 
@@ -120,20 +162,41 @@ def _format_address_line(line_format, address, rules):
 
     replacements = {
         '%%%s' % code: _get_field(field_name)
-        for code, field_name in i18naddress.FIELD_MAPPING.items()}
+        for code, field_name in address_field_mapping.items()}
 
     fields = re.split('(%.)', line_format)
     fields = [replacements.get(f, f) for f in fields]
     return ''.join(fields).strip()
 
-def format_address(address, latin=False):
+def get_address_format_rules(address, latin=False):
     rules = i18naddress.get_validation_rules(address)
     address_format = (
         rules.address_latin_format if latin else rules.address_format)
+    address_format = enhance_address_format(address, address_format)
+    return address_format, rules
+
+def format_address(address, latin=False):
+    address_format, rules = get_address_format_rules(address, latin)
     address_line_formats = address_format.split('%n')
     address_lines = [
         _format_address_line(lf, address, rules)
         for lf in address_line_formats]
-    address_lines.append(address['country_name'])
     address_lines = filter(None, address_lines)
     return '\n'.join(address_lines)
+
+def enhance_address_format(rules, address_format):
+    # Add extended address field (fails for 4 countries: Guinea, Hungary,
+    # Iran and China):
+    address_format = address_format.replace('%N%n%O%n%A', '%N%n%O%n%E%n%A')
+    address_format = address_format.replace('%A%n%O%n%N', '%A%n%E%n%O%n%N')
+    address_format = address_format.replace('%O%n%N%n%A', '%O%n%N%n%E%n%A')
+    if '%E%n%O%n%N' in address_format or '%A%n%O%n%N' in address_format:
+        address_format = '%Y%n' + address_format
+    else:
+        address_format = address_format + '%n%Y'
+    # country-specific fixes, if any
+    #if rules['country_code'] == 'SE':
+    #    pass
+    return address_format
+
+    

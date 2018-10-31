@@ -34,7 +34,8 @@ from xml2rfc.util.name import ( full_author_name, short_author_role,
                                 ref_author_name_first, ref_author_name_last, 
                                 short_author_name_set, full_author_name_set,
                                 short_org_name_set, full_org_name, )
-from xml2rfc.util.postal import get_normalized_address_info, address_hcard_properties
+from xml2rfc.util.postal import ( get_normalized_address_info, address_hcard_properties,
+                                enhance_address_format, address_field_mapping, )
 from xml2rfc.utils import namespaces, is_htmlblock
 
 #from xml2rfc import utils
@@ -152,7 +153,7 @@ def _format_address_line(line_format, address, rules):
 
     replacements = {
         '%%%s' % code: _get_field(field_name)
-        for code, field_name in i18naddress.FIELD_MAPPING.items()}
+        for code, field_name in address_field_mapping.items()}
 
     field_entries = re.split('(%.)', line_format)
     fields = [ f for n in field_entries for f in replacements.get(n, n) ]
@@ -162,12 +163,12 @@ def format_address(address, latin=False):
     rules = i18naddress.get_validation_rules(address)
     address_format = (
         rules.address_latin_format if latin else rules.address_format)
+    address_format = enhance_address_format(address, address_format)
     address_line_formats = address_format.split('%n')
     address_lines = [
         build.div(*_format_address_line(lf, address, rules), dir='auto')
         for lf in address_line_formats]
-    address_lines.append(build.div(build.span(address['country_name'], classes='country-name'), dir='auto'))
-    address_lines = filter(lambda n: n!=None, address_lines)
+    address_lines = filter(lambda n: n!=None and ''.join(list(n.itertext())), address_lines)
     return address_lines
 
 # ------------------------------------------------------------------------------
@@ -1633,7 +1634,7 @@ class HtmlWriter(BaseV3Writer):
     ##   </span>    
     def render_postal(self, h, x):
         latin = h.get('class') == 'ascii'
-        adr = get_normalized_address_info(x, latin=latin)
+        adr = get_normalized_address_info(self, x, latin=latin)
         if adr:
             for item in format_address(adr, latin=latin):
                 h.append(item)
@@ -2017,7 +2018,7 @@ class HtmlWriter(BaseV3Writer):
     def render_street(self, h, x):
         return self.address_line_renderer(h, x, classes='street-address')
 
-    def render_ext(self, h, x):
+    def render_extaddr(self, h, x):
         return self.address_line_renderer(h, x, classes='extended-address')
 
     def render_pobox(self, h, x):

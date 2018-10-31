@@ -117,7 +117,9 @@ def ref_author_name_last(a):
     return name, ascii
 
 
-def full_author_name(a):
+def full_author_name(a, latin=False):
+    if latin:
+        return full_author_ascii_name(a)
     fullname = a.get('fullname')
     if fullname:
         return fullname

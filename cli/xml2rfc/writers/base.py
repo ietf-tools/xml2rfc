@@ -1517,20 +1517,20 @@ class BaseV3Writer(object):
         lnum = getattr(e, 'sourceline')
         file = getattr(e, 'base')
         if lnum or file:
-            msg = "%s(%s): %s: %s" % (file or self.xmlrfc.source, lnum+1, label, text, )
+            msg = "%s(%s): %s %s" % (file or self.xmlrfc.source, lnum+1, label, text, )
         else:
-            msg = "(No source line available): %s: %s" % (label, text, )
+            msg = "(No source line available): %s %s" % (label, text, )
         xml2rfc.log.write(msg)
         return msg
 
     def note(self, e, text):
-        self.msg(e, 'Note', text)
+        self.msg(e, 'Note:', text)
 
     def warn(self, e, text):
-        self.msg(e, 'Warning', text)
+        self.msg(e, 'Warning:', text)
 
     def err(self, e, text, trace=False):
-        msg = self.msg(e, 'Error', text)
+        msg = self.msg(e, 'Error:', text)
         if trace or self.options.debug:
             raise RuntimeError(msg)
         self.errors.append(msg)

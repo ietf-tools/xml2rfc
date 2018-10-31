@@ -1999,8 +1999,10 @@ class TextWriter(BaseV3Writer):
     #       One or more <postalLine> elements (Section 2.38)
     def render_postal(self, e, width, **kwargs):
         latin = kwargs.pop('latin', False)
-        adr = get_normalized_address_info(e, latin=latin)
-        adr['street_address'] = '\n'.join(adr['street_address'] )
+        adr = get_normalized_address_info(self, e, latin=latin)
+        for k in adr:
+            if isinstance(adr[k], list):
+                adr[k] = '\n'.join(adr[k])
         kwargs['joiners'] = { None: joiner('', '\n', '', 0, 0), }
         if adr:
             try:
