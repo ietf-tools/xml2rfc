@@ -13,7 +13,11 @@ DERIVATIVES= experimental-debug.html index-debug.html \
 all: $(DERIVATIVES)
 
 experimental-debug.html: experimental.html
-	sed < experimental.html -e '/start debug section/s/!-- ! tr/tr/' -e '/end debug section/s/ --//' > experimental-debug.html
+	sed < experimental.html \
+		-e '/start debug section/s/!-- ! tr/tr/' \
+		-e '/start debug section/s/!-- ! span/span/' \
+		-e '/end debug section/s/ --//' \
+		> experimental-debug.html
 
 experimental-new.html: experimental.html
 	sed 's/xml2rfc-dev.cgi/xml2rfc-new.cgi/' < experimental.html > experimental-new.html

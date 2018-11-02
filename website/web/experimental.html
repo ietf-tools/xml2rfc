@@ -44,6 +44,8 @@
       <h1><a name='xml2rfcv2'>Dev Version of XML2RFC version 2</a></h1>
       <p>
 	This exercises the current dev version of the xml2rfc conversion program.<br/>
+	NOTE: if you choose v3-plaintext or v3-HTML, your input will go through the v2->v3
+	conversion procession and additional error messages may be generated.
       </p>
       <form action="cgi-bin/xml2rfc-dev.cgi" method="post" enctype="multipart/form-data">
 	<table bgcolor="#333333" border="0" cellpadding="1" cellspacing="0">
@@ -98,7 +100,17 @@
 		    <tr>
 		      <td class="converter small" height="24"></td>
 		      <td class="converter">
+			<input type="radio" value="txt/v3ascii" name="modeAsFormat"/> v3-plaintext
+		    <!-- start debug section --><!-- ! span>
+			<input type="radio" value="txt/v3pdf" name="modeAsFormat"/> as PDF
+		    </span --><!-- end debug section -->
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24"></td>
+		      <td class="converter">
 			<input type="radio" value="unpg/ascii" name="modeAsFormat"/> unpaginated
+			<hr/>
 		      </td>
 		    </tr>
 		    <tr>
@@ -106,6 +118,10 @@
 		      <td class="converter">
 			<input type="radio" value="html/ascii" name="modeAsFormat"/> HTML
 			<input type="radio" value="html/pdf" name="modeAsFormat"/> as PDF<br/>
+			<input type="radio" value="html/v3ascii" name="modeAsFormat"/> v3-HTML
+		    <!-- start debug section --><!-- ! span>
+			<input type="radio" value="html/v3pdf" name="modeAsFormat"/> as PDF<br/>
+		    </span --><!-- end debug section -->
 		      </td>
 		    </tr>
 		    <tr>
@@ -113,7 +129,13 @@
 		      <td class="converter">
 			<input type="radio" value="htmlrfcmarkup/ascii" name="modeAsFormat"/> RfcMarkup
 			<input type="radio" value="htmlrfcmarkup/pdf" name="modeAsFormat"/> as PDF
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24">&nbsp;</td>
+		      <td class="converter">
 			<input type="radio" value="html/epub" name="modeAsFormat"/> ePub
+			<hr/>
 		      </td>
 		    </tr>
 		    <tr>
