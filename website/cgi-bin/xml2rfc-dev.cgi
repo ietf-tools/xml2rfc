@@ -48,7 +48,7 @@ foreach my $bibxml (<$dir/web/public/rfc/bibxml?>) {
 	radio button "mode"
 	    one of txt, unpg, html, htmlxslt, htmlrfcmarkup, nr, or xml
 	radio button "format"
-	    one of ascii, pdf, epub, mobi, rtf, ps
+	    one of ascii, pdf, epub, mobi, rtf, ps, v3ascii, v3pdf
             epub and mobi requires an html* mode to be used
 	    rtp does not allow an html* mode to be used
 	radio button "type"
@@ -79,6 +79,7 @@ htmlrfcmarkup	xml2rfc --text > text, rfcmarkup > html
 
 format:
 */ascii		done
+*/v3ascii	done
 
 html*/pdf	wkhtmltopdf < html* > pdf
 */pdf		enscript < * > ps; ps2pdf < ps > pdf
@@ -100,7 +101,7 @@ COMMENT
 
 my @inputtypes = ('xml2rfc', 'kramdown');
 my @modes = ('txt', 'unpg', 'html', 'htmlxslt', 'htmlrfcmarkup', 'nr', 'v3xml', 'xml');
-my @formats = ('ascii',  'pdf',  'epub', 'mobi',  'rtf',  'ps');
+my @formats = ('ascii',  'pdf', 'v3ascii', 'v3pdf',  'epub', 'mobi',  'rtf',  'ps');
 
 umask(0);
 my $input    = $q->param('input');
@@ -166,6 +167,8 @@ my %expandedModes = (
 my %expandedFormats = (
     ascii => "ASCII",
     pdf => "PDF",
+    v3ascii => "v3ASCII",
+    v3pdf => "v3PDF",
     epub => "ePub",
     mobi => "MOBI",
     rtf => "Rich Text Format",
@@ -174,6 +177,9 @@ my %expandedFormats = (
 my %extensions = (
     txt => 'txt',
     html => 'html',
+    txt => 'txt',
+    html => 'html',
+    v3html => 'html',
     htmlxslt => 'html',
     htmlrfcmarkup => 'html',
     nr => 'nr',
@@ -273,7 +279,7 @@ given ($inputtype) {
 
 given ($mode) {
     when("txt") {
-	my $tmpout = callXml2rfc("txt", "text");
+	my $tmpout = callXml2rfc("txt", "text", $format);
 	$curfile = $tmpout;
     }
     when("unpg") {
@@ -293,7 +299,7 @@ given ($mode) {
 	$curfile = $tmpout;
     }
     when("html") {
-	my $tmpout = callXml2rfc("html", "html");
+	my $tmpout = callXml2rfc("html", "html", $format);
 	$curfile = $tmpout;
     }
     when("htmlxslt") {
@@ -351,7 +357,25 @@ my $enscriptPsArguments = "--font=Courier12 --language=PostScript --no-header --
 given($format) {
     when("ascii") { # all done
     }
+    when("v3ascii") { # all done
+    }
     when("pdf") {
+        if ($mode =~ /^html/) {
+	    my $TMP2 = getTempFileWithSuffix("pdf");
+	    ($ret, $out, $err) = runCommand("etc/wkhtmltopdf-i386 --quiet $curfile $TMP2", $curfile, $TMP2, "Converting to PDF");
+	    userError("Unable to Convert File", $err) if ($err ne '');
+	    $curfile = $TMP2;
+	} else {
+	    my $TMP2 = getTempFileWithSuffix("ps");
+	    ($ret, $out, $err) = runCommand("enscript $enscriptPsArguments --output=$TMP2 < $curfile", $curfile, $TMP2, "Converting to intermediate PS");
+	    userError("Conversion error to intermediate postscript", $err) if ($err ne '');
+	    my $TMP3 = getTempFileWithSuffix("pdf");
+	    ($ret, $out, $err) = runCommand("ps2pdf $TMP2 $TMP3", $TMP2, $TMP3);
+	    userError("Conversion error to final PDF", $err) if ($err ne '');
+	    $curfile = $TMP3;
+	}
+    }
+    when("v3pdf") {
         if ($mode =~ /^html/) {
 	    my $TMP2 = getTempFileWithSuffix("pdf");
 	    ($ret, $out, $err) = runCommand("etc/wkhtmltopdf-i386 --quiet $curfile $TMP2", $curfile, $TMP2, "Converting to PDF");
@@ -476,7 +500,7 @@ if ($type eq 'towindow') {
     my $KEEP = keepTempFile($curfile, "$inputfn-6." . getExtension($curfile), $debug);
     printHeaders("text/html");
     print "<html><head><title>XML2RFC Processor with Warnings &amp; Errors</title></head>\n";
-    my $rows = (($format eq 'ascii') && ($mode ne 'xml') && ($mode ne 'v3xml')) ? '25%,*' : '50%,*';
+    my $rows = ((($format eq 'ascii') || ($format eq 'v3ascii')) && ($mode ne 'xml') && ($mode ne 'v3xml')) ? '25%,*' : '50%,*';
     print "<frameset rows='$rows'>\n";
     print "<frame src='cat.cgi?input=" . encryptFileName($TMPTRACE) . "'/>\n";
     print "<frame src='cat.cgi/$outputfn?input=" . encryptFileName($KEEP) . "'/>\n";
@@ -512,8 +536,10 @@ exit;
 sub callXml2rfc {
     my $suffix = shift;
     my $xml2rfcMode = shift;
+    my $format = shift;
     my $tmpout = getTempFileWithSuffix($suffix);
-    my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --legacy --$xml2rfcMode --out=$tmpout $curfile", $curfile, $tmpout, "Expanding internal references and generating $expandedModes{$mode}");
+    my $legacyOrV3 = ($format =~ /^v3/) ? "--v3" : "--legacy";
+    my ($ret, $out, $err) = runCommand("etc/xml2rfc2 $legacyOrV3 --$xml2rfcMode --out=$tmpout $curfile", $curfile, $tmpout, "Expanding internal references and generating $expandedModes{$mode}");
     $curfile = $tmpout;
     print "xml2rfc ret=$ret\n" if $debug;
     print "out='$out'\n" if $debug;
@@ -761,7 +787,17 @@ sub getContentType {
 	    if ($mode eq 'v3xml') { return "text/xml"; }
 	    return "text/plain";	# nr, unpg
 	}
+	when ($format eq 'v3ascii') {
+	    if ($mode eq 'txt') { return "text/plain"; }
+	    if ($mode =~ /^html/) { return "text/html"; }
+	    if ($mode eq 'xml') { return "text/xml"; }
+	    if ($mode eq 'v3xml') { return "text/xml"; }
+	    return "text/plain";	# nr, unpg
+	}
 	when ('pdf') {
+	    return "application/pdf";
+	}
+	when ('v3pdf') {
 	    return "application/pdf";
 	}
 	when ('epub') {
@@ -790,7 +826,7 @@ sub getOutputName {
     $outputfn =~ s/\.xml$//;	# remove trailing .xml
     $outputfn = untaint($outputfn, '([^<>\s;&]*)');
     $outputfn .= ".";		# add in a new extension
-    if ($format eq 'ascii') {
+    if (($format eq 'ascii') || ($format eq 'v3ascii')) {
 	$outputfn .= $extensions{$mode};
     } else {
 	$outputfn .= "$extensions{$mode}.$extensions{$format}";
