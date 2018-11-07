@@ -794,8 +794,6 @@ class V2v3XmlWriter(object):
                 # Convert <vspace> at the start of hanging list text to
                 # attribute hanging='true' on <dl>
                 if not t.text:
-                    if len(t) == 0:
-                        self.warn(t, "Unexpected zero-length list")
                     if len(t) and t[0].tag == 'vspace':
                         t.text = t[0].tail
                         t.remove(t[0])
