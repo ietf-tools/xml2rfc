@@ -794,7 +794,7 @@ class V2v3XmlWriter(object):
                 # Convert <vspace> at the start of hanging list text to
                 # attribute hanging='true' on <dl>
                 if not t.text:
-                    if t[0].tag == 'vspace':
+                    if len(t) and t[0].tag == 'vspace':
                         t.text = t[0].tail
                         t.remove(t[0])
                     l.set('newline', 'true')
