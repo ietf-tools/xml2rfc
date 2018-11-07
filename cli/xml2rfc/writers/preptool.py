@@ -261,6 +261,7 @@ class PrepToolWriter:
                                                 # 5.1.2.  DTD Removal
             '//processing-instruction()',       # 5.1.3.  Processing Instruction Removal
             '.;validate_before()',              # 5.1.4.  Validity Check
+            '.;check_attribute_values()',       # 
             './/*[@anchor]',                    # 5.1.5.  Check "anchor"
             '.;insert_version()',               # 5.2.1.  "version" Insertion
             './front;insert_series_info()',     # 5.2.2.  "seriesInfo" Insertion
@@ -423,6 +424,50 @@ class PrepToolWriter:
     def validate_before(self, e, p):
         if not self.validate('before'):
             log.note("Schema validation failed for input document")
+
+    def check_attribute_values(self, e, p):
+        # Some attribute values we should check before we default set them,
+        # such as some of the attributes on <rfc>:
+        self.attribute_yes_no(e, p)
+        #
+        stream = self.root.get('submissionType')
+        category = self.root.get('category')
+        consensus = self.root.get('consensus')
+        workgroup = self.root.find('./front/workgroup')
+        #
+        rfc_defaults = self.get_attribute_defaults('rfc')
+        #
+        stream_values = boilerplate_rfc_status_of_memo.keys()
+        stream_default = rfc_defaults['submissionType']
+        if not stream in stream_values:
+            self.warn(self.root, "Expected a valid submissionType (stream) setting, one of %s, but found %s.  Will use '%s'" %
+                                (', '.join(stream_values), stream, stream_default))
+            stream = stream_default
+        #
+        category_values = boilerplate_rfc_status_of_memo[stream].keys()
+        if not category in category_values:
+            self.die(self.root, "Expected a valid category for submissionType='%s', one of %s, but found '%s'" % (stream, ','.join(strings.category.keys()), category, ))
+        #
+        consensus_values = boilerplate_rfc_status_of_memo[stream][category].keys()
+        consensus_default = rfc_defaults['consensus']
+        #
+        if stream == 'IRTF' and workgroup == None:
+            if consensus:
+                self.err(self.root, "Expected no consensus setting for IRTF stream and no workgroup, but found '%'.  Ignoring it." % consensus)
+            consensus = 'n/a'
+        elif stream == 'independent':
+            if consensus:
+                self.err(self.root, "Expected no consensus setting for independent stream, but found '%'.  Ignoring it." % consensus)
+            consensus = 'n/a'
+        elif consensus != None:
+            pass
+        else:
+            consensus = consensus_default
+        #
+        if not consensus in consensus_values:
+            self.warn(self.root, "Expected a valid consensus setting (one of %s), but found %s.  Will use '%s'" %
+                                (', '.join(consensus_values), consensus, consensus_default))
+            consensus = consensus_default
 
     # 5.1.5.  Check "anchor"
     # 
