@@ -446,7 +446,8 @@ class PrepToolWriter:
         #
         category_values = boilerplate_rfc_status_of_memo[stream].keys()
         if not category in category_values:
-            self.die(self.root, "Expected a valid category for submissionType='%s', one of %s, but found '%s'" % (stream, ','.join(strings.category.keys()), category, ))
+            self.die(self.root, "Expected a valid category for submissionType='%s', one of %s, but found '%s'" %
+                                (stream, ','.join(category_values), category, ))
         #
         consensus_values = boilerplate_rfc_status_of_memo[stream][category].keys()
         consensus_default = rfc_defaults['consensus']
@@ -462,12 +463,21 @@ class PrepToolWriter:
         elif consensus != None:
             pass
         else:
-            consensus = consensus_default
+            if len(consensus_values) > 1:
+                consensus = consensus_default
+            else:
+                consensus = consensus_values[0]
+                if consensus != consensus_default:
+                    self.warn(self.root, 'Setting consensus="%s" for %s %s document (this is not the schema default, but is the only value permitted for this type of document)' % (consensus, stream, category.upper()))
         #
         if not consensus in consensus_values:
-            self.warn(self.root, "Expected a valid consensus setting (one of %s), but found %s.  Will use '%s'" %
-                                (', '.join(consensus_values), consensus, consensus_default))
+            if not consensus_default in consensus_values:
+                self.die(self.root, "No valid consensus setting available.")
+            else:
+                self.warn(self.root, "Expected a valid consensus setting (one of %s), but found %s.  Will use '%s'" %
+                                    (', '.join(consensus_values), consensus, consensus_default))
             consensus = consensus_default
+        self.root.set('consensus', consensus)
 
     # 5.1.5.  Check "anchor"
     # 
@@ -921,7 +931,7 @@ class PrepToolWriter:
             consensus = self.root.get('consensus')
             workgroup = self.root.find('./front/workgroup')
             if not category in strings.category_name:
-                self.err(self.root, "Expected a known category, one of %s, but found '%s'" % (','.join(strings.category.keys()), category, ))
+                self.err(self.root, "Expected a known category, one of %s, but found '%s'" % (','.join(strings.category_name.keys()), category, ))
             #
             group = workgroup.text if workgroup != None else None
             format_dict.update({ 'rfc_number': self.rfcnumber })
