@@ -1083,11 +1083,13 @@ class HtmlWriter(BaseV3Writer):
     #    <span class="crefSource">--life</span></span>
     def render_cref(self, h, x):
         span = add.span(h, x, classes='cref')
-        for c in x.getchildren():
-            self.render(span, c)
-        source = x.get('source')
-        if source:
-            add.span(span, None, source, classes='crefSource')
+        disp = x.get('display') == 'true'
+        if disp:
+            for c in x.getchildren():
+                self.render(span, c)
+            source = x.get('source')
+            if source:
+                add.span(span, None, source, classes='crefSource')
         return span
 
     # 9.17.  <date>
