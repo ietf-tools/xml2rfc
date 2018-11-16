@@ -339,7 +339,7 @@ class PrepToolWriter:
             self.die(None, "XInclude processing failed: %s" % e)
 
         # Set up reference mapping for later use.
-        refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
+        refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in (self.root.xpath('.//reference') + self.root.xpath('.//referencegroup')) )
         refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
 
         # 
@@ -422,6 +422,9 @@ class PrepToolWriter:
     #    input is not valid, give an error.
 
     def validate_before(self, e, p):
+        version = self.root.get('version', '3')
+        if version not in ['3', ]:
+            self.die(self.root, 'Expected <rfc> version="3", but found "%s"' % version)
         if not self.validate('before'):
             log.note("Schema validation failed for input document")
 
@@ -451,14 +454,13 @@ class PrepToolWriter:
         #
         consensus_values = boilerplate_rfc_status_of_memo[stream][category].keys()
         consensus_default = rfc_defaults['consensus']
-        #
         if stream == 'IRTF' and workgroup == None:
             if consensus:
                 self.err(self.root, "Expected no consensus setting for IRTF stream and no workgroup, but found '%'.  Ignoring it." % consensus)
             consensus = 'n/a'
         elif stream == 'independent':
             if consensus:
-                self.err(self.root, "Expected no consensus setting for independent stream, but found '%'.  Ignoring it." % consensus)
+                self.err(self.root, "Expected no consensus setting for independent stream, but found '%s'.  Ignoring it." % consensus)
             consensus = 'n/a'
         elif consensus != None:
             pass
@@ -469,7 +471,6 @@ class PrepToolWriter:
                 consensus = consensus_values[0]
                 if consensus != consensus_default:
                     self.warn(self.root, 'Setting consensus="%s" for %s %s document (this is not the schema default, but is the only value permitted for this type of document)' % (consensus, stream, category.upper()))
-        #
         if not consensus in consensus_values:
             if not consensus_default in consensus_values:
                 self.die(self.root, "No valid consensus setting available.")
@@ -477,7 +478,22 @@ class PrepToolWriter:
                 self.warn(self.root, "Expected a valid consensus setting (one of %s), but found %s.  Will use '%s'" %
                                     (', '.join(consensus_values), consensus, consensus_default))
             consensus = consensus_default
-        self.root.set('consensus', consensus)
+        if consensus in ('true', 'false'):
+            self.root.set('consensus', consensus)
+        #
+        # Integer attributes
+        integer_attributes = {
+            'rfc':      ('number', 'version', ),
+            'date':     ('year', 'day', ),
+            'dl':       ('indent', ),
+            'format':   ('octets', ),
+        }
+        tags = integer_attributes.keys()
+        for c in e.iter(tags):
+            for a in integer_attributes[c.tag]:
+                i = c.get(a)
+                if i and not i.isdigit():
+                    self.err(self.root, 'Expected <%s> attribute "%s" to be an integer, but found "%s"' % (c.tag, a, i))
 
     # 5.1.5.  Check "anchor"
     # 
@@ -563,7 +579,10 @@ class PrepToolWriter:
     #    future, give a warning.  If the <front> element in the <rfc> element
     #    has a <date> element with some but not all of the "day", "month", and
     #    "year" attributes, give an error.
-
+    ## This tries to change the RFC Editor policy on publication dates
+    ## (normally only indicating year and month, not day, of publication.  It
+    ## also changes the heuristics that have been found helpful in v2.
+    ## Disregarding most of this, and going with what seems to make sense.
     def front_insert_date(self, e, p):
         d = e.find('date')
         today = datetime.date.today()
@@ -572,10 +591,6 @@ class PrepToolWriter:
             year  = d.get('year')
             month = d.get('month')
             day   = d.get('day')
-            if self.options.rfc and not (year and month and day):
-                # XXX: This changes RFC Editor policy on publication dates, and is
-                # probably not what was intended
-                self.warn(e, "Expected explicit values for year, month, and day, but found %s, %s and %s" % (year, month, day))
             if month and not month.isdigit():
                 if len(month) < 3:
                     self.err(e, "Expected a month name with at least 3 letters, found '%s'" % (month, ))
@@ -583,14 +598,10 @@ class PrepToolWriter:
             if not year:
                 year = str(today.year)
             if not month:
-                if not year == str(today.year):
+                if year != str(today.year):
                     self.die(e, "Expected <date> to have the current year when month is missing, but found '%s'" % (d.get('year')))
                 month = today.strftime('%m')
-            if not day:
-                if not (year == str(today.year) and month == today.strftime('%m')):
-                    self.warn(e, "Expected <date> to have the current month when day is missing, but found '%s'" % (d.get('month')))
-                else:
-                    day = today.strftime('%d')
+                day = today.strftime('%d')
             datestr = "%s-%s-%s" %(year, month, day or '01')
             date = datetime.datetime.strptime(datestr, "%Y-%m-%d").date()
             if abs(date - datetime.date.today()) > datetime.timedelta(days=3):
@@ -658,6 +669,8 @@ class PrepToolWriter:
             defaults = self.get_attribute_defaults(e.tag)
             for k in defaults:
                 if not k in e.attrib:
+                    if (e.tag, k) in [('rfc', 'consensus')]:
+                        continue
                     #debug.say('Setting <%s %s="%s">' % (e.tag, k, defaults[k]))
                     if ':' in k:
                         ns, tag = k.split(':',1)
@@ -866,12 +879,12 @@ class PrepToolWriter:
         old_bp = e.find('boilerplate')
         new_bp = self.element('boilerplate')
         if old_bp != None:
-            if not self.liberal:
+            if not self.liberal and not self.prepped:
                 children = old_bp.getchildren()
                 if len(children):
                     self.warn(old_bp, "Expected no <boilerplate> element, but found one.  Replacing the content with new boilerplate")
-                new_bp = self.element('boilerplate')
-                e.replace(old_bp, new_bp)
+                    for c in children:
+                        old_bp.remove(c)
         else:
             e.append(new_bp)
 
@@ -1106,7 +1119,7 @@ class PrepToolWriter:
     #    acknowledge that getting consensus on this will be a difficult task.
     def references_sort(self, e, p):
         global refname_mapping
-        children = e.xpath('./reference')
+        children = e.xpath('./reference') + e.xpath('./referencegroup')
         children.sort(key=lambda x: refname_mapping[x.get('anchor')].upper() )
         for c in children:
             e.remove(c)
@@ -1117,7 +1130,7 @@ class PrepToolWriter:
 
     def references_add_derived_anchor(self, e, p):
         global refname_mapping
-        children = e.xpath('./reference')
+        children = e.xpath('./reference') + e.xpath('./referencegroup')
         for c in children:
             anchor = c.get('anchor')
             c.set('derivedAnchor', refname_mapping[anchor])
@@ -1362,6 +1375,8 @@ class PrepToolWriter:
                 type, num = split_pn(t, pn)
                 if num.startswith('appendix'):
                     num = num.replace('.', ' ', 1).title()
+                elif re.search('^[a-z]', num):
+                    num = num.title()
                 if t.tag == 'li':
                     parent = t.getparent()
                     if not parent.tag == 'ol':
@@ -1588,6 +1603,7 @@ class PrepToolWriter:
                         if not svg.xpath('.//desc'):
                             desc = self.element('desc', line=e.sourceline)
                             desc.text = alt
+                            desc.tail = '\n'
                             desc.sourceline = e.sourceline
                             svg.insert(0, desc)
 
@@ -1776,6 +1792,10 @@ class PrepToolWriter:
     def back_insert_index(self, e, p):
         if self.prepped:
             return
+        oldix = self.root.find('./back/section/t[@anchor="rfc.index.index"]')
+        if oldix != None:
+            self.warn(e, "Found an existing Index section, not inserting another one")
+            return
         def letter_li(letter, letter_entries):
             anchor = 'rfc.index.%s' % letter
             li = self.element('li')
@@ -1857,9 +1877,15 @@ class PrepToolWriter:
     def back_insert_author_address(self, e, p):
         if self.prepped:
             return
+        old = self.root.find('./back/section[@anchor="authors-addresses"]')
+        if old != None:
+            self.warn(e, "Found an existing Authors' Addresses section, not inserting another one")
+            return
         authors = self.root.findall('./front/author')
-        s = self.element('section', toc='include', numbered='false', anchor='authors-addresses')
-        n = self.element('name')
+        back = self.root.find('./back')
+        line = back[-1].sourceline or back.sourceline
+        s = self.element('section', toc='include', numbered='false', anchor='authors-addresses', line=line)
+        n = self.element('name', line=line+1)
         if len(authors) > 1:
             n.text = "Authors' Addresses"
         else:
@@ -1868,7 +1894,6 @@ class PrepToolWriter:
         s.append(n)
         for a in authors:
             s.append(copy.copy(a))
-        back = self.root.find('./back')
         back.append(s)
         #
         self.back_section_add_number(s, e)
@@ -1967,11 +1992,11 @@ class PrepToolWriter:
     #    attributes and give an error if any issues are found.
     def validate_after(self, e, p):
         # XXX: There is an issue with exponential increase in validation time
-        # as a function of the number of attributes on the root element.  See
-        # https://bugzilla.gnome.org/show_bug.cgi?id=133736 .  In our schema,
-        # there is no dependency in the underlying schema on the root element
-        # attributes, on the order of minutes for the full set of possble
-        # attribute values.  In order to avoid very long validation times, we
+        # as a function of the number of attributes on the root element, on
+        # the order of minutes for the full set of possble attribute values.
+        # See https://bugzilla.gnome.org/show_bug.cgi?id=133736 .  In our
+        # schema, there is no dependency in the underlying schema on the root
+        # element attributes.  In order to avoid very long validation times, we
         # strip the root attributes before validation, and put them back
         # afterwards.  
         for k in e.keys():
@@ -1980,12 +2005,17 @@ class PrepToolWriter:
         attrib = copy.deepcopy(e.attrib) 
         for k in attrib.keys():
             del e.attrib[k]
+        #
         if not self.validate('after', warn=True):
             log.note("Schema validation failed for input document")
+        else:
+            self.root.set('version', '3')
+        #
         keys = list(attrib.keys())
         keys.sort()
         for k in keys:
             e.set(k, attrib[k])
+
 
     # 5.7.  Finalization
     # 
