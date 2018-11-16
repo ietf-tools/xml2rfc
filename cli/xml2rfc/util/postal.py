@@ -105,26 +105,42 @@ def get_normalized_address_info(writer, x, latin=True):
                 'country_code': country_info.alpha_2,
                 'country_name': country_name,
             }
-        for c in x.getchildren():
-            if c == country_element:
-                continue
-            # Some of these will overwrite data if there are multiple elements
-            value = get_value(c, latin=latin)
-            if   c.tag == 'extaddr':
-                adr['extended_address'].append(value)
-            elif c.tag in ['street', 'postalLine', 'pobox']:
-                adr['street_address'].append(value)
-            elif c.tag == 'cityarea':
-                adr['city_area'] = value
-            elif c.tag == 'city':
-                adr['city'] = value
-            elif c.tag == 'region':
-                adr['country_area'] = value
-            elif c.tag == 'code':
-                adr['postal_code'] = value
-            elif c.tag == 'sortingcode':
-                adr['sorting_code'] = value
-
+    else:
+        writer.warn(x, "Did not find a recognized country entry for author %s" % full_author_name(author, latin))
+        adr = {
+                'name': name,
+                'role': role,
+                'company_name': company,
+                'extended_address': [],
+                'street_address': [],
+                'sorting_code': '',
+                'postal_code': '',
+                'city_area': '',
+                'city': '',
+                'country_area': '',
+                'country_code': '',
+                'country_name': ''
+            }
+    for c in x.getchildren():
+        if c == country_element:
+            continue
+        # Some of these will overwrite data if there are multiple elements
+        value = get_value(c, latin=latin)
+        if   c.tag == 'extaddr':
+            adr['extended_address'].append(value)
+        elif c.tag in ['street', 'postalLine', 'pobox']:
+            adr['street_address'].append(value)
+        elif c.tag == 'cityarea':
+            adr['city_area'] = value
+        elif c.tag == 'city':
+            adr['city'] = value
+        elif c.tag == 'region':
+            adr['country_area'] = value
+        elif c.tag == 'code':
+            adr['postal_code'] = value
+        elif c.tag == 'sortingcode':
+            adr['sorting_code'] = value
+    if country_info:
         # Address validation
         address_format, rules = get_address_format_rules(adr, latin)
         parts = [ address_field_mapping[c] for c in re.findall(r'%([A-Z])', address_format)  if not c in ['N', 'O'] ]
@@ -143,10 +159,6 @@ def get_normalized_address_info(writer, x, latin=True):
                 writer.msg(x, '', "  Unexpected address info: %s: %s" % (address_field_elements[item], (adr[item]) or '(empty)'))
         if list_parts:
             writer.note(x, "Recognized address elements for %s are: %s" % (rules.country_name.title(), ', '.join(elements)))
-
-    else:
-        writer.warn(x, "Did not find a recognized country entry for author %s" % full_author_name(author, latin))
-        adr = None
     return adr
 
 # These are copied from i18address in order to remove uppercasing
