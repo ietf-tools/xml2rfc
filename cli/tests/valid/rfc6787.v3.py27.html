@@ -18,7 +18,7 @@
       done, the MRCPv2 exchange operates over the control session
       established above, allowing the client to control the media processing
       resources on the speech resource server.' name="description">
-<meta content="xml2rfc 2.12.1" name="generator">
+<meta content="xml2rfc 2.12.3" name="generator">
 <meta content="mrcp, speechsc, asr, tts, speech services, speech recognition, 
 speech synthesis, nlsml, speaker authentication, speaker verification, 
 speaker identification" name="keyword">
@@ -1092,31 +1092,31 @@ speaker identification" name="keyword">
 </h3>
 <dl class="dlNewline" id="section-2.1-1">
 <dt id="section-2.1-1.1">Media Resource</dt>
-<dd id="section-2.1-1.2">An entity on
+<dd style="margin-left: 7.5em" id="section-2.1-1.2">An entity on
             the speech processing server that can be controlled through 
             MRCPv2.</dd>
 <dt id="section-2.1-1.3">MRCP Server</dt>
-<dd id="section-2.1-1.4">
+<dd style="margin-left: 7.5em" id="section-2.1-1.4">
 Aggregate of one or more "Media Resource" entities on
                 a server, exposed through MRCPv2.  Often, 'server' in 
                 this document refers to an MRCP server.</dd>
 <dt id="section-2.1-1.5">MRCP Client</dt>
-<dd id="section-2.1-1.6">An entity
+<dd style="margin-left: 7.5em" id="section-2.1-1.6">An entity
             controlling one or more Media Resources through MRCPv2
             ("Client" for short).</dd>
 <dt id="section-2.1-1.7">DTMF</dt>
-<dd id="section-2.1-1.8">Dual-Tone
+<dd style="margin-left: 7.5em" id="section-2.1-1.8">Dual-Tone
             Multi-Frequency; a method of transmitting key presses in-band,
             either as actual tones (<span>Q.23 [<a href="#Q.23" class="xref">Q.23</a>]) or as
             named tone events (</span><span>RFC 4733 [<a href="#RFC4733" class="xref">RFC4733</a>]).</span>
 </dd>
 <dt id="section-2.1-1.9">Endpointing</dt>
-<dd id="section-2.1-1.10">The process of
+<dd style="margin-left: 7.5em" id="section-2.1-1.10">The process of
             automatically detecting the beginning and end of speech in an
             audio stream. This is critical both for speech recognition and for
             automated recording as one would find in voice mail systems.</dd>
 <dt id="section-2.1-1.11">Hotword Mode</dt>
-<dd id="section-2.1-1.12">A mode of
+<dd style="margin-left: 7.5em" id="section-2.1-1.12">A mode of
             speech recognition where a stream of utterances is evaluated for
             match against a small set of command words. This is generally
             employed either to trigger some action or to control the
@@ -1186,7 +1186,7 @@ Aggregate of one or more "Media Resource" entities on
       resource may have its own media session.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">The following diagram shows the general architecture of a system that
       uses MRCPv2. To simplify the diagram, only a few resources are shown.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<div id="F.arch">
+<span id="name-architectural-diagram"></span><div id="F.arch">
 <figure id="figure-1"><div class="artwork art-text alignLeft" id="section-3-6.1">
 <pre>
      MRCPv2 client                   MRCPv2 Media Resource Server
@@ -1215,7 +1215,7 @@ Aggregate of one or more "Media Resource" entities on
 </pre>
 </div>
 <figcaption><a href="#figure-1">Figure 1</a>
-<a href="#name-architectural-diagram" class="selfRef" id="name-architectural-diagram">Architectural Diagram</a></figcaption></figure>
+<a href="#name-architectural-diagram" class="selfRef">Architectural Diagram</a></figcaption></figure>
 </div>
 <div id="sec.resourceTypes">
 <section id="section-3.1"><h3 id="name-mrcpv2-media-resource-types">
@@ -1227,7 +1227,7 @@ Aggregate of one or more "Media Resource" entities on
 <a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <dl class="dlNewline" id="section-3.1-2">
 <dt id="section-3.1-2.1">Basic Synthesizer</dt>
-<dd id="section-3.1-2.2">A speech
+<dd style="margin-left: 7.5em" id="section-3.1-2.2">A speech
             synthesizer resource that has very limited capabilities and can
             generate its media stream exclusively from concatenated audio
             clips. The speech data is described using a limited subset of the
@@ -1237,13 +1237,13 @@ Aggregate of one or more "Media Resource" entities on
             and &lt;mark&gt;.</span>
 </dd>
 <dt id="section-3.1-2.3">Speech Synthesizer</dt>
-<dd id="section-3.1-2.4">A
+<dd style="margin-left: 7.5em" id="section-3.1-2.4">A
 full-capability speech synthesis resource that can render speech
             from text. Such a synthesizer MUST have full <span>SSML [<a href="#W3C.REC-speech-synthesis-20040907" class="xref">W3C.REC-speech-synthesis-20040907</a>]
             support.</span>
 </dd>
 <dt id="section-3.1-2.5">Recorder</dt>
-<dd id="section-3.1-2.6">A resource capable
+<dd style="margin-left: 7.5em" id="section-3.1-2.6">A resource capable
             of recording audio and providing a URI pointer to the recording. A
             recorder MUST provide endpointing capabilities for suppressing
             silence at the beginning and end of a recording, and MAY also
@@ -1251,14 +1251,14 @@ full-capability speech synthesis resource that can render speech
             is done, the recorder MUST maintain timing metadata to indicate
             the actual timestamps of the recorded media.</dd>
 <dt id="section-3.1-2.7">DTMF Recognizer</dt>
-<dd id="section-3.1-2.8">A
+<dd style="margin-left: 7.5em" id="section-3.1-2.8">A
             recognizer resource capable of extracting and interpreting <span>Dual-Tone Multi-Frequency (DTMF) [<a href="#Q.23" class="xref">Q.23</a>] digits in a
             media stream and matching them against a supplied digit grammar. It
             could also do a semantic interpretation based on semantic tags in
             the grammar.</span>
 </dd>
 <dt id="section-3.1-2.9">Speech Recognizer</dt>
-<dd id="section-3.1-2.10">A full
+<dd style="margin-left: 7.5em" id="section-3.1-2.10">A full
             speech recognition resource that is capable of receiving a media
             stream containing audio and interpreting it to recognition
             results. It also has a natural language semantic interpreter to
@@ -1268,7 +1268,7 @@ full-capability speech synthesis resource that can render speech
             the client can enroll and create new personal grammars for use in
             future recognition operations.</dd>
 <dt id="section-3.1-2.11">Speaker Verifier</dt>
-<dd id="section-3.1-2.12">A resource
+<dd style="margin-left: 7.5em" id="section-3.1-2.12">A resource
             capable of verifying the authenticity of a claimed identity by
             matching a media stream containing spoken input to a pre-existing
             voiceprint. This may also involve matching the caller's voice
@@ -1337,11 +1337,11 @@ full-capability speech synthesis resource that can render speech
         types of media processing resources. Additional resource types and their
         associated methods/events and state machines may be added as described
         below in <a href="#sec.iana" class="xref">Section 13</a>.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<div id="table.resourceTypes">
-<table id="table-1">
+<span id="name-resource-types"></span><div id="table.resourceTypes">
+<table class="center" id="table-1">
 <caption>
 <a href="#table-1">Table 1</a>
-<a href="#name-resource-types" class="selfRef" id="name-resource-types">Resource Types</a>
+<a href="#name-resource-types" class="selfRef">Resource Types</a>
 </caption>
 <thead><tr>
 <th class="text-left" rowspan="1" colspan="1">Resource Type</th>
@@ -1486,7 +1486,7 @@ full-capability speech synthesis resource that can render speech
           this interaction also creates a receive-only <span>Real-Time Protocol (RTP) [<a href="#RFC3550" class="xref">RFC3550</a>] media session for
           the server to send audio to. The SIP dialog with the media
           source/sink is independent of MRCP and is not shown.</span><a href="#section-4.3-2" class="pilcrow">¶</a></p>
-<figure id="figure-2"><div class="artwork art-text alignLeft" id="section-4.3-3.1">
+<span id="name-example-add-synthesizer-con"></span><figure id="figure-2"><div class="artwork art-text alignLeft" id="section-4.3-3.1">
 <pre>
 C-&gt;S:  INVITE sip:mresources@example.com SIP/2.0 
        Via:SIP/2.0/TCP client.atlanta.example.com:5060; 
@@ -1555,13 +1555,13 @@ C-&gt;S:  ACK sip:mresources@server.example.com SIP/2.0
 </pre>
 </div>
 <figcaption><a href="#figure-2">Figure 2</a>
-<a href="#name-example-add-synthesizer-con" class="selfRef" id="name-example-add-synthesizer-con">Example: Add Synthesizer Control Channel</a></figcaption></figure>
+<a href="#name-example-add-synthesizer-con" class="selfRef">Example: Add Synthesizer Control Channel</a></figcaption></figure>
 <p id="section-4.3-4">This example exchange continues from the previous figure
           and allocates an additional resource control channel for a
           recognizer. Since a recognizer would need to receive an audio stream
           for recognition, this interaction also updates the audio stream to
           sendrecv, making it a two-way RTP media session.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
-<figure id="figure-3"><div class="artwork art-text alignLeft" id="section-4.3-5.1">
+<span id="name-example-add-recognizer"></span><figure id="figure-3"><div class="artwork art-text alignLeft" id="section-4.3-5.1">
 <pre>
 C-&gt;S:  INVITE sip:mresources@server.example.com SIP/2.0 
        Via:SIP/2.0/TCP client.atlanta.example.com:5060;
@@ -1644,12 +1644,12 @@ C-&gt;S:  ACK sip:mresources@server.example.com SIP/2.0
 </pre>
 </div>
 <figcaption><a href="#figure-3">Figure 3</a>
-<a href="#name-example-add-recognizer" class="selfRef" id="name-example-add-recognizer">Example: Add Recognizer</a></figcaption></figure>
+<a href="#name-example-add-recognizer" class="selfRef">Example: Add Recognizer</a></figcaption></figure>
 <p id="section-4.3-6">This example exchange continues from the previous figure
           and deallocates the recognizer channel. Since a recognizer no
           longer needs to receive an audio stream, this interaction also
           updates the RTP media session to recvonly.<a href="#section-4.3-6" class="pilcrow">¶</a></p>
-<figure id="figure-4"><div class="artwork art-text alignLeft" id="section-4.3-7.1">
+<span id="name-example-deallocate-recogniz"></span><figure id="figure-4"><div class="artwork art-text alignLeft" id="section-4.3-7.1">
 <pre>
 C-&gt;S:  INVITE sip:mresources@server.example.com SIP/2.0 
        Via:SIP/2.0/TCP client.atlanta.example.com:5060;
@@ -1720,7 +1720,7 @@ C-&gt;S:  ACK sip:mresources@server.example.com SIP/2.0
 </pre>
 </div>
 <figcaption><a href="#figure-4">Figure 4</a>
-<a href="#name-example-deallocate-recogniz" class="selfRef" id="name-example-deallocate-recogniz">Example: Deallocate Recognizer</a></figcaption></figure>
+<a href="#name-example-deallocate-recogniz" class="selfRef">Example: Deallocate Recognizer</a></figcaption></figure>
 </section>
 </div>
 <div id="sec.mediaStreams">
@@ -2127,10 +2127,10 @@ request-state    =  "COMPLETE"
 </h3>
 <p id="section-5.4-1">The status codes are classified under the Success (2xx),
         Client Failure (4xx), and Server Failure (5xx) codes.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<table id="table-2">
+<span id="name-success-2xx"></span><table class="center" id="table-2">
 <caption>
 <a href="#table-2">Table 2</a>
-<a href="#name-success-2xx" class="selfRef" id="name-success-2xx">Success (2xx)</a>
+<a href="#name-success-2xx" class="selfRef">Success (2xx)</a>
 </caption>
 <thead><tr>
 <th class="text-left" rowspan="1" colspan="1">Code</th>
@@ -2147,10 +2147,10 @@ request-state    =  "COMPLETE"
 </tr>
 </tbody>
 </table>
-<table id="table-3">
+<span id="name-client-failure-4xx"></span><table class="center" id="table-3">
 <caption>
 <a href="#table-3">Table 3</a>
-<a href="#name-client-failure-4xx" class="selfRef" id="name-client-failure-4xx">Client Failure (4xx)</a>
+<a href="#name-client-failure-4xx" class="selfRef">Client Failure (4xx)</a>
 </caption>
 <thead><tr>
 <th class="text-left" rowspan="1" colspan="1">Code</th>
@@ -2208,10 +2208,10 @@ request-state    =  "COMPLETE"
 </tr>
 </tbody>
 </table>
-<table id="table-4">
+<span id="name-server-failure-5xx"></span><table class="center" id="table-4">
 <caption>
 <a href="#table-4">Table 4</a>
-<a href="#name-server-failure-5xx" class="selfRef" id="name-server-failure-5xx">Server Failure (5xx)</a>
+<a href="#name-server-failure-5xx" class="selfRef">Server Failure (5xx)</a>
 </caption>
 <thead><tr>
 <th class="text-left" rowspan="1" colspan="1">Code</th>
@@ -2792,19 +2792,19 @@ delta-seconds       = 1*19DIGIT
 <a href="#section-6.2.13-4" class="pilcrow">¶</a></p>
 <dl class="dlParallel" id="section-6.2.13-5">
 <dt id="section-6.2.13-5.1">max-age</dt>
-<dd id="section-6.2.13-5.2">Indicates that the client can tolerate the
+<dd style="margin-left: 7.5em" id="section-6.2.13-5.2">Indicates that the client can tolerate the
               server using content whose age is no greater than the specified
               time in seconds. Unless a "max-stale" directive is also
               included, the client is not willing to accept a response based
               on stale data.</dd>
 <dt id="section-6.2.13-5.3">min-fresh</dt>
-<dd id="section-6.2.13-5.4">Indicates that the client is willing to
+<dd style="margin-left: 7.5em" id="section-6.2.13-5.4">Indicates that the client is willing to
               accept a server response with cached data whose expiration is no
               less than its current age plus the specified time in seconds. If
               the server's cache time-to-live exceeds the client-supplied
               min-fresh value, the server MUST NOT utilize cached content.</dd>
 <dt id="section-6.2.13-5.5">max-stale</dt>
-<dd id="section-6.2.13-5.6">Indicates that the client is willing to
+<dd style="margin-left: 7.5em" id="section-6.2.13-5.6">Indicates that the client is willing to
               allow a server to utilize cached data that has exceeded its
               expiration time. If "max-stale" is assigned a value, then the
               client is willing to allow the server to use cached data that
@@ -3010,7 +3010,7 @@ com.example.companyB.paramxyz=Low
         results between the corresponding resource on the MRCPv2 server and
         the MRCPv2 client. Details of this result format are fully described
         in <a href="#sec.NLSML" class="xref">Section 6.3.1</a>.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
-<figure id="figure-5"><div class="artwork art-text alignLeft" id="section-6.3-3.1">
+<span id="name-result-example"></span><figure id="figure-5"><div class="artwork art-text alignLeft" id="section-6.3-3.1">
 <pre>
 Content-Type:application/nlsml+xml
 Content-Length:...
@@ -3029,7 +3029,7 @@ Content-Length:...
 </pre>
 </div>
 <figcaption><a href="#figure-5">Figure 5</a>
-<a href="#name-result-example" class="selfRef" id="name-result-example">Result Example</a></figcaption></figure>
+<a href="#name-result-example" class="selfRef">Result Example</a></figcaption></figure>
 <div id="sec.NLSML">
 <section id="section-6.3.1"><h4 id="name-natural-language-semantics-">
 <a href="#section-6.3.1" class="section-number selfRef">6.3.1. </a><a href="#name-natural-language-semantics-" class="section-name selfRef">Natural Language Semantics Markup Language</a>
@@ -3078,7 +3078,7 @@ Content-Length:...
       capabilities and the coders the server supports.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">In this example, the client uses the SIP OPTIONS method to
         query the capabilities of the MRCPv2 server.<a href="#section-7-3" class="pilcrow">¶</a></p>
-<figure id="figure-6"><div class="artwork art-text alignLeft" id="section-7-4.1">
+<span id="name-using-sip-options-for-mrcpv"></span><figure id="figure-6"><div class="artwork art-text alignLeft" id="section-7-4.1">
 <pre>
 C-&gt;S:
      OPTIONS sip:mrcp@server.example.com SIP/2.0
@@ -3127,7 +3127,7 @@ S-&gt;C:
 </pre>
 </div>
 <figcaption><a href="#figure-6">Figure 6</a>
-<a href="#name-using-sip-options-for-mrcpv" class="selfRef" id="name-using-sip-options-for-mrcpv">Using SIP OPTIONS for MRCPv2 Server Capability Discovery</a></figcaption></figure>
+<a href="#name-using-sip-options-for-mrcpv" class="selfRef">Using SIP OPTIONS for MRCPv2 Server Capability Discovery</a></figcaption></figure>
 </section>
 </div>
 <div id="sec.synthesizerResource">
@@ -3163,7 +3163,7 @@ S-&gt;C:
         the head of the synthesizer resource queue. A SPEAK request in the
         PENDING state can be deleted or stopped by a STOP request without
         affecting the state of the resource.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<figure id="figure-7"><div class="artwork art-text alignLeft" id="section-8.1-2.1">
+<span id="name-synthesizer-state-machine-2"></span><figure id="figure-7"><div class="artwork art-text alignLeft" id="section-8.1-2.1">
 <pre>
 Idle                    Speaking                  Paused
 State                   State                     State
@@ -3194,7 +3194,7 @@ State                   State                     State
 </pre>
 </div>
 <figcaption><a href="#figure-7">Figure 7</a>
-<a href="#name-synthesizer-state-machine-2" class="selfRef" id="name-synthesizer-state-machine-2">Synthesizer State Machine</a></figcaption></figure>
+<a href="#name-synthesizer-state-machine-2" class="selfRef">Synthesizer State Machine</a></figcaption></figure>
 </section>
 <section id="section-8.2"><h3 id="name-synthesizer-methods">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-synthesizer-methods" class="section-name selfRef">Synthesizer Methods</a>
@@ -3353,10 +3353,10 @@ completion-cause      =   "Completion-Cause" ":" 3DIGIT SP
 </pre>
 <a href="#section-8.4.4-2" class="pilcrow">¶</a>
 </div>
-<table id="table-5">
+<span id="name-synthesizer-resource-comple"></span><table class="center" id="table-5">
 <caption>
 <a href="#table-5">Table 5</a>
-<a href="#name-synthesizer-resource-comple" class="selfRef" id="name-synthesizer-resource-comple">Synthesizer Resource Completion Cause Codes</a>
+<a href="#name-synthesizer-resource-comple" class="selfRef">Synthesizer Resource Completion Cause Codes</a>
 </caption>
 <thead><tr>
 <th class="text-left" rowspan="1" colspan="1">Cause-Code</th>
@@ -3757,7 +3757,7 @@ lexicon-search-order =   "Lexicon-Search-Order" ":"
           the speech markup data that is another part in the multipart
           content block according to the 'multipart/mixed' media type
           specification.<a href="#section-8.5.1-4" class="pilcrow">¶</a></p>
-<figure id="figure-8"><div class="artwork art-text alignLeft" id="section-8.5.1-5.1">
+<span id="name-uri-list-example"></span><figure id="figure-8"><div class="artwork art-text alignLeft" id="section-8.5.1-5.1">
 <pre>
 Content-Type:text/uri-list
 Content-Length:...
@@ -3770,8 +3770,8 @@ http://www.example.com/ASR-Conclusion.ssml
 </pre>
 </div>
 <figcaption><a href="#figure-8">Figure 8</a>
-<a href="#name-uri-list-example" class="selfRef" id="name-uri-list-example">URI List Example</a></figcaption></figure>
-<figure id="figure-9"><div class="artwork art-text alignLeft" id="section-8.5.1-6.1">
+<a href="#name-uri-list-example" class="selfRef">URI List Example</a></figcaption></figure>
+<span id="name-ssml-example"></span><figure id="figure-9"><div class="artwork art-text alignLeft" id="section-8.5.1-6.1">
 <pre>
 Content-Type:application/ssml+xml
 Content-Length:...
@@ -3796,8 +3796,8 @@ Content-Length:...
 </pre>
 </div>
 <figcaption><a href="#figure-9">Figure 9</a>
-<a href="#name-ssml-example" class="selfRef" id="name-ssml-example">SSML Example</a></figcaption></figure>
-<figure id="figure-10"><div class="artwork art-text alignLeft" id="section-8.5.1-7.1">
+<a href="#name-ssml-example" class="selfRef">SSML Example</a></figcaption></figure>
+<span id="name-multipart-example"></span><figure id="figure-10"><div class="artwork art-text alignLeft" id="section-8.5.1-7.1">
 <pre>
 Content-Type:multipart/mixed; boundary="break"
 
@@ -3835,7 +3835,7 @@ Content-Length:...
 </pre>
 </div>
 <figcaption><a href="#figure-10">Figure 10</a>
-<a href="#name-multipart-example" class="selfRef" id="name-multipart-example">Multipart Example</a></figcaption></figure>
+<a href="#name-multipart-example" class="selfRef">Multipart Example</a></figcaption></figure>
 </section>
 <div id="sec.lexiconData">
 <section id="section-8.5.2"><h4 id="name-lexicon-data">
@@ -3905,7 +3905,7 @@ Content-Length:...
         been synthesized and played into the media stream, the resource issues
         a SPEAK-COMPLETE event with the request-id of the SPEAK request and a
         request-state of COMPLETE.<a href="#section-8.6-6" class="pilcrow">¶</a></p>
-<figure id="figure-11"><div class="artwork art-text alignLeft" id="section-8.6-7.1">
+<span id="name-speak-example"></span><figure id="figure-11"><div class="artwork art-text alignLeft" id="section-8.6-7.1">
 <pre>
 C-&gt;S: MRCP/2.0 ... SPEAK 543257 
       Channel-Identifier:32AECB23433802@speechsynth
@@ -3946,7 +3946,7 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543257 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-11">Figure 11</a>
-<a href="#name-speak-example" class="selfRef" id="name-speak-example">SPEAK Example</a></figcaption></figure>
+<a href="#name-speak-example" class="selfRef">SPEAK Example</a></figcaption></figure>
 </section>
 <section id="section-8.7"><h3 id="name-stop">
 <a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-stop" class="section-name selfRef">STOP</a>
@@ -3970,7 +3970,7 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543257 COMPLETE
 <p id="section-8.7-5">If a SPEAK request that was IN-PROGRESS and paused was stopped, the
         next pending SPEAK request, if any, becomes IN-PROGRESS and enters the
         paused state.<a href="#section-8.7-5" class="pilcrow">¶</a></p>
-<figure id="figure-12"><div class="artwork art-text alignLeft" id="section-8.7-6.1">
+<span id="name-stop-example"></span><figure id="figure-12"><div class="artwork art-text alignLeft" id="section-8.7-6.1">
 <pre>
 C-&gt;S: MRCP/2.0 ... SPEAK 543258
       Channel-Identifier:32AECB23433802@speechsynth
@@ -4008,7 +4008,7 @@ S-&gt;C: MRCP/2.0 ... 543259 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-12">Figure 12</a>
-<a href="#name-stop-example" class="selfRef" id="name-stop-example">STOP Example</a></figcaption></figure>
+<a href="#name-stop-example" class="selfRef">STOP Example</a></figcaption></figure>
 </section>
 <section id="section-8.8"><h3 id="name-barge-in-occurred">
 <a href="#section-8.8" class="section-number selfRef">8.8. </a><a href="#name-barge-in-occurred" class="section-name selfRef">BARGE-IN-OCCURRED</a>
@@ -4058,7 +4058,7 @@ S-&gt;C: MRCP/2.0 ... 543259 200 COMPLETE
         synthesizer. The client MUST invoke the BARGE-IN-OCCURRED if it has
         any outstanding requests to the synthesizer resource in either the
         PENDING or IN-PROGRESS state.<a href="#section-8.8-6" class="pilcrow">¶</a></p>
-<figure id="figure-13"><div class="artwork art-text alignLeft" id="section-8.8-7.1">
+<span id="name-barge-in-occurred-example"></span><figure id="figure-13"><div class="artwork art-text alignLeft" id="section-8.8-7.1">
 <pre>
 C-&gt;S: MRCP/2.0 ... SPEAK 543258
       Channel-Identifier:32AECB23433802@speechsynth
@@ -4100,7 +4100,7 @@ S-&gt;C:MRCP/2.0 ... 543259 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-13">Figure 13</a>
-<a href="#name-barge-in-occurred-example" class="selfRef" id="name-barge-in-occurred-example">BARGE-IN-OCCURRED Example</a></figcaption></figure>
+<a href="#name-barge-in-occurred-example" class="selfRef">BARGE-IN-OCCURRED Example</a></figcaption></figure>
 </section>
 <section id="section-8.9"><h3 id="name-pause">
 <a href="#section-8.9" class="section-number selfRef">8.9. </a><a href="#name-pause" class="section-name selfRef">PAUSE</a>
@@ -4114,7 +4114,7 @@ S-&gt;C:MRCP/2.0 ... 543259 200 COMPLETE
         status-code of 200 "Success". If a SPEAK request was active, the server
         MUST return an Active-Request-Id-List header field whose value
         contains the request-id of the SPEAK request that was paused.<a href="#section-8.9-1" class="pilcrow">¶</a></p>
-<figure id="figure-14"><div class="artwork art-text alignLeft" id="section-8.9-2.1">
+<span id="name-pause-example"></span><figure id="figure-14"><div class="artwork art-text alignLeft" id="section-8.9-2.1">
 <pre>
 C-&gt;S: MRCP/2.0 ... SPEAK 543258
       Channel-Identifier:32AECB23433802@speechsynth
@@ -4155,7 +4155,7 @@ S-&gt;C: MRCP/2.0 ... 543259 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-14">Figure 14</a>
-<a href="#name-pause-example" class="selfRef" id="name-pause-example">PAUSE Example</a></figcaption></figure>
+<a href="#name-pause-example" class="selfRef">PAUSE Example</a></figcaption></figure>
 </section>
 <section id="section-8.10"><h3 id="name-resume">
 <a href="#section-8.10" class="section-number selfRef">8.10. </a><a href="#name-resume" class="section-name selfRef">RESUME</a>
@@ -4169,7 +4169,7 @@ S-&gt;C: MRCP/2.0 ... 543259 200 COMPLETE
         status-code of 200 "Success". If a SPEAK request was paused, the server
         MUST return an Active-Request-Id-List header field whose value
         contains the request-id of the SPEAK request that was resumed.<a href="#section-8.10-1" class="pilcrow">¶</a></p>
-<figure id="figure-15"><div class="artwork art-text alignLeft" id="section-8.10-2.1">
+<span id="name-resume-example"></span><figure id="figure-15"><div class="artwork art-text alignLeft" id="section-8.10-2.1">
 <pre>
 C-&gt;S: MRCP/2.0 ... SPEAK 543258
       Channel-Identifier:32AECB23433802@speechsynth
@@ -4216,7 +4216,7 @@ S-&gt;C: MRCP/2.0 ... 543260 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-15">Figure 15</a>
-<a href="#name-resume-example" class="selfRef" id="name-resume-example">RESUME Example</a></figcaption></figure>
+<a href="#name-resume-example" class="selfRef">RESUME Example</a></figcaption></figure>
 </section>
 <section id="section-8.11"><h3 id="name-control">
 <a href="#section-8.11" class="section-number selfRef">8.11. </a><a href="#name-control" class="section-name selfRef">CONTROL</a>
@@ -4248,7 +4248,7 @@ S-&gt;C: MRCP/2.0 ... 543260 200 COMPLETE
 <p id="section-8.11-5">If a SPEAK request was active when the CONTROL method was received,
         the server MUST return an Active-Request-Id-List header field
         containing the request-id of the SPEAK request that was active.<a href="#section-8.11-5" class="pilcrow">¶</a></p>
-<figure id="figure-16"><div class="artwork art-text alignLeft" id="section-8.11-6.1">
+<span id="name-control-example"></span><figure id="figure-16"><div class="artwork art-text alignLeft" id="section-8.11-6.1">
 <pre>
 C-&gt;S: MRCP/2.0 ... SPEAK 543258
       Channel-Identifier:32AECB23433802@speechsynth
@@ -4300,7 +4300,7 @@ S-&gt;C: MRCP/2.0 ... 543260 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-16">Figure 16</a>
-<a href="#name-control-example" class="selfRef" id="name-control-example">CONTROL Example</a></figcaption></figure>
+<a href="#name-control-example" class="selfRef">CONTROL Example</a></figcaption></figure>
 </section>
 <section id="section-8.12"><h3 id="name-speak-complete">
 <a href="#section-8.12" class="section-number selfRef">8.12. </a><a href="#name-speak-complete" class="section-name selfRef">SPEAK-COMPLETE</a>
@@ -4314,7 +4314,7 @@ S-&gt;C: MRCP/2.0 ... 543260 200 COMPLETE
         specifies the cause code pertaining to the status and reason of
         request completion, such as the SPEAK completed normally or because of
         an error, kill-on-barge-in, etc.<a href="#section-8.12-1" class="pilcrow">¶</a></p>
-<figure id="figure-17"><div class="artwork art-text alignLeft" id="section-8.12-2.1">
+<span id="name-speak-complete-example"></span><figure id="figure-17"><div class="artwork art-text alignLeft" id="section-8.12-2.1">
 <pre>
 C-&gt;S: MRCP/2.0 ... SPEAK 543260
       Channel-Identifier:32AECB23433802@speechsynth
@@ -4352,7 +4352,7 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543260 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-17">Figure 17</a>
-<a href="#name-speak-complete-example" class="selfRef" id="name-speak-complete-example">SPEAK-COMPLETE Example</a></figcaption></figure>
+<a href="#name-speak-complete-example" class="selfRef">SPEAK-COMPLETE Example</a></figcaption></figure>
 </section>
 <section id="section-8.13"><h3 id="name-speech-marker-2">
 <a href="#section-8.13" class="section-number selfRef">8.13. </a><a href="#name-speech-marker-2" class="section-name selfRef">SPEECH-MARKER</a>
@@ -4371,7 +4371,7 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543260 COMPLETE
         (i.e., in the queue) changes state to IN-PROGRESS and starts speaking.
         The NTP timestamp MUST be synchronized with the RTP timestamp used to
         generate the speech stream through standard RTCP machinery.<a href="#section-8.13-1" class="pilcrow">¶</a></p>
-<figure id="figure-18"><div class="artwork art-text alignLeft" id="section-8.13-2.1">
+<span id="name-speech-marker-example"></span><figure id="figure-18"><div class="artwork art-text alignLeft" id="section-8.13-2.1">
 <pre>
 C-&gt;S: MRCP/2.0 ... SPEAK 543261
       Channel-Identifier:32AECB23433802@speechsynth
@@ -4420,7 +4420,7 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543261 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-18">Figure 18</a>
-<a href="#name-speech-marker-example" class="selfRef" id="name-speech-marker-example">SPEECH-MARKER Example</a></figcaption></figure>
+<a href="#name-speech-marker-example" class="selfRef">SPEECH-MARKER Example</a></figcaption></figure>
 </section>
 <div id="sec.methodDefineLexicon">
 <section id="section-8.14"><h3 id="name-define-lexicon">
@@ -4534,7 +4534,7 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543261 COMPLETE
 </h3>
 <p id="section-9.1-1">The recognizer resource maintains a state machine to process MRCPv2
         requests from the client.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
-<figure id="figure-19"><div class="artwork art-text alignLeft" id="section-9.1-2.1">
+<span id="name-recognizer-state-machine-2"></span><figure id="figure-19"><div class="artwork art-text alignLeft" id="section-9.1-2.1">
 <pre>
 Idle                   Recognizing               Recognized
 State                  State                     State
@@ -4561,7 +4561,7 @@ State                  State                     State
 </pre>
 </div>
 <figcaption><a href="#figure-19">Figure 19</a>
-<a href="#name-recognizer-state-machine-2" class="selfRef" id="name-recognizer-state-machine-2">Recognizer State Machine</a></figcaption></figure>
+<a href="#name-recognizer-state-machine-2" class="selfRef">Recognizer State Machine</a></figcaption></figure>
 <p id="section-9.1-3">If a recognizer resource supports voice enrolled grammars,
         starting an enrollment session does not change the state of the
         recognizer resource. Once an enrollment session is started, then
@@ -4916,7 +4916,7 @@ cause-name               =  *VCHAR
             </pre>
 <a href="#section-9.4.11-2" class="pilcrow">¶</a>
 </div>
-<table id="table-6">
+<table class="center" id="table-6">
 <caption><a href="#table-6">Table 6</a></caption>
 <thead><tr>
 <th class="text-left" rowspan="1" colspan="1">Cause- Code</th>
@@ -5786,7 +5786,7 @@ abort-phrase-enrollment  =  "Abort-Phrase-Enrollment" ":"
           specified in a message body of the RECOGNIZE request, the server
           interprets this as a list of grammar alternatives to match
           against.<a href="#section-9.5.1-9" class="pilcrow">¶</a></p>
-<figure id="figure-20"><div class="artwork art-text alignLeft" id="section-9.5.1-10.1">
+<span id="name-srgs-grammar-example"></span><figure id="figure-20"><div class="artwork art-text alignLeft" id="section-9.5.1-10.1">
 <pre>
 Content-Type:application/srgs+xml
 Content-ID:&lt;request1@form-level.store&gt;
@@ -5832,8 +5832,8 @@ Content-Length:...
 </pre>
 </div>
 <figcaption><a href="#figure-20">Figure 20</a>
-<a href="#name-srgs-grammar-example" class="selfRef" id="name-srgs-grammar-example">SRGS Grammar Example</a></figcaption></figure>
-<figure id="figure-21"><div class="artwork art-text alignLeft" id="section-9.5.1-11.1">
+<a href="#name-srgs-grammar-example" class="selfRef">SRGS Grammar Example</a></figcaption></figure>
+<span id="name-grammar-reference-example"></span><figure id="figure-21"><div class="artwork art-text alignLeft" id="section-9.5.1-11.1">
 <pre>
 Content-Type:text/uri-list
 Content-Length:...
@@ -5846,8 +5846,8 @@ session:menu1@menu-level.store
 </pre>
 </div>
 <figcaption><a href="#figure-21">Figure 21</a>
-<a href="#name-grammar-reference-example" class="selfRef" id="name-grammar-reference-example">Grammar Reference Example</a></figcaption></figure>
-<figure id="figure-22"><div class="artwork art-text alignLeft" id="section-9.5.1-12.1">
+<a href="#name-grammar-reference-example" class="selfRef">Grammar Reference Example</a></figcaption></figure>
+<span id="name-mixed-grammar-reference-exa"></span><figure id="figure-22"><div class="artwork art-text alignLeft" id="section-9.5.1-12.1">
 <pre>
 Content-Type:multipart/mixed; boundary="break"
 
@@ -5905,7 +5905,7 @@ Content-Length:...
 </pre>
 </div>
 <figcaption><a href="#figure-22">Figure 22</a>
-<a href="#name-mixed-grammar-reference-exa" class="selfRef" id="name-mixed-grammar-reference-exa">Mixed Grammar Reference Example</a></figcaption></figure>
+<a href="#name-mixed-grammar-reference-exa" class="selfRef">Mixed Grammar Reference Example</a></figcaption></figure>
 </section>
 </div>
 <section id="section-9.5.2"><h4 id="name-recognizer-result-data">
@@ -5917,7 +5917,7 @@ Content-Length:...
           and attribute descriptions for the recognition portion of the NLSML
           format are provided in <a href="#sec.recognizerResults" class="xref">Section 9.6</a>
           with a normative definition of the schema in <a href="#sec.schema.NLSML" class="xref">Section 16.1</a>.<a href="#section-9.5.2-1" class="pilcrow">¶</a></p>
-<figure id="figure-23"><div class="artwork art-text alignLeft" id="section-9.5.2-2.1">
+<span id="name-result-example-2"></span><figure id="figure-23"><div class="artwork art-text alignLeft" id="section-9.5.2-2.1">
 <pre>
 Content-Type:application/nlsml+xml
 Content-Length:...
@@ -5936,7 +5936,7 @@ Content-Length:...
 </pre>
 </div>
 <figcaption><a href="#figure-23">Figure 23</a>
-<a href="#name-result-example-2" class="selfRef" id="name-result-example-2">Result Example</a></figcaption></figure>
+<a href="#name-result-example-2" class="selfRef">Result Example</a></figcaption></figure>
 </section>
 <section id="section-9.5.3"><h4 id="name-enrollment-result-data">
 <a href="#section-9.5.3" class="section-number selfRef">9.5.3. </a><a href="#name-enrollment-result-data" class="section-name selfRef">Enrollment Result Data</a>
@@ -6237,7 +6237,7 @@ Content-Length:...
 </pre>
 <a href="#section-9.6.3.3-4" class="pilcrow">¶</a>
 </div>
-<div id="fig.nslmlExample2">
+<span id="name-nslml-example"></span><div id="fig.nslmlExample2">
 <figure id="figure-24"><div class="artwork art-text alignLeft" id="section-9.6.3.3-5.1">
 <pre>
 &lt;instance&gt;
@@ -6249,7 +6249,7 @@ Content-Length:...
 </pre>
 </div>
 <figcaption><a href="#figure-24">Figure 24</a>
-<a href="#name-nslml-example" class="selfRef" id="name-nslml-example">NSLML Example</a></figcaption></figure>
+<a href="#name-nslml-example" class="selfRef">NSLML Example</a></figcaption></figure>
 </div>
 </section>
 <section id="section-9.6.3.4"><h5 id="name-input-element">
@@ -6510,7 +6510,7 @@ Content-Length:...
         response for the DEFINE-GRAMMAR method MUST contain a failure
         status-code of 407 and contain a Completion-Cause header field
         describing the failure reason.<a href="#section-9.8-4" class="pilcrow">¶</a></p>
-<figure id="figure-25"><div class="artwork art-text alignLeft" id="section-9.8-5.1">
+<span id="name-define-grammar-example"></span><figure id="figure-25"><div class="artwork art-text alignLeft" id="section-9.8-5.1">
 <pre>
 C-&gt;S:MRCP/2.0 ... DEFINE-GRAMMAR 543257
 Channel-Identifier:32AECB23433801@speechrecog
@@ -6674,7 +6674,7 @@ Content-Length:...
 </pre>
 </div>
 <figcaption><a href="#figure-25">Figure 25</a>
-<a href="#name-define-grammar-example" class="selfRef" id="name-define-grammar-example">Define Grammar Example</a></figcaption></figure>
+<a href="#name-define-grammar-example" class="selfRef">Define Grammar Example</a></figcaption></figure>
 </section>
 </div>
 <div id="sec.methodRecognize">
@@ -7564,7 +7564,7 @@ S-&gt;C:    MRCP/2.0 ... INTERPRETATION-COMPLETE 543266 200 COMPLETE
 <section id="section-10.1"><h3 id="name-recorder-state-machine">
 <a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-recorder-state-machine" class="section-name selfRef">Recorder State Machine</a>
 </h3>
-<figure id="figure-26"><div class="artwork art-text alignLeft" id="section-10.1-1.1">
+<span id="name-recorder-state-machine-2"></span><figure id="figure-26"><div class="artwork art-text alignLeft" id="section-10.1-1.1">
 <pre>
 Idle                   Recording
 State                  State
@@ -7586,7 +7586,7 @@ State                  State
 </pre>
 </div>
 <figcaption><a href="#figure-26">Figure 26</a>
-<a href="#name-recorder-state-machine-2" class="selfRef" id="name-recorder-state-machine-2">Recorder State Machine</a></figcaption></figure>
+<a href="#name-recorder-state-machine-2" class="selfRef">Recorder State Machine</a></figcaption></figure>
 </section>
 <section id="section-10.2"><h3 id="name-recorder-methods">
 <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-recorder-methods" class="section-name selfRef">Recorder Methods</a>
@@ -7695,7 +7695,7 @@ cause-name               =  *VCHAR
             </pre>
 <a href="#section-10.4.3-2" class="pilcrow">¶</a>
 </div>
-<table id="table-7">
+<table class="center" id="table-7">
 <caption><a href="#table-7">Table 7</a></caption>
 <thead><tr>
 <th class="text-left" rowspan="1" colspan="1">Cause-Code</th>
@@ -7979,7 +7979,7 @@ start-input-timers       =  "Start-Input-Timers" ":"
         an IN-PROGRESS request state. The server MAY generate a subsequent
         START-OF-INPUT event when speech is detected. Upon completion of the
         recording operation, the server generates a RECORD-COMPLETE event.<a href="#section-10.6-6" class="pilcrow">¶</a></p>
-<figure id="figure-27"><div class="artwork art-text alignLeft" id="section-10.6-7.1">
+<span id="name-record-example"></span><figure id="figure-27"><div class="artwork art-text alignLeft" id="section-10.6-7.1">
 <pre>
 C-&gt;S:  MRCP/2.0 ... RECORD 543257
        Channel-Identifier:32AECB23433802@recorder
@@ -8003,7 +8003,7 @@ S-&gt;C:  MRCP/2.0 ... RECORD-COMPLETE 543257 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-27">Figure 27</a>
-<a href="#name-record-example" class="selfRef" id="name-record-example">RECORD Example</a></figcaption></figure>
+<a href="#name-record-example" class="selfRef">RECORD Example</a></figcaption></figure>
 </section>
 <section id="section-10.7"><h3 id="name-stop-3">
 <a href="#section-10.7" class="section-number selfRef">10.7. </a><a href="#name-stop-3" class="section-name selfRef">STOP</a>
@@ -8022,7 +8022,7 @@ S-&gt;C:  MRCP/2.0 ... RECORD-COMPLETE 543257 COMPLETE
         in which case the specified length of audio is trimmed from the end of
         the recording after the stop. In any case, the response MUST contain a
         status-code of 200 "Success".<a href="#section-10.7-1" class="pilcrow">¶</a></p>
-<figure id="figure-28"><div class="artwork art-text alignLeft" id="section-10.7-2.1">
+<span id="name-stop-example-2"></span><figure id="figure-28"><div class="artwork art-text alignLeft" id="section-10.7-2.1">
 <pre>
 C-&gt;S:  MRCP/2.0 ... RECORD 543257
        Channel-Identifier:32AECB23433802@recorder
@@ -8049,7 +8049,7 @@ S-&gt;C:  MRCP/2.0 ... 543257 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-28">Figure 28</a>
-<a href="#name-stop-example-2" class="selfRef" id="name-stop-example-2">STOP Example</a></figcaption></figure>
+<a href="#name-stop-example-2" class="selfRef">STOP Example</a></figcaption></figure>
 </section>
 <section id="section-10.8"><h3 id="name-record-complete">
 <a href="#section-10.8" class="section-number selfRef">10.8. </a><a href="#name-record-complete" class="section-name selfRef">RECORD-COMPLETE</a>
@@ -8060,7 +8060,7 @@ S-&gt;C:  MRCP/2.0 ... 543257 200 COMPLETE
         success, the RECORD-COMPLETE event contains a Record-URI header field
         pointing to the recorded audio file on the server or to a typed entity
         in the message body containing the recorded audio.<a href="#section-10.8-1" class="pilcrow">¶</a></p>
-<figure id="figure-29"><div class="artwork art-text alignLeft" id="section-10.8-2.1">
+<span id="name-record-complete-example"></span><figure id="figure-29"><div class="artwork art-text alignLeft" id="section-10.8-2.1">
 <pre>
 C-&gt;S:  MRCP/2.0 ... RECORD 543257
        Channel-Identifier:32AECB23433802@recorder
@@ -8083,7 +8083,7 @@ S-&gt;C:  MRCP/2.0 ... RECORD-COMPLETE 543257 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-29">Figure 29</a>
-<a href="#name-record-complete-example" class="selfRef" id="name-record-complete-example">RECORD-COMPLETE Example</a></figcaption></figure>
+<a href="#name-record-complete-example" class="selfRef">RECORD-COMPLETE Example</a></figcaption></figure>
 </section>
 <section id="section-10.9"><h3 id="name-start-input-timers-4">
 <a href="#section-10.9" class="section-number selfRef">10.9. </a><a href="#name-start-input-timers-4" class="section-name selfRef">START-INPUT-TIMERS</a>
@@ -8212,7 +8212,7 @@ S-&gt;C:  MRCP/2.0 ... START-OF-INPUT 543259 IN-PROGRESS
         by calling the VERIFY or VERIFY-FROM-BUFFER method. The state of the
         verifier resources goes from IDLE to VERIFYING state each time VERIFY
         or VERIFY-FROM-BUFFER is called.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
-<figure id="figure-30"><div class="artwork art-text alignLeft" id="section-11.1-2.1">
+<span id="name-verifier-resource-state-mac"></span><figure id="figure-30"><div class="artwork art-text alignLeft" id="section-11.1-2.1">
 <pre>
   Idle              Session Opened       Verifying/Training
   State             State                State
@@ -8282,7 +8282,7 @@ S-&gt;C:  MRCP/2.0 ... START-OF-INPUT 543259 IN-PROGRESS
 </pre>
 </div>
 <figcaption><a href="#figure-30">Figure 30</a>
-<a href="#name-verifier-resource-state-mac" class="selfRef" id="name-verifier-resource-state-mac">Verifier Resource State Machine</a></figcaption></figure>
+<a href="#name-verifier-resource-state-mac" class="selfRef">Verifier Resource State Machine</a></figcaption></figure>
 </section>
 <section id="section-11.2"><h3 id="name-speaker-verification-method">
 <a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-speaker-verification-method" class="section-name selfRef">Speaker Verification Methods</a>
@@ -8746,7 +8746,7 @@ cause-name               =  *VCHAR
             </pre>
 <a href="#section-11.4.16-2" class="pilcrow">¶</a>
 </div>
-<table id="table-8">
+<table class="center" id="table-8">
 <caption><a href="#table-8">Table 8</a></caption>
 <thead><tr>
 <th class="text-left" rowspan="1" colspan="1">Cause-Code</th>
@@ -9048,7 +9048,7 @@ start-input-timers       =  "Start-Input-Timers" ":"
             Note that the first one has crossed the verification score
             threshold, and the speaker has been accepted. The voiceprint was
             also adapted with the most recent utterance.<a href="#section-11.5.2.10-2" class="pilcrow">¶</a></p>
-<figure id="figure-31"><div class="artwork art-text alignLeft" id="section-11.5.2.10-3.1">
+<span id="name-verification-results-exampl"></span><figure id="figure-31"><div class="artwork art-text alignLeft" id="section-11.5.2.10-3.1">
 <pre>
 &lt;?xml version="1.0"?&gt;
 &lt;result xmlns="urn:ietf:params:xml:ns:mrcpv2"
@@ -9086,10 +9086,10 @@ start-input-timers       =  "Start-Input-Timers" ":"
 </pre>
 </div>
 <figcaption><a href="#figure-31">Figure 31</a>
-<a href="#name-verification-results-exampl" class="selfRef" id="name-verification-results-exampl">Verification Results Example 1</a></figcaption></figure>
+<a href="#name-verification-results-exampl" class="selfRef">Verification Results Example 1</a></figcaption></figure>
 <p id="section-11.5.2.10-4">In this next example, the verifier has enough information to
             decide to reject the speaker.<a href="#section-11.5.2.10-4" class="pilcrow">¶</a></p>
-<figure id="figure-32"><div class="artwork art-text alignLeft" id="section-11.5.2.10-5.1">
+<span id="name-verification-results-example"></span><figure id="figure-32"><div class="artwork art-text alignLeft" id="section-11.5.2.10-5.1">
 <pre>
 &lt;?xml version="1.0"?&gt;
 &lt;result xmlns="urn:ietf:params:xml:ns:mrcpv2"
@@ -9118,7 +9118,7 @@ start-input-timers       =  "Start-Input-Timers" ":"
 </pre>
 </div>
 <figcaption><a href="#figure-32">Figure 32</a>
-<a href="#name-verification-results-example" class="selfRef" id="name-verification-results-example">Verification Results Example 2</a></figcaption></figure>
+<a href="#name-verification-results-example" class="selfRef">Verification Results Example 2</a></figcaption></figure>
 </section>
 </section>
 </div>
@@ -9353,7 +9353,7 @@ S-&gt;C:  MRCP/2.0 ... 543260 200 IN-PROGRESS
         utterance is accepted. For the example, we assume both
         Num‑Min‑Verification‑Phrases and Num‑Max‑Verification‑Phrases are
         1.<a href="#section-11.11-5" class="pilcrow">¶</a></p>
-<figure id="figure-33"><div class="artwork art-text alignLeft" id="section-11.11-6.1">
+<span id="name-verify-from-buffer-example"></span><figure id="figure-33"><div class="artwork art-text alignLeft" id="section-11.11-6.1">
 <pre>
 C-&gt;S:  MRCP/2.0 ... START-SESSION 314161
        Channel-Identifier:32AECB23433801@speakverify
@@ -9466,7 +9466,7 @@ S-&gt;C:  MRCP/2.0 ... 314166 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-33">Figure 33</a>
-<a href="#name-verify-from-buffer-example" class="selfRef" id="name-verify-from-buffer-example">VERIFY-FROM-BUFFER Example</a></figcaption></figure>
+<a href="#name-verify-from-buffer-example" class="selfRef">VERIFY-FROM-BUFFER Example</a></figcaption></figure>
 </section>
 <section id="section-11.12"><h3 id="name-verify-rollback">
 <a href="#section-11.12" class="section-number selfRef">11.12. </a><a href="#name-verify-rollback" class="section-name selfRef">VERIFY-ROLLBACK</a>
@@ -9479,7 +9479,7 @@ S-&gt;C:  MRCP/2.0 ... 314166 200 COMPLETE
         method does not provide a stack of rollback states. Executing
         VERIFY-ROLLBACK twice in succession without an intervening recognition
         operation has no effect on the second attempt.<a href="#section-11.12-1" class="pilcrow">¶</a></p>
-<figure id="figure-34"><div class="artwork art-text alignLeft" id="section-11.12-2.1">
+<span id="name-verify-rollback-example"></span><figure id="figure-34"><div class="artwork art-text alignLeft" id="section-11.12-2.1">
 <pre>
 C-&gt;S:  MRCP/2.0 ... VERIFY-ROLLBACK 314165
        Channel-Identifier:32AECB23433801@speakverify
@@ -9489,7 +9489,7 @@ S-&gt;C:  MRCP/2.0 ... 314165 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-34">Figure 34</a>
-<a href="#name-verify-rollback-example" class="selfRef" id="name-verify-rollback-example">VERIFY-ROLLBACK Example</a></figcaption></figure>
+<a href="#name-verify-rollback-example" class="selfRef">VERIFY-ROLLBACK Example</a></figcaption></figure>
 </section>
 <section id="section-11.13"><h3 id="name-stop-4">
 <a href="#section-11.13" class="section-number selfRef">11.13. </a><a href="#name-stop-4" class="section-name selfRef">STOP</a>
@@ -9521,7 +9521,7 @@ S-&gt;C:  MRCP/2.0 ... 314165 200 COMPLETE
         scores.<a href="#section-11.13-3" class="pilcrow">¶</a></p>
 <p id="section-11.13-4">The following example assumes a voiceprint identity has already
         been established.<a href="#section-11.13-4" class="pilcrow">¶</a></p>
-<figure id="figure-35"><div class="artwork art-text alignLeft" id="section-11.13-5.1">
+<span id="name-stop-verification-example"></span><figure id="figure-35"><div class="artwork art-text alignLeft" id="section-11.13-5.1">
 <pre>
 C-&gt;S:  MRCP/2.0 ... VERIFY 314177
        Channel-Identifier:32AECB23433801@speakverify
@@ -9538,7 +9538,7 @@ S-&gt;C:  MRCP/2.0 ... 314178 200 COMPLETE
 </pre>
 </div>
 <figcaption><a href="#figure-35">Figure 35</a>
-<a href="#name-stop-verification-example" class="selfRef" id="name-stop-verification-example">STOP Verification Example</a></figcaption></figure>
+<a href="#name-stop-verification-example" class="selfRef">STOP Verification Example</a></figcaption></figure>
 </section>
 <section id="section-11.14"><h3 id="name-start-input-timers-6">
 <a href="#section-11.14" class="section-number selfRef">11.14. </a><a href="#name-start-input-timers-6" class="section-name selfRef">START-INPUT-TIMERS</a>
@@ -12292,270 +12292,170 @@ identification-tag =    token
 </section>
 <section id="section-17"><h2 id="name-references"><a href="#name-references" class="section-name selfRef">References</a></h2>
 <section id="section-17.1"><h3 id="name-normative-references"><a href="#name-normative-references" class="section-name selfRef">Normative References</a></h3>
-<dl class="reference" id="ISO.8859-1.1987">
-<dt>[ISO.8859-1.1987]</dt>
+<dl class="references">
+<dt id="ISO.8859-1.1987">[ISO.8859-1.1987]</dt>
 <dd>
-<span class="refAuthor">International Organization for Standardization</span>, <span class="refTitle">"Information technology - 8-bit single byte coded graphic - character sets - Part 1: Latin alphabet No. 1, JTC1/SC2"</span>, <span>ISOStandard 8859-1</span>, <time datetime="1987">1987</time>. </dd>
-</dl>
-<dl class="reference" id="RFC0793">
-<dt>[RFC0793]</dt>
+<span class="refAuthor">International Organization for Standardization</span>, <span class="refTitle">"Information technology - 8-bit single byte coded graphic - character sets - Part 1: Latin alphabet No. 1, JTC1/SC2"</span>, <span class="seriesInfo">ISOStandard 8859-1</span>, <time datetime="1987">1987</time>. </dd>
+<dt id="RFC0793">[RFC0793]</dt>
 <dd>
-<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Transmission Control Protocol"</span>, <span>STD7</span>, <span>RFC793</span>, <time datetime="1981-09-01">September 1, 1981</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc793.txt">http://www.rfc-editor.org/rfc/rfc793.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC1035">
-<dt>[RFC1035]</dt>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Transmission Control Protocol"</span>, <span class="seriesInfo">STD7</span>, <span class="seriesInfo">RFC793</span>, <time datetime="1981-09-01">September 1, 1981</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc793.txt">http://www.rfc-editor.org/rfc/rfc793.txt</a>&gt;</span>. </dd>
+<dt id="RFC1035">[RFC1035]</dt>
 <dd>
-<span class="refAuthor">Mockapetris, P.</span>, <span class="refTitle">"Domain names - implementation and specification"</span>, <span>STD13</span>, <span>RFC1035</span>, <time datetime="1987-11-01">November 1, 1987</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc1035.txt">http://www.rfc-editor.org/rfc/rfc1035.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC2119">
-<dt>[RFC2119]</dt>
+<span class="refAuthor">Mockapetris, P.</span>, <span class="refTitle">"Domain names - implementation and specification"</span>, <span class="seriesInfo">STD13</span>, <span class="seriesInfo">RFC1035</span>, <time datetime="1987-11-01">November 1, 1987</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc1035.txt">http://www.rfc-editor.org/rfc/rfc1035.txt</a>&gt;</span>. </dd>
+<dt id="RFC2119">[RFC2119]</dt>
 <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span>BCP14</span>, <span>RFC2119</span>, <span>DOI10.17487/RFC2119</span>, <time datetime="1997-03">March 1997</time><span>, &lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC2326">
-<dt>[RFC2326]</dt>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP14</span>, <span class="seriesInfo">RFC2119</span>, <span class="seriesInfo">DOI10.17487/RFC2119</span>, <time datetime="1997-03">March 1997</time><span>, &lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dt id="RFC2326">[RFC2326]</dt>
 <dd>
-<span class="refAuthor">Schulzrinne, H.</span><span class="refAuthor">, Rao, A.</span><span class="refAuthor">, and R. Lanphier</span>, <span class="refTitle">"Real Time Streaming Protocol (RTSP)"</span>, <span>RFC2326</span>, <time datetime="1998-04">April 1998</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2326.txt">http://www.rfc-editor.org/rfc/rfc2326.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC2392">
-<dt>[RFC2392]</dt>
+<span class="refAuthor">Schulzrinne, H.</span><span class="refAuthor">, Rao, A.</span><span class="refAuthor">, and R. Lanphier</span>, <span class="refTitle">"Real Time Streaming Protocol (RTSP)"</span>, <span class="seriesInfo">RFC2326</span>, <time datetime="1998-04">April 1998</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2326.txt">http://www.rfc-editor.org/rfc/rfc2326.txt</a>&gt;</span>. </dd>
+<dt id="RFC2392">[RFC2392]</dt>
 <dd>
-<span class="refAuthor">Levinson, E.</span>, <span class="refTitle">"Content-ID and Message-ID Uniform Resource Locators"</span>, <span>RFC2392</span>, <time datetime="1998-08">August 1998</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2392.txt">http://www.rfc-editor.org/rfc/rfc2392.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC2483">
-<dt>[RFC2483]</dt>
+<span class="refAuthor">Levinson, E.</span>, <span class="refTitle">"Content-ID and Message-ID Uniform Resource Locators"</span>, <span class="seriesInfo">RFC2392</span>, <time datetime="1998-08">August 1998</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2392.txt">http://www.rfc-editor.org/rfc/rfc2392.txt</a>&gt;</span>. </dd>
+<dt id="RFC2483">[RFC2483]</dt>
 <dd>
-<span class="refAuthor">Mealling, M.</span><span class="refAuthor"> and R. Daniel</span>, <span class="refTitle">"URI Resolution Services Necessary for URN Resolution"</span>, <span>RFC2483</span>, <time datetime="1999-01">January 1999</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2483.txt">http://www.rfc-editor.org/rfc/rfc2483.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC2616">
-<dt>[RFC2616]</dt>
+<span class="refAuthor">Mealling, M.</span><span class="refAuthor"> and R. Daniel</span>, <span class="refTitle">"URI Resolution Services Necessary for URN Resolution"</span>, <span class="seriesInfo">RFC2483</span>, <time datetime="1999-01">January 1999</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2483.txt">http://www.rfc-editor.org/rfc/rfc2483.txt</a>&gt;</span>. </dd>
+<dt id="RFC2616">[RFC2616]</dt>
 <dd>
-<span class="refAuthor">Fielding, R.</span><span class="refAuthor">, Gettys, J.</span><span class="refAuthor">, Mogul, J.</span><span class="refAuthor">, Frystyk, H.</span><span class="refAuthor">, Masinter, L.</span><span class="refAuthor">, Leach, P.</span><span class="refAuthor">, and T. Berners-Lee</span>, <span class="refTitle">"Hypertext Transfer Protocol -- HTTP/1.1"</span>, <span>RFC2616</span>, <time datetime="1999-06">June 1999</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2616.txt">http://www.rfc-editor.org/rfc/rfc2616.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC3023">
-<dt>[RFC3023]</dt>
+<span class="refAuthor">Fielding, R.</span><span class="refAuthor">, Gettys, J.</span><span class="refAuthor">, Mogul, J.</span><span class="refAuthor">, Frystyk, H.</span><span class="refAuthor">, Masinter, L.</span><span class="refAuthor">, Leach, P.</span><span class="refAuthor">, and T. Berners-Lee</span>, <span class="refTitle">"Hypertext Transfer Protocol -- HTTP/1.1"</span>, <span class="seriesInfo">RFC2616</span>, <time datetime="1999-06">June 1999</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2616.txt">http://www.rfc-editor.org/rfc/rfc2616.txt</a>&gt;</span>. </dd>
+<dt id="RFC3023">[RFC3023]</dt>
 <dd>
-<span class="refAuthor">Murata, M.</span><span class="refAuthor">, St. Laurent, S.</span><span class="refAuthor">, and D. Kohn</span>, <span class="refTitle">"XML Media Types"</span>, <span>RFC3023</span>, <time datetime="2001-01">January 2001</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3023.txt">http://www.rfc-editor.org/rfc/rfc3023.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC3261">
-<dt>[RFC3261]</dt>
+<span class="refAuthor">Murata, M.</span><span class="refAuthor">, St. Laurent, S.</span><span class="refAuthor">, and D. Kohn</span>, <span class="refTitle">"XML Media Types"</span>, <span class="seriesInfo">RFC3023</span>, <time datetime="2001-01">January 2001</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3023.txt">http://www.rfc-editor.org/rfc/rfc3023.txt</a>&gt;</span>. </dd>
+<dt id="RFC3261">[RFC3261]</dt>
 <dd>
-<span class="refAuthor">Rosenberg, J.</span><span class="refAuthor">, Schulzrinne, H.</span><span class="refAuthor">, Camarillo, G.</span><span class="refAuthor">, Johnston, A.</span><span class="refAuthor">, Peterson, J.</span><span class="refAuthor">, Sparks, R.</span><span class="refAuthor">, Handley, M.</span><span class="refAuthor">, and E. Schooler</span>, <span class="refTitle">"SIP: Session Initiation Protocol"</span>, <span>RFC3261</span>, <time datetime="2002-06">June 2002</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3261.txt">http://www.rfc-editor.org/rfc/rfc3261.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC3264">
-<dt>[RFC3264]</dt>
+<span class="refAuthor">Rosenberg, J.</span><span class="refAuthor">, Schulzrinne, H.</span><span class="refAuthor">, Camarillo, G.</span><span class="refAuthor">, Johnston, A.</span><span class="refAuthor">, Peterson, J.</span><span class="refAuthor">, Sparks, R.</span><span class="refAuthor">, Handley, M.</span><span class="refAuthor">, and E. Schooler</span>, <span class="refTitle">"SIP: Session Initiation Protocol"</span>, <span class="seriesInfo">RFC3261</span>, <time datetime="2002-06">June 2002</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3261.txt">http://www.rfc-editor.org/rfc/rfc3261.txt</a>&gt;</span>. </dd>
+<dt id="RFC3264">[RFC3264]</dt>
 <dd>
-<span class="refAuthor">Rosenberg, J.</span><span class="refAuthor"> and H. Schulzrinne</span>, <span class="refTitle">"An Offer/Answer Model with Session Description Protocol (SDP)"</span>, <span>RFC3264</span>, <time datetime="2002-06">June 2002</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3264.txt">http://www.rfc-editor.org/rfc/rfc3264.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC3550">
-<dt>[RFC3550]</dt>
+<span class="refAuthor">Rosenberg, J.</span><span class="refAuthor"> and H. Schulzrinne</span>, <span class="refTitle">"An Offer/Answer Model with Session Description Protocol (SDP)"</span>, <span class="seriesInfo">RFC3264</span>, <time datetime="2002-06">June 2002</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3264.txt">http://www.rfc-editor.org/rfc/rfc3264.txt</a>&gt;</span>. </dd>
+<dt id="RFC3550">[RFC3550]</dt>
 <dd>
-<span class="refAuthor">Schulzrinne, H.</span><span class="refAuthor">, Casner, S.</span><span class="refAuthor">, Frederick, R.</span><span class="refAuthor">, and V. Jacobson</span>, <span class="refTitle">"RTP: A Transport Protocol for Real-Time Applications"</span>, <span>STD64</span>, <span>RFC3550</span>, <time datetime="2003-07">July 2003</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3550.txt">http://www.rfc-editor.org/rfc/rfc3550.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC3629">
-<dt>[RFC3629]</dt>
+<span class="refAuthor">Schulzrinne, H.</span><span class="refAuthor">, Casner, S.</span><span class="refAuthor">, Frederick, R.</span><span class="refAuthor">, and V. Jacobson</span>, <span class="refTitle">"RTP: A Transport Protocol for Real-Time Applications"</span>, <span class="seriesInfo">STD64</span>, <span class="seriesInfo">RFC3550</span>, <time datetime="2003-07">July 2003</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3550.txt">http://www.rfc-editor.org/rfc/rfc3550.txt</a>&gt;</span>. </dd>
+<dt id="RFC3629">[RFC3629]</dt>
 <dd>
-<span class="refAuthor">Yergeau, F.</span>, <span class="refTitle">"UTF-8, a transformation format of ISO 10646"</span>, <span>STD63</span>, <span>RFC3629</span>, <time datetime="2003-11">November 2003</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3629.txt">http://www.rfc-editor.org/rfc/rfc3629.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC3688">
-<dt>[RFC3688]</dt>
+<span class="refAuthor">Yergeau, F.</span>, <span class="refTitle">"UTF-8, a transformation format of ISO 10646"</span>, <span class="seriesInfo">STD63</span>, <span class="seriesInfo">RFC3629</span>, <time datetime="2003-11">November 2003</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3629.txt">http://www.rfc-editor.org/rfc/rfc3629.txt</a>&gt;</span>. </dd>
+<dt id="RFC3688">[RFC3688]</dt>
 <dd>
-<span class="refAuthor">Mealling, M.</span>, <span class="refTitle">"The IETF XML Registry"</span>, <span>BCP81</span>, <span>RFC3688</span>, <time datetime="2004-01">January 2004</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3688.txt">http://www.rfc-editor.org/rfc/rfc3688.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC3711">
-<dt>[RFC3711]</dt>
+<span class="refAuthor">Mealling, M.</span>, <span class="refTitle">"The IETF XML Registry"</span>, <span class="seriesInfo">BCP81</span>, <span class="seriesInfo">RFC3688</span>, <time datetime="2004-01">January 2004</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3688.txt">http://www.rfc-editor.org/rfc/rfc3688.txt</a>&gt;</span>. </dd>
+<dt id="RFC3711">[RFC3711]</dt>
 <dd>
-<span class="refAuthor">Baugher, M.</span><span class="refAuthor">, McGrew, D.</span><span class="refAuthor">, Naslund, M.</span><span class="refAuthor">, Carrara, E.</span><span class="refAuthor">, and K. Norrman</span>, <span class="refTitle">"The Secure Real-time Transport Protocol (SRTP)"</span>, <span>RFC3711</span>, <time datetime="2004-03">March 2004</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3711.txt">http://www.rfc-editor.org/rfc/rfc3711.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC3986">
-<dt>[RFC3986]</dt>
+<span class="refAuthor">Baugher, M.</span><span class="refAuthor">, McGrew, D.</span><span class="refAuthor">, Naslund, M.</span><span class="refAuthor">, Carrara, E.</span><span class="refAuthor">, and K. Norrman</span>, <span class="refTitle">"The Secure Real-time Transport Protocol (SRTP)"</span>, <span class="seriesInfo">RFC3711</span>, <time datetime="2004-03">March 2004</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc3711.txt">http://www.rfc-editor.org/rfc/rfc3711.txt</a>&gt;</span>. </dd>
+<dt id="RFC3986">[RFC3986]</dt>
 <dd>
-<span class="refAuthor">Berners-Lee, T.</span><span class="refAuthor">, Fielding, R.</span><span class="refAuthor">, and L. Masinter</span>, <span class="refTitle">"Uniform Resource Identifier (URI): Generic Syntax"</span>, <span>STD66</span>, <span>RFC3986</span>, <span>DOI10.17487/RFC3986</span>, <time datetime="2005-01">January 2005</time><span>, &lt;<a href="https://www.rfc-editor.org/info/rfc3986">https://www.rfc-editor.org/info/rfc3986</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4145">
-<dt>[RFC4145]</dt>
+<span class="refAuthor">Berners-Lee, T.</span><span class="refAuthor">, Fielding, R.</span><span class="refAuthor">, and L. Masinter</span>, <span class="refTitle">"Uniform Resource Identifier (URI): Generic Syntax"</span>, <span class="seriesInfo">STD66</span>, <span class="seriesInfo">RFC3986</span>, <span class="seriesInfo">DOI10.17487/RFC3986</span>, <time datetime="2005-01">January 2005</time><span>, &lt;<a href="https://www.rfc-editor.org/info/rfc3986">https://www.rfc-editor.org/info/rfc3986</a>&gt;</span>. </dd>
+<dt id="RFC4145">[RFC4145]</dt>
 <dd>
-<span class="refAuthor">Yon, D.</span><span class="refAuthor"> and G. Camarillo</span>, <span class="refTitle">"TCP-Based Media Transport in the Session Description Protocol (SDP)"</span>, <span>RFC4145</span>, <time datetime="2005-09">September 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4145.txt">http://www.rfc-editor.org/rfc/rfc4145.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4288">
-<dt>[RFC4288]</dt>
+<span class="refAuthor">Yon, D.</span><span class="refAuthor"> and G. Camarillo</span>, <span class="refTitle">"TCP-Based Media Transport in the Session Description Protocol (SDP)"</span>, <span class="seriesInfo">RFC4145</span>, <time datetime="2005-09">September 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4145.txt">http://www.rfc-editor.org/rfc/rfc4145.txt</a>&gt;</span>. </dd>
+<dt id="RFC4288">[RFC4288]</dt>
 <dd>
-<span class="refAuthor">Freed, N.</span><span class="refAuthor"> and J. Klensin</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span>BCP13</span>, <span>RFC4288</span>, <time datetime="2005-12">December 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4288.txt">http://www.rfc-editor.org/rfc/rfc4288.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4566">
-<dt>[RFC4566]</dt>
+<span class="refAuthor">Freed, N.</span><span class="refAuthor"> and J. Klensin</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP13</span>, <span class="seriesInfo">RFC4288</span>, <time datetime="2005-12">December 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4288.txt">http://www.rfc-editor.org/rfc/rfc4288.txt</a>&gt;</span>. </dd>
+<dt id="RFC4566">[RFC4566]</dt>
 <dd>
-<span class="refAuthor">Handley, M.</span><span class="refAuthor">, Jacobson, V.</span><span class="refAuthor">, and C. Perkins</span>, <span class="refTitle">"SDP: Session Description Protocol"</span>, <span>RFC4566</span>, <time datetime="2006-07">July 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4566.txt">http://www.rfc-editor.org/rfc/rfc4566.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4568">
-<dt>[RFC4568]</dt>
+<span class="refAuthor">Handley, M.</span><span class="refAuthor">, Jacobson, V.</span><span class="refAuthor">, and C. Perkins</span>, <span class="refTitle">"SDP: Session Description Protocol"</span>, <span class="seriesInfo">RFC4566</span>, <time datetime="2006-07">July 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4566.txt">http://www.rfc-editor.org/rfc/rfc4566.txt</a>&gt;</span>. </dd>
+<dt id="RFC4568">[RFC4568]</dt>
 <dd>
-<span class="refAuthor">Andreasen, F.</span><span class="refAuthor">, Baugher, M.</span><span class="refAuthor">, and D. Wing</span>, <span class="refTitle">"Session Description Protocol (SDP) Security Descriptions for Media Streams"</span>, <span>RFC4568</span>, <time datetime="2006-07">July 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4568.txt">http://www.rfc-editor.org/rfc/rfc4568.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4572">
-<dt>[RFC4572]</dt>
+<span class="refAuthor">Andreasen, F.</span><span class="refAuthor">, Baugher, M.</span><span class="refAuthor">, and D. Wing</span>, <span class="refTitle">"Session Description Protocol (SDP) Security Descriptions for Media Streams"</span>, <span class="seriesInfo">RFC4568</span>, <time datetime="2006-07">July 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4568.txt">http://www.rfc-editor.org/rfc/rfc4568.txt</a>&gt;</span>. </dd>
+<dt id="RFC4572">[RFC4572]</dt>
 <dd>
-<span class="refAuthor">Lennox, J.</span>, <span class="refTitle">"Connection-Oriented Media Transport over the Transport Layer Security (TLS) Protocol in the Session Description Protocol (SDP)"</span>, <span>RFC4572</span>, <time datetime="2006-07">July 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4572.txt">http://www.rfc-editor.org/rfc/rfc4572.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC5226">
-<dt>[RFC5226]</dt>
+<span class="refAuthor">Lennox, J.</span>, <span class="refTitle">"Connection-Oriented Media Transport over the Transport Layer Security (TLS) Protocol in the Session Description Protocol (SDP)"</span>, <span class="seriesInfo">RFC4572</span>, <time datetime="2006-07">July 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4572.txt">http://www.rfc-editor.org/rfc/rfc4572.txt</a>&gt;</span>. </dd>
+<dt id="RFC5226">[RFC5226]</dt>
 <dd>
-<span class="refAuthor">Narten, T.</span><span class="refAuthor"> and H. Alvestrand</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span>BCP26</span>, <span>RFC5226</span>, <time datetime="2008-05">May 2008</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5226.txt">http://www.rfc-editor.org/rfc/rfc5226.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC5234">
-<dt>[RFC5234]</dt>
+<span class="refAuthor">Narten, T.</span><span class="refAuthor"> and H. Alvestrand</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP26</span>, <span class="seriesInfo">RFC5226</span>, <time datetime="2008-05">May 2008</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5226.txt">http://www.rfc-editor.org/rfc/rfc5226.txt</a>&gt;</span>. </dd>
+<dt id="RFC5234">[RFC5234]</dt>
 <dd>
-<span class="refAuthor">Crocker, D.</span><span class="refAuthor"> and P. Overell</span>, <span class="refTitle">"Augmented BNF for Syntax Specifications: ABNF"</span>, <span>STD68</span>, <span>RFC5234</span>, <time datetime="2008-01">January 2008</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5234.txt">http://www.rfc-editor.org/rfc/rfc5234.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC5246">
-<dt>[RFC5246]</dt>
+<span class="refAuthor">Crocker, D.</span><span class="refAuthor"> and P. Overell</span>, <span class="refTitle">"Augmented BNF for Syntax Specifications: ABNF"</span>, <span class="seriesInfo">STD68</span>, <span class="seriesInfo">RFC5234</span>, <time datetime="2008-01">January 2008</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5234.txt">http://www.rfc-editor.org/rfc/rfc5234.txt</a>&gt;</span>. </dd>
+<dt id="RFC5246">[RFC5246]</dt>
 <dd>
-<span class="refAuthor">Dierks, T.</span><span class="refAuthor"> and E. Rescorla</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.2"</span>, <span>RFC5246</span>, <time datetime="2008-08">August 2008</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5246.txt">http://www.rfc-editor.org/rfc/rfc5246.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC5322">
-<dt>[RFC5322]</dt>
+<span class="refAuthor">Dierks, T.</span><span class="refAuthor"> and E. Rescorla</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.2"</span>, <span class="seriesInfo">RFC5246</span>, <time datetime="2008-08">August 2008</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5246.txt">http://www.rfc-editor.org/rfc/rfc5246.txt</a>&gt;</span>. </dd>
+<dt id="RFC5322">[RFC5322]</dt>
 <dd>
-<span class="refAuthor">Resnick, P., Ed.</span>, <span class="refTitle">"Internet Message Format"</span>, <span>RFC5322</span>, <time datetime="2008-10">October 2008</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5322.txt">http://www.rfc-editor.org/rfc/rfc5322.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC5646">
-<dt>[RFC5646]</dt>
+<span class="refAuthor">Resnick, P., Ed.</span>, <span class="refTitle">"Internet Message Format"</span>, <span class="seriesInfo">RFC5322</span>, <time datetime="2008-10">October 2008</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5322.txt">http://www.rfc-editor.org/rfc/rfc5322.txt</a>&gt;</span>. </dd>
+<dt id="RFC5646">[RFC5646]</dt>
 <dd>
-<span class="refAuthor">Phillips, A.</span><span class="refAuthor"> and M. Davis</span>, <span class="refTitle">"Tags for Identifying Languages"</span>, <span>BCP47</span>, <span>RFC5646</span>, <time datetime="2009-09">September 2009</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5646.txt">http://www.rfc-editor.org/rfc/rfc5646.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC5888">
-<dt>[RFC5888]</dt>
+<span class="refAuthor">Phillips, A.</span><span class="refAuthor"> and M. Davis</span>, <span class="refTitle">"Tags for Identifying Languages"</span>, <span class="seriesInfo">BCP47</span>, <span class="seriesInfo">RFC5646</span>, <time datetime="2009-09">September 2009</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5646.txt">http://www.rfc-editor.org/rfc/rfc5646.txt</a>&gt;</span>. </dd>
+<dt id="RFC5888">[RFC5888]</dt>
 <dd>
-<span class="refAuthor">Camarillo, G.</span><span class="refAuthor"> and H. Schulzrinne</span>, <span class="refTitle">"The Session Description Protocol (SDP) Grouping Framework"</span>, <span>RFC5888</span>, <time datetime="2010-06">June 2010</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5888.txt">http://www.rfc-editor.org/rfc/rfc5888.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC5905">
-<dt>[RFC5905]</dt>
+<span class="refAuthor">Camarillo, G.</span><span class="refAuthor"> and H. Schulzrinne</span>, <span class="refTitle">"The Session Description Protocol (SDP) Grouping Framework"</span>, <span class="seriesInfo">RFC5888</span>, <time datetime="2010-06">June 2010</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5888.txt">http://www.rfc-editor.org/rfc/rfc5888.txt</a>&gt;</span>. </dd>
+<dt id="RFC5905">[RFC5905]</dt>
 <dd>
-<span class="refAuthor">Mills, D.</span><span class="refAuthor">, Martin, J.</span><span class="refAuthor">, Burbank, J.</span><span class="refAuthor">, and W. Kasch</span>, <span class="refTitle">"Network Time Protocol Version 4: Protocol and Algorithms Specification"</span>, <span>RFC5905</span>, <time datetime="2010-06">June 2010</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5905.txt">http://www.rfc-editor.org/rfc/rfc5905.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC5922">
-<dt>[RFC5922]</dt>
+<span class="refAuthor">Mills, D.</span><span class="refAuthor">, Martin, J.</span><span class="refAuthor">, Burbank, J.</span><span class="refAuthor">, and W. Kasch</span>, <span class="refTitle">"Network Time Protocol Version 4: Protocol and Algorithms Specification"</span>, <span class="seriesInfo">RFC5905</span>, <time datetime="2010-06">June 2010</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5905.txt">http://www.rfc-editor.org/rfc/rfc5905.txt</a>&gt;</span>. </dd>
+<dt id="RFC5922">[RFC5922]</dt>
 <dd>
-<span class="refAuthor">Gurbani, V.</span><span class="refAuthor">, Lawrence, S.</span><span class="refAuthor">, and A. Jeffrey</span>, <span class="refTitle">"Domain Certificates in the Session Initiation Protocol (SIP)"</span>, <span>RFC5922</span>, <time datetime="2010-06">June 2010</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5922.txt">http://www.rfc-editor.org/rfc/rfc5922.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC6265">
-<dt>[RFC6265]</dt>
+<span class="refAuthor">Gurbani, V.</span><span class="refAuthor">, Lawrence, S.</span><span class="refAuthor">, and A. Jeffrey</span>, <span class="refTitle">"Domain Certificates in the Session Initiation Protocol (SIP)"</span>, <span class="seriesInfo">RFC5922</span>, <time datetime="2010-06">June 2010</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc5922.txt">http://www.rfc-editor.org/rfc/rfc5922.txt</a>&gt;</span>. </dd>
+<dt id="RFC6265">[RFC6265]</dt>
 <dd>
-<span class="refAuthor">Barth, A.</span>, <span class="refTitle">"HTTP State Management Mechanism"</span>, <span>RFC6265</span>, <time datetime="2011-04">April 2011</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc6265.txt">http://www.rfc-editor.org/rfc/rfc6265.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="W3C.REC-semantic-interpretation-20070405">
-<dt>[W3C.REC-semantic-interpretation-20070405]</dt>
+<span class="refAuthor">Barth, A.</span>, <span class="refTitle">"HTTP State Management Mechanism"</span>, <span class="seriesInfo">RFC6265</span>, <time datetime="2011-04">April 2011</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc6265.txt">http://www.rfc-editor.org/rfc/rfc6265.txt</a>&gt;</span>. </dd>
+<dt id="W3C.REC-semantic-interpretation-20070405">[W3C.REC-semantic-interpretation-20070405]</dt>
 <dd>
 <span class="refAuthor">Tichelen, L.</span><span class="refAuthor"> and D. Burke</span>, <span class="refTitle">"Semantic Interpretation for Speech Recognition (SISR) Version
-          1.0"</span>, <span>World Wide Web Consortium RECREC-semantic-interpretation-20070405</span>, <time datetime="2007-04-05">April 5, 2007</time><span>, &lt;<a href="http://www.w3.org/TR/2007/REC-semantic-interpretation-20070405">http://www.w3.org/TR/2007/REC-semantic-interpretation-20070405</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="W3C.REC-speech-grammar-20040316">
-<dt>[W3C.REC-speech-grammar-20040316]</dt>
+          1.0"</span>, <span class="seriesInfo">World Wide Web Consortium RECREC-semantic-interpretation-20070405</span>, <time datetime="2007-04-05">April 5, 2007</time><span>, &lt;<a href="http://www.w3.org/TR/2007/REC-semantic-interpretation-20070405">http://www.w3.org/TR/2007/REC-semantic-interpretation-20070405</a>&gt;</span>. </dd>
+<dt id="W3C.REC-speech-grammar-20040316">[W3C.REC-speech-grammar-20040316]</dt>
 <dd>
-<span class="refAuthor">McGlashan, S.</span><span class="refAuthor"> and A. Hunt</span>, <span class="refTitle">"Speech Recognition Grammar Specification Version 1.0"</span>, <span>World Wide Web Consortium RecommendationREC-speech-grammar-20040316</span>, <time datetime="2004-03-16">March 16, 2004</time><span>, &lt;<a href="http://www.w3.org/TR/2004/REC-speech-grammar-20040316">http://www.w3.org/TR/2004/REC-speech-grammar-20040316</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="W3C.REC-speech-synthesis-20040907">
-<dt>[W3C.REC-speech-synthesis-20040907]</dt>
+<span class="refAuthor">McGlashan, S.</span><span class="refAuthor"> and A. Hunt</span>, <span class="refTitle">"Speech Recognition Grammar Specification Version 1.0"</span>, <span class="seriesInfo">World Wide Web Consortium RecommendationREC-speech-grammar-20040316</span>, <time datetime="2004-03-16">March 16, 2004</time><span>, &lt;<a href="http://www.w3.org/TR/2004/REC-speech-grammar-20040316">http://www.w3.org/TR/2004/REC-speech-grammar-20040316</a>&gt;</span>. </dd>
+<dt id="W3C.REC-speech-synthesis-20040907">[W3C.REC-speech-synthesis-20040907]</dt>
 <dd>
-<span class="refAuthor">Walker, M.</span><span class="refAuthor">, Burnett, D.</span><span class="refAuthor">, and A. Hunt</span>, <span class="refTitle">"Speech Synthesis Markup Language (SSML) Version 1.0"</span>, <span>World Wide Web Consortium RecommendationREC-speech-synthesis-20040907</span>, <time datetime="2004-09-07">September 7, 2004</time><span>, &lt;<a href="http://www.w3.org/TR/2004/REC-speech-synthesis-20040907">http://www.w3.org/TR/2004/REC-speech-synthesis-20040907</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="W3C.REC-xml-names11-20040204">
-<dt>[W3C.REC-xml-names11-20040204]</dt>
+<span class="refAuthor">Walker, M.</span><span class="refAuthor">, Burnett, D.</span><span class="refAuthor">, and A. Hunt</span>, <span class="refTitle">"Speech Synthesis Markup Language (SSML) Version 1.0"</span>, <span class="seriesInfo">World Wide Web Consortium RecommendationREC-speech-synthesis-20040907</span>, <time datetime="2004-09-07">September 7, 2004</time><span>, &lt;<a href="http://www.w3.org/TR/2004/REC-speech-synthesis-20040907">http://www.w3.org/TR/2004/REC-speech-synthesis-20040907</a>&gt;</span>. </dd>
+<dt id="W3C.REC-xml-names11-20040204">[W3C.REC-xml-names11-20040204]</dt>
 <dd>
-<span class="refAuthor">Layman, A.</span><span class="refAuthor">, Bray, T.</span><span class="refAuthor">, Hollander, D.</span><span class="refAuthor">, and R. Tobin</span>, <span class="refTitle">"Namespaces in XML 1.1"</span>, <span>World Wide Web Consortium First EditionREC-xml-names11-20040204</span>, <time datetime="2004-02-04">February 4, 2004</time><span>, &lt;<a href="http://www.w3.org/TR/2004/REC-xml-names11-20040204">http://www.w3.org/TR/2004/REC-xml-names11-20040204</a>&gt;</span>. </dd>
+<span class="refAuthor">Layman, A.</span><span class="refAuthor">, Bray, T.</span><span class="refAuthor">, Hollander, D.</span><span class="refAuthor">, and R. Tobin</span>, <span class="refTitle">"Namespaces in XML 1.1"</span>, <span class="seriesInfo">World Wide Web Consortium First EditionREC-xml-names11-20040204</span>, <time datetime="2004-02-04">February 4, 2004</time><span>, &lt;<a href="http://www.w3.org/TR/2004/REC-xml-names11-20040204">http://www.w3.org/TR/2004/REC-xml-names11-20040204</a>&gt;</span>. </dd>
 </dl>
 </section>
 <section id="section-17.2"><h3 id="name-informative-references"><a href="#name-informative-references" class="section-name selfRef">Informative References</a></h3>
-<dl class="reference" id="ISO.8601.1988">
-<dt>[ISO.8601.1988]</dt>
+<dl class="references">
+<dt id="ISO.8601.1988">[ISO.8601.1988]</dt>
 <dd>
-<span class="refAuthor">International Organization for Standardization</span>, <span class="refTitle">"Data elements and interchange formats - Information interchange - Representation of dates and times"</span>, <span>ISOStandard 8601</span>, <time datetime="1988-06">June 1988</time>. </dd>
-</dl>
-<dl class="reference" id="Q.23">
-<dt>[Q.23]</dt>
+<span class="refAuthor">International Organization for Standardization</span>, <span class="refTitle">"Data elements and interchange formats - Information interchange - Representation of dates and times"</span>, <span class="seriesInfo">ISOStandard 8601</span>, <time datetime="1988-06">June 1988</time>. </dd>
+<dt id="Q.23">[Q.23]</dt>
 <dd>
 <span class="refAuthor">International Telecommunications
-            Union</span>, <span class="refTitle">"Technical Features of Push-Button Telephone Sets"</span>, <span>ITU-TQ.23</span>, <time datetime="1993">1993</time>. </dd>
-</dl>
-<dl class="reference" id="refs.javaSpeechGrammarFormat">
-<dt>[refs.javaSpeechGrammarFormat]</dt>
+            Union</span>, <span class="refTitle">"Technical Features of Push-Button Telephone Sets"</span>, <span class="seriesInfo">ITU-TQ.23</span>, <time datetime="1993">1993</time>. </dd>
+<dt id="refs.javaSpeechGrammarFormat">[refs.javaSpeechGrammarFormat]</dt>
 <dd>
 <span class="refAuthor">Sun Microsystems</span>, <span class="refTitle">"Java Speech Grammar Format Version 1.0"</span>, <time datetime="1998-10-26">October 26, 1998</time><span>, &lt;<a href="http://java.sun.com/products/java-media/speech/forDevelopers/JSGF/">http://java.sun.com/products/java-media/speech/forDevelopers/JSGF/</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC2046">
-<dt>[RFC2046]</dt>
+<dt id="RFC2046">[RFC2046]</dt>
 <dd>
-<span class="refAuthor">Freed, N.</span><span class="refAuthor"> and N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types"</span>, <span>RFC2046</span>, <time datetime="1996-11">November 1996</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2046.txt">http://www.rfc-editor.org/rfc/rfc2046.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC2818">
-<dt>[RFC2818]</dt>
+<span class="refAuthor">Freed, N.</span><span class="refAuthor"> and N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types"</span>, <span class="seriesInfo">RFC2046</span>, <time datetime="1996-11">November 1996</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2046.txt">http://www.rfc-editor.org/rfc/rfc2046.txt</a>&gt;</span>. </dd>
+<dt id="RFC2818">[RFC2818]</dt>
 <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"HTTP Over TLS"</span>, <span>RFC2818</span>, <time datetime="2000-05">May 2000</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2818.txt">http://www.rfc-editor.org/rfc/rfc2818.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4217">
-<dt>[RFC4217]</dt>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"HTTP Over TLS"</span>, <span class="seriesInfo">RFC2818</span>, <time datetime="2000-05">May 2000</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc2818.txt">http://www.rfc-editor.org/rfc/rfc2818.txt</a>&gt;</span>. </dd>
+<dt id="RFC4217">[RFC4217]</dt>
 <dd>
-<span class="refAuthor">Ford-Hutchinson, P.</span>, <span class="refTitle">"Securing FTP with TLS"</span>, <span>RFC4217</span>, <time datetime="2005-10">October 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4217.txt">http://www.rfc-editor.org/rfc/rfc4217.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4267">
-<dt>[RFC4267]</dt>
+<span class="refAuthor">Ford-Hutchinson, P.</span>, <span class="refTitle">"Securing FTP with TLS"</span>, <span class="seriesInfo">RFC4217</span>, <time datetime="2005-10">October 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4217.txt">http://www.rfc-editor.org/rfc/rfc4217.txt</a>&gt;</span>. </dd>
+<dt id="RFC4267">[RFC4267]</dt>
 <dd>
-<span class="refAuthor">Froumentin, M.</span>, <span class="refTitle">"The W3C Speech Interface Framework Media Types: application/voicexml+xml, application/ssml+xml, application/srgs, application/srgs+xml, application/ccxml+xml, and application/pls+xml"</span>, <span>RFC4267</span>, <time datetime="2005-11">November 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4267.txt">http://www.rfc-editor.org/rfc/rfc4267.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4301">
-<dt>[RFC4301]</dt>
+<span class="refAuthor">Froumentin, M.</span>, <span class="refTitle">"The W3C Speech Interface Framework Media Types: application/voicexml+xml, application/ssml+xml, application/srgs, application/srgs+xml, application/ccxml+xml, and application/pls+xml"</span>, <span class="seriesInfo">RFC4267</span>, <time datetime="2005-11">November 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4267.txt">http://www.rfc-editor.org/rfc/rfc4267.txt</a>&gt;</span>. </dd>
+<dt id="RFC4301">[RFC4301]</dt>
 <dd>
-<span class="refAuthor">Kent, S.</span><span class="refAuthor"> and K. Seo</span>, <span class="refTitle">"Security Architecture for the Internet Protocol"</span>, <span>RFC4301</span>, <time datetime="2005-12">December 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4301.txt">http://www.rfc-editor.org/rfc/rfc4301.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4313">
-<dt>[RFC4313]</dt>
+<span class="refAuthor">Kent, S.</span><span class="refAuthor"> and K. Seo</span>, <span class="refTitle">"Security Architecture for the Internet Protocol"</span>, <span class="seriesInfo">RFC4301</span>, <time datetime="2005-12">December 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4301.txt">http://www.rfc-editor.org/rfc/rfc4301.txt</a>&gt;</span>. </dd>
+<dt id="RFC4313">[RFC4313]</dt>
 <dd>
-<span class="refAuthor">Oran, D.</span>, <span class="refTitle">"Requirements for Distributed Control of Automatic Speech Recognition (ASR), Speaker Identification/Speaker Verification (SI/SV), and Text-to-Speech (TTS) Resources"</span>, <span>RFC4313</span>, <time datetime="2005-12">December 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4313.txt">http://www.rfc-editor.org/rfc/rfc4313.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4395">
-<dt>[RFC4395]</dt>
+<span class="refAuthor">Oran, D.</span>, <span class="refTitle">"Requirements for Distributed Control of Automatic Speech Recognition (ASR), Speaker Identification/Speaker Verification (SI/SV), and Text-to-Speech (TTS) Resources"</span>, <span class="seriesInfo">RFC4313</span>, <time datetime="2005-12">December 2005</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4313.txt">http://www.rfc-editor.org/rfc/rfc4313.txt</a>&gt;</span>. </dd>
+<dt id="RFC4395">[RFC4395]</dt>
 <dd>
-<span class="refAuthor">Hansen, T.</span><span class="refAuthor">, Hardie, T.</span><span class="refAuthor">, and L. Masinter</span>, <span class="refTitle">"Guidelines and Registration Procedures for New URI Schemes"</span>, <span>BCP35</span>, <span>RFC4395</span>, <time datetime="2006-02">February 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4395.txt">http://www.rfc-editor.org/rfc/rfc4395.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4463">
-<dt>[RFC4463]</dt>
+<span class="refAuthor">Hansen, T.</span><span class="refAuthor">, Hardie, T.</span><span class="refAuthor">, and L. Masinter</span>, <span class="refTitle">"Guidelines and Registration Procedures for New URI Schemes"</span>, <span class="seriesInfo">BCP35</span>, <span class="seriesInfo">RFC4395</span>, <time datetime="2006-02">February 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4395.txt">http://www.rfc-editor.org/rfc/rfc4395.txt</a>&gt;</span>. </dd>
+<dt id="RFC4463">[RFC4463]</dt>
 <dd>
-<span class="refAuthor">Shanmugham, S.</span><span class="refAuthor">, Monaco, P.</span><span class="refAuthor">, and B. Eberman</span>, <span class="refTitle">"A Media Resource Control Protocol (MRCP) Developed by Cisco, Nuance, and Speechworks"</span>, <span>RFC4463</span>, <time datetime="2006-04">April 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4463.txt">http://www.rfc-editor.org/rfc/rfc4463.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4467">
-<dt>[RFC4467]</dt>
+<span class="refAuthor">Shanmugham, S.</span><span class="refAuthor">, Monaco, P.</span><span class="refAuthor">, and B. Eberman</span>, <span class="refTitle">"A Media Resource Control Protocol (MRCP) Developed by Cisco, Nuance, and Speechworks"</span>, <span class="seriesInfo">RFC4463</span>, <time datetime="2006-04">April 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4463.txt">http://www.rfc-editor.org/rfc/rfc4463.txt</a>&gt;</span>. </dd>
+<dt id="RFC4467">[RFC4467]</dt>
 <dd>
-<span class="refAuthor">Crispin, M.</span>, <span class="refTitle">"Internet Message Access Protocol (IMAP) - URLAUTH Extension"</span>, <span>RFC4467</span>, <time datetime="2006-05">May 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4467.txt">http://www.rfc-editor.org/rfc/rfc4467.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4733">
-<dt>[RFC4733]</dt>
+<span class="refAuthor">Crispin, M.</span>, <span class="refTitle">"Internet Message Access Protocol (IMAP) - URLAUTH Extension"</span>, <span class="seriesInfo">RFC4467</span>, <time datetime="2006-05">May 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4467.txt">http://www.rfc-editor.org/rfc/rfc4467.txt</a>&gt;</span>. </dd>
+<dt id="RFC4733">[RFC4733]</dt>
 <dd>
-<span class="refAuthor">Schulzrinne, H.</span><span class="refAuthor"> and T. Taylor</span>, <span class="refTitle">"RTP Payload for DTMF Digits, Telephony Tones, and Telephony Signals"</span>, <span>RFC4733</span>, <time datetime="2006-12">December 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4733.txt">http://www.rfc-editor.org/rfc/rfc4733.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC4960">
-<dt>[RFC4960]</dt>
+<span class="refAuthor">Schulzrinne, H.</span><span class="refAuthor"> and T. Taylor</span>, <span class="refTitle">"RTP Payload for DTMF Digits, Telephony Tones, and Telephony Signals"</span>, <span class="seriesInfo">RFC4733</span>, <time datetime="2006-12">December 2006</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4733.txt">http://www.rfc-editor.org/rfc/rfc4733.txt</a>&gt;</span>. </dd>
+<dt id="RFC4960">[RFC4960]</dt>
 <dd>
-<span class="refAuthor">Stewart, R.</span>, <span class="refTitle">"Stream Control Transmission Protocol"</span>, <span>RFC4960</span>, <time datetime="2007-09">September 2007</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4960.txt">http://www.rfc-editor.org/rfc/rfc4960.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="RFC6454">
-<dt>[RFC6454]</dt>
+<span class="refAuthor">Stewart, R.</span>, <span class="refTitle">"Stream Control Transmission Protocol"</span>, <span class="seriesInfo">RFC4960</span>, <time datetime="2007-09">September 2007</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc4960.txt">http://www.rfc-editor.org/rfc/rfc4960.txt</a>&gt;</span>. </dd>
+<dt id="RFC6454">[RFC6454]</dt>
 <dd>
-<span class="refAuthor">Barth, A.</span>, <span class="refTitle">"The Web Origin Concept"</span>, <span>RFC6454</span>, <time datetime="2011-12">December 2011</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc6454.txt">http://www.rfc-editor.org/rfc/rfc6454.txt</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="W3C.REC-emma-20090210">
-<dt>[W3C.REC-emma-20090210]</dt>
+<span class="refAuthor">Barth, A.</span>, <span class="refTitle">"The Web Origin Concept"</span>, <span class="seriesInfo">RFC6454</span>, <time datetime="2011-12">December 2011</time><span>, &lt;<a href="http://www.rfc-editor.org/rfc/rfc6454.txt">http://www.rfc-editor.org/rfc/rfc6454.txt</a>&gt;</span>. </dd>
+<dt id="W3C.REC-emma-20090210">[W3C.REC-emma-20090210]</dt>
 <dd>
 <span class="refAuthor">Johnston, M.</span><span class="refAuthor">, Baggia, P.</span><span class="refAuthor">, Burnett, D.</span><span class="refAuthor">, Carter, J.</span><span class="refAuthor">, Dahl, D.</span><span class="refAuthor">, McCobb, G.</span><span class="refAuthor">, and D. Raggett</span>, <span class="refTitle">"EMMA: Extensible MultiModal Annotation markup
-          language"</span>, <span>World Wide Web Consortium RecommendationREC-emma-20090210</span>, <time datetime="2009-02-10">February 10, 2009</time><span>, &lt;<a href="http://www.w3.org/TR/2009/REC-emma-20090210">http://www.w3.org/TR/2009/REC-emma-20090210</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="W3C.REC-pronunciation-lexicon-20081014">
-<dt>[W3C.REC-pronunciation-lexicon-20081014]</dt>
+          language"</span>, <span class="seriesInfo">World Wide Web Consortium RecommendationREC-emma-20090210</span>, <time datetime="2009-02-10">February 10, 2009</time><span>, &lt;<a href="http://www.w3.org/TR/2009/REC-emma-20090210">http://www.w3.org/TR/2009/REC-emma-20090210</a>&gt;</span>. </dd>
+<dt id="W3C.REC-pronunciation-lexicon-20081014">[W3C.REC-pronunciation-lexicon-20081014]</dt>
 <dd>
-<span class="refAuthor">Baggia, P.</span><span class="refAuthor">, Bagshaw, P.</span><span class="refAuthor">, Burnett, D.</span><span class="refAuthor">, Carter, J.</span><span class="refAuthor">, and F. Scahill</span>, <span class="refTitle">"Pronunciation Lexicon Specification (PLS)"</span>, <span>World Wide Web Consortium RecommendationREC-pronunciation-lexicon-20081014</span>, <time datetime="2008-10-14">October 14, 2008</time><span>, &lt;<a href="http://www.w3.org/TR/2008/REC-pronunciation-lexicon-20081014">http://www.w3.org/TR/2008/REC-pronunciation-lexicon-20081014</a>&gt;</span>. </dd>
-</dl>
-<dl class="reference" id="W3C.REC-voicexml20-20040316">
-<dt>[W3C.REC-voicexml20-20040316]</dt>
+<span class="refAuthor">Baggia, P.</span><span class="refAuthor">, Bagshaw, P.</span><span class="refAuthor">, Burnett, D.</span><span class="refAuthor">, Carter, J.</span><span class="refAuthor">, and F. Scahill</span>, <span class="refTitle">"Pronunciation Lexicon Specification (PLS)"</span>, <span class="seriesInfo">World Wide Web Consortium RecommendationREC-pronunciation-lexicon-20081014</span>, <time datetime="2008-10-14">October 14, 2008</time><span>, &lt;<a href="http://www.w3.org/TR/2008/REC-pronunciation-lexicon-20081014">http://www.w3.org/TR/2008/REC-pronunciation-lexicon-20081014</a>&gt;</span>. </dd>
+<dt id="W3C.REC-voicexml20-20040316">[W3C.REC-voicexml20-20040316]</dt>
 <dd>
-<span class="refAuthor">Rehor, K.</span><span class="refAuthor">, Ferrans, J.</span><span class="refAuthor">, Tryphonas, S.</span><span class="refAuthor">, Burnett, D.</span><span class="refAuthor">, Carter, J.</span><span class="refAuthor">, McGlashan, S.</span><span class="refAuthor">, Porter, B.</span><span class="refAuthor">, Hunt, A.</span><span class="refAuthor">, Danielsen, P.</span><span class="refAuthor">, and B. Lucas</span>, <span class="refTitle">"Voice Extensible Markup Language (VoiceXML) Version 2.0"</span>, <span>World Wide Web Consortium RecommendationREC-voicexml20-20040316</span>, <time datetime="2004-03-16">March 16, 2004</time><span>, &lt;<a href="http://www.w3.org/TR/2004/REC-voicexml20-20040316">http://www.w3.org/TR/2004/REC-voicexml20-20040316</a>&gt;</span>. </dd>
+<span class="refAuthor">Rehor, K.</span><span class="refAuthor">, Ferrans, J.</span><span class="refAuthor">, Tryphonas, S.</span><span class="refAuthor">, Burnett, D.</span><span class="refAuthor">, Carter, J.</span><span class="refAuthor">, McGlashan, S.</span><span class="refAuthor">, Porter, B.</span><span class="refAuthor">, Hunt, A.</span><span class="refAuthor">, Danielsen, P.</span><span class="refAuthor">, and B. Lucas</span>, <span class="refTitle">"Voice Extensible Markup Language (VoiceXML) Version 2.0"</span>, <span class="seriesInfo">World Wide Web Consortium RecommendationREC-voicexml20-20040316</span>, <time datetime="2004-03-16">March 16, 2004</time><span>, &lt;<a href="http://www.w3.org/TR/2004/REC-voicexml20-20040316">http://www.w3.org/TR/2004/REC-voicexml20-20040316</a>&gt;</span>. </dd>
 </dl>
 </section>
 </section>
