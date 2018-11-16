@@ -250,6 +250,9 @@ class V2v3XmlWriter(object):
     # ------------------------------------------------------------------
 
     def convert2to3(self):
+        if self.root.get('version') in ['3', ]:
+            return self.tree
+
         selectors = [
             # we need to process list before block elements that might get
             # promoted out of their surrounding <t/>, as <list/> uses one <t/>
@@ -331,6 +334,8 @@ class V2v3XmlWriter(object):
                     func(e, e.getparent())
             else:
                 log.warn("No handler for function %s, slug %s" % (func_name, slug, ))
+
+        self.root.set('version', '3')
 
         return self.tree
 
@@ -693,8 +698,11 @@ class V2v3XmlWriter(object):
         if ptarget:
             if ftarget == ptarget:
                 self.replace(e, None, "<format/> element with duplicate target (%s) removed" % ftarget)
-            else:
-                self.replace(e, None, "Warning: <format/> element with alternative target (%s) removed" % ftarget)
+            # The following, while implementing RFC 7991, seems dubious, and
+            # has been commented out.  Why would you disallow pointing to
+            # multiple versions of a reference?
+            #else:
+            #    self.replace(e, None, "Warning: <format/> element with alternative target (%s) removed" % ftarget)
         else:
             p.set('target', ftarget)
             self.replace(e, None, "<format/> element removed, target value (%s) moved to parent" % ftarget)
@@ -802,7 +810,7 @@ class V2v3XmlWriter(object):
                 l.insert(i, dt)
                 self.replace(t, 'dd')
         else:
-            self.error("Unexpected tag when processing <list/>: '%s'" % tag)
+            self.warn(e, "Unexpected tag when processing <list/>: '%s'" % tag)
 
     # 3.4.1.  "counter" Attribute
     # 
@@ -884,7 +892,8 @@ class V2v3XmlWriter(object):
         if style in tags:
             tag = tags[style]
         else:
-            self.error("Unexpected style in <spanx/>: '%s'" % style)
+            self.warn(e, "Unexpected style in <spanx/>: '%s'" % style)
+            tag = None
         stripattr(e, ['style', '{http://www.w3.org/XML/1998/namespace}space', ])
         self.replace(e, tag, 'Replaced <spanx style="%s"/> with <%s/>' % (style, tag))
 
