@@ -367,12 +367,12 @@ nav.toc li {
   text-indent: -1.2em;
 }
 /* references */
-.reference dt {
+.references dt {
   text-align: right;
   font-weight: bold;
   min-width: 7em;
 }
-.reference dd {
+.references dd {
   margin-left: 8em;
   overflow: auto;
 }
@@ -381,7 +381,7 @@ nav.toc li {
   margin-bottom: 1.25em;
 }
 
-.reference .ascii {
+.references .ascii {
   margin-bottom: 0.25em;
 }
 
@@ -803,7 +803,7 @@ table {
 
 /* Avoid reference text that sits in a block with very wide left margin,
    because of a long floating dt label.*/
-.reference dd {
+.references dd {
   overflow: visible;
 }
 
@@ -818,4 +818,24 @@ caption {
 address.vcard {
   max-width: 20em;
   margin-right: auto;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+	margin-left: auto;
+	margin-right: 0;
+}
+table.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+table.left {
+	margin-left: 0;
+	margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
 }
