@@ -78,6 +78,7 @@ class ClassElementMaker(ElementMaker):
 
     def __call__(self, tag, *children, **attrib):
         classes = attrib.pop('classes', None)
+        attrib = dict( (k,v) for k,v in attrib.items() if v != None)
         elem = super(ClassElementMaker, self).__call__(tag, *children, **attrib)
         if classes:
             elem.set('class', classes)
@@ -867,21 +868,27 @@ class HtmlWriter(BaseV3Writer):
     #      </div>
     #    </address>
         elif self.part == 'back':
+            # ascii will be set only if name has codepoints not in the Latin script blocks
             name, ascii  = full_author_name_set(x)
-            # ascii is set only if name has codepoint not in Latin script blocks
-            role = x.get('role')
-            # 
+            #
             addr = add.address(h, x, classes='vcard')
             #
+            postal = x.find('.//postal')
             if ascii:
                 ascii_div = add.div(addr, None, classes='ascii')
+                if postal == None:
+                    add.div(ascii_div, None, build.span(ascii, classes=address_hcard_properties['name']), dir='auto')
                 for c in x.getchildren():
                     self.render(ascii_div, c)
                 add.div(addr, None, 'Additional contact information:', classes='alternative-contact')
                 nonasc_div = add.div(addr, None, classes='non-ascii')
+                if postal == None:
+                    add.div(nonasc_div, None, build.span(name, classes=address_hcard_properties['name']), dir='auto')
                 for c in x.getchildren():
                     self.render(nonasc_div, c)
             else:
+                if postal == None:
+                    add.div(addr, None, build.span(name, classes=address_hcard_properties['name']), dir='auto')
                 for c in x.getchildren():
                     self.render(addr, c)
             return addr
@@ -1035,6 +1042,8 @@ class HtmlWriter(BaseV3Writer):
     #    This element is directly rendered as its HTML counterpart.  Note: in
     #    HTML, <br> does not have a closing slash.
     ## Removed from schema
+    def render_br(self, h, x):
+        return add.br(h, x)
 
     # 
     # 9.13.  <city>
@@ -1117,7 +1126,13 @@ class HtmlWriter(BaseV3Writer):
     # 9.18.  <dd>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    render_dd = default_renderer
+    def render_dd(self, h, x):
+        indent = x.getparent().get('indent')
+        style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent else None
+        dd = add.dd(h, x, style=style)
+        for c in x.getchildren():
+            self.render(dd, c)
+        return dd
 
     # 9.19.  <displayreference>
     # 
@@ -1192,7 +1207,12 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <a href="https://..." class="eref">the text</a>
     def render_eref(self, h, x):
-        return add.a(h, x, href=x.get('target'))
+        target = x.get('target')
+        if x.text:
+            hh = add.a(h, x, href=target)            
+        else:
+            hh = add.span(h, x, '<', build.a(target, href=target), '>')
+        return hh
 
     # 9.25.  <figure>
     # 
@@ -1212,16 +1232,18 @@ class HtmlWriter(BaseV3Writer):
     #      </figcaption>
     #    </figure>
     def render_figure(self, h, x):
+        name = x.find('name')
+        if name != None and name.text:
+            add.span(h, None, id=name.get('slugifiedName'))
         figure = add.figure(h, x)
         for c in x.iterchildren('artwork', 'sourcecode'):
             self.render(figure, c)
         pn = x.get('pn')
         caption = add.figcaption(figure, None)
         a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn)
-        name = x.find('name')
-        if name != None:
+        if name != None and name.text:
             a.tail = '\n'
-            a = add.a(caption, name, href='#%s'%name.get('slugifiedName'), classes='selfRef')
+            a = add.a(caption, None, href='#%s'%name.get('slugifiedName'), classes='selfRef')
             self.inline_text_renderer(a, name)
         return figure
 
@@ -1389,7 +1411,7 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <li id="s-2-7">Item <a href="#s-2-7" class="pilcrow">&para;</a></li>
     def render_li_ul(self, h, x):
-        li = add.li(h, x, classes=h.get('class', ''))
+        li = add.li(h, x, classes=h.get('class'))
         for c in x.getchildren():
             self.render(li, c)
         self.maybe_add_pilcrow(li)
@@ -1410,7 +1432,10 @@ class HtmlWriter(BaseV3Writer):
     # 9.30.  <link>
     # 
     #    This element is rendered as its HTML counterpart, in the HTML header.
-    # 
+    def render_link(self, h, x):
+        link = add.link(h, x, rel=x.get('rel'), href=x.get('href'))
+        return link
+        
     # 9.31.  <middle>
     # 
     #    This element does not add any direct output to HTML.
@@ -1547,18 +1572,7 @@ class HtmlWriter(BaseV3Writer):
     #      <span class="non-ascii">Test Org</span>
     #      (<span class="ascii">TEST ORG</span>)
     #    </div>
-#     def render_organization(self, h, x):
-#         if self.part == 'back':
-#             p  = x.getparent()
-#             script = h.get('class')
-#             if script == 'ascii':
-#                 div = add.div(h, x, full_org_ascii_name(p), classes='org')
-#             else:
-#                 div = add.div(h, x, full_org_name(p), classes='org', dir='auto')
-#         else:
-#             self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
-#         return div
-    render_organization = null_renderer
+    render_organization = null_renderer # handled in render_address
 
     # 9.36.  <phone>
     # 
@@ -1704,30 +1718,35 @@ class HtmlWriter(BaseV3Writer):
     #    </div>
     def render_reference(self, h, x):
         p = x.getparent()
-        if p.tag != 'referencegroup':
-            dl = add.dl(h, x, classes='reference')
-            add.dt(dl, None, '[%s]'%x.get('derivedAnchor'))
-            dd = add.dd(dl, None)
-            # Deal with parts in the correct order
-            for c in x.iterdescendants('author'):
-                self.render(dd, c)
-            for ctag in ('title', 'refcontent', 'seriesInfo', 'date', ):
-                for c in x.iterdescendants(ctag):
-                    if len(dd):
-                        dd[-1].tail = ', '
-                    self.render(dd, c)
-            target = x.get('target')
-            if target:
-                dd.append( build.span(', <', build.a(target, href=target), '>') )
-            if len(dd):
-                dd[-1].tail = '. '
-            for ctag in ('annotation', ):
-                for c in x.iterdescendants(ctag):
-                    self.render(dd, c)
-            return dl
+        if   p.tag == 'referencegroup':
+            div = add.div(h, x, classes='refInstance')
+            outer = div
+            inner = div
+        elif p.tag != 'referencegroup':
+            dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
+            dd = add.dd(h, None)
+            outer = dt, dd
+            inner = dd
         else:
             self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
-
+        # Deal with parts in the correct order
+        for c in x.iterdescendants('author'):
+            self.render(inner, c)
+        for ctag in ('title', 'refcontent', 'seriesInfo', 'date', ):
+            for c in x.iterdescendants(ctag):
+                if len(inner):
+                    inner[-1].tail = ', '
+                self.render(inner, c)
+        target = x.get('target')
+        if target:
+            inner.append( build.span(', <', build.a(target, href=target), '>') )
+        if len(inner):
+            inner[-1].tail = '. '
+        for ctag in ('annotation', ):
+            for c in x.iterdescendants(ctag):
+                self.render(inner, c)
+        #
+        return outer
 
     # 9.41.  <referencegroup>
     # 
@@ -1748,7 +1767,13 @@ class HtmlWriter(BaseV3Writer):
     #      </div>
     #      ...
     #    </dd>
-    # 
+    def render_referencegroup(self, h, x):
+        dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
+        dd = add.dd(h, None)
+        for c in x.getchildren():
+            self.render(dd, c)
+        return dt, dd
+
     # 9.42.  <references>
     # 
     #    If there is at exactly one <references> element, a section is added
@@ -1789,10 +1814,12 @@ class HtmlWriter(BaseV3Writer):
     def render_references(self, h, x):
         self.part = x.tag
         section = add.section(h, x)
+        hh = section
         for c in x.getchildren():
-            self.render(section, c)
+            if c.tag in ['reference', 'referencegroup'] and hh.tag != 'dl':
+                hh = add.dl(hh, None, classes='references')
+            self.render(hh, c)
         return section
-
 
     # 
     # 9.43.  <region>
@@ -1965,7 +1992,7 @@ class HtmlWriter(BaseV3Writer):
             entry(h, name, value)
             return h
         elif self.part == 'references':
-            span = add.span(h, x, name, value)
+            span = add.span(h, x, name, value, classes='seriesInfo')
             return span
         else:
             self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
@@ -2061,14 +2088,17 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    This element is directly rendered as its HTML counterpart.
     def render_table(self, h, x):
-        table = add.table(h, x)
+        name = x.find('name')
+        if name != None and name.text:
+            add.span(h, None, id=name.get('slugifiedName'))
+        align = x.get('align')
+        table = add.table(h, x, classes=align)
         caption = add.caption(table, None)
         pn = x.get('pn')
-        name = x.find('name')
         a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn)
         if name != None:
             a.tail = '\n'
-            a = add.a(caption, name, href='#%s'%name.get('slugifiedName'), classes='selfRef')
+            a = add.a(caption, None, href='#%s'%name.get('slugifiedName'), classes='selfRef')
             self.inline_text_renderer(a, name)
         for c in x.getchildren():
             self.render(table, c)
@@ -2214,7 +2244,7 @@ class HtmlWriter(BaseV3Writer):
     # 9.65.  <workgroup>
     # 
     #    This element does not add any direct output to HTML.
-    render_workgroup = null_renderer
+    render_workgroup = null_renderer    # handled in render_rfc, when rendering the page top for drafts
 
     # 9.66.  <xref>
     # 
