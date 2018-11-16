@@ -254,6 +254,27 @@ class TextWriter(BaseV3Writer):
                 kwargs.pop('first', None)
             return text, False
 
+    def quote_renderer(self, e, width, prefix, by, cite, **kwargs):
+        kwargs['joiners'].update({ 't':       joiner('', '\n\n', '', 0, 0), })
+        text, plain = self.text_or_block_renderer('', e, width-3, **kwargs)
+        if plain:
+            text = fill(text, width=width-3, **kwargs)
+        if by  or cite:
+            text += '\n\n'
+        if by:
+            text += "-- %s\n" % fill(by, width=width-6, hang=3)
+        if cite:
+            text += "   %s\n" % fill(cite, width=width-6, hang=3)
+        lines = []
+        for l in text.splitlines():
+            lines.append(prefix + '  '+l)
+        text = '\n'.join(lines)
+        text = indent(text, indent=kwargs.get('indent', 0))
+        return text
+
+    def null_renderer(self, e, width, **kwargs):
+        self.die(e, "Did not expect to be asked to render <%s> while in %s//%s" % (e.tag, self.part, e.getparent().tag))
+        return None
 
     # --- element rendering functions ------------------------------------------
 
@@ -718,24 +739,9 @@ class TextWriter(BaseV3Writer):
     #    A formatter should render this as visible text at the end of the
     #    quotation.
     def render_blockquote(self, e, width, **kwargs):
-        kwargs['joiners'].update({ 't':       joiner('', '\n\n', '', 0, 0), })
-        frm  = e.get('quotedFrom')
+        by  = e.get('quotedFrom')
         cite = e.get('cite')
-        text, plain = self.text_or_block_renderer('', e, width-3, **kwargs)
-        if plain:
-            text = fill(text, width=width-3, **kwargs)
-        if frm  or cite:
-            text += '\n\n'
-        if frm:
-            text += "-- %s\n" % fill(frm, width=width-6, hang=3)
-        if cite:
-            text += "   %s\n" % fill(cite, width=width-6, hang=3)
-        lines = []
-        for l in text.splitlines():
-            lines.append('|  '+l)
-        text = '\n'.join(lines)
-        text = indent(text, indent=kwargs.get('indent', 0))
-        return text
+        return self.quote_renderer(e, width, '|', by, cite, **kwargs)
 
     # 2.11.  <boilerplate>
     # 
@@ -776,7 +782,7 @@ class TextWriter(BaseV3Writer):
     # 2.13.1.  "ascii" Attribute
     # 
     #    The ASCII equivalent of the city name.
-
+    render_city = null_renderer         # handled in render_address
 
     # 2.14.  <code>
     # 
@@ -787,7 +793,7 @@ class TextWriter(BaseV3Writer):
     # 2.14.1.  "ascii" Attribute
     # 
     #    The ASCII equivalent of the postal code.
-
+    render_code = null_renderer         # handled in render_address
 
     # 2.15.  <country>
     # 
@@ -798,7 +804,7 @@ class TextWriter(BaseV3Writer):
     # 2.15.1.  "ascii" Attribute
     # 
     #    The ASCII equivalent of the country name.
-
+    render_country = null_renderer      # handled in render_address
 
     # 2.16.  <cref>
     # 
@@ -838,7 +844,13 @@ class TextWriter(BaseV3Writer):
     # 
     #    Holds the "source" of a comment, such as the name or the initials of
     #    the person who made the comment.
-
+    def render_cref(self, e, width, **kwargs):
+        display = e.get('display') == 'true'
+        source = e.get('source')
+        if display:
+            return self.quote_renderer(e, width, '//', source, None, **kwargs)
+        else:
+            return None
 
     # 2.17.  <date>
     # 
@@ -2251,6 +2263,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    Deprecated.  Use <name> instead.
     def render_references(self, e, width, **kwargs):
+        self.part = e.tag
         kwargs['joiners'].update({
             None:           joiner('', '\n\n', '', 3, 0),
             'name':         joiner('', '  '  , '', 0, 0),
@@ -2277,7 +2290,7 @@ class TextWriter(BaseV3Writer):
     # 2.43.1.  "ascii" Attribute
     # 
     #    The ASCII equivalent of the region name.
-
+    render_region = null_renderer       # handled in render_address
 
     # 2.44.  <relref>
     # 
@@ -2447,7 +2460,8 @@ class TextWriter(BaseV3Writer):
     #    The anchor of the reference for this element.  If this value is not
     #    an anchor to a <reference> or <referencegroup> element, it is an
     #    error.  If the reference at the target has no URI, it is an error.
-
+    def render_relref(self, e, width, **kwargs):
+        return self.render_xref(e, width, **kwargs)
 
     # 2.45.  <rfc>
     # 
@@ -2465,9 +2479,11 @@ class TextWriter(BaseV3Writer):
     # 
     #    4.  One optional <back> element (Section 2.8)
     def render_rfc(self, e, width, **kwargs):
+        self.part = e.tag
         paginated = kwargs.pop('paginated', False)
         parts = []
         for c in e.getchildren():
+            self.part = c.tag
             ctext = self.render(c, width, **kwargs)
             if ctext:
                 if isinstance(ctext, list):
@@ -2984,7 +3000,7 @@ class TextWriter(BaseV3Writer):
     # 2.49.1.  "ascii" Attribute
     # 
     #    The ASCII equivalent of the street address.
-
+    render_street = null_renderer       # handled in render_address
 
     # 2.50.  <strong>
     # 
@@ -3505,7 +3521,7 @@ class TextWriter(BaseV3Writer):
     # 2.55.1.  "anchor" Attribute
     # 
     #    Document-wide unique identifier for the tbody.
-
+    render_tbody = null_renderer        # handled in build_table
 
     # 2.56.  <td>
     # 
@@ -3593,6 +3609,7 @@ class TextWriter(BaseV3Writer):
     #    The number of rows that the cell is to span.  For example, setting
     #    "rowspan='3'" indicates that the cell occupies the same vertical
     #    space as three rows.
+    render_td = null_renderer           # handled in build_table
 
 
     # 2.57.  <tfoot>
@@ -3608,6 +3625,7 @@ class TextWriter(BaseV3Writer):
     # 2.57.1.  "anchor" Attribute
     # 
     #    Document-wide unique identifier for the tfoot.
+    render_tfoot = null_renderer        # handled in build_table
 
 
     # 2.58.  <th>
@@ -3698,6 +3716,7 @@ class TextWriter(BaseV3Writer):
     #    The number of rows that the cell is to span.  For example, setting
     #    "rowspan='3'" indicates that the cell occupies the same vertical
     #    space as three rows.
+    render_th = null_renderer           # handled in build_table
 
 
     # 2.59.  <thead>
@@ -3713,6 +3732,7 @@ class TextWriter(BaseV3Writer):
     # 2.59.1.  "anchor" Attribute
     # 
     #    Document-wide unique identifier for the thead.
+    render_thead = null_renderer        # handled in build_table
 
 
     # 2.60.  <title>
@@ -3780,7 +3800,7 @@ class TextWriter(BaseV3Writer):
     # 2.61.1.  "anchor" Attribute
     # 
     #    Document-wide unique identifier for the row.
-
+    render_tr = null_renderer           # handled in build_table
 
     # 2.62.  <tt>
     # 
@@ -3952,7 +3972,7 @@ class TextWriter(BaseV3Writer):
                             text += ' (%s)'%ref
                         else:
                             text = ref
-            if text != link and self.options.debug:
+            if text != link and text != '[%s]'%link and self.options.debug:
                 self.warn(e, 'Preptool specification failure: <xref> content should be "%s", but found derivedContent="%s"' % (text, link))
         elif format == 'title':
             text = link
