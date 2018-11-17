@@ -255,7 +255,11 @@ class TextWriter(BaseV3Writer):
             return text, False
 
     def quote_renderer(self, e, width, prefix, by, cite, **kwargs):
-        kwargs['joiners'].update({ 't':       joiner('', '\n\n', '', 0, 0), })
+        kwargs['joiners'] = {
+            None:      joiner('', '\n', '', 0, 0),
+            't':       joiner('', '\n\n', '', 0, 0),
+        }
+        width = width if width else 69
         text, plain = self.text_or_block_renderer('', e, width-3, **kwargs)
         if plain:
             text = fill(text, width=width-3, **kwargs)
