@@ -1606,6 +1606,7 @@ class PrepToolWriter:
                             desc.tail = '\n'
                             desc.sourceline = e.sourceline
                             svg.insert(0, desc)
+                            del e.attrib['alt']
 
     #    5.  If an <artwork> element has type='binary-art', the data needs to
     #        be in an "src" attribute with a URI scheme of "data:".  If the
