@@ -1601,7 +1601,7 @@ class PrepToolWriter:
                     alt = e.get('alt')
                     if alt and svg != None:
                         if not svg.xpath('.//desc'):
-                            desc = self.element('desc', line=e.sourceline)
+                            desc = self.element('{%s}desc'%namespaces['s'], line=e.sourceline)
                             desc.text = alt
                             desc.tail = '\n'
                             desc.sourceline = e.sourceline
