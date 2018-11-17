@@ -1,3 +1,107 @@
+xml2rfc (2.13.0) ietf; urgency=medium
+
+  This release provides an number of improvements.  Rendering of all v3
+  elements should now be in place for the v3 text and html formatters, and
+  the renderers have been updated to follow the issue resolutions so far.
+  A bug in the generation of boilerplate for BCPs has been fixed.  Feedback
+  on unexpected postal address data has been improved, as has feedback on
+  unexpected combinations of stream, category, and consensus settings.
+
+  Details from the commit log:
+
+  * In the html formatter:
+
+    - Added indentation support for <dl> to the v3 html renderer.  
+
+    - Fixed a bug in the display of author names in the author addresses
+      section when no postal information is given.  
+
+    - Improved <eref> rendering for the case when no eref text is provided.  
+
+    - Corrected the anchor placement for slugified names of figures and
+      tables.  
+
+    - Added support for <referencegroup>.  
+
+    - Added a missing CSS class for <seriesInfo> rendering.  
+
+    - Added support for right and center alignment of tables.
+
+  * In the text formatter:
+
+    - Added v3 text formatter support for rendering of blockquote and cref.  
+
+    - Minor other tweaks.
+
+  * In the preptool: 
+
+    - Added support for <referencegroup> elements.  
+
+    - Added support for the <rfc> version attribute.  
+
+    - Fixed a string formatting bug.  
+
+    - Added attribute valididty checking for integer-valued attributes.  
+
+    - Removed the forced inclusion of day for RFC publication dates, reverting
+      to permitting publication with only year and month.
+
+    - Added more sophisticated checking and setting of consensus, based on
+      what is valid for the given stream and category.  
+
+    - Refined the handling when given input that already contains boilerplate,
+      authors addresses and index.
+
+  * In the v2v3 converter:
+
+    - Added setting of the <rfc> version attribute.
+
+    - Removed dubious elimination of <format> elements pointing to alternative
+      reference URLs.
+
+    - Fixed a couple of instances of buggy error reporting.
+
+  * Changed util.postal.get_normalized_address() to return a filled-in adr 
+    structure even if no country could be identified, for more consistent code 
+    in other places.
+
+  * In the Relax NG schema files:
+
+    - Changed the v3 schema default value for <dl> newline so that the effect 
+      is the same as for the old 'hanging' default value.
+
+    - Added a 'derivedAnchor' attribute for <referencegroup>, matching that of
+      <reference>.
+
+  * In the CSS style sheet:
+
+    - Changed the CSS class for Reference Section definition lists from
+      'reference' to 'references'.  
+
+    - Added styling for table alignment and
+      applied the same styling for table labels as for figure labels.
+
+  * Added bcp14, em, iref, strong, sub, and sup to the permitted elements 
+    in <name>.
+
+  * Fixed some issues with the error messages for combinations of stream, 
+    category, and consensus.
+
+  * Added code to honour the "display" attribute of <cref>.
+
+  * Added a preptool action to check the <rfc> attributes submissionType 
+    (i.e., stream), category, and consensus for validity.  Invalid combinations 
+    are called out, and warnings are issued about setting missing settings to 
+    default values.
+
+  * With v2 formatters, treat consensus for BCPs the same way as STD 
+    documents, 
+
+  * Refactored some logging and address functionality, improved address
+    warnings and other address-related tweaks.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  17 Nov 2018 05:24:27 -0800
+
 xml2rfc (2.12.3) ietf; urgency=medium
 
   This release fixes a schema issue.
