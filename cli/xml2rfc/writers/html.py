@@ -1394,7 +1394,12 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <span class="iref" id="s-Paragraphs-first-1"/>
     def render_iref(self, h, x):
-        return add.span(h, x, classes='iref', id=x.get('pn'))
+        span = build.span(classes='iref', id=x.get('pn'))
+        if h.tag in ['table', ]:
+            h.addprevious(span)
+        else:
+            h.append(span)
+        return span
 
     # 9.28.  <keyword>
     # 
