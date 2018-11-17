@@ -452,7 +452,7 @@ class PrepToolWriter:
             self.die(self.root, "Expected a valid category for submissionType='%s', one of %s, but found '%s'" %
                                 (stream, ','.join(category_values), category, ))
         #
-        consensus_values = boilerplate_rfc_status_of_memo[stream][category].keys()
+        consensus_values = list(boilerplate_rfc_status_of_memo[stream][category].keys())
         consensus_default = rfc_defaults['consensus']
         if stream == 'IRTF' and workgroup == None:
             if consensus:
