@@ -950,9 +950,15 @@
        attribute target { text }?,
        [ a:defaultValue = "true" ]
        attribute quoteTitle { "true" | "false" }?,
+       stream?,
        front,
        (annotation | format | refcontent | seriesInfo)*
      }
+
+   stream = 
+     element stream {
+       ( "IETF" | "IAB" | "IRTF" | "independent" )?       
+   }
 
    referencegroup =
      element referencegroup {

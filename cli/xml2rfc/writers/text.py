@@ -2178,7 +2178,7 @@ class TextWriter(BaseV3Writer):
         for a in e.iterdescendants('author'):
             authors.append(a)
         elements = [ authors, ]
-        for ctag in ('title', 'refcontent', 'seriesInfo', 'date', ):
+        for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date', ):
             for c in e.iterdescendants(ctag):
                 elements.append(c)
         target = e.get('target')

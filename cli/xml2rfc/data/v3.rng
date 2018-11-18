@@ -2201,6 +2201,9 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <ref name="stream"/>
+      </optional>
       <ref name="front"/>
       <zeroOrMore>
         <choice>
@@ -2210,6 +2213,18 @@
           <ref name="seriesInfo"/>
         </choice>
       </zeroOrMore>
+    </element>
+  </define>
+  <define name="stream">
+    <element name="stream">
+      <optional>
+        <choice>
+          <value>IETF</value>
+          <value>IAB</value>
+          <value>IRTF</value>
+          <value>independent</value>
+        </choice>
+      </optional>
     </element>
   </define>
   <define name="referencegroup">

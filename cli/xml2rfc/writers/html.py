@@ -1394,7 +1394,7 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <span class="iref" id="s-Paragraphs-first-1"/>
     def render_iref(self, h, x):
-        span = build.span(classes='iref', id=x.get('pn'))
+        span = add.span(None, x, classes='iref', id=x.get('pn'))
         if h.tag in ['table', ]:
             h.addprevious(span)
         else:
@@ -1737,7 +1737,7 @@ class HtmlWriter(BaseV3Writer):
         # Deal with parts in the correct order
         for c in x.iterdescendants('author'):
             self.render(inner, c)
-        for ctag in ('title', 'refcontent', 'seriesInfo', 'date', ):
+        for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date', ):
             for c in x.iterdescendants(ctag):
                 if len(inner):
                     inner[-1].tail = ', '
