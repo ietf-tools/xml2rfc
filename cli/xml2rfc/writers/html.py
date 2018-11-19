@@ -36,7 +36,7 @@ from xml2rfc.util.name import ( full_author_name, short_author_role,
                                 short_org_name_set, full_org_name, )
 from xml2rfc.util.postal import ( get_normalized_address_info, address_hcard_properties,
                                 enhance_address_format, address_field_mapping, )
-from xml2rfc.utils import namespaces, is_htmlblock
+from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids
 
 #from xml2rfc import utils
 
@@ -179,6 +179,7 @@ class HtmlWriter(BaseV3Writer):
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
         super(HtmlWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         self.anchor_tags = self.get_tags_with_anchor()
+        self.duplicate_html_ids = set()
 
     def get_tags_with_anchor(self):
         anchor_nodes = self.schema.xpath("//x:define/x:element//x:attribute[@name='anchor']", namespaces=namespaces)
@@ -200,6 +201,11 @@ class HtmlWriter(BaseV3Writer):
             p.remove(c)
         html = self.render(None, self.root)
         html = self.post_process(html)
+
+        # Check for duplicate IDs
+        dups = set(find_duplicate_html_ids(self.html)) - self.duplicate_html_ids
+        for attr, id, e in dups:
+            self.warn(self.root[-1], 'Duplicate %s="%s" found in generated HTML.' % (attr, id, ))
 
         if self.errors:
             log.write("Not creating output file due to errors (see above)")
@@ -298,6 +304,7 @@ class HtmlWriter(BaseV3Writer):
         classes = ' '.join( i.get('name') for i in x.xpath('./front/seriesInfo') )
         #
         html = h if h != None else build.html(classes=classes, lang='en')
+        self.html = html
 
     # 6.3.  <head> Element
     # 
@@ -694,10 +701,14 @@ class HtmlWriter(BaseV3Writer):
             div = add.div(h, x, classes=classes)
             div.text = None
             src = x.get('src')
+            srcname = x.get('originalSrc') or x.get('src')[:16]
             if src:
                 if not src.startswith('data:'):
                     self.err(x, "Internal error: Got an <artwork> src: attribute that did not start with 'data:' after prepping")
-                f = urlopen(src)
+                try:
+                    f = urlopen(src)
+                except IOError as e:
+                    self.err(x, str(e))
                 data = f.read()
                 svg = lxml.etree.fromstring(data)
             else:
@@ -711,7 +722,11 @@ class HtmlWriter(BaseV3Writer):
             else:
                 if x.get('align') == 'right':
                     add.span(div, None)
-
+            dups = set(find_duplicate_html_ids(self.html))
+            new  = dups - self.duplicate_html_ids
+            for attr, id, e in new:
+                self.warn(x, 'Duplicate attribute %s="%s" found after including svg from %s.  This can cause problems with some browsers.' % (attr, id, srcname))
+            self.duplicate_html_ids = self.duplicate_html_ids | dups
 
     # 9.5.3.  Other Artwork
     # 

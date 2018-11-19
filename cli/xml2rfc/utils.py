@@ -294,10 +294,17 @@ def safeTagSlashedWords(tree):
 
 
 def find_duplicate_ids(schema, tree):
-    dups = []
     # get attributes specified with data type "ID"
     id_data = schema.xpath("/x:grammar/x:define/x:element//x:attribute/x:data[@type='ID']", namespaces=namespaces)
     attr = set([ i.getparent().get('name') for i in id_data ])
+    # Check them one by one
+    return find_duplicate_attr_values(attr, tree)
+
+def find_duplicate_html_ids(tree):
+    return find_duplicate_attr_values(['id',], tree)
+
+def find_duplicate_attr_values(attr, tree):
+    dups = []
     # Check them one by one
     for a in attr:
         seen = set()
@@ -308,7 +315,6 @@ def find_duplicate_ids(schema, tree):
             else:
                 seen.add(id)
     return dups
-
 
 # ----------------------------------------------------------------------
 # Unicode operations
