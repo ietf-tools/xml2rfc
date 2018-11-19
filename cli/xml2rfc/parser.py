@@ -51,7 +51,7 @@ class CachingResolver(lxml.etree.Resolver):
                      'http://xml2rfc.ietf.org/public/rfc/',
                      'http://xml2rfc.tools.ietf.org/public/rfc/',
                  ],
-                 rfc_number=None):
+                 rfc_number=None, options=None):
         self.verbose = verbose
         self.quiet = quiet
         self.source = source
@@ -62,6 +62,7 @@ class CachingResolver(lxml.etree.Resolver):
         self.include = False
         self.rfc_number = rfc_number
         self.cache_refresh_secs = (60*60*24*14) # 14 days
+        self.options = options
 
         # Get directory of source
         if self.source:
@@ -114,6 +115,7 @@ class CachingResolver(lxml.etree.Resolver):
                 shutil.rmtree(path)
                 xml2rfc.log.write('Deleted cache directory at', path)
 
+                
     def resolve(self, request, public_id, context):
         """ Called internally by lxml """
         if not request:
@@ -134,9 +136,12 @@ class CachingResolver(lxml.etree.Resolver):
                 request = request[8:]
             try:
                 request = os.path.relpath(request, self.source_dir)
-            except ValueError:
-                pass
-        path = self.getReferenceRequest(request)
+            except ValueError as e:
+                xml2rfc.log.error(str(e))                
+        try:
+            path = self.getReferenceRequest(request)
+        except Exception as e:
+            xml2rfc.log.error(str(e))
         return self.resolve_filename(path, context)
     
     def getReferenceRequest(self, request, include=False, line_no=0):
@@ -205,10 +210,12 @@ class CachingResolver(lxml.etree.Resolver):
                     result = os.path.join(self.source_dir, basename)
                     attempts.append(result)
         else:
-            if request.endswith('.xml'):
+            if self.options and self.options.vocabulary == 'v3':
                 paths = [ request ]
-            else:
+            elif not request.endswith('.xml'):
                 paths = [ request, request + '.xml' ]
+            else:
+                paths = [ request ]                
             if os.path.isabs(paths[0]):
                 # Absolute path, return as-is
                 for path in paths:
@@ -350,12 +357,19 @@ class CachingResolver(lxml.etree.Resolver):
         r = session.get(url)
         if r.status_code == 200:
             if self.write_cache:
-                write_path = os.path.join(self.write_cache, 
-                                          xml2rfc.CACHE_PREFIX, basename)
-                with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
-                    cache_file.write(r.text)
-                xml2rfc.log.note('Added file to cache: ', write_path)
-                return write_path
+                try:
+                    xml = lxml.etree.fromstring(r.text.encode('utf8'))
+                    xml.set('{%s}base'%xml2rfc.utils.namespaces['xml'], url)
+                    text = lxml.etree.tostring(xml)
+                    write_path = os.path.join(self.write_cache, 
+                                              xml2rfc.CACHE_PREFIX, basename)
+                    with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
+                        cache_file.write(text)
+                    xml2rfc.log.note('Added file to cache: ', write_path)
+                    return write_path
+                except Exception as e:
+                    xml2rfc.log.error(str(e))
+                    return url
             else:
                 return url
         else:
@@ -442,6 +456,7 @@ class XmlRfcParser:
                                         network_locs=self.network_locs,
                                         verbose=self.verbose,
                                         quiet=self.quiet,
+                                        options=options,
                                     )
 
     def delete_cache(self, path=None):
