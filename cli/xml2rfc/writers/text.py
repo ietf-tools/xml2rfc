@@ -2990,7 +2990,12 @@ class TextWriter(BaseV3Writer):
             text += '\n'
             text += '<CODE ENDS>'
         return text
-        
+
+
+    def render_stream(self, e, width, **kwargs):
+        text = e.text
+        text += e.tail or ''
+        return text
 
 
     # 2.49.  <street>

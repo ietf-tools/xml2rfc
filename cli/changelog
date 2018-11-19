@@ -1,5 +1,18 @@
 xml2rfc (2.13.1) ietf; urgency=medium
 
+  * Added a check for duplicate id attribute values after each include of 
+    svg into generated html, as duplicates may cause display problems with some 
+    browsers.
+
+  * Added back the ability to place <iref> elements in a location where they 
+    will translate to invalid HTML.  Avoided invalid HTML by pushing the span 
+    up one level, as a previous sibling, when needed.  Fixes issue #378.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Nov 2018 14:56:41 +0000
+
+
+xml2rfc (2.13.1) ietf; urgency=medium
+
   * Filled in missing rendering values for the case when cref is being 
     rendered in inline context in the v3 text renderer.  Fixes issue #380.
 

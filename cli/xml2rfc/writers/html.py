@@ -701,8 +701,8 @@ class HtmlWriter(BaseV3Writer):
             div = add.div(h, x, classes=classes)
             div.text = None
             src = x.get('src')
-            srcname = x.get('originalSrc') or x.get('src')[:16]
             if src:
+                svgfile = x.get('originalSrc') or x.get('src')[:37]+' ...'
                 if not src.startswith('data:'):
                     self.err(x, "Internal error: Got an <artwork> src: attribute that did not start with 'data:' after prepping")
                 try:
@@ -713,6 +713,7 @@ class HtmlWriter(BaseV3Writer):
                 svg = lxml.etree.fromstring(data)
             else:
                 svg = x.find('s:svg', namespaces=namespaces)
+                svgfile = "inline:%s ..." % lxml.etree.tostring(svg)[:31]
             if svg == None:
                 self.err(x, 'Expected <svg> content inside <artwork type="svg">, but did not find it:\n   %s ...' % (lxml.etree.tostring(x)[:256], ))
                 return None
@@ -722,10 +723,11 @@ class HtmlWriter(BaseV3Writer):
             else:
                 if x.get('align') == 'right':
                     add.span(div, None)
+            #
             dups = set(find_duplicate_html_ids(self.html))
             new  = dups - self.duplicate_html_ids
             for attr, id, e in new:
-                self.warn(x, 'Duplicate attribute %s="%s" found after including svg from %s.  This can cause problems with some browsers.' % (attr, id, srcname))
+                self.warn(x, 'Duplicate attribute %s="%s" found after including svg from %s.  This can cause problems with some browsers.' % (attr, id, svgfile))
             self.duplicate_html_ids = self.duplicate_html_ids | dups
 
     # 9.5.3.  Other Artwork
@@ -2057,6 +2059,9 @@ class HtmlWriter(BaseV3Writer):
         self.maybe_add_pilcrow(div)
         return div
 
+
+    def render_stream(self, h, x):
+        return add.span(h, x, classes="stream")
 
     # 9.49.  <street>
     # 
