@@ -497,16 +497,21 @@ class XmlRfcParser:
         # Get hold of the rfc number (if any) in the rfc element, so we can
         # later resolve the "&rfc.number;" entity.
         self.rfc_number = None
+        self.format_version = None
         try:
             for action, element in context:
                 if element.tag == "rfc":
                     self.rfc_number = element.attrib.get("number", None)
+                    self.format_version = element.attrib.get("version", None)
                     break
         except lxml.etree.XMLSyntaxError as e:
             xml2rfc.log.warn("Parsing Error: %s" % e)
         except ValueError as e:
             if e.message=="I/O operation on closed file":
                 pass
+
+        if self.format_version == "3":
+            self.default_dtd_path = None
 
         # now get a regular parser, and parse again, this time resolving entities
         parser = lxml.etree.XMLParser(dtd_validation=False,
