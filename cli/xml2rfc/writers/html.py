@@ -1376,6 +1376,7 @@ class HtmlWriter(BaseV3Writer):
                             a.tail = ' '
                             alist.append(a)
                         entry(dl, section.title(), *alist)
+                        a.tail += '(if approved)'
                 # Publication date
                 entry(dl, 'Published', self.render_date(None, x.find('date')))
                 # Intended category
