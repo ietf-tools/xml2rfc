@@ -1487,6 +1487,8 @@ class HtmlWriter(BaseV3Writer):
             if numbered == 'true':
                 if number.startswith('appendix'):
                     number = number.replace('.', ' ', 1).title()
+                elif re.search('^[a-z]', number):
+                    number = number.title()
                 a_number = build.a(number, '\u00a0', href='#%s'%pn, classes='section-number selfRef')
                 h.append( a_number)
             a_title = build.a(href='#%s'%x.get('slugifiedName'), classes='section-name selfRef')
