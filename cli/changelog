@@ -1,14 +1,27 @@
-xml2rfc (2.13.1) ietf; urgency=medium
+xml2rfc (2.14.0) ietf; urgency=medium
 
-  * Added a check for duplicate id attribute values after each include of 
-    svg into generated html, as duplicates may cause display problems with some 
-    browsers.
+  * Added missing '(if approved)' annotations for obsoleted and updated lines
+    in v3 html rendering of drafts.
+
+  * Fixed the case of appendix section numbers in v3 html output.
+
+  * Removed rfc2629 dtd validation for input files with <rfc version="3"> set.
+
+  * Tweaked the lxml resolver callback to not accept xi:include names lacking
+    an '.xml' extension under v3.  Added setting of xml:base before caching
+    xi:include content, in order to not loose the origin.  Fixes issue #381.
+
+  * Sorted the entries in requirements.txt lexicographically.
+
+  * Added a check for duplicate id attribute values after each include of svg
+    content into generated html, as duplicates may cause display problems with
+    some browsers.
 
   * Added back the ability to place <iref> elements in a location where they 
     will translate to invalid HTML.  Avoided invalid HTML by pushing the span 
     up one level, as a previous sibling, when needed.  Fixes issue #378.
 
- -- Henrik Levkowetz <henrik@levkowetz.com>  19 Nov 2018 14:56:41 +0000
+ -- Henrik Levkowetz <henrik@levkowetz.com>  23 Nov 2018 08:25:52 -0800
 
 
 xml2rfc (2.13.1) ietf; urgency=medium
