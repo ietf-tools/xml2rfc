@@ -137,20 +137,25 @@ def get_normalized_address_info(writer, x, latin=True):
             continue
         # Some of these will overwrite data if there are multiple elements
         value = get_value(c, latin=latin)
-        if   c.tag == 'extaddr':
-            adr['extended_address'].append(value)
-        elif c.tag in ['street', 'postalLine', 'pobox']:
-            adr['street_address'].append(value)
-        elif c.tag == 'cityarea':
-            adr['city_area'] = value
-        elif c.tag == 'city':
-            adr['city'] = value
-        elif c.tag == 'region':
-            adr['country_area'] = value
-        elif c.tag == 'code':
-            adr['postal_code'] = value
-        elif c.tag == 'sortingcode':
-            adr['sorting_code'] = value
+        if value:
+            if   c.tag == 'extaddr':
+                adr['extended_address'].append(value)
+            elif c.tag in ['street', 'postalLine', 'pobox']:
+                adr['street_address'].append(value)
+            elif c.tag == 'cityarea':
+                adr['city_area'] = value
+            elif c.tag == 'city':
+                adr['city'] = value
+            elif c.tag == 'region':
+                adr['country_area'] = value
+            elif c.tag == 'code':
+                adr['postal_code'] = value
+            elif c.tag == 'sortingcode':
+                adr['sorting_code'] = value
+    if not hasattr(pycountry.countries, 'lookup'):
+        for a in adr:
+            if isinstance(adr[a], list):
+                adr[a] = ', '.join(adr[a])
     if country_info:
         # Address validation
         address_format, rules = get_address_format_rules(adr, latin)
