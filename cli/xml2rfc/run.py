@@ -29,6 +29,7 @@ except ImportError:
 
 def display_version(self, opt, value, parser):
     print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
+    debug.dir('parser')
     sys.exit()
 
 
@@ -111,7 +112,7 @@ def main():
                             help='generate utf8 output')
     plain_options.add_option('-v', '--verbose', action='store_true',
                             help='print extra information')
-    plain_options.add_option('-V', '--version', action='callback', callback=display_version,
+    plain_options.add_option('-V', '--version', action='store_true', 
                             help='display the version number and exit')
     plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
                             help='Remove XML processing instructions')
@@ -185,6 +186,20 @@ def main():
     (options, args) = optionparser.parse_args()
     # Some additional values not exposed as options
     options.doi_base_url = "https://doi.org/"
+
+    # Show version information, then exit
+    if options.version:
+        print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
+        if options.verbose:
+            try:
+                import pkg_resources
+                this = pkg_resources.working_set.by_key[xml2rfc.NAME]
+                for p in this.requires():
+                    dist = pkg_resources.get_distribution(p.key)
+                    print('  %s'%dist)
+            except:
+                pass
+        sys.exit(0)
 
     if len(args) < 1:
         optionparser.print_help()
