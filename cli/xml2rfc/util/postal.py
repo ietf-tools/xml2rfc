@@ -66,7 +66,18 @@ def get_iso_country_info(e):
     if name == 'UK':
         name = 'United Kingdom'
     try:
-        country_info = pycountry.countries.lookup(name)
+        if hasattr(pycountry.countries, 'lookup'):
+            country_info = pycountry.countries.lookup(name)
+        else:
+            # Workaround for old versions of pycountry.  The transition from
+            # using alpha2 to alpha_2 coincides with the presence of a
+            # lookup() method for regular releases (there's a discrepancy for
+            # rc versions 16.10.23rc*)
+            if len(name) == 2:
+                country_info = pycountry.countries.get(alpha2=name.upper())
+            else:
+                country_info = pycountry.countries.get(name=name.title())
+            country_info.alpha_2 = country_info.alpha2
     except LookupError:
         xml2rfc.log.note("Country lookup failed for %s" % (lxml.etree.tostring(e), ))
         pass
