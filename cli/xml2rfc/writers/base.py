@@ -21,6 +21,9 @@ try:
 except ImportError:
     pass
 
+from xml2rfc.util.date import extract_date, format_date, get_expiry_date
+from xml2rfc.util.name import short_author_name_parts
+
 default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False, debug=False,
                             liberal=False, rfc=False, legacy_date_format=True, strict=False,
                             list_symbols=('*', '-', 'o', '+'),
@@ -1547,3 +1550,43 @@ class BaseV3Writer(object):
 
     def write(self, filename):
         raise NotImplementedError()
+
+    # methods for use in setting up page headers and footers
+
+    def footer_series(self):
+        if   self.root.find('.//seriesInfo[@name="Internet-Draft"]') != None:
+            return 'Internet-Draft'
+        else:
+            info = self.root.find('.//seriesInfo[@name="RFC"]')
+            if info != None:
+                return 'RFC %s' % info.get('value')
+        return '(unknown)'
+
+    def footer_title(self):
+        title = self.root.find('./front/title')
+        text = title.get('abbrev') or ''.join(title.itertext())
+        return text
+
+    def footer_date(self):
+        date = self.root.find('./front/date')
+        parts = extract_date(date, self.options.date)
+        text = format_date(parts[0], parts[1], None, legacy=True)
+        return text
+
+    def footer_authors(self):
+        authors = self.root.findall('front/author')
+        surnames = [ n for n in [ short_author_name_parts(a)[1] for a in authors ] if n ]
+        if len(surnames) == 1:
+            text = surnames[0]
+        elif len(surnames) == 2:
+            text = '%s & %s' % (surnames[0], surnames[1])
+        elif len(surnames) > 2:
+            text = '%s, et al.' % surnames[0]
+        return text
+
+    def footer_expires(self):
+        date = get_expiry_date(self.tree, self.options.date)
+        parts = date.year, date.month, date.day
+        text = 'Expires %s' % format_date(*parts, legacy=self.options.legacy_date_format)
+        return text
+

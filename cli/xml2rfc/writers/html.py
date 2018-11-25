@@ -476,27 +476,25 @@ class HtmlWriter(BaseV3Writer):
     #      </tfoot>
     #    </table>
 
-        if False:
-            # Is this pure placeholder, or does it need data from the document?
-            body.append(
-                build.table(
-                    build.thead(
-                        build.tr(
-                            build.td("Left", classes='left'),
-                            build.td("Middle", classes='center'),
-                            build.td("Right", classes='right'),
-                        ),
+        body.append(
+            build.table(
+                build.thead(
+                    build.tr(
+                        build.td(self.footer_series(), classes='left'),
+                        build.td(self.footer_title(), classes='center'),
+                        build.td(self.footer_date(), classes='right'),
                     ),
-                    build.tfoot(
-                        build.tr(
-                            build.td("Left", classes='left'),
-                            build.td("Middle", classes='center'),
-                            build.td("[Page]", classes='right'),
-                        ),
+                ),
+                build.tfoot(
+                    build.tr(
+                        build.td(self.footer_authors(), classes='left'),
+                        build.td(self.footer_expires(), classes='center'),
+                        build.td("[Page]", classes='right'),
                     ),
-                    classes='ears',
-                )
+                ),
+                classes='ears',
             )
+        )
 
         for c in [ e for e in [ x.find('front'), x.find('middle'), x.find('back') ] if e != None]:
             self.part = c.tag
