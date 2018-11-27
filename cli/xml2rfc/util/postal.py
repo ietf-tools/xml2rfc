@@ -165,16 +165,19 @@ def get_normalized_address_info(writer, x, latin=True):
         for e in adr:
             if adr[e] and not (e in parts or e in ['name', 'role', 'company_name', 'country_code', ]):
                 list_parts = True
-                writer.warn(x, "Address part filled in, but not recognized: %s: %s" % (e, adr[e]))
+                writer.note(x, "Postal address part filled in, but not used: %s: %s" % (address_field_elements[e], adr[e]))
         try:
             i18naddress.normalize_address(adr)
         except i18naddress.InvalidAddress as e:
             list_parts = True
-            writer.warn(x, "Address check failed for author %s." % full_author_name(author, latin))
+            writer.note(x, "Postal address check failed for author %s." % full_author_name(author, latin))
             for item in e.errors:
-                writer.msg(x, '', "  Unexpected address info: %s: %s" % (address_field_elements[item], (adr[item]) or '(empty)'))
+                if adr[item]:
+                    writer.note(x, "  Postal address has unexpected address info: %s: %s" % (address_field_elements[item], (adr[item])), label='')
+                else:
+                    writer.note(x, "  Postal address is missing an address element: %s" % (address_field_elements[item], ), label='')
         if list_parts:
-            writer.note(x, "Recognized address elements for %s are: %s" % (rules.country_name.title(), ', '.join(elements)))
+            writer.note(x, "Recognized postal address elements for %s are: %s" % (rules.country_name.title(), ', '.join(elements)))
     return adr
 
 # These are copied from i18address in order to remove uppercasing
