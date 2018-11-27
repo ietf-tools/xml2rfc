@@ -14,7 +14,7 @@ from lxml.etree import Element, Comment, CDATA
 
 from xml2rfc import log
 from xml2rfc.utils import find_duplicate_ids, hastext, isempty
-from xml2rfc.writers.base import default_options
+from xml2rfc.writers.base import default_options, BaseV3Writer
 
 
 try:
@@ -45,7 +45,7 @@ def copyattr(a, b):
         v = a.get(k)
         b.set(k, v)
 
-class V2v3XmlWriter(object):
+class V2v3XmlWriter(BaseV3Writer):
     """ Writes an XML file with v2 constructs converted to v3"""
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
@@ -57,11 +57,6 @@ class V2v3XmlWriter(object):
         self.options = options
         self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
         self.schema = etree.ElementTree(file=self.v3_rng_file)
-
-    def warn(self, e, text):
-        lnum = getattr(e, 'sourceline', 0)
-        msg = "%s(%s): Warning: %s" % (self.xmlrfc.source, lnum, text)
-        log.write(msg)
 
     def validate(self):
         v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
@@ -347,6 +342,8 @@ class V2v3XmlWriter(object):
     #       to <rfc> to cover Processing Instructions (PIs) that were in v2
     #       that are still needed in the grammar.  ...
     def processing_instruction(self, e, p):
+        if e.target != 'rfc':
+            return
         rfc_element = self.root.find('.')
         pi_name = {
             'sortrefs': 'sortRefs',
@@ -801,11 +798,11 @@ class V2v3XmlWriter(object):
                     del t.attrib['hangText']
                 # Convert <vspace> at the start of hanging list text to
                 # attribute hanging='true' on <dl>
-                if not t.text:
+                if not t.text or not t.text.strip():
                     if len(t) and t[0].tag == 'vspace':
                         t.text = t[0].tail
                         t.remove(t[0])
-                    l.set('newline', 'true')
+                        l.set('newline', 'true')
                 i = l.index(t)
                 l.insert(i, dt)
                 self.replace(t, 'dd')
