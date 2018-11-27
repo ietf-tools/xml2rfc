@@ -1527,11 +1527,40 @@ class BaseV3Writer(object):
         xml2rfc.log.write(msg)
         return msg
 
-    def note(self, e, text):
-        self.msg(e, 'Note:', text)
+    def get_relevant_pis(self, e):
+        pis = []
+        for c in e.getchildren():
+            if c.tag == lxml.etree.PI and c.target == xml2rfc.NAME:
+                pis.append(c)
+        for s in e.itersiblings(preceding=True):
+            if s.tag == lxml.etree.PI and s.target == xml2rfc.NAME:
+                pis.append(s)
+        for a in e.iterancestors():
+            for s in a.itersiblings(preceding=True):
+                if s.tag == lxml.etree.PI and s.target == xml2rfc.NAME:
+                    pis.append(s)
+        return pis
+
+    def silenced(self, e, text):
+        text = text.strip()
+        pis = self.get_relevant_pis(e)
+        silenced = filter(None, [ pi.get('silence') for pi in pis ])
+        for s in silenced:
+            for label in ['Note: ', 'Warning: ']:
+                if s.startswith(label):
+                    s = s[len(label):]
+            if text.startswith(s):
+                return True
+        return False
+
+    def note(self, e, text, label='Note:'):
+        if not self.options.quiet:
+            if not self.silenced(e, text):
+                self.msg(e, label, text)
 
     def warn(self, e, text):
-        self.msg(e, 'Warning:', text)
+        if not self.silenced(e, text):
+            self.msg(e, 'Warning:', text)
 
     def err(self, e, text, trace=False):
         msg = self.msg(e, 'Error:', text)
