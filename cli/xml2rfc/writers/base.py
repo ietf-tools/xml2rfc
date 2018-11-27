@@ -21,6 +21,7 @@ try:
 except ImportError:
     pass
 
+from xml2rfc import strings
 from xml2rfc.util.date import extract_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_name_parts
 
@@ -1584,9 +1585,14 @@ class BaseV3Writer(object):
             text = '%s, et al.' % surnames[0]
         return text
 
-    def footer_expires(self):
-        date = get_expiry_date(self.tree, self.options.date)
-        parts = date.year, date.month, date.day
-        text = 'Expires %s' % format_date(*parts, legacy=self.options.legacy_date_format)
+    def footer_center(self):
+        # Either expiry date or category
+        if self.options.rfc:
+            cat = self.root.get('category')
+            text = strings.category_name[cat]
+        else:
+            date = get_expiry_date(self.tree, self.options.date)
+            parts = date.year, date.month, date.day
+            text = 'Expires %s' % format_date(*parts, legacy=self.options.legacy_date_format)
         return text
 
