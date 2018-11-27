@@ -41,7 +41,7 @@ from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, format_date, normalize_month
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.utils import build_dataurl, namespaces, find_duplicate_ids
-from xml2rfc.writers.base import default_options
+from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.v2v3 import slugify
 
 pnprefix = {
@@ -92,10 +92,10 @@ def slugify_name(name):
     seen_slugs.add(slug)
     return slug
 
-class PrepToolWriter:
+class PrepToolWriter(BaseV3Writer):
     """ Writes an XML file where the input has been modified according to RFC 7998"""
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None, keep_pis=[]):
         if not quiet is None:
             options.quiet = quiet
         self.xmlrfc = xmlrfc
@@ -103,6 +103,9 @@ class PrepToolWriter:
         self.root = self.tree.getroot()
         self.rfcnumber = self.root.get('number')
         self.options = options
+        self.liberal = liberal if liberal != None else options.accept_prepped
+        self.keep_pis = keep_pis
+        #
         self.errors = []
         self.ol_counts = {}
         self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
@@ -114,6 +117,7 @@ class PrepToolWriter:
         self.middle_section_number = [0, ]
         self.table_number = 0
         self.figure_number = 0
+        self.unicode_number = 0
         self.references_number = [0, ]
         self.back_section_number = [0, ]
         self.paragraph_number = [0, ]
@@ -122,7 +126,6 @@ class PrepToolWriter:
         self.prev_section_level = 0
         self.prev_paragraph_section = None
         #
-        self.liberal = liberal if liberal != None else options.accept_prepped
         self.prepped = self.root.get('prepTime')
         #
         self.index_entries = []
@@ -130,7 +133,6 @@ class PrepToolWriter:
         self.spacer = '  '
         #
         self.boilerplate_https_date = datetime.date(year=2017, month=8, day=21)
-
 
     def get_attribute_names(self, tag):
         attr = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:attribute" % tag, namespaces=namespaces)
@@ -158,36 +160,6 @@ class PrepToolWriter:
             e.base = os.path.basename(filename)
             e.sourceline = lineno
         return e
-
-    def note(self, e, text):
-        lnum = getattr(e, 'sourceline', 0)
-        msg = "%s(%s): Note: %s" % (self.xmlrfc.source, lnum, text)
-        log.write(msg)
-
-    def warn(self, e, text):
-        lnum = getattr(e, 'sourceline', 0)
-        if lnum:
-            msg = "%s(%s): Warning: %s" % (self.xmlrfc.source, lnum, text)
-        else:
-            msg = "%s: Warning: %s" % (self.xmlrfc.source, text)
-        log.write(msg)
-
-    def err(self, e, text, trace=False):
-        lnum = getattr(e, 'sourceline', None)
-        if lnum:
-            msg = "%s(%s): Error: %s" % (self.xmlrfc.source, lnum, text)
-        else:
-            msg = "%s: Error: %s" % (self.xmlrfc.source, text)
-        if trace or self.options.debug:
-            raise RuntimeError(msg)
-        else:
-            log.write(msg)
-        self.errors.append(msg)
-
-    def die(self, e, text, trace=False):
-        self.err(e, text, trace)
-        log.write("Cannot continue, quitting now")
-        sys.exit(1)
 
     def validate(self, when, warn=False):
         # Note: Our schema doesn't permit xi:include elements, so the document
@@ -414,7 +386,8 @@ class PrepToolWriter:
 
     def processing_instruction(self, e, p):
         if p != None:
-            p.remove(e)
+            if not e.target in self.keep_pis:
+                p.remove(e)
 
     # 5.1.4.  Validity Check
     # 
