@@ -434,7 +434,7 @@ def main():
                 options.output_filename = filename
             v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
             xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True)
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=['xml2rfc'])
             xmlrfc.tree = prep.prep()
             writer = xml2rfc.TextWriter(xmlrfc, options=options, date=options.date)
             writer.write(filename)
@@ -448,7 +448,7 @@ def main():
                 options.output_filename = filename
             v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
             xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True)
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=['xml2rfc'])
             xmlrfc.tree = prep.prep()
             writer = xml2rfc.HtmlWriter(xmlrfc, options=options, date=options.date)
             writer.write(filename)
@@ -462,7 +462,7 @@ def main():
                 options.output_filename = filename
             v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
             xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True)
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=['xml2rfc'])
             xmlrfc.tree = prep.prep()
             info = extract_anchor_info(xmlrfc.tree)
             with open(filename, 'w') as fp:
