@@ -146,7 +146,7 @@ unicodetest: cleantmp  env/bin/python install
 	doc=unicode ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 utf8test: cleantmp  env/bin/python install
-	@ xml2rfc --cache tests/cache --no-network --utf8 --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep tests/input/utf8.xml
+	@ xml2rfc --cache tests/cache --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep tests/input/utf8.xml
 	doc=utf8 ; postnrofffix="cat" ; type=utf8; $(CHECKOUTPUT)
 
 v3featuretest: tests/out/draft-v3-features.prepped.xml.test
