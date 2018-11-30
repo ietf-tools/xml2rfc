@@ -1,3 +1,111 @@
+xml2rfc (2.15.0) ietf; urgency=medium
+
+  * Added support for a new element <u>, to be used to insert unicode in
+    protocol descriptions.
+
+    In xml2rfc vocabulary version 3, the elements <author>,
+    <organisation>, <street>, <city>, <region>, <code>, <country>,
+    <postalLine>, <email>, and <seriesInfo> may contain non-ascii
+    characters for the purpose of rendering author names, addresses, and
+    reference titles correctly.  They also have an additional "ascii"
+    attribute for the purpose of proper rendering in ascii-only media.
+
+    In order to insert Unicode characters in any other context, xml2rfc v3
+    formatters now require that the Unicode string be enclosed within an <u>
+    element.  The element will be expanded inline based on the value of a
+    "format" attribute.  This provides a generalized means of generating the 6
+    methods of Unicode renderings listed in RFC7997, Section 3.4
+    (http://rfc-editor.org/rfc/rfc7997.pdf), and also
+    several others found in for instance the RFC Format Tools example
+    rendering of RFC 7700, at 
+    <https://rfc-format.github.io/draft-iab-rfc-css-bis/sample2-v2.html>.
+
+    The "format" attribute accepts either a simplified format
+    specification, or a full format string with placeholders for the
+    various possible unicode expansions.
+
+    The simplified format consists of dash-separated keywords, where each
+    keyword represents a possible expansion of the unicode character or
+    string; use for example ``<u "lit-num-name">foo</u>`` to expand the text to
+    its literal value, code point values, and code point names.
+
+    A combination of up to 3 of the following keywords may be used,
+    separated by dashes: "num", "lit", "name", "ascii", "char".  The
+    keywords are expanded as follows and combined, with the second and
+    third enclosed in parentheses (if present):
+
+       "num"
+	  The numeric value(s) of the element text, in U+1234 notation
+
+       "name"
+	  The unicode name(s) of the element text
+
+       "lit"
+	  The literal element text, enclosed in quotes
+
+       "char"
+	  The literal element text, without quotes
+
+       "ascii"
+	  The provided ASCII value
+
+    In order to ensure that no specification mistakes can result for
+    rendering methods that cannot render all unicode code points, "num"
+    must always be part of the specified format.
+
+    The default value of the "format" attribute is "lit-name-num".
+
+    For instance:
+
+       format="lit-name-num":
+	  Temperature changes in the Temperature Control Protocol are
+	  indicated by the character "Δ" (GREEK CAPITAL LETTER DELTA,
+	  U+0394).
+
+    If the <u> element encloses a Unicode string, rather than a single
+    code point, the rendering reflects this.  The element::
+
+       <u format="num-lit">ᏚᎢᎵᎬᎢᎬᏒ</u>
+
+    will be expanded to 'U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2
+    ("ᏚᎢᎵᎬᎢᎬᏒ")'.
+
+    In order to provide for cases where the simplified format above is
+    insufficient, without relinquishing the requirement that the number of a
+    code point always must be rendered, the "format" attribute can also accept
+    a full format string.  This format uses placeholders which consist of any
+    of the key words above enclosed in in curly braces; outside of this, any
+    ascii text is permissible.  For example::
+
+       The <u format="{lit} character ({num})">Δ</u>.
+
+    will be rendered as::
+
+       The "Δ" character (U+0394).
+
+  * Added support for v3xml2rfc PIs that silence notices and warnings.  For
+    instance, adding::
+
+	<?v3xml2rfc silence="The document date .* is more than 3 days" ?>
+
+    in front of a <date> element with an old date will suppress the warning
+    message about an outdated date.  If the value of the silence attribute
+    matches the start of a notice or warning message, as a string or as a
+    regex, the message is suppressed.
+
+  * Some warnings have been downgraded to notices, and can be suppressed with
+    a --quiet switch.
+
+  * Added header and footer information for the tentative support for the 
+    W3C Paged Media Module described in RFC 7992, Section 6.4.
+
+  * Added support for older versions of pycountry.
+
+  * Added more information to the --version display when used with --verbose.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  30 Nov 2018 09:59:07 -0800
+
+
 xml2rfc (2.14.1) ietf; urgency=medium
 
   * The v3 attribute xml:base of <reference> is not compatible with the v2
