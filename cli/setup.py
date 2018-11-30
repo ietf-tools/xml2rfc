@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # --------------------------------------------------
 # Copyright The IETF Trust 2011, All Rights Reserved
 # --------------------------------------------------
@@ -8,6 +9,10 @@ import re
 from codecs import open
 from setuptools import setup
 import sys
+# This workaround is necessary to make setup.py upload work with non-ascii
+# arguments to setup():
+reload(sys).setdefaultencoding("UTF-8") 
+
 
 description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
 
@@ -69,6 +74,7 @@ Changelog
 =========
 
 """ + "\n".join([ changelog_entry_template % entry for entry in parse("changelog")[:3] ])
+
 
 setup(
     # Package metadata
