@@ -23,7 +23,7 @@ except ImportError:
     pass
 
 import xml2rfc.log
-
+from xml2rfc.util.unicode import unicode_content_tags
 
 # ----------------------------------------------------------------------
 # Text wrapping
@@ -257,15 +257,17 @@ def safeReplaceUnicode(tree):
     """
     for element in tree.iter():
         if element.text:
-            try:
-                element.text = element.text.encode('ascii')
-            except UnicodeEncodeError:
-                element.text = _replace_unicode_characters(element.text)
+            if not element.tag in unicode_content_tags:
+                try:
+                    element.text = element.text.encode('ascii')
+                except UnicodeEncodeError:
+                    element.text = _replace_unicode_characters(element.text)
         if element.tail:
-            try:
-                element.tail = element.tail.encode('ascii')
-            except UnicodeEncodeError:
-                element.tail = _replace_unicode_characters(element.tail)
+            if not element.getparent().tag in unicode_content_tags:
+                try:
+                    element.tail = element.tail.encode('ascii')
+                except UnicodeEncodeError:
+                    element.tail = _replace_unicode_characters(element.tail)
         for key in element.attrib.keys():
             try:
                 element.attrib[key] = element.attrib[key].encode('ascii')
@@ -325,7 +327,7 @@ def _replace_unicode_characters(str):
         &wj; &zwsp; &nbsp; &nbhy;
     """
     while True:
-        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\r\n])', str)
+        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\u2028\r\n])', str)
         if not match:
             return str
         if match.group(1) in _unicode_replacements:
