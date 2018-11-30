@@ -152,10 +152,18 @@
      elements may be present -->
 <!ELEMENT postal      (street+,(city|region|code|country)*)>
 <!ELEMENT street      (%CTEXT;)>
+<!ATTLIST street
+          ascii       %ATEXT;            #IMPLIED>
 <!ELEMENT city        (%CTEXT;)>
+<!ATTLIST city
+          ascii       %ATEXT;            #IMPLIED>
 <!ELEMENT region      (%CTEXT;)>
+<!ATTLIST region
+          ascii       %ATEXT;            #IMPLIED>
 <!ELEMENT code        (%CTEXT;)>
 <!ELEMENT country     (%CTEXT;)>
+<!ATTLIST country
+          ascii       %ATEXT;            #IMPLIED>
 <!ELEMENT phone       (%CTEXT;)>
 <!ELEMENT facsimile   (%CTEXT;)>
 <!ELEMENT email       (%CTEXT;)>
@@ -203,7 +211,7 @@
   -->
 
 <!-- use of <figure/> is deprecated... -->
-<!ELEMENT t           (%TEXT;|list|figure|xref|eref|iref|cref|spanx|vspace)*>
+<!ELEMENT t           (%TEXT;|list|figure|xref|eref|iref|cref|spanx|vspace|u)*>
 <!ATTLIST t
           anchor      ID                 #IMPLIED
           hangText    %ATEXT;            #IMPLIED>
@@ -258,7 +266,7 @@
           width       %ATEXT;            ""
           height      %ATEXT;            "">
 
-<!ELEMENT preamble    (%TEXT;|xref|eref|iref|cref|spanx)*>
+<!ELEMENT preamble    (%TEXT;|xref|eref|iref|cref|spanx|u)*>
 <!ELEMENT artwork     (%TEXT;)*>
 <!ATTLIST artwork
           xml:space   (default|preserve) "preserve"
@@ -270,7 +278,7 @@
           width       %ATEXT;            ""
           height      %ATEXT;            "">
 
-<!ELEMENT postamble   (%TEXT;|xref|eref|iref|cref|spanx)*>
+<!ELEMENT postamble   (%TEXT;|xref|eref|iref|cref|spanx|u)*>
     
 <!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?)>
 <!ATTLIST texttable
@@ -283,7 +291,7 @@
 <!ATTLIST ttcol
           width       %ATEXT;            #IMPLIED
           align       (left|center|right) "left">
-<!ELEMENT c           (%TEXT;|xref|eref|iref|cref|spanx)*>
+<!ELEMENT c           (%TEXT;|xref|eref|iref|cref|spanx|u)*>
 
 
 <!--
@@ -312,4 +320,9 @@
           target      %URI;              #IMPLIED
           type        %ATEXT;            #REQUIRED
           octets      %NUMBER;           #IMPLIED>
-<!ELEMENT annotation  (%TEXT;|xref|eref|iref|cref|spanx)*>
+<!ELEMENT annotation  (%TEXT;|xref|eref|iref|cref|spanx|u)*>
+<!ELEMENT u	      (%TEXT;)>
+<!ATTLIST u
+          anchor      ID                 #IMPLIED
+          ascii       %ATEXT;            #IMPLIED
+          format      %ATEXT;            #IMPLIED>
