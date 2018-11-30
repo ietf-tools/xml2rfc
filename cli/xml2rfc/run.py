@@ -284,6 +284,9 @@ def main():
         if options.exp:
             sys.exit("You can only use --exp in legacy mode")
 
+    if options.utf8:
+        xml2rfc.log.warn("The --utf8 switch is deprecated.  Use the new unicode insertion element <u>\nto refer to unicode values in a protocol specification.")
+
     # ------------------------------------------------------------------
 
     # Setup warnings module
@@ -434,7 +437,7 @@ def main():
                 options.output_filename = filename
             v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
             xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=['xml2rfc'])
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
             writer = xml2rfc.TextWriter(xmlrfc, options=options, date=options.date)
             writer.write(filename)
@@ -448,7 +451,7 @@ def main():
                 options.output_filename = filename
             v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
             xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=['xml2rfc'])
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
             writer = xml2rfc.HtmlWriter(xmlrfc, options=options, date=options.date)
             writer.write(filename)
@@ -462,7 +465,7 @@ def main():
                 options.output_filename = filename
             v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
             xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=['xml2rfc'])
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
             info = extract_anchor_info(xmlrfc.tree)
             with open(filename, 'w') as fp:
