@@ -155,6 +155,10 @@ def full_author_name_set(a):
         ascii = None
     return name, ascii
 
+def full_author_name_expansion(a):
+    name, ascii = full_author_name_set(a)
+    return "%s (%s)" % (name, ascii) if ascii else name
+
 def short_author_role(a):
     role = a.get('role')
     text = ''
