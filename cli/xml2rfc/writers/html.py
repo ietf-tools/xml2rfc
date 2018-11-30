@@ -30,12 +30,13 @@ from xml2rfc import log, strings
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, format_date, format_date_iso, get_expiry_date
-from xml2rfc.util.name import ( full_author_name, short_author_role,
+from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
                                 ref_author_name_first, ref_author_name_last, 
                                 short_author_name_set, full_author_name_set,
                                 short_org_name_set, full_org_name, )
 from xml2rfc.util.postal import ( get_normalized_address_info, address_hcard_properties,
                                 enhance_address_format, address_field_mapping, )
+from xml2rfc.util.unicode import expand_unicode_element
 from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids
 
 #from xml2rfc import utils
@@ -234,6 +235,8 @@ class HtmlWriter(BaseV3Writer):
 
 
     def render(self, h, x):
+        if x.tag is lxml.etree.PI:
+            return
         func_name = "render_%s" % (x.tag.lower(),)
         func = getattr(self, func_name, None)
         if func == None:
@@ -340,12 +343,10 @@ class HtmlWriter(BaseV3Writer):
     #    o  author - one each for the each of the "fullname"s and
     #       "asciiFullname"s of all of the <author>s from the <front> of the
     #       XML source
-
         for a in x.xpath('./front/author'):
-            name = full_author_name(a)
-            if not name:
-                name = full_org_name(a)
-            add.meta(head, None, name='author', content=name )
+            if not a.get('role') == 'contributor':
+                name = full_author_name_expansion(a) or full_org_name(a)
+                add.meta(head, None, name='author', content=name )
 
     #    o  description - the <abstract> from the XML source
 
@@ -488,7 +489,7 @@ class HtmlWriter(BaseV3Writer):
                 build.tfoot(
                     build.tr(
                         build.td(self.footer_authors(), classes='left'),
-                        build.td(self.footer_expires(), classes='center'),
+                        build.td(self.footer_center(), classes='center'),
                         build.td("[Page]", classes='right'),
                     ),
                 ),
@@ -2245,7 +2246,100 @@ class HtmlWriter(BaseV3Writer):
             self.render(ul, c)
         return ul
 
+    # RFC 7997
+    # 3.4.  Body of the Document
     # 
+    #    When the mention of non-ASCII characters is required for correct
+    #    protocol operation and understanding, the characters' Unicode
+    #    character name or code point MUST be included in the text.
+    # 
+    #    o  Non-ASCII characters will require identifying the Unicode code
+    #       point.
+    # 
+    #    o  Use of the actual UTF-8 character (e.g., Δ) is encouraged so
+    #       that a reader can more easily see what the character is, if their
+    #       device can render the text.
+    # 
+    #    o  The use of the Unicode character names like "INCREMENT" in
+    #       addition to the use of Unicode code points is also encouraged.
+    #       When used, Unicode character names should be in all capital
+    #       letters.
+    # 
+    #    Examples:
+    # 
+    #    OLD [RFC7564]:
+    # 
+    #    However, the problem is made more serious by introducing the full
+    #    range of Unicode code points into protocol strings.  For example,
+    #    the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 from
+    #    the Cherokee block look similar to the ASCII characters  "STPETER" as
+    #    they might appear when presented using a "creative" font family.
+    # 
+    #    NEW/ALLOWED:
+    # 
+    # However, the problem is made more serious by introducing the full
+    # range of Unicode code points into protocol strings.  For example,
+    # the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2
+    # (ᏚᎢᎵᎬᎢᎬᏒ) from the Cherokee block look similar to the ASCII
+    # characters "STPETER" as they might appear when presented using a
+    # "creative" font family.
+    # 
+    #    ALSO ACCEPTABLE:
+    # 
+    # However, the problem is made more serious by introducing the full
+    # range of Unicode code points into protocol strings.  For example,
+    # the characters "ᏚᎢᎵᎬᎢᎬᏒ" (U+13DA U+13A2 U+13B5 U+13AC U+13A2
+    # U+13AC U+13D2) from the Cherokee block look similar to the ASCII
+    # characters "STPETER" as they might appear when presented using a
+    # "creative" font family.
+    # 
+    #    Example of proper identification of Unicode characters in an RFC:
+    # 
+    # Flanagan                Expires October 27, 2016                [Page 6]
+    # 
+    #  
+    # Internet-Draft              non-ASCII in RFCs                 April 2016
+    # 
+    # 
+    #    Acceptable:
+    # 
+    #    o  Temperature changes in the Temperature Control Protocol are
+    #       indicated by the U+2206 character.
+    # 
+    #    Preferred:
+    # 
+    #    1.  Temperature changes in the Temperature Control Protocol are
+    #        indicated by the U+2206 character ("Δ").
+    # 
+    #    2.  Temperature changes in the Temperature Control Protocol are
+    #        indicated by the U+2206 character (INCREMENT).
+    # 
+    #    3.  Temperature changes in the Temperature Control Protocol are
+    #        indicated by the U+2206 character ("Δ", INCREMENT).
+    # 
+    #    4.  Temperature changes in the Temperature Control Protocol are
+    #        indicated by the U+2206 character (INCREMENT, "Δ").
+    # 
+    #    5.  Temperature changes in the Temperature Control Protocol are
+    #        indicated by the "Delta" character "Δ" (U+2206).
+    # 
+    #    6.  Temperature changes in the Temperature Control Protocol are
+    #        indicated by the character "Δ" (INCREMENT, U+2206).
+    def render_u(self, h, x):
+        try:
+            text = expand_unicode_element(x)
+        except (RuntimeError, ValueError) as e:
+            self.err(x, e)
+            text = ''
+        anchor = x.get('anchor')
+        xref = self.root.find('.//xref[@target="%s"]'%anchor) if anchor else None
+        if xref != None:
+            # render only literal here
+            text = x.text
+        span = add.span(h, None, text, classes="unicode", id=anchor)
+        span.tail = x.tail
+        return span
+        
     # 9.64.  <uri>
     # 
     #    This element is rendered as an HTML <div> containing the string

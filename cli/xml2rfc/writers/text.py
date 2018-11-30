@@ -28,6 +28,7 @@ from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, get_expiry_date, format_date
 from xml2rfc.util.name import short_author_name, short_author_ascii_name
 from xml2rfc.util.num import ol_style_formatter, num_width
+from xml2rfc.util.unicode import expand_unicode_element
 from xml2rfc.util.postal import get_normalized_address_info, format_address
 
 wrapper = utils.TextWrapper(width=72, break_on_hyphens=False)
@@ -135,6 +136,8 @@ class TextWriter(BaseV3Writer):
             log.write('Created file', filename)
 
     def render(self, e, width, **kw):
+        if e.tag is etree.PI:
+            return ''
         kwargs = copy.deepcopy(kw)
         func_name = "render_%s" % (e.tag.lower(),)
         func = getattr(self, func_name, self.default_renderer)
@@ -152,6 +155,8 @@ class TextWriter(BaseV3Writer):
         Render element e, then format and join it to text using the
         appropriate settings in joiners.
         '''
+        if e.tag is etree.PI:
+            return text
         assert 'joiners' in kwargs
         joiners = kwargs['joiners']
         j = joiners[e.tag] if e.tag in joiners else joiners[None]
@@ -1291,7 +1296,7 @@ class TextWriter(BaseV3Writer):
             parts = ['\n\n']
             parts.append(self.render_first_page_top(e, width, **kwargs))
             for c in e.getchildren():
-                if c.tag in ['title', 'seriesInfo', 'author', 'date', 'area', 'workgroup', 'keyword']:
+                if c.tag in ['title', 'seriesInfo', 'author', 'date', 'area', 'workgroup', 'keyword', etree.PI, ]:
                     # handled in render_first_page_top()
                     continue
                 parts.append(self.render(c, width, **kwargs))
@@ -3894,6 +3899,15 @@ class TextWriter(BaseV3Writer):
             text = self.join(text, c, width, **kwargs)
         return text
         
+
+    def render_u(self, e, width, **kwargs):
+        try:
+            text = expand_unicode_element(e)
+        except (RuntimeError, ValueError) as exception:
+            text = None
+            self.err(e, exception)
+        text += e.tail or ''
+        return text
 
     # 2.64.  <uri>
     # 

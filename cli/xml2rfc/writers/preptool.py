@@ -39,7 +39,9 @@ from xml2rfc.boilerplate_tlp import boilerplate_tlp
 from xml2rfc.scripts import get_scripts
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, format_date, normalize_month
+from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
+from xml2rfc.util.unicode import unicode_content_tags, bare_unicode_tags, expand_unicode_element, isascii, downcode
 from xml2rfc.utils import build_dataurl, namespaces, find_duplicate_ids
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.v2v3 import slugify
@@ -54,6 +56,7 @@ pnprefix = {
     'references':   'section',
     'section':      'section',
     'table':        'table',
+    'u':            'u',
 }
 
 refname_mapping = {}
@@ -195,10 +198,10 @@ class PrepToolWriter(BaseV3Writer):
                 msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, path)
                 log.write(msg)
             if warn:
-                self.warn(None, 'Invalid document %s running preptool.' % (when, ))
+                self.warn(self.root, 'Invalid document %s running preptool.' % (when, ))
                 return False
             else:
-                self.die(None, 'Invalid document %s running preptool.' % (when, ))
+                self.die(self.root, 'Invalid document %s running preptool.' % (when, ))
 
     def write(self, filename):
         """ Public method to write the XML document to a file """
@@ -234,6 +237,7 @@ class PrepToolWriter(BaseV3Writer):
             '//processing-instruction()',       # 5.1.3.  Processing Instruction Removal
             '.;validate_before()',              # 5.1.4.  Validity Check
             '.;check_attribute_values()',       # 
+            '.;check_ascii_text()',
             './/*[@anchor]',                    # 5.1.5.  Check "anchor"
             '.;insert_version()',               # 5.2.1.  "version" Insertion
             './front;insert_series_info()',     # 5.2.2.  "seriesInfo" Insertion
@@ -272,6 +276,7 @@ class PrepToolWriter(BaseV3Writer):
             './/back//section;add_number()',
             '.;paragraph_add_numbers()',
             './/iref;add_number()',             # 5.4.7.  <iref> Numbering
+            './/u;add_number()',
             './/ol;add_counter()',
             './/xref',                          # 5.4.8.  <xref> Processing
             './/relref',                        # 5.4.9.  <relref> Processing
@@ -402,6 +407,47 @@ class PrepToolWriter(BaseV3Writer):
             log.note("Schema validation failed for input document")
 
     def check_attribute_values(self, e, p):
+        # attribute names
+        attribute_names = (
+            ('quote-title', 'quoteTitle'),
+        )
+        for old, new in attribute_names:
+            for e in self.root.findall('.//*[@%s]'%old):
+                a = e.get(old)
+                if a:
+                    e.set(new, a)
+                del e.attrib[old]
+
+
+        # Integer attributes
+        integer_attributes = {
+            'rfc':      ('number', 'version', ),
+            'date':     ('year', 'day', ),
+            'dl':       ('indent', ),
+            'format':   ('octets', ),
+        }
+        tags = integer_attributes.keys()
+        for c in e.iter(tags):
+            for a in integer_attributes[c.tag]:
+                i = c.get(a)
+                if i and not i.isdigit():
+                    self.err(self.root, 'Expected <%s> attribute "%s" to be an integer, but found "%s"' % (c.tag, a, i))
+
+
+        # Attribute values should not contain unicode
+        unicode_attributes = {
+            ('author', 'fullname'),
+            ('author', 'surname'),
+            ('author', 'initials'),
+        }
+        for c in e.iter():
+            for a in c.attrib:
+                v = c.get(a)
+                if not isascii(v):
+                    if not (c.tag, a) in unicode_attributes:
+                        self.err(c, 'Found non-ascii content in <%s> attribute value %s="%s"' % (c.tag, a, v))
+
+
         # Some attribute values we should check before we default set them,
         # such as some of the attributes on <rfc>:
         self.attribute_yes_no(e, p)
@@ -454,19 +500,27 @@ class PrepToolWriter(BaseV3Writer):
         if consensus in ('true', 'false'):
             self.root.set('consensus', consensus)
         #
-        # Integer attributes
-        integer_attributes = {
-            'rfc':      ('number', 'version', ),
-            'date':     ('year', 'day', ),
-            'dl':       ('indent', ),
-            'format':   ('octets', ),
-        }
-        tags = integer_attributes.keys()
-        for c in e.iter(tags):
-            for a in integer_attributes[c.tag]:
-                i = c.get(a)
-                if i and not i.isdigit():
-                    self.err(self.root, 'Expected <%s> attribute "%s" to be an integer, but found "%s"' % (c.tag, a, i))
+
+
+    def check_ascii_text(self, e, p):
+        for c in self.root.iter():
+            p = c.getparent()
+            if c.text and not isascii(c.text):
+                show = c.text.encode('ascii', errors='replace')
+                if c.tag in unicode_content_tags:
+                    if not c.get('ascii') and not c.tag in bare_unicode_tags:
+                        self.err(c, 'Found non-unicode content without matching ascii attribute in <%s>: %s' % (c.tag, show))
+                else:
+                    self.err(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
+                    c.text = downcode(c.text)
+            if c.tail and not isascii(c.tail):
+                show = c.tail.encode('ascii', errors='replace')
+                if p.tag in unicode_content_tags:
+                    if not p.get('ascii') and not p.tag in ['artwork', 'refcontent', 'u']:
+                        self.err(p, 'Found non-unicode content without matching ascii attribute in <%s>: %s' % (p.tag, show))
+                else:
+                    self.err(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
+                    c.tail = downcode(c.tail)
 
     # 5.1.5.  Check "anchor"
     # 
@@ -578,7 +632,7 @@ class PrepToolWriter(BaseV3Writer):
             datestr = "%s-%s-%s" %(year, month, day or '01')
             date = datetime.datetime.strptime(datestr, "%Y-%m-%d").date()
             if abs(date - datetime.date.today()) > datetime.timedelta(days=3):
-                self.warn(e, "The document date (%s) is more than 3 days away from today's date" % date)
+                self.warn(d, "The document date (%s) is more than 3 days away from today's date" % date)
             n = self.element('date', year=year, month=month, line=d.sourceline)
             if day:
                 n.set('day', day)
@@ -1157,6 +1211,10 @@ class PrepToolWriter(BaseV3Writer):
         self.figure_number += 1
         e.set('pn', '%s-%s' % (pnprefix[e.tag], self.figure_number, ))
 
+    def u_add_number(self, e, p):
+        self.unicode_number += 1
+        e.set('pn', '%s-%s' % (pnprefix[e.tag], self.unicode_number, ))
+
     def references_add_number(self, e, p):
         self.references_number[0] = self.middle_section_number[0] + 1
         if len(list(p.iterchildren('references'))) > 1:
@@ -1344,9 +1402,10 @@ class PrepToolWriter(BaseV3Writer):
             format = e.get('format', 'default')
             if   format == 'counter':
                 if not t.tag in ['section', 'table', 'figure', 'li', 'references', ]:
-                    self.die(e, "Using <xref> format='counter' with a <%s> target is not supported" % (t.tag, ))
+                    self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
                 type, num = split_pn(t, pn)
                 if num.startswith('appendix'):
+                    type
                     num = num.replace('.', ' ', 1).title()
                 elif re.search('^[a-z]', num):
                     num = num.title()
@@ -1363,6 +1422,13 @@ class PrepToolWriter(BaseV3Writer):
                 elif t.tag in [ 't', 'ul', 'ol', ]:
                     type, num, para = pn.split('-', 2)
                     content = "%s %s, Paragraph %s" % (type.capitalize(), num, para)
+                elif t.tag == 'u':
+                    try:
+                        content = expand_unicode_element(t, bare=True)
+                    except (RuntimeError, ValueError) as exc:
+                        self.err(t, '%s' % exc)
+                elif t.tag == 'author':
+                    content = full_author_name_expansion(t)
                 else:
                     type, num = split_pn(t, pn)
                     if num.startswith('appendix'):
@@ -1371,7 +1437,9 @@ class PrepToolWriter(BaseV3Writer):
                     else:
                         content = "%s %s" % (type.capitalize(), num)
             elif format == 'title':
-                if t.tag == 'reference':
+                if t.tag in ['u', 'author', ]:
+                    self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
+                elif t.tag == 'reference':
                     title = t.find('./front/title')
                     if title is None:
                         self.err(t, "Expected a <title> element when processing <xref> to <%s>, but found none" % (t.tag, ))
@@ -1856,6 +1924,8 @@ class PrepToolWriter(BaseV3Writer):
             self.warn(e, "Found an existing Authors' Addresses section, not inserting another one")
             return
         authors = self.root.findall('./front/author')
+        # Exclude contributors
+        authors = [ a for a in authors if a.get('role') != 'contributor' ]
         back = self.root.find('./back')
         line = back[-1].sourceline or back.sourceline
         s = self.element('section', toc='include', numbered='false', anchor='authors-addresses', line=line)
@@ -1866,8 +1936,9 @@ class PrepToolWriter(BaseV3Writer):
             n.text = "Author's Address"
         n.set('slugifiedName', slugify_name('name-'+n.text))
         s.append(n)
-        for a in authors:
-            s.append(copy.copy(a))
+        for e in self.root.find('./front'):
+            if e.tag in ['author', etree.PI, ]:
+                s.append(copy.copy(e))
         back.append(s)
         #
         self.back_section_add_number(s, e)
