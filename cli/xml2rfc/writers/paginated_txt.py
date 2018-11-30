@@ -205,7 +205,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             year = date.attrib.get('year', '')
             self.right_header = month + ' ' + year
         authors = self.r.findall('front/author')
-        surnames = [ a.attrib.get('surname') for a in authors if a.attrib.get('surname', None) ]
+        surnames = filter(None, [ a.get('asciiSurname', a.get('surname')) for a in authors ])
         if len(surnames) == 1:
             self.left_footer = surnames[0]
         elif len(surnames) == 2:

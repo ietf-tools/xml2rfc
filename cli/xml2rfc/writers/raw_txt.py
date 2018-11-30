@@ -16,6 +16,7 @@ except ImportError:
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter, default_options
+from xml2rfc.util.unicode import expand_unicode_element
 import xml2rfc.utils
 
 
@@ -47,7 +48,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.iref_marks = {}
 
         # Text lookups
-        self.inline_tags = ['xref', 'eref', 'iref', 'cref', 'spanx']
+        self.inline_tags = ['xref', 'eref', 'iref', 'cref', 'spanx', 'u', ]
         
         # Custom textwrapper object
         self.wrapper = xml2rfc.utils.TextWrapper(width=self.width,
@@ -396,6 +397,14 @@ class RawTextRfcWriter(BaseRfcWriter):
         else:
             return target_text
 
+    def _expand_u(self, u):
+        try:
+            text = expand_unicode_element(u)
+        except (RuntimeError, ValueError) as exc:
+            text = ''
+            xml2rfc.log.error('%s'%exc)
+        return text
+
     def write_ref_element(self, key, text, sub_indent, source_line=None):
         """ Render a single reference element """
         # Use an empty first line if key is too long
@@ -480,7 +489,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if element.text:
                     text = element.text
                 line.append(edgechar + text + edgechar)
-            
+            elif element.tag == 'u':
+                line.append(self._expand_u(element))
+            else:
+                xml2rfc.log.error("Found unexpected inline element: <%s>" % element.tag)
+
             # Add tail text before next element
             if element.tail:
                 line.append(element.tail)

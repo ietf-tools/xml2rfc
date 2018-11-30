@@ -20,7 +20,9 @@ except ImportError:
 
 # Local libs
 import xml2rfc
+from xml2rfc.util.unicode import expand_unicode_element
 from xml2rfc.writers.base import BaseRfcWriter, default_options
+
 
 
 class HtmlRfcWriter(BaseRfcWriter):
@@ -301,6 +303,18 @@ class HtmlRfcWriter(BaseRfcWriter):
                 elem.tail = element.tail
             return [elem]
 
+    def _expand_u(self, element):
+        try:
+            text = expand_unicode_element(element)
+        except (RuntimeError, ValueError) as exc:
+            text = ''
+            xml2rfc.log.error('%s'%exc)
+        if text:
+            span = E.SPAN(text)
+            span.set('class', 'unicode')
+            return [span]
+        return []
+
     # -----------------------------------------
     # Base writer overrides
     # -----------------------------------------
@@ -404,6 +418,9 @@ class HtmlRfcWriter(BaseRfcWriter):
         for child in t:
             if child.tag in ['xref', 'eref', 'iref', 'cref', 'spanx']:
                 for element in self._expand_ref(child):
+                    current.append(element)
+            elif child.tag == 'u':
+                for element in self._expand_u(child):
                     current.append(element)
             elif child.tag == 'vspace':
                 br = E.BR()
@@ -776,9 +793,9 @@ class HtmlRfcWriter(BaseRfcWriter):
         else:
             docName = self.r.attrib.get('docName', '') 
         description = ''
-        abs_t = self.r.find('front/abstract/t')
-        if abs_t is not None and abs_t.text:
-            description = abs_t.text
+        abs = self.r.find('front/abstract')
+        if abs != None:
+            description = ''.join(abs.itertext())
         keywords = self.r.findall('front/keyword')
         keyword_list = [keyword.text for keyword in keywords if keyword.text]
         generator = "xml2rfc version %s - https://tools.ietf.org/tools/xml2rfc" % xml2rfc.__version__
@@ -798,7 +815,9 @@ class HtmlRfcWriter(BaseRfcWriter):
                 docDate += "-%02d" % int(date.attrib.get('day'))
 
         # Build author string
-        authors = self._format_author_string(self.r.findall('front/author'))
+        authors = self.r.findall('front/author')
+        authors = [ a for a in authors if a.get('role') != 'contributor' ]
+        authors = self._format_author_string(authors)
 
         # Run through base template, store in main output string
         subs = { 
