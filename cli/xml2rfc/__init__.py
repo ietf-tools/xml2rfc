@@ -7,6 +7,7 @@ VERSION      = [ int(i) if i.isdigit() else i for i in __version__.split('.') ]
 CACHES       = ['/var/cache/xml2rfc', '~/.cache/xml2rfc']  # Ordered by priority
 CACHE_PREFIX = ''
 NET_SUBDIRS  = ['bibxml', 'bibxml2', 'bibxml3', 'bibxml4', 'bibxml5']
+V3_PI_TARGET = 'v3xml2rfc'
 
 from xml2rfc.parser import  XmlRfcError, CachingResolver, XmlRfcParser, XmlRfc
 
