@@ -427,14 +427,14 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.9.3a2 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.14.1 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Gieben, R." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-gieben-writing-rfcs-pandoc-02" />
   <meta name="dct.issued" scheme="ISO8601" content="2013-01-01" />
-  <meta name="dct.abstract" content="This memo presents a technique for using Pandoc syntax as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  " />
-  <meta name="description" content="This memo presents a technique for using Pandoc syntax as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  " />
+  <meta name="dct.abstract" content="This memo presents a technique for using Pandoc syntax as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  This version is adapted to work with &quot;xml2rfc&quot; version 2.x.  " />
+  <meta name="description" content="This memo presents a technique for using Pandoc syntax as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  This version is adapted to work with &quot;xml2rfc&quot; version 2.x.  " />
 
 </head>
 
@@ -610,7 +610,7 @@
 
 <p> </p>
 <p id="rfc.section.2.p.2">When writing <a href="#RFC4641" class="xref">[RFC4641]</a> we directly wrote the XML. Needless to say it was tedious even thought the XML of <a href="http://xml.resource.org/experimental">xml2rfc</a> is very "light". The <a href="http://pypi.python.org/pypi/xml2rfc/">latest version of xml2rfc version 2 can be found here</a>.  </p>
-<p id="rfc.section.2.p.3">During the last few years people have been developing markup languages that are very easy to remember and type. These languages have become known as <samp>almost plain text</samp>-markup languages. One of the first was the <a href="http://daringfireball.net/projects/markdown/">Markdown</a> syntax. One that was developed later and incorporates Markdown and a number of extensions is <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a>. The power of Pandoc also comes from the fact that it can be translated to numerous output formats, including, but not limited to: HTML, (plain) Markdown and <samp>docbook</samp> XML.  </p>
+<p id="rfc.section.2.p.3">During the last few years people have been developing markup languages that are very easy to remember and type. These languages have become known as <samp>almost plain text</samp>-markup languages.  One of the first was the <a href="http://daringfireball.net/projects/markdown/">Markdown</a> syntax. One that was developed later and incorporates Markdown and a number of extensions is <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a>. The power of Pandoc also comes from the fact that it can be translated to numerous output formats, including, but not limited to: HTML, (plain) Markdown and <samp>docbook</samp> XML.  </p>
 <p id="rfc.section.2.p.4">So using Pandoc for writing RFCs seems like a sane choice. As <samp>xml2rfc</samp> uses XML, the easiest way would be to create <samp>docbook</samp> XML and transform that using XSLT.  Pandoc2rfc does just that. The conversions are, in some way amusing, as we start off with (almost) plain text, use elaborate XML and end up with plain text again.  </p>
 <div id="rfc.figure.1"></div>
 <div id="fig-attempt-to"></div>
@@ -625,9 +625,9 @@ non-existent  |                       | xsltproc
       +------------+    xml2rfc  +---------+ 
       | PLAIN TEXT |  &lt;--------  | XML2RFC | 
       +------------+             +---------+ 
-</pre>
+            </pre>
 <p class="figure">Figure 1: Attempt to justify Pandoc2rfc.</p>
-<p id="rfc.section.2.p.5">The XML generated (the output after the <samp>xsltproc</samp> step in <a href="#fig-attempt-to" class="xref">Figure 1</a>) is suitable for inclusion in either the <samp>middle</samp> or <samp>back</samp> section of an RFC. The simplest way is to create a template XML file and include the appropriate XML: </p>
+<p id="rfc.section.2.p.5">The XML generated (the output after the <samp>xsltproc</samp> step in <a href="#fig-attempt-to" class="xref">Figure 1</a>) is suitable for inclusion in either the <samp>middle</samp> or <samp>back</samp> section of an RFC.  The simplest way is to create a template XML file and include the appropriate XML: </p>
 <div id="rfc.figure.2"></div>
 <div id="fig-a-minimal-"></div>
 <pre>
@@ -651,7 +651,7 @@ non-existent  |                       | xsltproc
 &lt;/back&gt;
 
 &lt;/rfc&gt;
-</pre>
+            </pre>
 <p class="figure">Figure 2: A minimal template.xml.</p>
 <p id="rfc.section.2.p.6">See the Makefile for an example of this. In this case you need to edit 3 documents: </p>
 <p></p>
@@ -661,15 +661,17 @@ non-existent  |                       | xsltproc
 <li>back.pdc - holds appendices and references; </li>
 <li>template.xml (probably a fairly static file).  </li>
 </ol>
+
+<p> </p>
 <p id="rfc.section.2.p.8">The draft (<samp>draft.txt</samp>) you are reading now, is automatically created when you call <samp>make</samp>. The homepage of Pandoc2rfc is <a href="https://github.com/miekg/pandoc2rfc">this github repository</a>.  </p>
 <h1 id="rfc.section.2.1">
 <a href="#rfc.section.2.1">2.1.</a> <a href="#dependencies" id="dependencies">Dependencies</a>
 </h1>
-<p id="rfc.section.2.1.p.1">It needs <samp>xsltproc</samp> and <samp>pandoc</samp> to be installed. See the <a href="http://johnmacfarlane.net/pandoc/README.html">Pandoc user manual for the details</a> on how to type in Pandoc style. And of course <samp>xml2rfc</samp> version two.  </p>
+<p id="rfc.section.2.1.p.1">It needs <samp>xsltproc</samp> and <samp>pandoc</samp> to be installed. See the <a href="http://johnmacfarlane.net/pandoc/README.html">Pandoc user manual for the details</a> on how to type in Pandoc style.  And of course <samp>xml2rfc</samp> version two.  </p>
 <p id="rfc.section.2.1.p.2">When using Pandoc2rfc consider adding the following sentence to an Acknowledgements section: </p>
 <pre>
  This document was produced using the Pandoc2rfc tool.
-</pre>
+               </pre>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#starting-a-new-project" id="starting-a-new-project">Starting a new project</a>
 </h1>
@@ -692,6 +694,8 @@ non-existent  |                       | xsltproc
 <p> </p>
 </li>
 </ul>
+
+<p> </p>
 <p id="rfc.section.3.p.3">After that you can start editing.  </p>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#supported-features" id="supported-features">Supported Features</a>
@@ -730,6 +734,8 @@ non-existent  |                       | xsltproc
 <li>Tables with an anchor and title (<a href="#tables" class="xref">Section 7.8</a>); </li>
 <li>Indexes, by using footnotes (<a href="#indexes" class="xref">Section 7.9</a>).  </li>
 </ul>
+
+<p> </p>
 <h1 id="rfc.section.5">
 <a href="#rfc.section.5">5.</a> <a href="#unsupported-features" id="unsupported-features">Unsupported Features</a>
 </h1>
@@ -740,10 +746,12 @@ non-existent  |                       | xsltproc
 <li>Pandoc markup in the caption for figures/artwork. Pandoc markup for table captions <em>is</em> supported; </li>
 <li>crefs: for comments (no input syntax available), use HTML comments: <samp>&lt;!-- ... --&gt;</samp>; </li>
 </ul>
+
+<p> </p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a>
 </h1>
-<p id="rfc.section.6.p.1">The following people have helped to make Pandoc2rfc what it is today: Benno Overeinder, Erlend Hamnaberg, Matthijs Mekking, Trygve Laugst&#248;l.  </p>
+<p id="rfc.section.6.p.1">The following people have helped to make Pandoc2rfc what it is today: Benno Overeinder, Erlend Hamnaberg, Matthijs Mekking, Trygve Laugstoel.  </p>
 <p id="rfc.section.6.p.2">This document was prepared using Pandoc2rfc.  </p>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#pandoc-constructs" id="pandoc-constructs">Pandoc Constructs</a>
@@ -761,7 +769,7 @@ non-existent  |                       | xsltproc
 <pre>
 # Section1 One
 Bla
-</pre>
+               </pre>
 <p id="rfc.section.7.2.p.2">Converts to: <samp>&lt;section title="Section1 One" anchor="section1-one"&gt;</samp> If you have another section that is also named "Section1 One", that anchor will be called "section1-one-1", but <em>only</em> when the sections are in the <em>same</em> source file! </p>
 <p id="rfc.section.7.2.p.3">Referencing the section is done with <samp>see [](#section1-one)</samp>, as in see <a href="#section" class="xref">Section 7.2</a>.  </p>
 <h1 id="rfc.section.7.3">
@@ -776,7 +784,7 @@ A symbol list.
 
 * Item one;
 * Item two.
-</pre>
+                  </pre>
 <p id="rfc.section.7.3.1.p.1">Converts to <samp>&lt;list style="symbol"&gt;</samp>: </p>
 <p></p>
 
@@ -784,6 +792,8 @@ A symbol list.
 <li>Item one; </li>
 <li>Item two.  </li>
 </ul>
+
+<p> </p>
 <h1 id="rfc.section.7.3.2">
 <a href="#rfc.section.7.3.2">7.3.2.</a> <a href="#number" id="number">Number</a>
 </h1>
@@ -792,7 +802,7 @@ A numbered list.
 
 1. Item one;
 1. Item two.
-</pre>
+                  </pre>
 <p id="rfc.section.7.3.2.p.1">Converts to <samp>&lt;list style="numbers"&gt;</samp>: </p>
 <p></p>
 
@@ -800,6 +810,8 @@ A numbered list.
 <li>Item one; </li>
 <li>Item two.  </li>
 </ol>
+
+<p> </p>
 <h1 id="rfc.section.7.3.3">
 <a href="#rfc.section.7.3.3">7.3.3.</a> <a href="#empty" id="empty">Empty</a>
 </h1>
@@ -809,7 +821,7 @@ A list using the default list markers.
 
 #. Item one;
 #. Item two.
-</pre>
+                  </pre>
 <p id="rfc.section.7.3.3.p.2">Converts to <samp>&lt;list style="empty"&gt;</samp>: </p>
 <p></p>
 
@@ -817,6 +829,8 @@ A list using the default list markers.
 <li>Item one; </li>
 <li>Item two.  </li>
 </ul>
+
+<p> </p>
 <h1 id="rfc.section.7.3.4">
 <a href="#rfc.section.7.3.4">7.3.4.</a> <a href="#roman" id="roman">Roman</a>
 </h1>
@@ -824,7 +838,7 @@ A list using the default list markers.
 <pre>
 ii. Item one;
 ii. Item two.
-</pre>
+                  </pre>
 <p id="rfc.section.7.3.4.p.2">Converts to <samp>&lt;list style="format %i."&gt;</samp>: </p>
 <p></p>
 
@@ -834,11 +848,13 @@ ii. Item two.
 <dt>ii.   </dt>
 <dd>Item two.  </dd>
 </dl>
+
+<p> </p>
 <p id="rfc.section.7.3.4.p.4">If you use uppercase Roman numerals, they convert to a different style: </p>
 <pre>
 II. Item one;
 II. Item two.
-</pre>
+                  </pre>
 <p id="rfc.section.7.3.4.p.5">Yields <samp>&lt;list style="format (%d) "&gt;</samp>: </p>
 <p></p>
 
@@ -848,6 +864,8 @@ II. Item two.
 <dt>(2)   </dt>
 <dd>Item two.  </dd>
 </dl>
+
+<p> </p>
 <h1 id="rfc.section.7.3.5">
 <a href="#rfc.section.7.3.5">7.3.5.</a> <a href="#letter" id="letter">Letter</a>
 </h1>
@@ -855,7 +873,7 @@ II. Item two.
 <pre>
 a.  Item one;
 b.  Item two.
-</pre>
+                  </pre>
 <p id="rfc.section.7.3.5.p.2">Converts to <samp>&lt;list style="letters"&gt;</samp>: </p>
 <p></p>
 
@@ -863,11 +881,13 @@ b.  Item two.
 <li>Item one; </li>
 <li>Item two.  </li>
 </ol>
+
+<p> </p>
 <p id="rfc.section.7.3.5.p.4">Uppercasing the letters works too (note two spaces after the letter.  </p>
 <pre>
 A.  Item one;
 B.  Item two.
-</pre>
+                  </pre>
 <p id="rfc.section.7.3.5.p.5">Becomes: </p>
 <p></p>
 
@@ -877,6 +897,8 @@ B.  Item two.
 <dt>B.   </dt>
 <dd>Item two.  </dd>
 </dl>
+
+<p> </p>
 <h1 id="rfc.section.7.3.6">
 <a href="#rfc.section.7.3.6">7.3.6.</a> <a href="#hanging" id="hanging">Hanging</a>
 </h1>
@@ -892,7 +914,7 @@ More stuff, because item is difficult to explain.
 Second item that needs clarification:
 
 :   Explanation two
-</pre>
+                  </pre>
 <p id="rfc.section.7.3.6.p.2">Converts to: <samp>&lt;list style="hanging"&gt;</samp> and <samp>&lt;t hangText="First item that..."&gt;</samp> </p>
 <p id="rfc.section.7.3.6.p.3">If you want a newline after the hangTexts, search for the string <samp>OPTION</samp> in <samp>transform.xsl</samp> and uncomment it.  </p>
 <h1 id="rfc.section.7.4">
@@ -901,7 +923,7 @@ Second item that needs clarification:
 <p id="rfc.section.7.4.p.1">Indent the paragraph with 4 spaces.  </p>
 <pre>
 Like this
-</pre>
+               </pre>
 <p id="rfc.section.7.4.p.2">Converts to: <samp>&lt;figure&gt;&lt;artwork&gt; ...</samp> Note that <samp>xml2rfc</samp> supports a caption with <samp>&lt;artwork&gt;</samp>. Pandoc does not support this, but Pandoc2rfc does. If you add a <samp>@Figure: some text</samp> as the last line, the artwork gets a <samp>title</samp> attribute with the text after <samp>@Figure:</samp>. It will also be possible to reference the artwork. If a caption is supplied the artwork will be centered. If a caption is needed but the figure should not be centered use <samp>@figure:\</samp>.  </p>
 <h1 id="rfc.section.7.4.1">
 <a href="#rfc.section.7.4.1">7.4.1.</a> <a href="#references" id="references">References</a>
@@ -914,15 +936,17 @@ Like this
 <li>Spaces and single quotes (') are translated to a minus <samp>-</samp>; </li>
 <li>Uppercase letters translated to lowercase.  </li>
 </ul>
+
+<p> </p>
 <p id="rfc.section.7.4.1.p.3">So the first artwork with a caption will get <samp>fig:a-minimal-</samp> as a reference. See for instance <a href="#fig-a-minimal-" class="xref">Figure 2</a>.  </p>
-<p id="rfc.section.7.4.1.p.4">This anchoring is completely handled from within the <samp>xslt</samp>. Note that duplicate anchors are an XML validation error which will make <samp>xml2rfc</samp> fail.  </p>
+<p id="rfc.section.7.4.1.p.4">This anchoring is completely handled from within the <samp>xslt</samp>.  Note that duplicate anchors are an XML validation error which will make <samp>xml2rfc</samp> fail.  </p>
 <h1 id="rfc.section.7.5">
 <a href="#rfc.section.7.5">7.5.</a> <a href="#block-quote" id="block-quote">Block Quote</a>
 </h1>
 <p id="rfc.section.7.5.p.1">Any paragraph like: </p>
 <pre>
 &gt; quoted text
-</pre>
+               </pre>
 <p id="rfc.section.7.5.p.2">Converts to: <samp>&lt;t&gt;&lt;list style="empty"&gt; ...</samp> paragraph, making it indented.  </p>
 <h1 id="rfc.section.7.6">
 <a href="#rfc.section.7.6">7.6.</a> <a href="#references-1" id="references-1">References</a>
@@ -933,7 +957,7 @@ Like this
 <p id="rfc.section.7.6.1.p.1">Any reference like: </p>
 <pre>
 [Click here](URI)
-</pre>
+                  </pre>
 <p id="rfc.section.7.6.1.p.2">Converts to: <samp>&lt;ulink target="URI"&gt;Click here ...</samp> </p>
 <h1 id="rfc.section.7.6.2">
 <a href="#rfc.section.7.6.2">7.6.2.</a> <a href="#internal" id="internal">Internal</a>
@@ -941,17 +965,17 @@ Like this
 <p id="rfc.section.7.6.2.p.1">Any reference like: </p>
 <pre>
 [Click here](#localid)
-</pre>
+                  </pre>
 <p id="rfc.section.7.6.2.p.2">Converts to: <samp>&lt;link target="localid"&gt;Click here ...</samp> </p>
 <p id="rfc.section.7.6.2.p.3">For referring to RFCs (for which you manually need add the reference source in the template, with an external XML entity), you can just use: </p>
 <pre>
 [](#RFC2119)
-</pre>
+                  </pre>
 <p id="rfc.section.7.6.2.p.4">And it does the right thing. Referencing sections is done with: </p>
 <pre>
 See [](#pandoc-constructs)
-</pre>
-<p id="rfc.section.7.6.2.p.5">The word 'Section' is inserted automatically: ... see <a href="#pandoc-constructs" class="xref">Section 7</a> ... For referencing figures/artworks see <a href="#figureartwork" class="xref">Section 7.4</a>. For referencing tables see <a href="#tables" class="xref">Section 7.8</a>.  </p>
+                  </pre>
+<p id="rfc.section.7.6.2.p.5">The word 'Section' is inserted automatically: ... see <a href="#pandoc-constructs" class="xref">Section 7</a> ... For referencing figures/artworks see <a href="#figureartwork" class="xref">Section 7.4</a>.  For referencing tables see <a href="#tables" class="xref">Section 7.8</a>.  </p>
 <h1 id="rfc.section.7.7">
 <a href="#rfc.section.7.7">7.7.</a> <a href="#spanx-styles" id="spanx-styles">Spanx Styles</a>
 </h1>
@@ -972,13 +996,13 @@ See [](#pandoc-constructs)
         1     1         1         1       
 
   Table: A caption describing the table.
-  </pre>
+               </pre>
 <p class="figure">Figure 3: A caption describing the figure describing the table.</p>
-<p id="rfc.section.7.8.p.2">Is translated to <samp>&lt;texttable&gt;</samp> element in <samp>xml2rfc</samp>. You can choose multiple styles as input, but they all are converted to the same style (plain <samp>&lt;texttable&gt;</samp>) table in <samp>xml2rfc</samp>. The column alignment is copied over to the generated XML.  </p>
+<p id="rfc.section.7.8.p.2">Is translated to <samp>&lt;texttable&gt;</samp> element in <samp>xml2rfc</samp>.  You can choose multiple styles as input, but they all are converted to the same style (plain <samp>&lt;texttable&gt;</samp>) table in <samp>xml2rfc</samp>. The column alignment is copied over to the generated XML.  </p>
 <h1 id="rfc.section.7.8.1">
 <a href="#rfc.section.7.8.1">7.8.1.</a> <a href="#references-2" id="references-2">References</a>
 </h1>
-<p id="rfc.section.7.8.1.p.1">The caption is <em>always</em> translated to a <samp>title</samp> attribute. If a table has a caption, it will <em>also</em> get a reference. The reference anchor attribute will be: <samp>tab-</samp> + <samp>first 10 (normalized) characters from the caption</samp>.  Where normalized means: </p>
+<p id="rfc.section.7.8.1.p.1">The caption is <em>always</em> translated to a <samp>title</samp> attribute. If a table has a caption, it will <em>also</em> get a reference.  The reference anchor attribute will be: <samp>tab-</samp> + <samp>first 10 (normalized) characters from the caption</samp>.  Where normalized means: </p>
 <p></p>
 
 <ul>
@@ -986,8 +1010,10 @@ See [](#pandoc-constructs)
 <li>Spaces and single quotes (') are translated to a minus <samp>-</samp>; </li>
 <li>Uppercase letters translated to lowercase.  </li>
 </ul>
+
+<p> </p>
 <p id="rfc.section.7.8.1.p.3">So the first table with a caption will get <samp>tab-a-caption-</samp> for reference use. See for instance </p>
-<p id="rfc.section.7.8.1.p.4">This anchoring is completely handled from within the <samp>xslt</samp>. Note that duplicate anchors are an XML validation error which will make <samp>xml2rfc</samp> fail.  </p>
+<p id="rfc.section.7.8.1.p.4">This anchoring is completely handled from within the <samp>xslt</samp>.  Note that duplicate anchors are an XML validation error which will make <samp>xml2rfc</samp> fail.  </p>
 <h1 id="rfc.section.7.9">
 <a href="#rfc.section.7.9">7.9.</a> <a href="#indexes" id="indexes">Indexes</a>
 </h1>
@@ -996,15 +1022,15 @@ See [](#pandoc-constructs)
 [^1]
 
 [^1]: footnote text
-</pre>
+               </pre>
 <p id="rfc.section.7.9.p.2">We re-use this syntax for the <samp>&lt;iref&gt;</samp> tag.  The above text translates to: </p>
 <pre>
 &lt;iref item="footnote text"/&gt;
-</pre>
+               </pre>
 <p id="rfc.section.7.9.p.3">Sub items are also supported. Use an exclamation mark (<samp>!</samp>) to separate them: </p>
 <pre>
 [^1]: item!sub item
-</pre>
+               </pre>
 <h1 id="rfc.section.8">
 <a href="#rfc.section.8">8.</a> <a href="#usage-guidelines" id="usage-guidelines">Usage guidelines</a>
 </h1>
@@ -1015,7 +1041,7 @@ See [](#pandoc-constructs)
 <pre>
 allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
         cat $@ &gt; allsections.pdc
-</pre>
+               </pre>
 <p id="rfc.section.8.1.p.2">And then process <samp>allsection.pdc</samp> in the normal way.  </p>
 <h1 id="rfc.section.8.2">
 <a href="#rfc.section.8.2">8.2.</a> <a href="#setting-the-title" id="setting-the-title">Setting the title</a>
@@ -1023,11 +1049,11 @@ allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
 <p id="rfc.section.8.2.p.1">If you use double quotes in the documents title in the <samp>docName</samp> attribute, like: </p>
 <pre>
 &lt;rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02"&gt;
-</pre>
+               </pre>
 <p id="rfc.section.8.2.p.2">The Makefile will pick this up automatically and make a symbolic link: </p>
 <pre>
 draft-gieben-writing-rfcs-pandoc-00.txt -&gt; draft.txt
-</pre>
+               </pre>
 <p id="rfc.section.8.2.p.3">This makes uploading the file to the i-d tracker a bit easier.  </p>
 <h1 id="rfc.section.8.3">
 <a href="#rfc.section.8.3">8.3.</a> <a href="#uploading-the-xmltxt" id="uploading-the-xmltxt">Uploading the XML/txt</a>
@@ -1086,13 +1112,15 @@ draft-gieben-writing-rfcs-pandoc-00.txt -&gt; draft.txt
 <p></p>
 
 <ul class="empty"><li>This is a blockquote, how does it look? </li></ul>
+
+<p> </p>
 <h1 id="rfc.appendix.A.4">
 <a href="#rfc.appendix.A.4">A.4.</a> <a href="#verbatim-code-blocks" id="verbatim-code-blocks">Verbatim code blocks</a>
 </h1>
 <pre>
 A verbatim code block
 jkasjksajassjasjsajsajkas
-</pre>
+               </pre>
 <h1 id="rfc.appendix.A.5">
 <a href="#rfc.appendix.A.5">A.5.</a> <a href="#reference-tests" id="reference-tests">Reference Tests</a>
 </h1>
@@ -1108,6 +1136,8 @@ jkasjksajassjasjsajsajkas
 <li>double asterisks: <strong>double asterisks</strong> </li>
 <li>backticks: <samp>backticks</samp> </li>
 </ul>
+
+<p> </p>
 <h1 id="rfc.appendix.A.7">
 <a href="#rfc.appendix.A.7">A.7.</a> <a href="#list-tests" id="list-tests">List Tests</a>
 </h1>
@@ -1122,6 +1152,8 @@ jkasjksajassjasjsajsajkas
 <p> </p>
 </li>
 </ol>
+
+<p> </p>
 <p id="rfc.section.A.7.p.2">And the other around.  </p>
 <p></p>
 
@@ -1134,6 +1166,8 @@ jkasjksajassjasjsajsajkas
 <p> </p>
 </li>
 </ul>
+
+<p> </p>
 <p id="rfc.section.A.7.p.4">Description lists: </p>
 <p></p>
 
@@ -1143,6 +1177,8 @@ jkasjksajassjasjsajsajkas
 <dt>Another item to explain:</dt>
 <dd style="margin-left: 8">More explaining.  <br><br> Multiple paragraphs in such a list.  </dd>
 </dl>
+
+<p> </p>
 <p id="rfc.section.A.7.p.6">lists in description lists.  </p>
 <p></p>
 
@@ -1171,6 +1207,8 @@ jkasjksajassjasjsajsajkas
 <dt>Another item to explain again:</dt>
 <dd style="margin-left: 8">More explaining </dd>
 </dl>
+
+<p> </p>
 <p id="rfc.section.A.7.p.8">list with description lists.  </p>
 <p></p>
 
@@ -1185,10 +1223,12 @@ jkasjksajassjasjsajsajkas
 </li>
 <li>Go'bye </li>
 </ol>
+
+<p> </p>
 <p id="rfc.section.A.7.p.10">Multiple paragraphs in a list.  </p>
 <pre>
 Artwork
-</pre>
+                        </pre>
 <p></p>
 
 <ol>
@@ -1197,10 +1237,12 @@ Artwork
 <li>Another item with some artwork, indented by 8 spaces.  </li>
 <li>Final item.  </li>
 </ol>
+
+<p> </p>
 <p id="rfc.section.A.7.p.12">xml2rfc does not allow this, so the second paragraph is faked with a </p>
 <pre>
 &lt;vspace blankLines='1'&gt;
-</pre>
+               </pre>
 <p id="rfc.section.A.7.p.13">Ordered lists.  </p>
 <p></p>
 
@@ -1208,6 +1250,8 @@ Artwork
 <li>First item </li>
 <li>Second item </li>
 </ol>
+
+<p> </p>
 <p id="rfc.section.A.7.p.15">A lowercase roman list: </p>
 <p></p>
 
@@ -1217,6 +1261,8 @@ Artwork
 <dt>ii.   </dt>
 <dd>Item 2 </dd>
 </dl>
+
+<p> </p>
 <p id="rfc.section.A.7.p.17">An uppercase roman list.  </p>
 <p></p>
 
@@ -1228,6 +1274,8 @@ Artwork
 <dt>(3)   </dt>
 <dd>Item 3 </dd>
 </dl>
+
+<p> </p>
 <p id="rfc.section.A.7.p.19">And default list markers.<a name="index.list.default%20markers"></a> </p>
 <p id="rfc.section.A.7.p.20">Some surrounding text, to make it look better.  </p>
 <p></p>
@@ -1237,6 +1285,8 @@ Artwork
 <li>Second item. So this is the second para in your list. Enjoy; </li>
 <li>Another item.  </li>
 </ul>
+
+<p> </p>
 <p id="rfc.section.A.7.p.22">Text at the end.  </p>
 <p id="rfc.section.A.7.p.23">Lowercase letters list.  </p>
 <p></p>
@@ -1245,6 +1295,8 @@ Artwork
 <li>First item </li>
 <li>Second item </li>
 </ol>
+
+<p> </p>
 <p id="rfc.section.A.7.p.25">Uppercase letters list.  </p>
 <p></p>
 
@@ -1254,12 +1306,14 @@ Artwork
 <dt>B.   </dt>
 <dd>Second item </dd>
 </dl>
+
+<p> </p>
 <p><a name="index.list.Uppercase%20Letters"></a> </p>
 <p id="rfc.section.A.7.p.28">And artwork in a description list.  </p>
 <pre>
 miek.nl.    IN  NS  a.miek.nl.                             
 a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue            
-</pre>
+                     </pre>
 <p></p>
 
 <dl>
@@ -1268,6 +1322,8 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
 <dt>Item2:</dt>
 <dd style="margin-left: 8">Another description </dd>
 </dl>
+
+<p> </p>
 <p id="rfc.section.A.7.p.30">List with a sublist with a paragraph above the sublist </p>
 <p></p>
 
@@ -1281,6 +1337,8 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
 <p> </p>
 </li>
 </ol>
+
+<p> </p>
 <h1 id="rfc.appendix.A.8">
 <a href="#rfc.appendix.A.8">A.8.</a> <a href="#anchor-table-tests" id="anchor-table-tests">Table Tests</a>
 </h1>
@@ -1394,10 +1452,10 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
 <p id="rfc.section.A.8.p.3">This table has no caption, and therefor no reference. But you can refer to some of the other tables, with for instance: </p>
 <pre>
 See [](#tab-here-s-the)
-</pre>
+               </pre>
 <p id="rfc.section.A.8.p.4">Which will become "See <a href="#tab-here-s-the" class="xref">Table 2</a>".  </p>
 <p><a name="index.table.grid"></a> </p>
-<p id="rfc.section.A.8.p.6">We should also be able to refer to the table numbers directly, to say things like 'Look at Tables <a href="#tab-demonstrat" class="xref">1</a>, <a href="#tab-here-s-the" class="xref">2</a> and <a href="#tab-sample-gri" class="xref">3</a>.'</p>
+<p id="rfc.section.A.8.p.6">We should also be able to refer to the table numbers directly, to say things like 'Look at Tables <a href="#tab-demonstrat" class="xref">1</a>, <a href="#tab-here-s-the" class="xref">2</a> and <a href="#tab-sample-gri" class="xref">3</a>.' </p>
 <h1 id="rfc.appendix.A.9">
 <a href="#rfc.appendix.A.9">A.9.</a> <a href="#numbered-examples" id="numbered-examples">Numbered examples</a>
 </h1>
@@ -1405,6 +1463,8 @@ See [](#tab-here-s-the)
 <p></p>
 
 <ol><li>Another bla bla..  </li></ol>
+
+<p> </p>
 <p id="rfc.section.A.9.p.3">as (1) shows...  </p>
 <h1 id="rfc.appendix.A.10">
 <a href="#rfc.appendix.A.10">A.10.</a> <a href="#anchor-figure-tests" id="anchor-figure-tests">Figure tests</a>
@@ -1416,7 +1476,7 @@ This is a figure
 This is a figure
 This is a figure
 This is a figure
-</pre>
+               </pre>
 <p class="figure">Figure 4: This is the caption, with text in `typewriter`. Which isnt converted to a &lt;spanx&gt; style, because this is copied as-is.</p>
 <p id="rfc.section.A.10.p.1">And how a figure that is not centered, do to using <samp>figure</samp> and not <samp>Figure</samp>.  </p>
 <div id="rfc.figure.5"></div>
@@ -1424,14 +1484,14 @@ This is a figure
 <pre>
 This is a figure
 This is a figure
-</pre>
+               </pre>
 <p class="figure">Figure 5: A non centered figure.</p>
 <p id="rfc.section.A.10.p.2">Test the use of <samp>@title</samp>: </p>
 <pre>
 This is a figure with a title
 This is a figure with a title
 @title: and here it is: a title, don't mess it up *
-</pre>
+               </pre>
 <h1 id="rfc.appendix.A.11">
 <a href="#rfc.appendix.A.11">A.11.</a> <a href="#verse-tests" id="verse-tests">Verse tests</a>
 </h1>

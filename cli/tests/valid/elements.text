@@ -47,7 +47,10 @@ Table of Contents
    3.  Ordered list with sub-elements
    4.  Definition list with sub-elements
    5.  Table
-   6.  References
+   6.  Unicode Literals
+       6.1.  Single Characters
+       6.2.  Character Strings
+   7.  References
    Authors' Addresses
 
 1.  RFC 2119 key words
@@ -347,7 +350,186 @@ Table of Contents
                                                             Aligned
                                                              right
 
-6.  References
+6.  Unicode Literals
+
+6.1.  Single Characters
+
+   Expansion "num":
+      Example XML:
+
+      Use the character <u format="num">Δ</u>.
+
+      expands to:
+
+      Use the character U+0394.
+
+   Expansion "name":
+      Example XML:
+
+      Use the character <u format="name">Δ</u>.
+
+      expands to:
+
+      Use the character GREEK CAPITAL LETTER DELTA.
+
+   Expansion "num-lit":
+      Example XML:
+
+      Use the character <u format="num-lit">Δ</u>.
+
+      expands to:
+
+      Use the character U+0394 ("Δ").
+
+   Expansion "num-name":
+      Example XML:
+
+      Use the <u format="{num} character ({name})">Δ</u>.
+
+      expands to:
+
+      Use the U+0394 character (GREEK CAPITAL LETTER DELTA).
+
+   Expansion "num-lit-name":
+      Example XML:
+
+      Use the character <u format="num-lit-name">Δ</u>.
+
+      expands to:
+
+      Use the character U+0394 ("Δ", GREEK CAPITAL LETTER DELTA).
+
+   Expansion "num-name-lit":
+      Example XML:
+
+      Use the character <u format="num-name-lit">Δ</u>.
+
+      expands to:
+
+      Use the character U+0394 (GREEK CAPITAL LETTER DELTA, "Δ").
+
+   Expansion "ascii-lit-num":
+      Example XML:
+
+      Use the character <u ascii="Delta" format="ascii-lit-num" ascii="Delta">Δ</u>.
+
+      expands to:
+
+      Use the character "Delta" ("Δ", U+0394).
+
+   Expansion "lit-name-num":
+      Example XML:
+
+      Use the <u format="{lit} character ({name}, {num})">Δ</u>.
+
+      expands to:
+
+      Use the "Δ" character (GREEK CAPITAL LETTER DELTA, U+0394)
+
+   Expansion "lit-num":
+      Example XML:
+
+      Use the <u format="{lit} character ({num})">Δ</u>.
+
+      expands to:
+
+      Use the "Δ" character (U+0394).
+
+6.2.  Character Strings
+
+   Expansion "num-lit":
+      Example XML:
+
+      For example, the characters <u ascii="STPETER" format="num-lit">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+      the Cherokee block look similar to the ASCII characters "STPETER".
+
+      expands to:
+
+      For example, the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2
+      U+13AC U+13D2 ("ᏚᎢᎵᎬᎢᎬᏒ") from the Cherokee block look similar to
+      the ASCII characters "STPETER".
+
+   Expansion "num-name":
+      Example XML:
+
+      For example, the characters <u ascii="STPETER" format="num-name">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+      the Cherokee block look similar to the ASCII characters "STPETER".
+
+      expands to:
+
+      For example, the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2
+      U+13AC U+13D2 (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE
+      LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER
+      GV, CHEROKEE LETTER SV) from the Cherokee block look similar to
+      the ASCII characters "STPETER".
+
+   Expansion "num-lit-name":
+      Example XML:
+
+      For example, the characters <u ascii="STPETER" format="num-lit-name">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+      the Cherokee block look similar to the ASCII characters "STPETER".
+
+      expands to:
+
+      For example, the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2
+      U+13AC U+13D2 ("ᏚᎢᎵᎬᎢᎬᏒ", CHEROKEE LETTER DU, CHEROKEE LETTER I,
+      CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I,
+      CHEROKEE LETTER GV, CHEROKEE LETTER SV) from the Cherokee block
+      look similar to the ASCII characters "STPETER".
+
+   Expansion "num-name-lit":
+      Example XML:
+
+      For example, the characters <u ascii="STPETER" format="num-name-lit">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+      the Cherokee block look similar to the ASCII characters "STPETER".
+
+      expands to:
+
+      For example, the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2
+      U+13AC U+13D2 (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE
+      LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER
+      GV, CHEROKEE LETTER SV, "ᏚᎢᎵᎬᎢᎬᏒ") from the Cherokee block look
+      similar to the ASCII characters "STPETER".
+
+   Expansion "ascii-lit-num":
+      Example XML:
+
+      For example, the characters <u ascii="STPETER" format="ascii-lit-num">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+      the Cherokee block look similar to the ASCII characters "STPETER".
+
+      expands to:
+
+      For example, the characters "STPETER" ("ᏚᎢᎵᎬᎢᎬᏒ", U+13DA U+13A2
+      U+13B5 U+13AC U+13A2 U+13AC U+13D2) from the Cherokee block look
+      similar to the ASCII characters "STPETER".
+
+   Expansion "lit-name-num":
+      Example XML:
+
+      For example, the <u ascii="STPETER" format="{lit} characters ({name}, {num})">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+      the Cherokee block look similar to the ASCII characters "STPETER".
+
+      expands to:
+
+      For example, the "ᏚᎢᎵᎬᎢᎬᏒ" characters (CHEROKEE LETTER DU,
+      CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV,
+      CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV, U+13DA
+      U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2) from the Cherokee block
+      look similar to the ASCII characters "STPETER".
+
+   Expansion "lit-num":
+      Example XML:
+
+      For example, the <u ascii="STPETER" format="{lit} characters ({num})">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+      the Cherokee block look similar to the ASCII characters "STPETER".
+
+      expands to:
+
+      For example, the "ᏚᎢᎵᎬᎢᎬᏒ" characters (U+13DA U+13A2 U+13B5 U+13AC
+      U+13A2 U+13AC U+13D2) from the Cherokee block look similar to the
+      ASCII characters "STPETER".
+
+7.  References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
