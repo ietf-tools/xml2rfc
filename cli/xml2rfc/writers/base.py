@@ -24,7 +24,7 @@ except ImportError:
 from xml2rfc import strings
 from xml2rfc.util.date import extract_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion
-from xml2rfc.util.unicode import unicode_content_tags, downcode
+#from xml2rfc.util.unicode import unicode_content_tags, downcode
 
 default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False, debug=False,
                             liberal=False, rfc=False, legacy_date_format=True, strict=False,
