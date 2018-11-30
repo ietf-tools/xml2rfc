@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rfc submissionType='independent' ipr="trust200902" docName="elements-00" category="info" xmlns:xi="http://www.w3.org/2001/XInclude">
+<?v3xml2rfc silence="Found non-ascii characters outside of" ?>
+<rfc submissionType='independent' ipr="trust200902" docName="elements-00" category="info" xmlns:xi="http://www.w3.org/2001/XInclude" version="3">
    <front>
       <title>Xml2rfc Vocabulary V3 Elements Combined</title>
       <author fullname="An Author">
@@ -26,6 +27,7 @@
       </author>
       <author asciiFullname="Hanako Tanaka" fullname="田中花子 様">
 	 <address>
+	    <?v3xml2rfc silence=".*[Pp]ostal address" ?>
 	    <postal>
 	       <extaddr ascii="3-kai B-gōshitsu">3階B号室</extaddr>
 	       <street ascii="4-3-2 Hakusan, Bunkyō-ku">文京区 白山4丁目3番2号</street>
@@ -35,6 +37,7 @@
 	    </postal>
 	 </address>
       </author>
+      <?v3xml2rfc silence="The document date .*? is more than 3 days away from today's date" ?>
       <date year="2018" month="July" day="12"></date>
    </front>
    <middle>
@@ -309,6 +312,177 @@ Definition list, third bullet, fourth element:
 	   </tbody>
 	 </table>
 
+      </section>
+      <section>
+	 <name>Unicode Literals</name>
+	 <section>
+	    <name>Single Characters</name>
+	    <dl newline="true">
+	      <dt>Expansion "num":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the character <u format="num">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the character <u format="num">Δ</u>.
+		 </t>
+	      </dd>
+	      <dt>Expansion "name":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the character <u format="name">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the character <u format="name">Δ</u>.
+		 </t>
+	      </dd>
+	      <dt>Expansion "num-lit":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the character <u format="num-lit">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the character <u format="num-lit">Δ</u>.
+		 </t>
+	      </dd>
+	      <dt>Expansion "num-name":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the <u format="{num} character ({name})">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the <u format="{num} character ({name})">Δ</u>.
+		 </t>
+	      </dd>
+	      <dt>Expansion "num-lit-name":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the character <u format="num-lit-name">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the character <u format="num-lit-name">Δ</u>.
+		 </t>
+	      </dd>
+	      <dt>Expansion "num-name-lit":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the character <u format="num-name-lit">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the character <u format="num-name-lit">Δ</u>.
+		 </t>
+	      </dd>
+	      <dt>Expansion "ascii-lit-num":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the character <u ascii="Delta" format="ascii-lit-num" ascii="Delta">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the character <u ascii="Delta" format="ascii-lit-num" >Δ</u>.
+		 </t>
+	      </dd>
+	      <dt>Expansion "lit-name-num":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the <u format="{lit} character ({name}, {num})">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the <u format="{lit} character ({name}, {num})">Δ</u>
+		 </t>
+	      </dd>
+	      <dt>Expansion "lit-num":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+		 <artwork><![CDATA[Use the <u format="{lit} character ({num})">Δ</u>.]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    Use the <u format="{lit} character ({num})">Δ</u>.
+		 </t>
+	      </dd>
+	    </dl>
+	 </section>
+	 <section>
+	    <name>Character Strings</name>
+	    <dl newline="true">
+	      <dt>Expansion "num-lit":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+<artwork><![CDATA[
+For example, the characters <u ascii="STPETER" format="num-lit">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+the Cherokee block look similar to the ASCII characters "STPETER".]]></artwork>
+	         <t>expands to:</t>
+		 <t>
+		    For example, the characters <u ascii="STPETER" format="num-lit">ᏚᎢᎵᎬᎢᎬᏒ</u> from the Cherokee block look similar to the ASCII characters "STPETER".
+		 </t>
+	      </dd>
+	      <dt>Expansion "num-name":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+<artwork><![CDATA[
+For example, the characters <u ascii="STPETER" format="num-name">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+the Cherokee block look similar to the ASCII characters "STPETER".]]></artwork>
+	         <t>expands to:</t>
+		 <t>
+		    For example, the characters <u ascii="STPETER" format="num-name">ᏚᎢᎵᎬᎢᎬᏒ</u> from the Cherokee block look similar to the ASCII characters "STPETER".
+		 </t>
+	      </dd>
+	      <dt>Expansion "num-lit-name":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+<artwork><![CDATA[
+For example, the characters <u ascii="STPETER" format="num-lit-name">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+the Cherokee block look similar to the ASCII characters "STPETER".]]></artwork>
+	         <t>expands to:</t>
+		 <t>
+		    For example, the characters <u ascii="STPETER" format="num-lit-name">ᏚᎢᎵᎬᎢᎬᏒ</u> from the Cherokee block look similar to the ASCII characters "STPETER".
+		 </t>
+	      </dd>
+	      <dt>Expansion "num-name-lit":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+<artwork><![CDATA[
+For example, the characters <u ascii="STPETER" format="num-name-lit">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+the Cherokee block look similar to the ASCII characters "STPETER".]]></artwork>
+	         <t>expands to:</t>
+		 <t>
+		    For example, the characters <u ascii="STPETER" format="num-name-lit">ᏚᎢᎵᎬᎢᎬᏒ</u> from the Cherokee block look similar to the ASCII characters "STPETER".
+		 </t>
+	      </dd>
+	      <dt>Expansion "ascii-lit-num":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+<artwork><![CDATA[
+For example, the characters <u ascii="STPETER" format="ascii-lit-num">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+the Cherokee block look similar to the ASCII characters "STPETER".]]></artwork>
+	         <t>expands to:</t>
+		 <t>
+		    For example, the characters <u ascii="STPETER" format="ascii-lit-num" >ᏚᎢᎵᎬᎢᎬᏒ</u> from the Cherokee block look similar to the ASCII characters "STPETER".
+		 </t>
+	      </dd>
+	      <dt>Expansion "lit-name-num":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+<artwork><![CDATA[
+For example, the <u ascii="STPETER" format="{lit} characters ({name}, {num})">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+the Cherokee block look similar to the ASCII characters "STPETER".]]></artwork>
+	         <t>expands to:</t>
+		 <t>
+		    For example, the <u ascii="STPETER" format="{lit} characters ({name}, {num})">ᏚᎢᎵᎬᎢᎬᏒ</u> from the Cherokee block look similar to the ASCII characters "STPETER".
+		 </t>
+	      </dd>
+	      <dt>Expansion "lit-num":</dt>
+	      <dd>
+		 <t>Example XML:</t>
+<artwork><![CDATA[
+For example, the <u ascii="STPETER" format="{lit} characters ({num})">ᏚᎢᎵᎬᎢᎬᏒ</u> from
+the Cherokee block look similar to the ASCII characters "STPETER".]]></artwork>
+		 <t>expands to:</t>
+		 <t>
+		    For example, the <u ascii="STPETER" format="{lit} characters ({num})">ᏚᎢᎵᎬᎢᎬᏒ</u> from the Cherokee block look similar to the ASCII characters "STPETER".
+		 </t>
+	      </dd>
+	    </dl>
+	 </section>
       </section>
    </middle>
    <back>
