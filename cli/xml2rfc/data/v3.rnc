@@ -77,12 +77,13 @@
      element author {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
+       attribute anchor { xsd:ID }?,
        attribute initials { text }?,
        attribute asciiInitials { text }?,
        attribute surname { text }?,
        attribute asciiSurname { text }?,
        attribute fullname { text }?,
-       attribute role { "editor" }?,
+       attribute role { "editor" | "contributor" }?,
        attribute asciiFullname { text }?,
        organization?,
        address?
@@ -115,15 +116,15 @@
        attribute xml:lang { text }?,
        ((city | code | country | region | street)* 
         | postalLine+
-        | (country 
-	   & region?
-	   & city? 
-	   & cityarea? 
-	   & code? 
-	   & sortingcode? 
-	   & pobox?
-	   & street*
-	   & extaddr*))
+        | (city? 
+           & cityarea? 
+           & code? 
+           & country 
+           & extaddr*
+           & pobox?
+           & region?
+           & sortingcode? 
+           & street*))
      }
 
    extaddr =
@@ -374,6 +375,7 @@
         | sub
         | sup
         | tt
+        | u
         | vspace
         | xref)*
      }
@@ -407,6 +409,7 @@
            | sub
            | sup
            | tt
+           | u
            | xref)+)
      }
 
@@ -469,6 +472,7 @@
            | sub
            | sup
            | tt
+           | u
            | xref)+)
      }
 
@@ -524,6 +528,7 @@
            | sub
            | sup
            | tt
+           | u
            | xref)+)
      }
 
@@ -745,6 +750,7 @@
         | sub
         | sup
         | tt
+        | u
         | xref)*
      }
 
@@ -836,6 +842,7 @@
            | sub
            | sup
            | tt
+           | u
            | xref)*)
      }
 
@@ -860,6 +867,7 @@
            | sub
            | sup
            | tt
+           | u
            | xref)*)
      }
 
@@ -950,6 +958,7 @@
        attribute target { text }?,
        [ a:defaultValue = "true" ]
        attribute quoteTitle { "true" | "false" }?,
+       attribute quote-title { "true" | "false" }?,
        stream?,
        front,
        (annotation | format | refcontent | seriesInfo)*
@@ -1008,6 +1017,7 @@
         | sub
         | sup
         | tt
+        | u
         | xref)*
      }
 
@@ -1019,3 +1029,12 @@
      }
    start |= rfc
 
+   u = 
+     element u {
+       attribute anchor { xsd:ID }?,
+       attribute ascii { text }?,
+       [ a:defaultValue = "lit-name-num" ]
+       attribute format { text }?,
+       attribute pn { xsd:ID }?,
+       text
+     }

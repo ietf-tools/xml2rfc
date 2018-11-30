@@ -201,6 +201,11 @@
         <attribute name="xml:lang"/>
       </optional>
       <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="initials"/>
       </optional>
       <optional>
@@ -217,7 +222,10 @@
       </optional>
       <optional>
         <attribute name="role">
-          <value>editor</value>
+          <choice>
+            <value>editor</value>
+            <value>contributor</value>
+          </choice>
         </attribute>
       </optional>
       <optional>
@@ -298,10 +306,6 @@
           <ref name="postalLine"/>
         </oneOrMore>
         <interleave>
-          <ref name="country"/>
-          <optional>
-            <ref name="region"/>
-          </optional>
           <optional>
             <ref name="city"/>
           </optional>
@@ -311,17 +315,21 @@
           <optional>
             <ref name="code"/>
           </optional>
-          <optional>
-            <ref name="sortingcode"/>
-          </optional>
+          <ref name="country"/>
+          <zeroOrMore>
+            <ref name="extaddr"/>
+          </zeroOrMore>
           <optional>
             <ref name="pobox"/>
           </optional>
+          <optional>
+            <ref name="region"/>
+          </optional>
+          <optional>
+            <ref name="sortingcode"/>
+          </optional>
           <zeroOrMore>
             <ref name="street"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="extaddr"/>
           </zeroOrMore>
         </interleave>
       </choice>
@@ -812,6 +820,7 @@
           <ref name="sub"/>
           <ref name="sup"/>
           <ref name="tt"/>
+          <ref name="u"/>
           <ref name="vspace"/>
           <ref name="xref"/>
         </choice>
@@ -899,6 +908,7 @@
             <ref name="sub"/>
             <ref name="sup"/>
             <ref name="tt"/>
+            <ref name="u"/>
             <ref name="xref"/>
           </choice>
         </oneOrMore>
@@ -1066,6 +1076,7 @@
             <ref name="sub"/>
             <ref name="sup"/>
             <ref name="tt"/>
+            <ref name="u"/>
             <ref name="xref"/>
           </choice>
         </oneOrMore>
@@ -1194,6 +1205,7 @@
             <ref name="sub"/>
             <ref name="sup"/>
             <ref name="tt"/>
+            <ref name="u"/>
             <ref name="xref"/>
           </choice>
         </oneOrMore>
@@ -1665,6 +1677,7 @@
           <ref name="sub"/>
           <ref name="sup"/>
           <ref name="tt"/>
+          <ref name="u"/>
           <ref name="xref"/>
         </choice>
       </zeroOrMore>
@@ -1899,6 +1912,7 @@
             <ref name="sub"/>
             <ref name="sup"/>
             <ref name="tt"/>
+            <ref name="u"/>
             <ref name="xref"/>
           </choice>
         </zeroOrMore>
@@ -1958,6 +1972,7 @@
             <ref name="sub"/>
             <ref name="sup"/>
             <ref name="tt"/>
+            <ref name="u"/>
             <ref name="xref"/>
           </choice>
         </zeroOrMore>
@@ -2202,6 +2217,14 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="quote-title">
+          <choice>
+            <value>true</value>
+            <value>false</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <ref name="stream"/>
       </optional>
       <ref name="front"/>
@@ -2318,6 +2341,7 @@
           <ref name="sub"/>
           <ref name="sup"/>
           <ref name="tt"/>
+          <ref name="u"/>
           <ref name="xref"/>
         </choice>
       </zeroOrMore>
@@ -2347,4 +2371,25 @@
   <start combine="choice">
     <ref name="rfc"/>
   </start>
+  <define name="u">
+    <element name="u">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <optional>
+        <attribute name="format" a:defaultValue="lit-name-num"/>
+      </optional>
+      <optional>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <text/>
+    </element>
+  </define>
 </grammar>
