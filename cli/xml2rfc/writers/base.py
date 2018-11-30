@@ -23,7 +23,8 @@ except ImportError:
 
 from xml2rfc import strings
 from xml2rfc.util.date import extract_date, format_date, get_expiry_date
-from xml2rfc.util.name import short_author_name_parts
+from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion
+from xml2rfc.util.unicode import unicode_content_tags, downcode
 
 default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False, debug=False,
                             liberal=False, rfc=False, legacy_date_format=True, strict=False,
@@ -495,6 +496,13 @@ class BaseRfcWriter:
         self._index.append(item)
         return item
 
+    def _indexAuthor(self, counter, anchor, name):
+        autoName = name
+        autoAnchor = 'rfc.author.%s' % counter
+        item = _RfcItem(autoName, autoAnchor, counter=counter, anchor=anchor, toc=False)
+        self._index.append(item)
+        return item
+
     def get_initials(self, author):
         """author is an rfc2629 author element.  Return the author initials,
         fixed up according to current flavour and policy."""
@@ -751,7 +759,9 @@ class BaseRfcWriter:
         # Keep track of previous organization and remove if redundant.
         last_org = None
         last_pos = None
-        for author in self.r.findall('front/author'):
+        authors = self.r.findall('front/author')
+        authors = [ a for a in authors if a.get('role') != 'contributor' ]
+        for author in authors:
             role = author.attrib.get('role', '')
             if role == 'editor':
                 role = ', Ed.'
@@ -1141,6 +1151,14 @@ class BaseRfcWriter:
             for t in abstract.findall('t'):
                 self.write_t_rec(t)
 
+        # Authors
+        count = 0
+        authors = self.r.findall('front/author')
+        for author in authors:
+            count += 1
+            autoName = full_author_name_expansion(author)
+            self._indexAuthor(count, author.get('anchor'), autoName)
+
         # Optional notes
         for note in self.r.findall('front/note'):
             self.write_heading(note.attrib.get('title', 'Note'))
@@ -1202,6 +1220,7 @@ class BaseRfcWriter:
 
         if self.pis['authorship'] == 'yes':
             authors = self.r.findall('front/author')
+            authors = [ a for a in authors if a.get('role') != 'contributor' ]
             autoAnchor = 'rfc.authors'
             if len(authors) > 1:
                 title = "Authors' Addresses"
@@ -1327,6 +1346,7 @@ class BaseRfcWriter:
         # Authors addresses section
         if self.pis['authorship'] == 'yes':
             authors = self.r.findall('front/author')
+            authors = [ a for a in authors if a.get('role') != 'contributor' ]
             autoAnchor = 'rfc.authors'
             if len(authors) > 1:
                 title = "Authors' Addresses"
@@ -1518,9 +1538,9 @@ class BaseV3Writer(object):
             debug.show('len(missing_handlers)')
 
     def msg(self, e, label, text):
-        lnum = getattr(e, 'sourceline')
-        file = getattr(e, 'base')
-        if lnum or file:
+        lnum = getattr(e, 'sourceline', None)
+        file = getattr(e, 'base', None)
+        if lnum:
             msg = "%s(%s): %s %s" % (file or self.xmlrfc.source, lnum, label, text, )
         else:
             msg = "(No source line available): %s %s" % (label, text, )
@@ -1529,16 +1549,25 @@ class BaseV3Writer(object):
 
     def get_relevant_pis(self, e):
         pis = []
+        # directly inside element
         for c in e.getchildren():
-            if c.tag == lxml.etree.PI and c.target == xml2rfc.NAME:
+            if c.tag == lxml.etree.PI and c.target == xml2rfc.V3_PI_TARGET:
                 pis.append(c)
+        # siblings before element
         for s in e.itersiblings(preceding=True):
-            if s.tag == lxml.etree.PI and s.target == xml2rfc.NAME:
+            if s.tag == lxml.etree.PI and s.target == xml2rfc.V3_PI_TARGET:
                 pis.append(s)
+        # ancestor's earlier siblings
         for a in e.iterancestors():
             for s in a.itersiblings(preceding=True):
-                if s.tag == lxml.etree.PI and s.target == xml2rfc.NAME:
+                if s.tag == lxml.etree.PI and s.target == xml2rfc.V3_PI_TARGET:
                     pis.append(s)
+        # before root elements
+        p = self.root.getprevious()
+        while p != None:
+            if p.tag == lxml.etree.PI and p.target == xml2rfc.V3_PI_TARGET:
+                pis.append(p)
+            p = p.getprevious()
         return pis
 
     def silenced(self, e, text):
@@ -1551,6 +1580,11 @@ class BaseV3Writer(object):
                     s = s[len(label):]
             if text.startswith(s):
                 return True
+            try:
+                if re.match(s, text):
+                    return True
+            except re.error:
+                pass
         return False
 
     def note(self, e, text, label='Note:'):
@@ -1605,7 +1639,8 @@ class BaseV3Writer(object):
 
     def footer_authors(self):
         authors = self.root.findall('front/author')
-        surnames = [ n for n in [ short_author_name_parts(a)[1] for a in authors ] if n ]
+        authors = [ a for a in authors if a.get('role') != 'contributor' ]
+        surnames = [ n for n in [ short_author_ascii_name_parts(a)[1] for a in authors ] if n ]
         if len(surnames) == 1:
             text = surnames[0]
         elif len(surnames) == 2:
@@ -1625,3 +1660,29 @@ class BaseV3Writer(object):
             text = 'Expires %s' % format_date(*parts, legacy=self.options.legacy_date_format)
         return text
 
+#     def downcode(self):
+#         """
+# 
+#         Traverses an lxml.etree and replaces unicode characters with the proper
+#         equivalents specified in rfc2629-xhtml.ent, resulting in no non-ascii
+#         characters except in elements that explicitly permit non-ascii content.
+# 
+#         """
+#         for e in self.tree.iter():
+#             if e.text:
+#                 if not e.tag in unicode_content_tags:
+#                     try:
+#                         e.text = e.text.encode('ascii')
+#                     except UnicodeEncodeError:
+#                         e.text = downcode(e.text)
+#             if e.tail:
+#                 if not e.getparent().tag in unicode_content_tags:
+#                     try:
+#                         e.tail = e.tail.encode('ascii')
+#                     except UnicodeEncodeError:
+#                         e.tail = downcode(e.tail)
+#             for key in e.attrib.keys():
+#                 try:
+#                     e.set(key, e.get(key).encode('ascii'))
+#                 except UnicodeEncodeError:
+#                     e.set(key, downcode(e.get(key)))
