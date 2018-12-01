@@ -99,20 +99,14 @@ class PrepToolWriter(BaseV3Writer):
     """ Writes an XML file where the input has been modified according to RFC 7998"""
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None, keep_pis=[]):
+        super(PrepToolWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         if not quiet is None:
             options.quiet = quiet
-        self.xmlrfc = xmlrfc
-        self.tree = xmlrfc.tree
-        self.root = self.tree.getroot()
         self.rfcnumber = self.root.get('number')
-        self.options = options
         self.liberal = liberal if liberal != None else options.accept_prepped
         self.keep_pis = keep_pis
         #
-        self.errors = []
         self.ol_counts = {}
-        self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
-        self.schema = etree.ElementTree(file=self.v3_rng_file)
         self.attribute_defaults = {}
         # 
         self.boilerplate_section_number = 0
@@ -501,15 +495,15 @@ class PrepToolWriter(BaseV3Writer):
             self.root.set('consensus', consensus)
         #
 
-
     def check_ascii_text(self, e, p):
+        self.downcode_punctuation()
         for c in self.root.iter():
             p = c.getparent()
             if c.text and not isascii(c.text):
                 show = c.text.encode('ascii', errors='replace')
                 if c.tag in unicode_content_tags:
                     if not c.get('ascii') and not c.tag in bare_unicode_tags:
-                        self.err(c, 'Found non-unicode content without matching ascii attribute in <%s>: %s' % (c.tag, show))
+                        self.err(c, 'Found non-ascii content without matching ascii attribute in <%s>: %s' % (c.tag, show))
                 else:
                     self.err(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
                     c.text = downcode(c.text)
