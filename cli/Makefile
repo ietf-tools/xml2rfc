@@ -102,7 +102,7 @@ tests/out/%.v3.$(py).html: tests/input/%.xml install
 
 %.test: %
 	@echo "Diffing $< against master"
-	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (2)"; exit 1; }
+	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (2)"; exit 1; }
 
 %.nroff.txt: %.nroff
 	@echo "Creating $@ from $<"
