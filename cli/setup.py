@@ -8,11 +8,12 @@ import os
 import re
 from codecs import open
 from setuptools import setup
+import six
 import sys
 # This workaround is necessary to make setup.py upload work with non-ascii
 # arguments to setup().  
-from six.moves import reload_module as reload
-reload(sys).setdefaultencoding("UTF-8") 
+if six.PY2:
+    reload(sys).setdefaultencoding("UTF-8") 
 
 
 description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
