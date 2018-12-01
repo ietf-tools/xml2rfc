@@ -1,3 +1,27 @@
+xml2rfc (2.15.1) ietf; urgency=medium
+
+
+  * Added downcoding of punctuation followed by wrapping of other non-ascii 
+    text in <u> for the v2v3 converter.
+
+  * Added BaseV3Writer methods: downcode() and downcode_punctuation(), 
+    get_text_tags() and get_inline_tags() (works this out from the schema), and 
+    added a list of deprecated elements.
+
+  * Fixed a typo in an error message.  Added asciification of smart quotes 
+    and other punctuation for the v3 renderers  to match that done for v2.  
+    Some class refactoring.
+
+  * Changed the workaround for non-ascii metadata in setup.py to only be 
+    active under py2.  Fixes a problem with setup.py under python 3.x
+
+  * Reverted [2786], which permitted non-ascii characters inside artwork
+    for the v2 renderers, but broke when trying to write to file without
+    utf-8 encoding.  Fixes issue #387.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  01 Dec 2018 12:18:46 -0800
+
+
 xml2rfc (2.15.0) ietf; urgency=medium
 
   * Added support for a new element <u>, to be used to insert unicode in
