@@ -13,6 +13,7 @@ from lxml import etree
 from lxml.etree import Element, Comment, CDATA
 
 from xml2rfc import log
+from xml2rfc.util.unicode import unicode_content_tags, isascii
 from xml2rfc.utils import find_duplicate_ids, hastext, isempty
 from xml2rfc.writers.base import default_options, BaseV3Writer
 
@@ -303,6 +304,7 @@ class V2v3XmlWriter(BaseV3Writer):
             './/*[self::artwork or self::dl or self::figure or self::ol or self::sourcecode or self::t or self::ul]',
             './/*[@*="yes" or @*="no"]',      # convert old attribute false/true
             '.;pretty_print_prep()',
+            '.;wrap_non_ascii()',
         ]
 
         # replace the vocabulary v2 dtd, but keep some entity definitions.
@@ -1083,3 +1085,52 @@ class V2v3XmlWriter(BaseV3Writer):
                 if c.tail.strip() == '':
                     c.tail = None
 
+    def wrap_non_ascii(self, e, p):
+        self.downcode_punctuation()
+        for e in self.tree.iter():
+            def uwrap(text, line): 
+                words = []
+                elements = []
+                ascii = None
+                for word in re.split('(\s+)', text, flags=re.U):
+                    if isascii(word):
+                        words.append(word)
+                    else:
+                        u = self.element('u', line=line)
+                        u.text = word
+                        if ascii is None:
+                            ascii = ''.join(words)
+                            words = []
+                            elements.append(u)
+                        else:
+                            elements[-1].tail = ''.join(words)
+                            words = []
+                            elements.append(u)
+                if words:
+                    if ascii is None:
+                        ascii = ''.join(words)
+                    else:
+                        elements[-1].tail = ''.join(words)
+                return ascii, elements
+            #
+            if e.text and e.tag not in unicode_content_tags:
+                    try:
+                        e.text.encode('ascii')
+                    except UnicodeEncodeError:
+                        e.text, elements = uwrap(e.text, e.sourceline)
+                        if len(e):
+                            c = e[0]
+                            for u in elements:
+                                c.addprevious(u)
+                        else:
+                            for u in elements:
+                                e.append(u)
+            if e.tail and e.getparent().tag not in unicode_content_tags:
+                    try:
+                        e.tail.encode('ascii')
+                    except UnicodeEncodeError:
+                        e.tail, elements = uwrap(e.tail, e.sourceline)
+                        for u in elements:
+                            e.addnext(u)
+                            e = u
+                                
