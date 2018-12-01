@@ -99,20 +99,14 @@ class PrepToolWriter(BaseV3Writer):
     """ Writes an XML file where the input has been modified according to RFC 7998"""
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None, keep_pis=[]):
+        super(PrepToolWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         if not quiet is None:
             options.quiet = quiet
-        self.xmlrfc = xmlrfc
-        self.tree = xmlrfc.tree
-        self.root = self.tree.getroot()
         self.rfcnumber = self.root.get('number')
-        self.options = options
         self.liberal = liberal if liberal != None else options.accept_prepped
         self.keep_pis = keep_pis
         #
-        self.errors = []
         self.ol_counts = {}
-        self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
-        self.schema = etree.ElementTree(file=self.v3_rng_file)
         self.attribute_defaults = {}
         # 
         self.boilerplate_section_number = 0
@@ -503,6 +497,7 @@ class PrepToolWriter(BaseV3Writer):
 
 
     def check_ascii_text(self, e, p):
+        self.downcode_punctuation()
         for c in self.root.iter():
             p = c.getparent()
             if c.text and not isascii(c.text):
@@ -2080,16 +2075,38 @@ class PrepToolWriter(BaseV3Writer):
     #    Pretty-format the XML output.  (Note: there are many tools that do an
     #    adequate job.)
     def pretty_print_prep(self, e, p):
-        # apply this to elements that can't appear with text, i.e., don't have
-        # any of these as parent:
-        skip_parents = set([
-            "annotation", "blockquote", "preamble", "postamble", "name", "refcontent", "c", "t",
-            "cref", "dd", "dt", "li", "td", "th", "tt", "em", "strong", "sub", "sup", ])
-        for c in e.iter():
-            p = c.getparent()
-            if p != None and p.tag in skip_parents:
-                continue
-            if c.tail != None:
-                if c.tail.strip() == '':
-                    c.tail = None        
-        ## The actual pretty-printing is done in self.write()
+        ## The actual printing is done in self.write()
+        def indent(e, i):
+            if e.tag in (etree.CDATA, ):
+                return
+            if e.tag in (etree.Comment, etree.PI, ):
+                if not e.tail:
+                    e.tail = '\n'+' '*i
+                return
+            #
+            if e.tag not in self.text_tags:
+                if len(e):
+                    e.text = '\n'+' '*(i+2)
+            elif e.tag in ['blockquote', 'li', 'dd', 'td', 'th' ]: # mixed content
+                if len(e) and e[0] not in self.inline_tags:
+                    e.text = '\n'+' '*(i+2)
+            elif e.tag in ['artwork', 'sourcecode', ]:
+                pass
+            else:
+                if len(e):
+                    z = e[-1]
+                    if z.tail and re.search(r'\n[ \t]+$', z.tail):
+                        z.tail = re.sub(r'\n[ \t]+$', '\n'+' '*(i), z.tail)
+                else:
+                    if e.text and re.search(r'\n[ \t]+$', e.text):
+                        e.text = re.sub(r'\n[ \t]+$', '\n'+' '*(i), e.text)
+            #
+            for c in e:
+                indent(c, i+2)
+            #
+            if e.tag not in self.inline_tags and e.tag not in ['artwork', 'sourcecode', ]:
+                if e.getnext() != None:
+                    e.tail = '\n'+' '*i
+                else:
+                    e.tail = '\n'+' '*(i-2)
+        indent(e, 0)

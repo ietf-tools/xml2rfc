@@ -24,7 +24,8 @@ except ImportError:
 from xml2rfc import strings
 from xml2rfc.util.date import extract_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion
-#from xml2rfc.util.unicode import unicode_content_tags, downcode
+from xml2rfc.utils import namespaces
+from xml2rfc.util.unicode import unicode_content_tags, unicode_replacements, punctuation, downcode
 
 default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False, debug=False,
                             liberal=False, rfc=False, legacy_date_format=True, strict=False,
@@ -1507,6 +1508,20 @@ class BaseRfcWriter:
 
 
         
+deprecated_element_tags = set([
+    'c',
+    'facsimile',
+    'format',
+    'list',
+    'postamble',
+    'preamble',
+    'spanx',
+    'texttable',
+    'ttcol',
+    'vspace',
+])
+
+
 class BaseV3Writer(object):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
@@ -1518,7 +1533,8 @@ class BaseV3Writer(object):
         self.index_items = []
         self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
         self.schema = lxml.etree.ElementTree(file=self.v3_rng_file)
-        self.inline_tags = set(['bcp14', 'cref', 'em', 'eref', 'iref', 'relref', 'strong', 'sub', 'sup', 'tt', 'xref'])
+        self.text_tags   = self.get_text_tags() - deprecated_element_tags
+        self.inline_tags = self.get_inline_tags() - deprecated_element_tags
         self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
         self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
         #
@@ -1612,6 +1628,30 @@ class BaseV3Writer(object):
 #         names = set([ r.get('name') for r in refs ])
 #         return names
 
+    def get_text_tags(self):
+        "Get tags that can have text content from the schema"
+        text_tags = set()
+        texts = self.schema.xpath("/x:grammar/x:define/x:element//x:text", namespaces=namespaces)
+        for t in texts:
+            element = list(t.iterancestors('{*}element'))[0]
+            name = element.get('name')
+            if not name in text_tags:
+                text_tags.add(name)
+        return text_tags
+
+    def get_inline_tags(self):
+        "Get tags that can occur within text from the schema"
+        inline_tags = set()
+        referenced = self.schema.xpath("/x:grammar/x:define/x:element//x:ref", namespaces=namespaces)
+        for ref in referenced:
+            name = ref.get('name')
+            if not name in inline_tags:
+                p = ref.getparent()
+                text = p.find('x:text', namespaces=namespaces)
+                if text != None:
+                    inline_tags.add(name)
+        return inline_tags
+
     def write(self, filename):
         raise NotImplementedError()
 
@@ -1660,29 +1700,32 @@ class BaseV3Writer(object):
             text = 'Expires %s' % format_date(*parts, legacy=self.options.legacy_date_format)
         return text
 
-#     def downcode(self):
-#         """
-# 
-#         Traverses an lxml.etree and replaces unicode characters with the proper
-#         equivalents specified in rfc2629-xhtml.ent, resulting in no non-ascii
-#         characters except in elements that explicitly permit non-ascii content.
-# 
-#         """
-#         for e in self.tree.iter():
-#             if e.text:
-#                 if not e.tag in unicode_content_tags:
-#                     try:
-#                         e.text = e.text.encode('ascii')
-#                     except UnicodeEncodeError:
-#                         e.text = downcode(e.text)
-#             if e.tail:
-#                 if not e.getparent().tag in unicode_content_tags:
-#                     try:
-#                         e.tail = e.tail.encode('ascii')
-#                     except UnicodeEncodeError:
-#                         e.tail = downcode(e.tail)
-#             for key in e.attrib.keys():
-#                 try:
-#                     e.set(key, e.get(key).encode('ascii'))
-#                 except UnicodeEncodeError:
-#                     e.set(key, downcode(e.get(key)))
+    def downcode_punctuation(self):
+        self.downcode(replacements=punctuation)
+
+    def downcode(self, replacements=unicode_replacements):
+        """
+
+        Traverses an lxml.etree and replaces unicode characters with the proper
+        equivalents specified in rfc2629-xhtml.ent, resulting in no non-ascii
+        characters except in elements that explicitly permit non-ascii content.
+
+        """
+        for e in self.tree.iter():
+            if e.text:
+                if not e.tag in unicode_content_tags:
+                    try:
+                        e.text = e.text.encode('ascii')
+                    except UnicodeEncodeError:
+                        e.text = downcode(e.text, replacements=replacements)
+            if e.tail:
+                if not e.getparent().tag in unicode_content_tags:
+                    try:
+                        e.tail = e.tail.encode('ascii')
+                    except UnicodeEncodeError:
+                        e.tail = downcode(e.tail, replacements=replacements)
+            for key in e.attrib.keys():
+                try:
+                    e.set(key, e.get(key).encode('ascii'))
+                except UnicodeEncodeError:
+                    e.set(key, downcode(e.get(key), replacements=replacements))

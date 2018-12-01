@@ -10,7 +10,8 @@ from codecs import open
 from setuptools import setup
 import sys
 # This workaround is necessary to make setup.py upload work with non-ascii
-# arguments to setup():
+# arguments to setup().  
+from six.moves import reload_module as reload
 reload(sys).setdefaultencoding("UTF-8") 
 
 
