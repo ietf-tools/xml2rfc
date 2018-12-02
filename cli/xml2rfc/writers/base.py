@@ -17,7 +17,7 @@ from optparse import Values
 
 try:
     import debug
-    assert debug
+    debug.debug = True
 except ImportError:
     pass
 
@@ -27,10 +27,36 @@ from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_ex
 from xml2rfc.util.unicode import punctuation, unicode_replacements, unicode_content_tags, downcode
 from xml2rfc.utils import namespaces
 
-default_options = Values(defaults=dict(quiet=False, verbose=False, utf8=False, debug=False,
-                            liberal=False, rfc=False, legacy_date_format=True, strict=False,
-                            list_symbols=('*', '-', 'o', '+'),
-                        ))
+default_options = Values(defaults={
+        'accept_prepped': None,
+        'add_xinclude': None,
+        'basename': None,
+        'cache': None,
+        'css': None,
+        'datestring': None,
+        'debug': False,
+        'doi_base_url': 'https://doi.org/',
+        'dtd': None,
+        'external_css': False,
+        'filename': None,
+        'id_base_url': 'https://www.ietf.org/archive/id/',
+        'indent': 2,
+        'legacy': False,
+        'legacy_date_format': True,
+        'legacy_list_symbols': False,
+        'list_symbols': ('*', '-', 'o', '+'),
+        'no_dtd': None,
+        'no_network': False,
+        'omit_headers': None,
+        'output_filename': None,
+        'output_path': None,
+        'quiet': False,
+        'remove_pis': False,
+        'rfc_base_url': 'https://www.rfc-editor.org/info/',
+        'strict': False,
+        'utf8': False,
+        'verbose': False,
+    })
 
 class _RfcItem:
     """ A unique ID object for an anchored RFC element.
@@ -1730,3 +1756,59 @@ class BaseV3Writer(object):
                         e.get(key).encode('ascii')
                     except UnicodeEncodeError:
                         e.set(key, downcode(e.get(key), replacements=replacements))
+
+    def pretty_print_prep(self, e, p):
+        ind = self.options.indent
+        ## The actual printing is done in self.write()
+        def indent(e, i):
+            if e.tag in (lxml.etree.CDATA, ):
+                return
+            if e.tag in (lxml.etree.Comment, lxml.etree.PI, ):
+                if not e.tail:
+                    if e.getnext() != None:
+                        e.tail = '\n'+' '*i
+                    else:
+                        e.tail = '\n'+' '*(i-ind)
+                return
+            #
+            if e.tag not in self.text_tags:
+                if len(e) and (e.text is None or e.text.strip()==''):
+                    e.text = '\n'+' '*(i+ind)
+            elif e.tag in ['blockquote', 'li', 'dd', 'td', 'th' ]: # mixed content
+                pass
+                if len(e) and e[0] not in self.inline_tags and (e.text is None or e.text.strip()==''):
+                    e.text = '\n'+' '*(i+ind)
+            elif e.tag in ['artwork', 'sourcecode', ]:
+                pass
+            else:
+                # inline tag
+                if e.tail == '':
+                    e.tail = None
+                if len(e):
+                    z = e[-1]
+                    if z.tail and re.search(r'\n[ \t]+$', z.tail):
+                        z.tail = re.sub(r'\n[ \t]+$', '\n'+' '*(i), z.tail)
+                else:
+                    if e.text and re.search(r'\n[ \t]+$', e.text):
+                        e.text = re.sub(r'\n[ \t]+$', '\n'+' '*(i), e.text)
+                    
+            #
+            for c in e:
+                indent(c, i+ind)
+            #
+            if e.tag not in self.inline_tags:# and e.tag not in ['artwork', 'sourcecode', ]:
+                if e.tail is None or e.tail.strip()=='':
+                    if e.getnext() != None:
+                        e.tail = '\n'+' '*i
+                    else:
+                        e.tail = '\n'+' '*(i-ind)
+                else:
+                    self.warn(e, 'Unexpected tail: <%s>%s' % (e.tag, e.tail))
+            else:
+                if e.tail != None and e.tail.strip()=='' and '\n' in e.tail:
+                    if e.getnext() != None:
+                        e.tail = '\n'+' '*i
+                    else:
+                        e.tail = '\n'+' '*(i-ind)
+        indent(e, 0)
+        e.tail = None
