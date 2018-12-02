@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rfc version="3" category="info" consensus="false" docName="draft-gieben-writing-rfcs-pandoc-02" indexInclude="true" ipr="trust200902" prepTime="2018-11-30T02:37:33" scripts="Common,Latin" sortRefs="true" submissionType="IETF" symRefs="true" tocDepth="3" tocInclude="true" xml:lang="en">
+<rfc version="3" category="info" consensus="false" docName="draft-gieben-writing-rfcs-pandoc-02" indexInclude="true" ipr="trust200902" prepTime="2018-12-02T13:01:40" scripts="Common,Latin" sortRefs="true" submissionType="IETF" symRefs="true" tocDepth="3" tocInclude="true" xml:lang="en">
   <!--generate a table of contents -->
   <!--use anchors instead of numbers for references -->
   <!--alphabetize the references -->
@@ -39,10 +39,10 @@
             This memo presents a technique for using Pandoc syntax as a source
             format for documents in the Internet-Drafts (I-Ds) and Request for
             Comments (RFC) series.  
-         </t>
+      </t>
       <t pn="section-abstract-2">
             This version is adapted to work with "xml2rfc" version 2.x.  
-         </t>
+      </t>
     </abstract>
     <boilerplate>
       <section anchor="status-of-memo" numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.1">
@@ -256,15 +256,15 @@
             This document presents a technique for using Pandoc syntax as a
             source format for documents in the Internet-Drafts (I-Ds) and
             Request for Comments (RFC) series.  
-         </t>
+      </t>
       <t pn="section-1-2">
             This version is adapted to work with
             <tt>xml2rfc</tt> version 2.x.  
-         </t>
+      </t>
       <t pn="section-1-3">
             Pandoc is an "almost plain text" format and therefor particularly
             well suited for editing RFC-like documents.  
-         </t>
+      </t>
       <ul empty="true" spacing="normal" bare="false" pn="section-1-4">
         <li pn="section-1-4.1">
                   Note: this document is typeset in Pandoc and does not render
@@ -285,7 +285,7 @@
             the XML of <eref target="http://xml.resource.org/experimental">xml2rfc</eref>
             is very "light". The
             <eref target="http://pypi.python.org/pypi/xml2rfc/">latest version of xml2rfc version 2 can be found here</eref>.  
-         </t>
+      </t>
       <t pn="section-2-3">
             During the last few years people have been developing markup
             languages that are very easy to remember and type. These languages
@@ -300,7 +300,7 @@
             to numerous output formats, including, but not limited to: HTML,
             (plain) Markdown and
             <tt>docbook</tt> XML.  
-         </t>
+      </t>
       <t pn="section-2-4">
             So using Pandoc for writing RFCs seems like a sane choice. As
             <tt>xml2rfc</tt> uses XML,
@@ -310,7 +310,7 @@
             conversions are, in some way amusing, as we start off with
             (almost) plain text, use elaborate XML and end up with plain text
             again.  
-         </t>
+      </t>
       <figure anchor="fig-attempt-to" align="left" suppress-title="false" pn="figure-1">
         <name slugifiedName="name-attempt-to-justify-pandoc2r">Attempt to justify Pandoc2rfc.</name>
         <artwork name="" type="" align="left" alt="" pn="section-2-5.1"><![CDATA[
@@ -335,7 +335,7 @@ non-existent  |                       | xsltproc
             <tt>back</tt> section of
             an RFC.  The simplest way is to create a template XML file and
             include the appropriate XML: 
-         </t>
+      </t>
       <figure anchor="fig-a-minimal-" align="left" suppress-title="false" pn="figure-2">
         <name slugifiedName="name-a-minimal-templatexml">A minimal template.xml.</name>
         <artwork name="" type="" align="left" alt="" pn="section-2-7.1"><![CDATA[
@@ -364,7 +364,7 @@ non-existent  |                       | xsltproc
       <t pn="section-2-8">
             See the Makefile for an example of this. In this case you need to
             edit 3 documents: 
-         </t>
+      </t>
       <ol spacing="normal" type="1" start="1" pn="section-2-9">
         <li pn="section-2-9.1" derivedCounter="1.">
                   middle.pdc - contains the main body of text; 
@@ -384,7 +384,7 @@ non-existent  |                       | xsltproc
             homepage of Pandoc2rfc is
             <eref target="https://github.com/miekg/pandoc2rfc">this github
             repository</eref>.  
-         </t>
+      </t>
       <section anchor="dependencies" toc="include" numbered="true" removeInRFC="false" pn="section-2.1">
         <name slugifiedName="name-dependencies">Dependencies</name>
         <t pn="section-2.1-1">
@@ -395,11 +395,11 @@ non-existent  |                       | xsltproc
                user manual for the details</eref> on how to type in Pandoc style.
                And of course <tt>xml2rfc</tt>
                version two.  
-            </t>
+        </t>
         <t pn="section-2.1-2">
                When using Pandoc2rfc consider adding the following sentence to
                an Acknowledgements section: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-2.1-3"><![CDATA[
  This document was produced using the Pandoc2rfc tool.
                ]]></artwork>
@@ -411,28 +411,33 @@ non-existent  |                       | xsltproc
             When starting a new project with
             <tt>pandoc2rfc</tt> you'll
             need to copy the following files: 
-         </t>
+      </t>
       <ul spacing="normal" bare="false" empty="false" pn="section-3-2">
-        <li pn="section-3-2.1"><tt>Makefile</tt>
-               </li>
-        <li pn="section-3-2.2"><tt>transform.xslt</tt>
-               </li>
+        <li pn="section-3-2.1">
+          <tt>Makefile</tt>
+        </li>
+        <li pn="section-3-2.2">
+          <tt>transform.xslt</tt>
+        </li>
         <li pn="section-3-2.3">
           <t pn="section-3-2.3.1">
                   And the above mentioned files: </t>
           <ul spacing="normal" bare="false" empty="false" pn="section-3-2.3.2">
-            <li pn="section-3-2.3.2.1"><tt>middle.pdc</tt>
-                     </li>
-            <li pn="section-3-2.3.2.2"><tt>back.pdc</tt>
-                     </li>
-            <li pn="section-3-2.3.2.3"><tt>template.xml</tt>
-                     </li>
+            <li pn="section-3-2.3.2.1">
+              <tt>middle.pdc</tt>
+            </li>
+            <li pn="section-3-2.3.2.2">
+              <tt>back.pdc</tt>
+            </li>
+            <li pn="section-3-2.3.2.3">
+              <tt>template.xml</tt>
+            </li>
           </ul>
         </li>
       </ul>
       <t pn="section-3-3">
             After that you can start editing.  
-         </t>
+      </t>
     </section>
     <section anchor="supported-features" toc="include" numbered="true" removeInRFC="false" pn="section-4">
       <name slugifiedName="name-supported-features">Supported Features</name>
@@ -532,10 +537,10 @@ non-existent  |                       | xsltproc
       <name slugifiedName="name-acknowledgements">Acknowledgements</name>
       <t pn="section-6-1">
             The following people have helped to make Pandoc2rfc what it is today: Benno Overeinder, Erlend Hamnaberg, Matthijs Mekking, Trygve Laugstoel.  
-         </t>
+      </t>
       <t pn="section-6-2">
             This document was prepared using Pandoc2rfc.  
-         </t>
+      </t>
     </section>
     <section anchor="pandoc-constructs" toc="include" numbered="true" removeInRFC="false" pn="section-7">
       <name slugifiedName="name-pandoc-constructs">Pandoc Constructs</name>
@@ -544,21 +549,21 @@ non-existent  |                       | xsltproc
             <em>just</em> Pandoc. The best introduction
             to the Pandoc style is given in this
             <eref target="http://johnmacfarlane.net/pandoc/README.html">README from Pandoc itself</eref>.  
-         </t>
+      </t>
       <t pn="section-7-2">
             For convenience we list the most important ones in the following sections.  
-         </t>
+      </t>
       <section anchor="paragraph" toc="include" numbered="true" removeInRFC="false" pn="section-7.1">
         <name slugifiedName="name-paragraph">Paragraph</name>
         <t pn="section-7.1-1">
                Paragraphs are separated with an empty line.  
-            </t>
+        </t>
       </section>
       <section anchor="section" toc="include" numbered="true" removeInRFC="false" pn="section-7.2">
         <name slugifiedName="name-section">Section</name>
         <t pn="section-7.2-1">
                Just use the normal sectioning commands available in Pandoc, for instance: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-7.2-2"><![CDATA[
 # Section1 One
 Bla
@@ -569,17 +574,17 @@ Bla
                named "Section1 One", that anchor will be called "section1-one-1", but
                <em>only</em> when the sections are in
                the <em>same</em> source file! 
-            </t>
+        </t>
         <t pn="section-7.2-4">
                Referencing the section is done with <tt>see
                [](#section1-one)</tt>, as in see <xref target="section" format="default" sectionFormat="of" derivedContent="Section 7.2"/>.  
-            </t>
+        </t>
       </section>
       <section anchor="list-styles" toc="include" numbered="true" removeInRFC="false" pn="section-7.3">
         <name slugifiedName="name-list-styles">List Styles</name>
         <t pn="section-7.3-1">
                A good number of styles are supported.  
-            </t>
+        </t>
         <section anchor="symbol" toc="include" numbered="true" removeInRFC="false" pn="section-7.3.1">
           <name slugifiedName="name-symbol">Symbol</name>
           <artwork name="" type="" align="left" alt="" pn="section-7.3.1-1"><![CDATA[
@@ -590,7 +595,7 @@ A symbol list.
                   ]]></artwork>
           <t pn="section-7.3.1-2">
                   Converts to <tt>&lt;list style="symbol"&gt;</tt>: 
-               </t>
+          </t>
           <ul spacing="normal" bare="false" empty="false" pn="section-7.3.1-3">
             <li pn="section-7.3.1-3.1">
                         Item one; 
@@ -610,7 +615,7 @@ A numbered list.
                   ]]></artwork>
           <t pn="section-7.3.2-2">
                   Converts to <tt>&lt;list style="numbers"&gt;</tt>: 
-               </t>
+          </t>
           <ol spacing="normal" type="1" start="1" pn="section-7.3.2-3">
             <li pn="section-7.3.2-3.1" derivedCounter="1.">
                         Item one; 
@@ -624,7 +629,7 @@ A numbered list.
           <name slugifiedName="name-empty">Empty</name>
           <t pn="section-7.3.3-1">
                   Using the default list markers from Pandoc: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.3.3-2"><![CDATA[
 A list using the default list markers.
 
@@ -633,7 +638,7 @@ A list using the default list markers.
                   ]]></artwork>
           <t pn="section-7.3.3-3">
                   Converts to <tt>&lt;list style="empty"&gt;</tt>: 
-               </t>
+          </t>
           <ul empty="true" spacing="normal" bare="false" pn="section-7.3.3-4">
             <li pn="section-7.3.3-4.1">
                         Item one; 
@@ -647,14 +652,14 @@ A list using the default list markers.
           <name slugifiedName="name-roman">Roman</name>
           <t pn="section-7.3.4-1">
                   Use the supported Pandoc syntax: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.3.4-2"><![CDATA[
 ii. Item one;
 ii. Item two.
                   ]]></artwork>
           <t pn="section-7.3.4-3">
                   Converts to <tt>&lt;list style="format %i."&gt;</tt>: 
-               </t>
+          </t>
           <ol spacing="normal" type="%i." start="1" pn="section-7.3.4-4">
             <li pn="section-7.3.4-4.1" derivedCounter="i.">
                         Item one; 
@@ -665,14 +670,14 @@ ii. Item two.
           </ol>
           <t pn="section-7.3.4-5">
                   If you use uppercase Roman numerals, they convert to a different style: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.3.4-6"><![CDATA[
 II. Item one;
 II. Item two.
                   ]]></artwork>
           <t pn="section-7.3.4-7">
                   Yields <tt>&lt;list style="format (%d) "&gt;</tt>: 
-               </t>
+          </t>
           <ol spacing="normal" type="(%d)" start="1" pn="section-7.3.4-8">
             <li pn="section-7.3.4-8.1" derivedCounter="(1)">
                         Item one; 
@@ -686,14 +691,14 @@ II. Item two.
           <name slugifiedName="name-letter">Letter</name>
           <t pn="section-7.3.5-1">
                   A numbered list.  
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.3.5-2"><![CDATA[
 a.  Item one;
 b.  Item two.
                   ]]></artwork>
           <t pn="section-7.3.5-3">
                   Converts to <tt>&lt;list style="letters"&gt;</tt>: 
-               </t>
+          </t>
           <ol spacing="normal" type="a" start="1" pn="section-7.3.5-4">
             <li pn="section-7.3.5-4.1" derivedCounter="a.">
                         Item one; 
@@ -704,14 +709,14 @@ b.  Item two.
           </ol>
           <t pn="section-7.3.5-5">
                   Uppercasing the letters works too (note two spaces after the letter.  
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.3.5-6"><![CDATA[
 A.  Item one;
 B.  Item two.
                   ]]></artwork>
           <t pn="section-7.3.5-7">
                   Becomes: 
-               </t>
+          </t>
           <ol spacing="normal" type="%C." start="1" pn="section-7.3.5-8">
             <li pn="section-7.3.5-8.1" derivedCounter="A.">
                         Item one; 
@@ -725,7 +730,7 @@ B.  Item two.
           <name slugifiedName="name-hanging">Hanging</name>
           <t pn="section-7.3.6-1">
                   This is more like a description list, so we need to use: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.3.6-2"><![CDATA[
 First item that needs clarification:
 
@@ -739,18 +744,18 @@ Second item that needs clarification:
 :   Explanation two
                   ]]></artwork>
           <t pn="section-7.3.6-3">
-                  Converts to: <tt>&lt;list style="hanging"&gt;</tt> and <tt>&lt;t hangText="First item that..."&gt;</tt> 
-               </t>
+                  Converts to: <tt>&lt;list style="hanging"&gt;</tt> and <tt>&lt;t hangText="First item that..."&gt;</tt>
+          </t>
           <t pn="section-7.3.6-4">
                   If you want a newline after the hangTexts, search for the string <tt>OPTION</tt> in <tt>transform.xsl</tt> and uncomment it.  
-               </t>
+          </t>
         </section>
       </section>
       <section anchor="figureartwork" toc="include" numbered="true" removeInRFC="false" pn="section-7.4">
         <name slugifiedName="name-figure-artwork">Figure/Artwork</name>
         <t pn="section-7.4-1">
                Indent the paragraph with 4 spaces.  
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-7.4-2"><![CDATA[
 Like this
                ]]></artwork>
@@ -768,14 +773,14 @@ Like this
                possible to reference the artwork. If a caption is supplied the artwork will be
                centered. If a caption is needed but the figure should not be centered use
                <tt>@figure:\</tt>.  
-            </t>
+        </t>
         <section anchor="references" toc="include" numbered="true" removeInRFC="false" pn="section-7.4.1">
           <name slugifiedName="name-references">References</name>
           <t pn="section-7.4.1-1">
                   The reference anchor attribute will be: <tt>fig:</tt>
                   + <tt>first 10 (normalized) characters from the caption</tt>.
                   Where normalized means: 
-               </t>
+          </t>
           <ul spacing="normal" bare="false" empty="false" pn="section-7.4.1-2">
             <li pn="section-7.4.1-2.1">
                         Take the first 10 characters of the caption (i.e. this is the text
@@ -795,27 +800,27 @@ Like this
                   <tt>fig:a-minimal-</tt>
                   as a reference. See for instance
                   <xref target="fig-a-minimal-" format="default" sectionFormat="of" derivedContent="Figure 2"/>.  
-               </t>
+          </t>
           <t pn="section-7.4.1-4">
                   This anchoring is completely handled from within the
                   <tt>xslt</tt>.
                   Note that duplicate anchors are an XML validation error which will make
                   <tt>xml2rfc</tt> fail.  
-               </t>
+          </t>
         </section>
       </section>
       <section anchor="block-quote" toc="include" numbered="true" removeInRFC="false" pn="section-7.5">
         <name slugifiedName="name-block-quote">Block Quote</name>
         <t pn="section-7.5-1">
                Any paragraph like: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-7.5-2"><![CDATA[
 > quoted text
                ]]></artwork>
         <t pn="section-7.5-3">
                Converts to: <tt>&lt;t&gt;&lt;list style="empty"&gt; ...</tt>
                paragraph, making it indented.  
-            </t>
+        </t>
       </section>
       <section anchor="references-1" toc="include" numbered="true" removeInRFC="false" pn="section-7.6">
         <name slugifiedName="name-references-2">References</name>
@@ -823,35 +828,35 @@ Like this
           <name slugifiedName="name-external">External</name>
           <t pn="section-7.6.1-1">
                   Any reference like: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.6.1-2"><![CDATA[
 [Click here](URI)
                   ]]></artwork>
           <t pn="section-7.6.1-3">
-                  Converts to: <tt>&lt;ulink target="URI"&gt;Click here ...</tt> 
-               </t>
+                  Converts to: <tt>&lt;ulink target="URI"&gt;Click here ...</tt>
+          </t>
         </section>
         <section anchor="internal" toc="include" numbered="true" removeInRFC="false" pn="section-7.6.2">
           <name slugifiedName="name-internal">Internal</name>
           <t pn="section-7.6.2-1">
                   Any reference like: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.6.2-2"><![CDATA[
 [Click here](#localid)
                   ]]></artwork>
           <t pn="section-7.6.2-3">
-                  Converts to: <tt>&lt;link target="localid"&gt;Click here ...</tt> 
-               </t>
+                  Converts to: <tt>&lt;link target="localid"&gt;Click here ...</tt>
+          </t>
           <t pn="section-7.6.2-4">
                   For referring to RFCs (for which you manually need add the reference source in
                   the template, with an external XML entity), you can just use: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.6.2-5"><![CDATA[
 [](#RFC2119)
                   ]]></artwork>
           <t pn="section-7.6.2-6">
                   And it does the right thing. Referencing sections is done with: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt="" pn="section-7.6.2-7"><![CDATA[
 See [](#pandoc-constructs)
                   ]]></artwork>
@@ -861,7 +866,7 @@ See [](#pandoc-constructs)
                   ... For referencing figures/artworks see
                   <xref target="figureartwork" format="default" sectionFormat="of" derivedContent="Section 7.4"/>.
                   For referencing tables see <xref target="tables" format="default" sectionFormat="of" derivedContent="Section 7.8"/>.  
-               </t>
+          </t>
         </section>
       </section>
       <section anchor="spanx-styles" toc="include" numbered="true" removeInRFC="false" pn="section-7.7">
@@ -870,25 +875,25 @@ See [](#pandoc-constructs)
                The verb style can be selected with back-tics:
                <tt>`text`</tt>
                Converts to:
-               <tt>&lt;spanx style="verb"&gt; ...</tt> 
-            </t>
+               <tt>&lt;spanx style="verb"&gt; ...</tt>
+        </t>
         <t pn="section-7.7-2">
                And the emphasis style with asterisks:
                <tt>*text*</tt>
                or underscores: <tt>_text_</tt>
-               Converts to: <tt>&lt;spanx style="emph"&gt; ...</tt> 
-            </t>
+               Converts to: <tt>&lt;spanx style="emph"&gt; ...</tt>
+        </t>
         <t pn="section-7.7-3">
                And the emphasis style with double asterisks:
                <tt>**text**</tt>
-               Converts to: <tt>&lt;spanx style="strong"&gt; ...</tt> 
-            </t>
+               Converts to: <tt>&lt;spanx style="strong"&gt; ...</tt>
+        </t>
       </section>
       <section anchor="tables" toc="include" numbered="true" removeInRFC="false" pn="section-7.8">
         <name slugifiedName="name-tables">Tables</name>
         <t pn="section-7.8-1">
                A table can be entered as: 
-            </t>
+        </t>
         <figure anchor="fig-a-caption-" align="left" suppress-title="false" pn="figure-3">
           <name slugifiedName="name-a-caption-describing-the-fi">A caption describing the figure describing the table.</name>
           <artwork name="" type="" align="left" alt="" pn="section-7.8-2.1"><![CDATA[
@@ -908,7 +913,7 @@ See [](#pandoc-constructs)
                <tt>&lt;texttable&gt;</tt>) table in
                <tt>xml2rfc</tt>. The column alignment
                is copied over to the generated XML.  
-            </t>
+        </t>
         <section anchor="references-2" toc="include" numbered="true" removeInRFC="false" pn="section-7.8.1">
           <name slugifiedName="name-references-3">References</name>
           <t pn="section-7.8.1-1">
@@ -920,7 +925,7 @@ See [](#pandoc-constructs)
                   <tt>tab-</tt>
                   + <tt>first 10 (normalized) characters from the caption</tt>.
                   Where normalized means: 
-               </t>
+          </t>
           <ul spacing="normal" bare="false" empty="false" pn="section-7.8.1-2">
             <li pn="section-7.8.1-2.1">
                         Take the first 10 characters of the caption (i.e. this is the text
@@ -939,20 +944,20 @@ See [](#pandoc-constructs)
                   So the first table with a caption will get
                   <tt>tab-a-caption-</tt>
                   for reference use. See for instance 
-               </t>
+          </t>
           <t pn="section-7.8.1-4">
                   This anchoring is completely handled from within the
                   <tt>xslt</tt>.
                   Note that duplicate anchors are an XML validation error which will make
                   <tt>xml2rfc</tt> fail.  
-               </t>
+          </t>
         </section>
       </section>
       <section anchor="indexes" toc="include" numbered="true" removeInRFC="false" pn="section-7.9">
         <name slugifiedName="name-indexes">Indexes</name>
         <t pn="section-7.9-1">
                The footnote syntax of Pandoc is slightly abused to support an index. Footnotes are entered in two steps, you have a marker in the text, and later you give actual footnote text. Like this: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-7.9-2"><![CDATA[
 [^1]
 
@@ -960,13 +965,13 @@ See [](#pandoc-constructs)
                ]]></artwork>
         <t pn="section-7.9-3">
                We re-use this syntax for the <tt>&lt;iref&gt;</tt> tag.  The above text translates to: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-7.9-4"><![CDATA[
 <iref item="footnote text"/>
                ]]></artwork>
         <t pn="section-7.9-5">
                Sub items are also supported. Use an exclamation mark (<tt>!</tt>) to separate them: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-7.9-6"><![CDATA[
 [^1]: item!sub item
                ]]></artwork>
@@ -985,33 +990,33 @@ See [](#pandoc-constructs)
                before processing them is a solution to this problem. You can, for instance,
                amend the <tt>Makefile</tt> and add
                something like this: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-8.1-2"><![CDATA[
 allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
         cat $@ > allsections.pdc
                ]]></artwork>
         <t pn="section-8.1-3">
                And then process <tt>allsection.pdc</tt> in the normal way.  
-            </t>
+        </t>
       </section>
       <section anchor="setting-the-title" toc="include" numbered="true" removeInRFC="false" pn="section-8.2">
         <name slugifiedName="name-setting-the-title">Setting the title</name>
         <t pn="section-8.2-1">
                If you use double quotes in the documents title in the
                <tt>docName</tt> attribute, like: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-8.2-2"><![CDATA[
 <rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02">
                ]]></artwork>
         <t pn="section-8.2-3">
                The Makefile will pick this up automatically and make a symbolic link: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-8.2-4"><![CDATA[
 draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                ]]></artwork>
         <t pn="section-8.2-5">
                This makes uploading the file to the i-d tracker a bit easier.  
-            </t>
+        </t>
       </section>
       <section anchor="uploading-the-xmltxt" toc="include" numbered="true" removeInRFC="false" pn="section-8.3">
         <name slugifiedName="name-uploading-the-xml-txt">Uploading the XML/txt</name>
@@ -1019,7 +1024,7 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                The <tt>draft.xml</tt> target will
                generate an XML file with all XML included, so you can upload just one file to
                the I-D tracker.  
-            </t>
+        </t>
       </section>
       <section anchor="vim-syntax-highlighting" toc="include" numbered="true" removeInRFC="false" pn="section-8.4">
         <name slugifiedName="name-vim-syntax-highlighting">VIM syntax highlighting</name>
@@ -1027,20 +1032,20 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                If you are a VIM user you might be interested in a syntax highlighting file (see
                <xref target="VIM" format="default" sectionFormat="of" derivedContent="VIM"/>) that slightly lightens up
                your reading experience while viewing a draft.txt from VIM.  
-            </t>
+        </t>
       </section>
     </section>
     <section anchor="security-considerations" toc="include" numbered="true" removeInRFC="false" pn="section-9">
       <name slugifiedName="name-security-considerations">Security Considerations</name>
       <t pn="section-9-1">
             This document raises no security issues.  
-         </t>
+      </t>
     </section>
     <section anchor="iana-considerations" toc="include" numbered="true" removeInRFC="false" pn="section-10">
       <name slugifiedName="name-iana-considerations">IANA Considerations</name>
       <t pn="section-10-1">
             This document has no actions for IANA.  
-         </t>
+      </t>
     </section>
   </middle>
   <back>
@@ -1090,7 +1095,7 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                      This document defines these words as they should be interpreted in IETF
                      documents.  Authors who follow these guidelines should incorporate this
                      phrase near the beginning of their document:
-                     </t>
+              </t>
               <ul empty="true" spacing="normal" bare="false">
                 <li>
                            The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -1101,7 +1106,7 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
               <t>
                      Note that the force of these words is modified by the requirement level of
                      the document in which they are used.  
-                  </t>
+              </t>
             </abstract>
           </front>
           <format type="HTML" octets="17491" target="http://xml.resource.org/public/rfc/html/rfc2119.html"/>
@@ -1129,7 +1134,7 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                      more operational ground and gives more up-to-date requirements with respect
                      to key sizes and the new DNSSEC specification. This memo provides
                      information for the Internet community.
-                  </t>
+              </t>
             </abstract>
           </front>
         </reference>
@@ -1141,18 +1146,18 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
       <t pn="section-appendix.a-1">
             This appendix consists out of a few tests that should all render to proper
             <tt>xml2rfc</tt> XML.  
-         </t>
+      </t>
       <section anchor="a-very-long-title-considerations-with-regards-to-the-already-deployed-routing-policy" toc="include" numbered="true" removeInRFC="false" pn="section-a.1">
         <name slugifiedName="name-a-very-long-title-considera">A Very Long Title Considerations With Regards to the Already Deployed Routing Policy</name>
         <t pn="section-a.1-1">
                Test a very long title.  
-            </t>
+        </t>
       </section>
       <section anchor="markup-in-heading" toc="include" numbered="true" removeInRFC="false" pn="section-a.2">
         <name slugifiedName="name-markup-in-heading">Markup in heading</name>
         <t pn="section-a.2-1">
                This is discarded by <tt>xml2rfc</tt>.  
-            </t>
+        </t>
       </section>
       <section anchor="blockquote" toc="include" numbered="true" removeInRFC="false" pn="section-a.3">
         <name slugifiedName="name-blockquote">Blockquote</name>
@@ -1173,23 +1178,23 @@ jkasjksajassjasjsajsajkas
         <name slugifiedName="name-reference-tests">Reference Tests</name>
         <t pn="section-a.5-1">
                Refer to <xref target="RFC2119" format="default" sectionFormat="of" derivedContent="RFC 2119">RFC 2119</xref> if you will. Or maybe you want to inspect <xref target="fig-a-minimal-" format="default" sectionFormat="of" derivedContent="Figure 2"/> in <xref target="pandoc-to-rfc" format="default" sectionFormat="of" derivedContent="Section 2"/> again. Or you might want to <eref target="http://miek.nl">Click here</eref>.  
-            </t>
+        </t>
       </section>
       <section anchor="spanx-tests" toc="include" numbered="true" removeInRFC="false" pn="section-a.6">
         <name slugifiedName="name-spanx-tests">Spanx Tests</name>
         <ul empty="true" spacing="normal" bare="false" pn="section-a.6-1">
           <li pn="section-a.6-1.1">
-                     underscores: <em>underscores</em> 
-                  </li>
+                     underscores: <em>underscores</em>
+          </li>
           <li pn="section-a.6-1.2">
-                     asterisks: <em>asterisks</em> 
-                  </li>
+                     asterisks: <em>asterisks</em>
+          </li>
           <li pn="section-a.6-1.3">
-                     double asterisks: <strong>double asterisks</strong> 
-                  </li>
+                     double asterisks: <strong>double asterisks</strong>
+          </li>
           <li pn="section-a.6-1.4">
-                     backticks: <tt>backticks</tt> 
-                  </li>
+                     backticks: <tt>backticks</tt>
+          </li>
         </ul>
       </section>
       <section anchor="list-tests" toc="include" numbered="true" removeInRFC="false" pn="section-a.7">
@@ -1213,7 +1218,7 @@ jkasjksajassjasjsajsajkas
         </ol>
         <t pn="section-a.7-2">
                And the other around.  
-            </t>
+        </t>
         <ul spacing="normal" bare="false" empty="false" pn="section-a.7-3">
           <li pn="section-a.7-3.1">
                      First we do 
@@ -1233,7 +1238,7 @@ jkasjksajassjasjsajsajkas
         </ul>
         <t pn="section-a.7-4">
                Description lists: 
-            </t>
+        </t>
         <dl newline="false" spacing="normal" pn="section-a.7-5">
           <dt pn="section-a.7-5.1">Item to explain:</dt>
           <dd pn="section-a.7-5.2">It works because of herbs.  
@@ -1242,12 +1247,12 @@ jkasjksajassjasjsajsajkas
           <dd pn="section-a.7-5.4">
             <t pn="section-a.7-5.4.1">More explaining.  </t>
             <t pn="section-a.7-5.4.2"> Multiple paragraphs in such a list.  
-                  </t>
+            </t>
           </dd>
         </dl>
         <t pn="section-a.7-6">
                lists in description lists.  
-            </t>
+        </t>
         <dl newline="false" spacing="normal" pn="section-a.7-7">
           <dt pn="section-a.7-7.1">Item to explain:</dt>
           <dd pn="section-a.7-7.2">
@@ -1291,7 +1296,7 @@ jkasjksajassjasjsajsajkas
         </dl>
         <t pn="section-a.7-8">
                list with description lists.  
-            </t>
+        </t>
         <ol spacing="normal" type="1" start="1" pn="section-a.7-9">
           <li pn="section-a.7-9.1" derivedCounter="1.">
             <t pn="section-a.7-9.1.1">
@@ -1311,14 +1316,14 @@ jkasjksajassjasjsajsajkas
         </ol>
         <t pn="section-a.7-10">
                Multiple paragraphs in a list.  
-            </t>
+        </t>
         <ol spacing="normal" type="1" start="1" pn="section-a.7-11">
           <li pn="section-a.7-11.1" derivedCounter="1.">
             <t pn="section-a.7-11.1.1">
                      This is the first bullet point and it needs multiple paragraphs...
-                     </t>
+            </t>
             <t pn="section-a.7-11.1.2"> ... to be explained properly.  
-                  </t>
+            </t>
           </li>
           <li pn="section-a.7-11.2" derivedCounter="2.">
                      This is the next bullet. New paragraphs should be indented with 4 four spaces.  
@@ -1326,7 +1331,7 @@ jkasjksajassjasjsajsajkas
           <li pn="section-a.7-11.3" derivedCounter="3.">
             <t pn="section-a.7-11.3.1">
                      Another item with some artwork, indented by 8 spaces.
-                     </t>
+            </t>
             <artwork name="" type="" align="left" alt="" pn="section-a.7-11.3.2"><![CDATA[
 Artwork
                         ]]></artwork>
@@ -1337,13 +1342,13 @@ Artwork
         </ol>
         <t pn="section-a.7-12">
                xml2rfc does not allow this, so the second paragraph is faked with a 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-a.7-13"><![CDATA[
 <vspace blankLines='1'>
                ]]></artwork>
         <t pn="section-a.7-14">
                Ordered lists.  
-            </t>
+        </t>
         <ol spacing="normal" type="1" start="1" pn="section-a.7-15">
           <li pn="section-a.7-15.1" derivedCounter="1.">
                      First item 
@@ -1354,7 +1359,7 @@ Artwork
         </ol>
         <t pn="section-a.7-16">
                A lowercase roman list: 
-            </t>
+        </t>
         <ol spacing="normal" type="%i." start="1" pn="section-a.7-17">
           <li pn="section-a.7-17.1" derivedCounter="i.">
                      Item 1 
@@ -1365,7 +1370,7 @@ Artwork
         </ol>
         <t pn="section-a.7-18">
                An uppercase roman list.  
-            </t>
+        </t>
         <ol spacing="normal" type="(%d)" start="1" pn="section-a.7-19">
           <li pn="section-a.7-19.1" derivedCounter="(1)">
                      Item1 
@@ -1378,11 +1383,11 @@ Artwork
                   </li>
         </ol>
         <t pn="section-a.7-20">
-               And default list markers.<iref item="list" subitem="default markers" primary="false" pn="iref-list-default-markers-1"/> 
-            </t>
+               And default list markers.<iref item="list" subitem="default markers" primary="false" pn="iref-list-default-markers-1"/>
+        </t>
         <t pn="section-a.7-21">
                Some surrounding text, to make it look better.  
-            </t>
+        </t>
         <ul empty="true" spacing="normal" bare="false" pn="section-a.7-22">
           <li pn="section-a.7-22.1">
                      First item. Use lot of text to get a real paragraphs sense.
@@ -1399,10 +1404,10 @@ Artwork
         </ul>
         <t pn="section-a.7-23">
                Text at the end.  
-            </t>
+        </t>
         <t pn="section-a.7-24">
                Lowercase letters list.  
-            </t>
+        </t>
         <ol spacing="normal" type="a" start="1" pn="section-a.7-25">
           <li pn="section-a.7-25.1" derivedCounter="a.">
                      First item 
@@ -1413,7 +1418,7 @@ Artwork
         </ol>
         <t pn="section-a.7-26">
                Uppercase letters list.  
-            </t>
+        </t>
         <ol spacing="normal" type="%C." start="1" pn="section-a.7-27">
           <li pn="section-a.7-27.1" derivedCounter="A.">
                      First item 
@@ -1424,24 +1429,24 @@ Artwork
         </ol>
         <t pn="section-a.7-28">
                <iref item="list" subitem="Uppercase Letters" primary="false" pn="iref-list-uppercase-letters-2"/>
-            </t>
+        </t>
         <t pn="section-a.7-29">
                And artwork in a description list.  
-            </t>
+        </t>
         <dl newline="false" spacing="normal" pn="section-a.7-30">
           <dt pn="section-a.7-30.1">Item1:</dt>
           <dd pn="section-a.7-30.2">
             <t pn="section-a.7-30.2.1">
                      Tell something about it. Tell something about it. Tell something about
 		     it. Tell something about it. Tell something about it. Tell something about it.
-                     </t>
+            </t>
             <artwork name="" type="" align="left" alt="" pn="section-a.7-30.2.2"><![CDATA[
 miek.nl.    IN  NS  a.miek.nl.                             
 a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue            
                      ]]></artwork>
             <t pn="section-a.7-30.2.3">
                      Tell some more about it. Tell some more about it. Tell some more about it.  
-                  </t>
+            </t>
           </dd>
           <dt pn="section-a.7-30.3">Item2:</dt>
           <dd pn="section-a.7-30.4">Another description 
@@ -1449,7 +1454,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         </dl>
         <t pn="section-a.7-31">
                List with a sublist with a paragraph above the sublist 
-            </t>
+        </t>
         <ol spacing="normal" type="1" start="1" pn="section-a.7-32">
           <li pn="section-a.7-32.1" derivedCounter="1.">
                      First Item 
@@ -1534,7 +1539,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         </table>
         <t pn="section-a.8-3">
                <iref item="table" subitem="simple" primary="false" pn="iref-table-simple-3"/>
-            </t>
+        </t>
         <table anchor="tab-sample-gri" align="center" pn="table-3">
           <name slugifiedName="name-sample-grid-table">Sample grid table.</name>
           <thead>
@@ -1559,7 +1564,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         </table>
         <t pn="section-a.8-5">
                Grid tables without a caption 
-            </t>
+        </t>
         <table align="center" pn="table-4">
           <thead>
             <tr>
@@ -1583,29 +1588,29 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         </table>
         <t pn="section-a.8-7">
                This table has no caption, and therefor no reference. But you can refer to some of the other tables, with for instance: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-a.8-8"><![CDATA[
 See [](#tab-here-s-the)
                ]]></artwork>
         <t pn="section-a.8-9">
                Which will become "See <xref target="tab-here-s-the" format="default" sectionFormat="of" derivedContent="Table 2"/>".  
-            </t>
+        </t>
         <t pn="section-a.8-10">
                <iref item="table" subitem="grid" primary="false" pn="iref-table-grid-4"/>
-            </t>
+        </t>
         <t pn="section-a.8-11">
                We should also be able to refer to the table numbers directly, to say things like 
                'Look at Tables
                <xref target="tab-demonstrat" format="counter" sectionFormat="of" derivedContent="1"/>,
                <xref target="tab-here-s-the" format="counter" sectionFormat="of" derivedContent="2"/>
                and <xref target="tab-sample-gri" format="counter" sectionFormat="of" derivedContent="3"/>.'
-            </t>
+        </t>
       </section>
       <section anchor="numbered-examples" toc="include" numbered="true" removeInRFC="false" pn="section-a.9">
         <name slugifiedName="name-numbered-examples">Numbered examples</name>
         <t pn="section-a.9-1">
                This is another example: 
-            </t>
+        </t>
         <ol spacing="normal" type="1" start="1" pn="section-a.9-2">
           <li pn="section-a.9-2.1" derivedCounter="1.">
                      Another bla bla..  
@@ -1613,7 +1618,7 @@ See [](#tab-here-s-the)
         </ol>
         <t pn="section-a.9-3">
                as (1) shows...  
-            </t>
+        </t>
       </section>
       <section anchor="anchor-figure-tests" toc="include" numbered="true" removeInRFC="false" pn="section-a.10">
         <name slugifiedName="name-figure-tests">Figure tests</name>
@@ -1628,7 +1633,7 @@ This is a figure
         </figure>
         <t pn="section-a.10-2">
                And how a figure that is not centered, do to using <tt>figure</tt> and not <tt>Figure</tt>.  
-            </t>
+        </t>
         <figure anchor="fig-a-non-cent" align="left" suppress-title="false" pn="figure-5">
           <name slugifiedName="name-a-non-centered-figure">A non centered figure.</name>
           <artwork name="" type="" align="left" alt="" pn="section-a.10-3.1"><![CDATA[
@@ -1638,7 +1643,7 @@ This is a figure
         </figure>
         <t pn="section-a.10-4">
                Test the use of <tt>@title</tt>: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt="" pn="section-a.10-5"><![CDATA[
 This is a figure with a title
 This is a figure with a title
@@ -1649,7 +1654,7 @@ This is a figure with a title
         <name slugifiedName="name-verse-tests">Verse tests</name>
         <t pn="section-a.11-1">
                This is a verse text This is another line 
-            </t>
+        </t>
       </section>
     </section>
     <section numbered="false" removeInRFC="false" toc="exclude" pn="section-appendix.b">
@@ -1661,7 +1666,7 @@ This is a figure with a title
       <ul bare="true" empty="true" spacing="compact" pn="section-appendix.b-2">
         <li pn="section-appendix.b-2.1">
           <t anchor="rfc.index.L" pn="section-appendix.b-2.1.1">
-            <xref derivedContent="L" format="default" sectionFormat="of" target="rfc.index.L">L</xref>
+                <xref derivedContent="L" format="default" sectionFormat="of" target="rfc.index.L">L</xref>
           </t>
           <ul bare="true" empty="true" spacing="compact" pn="section-appendix.b-2.1.2">
             <li pn="section-appendix.b-2.1.2.1">
@@ -1698,7 +1703,7 @@ This is a figure with a title
         </li>
         <li pn="section-appendix.b-2.2">
           <t anchor="rfc.index.T" pn="section-appendix.b-2.2.1">
-            <xref derivedContent="T" format="default" sectionFormat="of" target="rfc.index.T">T</xref>
+                <xref derivedContent="T" format="default" sectionFormat="of" target="rfc.index.T">T</xref>
           </t>
           <ul bare="true" empty="true" spacing="compact" pn="section-appendix.b-2.2.2">
             <li pn="section-appendix.b-2.2.2.1">

@@ -47,10 +47,10 @@
             This memo presents a technique for using Pandoc syntax as a source
             format for documents in the Internet-Drafts (I-Ds) and Request for
             Comments (RFC) series.  
-         </t>
+      </t>
       <t>
             This version is adapted to work with "xml2rfc" version 2.x.  
-         </t>
+      </t>
     </abstract>
   </front>
   <middle>
@@ -61,15 +61,15 @@
             This document presents a technique for using Pandoc syntax as a
             source format for documents in the Internet-Drafts (I-Ds) and
             Request for Comments (RFC) series.  
-         </t>
+      </t>
       <t>
             This version is adapted to work with
             <tt>xml2rfc</tt> version 2.x.  
-         </t>
+      </t>
       <t>
             Pandoc is an "almost plain text" format and therefor particularly
             well suited for editing RFC-like documents.  
-         </t>
+      </t>
       <ul empty="true" spacing="normal">
         <li>
                   Note: this document is typeset in Pandoc and does not render
@@ -90,7 +90,7 @@
             the XML of <eref target="http://xml.resource.org/experimental">xml2rfc</eref>
             is very "light". The
             <eref target="http://pypi.python.org/pypi/xml2rfc/">latest version of xml2rfc version 2 can be found here</eref>.  
-         </t>
+      </t>
       <t>
             During the last few years people have been developing markup
             languages that are very easy to remember and type. These languages
@@ -105,7 +105,7 @@
             to numerous output formats, including, but not limited to: HTML,
             (plain) Markdown and
             <tt>docbook</tt> XML.  
-         </t>
+      </t>
       <t>
             So using Pandoc for writing RFCs seems like a sane choice. As
             <tt>xml2rfc</tt> uses XML,
@@ -115,7 +115,7 @@
             conversions are, in some way amusing, as we start off with
             (almost) plain text, use elaborate XML and end up with plain text
             again.  
-         </t>
+      </t>
       <figure anchor="fig-attempt-to">
         <name>Attempt to justify Pandoc2rfc.</name>
         <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -140,7 +140,7 @@ non-existent  |                       | xsltproc
             <tt>back</tt> section of
             an RFC.  The simplest way is to create a template XML file and
             include the appropriate XML: 
-         </t>
+      </t>
       <figure anchor="fig-a-minimal-">
         <name>A minimal template.xml.</name>
         <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -169,7 +169,7 @@ non-existent  |                       | xsltproc
       <t>
             See the Makefile for an example of this. In this case you need to
             edit 3 documents: 
-         </t>
+      </t>
       <ol spacing="normal" type="1">
         <li>
                   middle.pdc - contains the main body of text; 
@@ -189,7 +189,7 @@ non-existent  |                       | xsltproc
             homepage of Pandoc2rfc is
             <eref target="https://github.com/miekg/pandoc2rfc">this github
             repository</eref>.  
-         </t>
+      </t>
       <section anchor="dependencies" toc="default" numbered="true">
         <name>Dependencies</name>
         <t>
@@ -200,11 +200,11 @@ non-existent  |                       | xsltproc
                user manual for the details</eref> on how to type in Pandoc style.
                And of course <tt>xml2rfc</tt>
                version two.  
-            </t>
+        </t>
         <t>
                When using Pandoc2rfc consider adding the following sentence to
                an Acknowledgements section: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
  This document was produced using the Pandoc2rfc tool.
                ]]></artwork>
@@ -216,28 +216,33 @@ non-existent  |                       | xsltproc
             When starting a new project with
             <tt>pandoc2rfc</tt> you'll
             need to copy the following files: 
-         </t>
+      </t>
       <ul spacing="normal">
-        <li><tt>Makefile</tt>
-               </li>
-        <li><tt>transform.xslt</tt>
-               </li>
+        <li>
+          <tt>Makefile</tt>
+        </li>
+        <li>
+          <tt>transform.xslt</tt>
+        </li>
         <li>
           <t>
                   And the above mentioned files: </t>
           <ul spacing="normal">
-            <li><tt>middle.pdc</tt>
-                     </li>
-            <li><tt>back.pdc</tt>
-                     </li>
-            <li><tt>template.xml</tt>
-                     </li>
+            <li>
+              <tt>middle.pdc</tt>
+            </li>
+            <li>
+              <tt>back.pdc</tt>
+            </li>
+            <li>
+              <tt>template.xml</tt>
+            </li>
           </ul>
         </li>
       </ul>
       <t>
             After that you can start editing.  
-         </t>
+      </t>
     </section>
     <section anchor="supported-features" toc="default" numbered="true">
       <name>Supported Features</name>
@@ -337,10 +342,10 @@ non-existent  |                       | xsltproc
       <name>Acknowledgements</name>
       <t>
             The following people have helped to make Pandoc2rfc what it is today: Benno Overeinder, Erlend Hamnaberg, Matthijs Mekking, Trygve Laugstoel.  
-         </t>
+      </t>
       <t>
             This document was prepared using Pandoc2rfc.  
-         </t>
+      </t>
     </section>
     <section anchor="pandoc-constructs" toc="default" numbered="true">
       <name>Pandoc Constructs</name>
@@ -349,21 +354,21 @@ non-existent  |                       | xsltproc
             <em>just</em> Pandoc. The best introduction
             to the Pandoc style is given in this
             <eref target="http://johnmacfarlane.net/pandoc/README.html">README from Pandoc itself</eref>.  
-         </t>
+      </t>
       <t>
             For convenience we list the most important ones in the following sections.  
-         </t>
+      </t>
       <section anchor="paragraph" toc="default" numbered="true">
         <name>Paragraph</name>
         <t>
                Paragraphs are separated with an empty line.  
-            </t>
+        </t>
       </section>
       <section anchor="section" toc="default" numbered="true">
         <name>Section</name>
         <t>
                Just use the normal sectioning commands available in Pandoc, for instance: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 # Section1 One
 Bla
@@ -374,17 +379,17 @@ Bla
                named "Section1 One", that anchor will be called "section1-one-1", but
                <em>only</em> when the sections are in
                the <em>same</em> source file! 
-            </t>
+        </t>
         <t>
                Referencing the section is done with <tt>see
                [](#section1-one)</tt>, as in see <xref target="section" format="default"/>.  
-            </t>
+        </t>
       </section>
       <section anchor="list-styles" toc="default" numbered="true">
         <name>List Styles</name>
         <t>
                A good number of styles are supported.  
-            </t>
+        </t>
         <section anchor="symbol" toc="default" numbered="true">
           <name>Symbol</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -395,7 +400,7 @@ A symbol list.
                   ]]></artwork>
           <t>
                   Converts to <tt>&lt;list style="symbol"&gt;</tt>: 
-               </t>
+          </t>
           <ul spacing="normal">
             <li>
                         Item one; 
@@ -415,7 +420,7 @@ A numbered list.
                   ]]></artwork>
           <t>
                   Converts to <tt>&lt;list style="numbers"&gt;</tt>: 
-               </t>
+          </t>
           <ol spacing="normal" type="1">
             <li>
                         Item one; 
@@ -429,7 +434,7 @@ A numbered list.
           <name>Empty</name>
           <t>
                   Using the default list markers from Pandoc: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 A list using the default list markers.
 
@@ -438,7 +443,7 @@ A list using the default list markers.
                   ]]></artwork>
           <t>
                   Converts to <tt>&lt;list style="empty"&gt;</tt>: 
-               </t>
+          </t>
           <ul empty="true" spacing="normal">
             <li>
                         Item one; 
@@ -452,14 +457,14 @@ A list using the default list markers.
           <name>Roman</name>
           <t>
                   Use the supported Pandoc syntax: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 ii. Item one;
 ii. Item two.
                   ]]></artwork>
           <t>
                   Converts to <tt>&lt;list style="format %i."&gt;</tt>: 
-               </t>
+          </t>
           <ol spacing="normal" type="%i.">
             <li>
                         Item one; 
@@ -470,14 +475,14 @@ ii. Item two.
           </ol>
           <t>
                   If you use uppercase Roman numerals, they convert to a different style: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 II. Item one;
 II. Item two.
                   ]]></artwork>
           <t>
                   Yields <tt>&lt;list style="format (%d) "&gt;</tt>: 
-               </t>
+          </t>
           <ol spacing="normal" type="(%d)">
             <li>
                         Item one; 
@@ -491,14 +496,14 @@ II. Item two.
           <name>Letter</name>
           <t>
                   A numbered list.  
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 a.  Item one;
 b.  Item two.
                   ]]></artwork>
           <t>
                   Converts to <tt>&lt;list style="letters"&gt;</tt>: 
-               </t>
+          </t>
           <ol spacing="normal" type="a">
             <li>
                         Item one; 
@@ -509,14 +514,14 @@ b.  Item two.
           </ol>
           <t>
                   Uppercasing the letters works too (note two spaces after the letter.  
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 A.  Item one;
 B.  Item two.
                   ]]></artwork>
           <t>
                   Becomes: 
-               </t>
+          </t>
           <ol spacing="normal" type="%C.">
             <li>
                         Item one; 
@@ -530,7 +535,7 @@ B.  Item two.
           <name>Hanging</name>
           <t>
                   This is more like a description list, so we need to use: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 First item that needs clarification:
 
@@ -544,18 +549,18 @@ Second item that needs clarification:
 :   Explanation two
                   ]]></artwork>
           <t>
-                  Converts to: <tt>&lt;list style="hanging"&gt;</tt> and <tt>&lt;t hangText="First item that..."&gt;</tt> 
-               </t>
+                  Converts to: <tt>&lt;list style="hanging"&gt;</tt> and <tt>&lt;t hangText="First item that..."&gt;</tt>
+          </t>
           <t>
                   If you want a newline after the hangTexts, search for the string <tt>OPTION</tt> in <tt>transform.xsl</tt> and uncomment it.  
-               </t>
+          </t>
         </section>
       </section>
       <section anchor="figureartwork" toc="default" numbered="true">
         <name>Figure/Artwork</name>
         <t>
                Indent the paragraph with 4 spaces.  
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 Like this
                ]]></artwork>
@@ -573,14 +578,14 @@ Like this
                possible to reference the artwork. If a caption is supplied the artwork will be
                centered. If a caption is needed but the figure should not be centered use
                <tt>@figure:\</tt>.  
-            </t>
+        </t>
         <section anchor="references" toc="default" numbered="true">
           <name>References</name>
           <t>
                   The reference anchor attribute will be: <tt>fig:</tt>
                   + <tt>first 10 (normalized) characters from the caption</tt>.
                   Where normalized means: 
-               </t>
+          </t>
           <ul spacing="normal">
             <li>
                         Take the first 10 characters of the caption (i.e. this is the text
@@ -600,27 +605,27 @@ Like this
                   <tt>fig:a-minimal-</tt>
                   as a reference. See for instance
                   <xref target="fig-a-minimal-" format="default"/>.  
-               </t>
+          </t>
           <t>
                   This anchoring is completely handled from within the
                   <tt>xslt</tt>.
                   Note that duplicate anchors are an XML validation error which will make
                   <tt>xml2rfc</tt> fail.  
-               </t>
+          </t>
         </section>
       </section>
       <section anchor="block-quote" toc="default" numbered="true">
         <name>Block Quote</name>
         <t>
                Any paragraph like: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 > quoted text
                ]]></artwork>
         <t>
                Converts to: <tt>&lt;t&gt;&lt;list style="empty"&gt; ...</tt>
                paragraph, making it indented.  
-            </t>
+        </t>
       </section>
       <section anchor="references-1" toc="default" numbered="true">
         <name>References</name>
@@ -628,35 +633,35 @@ Like this
           <name>External</name>
           <t>
                   Any reference like: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 [Click here](URI)
                   ]]></artwork>
           <t>
-                  Converts to: <tt>&lt;ulink target="URI"&gt;Click here ...</tt> 
-               </t>
+                  Converts to: <tt>&lt;ulink target="URI"&gt;Click here ...</tt>
+          </t>
         </section>
         <section anchor="internal" toc="default" numbered="true">
           <name>Internal</name>
           <t>
                   Any reference like: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 [Click here](#localid)
                   ]]></artwork>
           <t>
-                  Converts to: <tt>&lt;link target="localid"&gt;Click here ...</tt> 
-               </t>
+                  Converts to: <tt>&lt;link target="localid"&gt;Click here ...</tt>
+          </t>
           <t>
                   For referring to RFCs (for which you manually need add the reference source in
                   the template, with an external XML entity), you can just use: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 [](#RFC2119)
                   ]]></artwork>
           <t>
                   And it does the right thing. Referencing sections is done with: 
-               </t>
+          </t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 See [](#pandoc-constructs)
                   ]]></artwork>
@@ -666,7 +671,7 @@ See [](#pandoc-constructs)
                   ... For referencing figures/artworks see
                   <xref target="figureartwork" format="default"/>.
                   For referencing tables see <xref target="tables" format="default"/>.  
-               </t>
+          </t>
         </section>
       </section>
       <section anchor="spanx-styles" toc="default" numbered="true">
@@ -675,25 +680,25 @@ See [](#pandoc-constructs)
                The verb style can be selected with back-tics:
                <tt>`text`</tt>
                Converts to:
-               <tt>&lt;spanx style="verb"&gt; ...</tt> 
-            </t>
+               <tt>&lt;spanx style="verb"&gt; ...</tt>
+        </t>
         <t>
                And the emphasis style with asterisks:
                <tt>*text*</tt>
                or underscores: <tt>_text_</tt>
-               Converts to: <tt>&lt;spanx style="emph"&gt; ...</tt> 
-            </t>
+               Converts to: <tt>&lt;spanx style="emph"&gt; ...</tt>
+        </t>
         <t>
                And the emphasis style with double asterisks:
                <tt>**text**</tt>
-               Converts to: <tt>&lt;spanx style="strong"&gt; ...</tt> 
-            </t>
+               Converts to: <tt>&lt;spanx style="strong"&gt; ...</tt>
+        </t>
       </section>
       <section anchor="tables" toc="default" numbered="true">
         <name>Tables</name>
         <t>
                A table can be entered as: 
-            </t>
+        </t>
         <figure anchor="fig-a-caption-">
           <name>A caption describing the figure describing the table.</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -713,7 +718,7 @@ See [](#pandoc-constructs)
                <tt>&lt;texttable&gt;</tt>) table in
                <tt>xml2rfc</tt>. The column alignment
                is copied over to the generated XML.  
-            </t>
+        </t>
         <section anchor="references-2" toc="default" numbered="true">
           <name>References</name>
           <t>
@@ -725,7 +730,7 @@ See [](#pandoc-constructs)
                   <tt>tab-</tt>
                   + <tt>first 10 (normalized) characters from the caption</tt>.
                   Where normalized means: 
-               </t>
+          </t>
           <ul spacing="normal">
             <li>
                         Take the first 10 characters of the caption (i.e. this is the text
@@ -744,20 +749,20 @@ See [](#pandoc-constructs)
                   So the first table with a caption will get
                   <tt>tab-a-caption-</tt>
                   for reference use. See for instance 
-               </t>
+          </t>
           <t>
                   This anchoring is completely handled from within the
                   <tt>xslt</tt>.
                   Note that duplicate anchors are an XML validation error which will make
                   <tt>xml2rfc</tt> fail.  
-               </t>
+          </t>
         </section>
       </section>
       <section anchor="indexes" toc="default" numbered="true">
         <name>Indexes</name>
         <t>
                The footnote syntax of Pandoc is slightly abused to support an index. Footnotes are entered in two steps, you have a marker in the text, and later you give actual footnote text. Like this: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 [^1]
 
@@ -765,13 +770,13 @@ See [](#pandoc-constructs)
                ]]></artwork>
         <t>
                We re-use this syntax for the <tt>&lt;iref&gt;</tt> tag.  The above text translates to: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 <iref item="footnote text"/>
                ]]></artwork>
         <t>
                Sub items are also supported. Use an exclamation mark (<tt>!</tt>) to separate them: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 [^1]: item!sub item
                ]]></artwork>
@@ -790,33 +795,33 @@ See [](#pandoc-constructs)
                before processing them is a solution to this problem. You can, for instance,
                amend the <tt>Makefile</tt> and add
                something like this: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
         cat $@ > allsections.pdc
                ]]></artwork>
         <t>
                And then process <tt>allsection.pdc</tt> in the normal way.  
-            </t>
+        </t>
       </section>
       <section anchor="setting-the-title" toc="default" numbered="true">
         <name>Setting the title</name>
         <t>
                If you use double quotes in the documents title in the
                <tt>docName</tt> attribute, like: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 <rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02">
                ]]></artwork>
         <t>
                The Makefile will pick this up automatically and make a symbolic link: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                ]]></artwork>
         <t>
                This makes uploading the file to the i-d tracker a bit easier.  
-            </t>
+        </t>
       </section>
       <section anchor="uploading-the-xmltxt" toc="default" numbered="true">
         <name>Uploading the XML/txt</name>
@@ -824,7 +829,7 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                The <tt>draft.xml</tt> target will
                generate an XML file with all XML included, so you can upload just one file to
                the I-D tracker.  
-            </t>
+        </t>
       </section>
       <section anchor="vim-syntax-highlighting" toc="default" numbered="true">
         <name>VIM syntax highlighting</name>
@@ -832,20 +837,20 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                If you are a VIM user you might be interested in a syntax highlighting file (see
                <xref target="VIM" format="default"/>) that slightly lightens up
                your reading experience while viewing a draft.txt from VIM.  
-            </t>
+        </t>
       </section>
     </section>
     <section anchor="security-considerations" toc="default" numbered="true">
       <name>Security Considerations</name>
       <t>
             This document raises no security issues.  
-         </t>
+      </t>
     </section>
     <section anchor="iana-considerations" toc="default" numbered="true">
       <name>IANA Considerations</name>
       <t>
             This document has no actions for IANA.  
-         </t>
+      </t>
     </section>
   </middle>
   <back>
@@ -895,7 +900,7 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                      This document defines these words as they should be interpreted in IETF
                      documents.  Authors who follow these guidelines should incorporate this
                      phrase near the beginning of their document:
-                     </t>
+              </t>
               <ul empty="true" spacing="normal">
                 <li>
                            The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -906,7 +911,7 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
               <t>
                      Note that the force of these words is modified by the requirement level of
                      the document in which they are used.  
-                  </t>
+              </t>
             </abstract>
           </front>
           <format type="HTML" octets="17491" target="http://xml.resource.org/public/rfc/html/rfc2119.html"/>
@@ -934,7 +939,7 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
                      more operational ground and gives more up-to-date requirements with respect
                      to key sizes and the new DNSSEC specification. This memo provides
                      information for the Internet community.
-                  </t>
+              </t>
             </abstract>
           </front>
         </reference>
@@ -946,18 +951,18 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
       <t>
             This appendix consists out of a few tests that should all render to proper
             <tt>xml2rfc</tt> XML.  
-         </t>
+      </t>
       <section anchor="a-very-long-title-considerations-with-regards-to-the-already-deployed-routing-policy" toc="default" numbered="true">
         <name>A Very Long Title Considerations With Regards to the Already Deployed Routing Policy</name>
         <t>
                Test a very long title.  
-            </t>
+        </t>
       </section>
       <section anchor="markup-in-heading" toc="default" numbered="true">
         <name>Markup in heading</name>
         <t>
                This is discarded by <tt>xml2rfc</tt>.  
-            </t>
+        </t>
       </section>
       <section anchor="blockquote" toc="default" numbered="true">
         <name>Blockquote</name>
@@ -978,23 +983,23 @@ jkasjksajassjasjsajsajkas
         <name>Reference Tests</name>
         <t>
                Refer to <xref target="RFC2119" format="default">RFC 2119</xref> if you will. Or maybe you want to inspect <xref target="fig-a-minimal-" format="default"/> in <xref target="pandoc-to-rfc" format="default"/> again. Or you might want to <eref target="http://miek.nl">Click here</eref>.  
-            </t>
+        </t>
       </section>
       <section anchor="spanx-tests" toc="default" numbered="true">
         <name>Spanx Tests</name>
         <ul empty="true" spacing="normal">
           <li>
-                     underscores: <em>underscores</em> 
-                  </li>
+                     underscores: <em>underscores</em>
+          </li>
           <li>
-                     asterisks: <em>asterisks</em> 
-                  </li>
+                     asterisks: <em>asterisks</em>
+          </li>
           <li>
-                     double asterisks: <strong>double asterisks</strong> 
-                  </li>
+                     double asterisks: <strong>double asterisks</strong>
+          </li>
           <li>
-                     backticks: <tt>backticks</tt> 
-                  </li>
+                     backticks: <tt>backticks</tt>
+          </li>
         </ul>
       </section>
       <section anchor="list-tests" toc="default" numbered="true">
@@ -1018,7 +1023,7 @@ jkasjksajassjasjsajsajkas
         </ol>
         <t>
                And the other around.  
-            </t>
+        </t>
         <ul spacing="normal">
           <li>
                      First we do 
@@ -1038,7 +1043,7 @@ jkasjksajassjasjsajsajkas
         </ul>
         <t>
                Description lists: 
-            </t>
+        </t>
         <dl newline="false" spacing="normal">
           <dt>Item to explain:</dt>
           <dd>It works because of herbs.  
@@ -1047,12 +1052,12 @@ jkasjksajassjasjsajsajkas
           <dd>
             <t>More explaining.  </t>
             <t> Multiple paragraphs in such a list.  
-                  </t>
+            </t>
           </dd>
         </dl>
         <t>
                lists in description lists.  
-            </t>
+        </t>
         <dl newline="false" spacing="normal">
           <dt>Item to explain:</dt>
           <dd>
@@ -1096,7 +1101,7 @@ jkasjksajassjasjsajsajkas
         </dl>
         <t>
                list with description lists.  
-            </t>
+        </t>
         <ol spacing="normal" type="1">
           <li>
             <t>
@@ -1116,14 +1121,14 @@ jkasjksajassjasjsajsajkas
         </ol>
         <t>
                Multiple paragraphs in a list.  
-            </t>
+        </t>
         <ol spacing="normal" type="1">
           <li>
             <t>
                      This is the first bullet point and it needs multiple paragraphs...
-                     </t>
+            </t>
             <t> ... to be explained properly.  
-                  </t>
+            </t>
           </li>
           <li>
                      This is the next bullet. New paragraphs should be indented with 4 four spaces.  
@@ -1131,7 +1136,7 @@ jkasjksajassjasjsajsajkas
           <li>
             <t>
                      Another item with some artwork, indented by 8 spaces.
-                     </t>
+            </t>
             <artwork name="" type="" align="left" alt=""><![CDATA[
 Artwork
                         ]]></artwork>
@@ -1142,13 +1147,13 @@ Artwork
         </ol>
         <t>
                xml2rfc does not allow this, so the second paragraph is faked with a 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 <vspace blankLines='1'>
                ]]></artwork>
         <t>
                Ordered lists.  
-            </t>
+        </t>
         <ol spacing="normal" type="1">
           <li>
                      First item 
@@ -1159,7 +1164,7 @@ Artwork
         </ol>
         <t>
                A lowercase roman list: 
-            </t>
+        </t>
         <ol spacing="normal" type="%i.">
           <li>
                      Item 1 
@@ -1170,7 +1175,7 @@ Artwork
         </ol>
         <t>
                An uppercase roman list.  
-            </t>
+        </t>
         <ol spacing="normal" type="(%d)">
           <li>
                      Item1 
@@ -1183,11 +1188,11 @@ Artwork
                   </li>
         </ol>
         <t>
-               And default list markers.<iref item="list" subitem="default markers" primary="false"/> 
-            </t>
+               And default list markers.<iref item="list" subitem="default markers" primary="false"/>
+        </t>
         <t>
                Some surrounding text, to make it look better.  
-            </t>
+        </t>
         <ul empty="true" spacing="normal">
           <li>
                      First item. Use lot of text to get a real paragraphs sense.
@@ -1204,10 +1209,10 @@ Artwork
         </ul>
         <t>
                Text at the end.  
-            </t>
+        </t>
         <t>
                Lowercase letters list.  
-            </t>
+        </t>
         <ol spacing="normal" type="a">
           <li>
                      First item 
@@ -1218,7 +1223,7 @@ Artwork
         </ol>
         <t>
                Uppercase letters list.  
-            </t>
+        </t>
         <ol spacing="normal" type="%C.">
           <li>
                      First item 
@@ -1229,24 +1234,24 @@ Artwork
         </ol>
         <t>
                <iref item="list" subitem="Uppercase Letters" primary="false"/>
-            </t>
+        </t>
         <t>
                And artwork in a description list.  
-            </t>
+        </t>
         <dl newline="false" spacing="normal">
           <dt>Item1:</dt>
           <dd>
             <t>
                      Tell something about it. Tell something about it. Tell something about
 		     it. Tell something about it. Tell something about it. Tell something about it.
-                     </t>
+            </t>
             <artwork name="" type="" align="left" alt=""><![CDATA[
 miek.nl.    IN  NS  a.miek.nl.                             
 a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue            
                      ]]></artwork>
             <t>
                      Tell some more about it. Tell some more about it. Tell some more about it.  
-                  </t>
+            </t>
           </dd>
           <dt>Item2:</dt>
           <dd>Another description 
@@ -1254,7 +1259,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         </dl>
         <t>
                List with a sublist with a paragraph above the sublist 
-            </t>
+        </t>
         <ol spacing="normal" type="1">
           <li>
                      First Item 
@@ -1339,7 +1344,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         </table>
         <t>
                <iref item="table" subitem="simple" primary="false"/>
-            </t>
+        </t>
         <table anchor="tab-sample-gri" align="center">
           <name>Sample grid table.</name>
           <thead>
@@ -1364,7 +1369,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         </table>
         <t>
                Grid tables without a caption 
-            </t>
+        </t>
         <table align="center">
           <thead>
             <tr>
@@ -1388,29 +1393,29 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
         </table>
         <t>
                This table has no caption, and therefor no reference. But you can refer to some of the other tables, with for instance: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 See [](#tab-here-s-the)
                ]]></artwork>
         <t>
                Which will become "See <xref target="tab-here-s-the" format="default"/>".  
-            </t>
+        </t>
         <t>
                <iref item="table" subitem="grid" primary="false"/>
-            </t>
+        </t>
         <t>
                We should also be able to refer to the table numbers directly, to say things like 
                'Look at Tables
                <xref target="tab-demonstrat" format="counter"/>,
                <xref target="tab-here-s-the" format="counter"/>
                and <xref target="tab-sample-gri" format="counter"/>.'
-            </t>
+        </t>
       </section>
       <section anchor="numbered-examples" toc="default" numbered="true">
         <name>Numbered examples</name>
         <t>
                This is another example: 
-            </t>
+        </t>
         <ol spacing="normal" type="1">
           <li>
                      Another bla bla..  
@@ -1418,7 +1423,7 @@ See [](#tab-here-s-the)
         </ol>
         <t>
                as (1) shows...  
-            </t>
+        </t>
       </section>
       <section anchor="anchor-figure-tests" toc="default" numbered="true">
         <name>Figure tests</name>
@@ -1433,7 +1438,7 @@ This is a figure
         </figure>
         <t>
                And how a figure that is not centered, do to using <tt>figure</tt> and not <tt>Figure</tt>.  
-            </t>
+        </t>
         <figure anchor="fig-a-non-cent">
           <name>A non centered figure.</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -1443,7 +1448,7 @@ This is a figure
         </figure>
         <t>
                Test the use of <tt>@title</tt>: 
-            </t>
+        </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
 This is a figure with a title
 This is a figure with a title
@@ -1454,7 +1459,7 @@ This is a figure with a title
         <name>Verse tests</name>
         <t>
                This is a verse text This is another line 
-            </t>
+        </t>
       </section>
     </section>
   </back>
