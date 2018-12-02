@@ -192,19 +192,20 @@ class HtmlWriter(BaseV3Writer):
                     break
         return element_nodes
 
+    def html(self):
+        html = self.render(None, self.root)
+        html = self.post_process(html)
+        return html
+
     def write(self, filename):
         self.filename = filename
 
         """Write the document to a file """
         # get rid of comments so we can ignore them in the rest of the code
-        for c in self.tree.xpath('.//comment()'):
-            p = c.getparent()
-            p.remove(c)
-        html = self.render(None, self.root)
-        html = self.post_process(html)
+        html = self.html()
 
         # Check for duplicate IDs
-        dups = set(find_duplicate_html_ids(self.html)) - self.duplicate_html_ids
+        dups = set(find_duplicate_html_ids(html)) - self.duplicate_html_ids
         for attr, id, e in dups:
             self.warn(self.root[-1], 'Duplicate %s="%s" found in generated HTML.' % (attr, id, ))
 
@@ -235,7 +236,7 @@ class HtmlWriter(BaseV3Writer):
 
 
     def render(self, h, x):
-        if x.tag is lxml.etree.PI:
+        if x.tag in (lxml.etree.PI, lxml.etree.Comment):
             return
         func_name = "render_%s" % (x.tag.lower(),)
         func = getattr(self, func_name, None)
@@ -307,7 +308,7 @@ class HtmlWriter(BaseV3Writer):
         classes = ' '.join( i.get('name') for i in x.xpath('./front/seriesInfo') )
         #
         html = h if h != None else build.html(classes=classes, lang='en')
-        self.html = html
+        self.html_root = html
 
     # 6.3.  <head> Element
     # 
@@ -723,7 +724,7 @@ class HtmlWriter(BaseV3Writer):
                 if x.get('align') == 'right':
                     add.span(div, None)
             #
-            dups = set(find_duplicate_html_ids(self.html))
+            dups = set(find_duplicate_html_ids(self.html_root))
             new  = dups - self.duplicate_html_ids
             for attr, id, e in new:
                 self.warn(x, 'Duplicate attribute %s="%s" found after including svg from %s.  This can cause problems with some browsers.' % (attr, id, svgfile))
