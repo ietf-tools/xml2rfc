@@ -84,7 +84,7 @@ def main():
                            help='outputs to an nroff file')
     formatgroup.add_option('', '--raw', action='store_true',
                            help='outputs to a text file, unpaginated')
-    formatgroup.add_option('', '--exp', action='store_true',
+    formatgroup.add_option('', '--expand', action='store_true',
                            help='outputs to an XML file with all references expanded')
     formatgroup.add_option('', '--v2v3', action='store_true',
                            help='convert vocabulary version 2 XML to version 3')
@@ -130,6 +130,8 @@ def main():
                             help='run as if the date is DATE (format: yyyy-mm-dd)')
     value_options.add_option('-f', '--filename', dest='filename', metavar='FILE',
                             help='Deprecated.  The same as -o.')
+    value_options.add_option('-i', '--indent', type=int, default=2, 
+                            help='With some v3 formatters: Indentation to use when pretty-printing XML')
     value_options.add_option('-o', '--out', dest='output_filename', metavar='FILE',
                             help='specify an explicit output filename')
     value_options.add_option('-p', '--path', dest='output_path', metavar='PATH',
@@ -231,7 +233,7 @@ def main():
             options.output_path = options.basename
             options.basename = None
     #
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp, options.v2v3, options.preptool, options.info, ] if o])
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
                  'use --path instead.')
@@ -276,13 +278,12 @@ def main():
             sys.exit("You can only use --list_symbols with v3 text output.")
 
     if not options.legacy:
+        # I.e., V3 formatter
         options.no_dtd = True        
         if options.nroff:
             sys.exit("You can only use --nroff in legacy mode")
         if options.raw:
             sys.exit("You can only use --raw in legacy mode")
-        if options.exp:
-            sys.exit("You can only use --exp in legacy mode")
 
     if options.utf8:
         xml2rfc.log.warn("The --utf8 switch is deprecated.  Use the new unicode insertion element <u>\nto refer to unicode values in a protocol specification.")
@@ -344,7 +345,7 @@ def main():
             # Create basename based on input
             basename = os.path.join(source_path, source_name)
 
-        if options.exp:
+        if options.expand and options.legacy:
             # Expanded XML writer needs a separate tree instance with
             # all comments and PI's preserved.  We can assume there are no
             # parse errors at this point since we didnt call sys.exit() during
@@ -405,6 +406,20 @@ def main():
                                                  options=options,
                                                  date=options.date)
             nroffwriter.write(filename)
+            options.output_filename = None
+
+        # --- End of legacy formatter invocations ---
+
+        if options.expand and not options.legacy:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True, normalize=False, strip_cdata=False)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.exp.xml'
+                options.output_filename = filename
+            #v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            #xmlrfc.tree = v2v3.convert2to3()
+            expander = xml2rfc.ExpandV3XmlWriter(xmlrfc, options=options, date=options.date)
+            expander.write(filename)
             options.output_filename = None
 
         if options.v2v3:
