@@ -18,6 +18,7 @@ try:
     import debug
     debug.debug = True
 except ImportError:
+    debug = None
     pass
 
 
@@ -122,7 +123,7 @@ class TextWriter(BaseV3Writer):
         text = text.replace(u'\u00A0', u' ')
         text = text.replace(u'\u2011', u'-')
         text = text.replace(u'\u200B', u'')
-        text = text.replace(u'\u2028', u'\n')
+        assert text == text.replace(u'\u2028', u' ')
 
         if self.errors:
             log.write("Not creating output file due to errors (see above)")
@@ -169,7 +170,7 @@ class TextWriter(BaseV3Writer):
             self.die(e, "Trying to render text in a too narrow column: width: %s, text: '%s'" % (width, text))
         kwargs['hang'] = j.hang
         etext = self.render(e, width, **kwargs)
-        if not isinstance(etext, six.string_types):
+        if not isinstance(etext, six.string_types) and debug:
             debug.show('e.tag')
             debug.show('etext')
         if not isinstance(etext, six.string_types):
@@ -219,7 +220,7 @@ class TextWriter(BaseV3Writer):
             ctext = self.render(c, width, **kwargs)
             if isinstance(ctext, list):
                 ctext = "\n\n".join(ctext)
-            if ctext is None:
+            if ctext is None and debug:
                 debug.show('e')
                 debug.show('c')
             text += '\n' + ctext
@@ -395,7 +396,6 @@ class TextWriter(BaseV3Writer):
     #    "&" and "<" characters in artwork.
     def render_artwork(self, e, width, **kwargs):
         text = (e.text and e.text.expandtabs()) or "(Artwork only available as %s: <%s>)" % (e.get('type', '(unknown type)'), e.get('originalSrc'))
-        text += e.tail or ''
         text = text.strip('\n')
         text = '\n'.join( [ l.rstrip() for l in text.splitlines() ] )
         return align(text, e.get('align', 'left'), width)
@@ -2984,22 +2984,24 @@ class TextWriter(BaseV3Writer):
     def render_sourcecode(self, e, width, **kwargs):
         markers = e.get('markers')
         text = ''
+        artwork = self.render_artwork(e, width, **kwargs)
         if markers == 'true':
             text += '<CODE BEGINS>'
             file = e.get('name')
             if file:
                 text += ' file "%s"' % file
-            text += '\n'
-        text += self.render_artwork(e, width, **kwargs)
+            if not re.search(r'^\s*\n', artwork):
+                    text += '\n'
+        text += artwork
         if markers == 'true':
-            text += '\n'
+            if not re.search(r'\n\s*$', text):
+                text += '\n'
             text += '<CODE ENDS>'
         return text
 
 
     def render_stream(self, e, width, **kwargs):
         text = e.text
-        text += e.tail or ''
         return text
 
 
