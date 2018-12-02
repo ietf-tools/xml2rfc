@@ -1832,12 +1832,17 @@ class PrepToolWriter(BaseV3Writer):
         if oldix != None:
             self.warn(e, "Found an existing Index section, not inserting another one")
             return
+        def mkxref(self, text, **kwargs):
+            xref = self.element('xref', **kwargs)
+            xref.text = text
+            xref.tail = '\n'+' '*16
+            return xref
         def letter_li(letter, letter_entries):
             anchor = 'rfc.index.%s' % letter
             li = self.element('li')
             t = self.element('t', anchor=anchor)
-            xref = self.element('xref', target=anchor, format='default', derivedContent=letter)
-            xref.text = letter
+            t.text = '\n'+' '*16
+            xref = mkxref(self, letter, target=anchor, format='default', derivedContent=letter)
             t.append(xref)
             li.append(t)
             #
@@ -1854,11 +1859,11 @@ class PrepToolWriter(BaseV3Writer):
             t.text = item
             li.append(t)
             t = self.element('t')
+            t.text = '\n'+' '*16
             li.append(t)
             for i in item_entries:
                 if i.anchor:
-                    xref = self.element('xref', target=i.anchor, format='default', derivedContent=i.item)
-                    xref.text = i.item
+                    xref = mkxref(self, i.item, target=i.anchor, format='default', derivedContent=i.item)
                     t.append(xref)
                 else:
                     self.err(e, "Did not expect an <iref> here, skipping it")
@@ -1876,8 +1881,9 @@ class PrepToolWriter(BaseV3Writer):
             t.text = sub
             li.append(t)
             t = self.element('t')
+            t.text = '\n'+' '*16
             for i in sub_entries:
-                t.append(self.element('xref', target=i.anchor, format='counter', derivedContent=i.sub))
+                t.append(mkxref(self, i.sub, target=i.anchor, format='counter', derivedContent=i.sub))
             return li
         if self.index_entries and self.root.get('indexInclude') == 'true':
             index = self.element('section', numbered='false', toc='exclude')
@@ -1887,6 +1893,7 @@ class PrepToolWriter(BaseV3Writer):
             self.name_insert_slugified_name(name, index)
             #
             index_index = self.element('t', anchor='rfc.index.index')
+            index_index.text = '\n'+' '*8
             index.append(index_index)
             # sort the index entries
             self.index_entries.sort(key=lambda i: '%s~%s' % (i.item, i.sub or ''))
@@ -1894,8 +1901,7 @@ class PrepToolWriter(BaseV3Writer):
             letters = uniq([ i.item[0].upper() for i in self.index_entries ])
             # set up the index index
             for letter in letters:
-                xref = self.element('xref', target='rfc.index.%s'%letter, derivedContent=letter)
-                xref.text = letter
+                xref = mkxref(self, letter, target='rfc.index.%s'%letter, derivedContent=letter)
                 index_index.append(xref)
             # one letter entry per letter
             index_ul = self.element('ul', empty='true', spacing='compact', bare="true")
@@ -2073,17 +2079,3 @@ class PrepToolWriter(BaseV3Writer):
     # 
     #    Pretty-format the XML output.  (Note: there are many tools that do an
     #    adequate job.)
-    def pretty_print_prep(self, e, p):
-        # apply this to elements that can't appear with text, i.e., don't have
-        # any of these as parent:
-        skip_parents = set([
-            "annotation", "blockquote", "preamble", "postamble", "name", "refcontent", "c", "t",
-            "cref", "dd", "dt", "li", "td", "th", "tt", "em", "strong", "sub", "sup", ])
-        for c in e.iter():
-            p = c.getparent()
-            if p != None and p.tag in skip_parents:
-                continue
-            if c.tail != None:
-                if c.tail.strip() == '':
-                    c.tail = None        
-        ## The actual pretty-printing is done in self.write()
