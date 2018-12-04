@@ -152,10 +152,9 @@ def get_normalized_address_info(writer, x, latin=True):
                 adr['postal_code'] = value
             elif c.tag == 'sortingcode':
                 adr['sorting_code'] = value
-    if not hasattr(pycountry.countries, 'lookup'):
-        for a in adr:
-            if isinstance(adr[a], list):
-                adr[a] = ', '.join(adr[a])
+    for a in adr:
+        if isinstance(adr[a], list):
+            adr[a] = ', '.join(adr[a])
     if country_info:
         # Address validation
         address_format, rules = get_address_format_rules(adr, latin)
