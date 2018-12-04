@@ -33,7 +33,7 @@ def slugify(s):
 
 def idref(s):
     s = re.sub(r'^[^A-Za-z_]', '_', s)
-    s = re.sub(r'[^-._A-Za-z0-9]', '-', s)
+    s = re.sub(r'[^-._A-Za-z0-9]', '_', s)
     return s
 
 def stripattr(e, attrs):
@@ -777,7 +777,7 @@ class V2v3XmlWriter(BaseV3Writer):
             comments.append("Warning: unknown list style: '%s'" % style)
         #
         comments.append('Replaced <list style="%s"/> with <%s/>' % (style, tag))
-        if 'counter' in e.keys():
+        if tag=='ol' and 'counter' in e.keys():
             attribs['group'] = e.get('counter')
             comments.append("Converting <list counter=...> to <%s group=...> " % tag)
         #

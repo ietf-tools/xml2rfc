@@ -500,6 +500,8 @@ class PrepToolWriter(BaseV3Writer):
         for c in self.root.iter():
             p = c.getparent()
             if c.text and not isascii(c.text):
+                if self.tree.docinfo.encoding.lower() in ['us-ascii', ]:
+                    self.die(c, "Found non-ascii content in a document with xml encoding declared as %s" % self.tree.docinfo.encoding)
                 show = c.text.encode('ascii', errors='replace')
                 if c.tag in unicode_content_tags:
                     if not c.get('ascii') and not c.tag in bare_unicode_tags:
@@ -1322,10 +1324,11 @@ class PrepToolWriter(BaseV3Writer):
         #
         int2str = ol_style_formatter[fchar]
         for c in e.getchildren():
-            label = format % int2str(counter)
-            counter += 1
-            c.set('derivedCounter', label)
-
+            if c.tag == 'li':           # not PI or Comment
+                label = format % int2str(counter)
+                counter += 1
+                c.set('derivedCounter', label)
+                
     # 5.4.8.  <xref> Processing
     # 
     # 5.4.8.1.  "derivedContent" Insertion (with Content)
@@ -1927,7 +1930,7 @@ class PrepToolWriter(BaseV3Writer):
         # Exclude contributors
         authors = [ a for a in authors if a.get('role') != 'contributor' ]
         back = self.root.find('./back')
-        line = back[-1].sourceline or back.sourceline
+        line = back[-1].sourceline or back.sourceline if len(back) else back.sourceline
         s = self.element('section', toc='include', numbered='false', anchor='authors-addresses', line=line)
         n = self.element('name', line=line+1)
         if len(authors) > 1:
