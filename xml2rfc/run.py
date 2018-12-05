@@ -82,6 +82,8 @@ def main():
                            help='outputs to an html file')
     formatgroup.add_option('', '--nroff', action='store_true',
                            help='outputs to an nroff file')
+    formatgroup.add_option('', '--pdf', action='store_true',
+                           help='outputs to a pdf file')
     formatgroup.add_option('', '--raw', action='store_true',
                            help='outputs to a text file, unpaginated')
     formatgroup.add_option('', '--expand', action='store_true',
@@ -188,6 +190,7 @@ def main():
     (options, args) = optionparser.parse_args()
     # Some additional values not exposed as options
     options.doi_base_url = "https://doi.org/"
+    options.no_css = False
 
     # Show version information, then exit
     if options.version:
@@ -233,7 +236,7 @@ def main():
             options.output_path = options.basename
             options.basename = None
     #
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, ] if o])
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, options.pdf ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
                  'use --path instead.')
@@ -313,6 +316,11 @@ def main():
         xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e.error_log)
         sys.exit(1)
         
+    # Check if we've received a version="3" document, and adjust accordingly
+    if xmlrfc.tree.getroot().get('version') == '3':
+        options.legacy = False
+        options.no_dtd = True
+
     # Remember if we're building an RFC
     options.rfc = xmlrfc.tree.getroot().get('number')
 
@@ -469,6 +477,20 @@ def main():
             prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
             writer = xml2rfc.HtmlWriter(xmlrfc, options=options, date=options.date)
+            writer.write(filename)
+            options.output_filename = None
+
+        if options.pdf:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.pdf'
+                options.output_filename = filename
+            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            xmlrfc.tree = v2v3.convert2to3()
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
+            xmlrfc.tree = prep.prep()
+            writer = xml2rfc.PdfWriter(xmlrfc, options=options, date=options.date)
             writer.write(filename)
             options.output_filename = None
 

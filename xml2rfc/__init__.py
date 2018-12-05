@@ -13,7 +13,8 @@ from xml2rfc.parser import  XmlRfcError, CachingResolver, XmlRfcParser, XmlRfc
 
 from xml2rfc.writers import ( BaseRfcWriter, RawTextRfcWriter, PaginatedTextRfcWriter,
 	 HtmlRfcWriter, NroffRfcWriter, ExpandedXmlWriter, RfcWriterError,
-         V2v3XmlWriter, PrepToolWriter, TextWriter, HtmlWriter, ExpandV3XmlWriter,
+         V2v3XmlWriter, PrepToolWriter, TextWriter, HtmlWriter, PdfWriter,
+         ExpandV3XmlWriter,
      )
 
 # This defines what 'from xml2rfc import *' actually imports:
@@ -21,6 +22,6 @@ __all__ = ['XmlRfcError', 'CachingResolver', 'XmlRfcParser', 'XmlRfc',
            'BaseRfcWriter', 'RawTextRfcWriter', 'PaginatedTextRfcWriter',
            'HtmlRfcWriter', 'NroffRfcWriter', 'ExpandedXmlWriter',
            'RfcWriterError', 'V2v3XmlWriter', 'PrepToolWriter', 'TextWriter',
-           'HtmlWriter', 'ExpandV3XmlWriter',
+           'HtmlWriter', 'PdfWriter', 'ExpandV3XmlWriter',
        ]
 
