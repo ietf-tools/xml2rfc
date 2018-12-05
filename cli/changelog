@@ -1,3 +1,20 @@
+xml2rfc (2.15.3) ietf; urgency=medium
+
+  This release fixes some issues found when running the html renderer over
+  a corpus of all drafts submitted with xml format over the last 30 days,
+  and an installation issue.
+
+  * Handled utf-8 reloading in setup.py under py27 without using six, which 
+    might be unavailable before the installation completes.
+
+  * Always convert python lists to comma-separated strings before calling 
+    on i18n address validation.
+
+  * Added some guards to prevent operations on None.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  05 Dec 2018 06:24:35 -0800
+
+
 xml2rfc (2.15.2) ietf; urgency=medium
 
   * Added a v3 version of the expansion renderer, to handle xi:include 
