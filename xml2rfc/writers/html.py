@@ -9,6 +9,7 @@ import os
 import re
 #import sys
 import six
+import unicodedata
 
 from io import open
 from lxml.html import html_parser
@@ -20,7 +21,7 @@ elif six.PY3:
     from urllib.request import urlopen
 
 try:
-    import debug
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
@@ -173,6 +174,21 @@ def format_address(address, latin=False):
     address_lines = filter(lambda n: n!=None and ''.join(list(n.itertext())), address_lines)
     return address_lines
 
+def get_bidi_alignment(address):
+    # We don't attempt to control the bidi layout in detail, but leave that to
+    #the html layout engine; but want to know whether we have Right-to-left content
+    #in order to set the overall alignment of the address block.
+    for field in address:
+        line = address[field]
+        if line:
+            for ch in line:
+                if isinstance(ch, six.text_type):
+                    dir = unicodedata.bidirectional(ch)
+                    if dir in ['R', 'AL']:
+                        alignment = 'R'
+                        return 'right'
+    return 'left'
+    
 # ------------------------------------------------------------------------------
 
 class HtmlWriter(BaseV3Writer):
@@ -192,9 +208,23 @@ class HtmlWriter(BaseV3Writer):
                     break
         return element_nodes
 
-    def html(self):
-        html = self.render(None, self.root)
-        html = self.post_process(html)
+    def html_tree(self):
+        html_tree = self.render(None, self.root)
+        html_tree = self.post_process(html_tree)
+        return html_tree
+
+    def html(self, html_tree=None):
+        if not html_tree:
+            html_tree = self.html_tree()
+        # 6.1.  DOCTYPE
+        # 
+        #    The DOCTYPE of the document is "html", which declares that the
+        #    document is compliant with HTML5.  The document will start with
+        #    exactly this string:
+        # 
+        #    <!DOCTYPE html>
+        html = lxml.etree.tostring(html_tree, method='html', encoding='unicode', pretty_print=True, doctype="<!DOCTYPE html>")
+        html = re.sub(r'[\x00-\x09\x0B-\x1F]+', ' ', html)
         return html
 
     def write(self, filename):
@@ -202,10 +232,10 @@ class HtmlWriter(BaseV3Writer):
 
         """Write the document to a file """
         # get rid of comments so we can ignore them in the rest of the code
-        html = self.html()
+        html_tree = self.html_tree()
 
         # Check for duplicate IDs
-        dups = set(find_duplicate_html_ids(html)) - self.duplicate_html_ids
+        dups = set(find_duplicate_html_ids(html_tree)) - self.duplicate_html_ids
         for attr, id, e in dups:
             self.warn(self.root[-1], 'Duplicate %s="%s" found in generated HTML.' % (attr, id, ))
 
@@ -215,20 +245,7 @@ class HtmlWriter(BaseV3Writer):
 
         # Use lxml's built-in serialization
         with open(filename, 'w', encoding='utf-8') as file:
-
-            # 6.1.  DOCTYPE
-            # 
-            #    The DOCTYPE of the document is "html", which declares that the
-            #    document is compliant with HTML5.  The document will start with
-            #    exactly this string:
-            # 
-            #    <!DOCTYPE html>
-
-
-            text = lxml.etree.tostring(html, method='html', encoding='unicode', pretty_print=True, doctype="<!DOCTYPE html>")
-            # Required by RFC7992:
-            text = re.sub(r'[\x00-\x09\x0B-\x1F]+', ' ', text)
-
+            text = self.html(html_tree)
             file.write(text)
 
         if not self.options.quiet:
@@ -328,6 +345,7 @@ class HtmlWriter(BaseV3Writer):
     #    <meta charset="utf-8">
 
         add.meta(head, None, charset='utf-8')
+        add.meta(head, None, name="scripts", content=x.get('scripts'))
 
     # 6.3.2.  Document Title
     # 
@@ -432,6 +450,8 @@ class HtmlWriter(BaseV3Writer):
             with open(cssout, 'w', encoding='utf-8') as f:
                 f.write(css)
             add.link(head, None, rel="stylesheet", href="xml2rfc.css", type="text/css")
+        elif self.options.no_css:
+            pass
         else:
             add.style(head, None, css, type="text/css")
         add.link(head, None, rel="stylesheet", href="rfc-local.css", type="text/css")
@@ -482,15 +502,15 @@ class HtmlWriter(BaseV3Writer):
             build.table(
                 build.thead(
                     build.tr(
-                        build.td(self.footer_series(), classes='left'),
-                        build.td(self.footer_title(), classes='center'),
-                        build.td(self.footer_date(), classes='right'),
+                        build.td(self.page_top_left(), classes='left'),
+                        build.td(self.page_top_center(), classes='center'),
+                        build.td(self.page_top_right(), classes='right'),
                     ),
                 ),
                 build.tfoot(
                     build.tr(
-                        build.td(self.footer_authors(), classes='left'),
-                        build.td(self.footer_center(), classes='center'),
+                        build.td(self.page_bottom_left(), classes='left'),
+                        build.td(self.page_bottom_center(), classes='center'),
                         build.td("[Page]", classes='right'),
                     ),
                 ),
@@ -1677,7 +1697,9 @@ class HtmlWriter(BaseV3Writer):
         latin = h.get('class') == 'ascii'
         adr = get_normalized_address_info(self, x, latin=latin)
         if adr:
+            align = 'left' if latin else get_bidi_alignment(adr)
             for item in format_address(adr, latin=latin):
+                item.set('class', align)
                 h.append(item)
         else:
             # render elements in found order
