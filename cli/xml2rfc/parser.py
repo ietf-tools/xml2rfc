@@ -364,7 +364,7 @@ class CachingResolver(lxml.etree.Resolver):
                     write_path = os.path.join(self.write_cache, 
                                               xml2rfc.CACHE_PREFIX, basename)
                     with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
-                        cache_file.write(text.decode('utf-8')
+                        cache_file.write(text.decode('utf-8'))
                     xml2rfc.log.note('Added file to cache: ', write_path)
                     return write_path
                 except Exception as e:
