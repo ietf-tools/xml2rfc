@@ -173,7 +173,7 @@ changes=$( sed -n "/^$PROJ ($VER.*)/,/^ -- /p" changelog )
 contributors=$(echo "$changes" | sed 's/\.[ \t\n]/ /'| tr -c "a-z0-9.@-" "\n" | sort | uniq | grep '@' | sed -r -e 's/^\.+//' -e 's/\.+$//' -e 's/^/-c /' || true)
 
 note "Checking that we don't have temporary editor files"
-$do find $SRC/$PROJ -name '*~' || die "Found temporary editor files, see above."
+$do find $SRC/$PROJ -name '?*~' -print0 | grep -qz . && die "Found temporary editor files, see above."
 
 note "Set the current time on the release notes in the changelog file"
 $do sed -r -i -e "1,/^ -- /s/([A-Za-z-]+ <[a-z0-9.-]+@[a-z0-9.-]+>  ).*$/\1$(date +'%d %b %Y %H:%M:%S %z')/" changelog
