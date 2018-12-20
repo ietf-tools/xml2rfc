@@ -10,6 +10,7 @@ import re
 #import sys
 import six
 import unicodedata
+import xml2rfc
 
 from io import open
 from lxml.html import html_parser
@@ -21,12 +22,11 @@ elif six.PY3:
     from urllib.request import urlopen
 
 try:
-    from xml2rfc import debug
+    import debug
     debug.debug = True
 except ImportError:
     pass
 
-import xml2rfc
 from xml2rfc import log, strings
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.uniscripts import is_script
@@ -38,7 +38,7 @@ from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
 from xml2rfc.util.postal import ( get_normalized_address_info, address_hcard_properties,
                                 enhance_address_format, address_field_mapping, )
 from xml2rfc.util.unicode import expand_unicode_element
-from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids
+from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids, build_dataurl
 
 #from xml2rfc import utils
 
@@ -185,7 +185,6 @@ def get_bidi_alignment(address):
                 if isinstance(ch, six.text_type):
                     dir = unicodedata.bidirectional(ch)
                     if dir in ['R', 'AL']:
-                        alignment = 'R'
                         return 'right'
     return 'left'
     
@@ -209,12 +208,17 @@ class HtmlWriter(BaseV3Writer):
         return element_nodes
 
     def html_tree(self):
+        if not self.root.get('prepTime'):
+            prep = xml2rfc.PrepToolWriter(self.xmlrfc, options=self.options, date=self.options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
+            tree = prep.prep()
+            self.tree = tree
+            self.root = self.tree.getroot()
         html_tree = self.render(None, self.root)
         html_tree = self.post_process(html_tree)
         return html_tree
 
     def html(self, html_tree=None):
-        if not html_tree:
+        if html_tree is None:
             html_tree = self.html_tree()
         # 6.1.  DOCTYPE
         # 
@@ -737,7 +741,11 @@ class HtmlWriter(BaseV3Writer):
             if svg == None:
                 self.err(x, 'Expected <svg> content inside <artwork type="svg">, but did not find it:\n   %s ...' % (lxml.etree.tostring(x)[:256], ))
                 return None
-            div.append(svg)
+            if self.options.image_svg:
+                data = build_dataurl('image/svg+xml', lxml.etree.tostring(svg))
+                add.img(div, None, src=data, alt=x.get('alt'))
+            else:
+                div.append(svg)
             if x.getparent().tag != 'figure':
                 self.maybe_add_pilcrow(div)
             else:
