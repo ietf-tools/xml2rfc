@@ -84,9 +84,7 @@ RUN apt-get install -qy \
 	python3-pip \
 	python3-setuptools \
 	python3-wheel \
-	python3.4 \
 	python3.5 \
-	python3.6 \
 	realpath \
 	rsync \
 	shared-mime-info \
