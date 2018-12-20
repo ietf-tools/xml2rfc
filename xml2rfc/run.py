@@ -82,8 +82,12 @@ def main():
                            help='outputs to an html file')
     formatgroup.add_option('', '--nroff', action='store_true',
                            help='outputs to an nroff file')
-    formatgroup.add_option('', '--pdf', action='store_true',
-                           help='outputs to a pdf file')
+    if xml2rfc.HAVE_CAIRO and xml2rfc.HAVE_PANGO:
+        formatgroup.add_option('', '--pdf', action='store_true',
+                               help='outputs to a pdf file')
+    else:
+        formatgroup.add_option('', '--pdf', action='store_true',
+                               help='(unavailable due to missing external library)')
     formatgroup.add_option('', '--raw', action='store_true',
                            help='outputs to a text file, unpaginated')
     formatgroup.add_option('', '--expand', action='store_true',
@@ -191,6 +195,7 @@ def main():
     # Some additional values not exposed as options
     options.doi_base_url = "https://doi.org/"
     options.no_css = False
+    options.image_svg = False
 
     # Show version information, then exit
     if options.version:
@@ -209,6 +214,12 @@ def main():
     if len(args) < 1:
         optionparser.print_help()
         sys.exit(2)
+
+    if options.pdf and not xml2rfc.HAVE_CAIRO:
+        sys.exit("Cannot generate PDF due to missing external Cairo library")
+    if options.pdf and not xml2rfc.HAVE_PANGO:
+        sys.exit("Cannot generate PDF due to missing external Pango library")
+
     source = args[0]
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)

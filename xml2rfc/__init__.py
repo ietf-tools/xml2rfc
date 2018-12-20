@@ -1,4 +1,6 @@
-
+# Copyright The IETF Trust 2011-2018, All Rights Reserved
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, print_function, division
 
 # Static values
 __version__  = '2.15.2'
@@ -25,3 +27,17 @@ __all__ = ['XmlRfcError', 'CachingResolver', 'XmlRfcParser', 'XmlRfc',
            'HtmlWriter', 'PdfWriter', 'ExpandV3XmlWriter',
        ]
 
+try:
+    from weasyprint.text import cairo
+    HAVE_CAIRO = True
+    CAIRO_VERSION = cairo.cairo_version()
+except (ImportError, OSError):
+    HAVE_CAIRO = False
+    CAIRO_VERSION = None
+try:
+    from weasyprint.text import pango
+    HAVE_PANGO = True
+    PANGO_VERSION = pango.pango_version
+except (ImportError, OSError):
+    HAVE_PANGO = False
+    PANGO_VERSION = None
