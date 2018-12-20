@@ -3,15 +3,28 @@
 from __future__ import unicode_literals, print_function, division
 
 import datetime
+import io
 import os
 
-import weasyprint
-
-from xml2rfc.writers.base import default_options, BaseV3Writer
-from xml2rfc.writers.html import HtmlWriter
+try:
+    import weasyprint
+    import_error = None
+except (ImportError, OSError) as e:
+    import_error = e
+    weasyprint = False
 
 try:
-    from xml2rfc import debug, log
+    import fontconfig
+except ImportError:
+    fontconfig = False
+
+import xml2rfc
+from xml2rfc.writers.base import default_options, BaseV3Writer
+from xml2rfc.writers.html import HtmlWriter
+from xml2rfc.util.fonts import get_noto_serif_family_for_script
+
+try:
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
@@ -20,76 +33,35 @@ class PdfWriter(BaseV3Writer):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
         super(PdfWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
+        if not weasyprint:
+            self.err(None, "Cannot run PDF formatter: %s" % import_error)
+            return
 
-    def get_serif_fonts(self):
-        """
+        if options.verbose:
+            import logging
+            weasyprint.logger.LOGGER.setLevel(logging.DEBUG)
 
-        This translates from the official unicode script names to the fonts
-        actually available in the Noto font family.  The set of fonts known
-        to have serif versions is up-to-date as of 05 Dec 2018, for the
-        Noto font pack built on 2017-10-24, available as
-        https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
-        
-        """
-        noto_serif = "'Noto Serif'"
-        fontname = {
-            'Latin':    'Noto Serif',
-            'Common':   'Noto Serif',
-            'Greek':    'Noto Serif',
-            'Hebrew':   'Noto Serif',
-            'Cyrillic': 'Noto Serif',
-            'Tai_Viet': 'Noto Serif',
-            # Script names that don't match font names
-            'Han':      'Noto Serif CJK SC',
-            'Hangul':   'Noto Serif CJK KR',
-            'Hiragana': 'Noto Serif CJK JP',
-            'Katakana': 'Noto Serif CJK JP',
-            # Script names available in Serif
-            'Armenian':	'Noto Serif Armenian',
-            'Bengali':	'Noto Serif Bengali',
-            'Devanagari':'Noto Serif Devanagari',
-            'Display':	'Noto Serif Display',
-            'Ethiopic':	'Noto Serif Ethiopic',
-            'Georgian':	'Noto Serif Georgian',
-            'Gujarati':	'Noto Serif Gujarati',
-            'Hebrew':	'Noto Serif Hebrew',
-            'Kannada':	'Noto Serif Kannada',
-            'Khmer':	'Noto Serif Khmer',
-            'Lao':	'Noto Serif Lao',
-            'Malayalam':'Noto Serif Malayalam',
-            'Myanmar':	'Noto Serif Myanmar',
-            'Sinhala':	'Noto Serif Sinhala',
-            'Tamil':	'Noto Serif Tamil',
-            'Telugu':	'Noto Serif Telugu',
-            'Thai':	'Noto Serif Thai',
-            # Other names may be available in Sans
-        }
-        fonts = set()
-        scripts = self.root.get('scripts').split(',')
-        for script in scripts:
-            if script in fontname:
-                fonts.add("'%s'" % fontname[script])
-            else:
-                script = script.replace('_', ' ')
-                fonts.add("'Noto Sans %s'" % script)
-        fonts -= set([ noto_serif, ])
-        fonts = [ noto_serif, ] + list(fonts)
-        return fonts
+    def pdf(self):
+        if not weasyprint:
+            return None
 
-    def write(self, filename):
-        self.filename = filename
+        if not self.root.get('prepTime'):
+            prep = xml2rfc.PrepToolWriter(self.xmlrfc, options=self.options, date=self.options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
+            tree = prep.prep()
+            self.tree = tree
+            self.root = self.tree.getroot()
 
         self.options.no_css = True
+        self.options.image_svg = True
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
 
         writer = weasyprint.HTML(string=html)
 
         cssin  = self.options.css or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'xml2rfc.css')
-        font_config = weasyprint.fonts.FontConfiguration()
-        css = weasyprint.CSS(cssin, font_config=font_config)
+        css = weasyprint.CSS(cssin)
 
-        # page info
+        # fonts and page info
         fonts = self.get_serif_fonts()
         page_info = {
             'top-left': self.page_top_left(),
@@ -100,13 +72,43 @@ class PdfWriter(BaseV3Writer):
             'fonts': ', '.join(fonts),
         }
         page_css_text = page_css_template.format(**page_info)
-        page_css = weasyprint.CSS(string=page_css_text, font_config=font_config)
+        page_css = weasyprint.CSS(string=page_css_text)
 
-        res = writer.write_pdf(filename, stylesheets=[ css, page_css ])
+        pdf = writer.write_pdf(None, stylesheets=[ css, page_css ])
 
-        if not self.options.quiet:
-            log.write('Created file', filename)
+        return pdf
 
+
+    def write(self, filename):
+        if not weasyprint:
+            return
+
+        self.filename = filename
+
+        pdf = self.pdf()
+        if pdf:
+            with io.open(filename, 'bw') as file:
+                file.write(pdf)
+            
+            if not self.options.quiet:
+                xml2rfc.log.write('Created file', filename)
+        else:
+            self.err(None, 'PDF creation failed')
+
+    def get_serif_fonts(self):
+        fonts = set()
+        scripts = self.root.get('scripts').split(',')
+        noto_serif = "'Noto Serif'"
+        for script in scripts:
+            family = get_noto_serif_family_for_script(script)
+            fonts.add("'%s'" % family)
+            if fontconfig:
+                available = fontconfig.query(family=family)
+                if not available:
+                    self.warn(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
+        fonts -= set([ noto_serif, ])
+        fonts = [ noto_serif, ] + list(fonts)
+        return fonts
 
 page_css_template = """
 @media print {{
@@ -164,3 +166,5 @@ page_css_template = """
   }}
 }}
 """
+
+
