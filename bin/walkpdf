@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright The IETF Trust 2018, All Rights Reserved
+
+from __future__ import unicode_literals, print_function, division
+
+import io
+import json
+import os
+import sys
+
+from xml2rfc.walkpdf import pyobj, xmltext
+
+for filename in sys.argv[1:]:
+    if not os.path.exists(filename):
+        print('Could not find "%s"' % filename)
+    print('File: %s' % filename)
+    doc = pyobj(filename)
+    with io.open(filename+'.json', 'bw') as j:
+        json.dump(doc, j, indent=2)
+    print('Wrote: %s' % j.name)
+    with io.open(filename+'.xml', 'w', encoding='utf-8') as x:
+        x.write(xmltext(filename, doc))
+    print('Wrote: %s' % x.name)
+
