@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 
-import unittest
+import copy
 import difflib
+import lxml
+import re
+import six
+import tempfile
+import unittest
 import xml2rfc
 import xml2rfc.utils
-import lxml
-import tempfile
-import re
+
+from xml2rfc.walkpdf import xmldoc
 
 try:
     import debug
@@ -29,7 +33,7 @@ def diff_test(case, valid, test, failpath):
     test  = str(test)
     valid = str(valid)
     # replace the current version with someting static, if present
-    test  =  test.replace(xml2rfc.__version__, 'N.N.N')
+    test  =  str(test.replace(xml2rfc.__version__, 'N.N.N'))
     validarr = [line.rstrip() for line in valid.splitlines()]
     testarr = [line.rstrip() for line in test.splitlines()]
     if testarr != validarr:
@@ -447,6 +451,43 @@ class WriterRfcTest(WriterRootTest):
         self.set_root_attrs('independent', 'exp', 'no')
         self.set_valid('tests/valid/status_independent_exp.txt')
         return self.status_test()
+
+
+def pdfwriter(path):
+    """ Parse a minimal RFC tree and instantiate a writer """
+    parser = xml2rfc.XmlRfcParser(path, quiet=True)
+    xmlrfc = parser.parse()
+    writer = xml2rfc.writers.pdf.PdfWriter(xmlrfc, quiet=True, )
+    return writer
+
+elements_writer = pdfwriter('tests/input/elements.xml')
+elements_pdfdoc = elements_writer.pdf() # has side effects on .root
+elements_root   = elements_writer.root
+elements_pdfxml = xmldoc(None, bytes=elements_pdfdoc)
+
+class PdfWriterTests(unittest.TestCase):
+
+    def setUp(self):
+        xml2rfc.log.quiet = True
+        self.pdfxml = copy.deepcopy(elements_pdfxml)
+        self.root = copy.deepcopy(elements_root)
+
+
+    def test_text_content(self):
+        def norm(t):
+            return re.sub(r'\s+', ' ', t).strip()
+        #
+        text = norm('\n'.join( p.text for p in self.pdfxml.xpath('.//Page/text') ))
+        for e in self.root.xpath('./middle//*'):
+            if e.text and e.text.strip() and e.tag not in xml2rfc.util.unicode.unicode_content_tags:
+                t =  norm(e.text.split(None, 1)[0])
+                self.assertIn(t, text)
+
+    def test_included_fonts(self):
+        font_families = set([ f.text for f in self.pdfxml.xpath('.//FontFamily') ])
+        for script in self.root.get('scripts').split(','):
+            family = xml2rfc.util.fonts.get_noto_serif_family_for_script(script)
+            self.assertIn(family, font_families, 'Missing font match for %s' % script)
 
 if __name__ == '__main__':
     unittest.main()
