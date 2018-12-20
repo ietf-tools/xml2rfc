@@ -8,13 +8,13 @@ import os
 import re
 from codecs import open
 from setuptools import setup
-import six
 import sys
 # This workaround is necessary to make setup.py upload work with non-ascii
 # arguments to setup().  
-if six.PY2:
+try:
     reload(sys).setdefaultencoding("UTF-8") 
-
+except NameError:
+    pass
 
 description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
 
@@ -118,6 +118,10 @@ setup(
     ]},
 
     install_requires = requirements,
+    tests_require = [
+        'dict2xml',
+        'pypdf2',
+    ],
 
     zip_safe = False,                   # We're reading templates from a package directory.
 )
