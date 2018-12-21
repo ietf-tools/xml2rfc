@@ -569,7 +569,7 @@ hr.addr {
 /* pagination */
 @media print {
   body {
-    font-family: 'Noto Serif', "Times New Roman", Times, serif;
+
     width: 100%;
   }
   p {
@@ -820,6 +820,14 @@ address.vcard {
   margin-right: auto;
 }
 
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
 /* Provide table alignment support.  We can't use the alignX classes above
    since they do unwanted things with caption and other styling. */
 table.right {
@@ -838,4 +846,16 @@ table.left {
 /* Give the table caption label the same styling as the figcaption */
 caption a[href] {
   color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
 }

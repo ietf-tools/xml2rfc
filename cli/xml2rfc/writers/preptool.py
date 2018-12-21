@@ -1606,7 +1606,7 @@ class PrepToolWriter(BaseV3Writer):
 
                     awtext = (' '.join(list(e.itertext()))).strip()
                     svg = None
-                    if awtext:
+                    if awtext or self.options.image_svg:
                         # keep svg in src attribute
                         if scheme in ['file', 'http', 'https', 'data']:
                             f = urlopen(src)

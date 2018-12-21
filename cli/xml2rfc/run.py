@@ -82,6 +82,12 @@ def main():
                            help='outputs to an html file')
     formatgroup.add_option('', '--nroff', action='store_true',
                            help='outputs to an nroff file')
+    if xml2rfc.HAVE_CAIRO and xml2rfc.HAVE_PANGO:
+        formatgroup.add_option('', '--pdf', action='store_true',
+                               help='outputs to a pdf file')
+    else:
+        formatgroup.add_option('', '--pdf', action='store_true',
+                               help='(unavailable due to missing external library)')
     formatgroup.add_option('', '--raw', action='store_true',
                            help='outputs to a text file, unpaginated')
     formatgroup.add_option('', '--expand', action='store_true',
@@ -188,17 +194,31 @@ def main():
     (options, args) = optionparser.parse_args()
     # Some additional values not exposed as options
     options.doi_base_url = "https://doi.org/"
+    options.no_css = False
+    options.image_svg = False
 
     # Show version information, then exit
     if options.version:
         print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
         if options.verbose:
+            extras = set(['pycairo', 'weasyprint'])
             try:
                 import pkg_resources
                 this = pkg_resources.working_set.by_key[xml2rfc.NAME]
                 for p in this.requires():
-                    dist = pkg_resources.get_distribution(p.key)
-                    print('  %s'%dist)
+                    if p.key in extras:
+                        extras -= p.key
+                    try:
+                        dist = pkg_resources.get_distribution(p.key)
+                        print('  %s'%dist)
+                    except:
+                        pass
+                for key in extras:
+                    try:
+                        dist = pkg_resources.get_distribution(key)
+                        print('  %s'%dist)
+                    except:
+                        pass
             except:
                 pass
         sys.exit(0)
@@ -206,6 +226,55 @@ def main():
     if len(args) < 1:
         optionparser.print_help()
         sys.exit(2)
+
+    install_info = """
+    Cannot generate PDF due to missing external libraries.
+    ------------------------------------------------------
+    
+    In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
+    depends on external libaries that must be installed as native packages.
+
+    First, install the Cairo, Pango, and GDK-PixBuf library files on your
+    system.  See installation instructions on the WeasyPrint Docs:
+    
+        https://weasyprint.readthedocs.io/en/stable/install.html
+
+    (Python 3 is not needed if your system Python is 2.7, though).
+
+    Next, install the pycairo and weasyprint python modules using pip.
+    Depending on your system, you may need to use 'sudo' or install in
+    user-specific directories, using the --user switch.  On OS X in
+    particular, you may also need to install a newer version of setuptools
+    using --user before weasyprint can be installed.  If you install with 
+    the --user switch, you may need to also set PYTHONPATH, e.g.,
+    
+        PYTHONPATH=/Users/username/Library/Python/2.7/lib/python/site-packages
+
+    for Python 2.7.
+
+    The basic pip commands (modify as needed according to the text above)
+    are:
+
+        pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
+
+    With these installed and available to xml2rfc, the --pdf switch will be
+    enabled.
+    """
+
+    missing = ""
+    if options.pdf and not xml2rfc.HAVE_WEASYPRINT:
+        missing += "\nCould not import weasyprint"
+    if options.pdf and not xml2rfc.HAVE_PYCAIRO:
+        missing += "\nCould not import pycairo"
+    if options.pdf and not xml2rfc.HAVE_CAIRO:
+        missing += "\nCould not find the cairo lib"
+    if options.pdf and not xml2rfc.HAVE_PANGO:
+        missing += "\nCould not find the pango lib"
+
+    if missing:
+        install_info += missing + '\n'
+        sys.exit(install_info)
+
     source = args[0]
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)
@@ -233,7 +302,7 @@ def main():
             options.output_path = options.basename
             options.basename = None
     #
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, ] if o])
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, options.pdf ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot give an explicit filename with more than one format, '
                  'use --path instead.')
@@ -311,14 +380,15 @@ def main():
         xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e.error_log)
         sys.exit(1)
         
+
     # Remember if we're building an RFC
     options.rfc = xmlrfc.tree.getroot().get('number')
 
-    # Treat v3 input as v3
+    # Check if we've received a version="3" document, and adjust accordingly
     if xmlrfc.tree.getroot().get('version') == '3':
         options.legacy = False
-        options.vocabulary = 'v3'
         options.no_dtd = True
+        options.vocabulary = 'v3'
         if options.list_symbols is None:
             options.list_symbols = ('*', '-', 'o', '+')
 
@@ -475,6 +545,20 @@ def main():
             prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
             writer = xml2rfc.HtmlWriter(xmlrfc, options=options, date=options.date)
+            writer.write(filename)
+            options.output_filename = None
+
+        if options.pdf:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.pdf'
+                options.output_filename = filename
+            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+            xmlrfc.tree = v2v3.convert2to3()
+            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
+            xmlrfc.tree = prep.prep()
+            writer = xml2rfc.PdfWriter(xmlrfc, options=options, date=options.date)
             writer.write(filename)
             options.output_filename = None
 

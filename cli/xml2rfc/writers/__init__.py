@@ -11,10 +11,11 @@ from xml2rfc.writers.preptool import PrepToolWriter
 from xml2rfc.writers.text import TextWriter
 from xml2rfc.writers.html import HtmlWriter
 from xml2rfc.writers.expand import ExpandV3XmlWriter
+from xml2rfc.writers.pdf import PdfWriter
 
 # This defines what 'from xml2rfc.writers import *' actually imports:
 __all__ = ['BaseRfcWriter', 'RawTextRfcWriter', 'PaginatedTextRfcWriter',
            'HtmlRfcWriter', 'NroffRfcWriter', 'ExpandedXmlWriter',
            'RfcWriterError', 'V2v3XmlWriter', 'PrepToolWriter', 'TextWriter',
-           'HtmlWriter', 'ExpandV3XmlWriter',
+           'HtmlWriter', 'PdfWriter', 'ExpandV3XmlWriter',
        ]

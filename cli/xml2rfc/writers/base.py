@@ -33,6 +33,7 @@ default_options = Values(defaults={
         'basename': None,
         'cache': None,
         'css': None,
+        'date': datetime.date.today(),
         'datestring': None,
         'debug': False,
         'doi_base_url': 'https://doi.org/',
@@ -40,11 +41,13 @@ default_options = Values(defaults={
         'external_css': False,
         'filename': None,
         'id_base_url': 'https://www.ietf.org/archive/id/',
+        'image_svg': False,
         'indent': 2,
         'legacy': False,
         'legacy_date_format': True,
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
+        'no_css': False,
         'no_dtd': None,
         'no_network': False,
         'omit_headers': None,
@@ -52,6 +55,7 @@ default_options = Values(defaults={
         'output_path': None,
         'quiet': False,
         'remove_pis': False,
+        'rfc': None,
         'rfc_base_url': 'https://www.rfc-editor.org/info/',
         'strict': False,
         'utf8': False,
@@ -1592,25 +1596,26 @@ class BaseV3Writer(object):
 
     def get_relevant_pis(self, e):
         pis = []
-        # directly inside element
-        for c in e.getchildren():
-            if c.tag == lxml.etree.PI and c.target == xml2rfc.V3_PI_TARGET:
-                pis.append(c)
-        # siblings before element
-        for s in e.itersiblings(preceding=True):
-            if s.tag == lxml.etree.PI and s.target == xml2rfc.V3_PI_TARGET:
-                pis.append(s)
-        # ancestor's earlier siblings
-        for a in e.iterancestors():
-            for s in a.itersiblings(preceding=True):
+        if e != None:
+            # directly inside element
+            for c in e.getchildren():
+                if c.tag == lxml.etree.PI and c.target == xml2rfc.V3_PI_TARGET:
+                    pis.append(c)
+            # siblings before element
+            for s in e.itersiblings(preceding=True):
                 if s.tag == lxml.etree.PI and s.target == xml2rfc.V3_PI_TARGET:
                     pis.append(s)
-        # before root elements
-        p = self.root.getprevious()
-        while p != None:
-            if p.tag == lxml.etree.PI and p.target == xml2rfc.V3_PI_TARGET:
-                pis.append(p)
-            p = p.getprevious()
+            # ancestor's earlier siblings
+            for a in e.iterancestors():
+                for s in a.itersiblings(preceding=True):
+                    if s.tag == lxml.etree.PI and s.target == xml2rfc.V3_PI_TARGET:
+                        pis.append(s)
+            # before root elements
+            p = self.root.getprevious()
+            while p != None:
+                if p.tag == lxml.etree.PI and p.target == xml2rfc.V3_PI_TARGET:
+                    pis.append(p)
+                p = p.getprevious()
         return pis
 
     def silenced(self, e, text):
@@ -1684,27 +1689,27 @@ class BaseV3Writer(object):
 
     # methods for use in setting up page headers and footers
 
-    def footer_series(self):
-        if   self.root.find('.//seriesInfo[@name="Internet-Draft"]') != None:
-            return 'Internet-Draft'
-        else:
-            info = self.root.find('.//seriesInfo[@name="RFC"]')
-            if info != None:
-                return 'RFC %s' % info.get('value')
-        return '(unknown)'
+    def page_top_left(self):
+        number = self.root.get('number')
+        if number != None:
+            return 'RFC %s' % number
+        info = self.root.find('./front/seriesInfo[@name="RFC"]')
+        if info != None:
+            return 'RFC %s' % info.get('value')
+        return 'Internet-Draft'
 
-    def footer_title(self):
+    def page_top_center(self):
         title = self.root.find('./front/title')
         text = title.get('abbrev') or ''.join(title.itertext())
         return text
 
-    def footer_date(self):
+    def page_top_right(self):
         date = self.root.find('./front/date')
         parts = extract_date(date, self.options.date)
         text = format_date(parts[0], parts[1], None, legacy=True)
         return text
 
-    def footer_authors(self):
+    def page_bottom_left(self):
         authors = self.root.findall('front/author')
         authors = [ a for a in authors if a.get('role') != 'contributor' ]
         surnames = [ n for n in [ short_author_ascii_name_parts(a)[1] for a in authors ] if n ]
@@ -1716,7 +1721,7 @@ class BaseV3Writer(object):
             text = '%s, et al.' % surnames[0]
         return text
 
-    def footer_center(self):
+    def page_bottom_center(self):
         # Either expiry date or category
         if self.options.rfc:
             cat = self.root.get('category')

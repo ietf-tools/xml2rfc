@@ -1,3 +1,58 @@
+xml2rfc (2.16.0) ietf; urgency=medium
+
+  This release provides support for generation of xml2rfc PDF output.
+  However, a default pip install will only install the xml2rfc module
+  itself; additional installation work is needed to enable PDF generation:
+
+  In order to generate PDFs, xml2rfc uses the WeasyPrint module, which
+  depends on external libaries that must be installed as native packages
+  on your platform, separately from the xml2rfc install.
+
+  First, install the Cairo, Pango, and GDK-PixBuf libs on your system.
+  See installation instructions on the WeasyPrint Docs:
+
+      https://weasyprint.readthedocs.io/en/stable/install.html
+
+  (Python 3 is not needed if your system Python is 2.7, though).
+
+  (On some OS X systems with System Integrity Protection active, you may
+  need to create a symlink from your home directory to the library installation
+  directory (often /opt/local/lib):
+
+      ln -s /opt/local/lib ~/lib
+
+  in order for weasyprint to find the installed cairo and pango libraries.
+  Whether this is needed or not depends on whether you used macports or
+  homebrew to install cairo and pango, and the homebrew / macport version.)
+
+  Next, install the pycairo and weasyprint python modules using pip.
+  Depending on your system, you may need to use 'sudo' or install in
+  user-specific directories, using the --user switch.  On OS X in particular,
+  you may also need to install a newer version of setuptools using --user
+  switch before weasyprint can be installed.  If you install with the --user
+  switch, you may also need to set PYTHONPATH in your shell environment, e.g.,
+
+      PYTHONPATH=/Users/username/Library/Python/2.7/lib/python/site-packages
+
+  for Python 2.7.
+
+  The basic pip command (modify as needed according to the text above) is:
+
+      pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
+
+  With these installed and available to xml2rfc, the --pdf switch will be
+  enabled.
+
+  For correct PDF output, you also need to install the Noto font set.
+  Download the full set from:
+
+    https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip,
+
+  and install as appropriate for your platform.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  21 Dec 2018 17:28:08 +0000
+
+
 xml2rfc (2.15.5) ietf; urgency=medium
 
   * Added code to look for input marked as v3, and process that as v3 

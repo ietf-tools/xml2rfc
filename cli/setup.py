@@ -118,6 +118,10 @@ setup(
     ]},
 
     install_requires = requirements,
+    tests_require = [
+        'dict2xml',
+        'pypdf2',
+    ],
 
     zip_safe = False,                   # We're reading templates from a package directory.
 )
