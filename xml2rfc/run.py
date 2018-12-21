@@ -201,12 +201,24 @@ def main():
     if options.version:
         print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
         if options.verbose:
+            extras = set(['pycairo', 'weasyprint'])
             try:
                 import pkg_resources
                 this = pkg_resources.working_set.by_key[xml2rfc.NAME]
                 for p in this.requires():
-                    dist = pkg_resources.get_distribution(p.key)
-                    print('  %s'%dist)
+                    if p.key in extras:
+                        extras -= p.key
+                    try:
+                        dist = pkg_resources.get_distribution(p.key)
+                        print('  %s'%dist)
+                    except:
+                        pass
+                for key in extras:
+                    try:
+                        dist = pkg_resources.get_distribution(key)
+                        print('  %s'%dist)
+                    except:
+                        pass
             except:
                 pass
         sys.exit(0)
@@ -215,10 +227,54 @@ def main():
         optionparser.print_help()
         sys.exit(2)
 
+    install_info = """
+    Cannot generate PDF due to missing external libraries.
+    ------------------------------------------------------
+    
+    In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
+    depends on external libaries that must be installed as native packages.
+
+    First, install the Cairo, Pango, and GDK-PixBuf library files on your
+    system.  See installation instructions on the WeasyPrint Docs:
+    
+        https://weasyprint.readthedocs.io/en/stable/install.html
+
+    (Python 3 is not needed if your system Python is 2.7, though).
+
+    Next, install the pycairo and weasyprint python modules using pip.
+    Depending on your system, you may need to use 'sudo' or install in
+    user-specific directories, using the --user switch.  On OS X in
+    particular, you may also need to install a newer version of setuptools
+    using --user before weasyprint can be installed.  If you install with 
+    the --user switch, you may need to also set PYTHONPATH, e.g.,
+    
+        PYTHONPATH=/Users/henrik/Library/Python/2.7/lib/python/site-packages
+
+    for Python 2.7.
+
+    The basic pip commands (modify as needed according to the text above)
+    are:
+
+        pip install 'pycairo>=1.18'
+        pip install 'weasyprint<=0.42.3'
+
+    With these installed and available to xml2rfc, the --pdf switch will be
+    enabled.
+    """
+
+    missing = ""
+    if options.pdf and not xml2rfc.HAVE_WEASYPRINT:
+        missing += "\nCould not import weasyprint"
+    if options.pdf and not xml2rfc.HAVE_PYCAIRO:
+        missing += "\nCould not import pycairo"
     if options.pdf and not xml2rfc.HAVE_CAIRO:
-        sys.exit("Cannot generate PDF due to missing external Cairo library")
+        missing += "\nCould not find the cairo lib"
     if options.pdf and not xml2rfc.HAVE_PANGO:
-        sys.exit("Cannot generate PDF due to missing external Pango library")
+        missing += "\nCould not find the pango lib"
+
+    if missing:
+        install_info += missing + '\n'
+        sys.exit(install_info)
 
     source = args[0]
     if not os.path.exists(source):

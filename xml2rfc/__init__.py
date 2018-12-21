@@ -28,6 +28,16 @@ __all__ = ['XmlRfcError', 'CachingResolver', 'XmlRfcParser', 'XmlRfc',
        ]
 
 try:
+    import weasyprint
+    HAVE_WEASYPRINT = True
+except (ImportError, OSError):
+    HAVE_WEASYPRINT = False
+try:
+    import cairo
+    HAVE_PYCAIRO = True
+except (ImportError, OSError):
+    HAVE_PYCAIRO = False
+try:
     from weasyprint.text import cairo
     HAVE_CAIRO = True
     CAIRO_VERSION = cairo.cairo_version()
