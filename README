@@ -26,6 +26,9 @@ Installation
 Installation of the python package is done as usual with 'pip install xml2rfc',
 using appropriate switches and/or sudo.
 
+Installation of support libraries for the PDF-formatter
+-------------------------------------------------------
+
 In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
 depends on external libaries that must be installed as native packages
 on your platform, separately from the xml2rfc install.
@@ -36,6 +39,16 @@ system.  See installation instructions on the WeasyPrint Docs:
     https://weasyprint.readthedocs.io/en/stable/install.html
 
 (Python 3 is not needed if your system Python is 2.7, though).
+
+(On some OS X systems with System Integrity Protection active, you may
+need to create a symlink from your home directory to the library installation
+directory (often /opt/local/lib):
+
+    ln -s /opt/local/lib ~/lib
+
+in order for weasyprint to find the installed cairo and pango libraries.
+Whether this is needed or not depends on whether you used macports or homebrew
+to install cairo and pango, and the homebrew / macport version.)
 
 Next, install the pycairo and weasyprint python modules using pip.
 Depending on your system, you may need to use 'sudo' or install in
