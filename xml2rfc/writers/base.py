@@ -60,6 +60,7 @@ default_options = Values(defaults={
         'strict': False,
         'utf8': False,
         'verbose': False,
+        'vocabulary': 'v2',
     })
 
 class _RfcItem:

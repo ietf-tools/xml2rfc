@@ -456,26 +456,26 @@ class RawTextRfcWriter(BaseRfcWriter):
                     line.append('<' + element.attrib['target'].strip() + '>')
             elif element.tag == 'iref':
                 self._add_iref_to_index(element)
-            elif element.tag == 'cref' and \
-                element.pis['comments'] == 'yes':                
-                # Render if processing instruction is enabled
-                self.cref_counter += 1
-                anchor = element.attrib.get('anchor', None)
-                if anchor is None:
-                    anchor = 'CREF' + str(self.cref_counter)
-                    element.attrib['anchor'] = anchor
-                self._indexCref(self.cref_counter, anchor)
-                if element.pis['inline'] == 'yes':
-                    if anchor:
-                        anchor = anchor + ': '
-                    source = element.attrib.get('source', "")
-                    if source:
-                        source = " --" + source
-                    if element.text:
-                        line.append('[[' + anchor + element.text + source + ']]')
-                else:
-                    line.append('[' + anchor + ']')
-                    self.cref_list.append(element)
+            elif element.tag == 'cref':
+                if element.pis['comments'] == 'yes':                
+                    # Render if processing instruction is enabled
+                    self.cref_counter += 1
+                    anchor = element.attrib.get('anchor', None)
+                    if anchor is None:
+                        anchor = 'CREF' + str(self.cref_counter)
+                        element.attrib['anchor'] = anchor
+                    self._indexCref(self.cref_counter, anchor)
+                    if element.pis['inline'] == 'yes':
+                        if anchor:
+                            anchor = anchor + ': '
+                        source = element.attrib.get('source', "")
+                        if source:
+                            source = " --" + source
+                        if element.text:
+                            line.append('[[' + anchor + element.text + source + ']]')
+                    else:
+                        line.append('[' + anchor + ']')
+                        self.cref_list.append(element)
             elif element.tag == 'spanx':
                 style = element.attrib.get('style', 'emph')
                 edgechar = '_'  # default to emph because the spanx element exists

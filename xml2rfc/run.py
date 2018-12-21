@@ -280,7 +280,7 @@ def main():
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)
     # Default (this may change over time):
-    options.vocabulary = 'v2'
+    options.vocabulary = 'v2' if options.legacy else 'v3'
     # Option constraints
     if sys.argv[0].endswith('v2v3'):
         options.v2v3 = True
@@ -366,10 +366,8 @@ def main():
     xml2rfc.log.verbose = options.verbose
 
     # Parse the document into an xmlrfc tree instance
-    parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,
-                                  quiet=options.quiet,
-                                  cache_path=options.cache,
-                                  no_network=options.no_network,
+    parser = xml2rfc.XmlRfcParser(source,
+                                  options=options,
                                   templates_path=globals().get('_TEMPLATESPATH', None),
                               )
     try:
@@ -390,6 +388,14 @@ def main():
 
     # Remember if we're building an RFC
     options.rfc = xmlrfc.tree.getroot().get('number')
+
+    # Treat v3 input as v3
+    if xmlrfc.tree.getroot().get('version') == '3':
+        options.legacy = False
+        options.vocabulary = 'v3'
+        options.no_dtd = True
+        if options.list_symbols is None:
+            options.list_symbols = ('*', '-', 'o', '+')
 
     # Validate the document unless disabled
     if not options.no_dtd:

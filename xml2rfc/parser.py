@@ -14,11 +14,13 @@ import requests
 import lxml.etree
 import xml2rfc.log
 import xml2rfc.utils
+from xml2rfc.writers import base
 
 try:
     from urllib.parse import urlparse, urljoin
 except ImportError:
     from urlparse import urlparse, urljoin
+
 try:
     import debug
     assert debug
@@ -44,20 +46,21 @@ class XmlRfcError(Exception):
 class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
     def __init__(self, cache_path=None, library_dirs=None, source=None,
-                 templates_path='templates', verbose=False, quiet=False,
-                 no_network=False, network_locs= [
+                 templates_path='templates', verbose=None, quiet=None,
+                 no_network=None, network_locs= [
                      'https://xml2rfc.ietf.org/public/rfc/',
                      'https://xml2rfc.tools.ietf.org/public/rfc/',
                      'http://xml2rfc.ietf.org/public/rfc/',
                      'http://xml2rfc.tools.ietf.org/public/rfc/',
                  ],
-                 rfc_number=None, options=None):
-        self.verbose = verbose
-        self.quiet = quiet
-        self.source = source
+                 rfc_number=None, options=base.default_options):
+        self.quiet = quiet if quiet != None else options.quiet
+        self.verbose = verbose if verbose != None else options.verbose
+        self.no_network = no_network if no_network != None else options.no_network
+        self.cache_path = cache_path or options.cache
+        self.source = source 
         self.library_dirs = library_dirs
         self.templates_path = templates_path
-        self.no_network=no_network
         self.network_locs = network_locs
         self.include = False
         self.rfc_number = rfc_number
@@ -76,9 +79,9 @@ class CachingResolver(lxml.etree.Resolver):
         # Determine cache directories to read/write to
         self.read_caches = [ os.path.expanduser(path) for path in xml2rfc.CACHES ]
         self.write_cache = None
-        if cache_path:
+        if self.cache_path:
             # Explicit directory given, set as first directory in read_caches
-            self.read_caches.insert(0, cache_path)
+            self.read_caches.insert(0, self.cache_path)
         # Try to find a valid directory to write to by stepping through
         # Read caches one by one
         for dir in self.read_caches:
@@ -243,8 +246,11 @@ class CachingResolver(lxml.etree.Resolver):
                         result = self.cache(path)
                         if result:
                             break
-                if not result and self.no_network:
-                    xml2rfc.log.warn("Document not found in cache, and --no-network specified -- couldn't resolve %s" % request)
+                if not result:
+                    if self.options.vocabulary == 'v3' and not request.endswith('.xml'):
+                        xml2rfc.log.warn("The v3 formatters require full explicit URLs of external resources.  Did you forget to add '.xml' (or some other extension)?")
+                    if self.no_network:
+                        xml2rfc.log.warn("Document not found in cache, and --no-network specified -- couldn't resolve %s" % request)
                 tried_cache = True
             else:
                 if os.path.dirname(paths[0]):
@@ -395,20 +401,21 @@ class XmlRfcParser:
 
 
     """ XML parser container with callbacks to construct an RFC tree """
-    def __init__(self, source, verbose=False, quiet=False, options=None,
+    def __init__(self, source, verbose=None, quiet=None, options=base.default_options,
                  cache_path=None, templates_path=None, library_dirs=None,
-                 no_network=False, network_locs=[
+                 no_network=None, network_locs=[
                      'https://xml2rfc.ietf.org/public/rfc/',
                      'https://xml2rfc.tools.ietf.org/public/rfc/',
                      'http://xml2rfc.ietf.org/public/rfc/',
                      'http://xml2rfc.tools.ietf.org/public/rfc/',
                  ]
                  ):
-        self.verbose = verbose
-        self.quiet = quiet
+        self.options = options
+        self.quiet = quiet if quiet != None else options.quiet
+        self.verbose = verbose if verbose != None else options.verbose
+        self.no_network = no_network if no_network != None else options.no_network
         self.source = source
-        self.cache_path = cache_path
-        self.no_network = no_network
+        self.cache_path = cache_path or options.cache
         self.network_locs = network_locs
 
         if self.source:
@@ -491,6 +498,7 @@ class XmlRfcParser:
                                         network_locs=self.network_locs,
                                         verbose=self.verbose,
                                         quiet=self.quiet,
+                                        options=self.options,
                                      )
         context.resolvers.add(caching_resolver)
 
@@ -534,6 +542,7 @@ class XmlRfcParser:
                                         verbose=self.verbose,
                                         quiet=self.quiet,
                                         rfc_number = self.rfc_number,
+                                        options=self.options,
                                     )
 
         # Add our custom resolver

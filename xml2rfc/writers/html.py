@@ -1354,10 +1354,11 @@ class HtmlWriter(BaseV3Writer):
             #   * Expires: <Date>
 
             def entry(dl, name, value):
-                cls = slugify(name)
-                dl.append( build.dt('%s:'%name, classes='label-%s'%cls))
-                dl.append( build.dd(value, classes=cls))
-
+                if value != None:
+                    cls = slugify(name)
+                    dl.append( build.dt('%s:'%name, classes='label-%s'%cls))
+                    dl.append( build.dd(value, classes=cls))
+            #
             dl = build.dl(id='identifiers')
             h.append( build.div(dl, classes='document-information' ))
             if self.options.rfc:
@@ -1397,13 +1398,11 @@ class HtmlWriter(BaseV3Writer):
                 for section in ['obsoletes', 'updates']:
                     items = self.root.get(section)
                     if items:
-                        alist = []
                         for num in items.split(','):
                             num = num.strip()
                             a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%num), classes='eref')
                             a.tail = ' '
-                            alist.append(a)
-                        entry(dl, section.title(), *alist)
+                            entry(dl, section.title(), a)
                         a.tail += '(if approved)'
                 # Publication date
                 entry(dl, 'Published', self.render_date(None, x.find('date')))
@@ -2383,6 +2382,8 @@ class HtmlWriter(BaseV3Writer):
     #         class="url">http://www.example.com</a>
     #    </div>
     def render_uri(self, h, x):
+        if not x.text:
+            return None
         value = x.text.strip()
         cls = 'url'
         div = add.div(h, None,
