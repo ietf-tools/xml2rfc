@@ -50,6 +50,23 @@ echo "Activating the virtual python environment ..."
 chown -R $USER /opt/home/$USER
 chmod -R g+w   /usr/local/lib/		# so we can patch libs if needed
 
+echo "Checking for local font directory"
+LOCAL_FONTS="/home/$USER/$CWD/.fonts"
+[ -d ls $LOCAL_FONTS ] || echo "
+ *** Missing font directory: $LOCAL_FONTS ***
+"
+
+echo "Checking for local fonts"
+found_fonts="$(ls $LOCAL_FONTS | fgrep .ttf | wc -l)"
+[ $fount_fonts = 1541 ] || echo "
+ *** Missing local fonts: Expected 1541, fount $local_fonts ***
+"
+
+echo "Linking in Noto fonts"
+cd /usr/share/fonts/truetype/noto/
+ln -s $LOCAL_FONTS/*.ttf .
+
+
 cd "/home/$USER/$CWD" || cd "/home/$USER/"
 
 echo "Done!"

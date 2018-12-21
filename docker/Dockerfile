@@ -57,15 +57,26 @@ RUN apt-get install -qy \
 	groff \
 	ipython \
 	less \
+	libbz2-dev \
 	libcairo2 \
+	libcairo2-dev \
+	libdb5.3-dev \
+	libexpat1-dev \
 	libffi-dev \
 	libfontconfig1 \
 	libfontconfig1-dev \
 	libfreetype6 \
+	libgdbm-dev \
 	libgdk-pixbuf2.0-0 \
+	liblzma-dev \
+	libncurses5-dev \
+	libncursesw5-dev \
 	libpango-1.0-0 \
 	libpango1.0-0 \
 	libpangocairo-1.0-0 \
+	libreadline-dev \
+	libsqlite3-dev \
+	libssl1.0-dev \
 	libxml2-dev \
 	libxml2-utils \
 	libxslt-dev \
@@ -92,7 +103,8 @@ RUN apt-get install -qy \
 	sudo \
 	vim \
 	wget \
-	zile
+	zile \
+	zlib1g-dev
 
 # Install SystemV init
 RUN apt-get install -qy sysvinit-core \
@@ -118,6 +130,26 @@ RUN wget -q https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm get-
 RUN pip install certifi
 RUN pip install virtualenv
 RUN pip install tox
+
+# Additional python versions.  Python 3.5 is part of the distribution, 3.4
+# and 3.6 not available through apt.
+# Python 3.4
+WORKDIR /usr/src
+RUN wget -q https://www.python.org/ftp/python/3.6.7/Python-3.6.7.tar.xz
+RUN tar xJf Python-3.6.7.tar.xz
+WORKDIR /usr/src/Python-3.6.7/
+RUN ./configure
+RUN make
+RUN make altinstall
+# Python 3.6
+WORKDIR /usr/src
+RUN wget -q https://www.python.org/ftp/python/3.4.9/Python-3.4.9.tar.xz
+RUN tar xJf Python-3.4.9.tar.xz
+WORKDIR /usr/src/Python-3.4.9/
+RUN ./configure
+RUN make
+RUN make altinstall
+
 
 ENV DDIR="/usr/local/share/xml2rfc"
 RUN mkdir -p $DDIR
