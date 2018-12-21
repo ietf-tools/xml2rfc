@@ -31,11 +31,13 @@ try:
     import weasyprint
     HAVE_WEASYPRINT = True
 except (ImportError, OSError):
+    weasyprint = False
     HAVE_WEASYPRINT = False
 try:
     import cairo
     HAVE_PYCAIRO = True
 except (ImportError, OSError):
+    cairo = False
     HAVE_PYCAIRO = False
 try:
     from weasyprint.text import cairo
