@@ -314,6 +314,14 @@ def main():
     # Remember if we're building an RFC
     options.rfc = xmlrfc.tree.getroot().get('number')
 
+    # Treat v3 input as v3
+    if xmlrfc.tree.getroot().get('version') == '3':
+        options.legacy = False
+        options.vocabulary = 'v3'
+        options.no_dtd = True
+        if options.list_symbols is None:
+            options.list_symbols = ('*', '-', 'o', '+')
+
     # Validate the document unless disabled
     if not options.no_dtd:
         ok, errors = xmlrfc.validate(dtd_path=options.dtd)
