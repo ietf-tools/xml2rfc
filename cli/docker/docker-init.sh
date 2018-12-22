@@ -22,7 +22,7 @@ echo "User $USER ($UID:$GID)"
 
 if ! id -u "$USER" &> /dev/null; then
     echo "Creating user '$USER' ..."
-    useradd -s /bin/bash --groups staff,sudo --uid $UID --gid $GID $USER
+    useradd -s /bin/bash --groups staff,sudo,tty --uid $UID --gid $GID $USER
     echo "$USER:$USER" | chpasswd
 fi
 
