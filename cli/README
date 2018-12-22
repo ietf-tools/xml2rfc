@@ -1,0 +1,84 @@
+Introduction
+============
+
+The IETF_ uses a specific format for the standards and other documents it
+publishes as RFCs_, and for the draft documents which are produced when
+developing documents for publications.  There exists a number of different
+tools to facilitate the formatting of drafts and RFCs according to the
+existing rules, and this tool, **xml2rfc**, is one of them.  It takes as input
+an xml file which contains the text and meta-information about author names
+etc., and transforms it into suitably formatted output.  The input xml file
+should follow the DTD given in RFC2629_ (or it's `inofficial successor`_).
+
+The current incarnation of **xml2rfc** provides output in the following
+formats: Paginated and unpaginated ascii text, html, nroff, and expanded xml.
+Only the paginated text format is currently (January 2013) accepable as draft
+submissions to the IETF.
+
+.. _IETF: https://www.ietf.org/
+.. _RFCs: https://www.rfc-editor.org/
+.. _RFC2629: https://tools.ietf.org/html/rfc2629
+.. _inofficial successor: https://tools.ietf.org/html/draft-mrose-writing-rfcs
+
+Installation
+============
+
+Installation of the python package is done as usual with 'pip install xml2rfc',
+using appropriate switches and/or sudo.
+
+Installation of support libraries for the PDF-formatter
+-------------------------------------------------------
+
+In order to generate PDFs, xml2rfc uses the WeasyPrint module, which
+depends on external libaries that must be installed as native packages
+on your platform, separately from the xml2rfc install.
+
+First, install the Cairo, Pango, and GDK-PixBuf library files on your
+system.  See installation instructions on the WeasyPrint Docs:
+
+    https://weasyprint.readthedocs.io/en/stable/install.html
+
+(Python 3 is not needed if your system Python is 2.7, though).
+
+(On some OS X systems with System Integrity Protection active, you may
+need to create a symlink from your home directory to the library installation
+directory (often /opt/local/lib):
+
+    ln -s /opt/local/lib ~/lib
+
+in order for weasyprint to find the installed cairo and pango libraries.
+Whether this is needed or not depends on whether you used macports or homebrew
+to install cairo and pango, and the homebrew / macport version.)
+
+Next, install the pycairo and weasyprint python modules using pip.
+Depending on your system, you may need to use 'sudo' or install in
+user-specific directories, using the --user switch.  On OS X in
+particular, you may also need to install a newer version of setuptools
+using --user before weasyprint can be installed.  If you install with 
+the --user switch, you may need to also set PYTHONPATH, e.g.,
+
+    PYTHONPATH=/Users/henrik/Library/Python/2.7/lib/python/site-packages
+
+for Python 2.7.
+
+The basic pip commands (modify as needed according to the text above)
+are:
+
+    pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
+
+With these installed and available to xml2rfc, the --pdf switch will be
+enabled.
+
+For PDF output, you also need to install the Noto font set.  Download the full
+set from https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip,
+and install as appropriate for your platform.
+
+Usage
+=====
+
+xml2rfc accepts a single XML document as input and outputs to one or more conversion formats.
+
+**Basic Usage**: ``xml2rfc SOURCE [options] FORMATS...``
+
+Run ``xml2rfc --help`` for a full listing of command-line options.
+

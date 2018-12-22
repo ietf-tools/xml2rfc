@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en" class="RFC">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<title>RFC Editor Model (Version 2)</title>
+    <meta content="Olaf M. Kolkman" name="author">
+<meta content="Joel M. Halpern" name="author">
+<meta content="Internet Architecture Board" name="author">
+<meta content='
+       
+        The RFC Editor
+        model described in this document divides the responsibilities
+        for the RFC Series into three functions: the RFC Series Editor,
+        the RFC Production Center,
+        and the RFC Publisher.  Internet Architecture Board 
+(IAB) oversight via the RFC Series Oversight Committee (RSOC) is
+described, 
+as is the relationship between the IETF Administrative Oversight
+Committee (IAOC) and the RSOC.
+This document reflects the experience gained with "RFC Editor Model (Version 1)",
+documented in RFC 5620, and obsoletes that document.  
+       
+    ' name="description">
+<meta content="xml2rfc 2.15.2" name="generator">
+<meta content="RFC" name="keyword">
+<link href="tests/input/rfc6635.xml" type="application/rfc+xml" rel="alternate">
+<link href="#copyright" rel="license">
+<link href="xml2rfc.css" type="text/css" rel="stylesheet">
+<link href="rfc-local.css" type="text/css" rel="stylesheet">
+<link href="https://dx.doi.org/10.17487/rfc6635" rel="alternate">
+  <link href="urn:issn:2070-1721" rel="alternate">
+  </head>
+<body>
+<table class="ears">
+<thead><tr>
+<td class="left">RFC 6635</td>
+<td class="center">RFC Editor Model (Version 2)</td>
+<td class="right">June 2012</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Kolkman, et al.</td>
+<td class="center">Informational</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div class="document-information">
+<dl id="identifiers">
+<dt class="label-stream">Stream:</dt>
+<dd class="stream">Internet Architecture Board (IAB)</dd>
+<dt class="label-rfc">RFC:</dt>
+<dd class="rfc"><a href="https://www.rfc-editor.org/info/rfc6635.txt" class="eref">6635</a></dd>
+<dt class="label-obsoletes">Obsoletes:</dt>
+<dd class="obsoletes">
+<a href="https://www.rfc-editor.org/info/rfc5620.txt" class="eref">5620</a> </dd>
+<dt class="label-category">Category:</dt>
+<dd class="category">Informational</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2012-06" class="published">June 2012</time>
+    </dd>
+<dt class="label-issn">ISSN:</dt>
+<dd class="issn">2070-1721</dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">O. Kolkman, <span class="editor">Ed.</span>
+</div>
+</div>
+<div class="author">
+      <div class="author-name">J.M. Halpern, <span class="editor">Ed.</span>
+</div>
+<div class="org">Ericsson</div>
+</div>
+<div class="author">
+      <div class="author-name">IAB</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">RFC Editor Model (Version 2)</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">
+        The RFC Editor
+        model described in this document divides the responsibilities
+        for the RFC Series into three functions: the RFC Series Editor,
+        the RFC Production Center,
+        and the RFC Publisher.  Internet Architecture Board 
+(IAB) oversight via the RFC Series Oversight Committee (RSOC) is
+described, 
+as is the relationship between the IETF Administrative Oversight
+Committee (IAOC) and the RSOC.
+This document reflects the experience gained with "RFC Editor Model (Version 1)",
+documented in RFC 5620, and obsoletes that document.  
+      <a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">This document is not an Internet Standards Track specification; it is
+            published for informational purposes.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">This document is a product of the Internet Architecture Board
+            (IAB) and represents information that the IAB has deemed valuable
+            to provide for permanent record.  Documents approved for publication
+            by the IAB are not candidates for any level of Internet Standard; see
+            Section 2 of RFC 7841.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">Information about the current status of this document, any
+            errata, and how to provide feedback on it may be obtained at
+            http://www.rfc-editor.org/info/rfc6635.<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">Copyright (c) 2012 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (http://trustee.ietf.org/license-info) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-boilerplate.3">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-boilerplate.3-1.1">
+            <p id="section-boilerplate.3-1.1.1"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-boilerplate.3-1.1.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-boilerplate.3-1.1.2.1">
+                <p id="section-boilerplate.3-1.1.2.1.1"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-the-rfc-editor-function" class="xref">The RFC Editor Function</a><a href="#section-boilerplate.3-1.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="toc ulEmpty" id="section-boilerplate.3-1.2">
+            <p id="section-boilerplate.3-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-rfc-editor-model" class="xref">RFC Editor Model</a><a href="#section-boilerplate.3-1.2.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.1">
+                <p id="section-boilerplate.3-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-rfc-series-editor" class="xref">RFC Series Editor</a><a href="#section-boilerplate.3-1.2.2.1.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.1.2.1">
+                    <p id="section-boilerplate.3-1.2.2.1.2.1.1"><a href="#section-2.1.1" class="xref">2.1.1</a>.  <a href="#name-strategic-leadership-and-ma" class="xref">Strategic Leadership and Management of the Publication and Production Functions</a><a href="#section-boilerplate.3-1.2.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.1.2.2">
+                    <p id="section-boilerplate.3-1.2.2.1.2.2.1"><a href="#section-2.1.2" class="xref">2.1.2</a>.  <a href="#name-representation-of-the-rfc-s" class="xref">Representation of the RFC Series</a><a href="#section-boilerplate.3-1.2.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.1.2.3">
+                    <p id="section-boilerplate.3-1.2.2.1.2.3.1"><a href="#section-2.1.3" class="xref">2.1.3</a>.  <a href="#name-development-of-rfc-producti" class="xref">Development of RFC Production and Publication</a><a href="#section-boilerplate.3-1.2.2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.1.2.4">
+                    <p id="section-boilerplate.3-1.2.2.1.2.4.1"><a href="#section-2.1.4" class="xref">2.1.4</a>.  <a href="#name-development-of-the-rfc-seri" class="xref">Development of the RFC Series</a><a href="#section-boilerplate.3-1.2.2.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.1.2.5">
+                    <p id="section-boilerplate.3-1.2.2.1.2.5.1"><a href="#section-2.1.5" class="xref">2.1.5</a>.  <a href="#name-workload" class="xref">Workload</a><a href="#section-boilerplate.3-1.2.2.1.2.5.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.1.2.6">
+                    <p id="section-boilerplate.3-1.2.2.1.2.6.1"><a href="#section-2.1.6" class="xref">2.1.6</a>.  <a href="#name-qualifications" class="xref">Qualifications</a><a href="#section-boilerplate.3-1.2.2.1.2.6.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.1.2.7">
+                    <p id="section-boilerplate.3-1.2.2.1.2.7.1"><a href="#section-2.1.7" class="xref">2.1.7</a>.  <a href="#name-conflict-of-interest" class="xref">Conflict of Interest</a><a href="#section-boilerplate.3-1.2.2.1.2.7.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.2">
+                <p id="section-boilerplate.3-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-rfc-production-center" class="xref">RFC Production Center</a><a href="#section-boilerplate.3-1.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc ulEmpty" id="section-boilerplate.3-1.2.2.3">
+                <p id="section-boilerplate.3-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-rfc-publisher" class="xref">RFC Publisher</a><a href="#section-boilerplate.3-1.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="toc ulEmpty" id="section-boilerplate.3-1.3">
+            <p id="section-boilerplate.3-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-committees" class="xref">Committees</a><a href="#section-boilerplate.3-1.3.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-boilerplate.3-1.3.2.1">
+                <p id="section-boilerplate.3-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-rfc-series-oversight-commit" class="xref">RFC Series Oversight Committee (RSOC)</a><a href="#section-boilerplate.3-1.3.2.1.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-boilerplate.3-1.3.2.1.2.1">
+                    <p id="section-boilerplate.3-1.3.2.1.2.1.1"><a href="#section-3.1.1" class="xref">3.1.1</a>.  <a href="#name-rsoc-composition" class="xref">RSOC Composition</a><a href="#section-boilerplate.3-1.3.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="toc ulEmpty" id="section-boilerplate.3-1.4">
+            <p id="section-boilerplate.3-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-administrative-implementati" class="xref">Administrative Implementation</a><a href="#section-boilerplate.3-1.4.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-boilerplate.3-1.4.2.1">
+                <p id="section-boilerplate.3-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-vendor-selection-for-the-pr" class="xref">Vendor Selection for the Production and Publisher Functions</a><a href="#section-boilerplate.3-1.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc ulEmpty" id="section-boilerplate.3-1.4.2.2">
+                <p id="section-boilerplate.3-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-budget" class="xref">Budget</a><a href="#section-boilerplate.3-1.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc ulEmpty" id="section-boilerplate.3-1.4.2.3">
+                <p id="section-boilerplate.3-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-disagreements-among-entitie" class="xref">Disagreements among Entities Related to the RFC Editor</a><a href="#section-boilerplate.3-1.4.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc ulEmpty" id="section-boilerplate.3-1.4.2.4">
+                <p id="section-boilerplate.3-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-issues-with-contractual-imp" class="xref">Issues with Contractual Impact</a><a href="#section-boilerplate.3-1.4.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="toc ulEmpty" id="section-boilerplate.3-1.5">
+            <p id="section-boilerplate.3-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-boilerplate.3-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc ulEmpty" id="section-boilerplate.3-1.6">
+            <p id="section-boilerplate.3-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-boilerplate.3-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc ulEmpty" id="section-boilerplate.3-1.7">
+            <p id="section-boilerplate.3-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a><a href="#section-boilerplate.3-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc ulEmpty" id="section-boilerplate.3-1.8">
+            <p id="section-boilerplate.3-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-references" class="xref">References</a><a href="#section-boilerplate.3-1.8.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-boilerplate.3-1.8.2.1">
+                <p id="section-boilerplate.3-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-boilerplate.3-1.8.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc ulEmpty" id="section-boilerplate.3-1.8.2.2">
+                <p id="section-boilerplate.3-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-boilerplate.3-1.8.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="toc ulEmpty" id="section-boilerplate.3-1.9">
+            <p id="section-boilerplate.3-1.9.1"><a href="#section-appendix.a" class="xref"></a>  <a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-boilerplate.3-1.9.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">
+        The IAB, on behalf of the Internet technical community, is
+        concerned with ensuring the continuity of the RFC Series,
+        orderly RFC Editor succession, RFC quality, and
+        RFC document accessibility. The IAB is also sensitive to the
+        concerns of the IETF Administrative Oversight Committee (IAOC)
+        about providing the necessary services in a cost-effective and
+        efficient manner.
+      <a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">
+   The contemporary RFC Editor model <span>[<a href="#RFC5620" class="xref">RFC5620</a>] was
+first approved in October 2008, and our understanding of the model
+has evolved with our experience since. During the implementation
+of version 1 of the model </span><span>[<a href="#RFC5620" class="xref">RFC5620</a>], it was quickly
+realized that the role of the RFC Series Editor (RSE) and the  
+   oversight responsibilities needed to be structured differently. In
+   order to gain experience with "running code", a transitional RSE
+   was hired who analyzed the managerial environment and provided
+   recommendations. This was followed by the appointment of an acting
+RSE, who ably managed the series while work was
+undertaken to select and hire a permanent RSE.
+This version of the model is based on the recommendations
+of both temporary RFC Series Editors
+   and the extensive discussion in the IETF community, on
+the rfc-interest list, and within the IAB. As such, this document
+obsoletes </span><span>[<a href="#RFC5620" class="xref">RFC5620</a>].
+      </span><a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">
+   This document, and the resulting structures,
+   will be modified as needed through normal procedures.  The RSE, and
+the IAB, through the RFC Oversight Committee (see <a href="#RSOC" class="xref">Section 3.1</a>), will
+continue to monitor discussions  
+   within the community about potential
+   adjustments to the RFC Editor model and recognize that the process
+   described in this document may need to be adjusted to align with any
+   changes that result from such discussions; hence, the version number
+   in the title.
+      <a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">
+   The IAB and IAOC maintain their chartered
+        responsibility as defined in <span>[<a href="#RFC2850" class="xref">RFC2850</a>] and
+        </span><span>[<a href="#RFC4071" class="xref">RFC4071</a>]. 
+      </span><a href="#section-1-4" class="pilcrow">¶</a></p>
+<section id="section-1.1">
+        <h3 id="name-the-rfc-editor-function">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-the-rfc-editor-function" class="section-name selfRef">The RFC Editor Function</a>
+        </h3>
+<p id="section-1.1-1">
+        The RFC Series is described in <span>[<a href="#RFC4844" class="xref">RFC4844</a>].  Its
+        Section 3.1 defines "RFC Editor":
+        </span><a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<ul class="ulEmpty">
+<li class="ulEmpty" id="section-1.1-2.1">
+     Originally, there was a single person acting as editor of the RFC
+     Series (the RFC Editor). The task has grown, and the work now
+     requires the organized activity of several experts, so there are
+     RFC Editors, or an RFC Editor organization. In time, there may be
+     multiple organizations working together to undertake the work
+     required by the RFC Series. For simplicity's sake, and without
+     attempting to predict how the role might be subdivided among them,
+     this document refers to this collection of experts and 
+     organizations as the "RFC Editor".<a href="#section-1.1-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="ulEmpty" id="section-1.1-2.2">     The RFC Editor is an expert technical editor and series editor,
+     acting to support the mission of the RFC Series. As such, the RFC
+     Editor is the implementer handling the editorial management of the
+     RFC Series, in accordance with the defined processes. In addition,
+     the RFC Editor is expected to be the expert and prime mover in
+     discussions about policies for editing, publishing, and archiving
+     RFCs.<a href="#section-1.1-2.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-1.1-3">
+        RFC 4844 does not explore the internal organization
+        of the RFC Editor. However, RFC 4844 envisions changes in the
+        RFC Editor organizational structure. There have been several
+iterations on efforts to improve and clarify this structure.  These
+have been led by the IAB, in consultation with the community and many
+leadership bodies within the community.  This first resulted in the
+publication of <span>[<a href="#RFC5620" class="xref">RFC5620</a>] and then in further
+discussions leading to this document.  Some of the details on
+this evolution can be found below.  In undertaking this evolution,
+the IAB considered changes that increase
+        flexibility and operational support options, provide for the
+        orderly succession of the RFC Editor, and ensure the
+        continuity of the RFC Series, while maintaining RFC quality,
+        maintaining timely processing, ensuring document
+        accessibility, reducing costs, and increasing cost
+        transparency. The model set forth below describes the internal
+organization of 
+        the RFC Editor, while remaining consistent with RFC 4844.
+        </span><a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.1-4">
+        Note that RFC 4844 uses the term "RFC Editor function" or "RFC
+        Editor" as the collective set of responsibilities for which
+        this memo provides a model for internal organization. This
+        memo defines the term "RFC Series Editor" or "Series
+        Editor" for one of the organizational components.
+        <a href="#section-1.1-4" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-2">
+      <h2 id="name-rfc-editor-model">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-rfc-editor-model" class="section-name selfRef">RFC Editor Model</a>
+      </h2>
+<p id="section-2-1">
+        The RFC Editor model divides the responsibilities for
+        the RFC Series into the following components:
+      <a href="#section-2-1" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-2-2.1">RFC Series Editor (RSE)<a href="#section-2-2.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-2-2.2">RFC Production Center<a href="#section-2-2.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-2-2.3">RFC Publisher<a href="#section-2-2.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-3">
+        The structure and relationship of the components of the
+RFC Series production and process is
+        schematically represented by the figure below. The picture does not
+        depict oversight and escalation relations.  It does include
+the streams and their managers (which are not part of the RFC Series
+Editor, the RFC Production Center, or Publisher facilities) in order to more
+fully show the context in which the RFC Series Editor operates.
+      <a href="#section-2-3" class="pilcrow">¶</a></p>
+<div id="model-figure">
+<figure id="figure-1">
+        <div class="artwork art-text alignLeft" id="section-2-4.1">
+<pre>
+
+
+
+                                      +-------------+
+                                      |             |
+                       +--------------+     IAB     &lt;------------+
+                       |              |             |            |
+                       |              |=============|            |
+                       |              |             |            |
+                       |              |     RSOC    &lt;------------+
+                       |              |             |            |
+                       |              +-------+-----+      +-----+-----+
+                       |                      |            |           |
+                       |          +...........|.........+  | Community |
+                       |          .           |         .  |    at     |
+                       |          .   +-------V-----+   .  |   Large   |
+                       |          .   |             |   .  |           |
+                       |          .   |     RFC     |   .  +-----+-----+
+                       |          .   |    Series   |   .        |
+                       |          .   |    Editor   &lt;------------+
+                       |          .   |             |   .
+                       |          .   +-+---------+-+   .
+                       |          .     |         |     .
++-------------+  +-----V-------+  .  +--V--+   +--V--+  .     +-----+
+|             |  |             |  .  |     |   |     |  .     |     |
+| Independent |  | Independent |  .  | RFC |   |     |  .     |  E  |
+|   Authors   +--&gt; Submission  +-----&gt;     |   |     |  .     |  n  |
+|             |  |   Editor    |  .  |  P  |   |     |  .     |  d  |
+|             |  |             |  .  |  r  |   | RFC |  .     |     |
++-------------+  +-------------+  .  |  o  |   |     |  .     |  U  |
++-------------+  +-------------+  .  |  d  |   |  P  |  .     |  s  |
+|             |  |             |  .  |  u  |   |  u  |  .     |  e  |
+|     IAB     +--&gt;     IAB     +-----&gt;  c  |   |  b  |  .     |  r  |
+|             |  |             |  .  |  t  |   |  l  |  .     |  s  |
++-------------+  +-------------+  .  |  i  +---&gt;  i  +--------&gt;     |
++-------------+  +-------------+  .  |  o  |   |  s  |  .     |  &amp;  |
+|             |  |             |  .  |  n  |   |  h  |  .     |     |
+|    IRTF     +--&gt;     IRSG    +----&gt;|     |   |  e  |  .     |  R  |
+|             |  |             |  .  |  C  |   |  r  |  .     |  e  |
++-------------+  +-------------+  .  |  e  |   |     |  .     |  a  |
++-------------+  +-------------+  .  |  n  |   |     |  .     |  d  |
+|             |  |             |  .  |  t  |   |     |  .     |  e  |
+|    IETF     +--&gt;    IESG     +-----&gt;  e  |   |     |  .     |  r  |
+|             |  |             |  .  |  r  |   |     |  .     |  s  |
++-------------+  +-------------+  .  +-----+   +-----+  .     +-----+ 
+                                  .                     .
+                                  +..... RFC Editor ....+
+
+            Structure of RFC Series Production and Process
+</pre>
+</div>
+<figcaption><a href="#figure-1">Figure 1</a></figcaption></figure>
+</div>
+<p id="section-2-5">
+        In this model, documents are produced and approved through
+        multiple document streams.  The stream manager for each stream
+        is responsible for the content of that stream.  
+        The four streams that now exist are described in <span>[<a href="#RFC4844" class="xref">RFC4844</a>]. 
+        The RFC Editor function is responsible for the packaging and
+        distribution of the documents.  As such,  documents from these
+        streams are 
+        edited and processed by the Production Center and published by
+        the Publisher.  The RFC Series Editor will exercise
+        strategic leadership and  management over the activities of the
+        RFC Publisher and the RFC Production Center (both of which can
+        be seen as back-office functions) and will be the entity that:
+      </span><a href="#section-2-5" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-2-6.1">Represents the RFC Series and the RFC Editor Function
+within the IETF and externally.<a href="#section-2-6.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-2-6.2">Leads the community in the design of improvements to
+the RFC Series.<a href="#section-2-6.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-2-6.3">Is responsible for planning and seeing to the execution
+of improvements in the RFC Editor production and access processes.<a href="#section-2-6.3" class="pilcrow">¶</a>
+</li>
+        <li id="section-2-6.4"> Is responsible for the content of the rfc-editor.org web
+site, which is operated and maintained by the RFC Publisher.<a href="#section-2-6.4" class="pilcrow">¶</a>
+</li>
+        <li id="section-2-6.5">Is responsible for developing consensus versions of
+          vision and policy documents.  These documents will be
+          reviewed by the RFC Series Oversight Committee (<a href="#RSOC" class="xref">Section 3.1</a>) and subject to its approval before final
+          publication.  
+      <a href="#section-2-6.5" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-7">These responsibilities are defined below, although the
+specific work items under them are a matter for the actual employment
+contract and its Statement of Work (SOW).<a href="#section-2-7" class="pilcrow">¶</a></p>
+<p id="section-2-8">
+        The IAB and IAOC maintain their chartered
+        responsibility as defined in <span>[<a href="#RFC2850" class="xref">RFC2850</a>] and
+        </span><span>[<a href="#RFC4071" class="xref">RFC4071</a>].  More details on the
+        oversight by the IAB via the RFC Series Oversight Committee 
+        (RSOC) can be found in </span><a href="#RSOC" class="xref">Section 3.1</a>.  For example,
+        the RSE does not have the direct authority to 
+        hire or fire RFC Editor
+        contractors or personnel. 
+      <a href="#section-2-8" class="pilcrow">¶</a></p>
+<div id="RSE">
+<section id="section-2.1">
+        <h3 id="name-rfc-series-editor">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-rfc-series-editor" class="section-name selfRef">RFC Series Editor</a>
+        </h3>
+<p id="section-2.1-1">
+          The RFC Series Editor is the individual with overall
+responsibility 
+for the quality, continuity, and evolution of the RFC Series.  
+        <a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">The RSE is appointed by the IAB, but formally hired by the 
+        IAOC. The IAB delegates the direct oversight over the RSE to the
+        RSOC, which it appoints.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-3">The RSE is expected to cooperate closely with the IAOC and
+the stream managers.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<div id="ExecManage">
+<section id="section-2.1.1">
+          <h4 id="name-strategic-leadership-and-ma">
+<a href="#section-2.1.1" class="section-number selfRef">2.1.1. </a><a href="#name-strategic-leadership-and-ma" class="section-name selfRef">Strategic Leadership and Management of the Publication and Production Functions</a>
+          </h4>
+<p id="section-2.1.1-1"> With respect to the RFC Publisher and Production Center functions, the RSE
+      provides input to the IASA budget, SOWs, and manages
+      vendor selection processes.  The RSE performs annual reviews of
+      the RFC Production Center and Publisher function, which are then provided to
+      the RSOC, the IASA, and the community.  Normally, private
+      financial details would not be included in a public version
+      unless the IAOC concludes it is necessary to make such
+      information public.
+          <a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1-2">The RSE is responsible for the performance of the RFC Production
+Center and Publisher.  The RSE is responsible for issues that go
+beyond the RFC Production Center or Publisher functions, such as cross-stream
+coordination of priorities.  Issues that require changes to the budget
+or contracts shall be brought to the attention of the IAD by the RSE.<a href="#section-2.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.1-3">The RSE is also responsible for creating documentation and 
+      structures that will allow for continuity of the RFC
+      Series in the face of changes in contracts and
+personnel. <a href="#section-2.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1.1-4">Vendor selection for the RFC Production Center and Publisher functions
+is done in cooperation 
+with the streams and under final authority of the IASA.  Details on
+this process can be found in <a href="#vendorsel" class="xref">Section 4.1</a>.<a href="#section-2.1.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="SeriesRep">
+<section id="section-2.1.2">
+          <h4 id="name-representation-of-the-rfc-s">
+<a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-representation-of-the-rfc-s" class="section-name selfRef">Representation of the RFC Series</a>
+          </h4>
+<p id="section-2.1.2-1">The RSE is the primary representative of the RFC Series.
+This representation is important both internally, relative to the
+IETF, and externally.<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
+<div id="IETFRep">
+<section id="section-2.1.2.1">
+            <h5 id="name-representation-to-the-ietf">
+<a href="#section-2.1.2.1" class="section-number selfRef">2.1.2.1. </a><a href="#name-representation-to-the-ietf" class="section-name selfRef">Representation to the IETF</a>
+            </h5>
+<p id="section-2.1.2.1-1">The RSE is the primary point of contact to the IETF on
+matters relating to the RFC Series in general, or policy matters
+relating to specific documents.  
+Issues of practical details in the processing of specific documents
+are generally worked through directly with the RFC Production Center
+staff.<a href="#section-2.1.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.2.1-2">This includes providing suitable reports to the community
+at large, providing email contact for policy questions and inputs, and
+enabling and participating in suitable on-line forums for discussion
+of issues related to the RFC Series.<a href="#section-2.1.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.2.1-3">Due to the history and nature of the interaction between
+the RSE and the IETF, certain principles, described in the following
+subsections,  must be understood and
+adhered to by the RSE in his or her interactions with the community.  These
+apply to the representation function, as well as to the leadership the
+RSE provides for production and series development.<a href="#section-2.1.2.1-3" class="pilcrow">¶</a></p>
+<section id="section-2.1.2.1.1">
+              <h6 id="name-volunteerism">
+<a href="#section-2.1.2.1.1" class="section-number selfRef">2.1.2.1.1. </a><a href="#name-volunteerism" class="section-name selfRef">Volunteerism</a>
+              </h6>
+<p id="section-2.1.2.1.1-1">The vast majority of Internet technical community work
+is led, initiated, and done by community volunteers, including
+oversight, policy making, and direct production of, for example, many
+software tools.  The RSE, while not a volunteer, is dependent 
+upon these volunteer participants.  Also, the spirit of the community 
+is heavily focused on and draws from these volunteers.  As such, the
+RSE needs to support the vitality and effectiveness of
+volunteer participation.<a href="#section-2.1.2.1.1-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-2.1.2.1.2">
+              <h6 id="name-policy-authority">
+<a href="#section-2.1.2.1.2" class="section-number selfRef">2.1.2.1.2. </a><a href="#name-policy-authority" class="section-name selfRef">Policy Authority</a>
+              </h6>
+<p id="section-2.1.2.1.2-1">All decisions are to be made in the overall interest of the
+broader Internet community.  The RSE is responsible for identifying
+materially concerned interest groups within the Internet community and
+reaching out to them.  Those interest groups include at least the IETF
+community, the IRTF community, the network research community, and the
+network operations community.  Other interest groups might also be
+materially interested.<a href="#section-2.1.2.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.2.1.2-2">The RSE must consult with the community on policy issues.  The
+RSE works with the community to achieve policy that meets the overall
+quality, continuity, and evolution goals the RSE is charged with
+meeting.  As described in  <a href="#RSOC" class="xref">Section 3.1</a>, the RSE reports the
+results of such interactions to the RSOC, including a description of
+the outreach efforts and the specific recommendations on policy.  This
+enables the RSOC to provide the oversight the IAB is required to
+apply, as well as to confirm that the Internet community has been
+properly consulted and considered in making policy.<a href="#section-2.1.2.1.2-2" class="pilcrow">¶</a></p>
+</section>
+</section>
+</div>
+<div id="ExtRep">
+<section id="section-2.1.2.2">
+            <h5 id="name-external-representation">
+<a href="#section-2.1.2.2" class="section-number selfRef">2.1.2.2. </a><a href="#name-external-representation" class="section-name selfRef">External Representation</a>
+            </h5>
+<p id="section-2.1.2.2-1">From time to time, individuals or organizations external to
+the IETF need a contact person to talk to about the RFC Series.  The
+RSE, or the RSE's designate, serves this role.<a href="#section-2.1.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.2.2-2">Over time, the RSE should determine what, if any, means
+should be employed to increase end-user awareness of the series,
+to reinforce the stature of the series, and to provide the contact
+point for outside parties seeking information on the series or the
+Editor.<a href="#section-2.1.2.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="ProdDev">
+<section id="section-2.1.3">
+          <h4 id="name-development-of-rfc-producti">
+<a href="#section-2.1.3" class="section-number selfRef">2.1.3. </a><a href="#name-development-of-rfc-producti" class="section-name selfRef">Development of RFC Production and Publication</a>
+          </h4>
+<p id="section-2.1.3-1">Closely related to providing strategic leadership and
+management to the 
+RFC Production Center and Publisher functions is the need to develop and
+improve those functions.  The RSE is responsible for ensuring that
+such ongoing development takes place.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-2">This effort must include the dimensions of document
+quality, timeliness of production, and accessibility of results.  It
+must also specifically take into account issues raised by the IETF
+community, including all the streams feeding into the RFC Editor function.<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="SeriesDev">
+<section id="section-2.1.4">
+          <h4 id="name-development-of-the-rfc-seri">
+<a href="#section-2.1.4" class="section-number selfRef">2.1.4. </a><a href="#name-development-of-the-rfc-seri" class="section-name selfRef">Development of the RFC Series</a>
+          </h4>
+<p id="section-2.1.4-1">In order to develop the RFC Series, the RSE
+   is expected to develop a relationship with the Internet technical
+   community.  The Editor is expected to engage with the Internet
+   technical community in a process of articulating and refining a
+   vision for the series and its continuous evolution.  The RSE is also
+   expected to engage other users of the RFC Series, in
+   particular, the consumers of these documents, such as those
+   people who use them to specify products, write code, test
+   behaviors, or other related activities.<a href="#section-2.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.4-2">Concretely:
+          <a href="#section-2.1.4-2" class="pilcrow">¶</a></p>
+<dl class="dlParallel" id="section-2.1.4-3">
+            <dt id="section-2.1.4-3.1"></dt>
+            <dd id="section-2.1.4-3.2">The RSE is responsible for the coordination of discussion on
+      series evolution among the series' stream participants and the
+      broader Internet technical community.</dd>
+            <dt id="section-2.1.4-3.3"></dt>
+            <dd id="section-2.1.4-3.4">
+              <p id="section-2.1.4-3.4.1">In time, the RSE is expected to develop and refine a vision
+ for the RFC Series, including examining:
+              <a href="#section-2.1.4-3.4.1" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-2.1.4-3.4.2.1">The RFC Series, as it continues to
+         evolve.  The RSE is expected to take a broad view and 
+         look for the best ways to evolve the series for the
+         benefit of the entire Internet community.  As such, the
+         RSE may even consider evolution 
+         beyond the historical 'by engineers for engineers' emphasis;
+         and<a href="#section-2.1.4-3.4.2.1" class="pilcrow">¶</a>
+</li>
+                <li id="section-2.1.4-3.4.2.2">Its publication-technical environment, by looking
+         at whether it should be slowly changing in terms
+         of publishing and archiving techniques -- particularly
+         to better serve the communities that
+         produce and depend on the RFC Series.  For example, all of 
+         those communities
+         have been slowly changing to include a significant population of
+multi-lingual individuals 
+         or non-native speakers of English.  Another example is that
+         some of these constituencies also have shifted to include significant groups whose primary
+         focus is on the constraints and consequences of network
+         engineering, rather than a primary interest in the engineering
+         issues themselves.<a href="#section-2.1.4-3.4.2.2" class="pilcrow">¶</a>
+</li>
+              </ul>
+</dd>
+          </dl>
+<p id="section-2.1.4-4">For this type of responsibility, the RSE cooperates closely with the
+  community, and operates under oversight of the RSOC: thus, ultimately, under
+  oversight of the IAB.<a href="#section-2.1.4-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="Workload">
+<section id="section-2.1.5">
+          <h4 id="name-workload">
+<a href="#section-2.1.5" class="section-number selfRef">2.1.5. </a><a href="#name-workload" class="section-name selfRef">Workload</a>
+          </h4>
+<p id="section-2.1.5-1">
+On average, the job is expected to take half of
+a full-time equivalent position (FTE, thus approx 20 hrs per week),
+with the workload per week nearing full time during IETF weeks.  In addition, 
+the job is expected to take more than 20 hours per week in the first few months
+of the engagement and when involved in special projects.
+          <a href="#section-2.1.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="Qualifications">
+<section id="section-2.1.6">
+          <h4 id="name-qualifications">
+<a href="#section-2.1.6" class="section-number selfRef">2.1.6. </a><a href="#name-qualifications" class="section-name selfRef">Qualifications</a>
+          </h4>
+<p id="section-2.1.6-1">
+          The RFC Series Editor is a senior technology professional. 
+          The following qualifications are desired:
+          <a href="#section-2.1.6-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal" id="section-2.1.6-2">
+            <li id="section-2.1.6-2.1"> Strategic leadership and management experience
+            fulfilling the requirements outlined in this document, the
+            many aspects of this role, and the coordination of the
+            overall RFC Editor process.<a href="#section-2.1.6-2.1" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.2">Good understanding of the English language and technical
+            terminology related to the Internet.<a href="#section-2.1.6-2.2" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.3">Good communication skills.<a href="#section-2.1.6-2.3" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.4">Experience with editorial processes.<a href="#section-2.1.6-2.4" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.5">Ability to develop strong understanding of the IETF and
+RFC process.<a href="#section-2.1.6-2.5" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.6">Independent worker.<a href="#section-2.1.6-2.6" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.7">Willingness to, and availability for, travel.<a href="#section-2.1.6-2.7" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.8">The ability to work effectively in a multi-actor and
+matrixed environment with divided authority and responsibility similar
+to that described in this document.<a href="#section-2.1.6-2.8" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.9">Experience with and ability to participate in, and
+            manage, activities by email and teleconferences, not just
+            face-to-face interactions.<a href="#section-2.1.6-2.9" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.10">Demonstrated experience in strategic planning and the
+            management of entire operations.<a href="#section-2.1.6-2.10" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.1.6-2.11">Experience as an RFC author.<a href="#section-2.1.6-2.11" class="pilcrow">¶</a>
+</li>
+          </ol>
+</section>
+</div>
+<section id="section-2.1.7">
+          <h4 id="name-conflict-of-interest">
+<a href="#section-2.1.7" class="section-number selfRef">2.1.7. </a><a href="#name-conflict-of-interest" class="section-name selfRef">Conflict of Interest</a>
+          </h4>
+<p id="section-2.1.7-1">The RSE is expected to avoid even the appearance of
+   conflict of interest or judgment in performing these roles.  
+   As such, the RSE is barred from having any ownership, advisory, or 
+   other relationship to the vendors executing the RFC Publisher or
+   Production Center functions except as specified elsewhere in this
+   document. 
+   If necessary, an exception can be made after public disclosure of
+   those relationships and with the explicit permission of the IAB and
+   IAOC.<a href="#section-2.1.7-1" class="pilcrow">¶</a></p>
+</section>
+</section>
+</div>
+<div id="production">
+<section id="section-2.2">
+        <h3 id="name-rfc-production-center">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-rfc-production-center" class="section-name selfRef">RFC Production Center</a>
+        </h3>
+<p id="section-2.2-1">
+          The RFC Production Center function is performed by a paid contractor, and the
+          contractor's responsibilities include the following:
+        <a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal" id="section-2.2-2">
+          <li id="section-2.2-2.1">Editing inputs from all RFC streams to comply with the
+          RFC Style Manual, under the direction of the RSE;<a href="#section-2.2-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.2">Creating records of edits performed on documents;<a href="#section-2.2-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.3">Identifying where editorial changes might have technical
+          impact and seeking necessary clarification;<a href="#section-2.2-2.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.4">Engaging in dialog with authors, document shepherds,
+          IANA, and/or stream-dependent contacts when clarification is
+          needed;
+          <a href="#section-2.2-2.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.5">Creating records of dialog with document authors;<a href="#section-2.2-2.5" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.6">Requesting advice from the RFC Series Editor as needed;<a href="#section-2.2-2.6" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.7">Providing suggestions to the RFC Series Editor as
+needed;<a href="#section-2.2-2.7" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.8">Providing sufficient resources to support reviews of RFC
+        Publisher performance by the RFC Series Editor and external
+        reviews of the RFC Editor function initiated by the IAB or IAOC;<a href="#section-2.2-2.8" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.9"> Coordinating with IANA to ensure correct documentation of 
+        IANA-performed protocol registry actions;<a href="#section-2.2-2.9" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.10">Assigning RFC numbers;<a href="#section-2.2-2.10" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.11"> Establishing publication readiness of each document
+          through communication with the authors, document shepherds,
+          IANA, and/or stream-dependent contacts, and, if needed, with
+          the RFC Series Editor; <a href="#section-2.2-2.11" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.12">Forwarding documents that are ready for publication to the RFC
+          Publisher;<a href="#section-2.2-2.12" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.13">Forwarding records of edits and author dialog to the RFC
+          Publisher so these can be preserved;<a href="#section-2.2-2.13" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.2-2.14">Liaising with the streams as needed.<a href="#section-2.2-2.14" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-2.2-3">All these activities will be done under the general direction,
+    but not day-to-day management,  of
+    the RSE and need some level of coordination with various
+    submission streams and the RSE. <a href="#section-2.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.2-4">
+      The RFC Production Center contractor is to be selected through
+      an IASA Request for Proposal (RFP) process as described in <a href="#vendorsel" class="xref">Section 4.1</a>.
+        <a href="#section-2.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-2.3">
+        <h3 id="name-rfc-publisher">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-rfc-publisher" class="section-name selfRef">RFC Publisher</a>
+        </h3>
+<p id="section-2.3-1">
+        The RFC Publisher responsibilities include the following:
+        <a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal" id="section-2.3-2">
+          <li id="section-2.3-2.1">Announcing and providing on-line access to RFCs.<a href="#section-2.3-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.3-2.2">Providing an on-line system to submit RFC Errata.<a href="#section-2.3-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.3-2.3">Providing on-line access to approved RFC Errata.<a href="#section-2.3-2.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.3-2.4">Providing backups.<a href="#section-2.3-2.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.3-2.5">Providing storage and preservation of records.<a href="#section-2.3-2.5" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.3-2.6">Authenticating RFCs for legal proceedings.<a href="#section-2.3-2.6" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-2.3-3">All these activities will be done under the general direction,
+    but not day-to-day management,  of
+    the RSE and need some level of coordination with various
+    submission streams and the RSE. <a href="#section-2.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.3-4">
+      The RFC Publisher  contractor is to be selected through
+      an IASA RFP process as described in <a href="#vendorsel" class="xref">Section 4.1</a>.
+        <a href="#section-2.3-4" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-3">
+      <h2 id="name-committees">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-committees" class="section-name selfRef">Committees</a>
+      </h2>
+<div id="RSOC">
+<section id="section-3.1">
+        <h3 id="name-rfc-series-oversight-commit">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-rfc-series-oversight-commit" class="section-name selfRef">RFC Series Oversight Committee (RSOC)</a>
+        </h3>
+<p id="section-3.1-1">The IAB is responsible for the oversight of the RFC Series and
+    acts as a body for final conflict resolution, including the
+    process described in <a href="#dispute" class="xref">Section 4.3</a>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">In order to provide continuity over periods longer than the NomCom
+    appointment cycle <span>[<a href="#RFC3777" class="xref">RFC3777</a>] and assure that oversight includes suitable
+    subject matter expertise, the IAB will establish a group that implements
+    oversight for the IAB, the RFC Series Oversight Committee (RSOC).</span><a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">The RSOC will act with authority delegated from the IAB: in general,
+    it will be the RSOC that will approve consensus policy and vision
+    documents as developed by the RSE in collaboration with the
+    community.  While it is expected that the IAB will exercise due
+    diligence in its supervision of the RSOC,  the RSOC should be
+    allowed the latitude to do its job without undue interference
+    from the IAB.  Therefore, it is expected that the IAB
+    will accord RSOC reports and recommendations the benefit of
+    the doubt.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">For all decisions that affect the RSE individually (e.g., hiring and firing),
+   the RSOC prepares recommendations for the IAB, but the final decision is
+   the responsibility of the IAB.  For instance the RSOC would do the following:
+
+        <a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-3.1-5.1">perform annual reviews of the RSE and report the result of 
+     these reviews to the IAB.<a href="#section-3.1-5.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-3.1-5.2"> manage RSE candidate selection and advise the IAB on candidate
+      appointment (in other words, select the RSE subject to IAB
+      approval).<a href="#section-3.1-5.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-3.1-6">RSOC members are expected to recognize potential conflicts of
+interest and behave accordingly.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.1-7">For the actual recruitment and selection of the RSE, the RSOC
+will propose a budget for the search process. It will work with
+IASA to refine that budget and develop remuneration
+criteria and an employment agreement or contracting plans,
+as appropriate.
+        <a href="#section-3.1-7" class="pilcrow">¶</a></p>
+<p id="section-3.1-8">The RSOC will be responsible for ensuring that the RFC Series is run in
+   a transparent and accountable manner.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
+<p id="section-3.1-9">The RSOC shall develop and publish its own rules of order.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
+<p id="section-3.1-10">The initial RSOC was charged with designing and executing a
+solicitation, search, and selection process for the first
+actual (not transitional or "acting") RSE appointment. That
+process involved iteration on this and
+related documents and evaluation of various strategies and
+options.   During the creation of this document, it was expected that the RSOC
+would describe the process it ultimately selected to the community.
+The RSOC did involve the
+community in interim considerations when that was likely to
+be of value. Following completion of the selection process,
+the RSOC will determine the best way to share information
+learned and experience gained with the community and 
+determine how to best preserve that information for future
+use.
+        <a href="#section-3.1-10" class="pilcrow">¶</a></p>
+<div id="RSOCCompose">
+<section id="section-3.1.1">
+          <h4 id="name-rsoc-composition">
+<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-rsoc-composition" class="section-name selfRef">RSOC Composition</a>
+          </h4>
+<p id="section-3.1.1-1">
+   The RSOC will operate under the authority of the IAB, with the IAB 
+   retaining final responsibility.  The IAB will delegate authority and
+   responsibility to the RSOC as appropriate and as RSOC and RSE
+   relationships evolve.  The RSOC will include people who are not
+   current IAB members.  Currently, this is aligned with the IAB
+   program structure.   The IAB will designate the
+   membership of the RSOC with the following goals: preserving effective
+   stability; keeping it small enough to be effective, and keeping it large enough
+   to provide general Internet community expertise, specific IETF
+   expertise, publication expertise, and stream expertise.  Members
+   serve at the pleasure of the IAB and are expected to bring a balance
+   between short- and long-term perspectives.  Specific input about, and
+   recommendations of, members will be sought from the streams, the
+   IASA, and the RSE.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-2">In addition to the members from outside of the IAB appointed to
+the RSOC, IAB members may participate as full members of the RSOC.
+Under most circumstances, there will be a specific individual IAB
+member appointed by the IAB as the program lead, who will be a full
+member of the RSOC.  This member's role is distinct from any RSOC-internal organizational roles, such as would be created by the RSOC choosing to appoint a
+chair from among its members.  Other IAB members may choose to be full
+members of the RSOC, with the consent of the IAB.  This consent is
+primarily concerned with avoiding overpopulating the RSOC and
+providing it with relatively stable membership, which will
+work best if it is not too large a committee.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-3">The IAOC will appoint an individual to serve as its liaison to
+   the RSOC.  The RSE and the IAOC Liaison will serve as
+   non-voting ex officio members of the RSOC.  Either or both can be
+   excluded from its discussions if necessary.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+<section id="section-4">
+      <h2 id="name-administrative-implementati">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-administrative-implementati" class="section-name selfRef">Administrative Implementation</a>
+      </h2>
+<p id="section-4-1">
+The exact implementation of the administrative and contractual
+activities described here are a
+responsibility of the IETF Administrative Oversight Committee (IAOC, 
+<span>[<a href="#RFC4071" class="xref">RFC4071</a>]) in cooperation with the RFC Series Editor.
+The authority structure is described in Figure 2 below.
+      </span><a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="auth-figure">
+<figure id="figure-2">
+        <div class="artwork art-text alignLeft" id="section-4-2.1">
+<pre>
+
+
+                +----------------+       +----------------+
+                |                |       |                |
+                |      IAB       |       |     IAOC       |
+                |                |       |                |
+                +==========+-----+       +-+--------------+
+                |          |               .            
+                |   RSOC   |               .            
+                |          |               .            
+                +----+-----+               .            
+                     |                     .            
+                     |                     .            
+                     |   ...................            
+                     |   .                 .            
+            +--------V---V----+            .                     
+            |                 |            .  
+            |       RFC       |            .  
+            |      Series     |            .  
+            |      Editor     |            .  
+            |                 |            .  
+            +--------+--------+            .  
+                     |                     .
+                     |        .................
+                     |        .               .
+                     +--+----------------+    .
+                        |     .          |    .
+                        |     .          |    .
+                    +---V-----V--+    +--V----V---+
+                    |    RFC     |    |    RFC    |
+                    | Production |    | Publisher |
+                    |   Center   |    |           |
+                    +------------+    +-----------+
+
+                  Authority Structure of the RFC Series
+
+                      Legend:
+
+                      -------    IAB RFC Series Oversight
+                      .......    IAOC Contract/Budget Oversight
+
+</pre>
+</div>
+<figcaption><a href="#figure-2">Figure 2</a></figcaption></figure>
+</div>
+<div id="vendorsel">
+<section id="section-4.1">
+        <h3 id="name-vendor-selection-for-the-pr">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-vendor-selection-for-the-pr" class="section-name selfRef">Vendor Selection for the Production and Publisher Functions</a>
+        </h3>
+<p id="section-4.1-1">As stated earlier, vendor selection is done in cooperation
+      with the streams and under the final authority of the IAOC.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">The RSE owns and develops the work definition (the SOW) and
+      participates in the IASA vendor selection process.
+      The work definition is created within the IASA budget and
+      takes into account the stream managers and community input.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">The process to select and contract for an RFC Production
+      Center, RFC Publisher, and other RFC-related services, is as
+      follows: <a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-4.1-4.1">The IAOC establishes the contract process, including the
+steps necessary to issue an RFP when necessary, the timing, and the
+contracting procedures.
+          <a href="#section-4.1-4.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-4.2">The IAOC establishes the Selection Committee, which will
+consist of the RSE, the IAD, and other members selected by the RSOC
+and the IAOC.  The Committee shall be chaired by the RSE.<a href="#section-4.1-4.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-4.3">The Selection Committee selects the vendor, subject to
+the successful negotiation of a contract approved by the IAOC.  In the
+event that a contract cannot be reached, the matter shall be referred
+to the Selection Committee for further action.<a href="#section-4.1-4.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-4.4">The Selection Committee may select an RFC Publisher
+either through the IASA RFP process or, at the Committee's option,
+the Committee may select the IETF Secretariat to provide RFC Publisher
+services, subject to negotiations in accordance with the IASA
+procedures. <a href="#section-4.1-4.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<section id="section-4.2">
+        <h3 id="name-budget">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-budget" class="section-name selfRef">Budget</a>
+        </h3>
+<p id="section-4.2-1"> 
+          The expenses discussed in this document are not new
+          expenses.  They have been and remain part of the 
+          IETF Administrative Support Activity (IASA, 
+          <span>[<a href="#RFC4071" class="xref">RFC4071</a>]) budget. 
+        </span><a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">The RFC Series portion of the IASA budget shall include
+entries for the RSOC, RSE, RFC Production Center, and the RFC
+Publisher.  The IASA budget shall also include entries for the
+streams, including the independent stream.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">The IAOC has the responsibility to approve the total RFC
+Editor budget (and the authority to deny it).  The RSE must work
+within the IAOC budgetary process.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">The RSE is responsible for managing the RFC Editor function to
+operate within those budgets.  If production needs change, the RSE is
+responsible for working with the Production Center, and where
+appropriate, other RFC Editor component institutions, relevant
+streams, and/or the RSOC to determine what
+the correct response should be.  If they agree that a budgetary change
+is needed, that decision needs to be taken to the IAD and the IAOC.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+</section>
+<div id="dispute">
+<section id="section-4.3">
+        <h3 id="name-disagreements-among-entitie">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-disagreements-among-entitie" class="section-name selfRef">Disagreements among Entities Related to the RFC Editor</a>
+        </h3>
+<p id="section-4.3-1">The RFC Series Editor and the RFC Production Center and Publisher 
+facilities work with the various streams to produce RFCs. 
+Disagreements may arise between these entities 
+during the execution of the RFC Editor 
+operations. In particular, different streams may disagree with each 
+other, or disagree with the RFC Editor function. Potentially, even the 
+RSOC or the IAOC could find themselves in disagreement with some 
+aspect of the RFC Editor operations.  Note that disagreements between
+an author and the RFC Production Center are not cross-entity issues, and
+they are to be resolved by the RSE, in accordance with the rest of this
+document. 
+        <a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">
+If such cross-entity disagreements arise, the community would 
+generally hope that they can be resolved politely and directly. 
+However, this is not always possible. At that point, any relevant 
+party would first formally request a review and reconsideration of the 
+decision. If the party still disagrees after the reconsideration, that 
+party may ask the RSE to decide or, especially if the RSE is involved, 
+the party may ask the IAB Chair (for a technical or procedural matter) 
+to mediate or appoint a mediator to aid in the discussions, although 
+he or she not is obligated to do so. All parties should work 
+informally and in good faith to reach a mutually agreeable
+conclusion.  As noted below, any such issues that involve contractual
+matters must be brought to the attention of the IAOC.  If the IAB Chair
+is asked to assist in resolving the matter, the Chair may ask for
+advice or seek assistance from anyone the Chair deems helpful.  The
+Chair may also alert any appropriate individuals or organizations to
+the existence of the issue.
+        <a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">
+          If such a conclusion is not possible through the above less formal
+          processes, then the matter must be registered with the RFC
+          Series Oversight Committee. The RSOC may choose to offer advice
+          to the RSE or more general advice to the parties involved
+          and may ask the RSE to defer a decision until it formulates
+          its advice. However, if a timely decision cannot be reached
+          through discussion, mediation, and mutual agreement, the
+          RSE is expected to make whatever decisions are
+          needed to ensure the smooth operation of the RFC Editor
+          function; those decisions are final.
+        <a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4">
+          The RSE may make final decisions unilaterally only to assure
+          the functioning of the process, and only while there is an
+          evaluation of current policies to determine whether they are
+          appropriately implemented in the decision or need
+          adjustment. In particular, it should be noted that final
+decisions about the technical content of individual
+documents are the exclusive responsibility of the stream
+approvers from which those documents originate, as shown in the illustration
+in <a href="#model-figure" class="xref">Figure 1</a>.
+
+
+        <a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">
+          If informal agreements cannot be reached, then formal RSOC
+          review and decision making may be required.  If so, the
+          RSE must present the issues involved to the community
+          so that the community is aware of the situation.  The RSE
+          will then report the issue to the RSOC for formal resolution
+          by the RSOC with confirmation by the IAB in its oversight
+          capacity.
+        <a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6">
+          IAB and community discussion of any patterns of disputes are
+          expected to inform future changes to RFC Series policies,
+          including possible updates to this document.
+        <a href="#section-4.3-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-4.4">
+        <h3 id="name-issues-with-contractual-imp">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-issues-with-contractual-imp" class="section-name selfRef">Issues with Contractual Impact</a>
+        </h3>
+<p id="section-4.4-1">
+          If a disagreement or decision has immediate or future
+          contractual consequences, it falls under <span>BCP 101 [<a href="#RFC4071" class="xref">RFC4071</a>] and IASA; 
+          thus, the RSE must identify
+          the issue and provide his or her advice to the IAOC; additionally, 
+          if the RSOC has provided advice,
+          forward that advice as well. The IAOC must notify the RSOC
+          and IAB regarding the action it concludes is required to
+          resolve the issue based on its applicable procedures and
+          provisions in the relevant contracts. 
+        </span><a href="#section-4.4-1" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-5">
+      <h2 id="name-iana-considerations">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-5-1">
+      This document defines several functions within the overall
+      RFC Editor structure, and it places the responsibility for
+      coordination of registry value assignments with the RFC
+      Production Center. The IAOC will facilitate the establishment
+      of the relationship between the RFC Production Center and IANA.
+      <a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">
+      This document does not create a new registry nor does it
+      register any values in existing registries, and no IANA action
+      is required.
+      <a href="#section-5-2" class="pilcrow">¶</a></p>
+</section>
+<section id="section-6">
+      <h2 id="name-security-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-6-1">
+      The same security considerations as those in <span>[<a href="#RFC4844" class="xref">RFC4844</a>] apply. The
+      processes for the publication of documents must prevent the
+      introduction of unapproved changes. Since the RFC Editor 
+      maintains the index of publications, sufficient security must be
+      in place to prevent these published documents from being changed
+      by external parties. The archive of RFC documents, any source
+      documents needed to recreate the RFC documents, and any
+      associated original documents (such as lists of errata, tools,
+      and, for some early items, originals that are not
+      machine readable) need to be secured against any kind of data
+      storage failure. 
+      </span><a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">
+     The IAOC should take these security considerations into
+     account during the implementation and enforcement of the RFC
+     Editor component contracts. 
+      <a href="#section-6-2" class="pilcrow">¶</a></p>
+</section>
+<section id="section-7">
+      <h2 id="name-acknowledgments">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="section-7-1">
+      The RFC Editor model was conceived and discussed in hallways and
+      on mailing lists. The first iteration of the text on which this
+      document is based was first written by Leslie Daigle, Russ
+      Housley, and Ray Pelletier. In addition to the members of the
+      IAOC and IAB in conjunction with those roles, major and minor
+      contributions were made by (in alphabetical order): Bob Braden,
+      Brian Carpenter, Sandy Ginoza, Alice Russo, Joel M. Halpern,
+      Alfred Hoenes, Paul Hoffman, John Klensin, Subramanian Moonesamy, and Jim
+      Schaad.
+      <a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">
+      The IAOC members at the time this RFC Editor model was approved
+      were (in alphabetical order):
+        Bernard Aboba (ex officio),
+        Eric Burger,
+        Dave Crocker,
+        Marshall Eubanks,
+        Bob Hinden,
+        Russ Housley (ex officio),
+        Ole Jacobsen,
+        Ray Pelletier (non-voting), and
+        Lynn St. Amour (ex officio).
+      <a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">
+      The IAB members at the time the initial RFC Editor model was approved
+      were (in alphabetical order):
+        Loa Andersson,
+        Gonzalo Camarillo,
+        Stuart Cheshire,
+        Russ Housley,
+        Olaf Kolkman,
+        Gregory Lebovitz,
+        Barry Leiba,
+        Kurtis Lindqvist,
+        Andrew Malis,
+        Danny McPherson,
+        David Oran,
+        Dave Thaler, and
+        Lixia Zhang.
+      In addition, the IAB included two ex officio members: Dow Street, who
+      was serving as the IAB Executive Director, and Aaron Falk, who was
+      serving as the IRTF Chair.
+      <a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">
+      The IAB members at the time the this RFC was approved were (in alphabetical order):
+      Bernard Aboba,
+      Ross Callon,
+      Alissa Cooper,
+      Spencer Dawkins,
+      Joel Halpern,
+      Russ Housley,
+      David Kessens,
+      Olaf Kolkman,
+      Danny McPherson,
+      Jon Peterson, 
+      Andrei Robachevsky, 
+      Dave Thaler, and
+      Hannes Tschofenig.
+    In addition, at the time of approval, the IAB included two
+ex officio members: Mary Barnes who was serving as the IAB Executive
+Director, and Lars Eggert, who was serving as the IRTF Chair.
+      <a href="#section-7-4" class="pilcrow">¶</a></p>
+</section>
+<section id="section-8">
+      <h2 id="name-references">
+<a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-8.1">
+        <h3 id="name-normative-references">
+<a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2850">[RFC2850]</dt>
+        <dd>
+<span class="refAuthor">Internet Architecture Board</span><span class="refAuthor"> and B. Carpenter, Ed.</span>, <span class="refTitle">"Charter of the Internet Architecture Board (IAB)"</span>, <span class="seriesInfo">BCP39</span>, <span class="seriesInfo">RFC2850</span>, <span class="seriesInfo">DOI10.17487/RFC2850</span>, <time datetime="2000-05">May 2000</time>
+            <span>, &lt;<a href="https://www.rfc-editor.org/info/rfc2850">https://www.rfc-editor.org/info/rfc2850</a>&gt;</span>. </dd>
+<dt id="RFC4071">[RFC4071]</dt>
+        <dd>
+<span class="refAuthor">Austein, R., Ed.</span><span class="refAuthor"> and B. Wijnen, Ed.</span>, <span class="refTitle">"Structure of the IETF Administrative Support Activity (IASA)"</span>, <span class="seriesInfo">BCP101</span>, <span class="seriesInfo">RFC4071</span>, <span class="seriesInfo">DOI10.17487/RFC4071</span>, <time datetime="2005-04">April 2005</time>
+            <span>, &lt;<a href="https://www.rfc-editor.org/info/rfc4071">https://www.rfc-editor.org/info/rfc4071</a>&gt;</span>. </dd>
+<dt id="RFC4844">[RFC4844]</dt>
+      <dd>
+<span class="refAuthor">Daigle, L., Ed.</span><span class="refAuthor"> and Internet Architecture Board</span>, <span class="refTitle">"The RFC Series and RFC Editor"</span>, <span class="seriesInfo">RFC4844</span>, <span class="seriesInfo">DOI10.17487/RFC4844</span>, <time datetime="2007-07">July 2007</time>
+            <span>, &lt;<a href="https://www.rfc-editor.org/info/rfc4844">https://www.rfc-editor.org/info/rfc4844</a>&gt;</span>. </dd>
+</dl>
+</section>
+<section id="section-8.2">
+        <h3 id="name-informative-references">
+<a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC3777">[RFC3777]</dt>
+        <dd>
+<span class="refAuthor">Galvin, J., Ed.</span>, <span class="refTitle">"IAB and IESG Selection, Confirmation, and Recall Process: Operation of the Nominating and Recall Committees"</span>, <span class="seriesInfo">RFC3777</span>, <span class="seriesInfo">DOI10.17487/RFC3777</span>, <time datetime="2004-06">June 2004</time>
+            <span>, &lt;<a href="https://www.rfc-editor.org/info/rfc3777">https://www.rfc-editor.org/info/rfc3777</a>&gt;</span>. </dd>
+<dt id="RFC5620">[RFC5620]</dt>
+      <dd>
+<span class="refAuthor">Kolkman, O., Ed.</span><span class="refAuthor"> and IAB</span>, <span class="refTitle">"RFC Editor Model (Version 1)"</span>, <span class="seriesInfo">RFC5620</span>, <span class="seriesInfo">DOI10.17487/RFC5620</span>, <time datetime="2009-08">August 2009</time>
+            <span>, &lt;<a href="https://www.rfc-editor.org/info/rfc5620">https://www.rfc-editor.org/info/rfc5620</a>&gt;</span>. </dd>
+</dl>
+</section>
+</section>
+<div id="authors-addresses">
+<section id="section-appendix.a">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto"><span class="fn nameRole">Olaf M. Kolkman</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:olaf@nlnetlabs.nl" class="email">olaf@nlnetlabs.nl</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto"><span class="fn nameRole">Joel M. Halpern</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:joel.halpern@ericsson.com" class="email">joel.halpern@ericsson.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto"><span class="fn nameRole">Internet Architecture Board</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:iab@iab.org" class="email">iab@iab.org</a>
+</div>
+</address>
+</section>
+</div>
+<script>var toc = document.getElementById("toc");
+var tocToggle = toc.querySelector("h2");
+var tocNav = toc.querySelector("nav");
+
+// mobile menu toggle
+tocToggle.onclick = function(event) {
+    if (window.innerWidth < 1024) {
+ var tocNavDisplay = tocNav.currentStyle ? tocNav.currentStyle.display : getComputedStyle(tocNav, null).display;
+ if (tocNavDisplay == "none") {
+     tocNav.style.display = "block";
+ } else {
+     tocNav.style.display = "none";
+ }
+    }
+}
+
+// toc anchor scroll to anchor
+tocNav.addEventListener("click", function (event) {
+    event.preventDefault();
+    if (event.target.nodeName == 'A') {
+ if (window.innerWidth < 1024) {
+     tocNav.style.display = "none";
+ }
+ var href = event.target.getAttribute("href");
+ var anchorId = href.substr(1);
+ var anchor =  document.getElementById(anchorId);
+ anchor.scrollIntoView(true);
+ window.history.pushState("","",href);
+    }
+});
+
+// switch toc mode when window resized
+window.onresize = function () {
+    if (window.innerWidth < 1024) {
+ tocNav.style.display = "none";
+    } else {
+ tocNav.style.display = "block";
+    }
+}
+</script>
+</body>
+</html>

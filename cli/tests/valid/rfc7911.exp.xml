@@ -1,0 +1,463 @@
+<?xml version='1.0' encoding='ascii'?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc number="7911" category="std" consensus="yes" submissionType="IETF" ipr="trust200902" docName="draft-ietf-idr-add-paths" obsoletes="" updates="" xml:lang="en">
+  <front>
+    <title abbrev="ADD-PATH">Advertisement of Multiple Paths in BGP</title>
+    <author fullname="Daniel Walton" initials="D." surname="Walton">
+      <organization abbrev="Cumulus Networks">Cumulus Networks</organization>
+      <address>
+        <postal>
+          <street>185 E. Dana Street</street>
+          <city>Mountain View</city>
+          <region>CA</region>
+          <code>94041</code>
+          <country>United States of America</country>
+        </postal>
+        <email>dwalton@cumulusnetworks.com</email>
+      </address>
+    </author>
+    <author fullname="Alvaro Retana" initials="A." surname="Retana">
+      <organization>Cisco Systems, Inc.</organization>
+      <address>
+        <postal>
+          <street>Kit Creek Rd.</street>
+          <city>Research Triangle Park</city>
+          <region>NC</region>
+          <code>27709</code>
+          <country>United States of America</country>
+        </postal>
+        <email>aretana@cisco.com</email>
+      </address>
+    </author>
+    <author fullname="Enke Chen" initials="E." surname="Chen">
+      <organization>Cisco Systems, Inc.</organization>
+      <address>
+        <postal>
+          <street>170 W. Tasman Dr.</street>
+          <city>San Jose</city>
+          <region>CA</region>
+          <code>95134</code>
+          <country>United States of America</country>
+        </postal>
+        <email>enkechen@cisco.com</email>
+      </address>
+    </author>
+    <author fullname="John Scudder" initials="J." surname="Scudder">
+      <organization abbrev="Juniper Networks">Juniper Networks</organization>
+      <address>
+        <postal>
+          <street>1194 N. Mathilda Ave</street>
+          <city>Sunnyvale</city>
+          <region>CA</region>
+          <code>94089</code>
+          <country>United States of America</country>
+        </postal>
+        <email>jgs@juniper.net</email>
+      </address>
+    </author>
+    <?v3xml2rfc silence="The document date .*? is more than 3 days away from today's date" ?>
+    <date month="July" year="2016"/>
+    <abstract>
+      <t>This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. The essence of the extension is
+      that each path is identified by a Path Identifier in addition to the
+      address prefix.</t>
+    </abstract>
+  </front>
+  <middle>
+    <section title="Introduction" numbered="true" toc="default">
+      <t>The BGP specification <xref format="default" pageno="false" target="RFC4271"/> defines an Update-Send Process to advertise the
+      routes chosen by the Decision Process to other BGP speakers. No
+      provisions are made to allow the advertisement of multiple paths for the
+      same address prefix or Network Layer Reachability Information (NLRI).
+      In fact, a route with the same NLRI as a previously advertised route
+      implicitly replaces the previous advertisement.</t>
+      <t>This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. The essence of the extension is
+      that each path is identified by a Path Identifier in addition to the
+      address prefix.</t>
+      <t>The availability of the additional paths can help reduce or eliminate
+      persistent route oscillations <xref format="default" pageno="false" target="RFC3345"/>.  It can also help with optimal routing and routing 
+      convergence in a network by providing potential alternate or backup paths, 
+      respectively.</t>
+      <section title="Specification of Requirements" numbered="true" toc="default">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <xref format="default" pageno="false" target="RFC2119"/>.</t>
+      </section>
+    </section>
+    <section title="How to Identify a Path" numbered="true" toc="default">
+      <t>As defined in <xref format="default" pageno="false" target="RFC4271"/>, a path refers to the information reported in the
+      Path Attribute field of an UPDATE message. As the procedures specified
+      in <xref format="default" pageno="false" target="RFC4271"/> allow only
+      the advertisement of one path for a particular address prefix, a path
+      for an address prefix from a BGP peer can be keyed on the address
+      prefix.</t>
+      <t>In order for a BGP speaker to advertise multiple paths for the same
+      address prefix, a new identifier (termed "Path Identifier" hereafter)
+      needs to be introduced so that a particular path for an address prefix
+      can be identified by the combination of the address prefix and the Path
+      Identifier.</t>
+      <t>The assignment of the Path Identifier for a path by a BGP speaker is
+      purely a local matter. However, the Path Identifier MUST be assigned in
+      such a way that the BGP speaker is able to use the (Prefix, Path
+      Identifier) to uniquely identify a path advertised to a neighbor. A BGP
+      speaker that re-advertises a route MUST generate its own Path Identifier
+      to be associated with the re-advertised route. A BGP speaker that
+      receives a route should not assume that the identifier carries any
+      particular semantics.</t>
+    </section>
+    <section anchor="code" title="Extended NLRI Encodings" numbered="true" toc="default">
+      <t>In order to carry the Path Identifier in an UPDATE message, the NLRI
+      encoding MUST be extended by prepending the Path Identifier field, which
+      is of four octets.</t>
+      <t>For example, the NLRI encoding specified in <xref format="default" pageno="false" target="RFC4271"/> is extended as the following:</t>
+      <figure title="" suppress-title="false" align="left" alt="" width="" height="">
+        <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
+               +--------------------------------+
+               | Path Identifier (4 octets)     |
+               +--------------------------------+
+               | Length (1 octet)               |
+               +--------------------------------+
+               | Prefix (variable)              |
+               +--------------------------------+</artwork>
+      </figure>
+      <t>The usage of the extended NLRI encodings is specified in <xref target="ops" pageno="false" format="default"/>.</t>
+      <?rfc needLines="20" ?>
+    </section>
+    <section anchor="capa" title="ADD-PATH Capability" numbered="true" toc="default">
+      <t>The ADD-PATH Capability is a BGP capability <xref format="default" pageno="false" target="RFC5492"/>, with Capability Code
+      69. The Capability Length field of this capability is
+      variable. The Capability Value field consists of one or more of the
+      following tuples:</t>
+      <figure title="" suppress-title="false" align="left" alt="" width="" height="">
+        <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
+             +------------------------------------------------+
+             | Address Family Identifier (2 octets)           |
+             +------------------------------------------------+
+             | Subsequent Address Family Identifier (1 octet) |
+             +------------------------------------------------+
+             | Send/Receive (1 octet)                         |
+             +------------------------------------------------+</artwork>
+      </figure>
+      <t>The meaning and use of the fields are as follows: </t>
+      <t><list><t>Address Family Identifier (AFI): <list><t>This field is the same as the one used in <xref format="default" pageno="false" target="RFC4760"/>.</t></list></t><t>Subsequent Address Family Identifier (SAFI): <list><t>This field is the same as the one used in <xref format="default" pageno="false" target="RFC4760"/>.</t></list></t><t>Send/Receive: <list><t>This field indicates whether the sender is (a) able to
+              receive multiple paths from its peer (value 1), (b) able to send
+              multiple paths to its peer (value 2), or (c) both (value 3) for
+              the &lt;AFI, SAFI&gt;.</t><t>If any other value is received, then the capability SHOULD be
+              treated as not understood and ignored <xref format="default" pageno="false" target="RFC5492"/>.</t></list></t></list>A BGP speaker that wishes to indicate support for multiple
+      AFI/SAFIs MUST do so by including the information in a single instance of
+      the ADD-PATH Capability.</t>
+    </section>
+    <section anchor="ops" title="Operation" numbered="true" toc="default">
+      <t>The Path Identifier specified in <xref target="code" pageno="false" format="default"/> can be used to
+      advertise multiple paths for the same address prefix without subsequent
+      advertisements replacing the previous ones. Apart from the fact that
+      this is now possible, the route advertisement rules of <xref format="default" pageno="false" target="RFC4271"/> are not changed. In
+      particular, a new advertisement for a given address prefix and a given
+      Path Identifier replaces a previous advertisement for the same address
+      prefix and Path Identifier. If a BGP speaker receives a message to
+      withdraw a prefix with a Path Identifier not seen before, it SHOULD
+      silently ignore it.</t>
+      <t>For a BGP speaker to be able to send multiple paths to its peer, that
+      BGP speaker MUST advertise the ADD-PATH Capability with the Send/Receive
+      field set to either 2 or 3, and MUST receive from its peer the ADD-PATH
+      Capability with the Send/Receive field set to either 1 or 3, for the
+      corresponding &lt;AFI, SAFI&gt;.</t>
+      <t>A BGP speaker MUST follow the procedures defined in <xref format="default" pageno="false" target="RFC4271"/> when generating an
+      UPDATE message for a particular &lt;AFI, SAFI&gt; to a peer unless the
+      BGP speaker advertises the ADD-PATH Capability to the peer indicating
+      its ability to send multiple paths for the &lt;AFI, SAFI&gt;, and also
+      receives the ADD-PATH Capability from the peer indicating its ability to
+      receive multiple paths for the &lt;AFI, SAFI&gt;, in which case the
+      speaker MUST generate a route update for the &lt;AFI, SAFI&gt; based on
+      the combination of the address prefix and the Path Identifier, and use
+      the extended NLRI encodings specified in this document. The peer SHALL
+      act accordingly in processing an UPDATE message related to a particular
+      &lt;AFI, SAFI&gt;.</t>
+      <t>A BGP speaker SHOULD include the best route <xref format="default" pageno="false" target="RFC4271"/> when more than one path is
+      advertised to a neighbor, unless it is a path received from
+      that neighbor.</t>
+      <t>As the Path Identifiers are locally assigned, and may or may not be
+      persistent across a control plane restart of a BGP speaker, an
+      implementation SHOULD take special care so that the underlying
+      forwarding plane of a "Receiving Speaker" as described in <xref format="default" pageno="false" target="RFC4724"/> is not affected
+      during the graceful restart of a BGP session.</t>
+    </section>
+    <section title="Deployment Considerations" numbered="true" toc="default">
+      <t>The extension proposed in this document provides a mechanism for a
+      BGP speaker to advertise multiple paths over a BGP session. Care needs
+      to be taken in its deployment to ensure consistent routing and
+      forwarding in a network <xref format="default" pageno="false" target="ADDPATH"/>.</t>
+      <t>The only explicit indication that the encoding described in <xref target="code" pageno="false" format="default"/>
+      is in use in a particular BGP session is the exchange of Capabilities
+      described in <xref target="capa" pageno="false" format="default"/>.  If the exchange is successful <xref format="default" pageno="false" target="RFC5492"/>, then the BGP speakers
+      will be able to process all BGP UPDATES properly, as described in <xref target="ops" pageno="false" format="default"/>.
+      However, if, for example, a packet analyzer is used on the wire to examine 
+      an active BGP session, it may not be able to properly decode the BGP UPDATES
+      because it lacks prior knowledge of the exchanged Capabilities.</t>
+      <t>When deployed as a provider edge router or a peering router that
+      interacts with external neighbors, a BGP speaker usually advertises at
+      most one path to the internal neighbors in a network. In the case where the
+      speaker is configured to advertise multiple paths to the internal
+      neighbors, and additional information is needed for the application, the
+      speaker could use attributes such as the Edge_Discriminator attribute
+      <xref format="default" pageno="false" target="FAST"/>. The use of that type of
+      additional information is outside the scope of this document.</t>
+    </section>
+    <section title="IANA Considerations" numbered="true" toc="default">
+      <t>IANA has assigned the value 69 for the ADD-PATH Capability
+      described in this document. This registration is in the "Capability
+      Codes" registry.</t>
+    </section>
+    <section title="Security Considerations" numbered="true" toc="default">
+      <t>This document defines a BGP extension that allows the advertisement
+      of multiple paths for the same address prefix without the new paths
+      implicitly replacing any previous ones. As a result, multiple paths for
+      a large number of prefixes may be received by a BGP speaker, potentially
+      depleting memory resources or even causing network-wide instability, which
+      can be considered a denial-of-service attack.  Note that this is not a new
+      vulnerability, but one that is present in the base BGP specification <xref format="default" pageno="false" target="RFC4272"/>.</t>
+      <t>
+  The use of the ADD-PATH Capability is intended to address specific
+  needs related to, for example, <xref target="STOP-OSC" pageno="false" format="default">eliminating route oscillations that
+  were induced by the MULTI_EXIT_DISC (MED) attribute</xref>.
+
+  While describing the applications for the
+      ADD-PATH Capability is outside the scope of this document, users
+      are encouraged to examine their behavior and potential impact by
+      studying the best practices described in <xref format="default" pageno="false" target="ADDPATH"/>.</t>
+      <t>Security concerns in the base operation of <xref format="default" pageno="false" target="RFC4271">BGP</xref> also apply.</t>
+    </section>
+  </middle>
+  <back>
+    <references title="Normative References">
+      <reference anchor="RFC4271" target="https://www.rfc-editor.org/info/rfc4271" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4271.xml">
+        <front>
+          <title>A Border Gateway Protocol 4 (BGP-4)</title>
+          <author initials="Y." surname="Rekhter" fullname="Y. Rekhter" role="editor">
+            <organization/>
+          </author>
+          <author initials="T." surname="Li" fullname="T. Li" role="editor">
+            <organization/>
+          </author>
+          <author initials="S." surname="Hares" fullname="S. Hares" role="editor">
+            <organization/>
+          </author>
+          <date year="2006" month="January"/>
+          <abstract>
+            <t>This document discusses the Border Gateway Protocol (BGP), which is an inter-Autonomous System routing protocol.</t>
+            <t>The primary function of a BGP speaking system is to exchange network reachability information with other BGP systems.  This network reachability information includes information on the list of Autonomous Systems (ASes) that reachability information traverses. This information is sufficient for constructing a graph of AS connectivity for this reachability from which routing loops may be pruned, and, at the AS level, some policy decisions may be enforced.</t>
+            <t>BGP-4 provides a set of mechanisms for supporting Classless Inter-Domain Routing (CIDR).  These mechanisms include support for advertising a set of destinations as an IP prefix, and eliminating the concept of network "class" within BGP.  BGP-4 also introduces mechanisms that allow aggregation of routes, including aggregation of AS paths.</t>
+            <t>This document obsoletes RFC 1771.  [STANDARDS-TRACK]</t>
+          </abstract>
+        </front>
+        <seriesInfo name="RFC" value="4271"/>
+        <seriesInfo name="DOI" value="10.17487/RFC4271"/>
+      </reference>
+      <reference anchor="RFC5492" target="https://www.rfc-editor.org/info/rfc5492" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5492.xml">
+        <front>
+          <title>Capabilities Advertisement with BGP-4</title>
+          <author initials="J." surname="Scudder" fullname="J. Scudder">
+            <organization/>
+          </author>
+          <author initials="R." surname="Chandra" fullname="R. Chandra">
+            <organization/>
+          </author>
+          <date year="2009" month="February"/>
+          <abstract>
+            <t>This document defines an Optional Parameter, called Capabilities, that is expected to facilitate the introduction of new capabilities in the Border Gateway Protocol (BGP) by providing graceful capability advertisement without requiring that BGP peering be terminated.</t>
+            <t>This document obsoletes RFC 3392.  [STANDARDS-TRACK]</t>
+          </abstract>
+        </front>
+        <seriesInfo name="RFC" value="5492"/>
+        <seriesInfo name="DOI" value="10.17487/RFC5492"/>
+      </reference>
+      <reference anchor="RFC4760" target="https://www.rfc-editor.org/info/rfc4760" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4760.xml">
+        <front>
+          <title>Multiprotocol Extensions for BGP-4</title>
+          <author initials="T." surname="Bates" fullname="T. Bates">
+            <organization/>
+          </author>
+          <author initials="R." surname="Chandra" fullname="R. Chandra">
+            <organization/>
+          </author>
+          <author initials="D." surname="Katz" fullname="D. Katz">
+            <organization/>
+          </author>
+          <author initials="Y." surname="Rekhter" fullname="Y. Rekhter">
+            <organization/>
+          </author>
+          <date year="2007" month="January"/>
+          <abstract>
+            <t>This document defines extensions to BGP-4 to enable it to carry routing information for multiple Network Layer protocols (e.g., IPv6, IPX, L3VPN, etc.).  The extensions are backward compatible - a router that supports the extensions can interoperate with a router that doesn't support the extensions.  [STANDARDS-TRACK]</t>
+          </abstract>
+        </front>
+        <seriesInfo name="RFC" value="4760"/>
+        <seriesInfo name="DOI" value="10.17487/RFC4760"/>
+      </reference>
+      <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+        <front>
+          <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+          <author initials="S." surname="Bradner" fullname="S. Bradner">
+            <organization/>
+          </author>
+          <date year="1997" month="March"/>
+          <abstract>
+            <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized. This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
+          </abstract>
+        </front>
+        <seriesInfo name="BCP" value="14"/>
+        <seriesInfo name="RFC" value="2119"/>
+        <seriesInfo name="DOI" value="10.17487/RFC2119"/>
+      </reference>
+    </references>
+    <references title="Informative References">
+      <reference anchor="RFC3345" target="https://www.rfc-editor.org/info/rfc3345" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3345.xml">
+        <front>
+          <title>Border Gateway Protocol (BGP) Persistent Route Oscillation Condition</title>
+          <author initials="D." surname="McPherson" fullname="D. McPherson">
+            <organization/>
+          </author>
+          <author initials="V." surname="Gill" fullname="V. Gill">
+            <organization/>
+          </author>
+          <author initials="D." surname="Walton" fullname="D. Walton">
+            <organization/>
+          </author>
+          <author initials="A." surname="Retana" fullname="A. Retana">
+            <organization/>
+          </author>
+          <date year="2002" month="August"/>
+        </front>
+        <seriesInfo name="RFC" value="3345"/>
+        <seriesInfo name="DOI" value="10.17487/RFC3345"/>
+      </reference>
+      <!--draft-ietf-idr-route-oscillation-stop IESG State: IESG Evaluation::Revised
+I-D Needed -->
+      <reference anchor="STOP-OSC" quote-title="true">
+        <front>
+          <title>BGP Persistent Route Oscillation Solutions</title>
+          <author initials="D" surname="Walton" fullname="Daniel Walton">
+            <organization/>
+          </author>
+          <author initials="A" surname="Retana" fullname="Alvaro Retana">
+            <organization/>
+          </author>
+          <author initials="E" surname="Chen" fullname="Enke Chen">
+            <organization/>
+          </author>
+          <author initials="J" surname="Scudder" fullname="John Scudder">
+            <organization/>
+          </author>
+          <date month="April" day="30" year="2016"/>
+        </front>
+        <seriesInfo name="Work in Progress," value="draft-ietf-idr-route-oscillation-stop-03"/>
+      </reference>
+      <!--draft-ietf-idr-add-paths-guidelines IESG State: I-D Exists -->
+      <reference anchor="ADDPATH" quote-title="true">
+        <front>
+          <title>Best Practices for Advertisement of Multiple Paths in IBGP</title>
+          <author initials="J" surname="Uttaro" fullname="Jim Uttaro">
+            <organization/>
+          </author>
+          <author initials="P" surname="Francois" fullname="Pierre Francois">
+            <organization/>
+          </author>
+          <author initials="K" surname="Patel" fullname="Keyur Patel">
+            <organization/>
+          </author>
+          <author initials="J" surname="Haas" fullname="Jeffrey Haas">
+            <organization/>
+          </author>
+          <author initials="A" surname="Simpson" fullname="Adam Simpson">
+            <organization/>
+          </author>
+          <author initials="R" surname="Fragassi" fullname="Roberto Fragassi">
+            <organization/>
+          </author>
+          <date month="April" day="25" year="2016"/>
+        </front>
+        <seriesInfo name="Work in Progress," value="draft-ietf-idr-add-paths-guidelines-08"/>
+      </reference>
+      <!--draft-pmohapat-idr-fast-conn-restore IESG State: Expired -->
+      <reference anchor="FAST" quote-title="true">
+        <front>
+          <title>Fast Connectivity Restoration Using BGP Add-path</title>
+          <author initials="P" surname="Mohapatra" fullname="Pradosh Mohapatra">
+            <organization/>
+          </author>
+          <author initials="R" surname="Fernando" fullname="Rex Fernando">
+            <organization/>
+          </author>
+          <author initials="C" surname="Filsfils" fullname="Clarence Filsfils">
+            <organization/>
+          </author>
+          <author initials="R" surname="Raszuk" fullname="Robert Raszuk">
+            <organization/>
+          </author>
+          <date month="January" day="22" year="2013"/>
+        </front>
+        <seriesInfo name="Work in Progress," value="draft-pmohapat-idr-fast-conn-restore-03"/>
+      </reference>
+      <reference anchor="RFC4724" target="https://www.rfc-editor.org/info/rfc4724" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4724.xml">
+        <front>
+          <title>Graceful Restart Mechanism for BGP</title>
+          <author initials="S." surname="Sangli" fullname="S. Sangli">
+            <organization/>
+          </author>
+          <author initials="E." surname="Chen" fullname="E. Chen">
+            <organization/>
+          </author>
+          <author initials="R." surname="Fernando" fullname="R. Fernando">
+            <organization/>
+          </author>
+          <author initials="J." surname="Scudder" fullname="J. Scudder">
+            <organization/>
+          </author>
+          <author initials="Y." surname="Rekhter" fullname="Y. Rekhter">
+            <organization/>
+          </author>
+          <date year="2007" month="January"/>
+          <abstract>
+            <t>This document describes a mechanism for BGP that would help minimize the negative effects on routing caused by BGP restart.  An End-of-RIB marker is specified and can be used to convey routing convergence information.  A new BGP capability, termed "Graceful Restart Capability", is defined that would allow a BGP speaker to express its ability to preserve forwarding state during BGP restart.  Finally, procedures are outlined for temporarily retaining routing information across a TCP session termination/re-establishment.</t>
+            <t>The mechanisms described in this document are applicable to all routers, both those with the ability to preserve forwarding state during BGP restart and those without (although the latter need to implement only a subset of the mechanisms described in this document).  [STANDARDS-TRACK]</t>
+          </abstract>
+        </front>
+        <seriesInfo name="RFC" value="4724"/>
+        <seriesInfo name="DOI" value="10.17487/RFC4724"/>
+      </reference>
+      <reference anchor="RFC4272" target="https://www.rfc-editor.org/info/rfc4272" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4272.xml">
+        <front>
+          <title>BGP Security Vulnerabilities Analysis</title>
+          <author initials="S." surname="Murphy" fullname="S. Murphy">
+            <organization/>
+          </author>
+          <date year="2006" month="January"/>
+          <abstract>
+            <t>Border Gateway Protocol 4 (BGP-4), along with a host of other infrastructure protocols designed before the Internet environment became perilous, was originally designed with little consideration for protection of the information it carries.  There are no mechanisms internal to BGP that protect against attacks that modify, delete, forge, or replay data, any of which has the potential to disrupt overall network routing behavior.</t>
+            <t>This document discusses some of the security issues with BGP routing data dissemination.  This document does not discuss security issues with forwarding of packets.  This memo provides information for the Internet community.</t>
+          </abstract>
+        </front>
+        <seriesInfo name="RFC" value="4272"/>
+        <seriesInfo name="DOI" value="10.17487/RFC4272"/>
+      </reference>
+    </references>
+    <section title="Acknowledgments" numbered="no" toc="default">
+      <t>We would like to thank David Cook and Naiming Shen for their
+      contributions to the design and development of the extension.</t>
+      <t>Many people have made valuable comments and suggestions, including
+      Rex Fernando, Eugene Kim, Danny McPherson, Dave Meyer, Pradosh
+      Mohapatra, Keyur Patel, Robert Raszuk, Eric Rosen, Srihari Sangli, Dan
+      Tappan, Mark Turner, Jeff Haas, Jay Borkenhagen, Mach Chen, Denis Ovsienko,
+      Carlos Pignataro, Meral Shirazipour, and Kathleen Moriarty.</t>
+    </section>
+  </back>
+</rfc>

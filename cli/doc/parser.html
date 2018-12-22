@@ -1,0 +1,208 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parser Module &mdash; xml2rfc v2.3.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.3.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="xml2rfc v2.3.3 documentation" href="index.html" />
+    <link rel="next" title="Writer Module" href="writers.html" />
+    <link rel="prev" title="Graphical Appplication" href="gui.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="writers.html" title="Writer Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gui.html" title="Graphical Appplication"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">xml2rfc v2.3.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="parser-module">
+<h1>Parser Module<a class="headerlink" href="#parser-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
+<p>The xml2rfc parser module contains two classes for public use: <tt class="docutils literal"><span class="pre">XmlRfcParser</span></tt>
+and <tt class="docutils literal"><span class="pre">XmlRfc</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">XmlRfcParser</span></tt> is a basic XML parser which uses
+the <a class="reference external" href="http://lxml.de/">lxml library</a> to parse an xml file into a tree
+structure.  An instance of <tt class="docutils literal"><span class="pre">XmlRfc</span></tt> contains a reference to this parsed
+tree, along with some helper methods to provide useful additional formatting
+to the tree.</p>
+<p>Accessing nodes in the tree is done through the standard lxml.etree interface.
+You can read more about that at <a class="reference external" href="http://lxml.de/tutorial.html">the lxml documentation</a></p>
+<p><em>Example &#8211; getting the title of an rfc document</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">root</span> <span class="o">=</span> <span class="n">xmlrfc</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+<span class="n">title</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;front/title&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xml2rfc.parser.XmlRfcParser">
+<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfcParser</tt><big>(</big><em>source</em>, <em>verbose=False</em>, <em>quiet=False</em>, <em>cache_path=None</em>, <em>templates_path=None</em>, <em>library_dirs=None</em>, <em>network_loc='http://xml.resource.org/public/rfc/'</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>XML parser with callbacks to construct an RFC tree</p>
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfcParser.parse">
+<tt class="descname">parse</tt><big>(</big><em>remove_comments=True</em>, <em>remove_pis=False</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the source XML file and returns an XmlRfc instance</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xml2rfc.parser.XmlRfc">
+<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfc</tt><big>(</big><em>tree</em>, <em>default_dtd_path</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal representation of an RFC document</p>
+<p>Contains an lxml.etree.ElementTree, with some additional helper
+methods to prepare the tree for output.</p>
+<p>Accessing the rfc tree is done by getting the root node from getroot()</p>
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.getpis">
+<tt class="descname">getpis</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.getpis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the XML processing instructions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.getroot">
+<tt class="descname">getroot</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.getroot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper method to get the root of the XML tree</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.parse_pi">
+<tt class="descname">parse_pi</tt><big>(</big><em>pi</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.parse_pi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a processing instruction to the current state</p>
+<p>Will also return the dictionary containing the added instructions
+for use in things like ?include instructions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.replaceUnicode">
+<tt class="descname">replaceUnicode</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.replaceUnicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Traverses the RFC tree and replaces unicode characters with the
+proper equivalents specified in rfc2629-xhtml.ent.</p>
+<p>Writers should call this method if the entire RFC document needs to
+be ascii formatted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.validate">
+<tt class="descname">validate</tt><big>(</big><em>dtd_path=None</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the document with its default dtd, or an optional one</p>
+<p>Return a success bool along with a list of any errors</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xml2rfc.parser.XmlRfcError">
+<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfcError</tt><big>(</big><em>msg</em>, <em>line_no=0</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application XML errors with positional information</p>
+<p>This class attempts to mirror the API of lxml&#8217;s error class</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parser Module</a><ul>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gui.html"
+                        title="previous chapter">Graphical Appplication</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="writers.html"
+                        title="next chapter">Writer Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/parser.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="writers.html" title="Writer Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gui.html" title="Graphical Appplication"
+             >previous</a> |</li>
+        <li><a href="index.html">xml2rfc v2.3.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Concentric Sky.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

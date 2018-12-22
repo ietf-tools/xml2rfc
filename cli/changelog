@@ -1,0 +1,2048 @@
+xml2rfc (2.16.0) ietf; urgency=medium
+
+  This release provides support for generation of xml2rfc PDF output.
+  However, a default pip install will only install the xml2rfc module
+  itself; additional installation work is needed to enable PDF generation:
+
+  In order to generate PDFs, xml2rfc uses the WeasyPrint module, which
+  depends on external libaries that must be installed as native packages
+  on your platform, separately from the xml2rfc install.
+
+  First, install the Cairo, Pango, and GDK-PixBuf libs on your system.
+  See installation instructions on the WeasyPrint Docs:
+
+      https://weasyprint.readthedocs.io/en/stable/install.html
+
+  (Python 3 is not needed if your system Python is 2.7, though).
+
+  (On some OS X systems with System Integrity Protection active, you may
+  need to create a symlink from your home directory to the library installation
+  directory (often /opt/local/lib):
+
+      ln -s /opt/local/lib ~/lib
+
+  in order for weasyprint to find the installed cairo and pango libraries.
+  Whether this is needed or not depends on whether you used macports or
+  homebrew to install cairo and pango, and the homebrew / macport version.)
+
+  Next, install the pycairo and weasyprint python modules using pip.
+  Depending on your system, you may need to use 'sudo' or install in
+  user-specific directories, using the --user switch.  On OS X in particular,
+  you may also need to install a newer version of setuptools using --user
+  switch before weasyprint can be installed.  If you install with the --user
+  switch, you may also need to set PYTHONPATH in your shell environment, e.g.,
+
+      PYTHONPATH=/Users/username/Library/Python/2.7/lib/python/site-packages
+
+  for Python 2.7.
+
+  The basic pip command (modify as needed according to the text above) is:
+
+      pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
+
+  With these installed and available to xml2rfc, the --pdf switch will be
+  enabled.
+
+  For correct PDF output, you also need to install the Noto font set.
+  Download the full set from:
+
+    https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip,
+
+  and install as appropriate for your platform.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  22 Dec 2018 15:58:44 +0000
+
+
+xml2rfc (2.15.5) ietf; urgency=medium
+
+  * Added code to look for input marked as v3, and process that as v3 
+    without requiring an explicit --v3 switch.  This should make it easier to 
+    transition to v3 draft submissions.
+
+  * Fixed a bug related to cref handling.  Fixes issue #389.
+
+  * Ensured propagation of options to parser and url resolver, and improved 
+    the error message for externals without .xml extension that give 404.
+
+  * Fixed an include without explicit extension in a test input file, in 
+    order to work with the stricter v3 formatter include processing.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  21 Dec 2018 09:34:14 -0800
+
+xml2rfc (2.15.4) ietf; urgency=medium
+
+  * Tweaked the mkrelease script to prevent inclusion of temporary editor 
+    files.
+
+  * Fixed a problem with string vs byte for referece file output.
+
+  * Added a limitation on the intervaltree requirements to avoid a broken
+    version.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Dec 2018 09:08:00 -0800
+
+xml2rfc (2.15.3) ietf; urgency=medium
+
+  This release fixes some issues found when running the html renderer over
+  a corpus of all drafts submitted with xml format over the last 30 days,
+  and an installation issue.
+
+  * Handled utf-8 reloading in setup.py under py27 without using six, which 
+    might be unavailable before the installation completes.
+
+  * Always convert python lists to comma-separated strings before calling 
+    on i18n address validation.
+
+  * Added some guards to prevent operations on None.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  05 Dec 2018 06:24:35 -0800
+
+
+xml2rfc (2.15.2) ietf; urgency=medium
+
+  * Added a v3 version of the expansion renderer, to handle xi:include 
+    processing and prettify the output for v3 xml files.
+
+  * Fixed an issue with blank lines around the text rendering of artwork.
+
+  * Introduced new pretty-print code which provide better indentation
+    consistency between beginning and end tags.
+
+  * Added a html() method to the html writer, for library model use, and did
+    some minor refactoring.
+
+  * Added a missing file.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  02 Dec 2018 15:20:03 -0800
+
+
+xml2rfc (2.15.1) ietf; urgency=medium
+
+
+  * Added downcoding of punctuation followed by wrapping of other non-ascii 
+    text in <u> for the v2v3 converter.
+
+  * Added BaseV3Writer methods: downcode() and downcode_punctuation(), 
+    get_text_tags() and get_inline_tags() (works this out from the schema), and 
+    added a list of deprecated elements.
+
+  * Fixed a typo in an error message.  Added asciification of smart quotes 
+    and other punctuation for the v3 renderers  to match that done for v2.  
+    Some class refactoring.
+
+  * Changed the workaround for non-ascii metadata in setup.py to only be 
+    active under py2.  Fixes a problem with setup.py under python 3.x
+
+  * Reverted [2786], which permitted non-ascii characters inside artwork
+    for the v2 renderers, but broke when trying to write to file without
+    utf-8 encoding.  Fixes issue #387.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  01 Dec 2018 12:18:46 -0800
+
+
+xml2rfc (2.15.0) ietf; urgency=medium
+
+  * Added support for a new element <u>, to be used to insert unicode in
+    protocol descriptions.
+
+    In xml2rfc vocabulary version 3, the elements <author>,
+    <organisation>, <street>, <city>, <region>, <code>, <country>,
+    <postalLine>, <email>, and <seriesInfo> may contain non-ascii
+    characters for the purpose of rendering author names, addresses, and
+    reference titles correctly.  They also have an additional "ascii"
+    attribute for the purpose of proper rendering in ascii-only media.
+
+    In order to insert Unicode characters in any other context, xml2rfc v3
+    formatters now require that the Unicode string be enclosed within an <u>
+    element.  The element will be expanded inline based on the value of a
+    "format" attribute.  This provides a generalized means of generating the 6
+    methods of Unicode renderings listed in RFC7997, Section 3.4
+    (http://rfc-editor.org/rfc/rfc7997.pdf), and also
+    several others found in for instance the RFC Format Tools example
+    rendering of RFC 7700, at 
+    <https://rfc-format.github.io/draft-iab-rfc-css-bis/sample2-v2.html>.
+
+    The "format" attribute accepts either a simplified format
+    specification, or a full format string with placeholders for the
+    various possible unicode expansions.
+
+    The simplified format consists of dash-separated keywords, where each
+    keyword represents a possible expansion of the unicode character or
+    string; use for example ``<u "lit-num-name">foo</u>`` to expand the text to
+    its literal value, code point values, and code point names.
+
+    A combination of up to 3 of the following keywords may be used,
+    separated by dashes: "num", "lit", "name", "ascii", "char".  The
+    keywords are expanded as follows and combined, with the second and
+    third enclosed in parentheses (if present):
+
+       "num"
+	  The numeric value(s) of the element text, in U+1234 notation
+
+       "name"
+	  The unicode name(s) of the element text
+
+       "lit"
+	  The literal element text, enclosed in quotes
+
+       "char"
+	  The literal element text, without quotes
+
+       "ascii"
+	  The provided ASCII value
+
+    In order to ensure that no specification mistakes can result for
+    rendering methods that cannot render all unicode code points, "num"
+    must always be part of the specified format.
+
+    The default value of the "format" attribute is "lit-name-num".
+
+    For instance:
+
+       format="lit-name-num":
+	  Temperature changes in the Temperature Control Protocol are
+	  indicated by the character "Δ" (GREEK CAPITAL LETTER DELTA,
+	  U+0394).
+
+    If the <u> element encloses a Unicode string, rather than a single
+    code point, the rendering reflects this.  The element::
+
+       <u format="num-lit">ᏚᎢᎵᎬᎢᎬᏒ</u>
+
+    will be expanded to 'U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2
+    ("ᏚᎢᎵᎬᎢᎬᏒ")'.
+
+    In order to provide for cases where the simplified format above is
+    insufficient, without relinquishing the requirement that the number of a
+    code point always must be rendered, the "format" attribute can also accept
+    a full format string.  This format uses placeholders which consist of any
+    of the key words above enclosed in in curly braces; outside of this, any
+    ascii text is permissible.  For example::
+
+       The <u format="{lit} character ({num})">Δ</u>.
+
+    will be rendered as::
+
+       The "Δ" character (U+0394).
+
+  * Added support for v3xml2rfc PIs that silence notices and warnings.  For
+    instance, adding::
+
+	<?v3xml2rfc silence="The document date .* is more than 3 days" ?>
+
+    in front of a <date> element with an old date will suppress the warning
+    message about an outdated date.  If the value of the silence attribute
+    matches the start of a notice or warning message, as a string or as a
+    regex, the message is suppressed.
+
+  * Some warnings have been downgraded to notices, and can be suppressed with
+    a --quiet switch.
+
+  * Added header and footer information for the tentative support for the 
+    W3C Paged Media Module described in RFC 7992, Section 6.4.
+
+  * Added support for older versions of pycountry.
+
+  * Added more information to the --version display when used with --verbose.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  30 Nov 2018 10:04:45 -0800
+
+
+xml2rfc (2.14.1) ietf; urgency=medium
+
+  * The v3 attribute xml:base of <reference> is not compatible with the v2
+    DTD.  Added xml:base to the DTD for <reference> in order to be able to
+    work from the same reference cache for v2 and v3, without backing out
+    the issue #381 resolution.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  23 Nov 2018 13:39:07 -0800
+
+xml2rfc (2.14.0) ietf; urgency=medium
+
+  * Added missing '(if approved)' annotations for obsoleted and updated lines
+    in v3 html rendering of drafts.
+
+  * Fixed the case of appendix section numbers in v3 html output.
+
+  * Removed rfc2629 dtd validation for input files with <rfc version="3"> set.
+
+  * Tweaked the lxml resolver callback to not accept xi:include names lacking
+    an '.xml' extension under v3.  Added setting of xml:base before caching
+    xi:include content, in order to not loose the origin.  Fixes issue #381.
+
+  * Sorted the entries in requirements.txt lexicographically.
+
+  * Added a check for duplicate id attribute values after each include of svg
+    content into generated html, as duplicates may cause display problems with
+    some browsers.
+
+  * Added back the ability to place <iref> elements in a location where they 
+    will translate to invalid HTML.  Avoided invalid HTML by pushing the span 
+    up one level, as a previous sibling, when needed.  Fixes issue #378.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  23 Nov 2018 08:25:52 -0800
+
+
+xml2rfc (2.13.1) ietf; urgency=medium
+
+  * Filled in missing rendering values for the case when cref is being 
+    rendered in inline context in the v3 text renderer.  Fixes issue #380.
+
+  * Under python 3.6, dictionary keys() return a set-like object that 
+    cannot be indexed.  Convert to list for our purposes.  Fixes issue #379
+
+  * Remove the 'alt' attribute on <artwork> with SVG after setting <desc>.
+
+  * Fixed an issue with missing svg namespace when inserting <desc>.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  17 Nov 2018 09:07:14 -0800
+
+
+xml2rfc (2.13.0) ietf; urgency=medium
+
+  This release provides an number of improvements.  Rendering of all v3
+  elements should now be in place for the v3 text and html formatters, and
+  the renderers have been updated to follow the issue resolutions so far.
+  A bug in the generation of boilerplate for BCPs has been fixed.  Feedback
+  on unexpected postal address data has been improved, as has feedback on
+  unexpected combinations of stream, category, and consensus settings.
+
+  Details from the commit log:
+
+  * In the html formatter:
+
+    - Added indentation support for <dl> to the v3 html renderer.  
+
+    - Fixed a bug in the display of author names in the author addresses
+      section when no postal information is given.  
+
+    - Improved <eref> rendering for the case when no eref text is provided.  
+
+    - Corrected the anchor placement for slugified names of figures and
+      tables.  
+
+    - Added support for <referencegroup>.  
+
+    - Added a missing CSS class for <seriesInfo> rendering.  
+
+    - Added support for right and center alignment of tables.
+
+  * In the text formatter:
+
+    - Added v3 text formatter support for rendering of blockquote and cref.  
+
+    - Minor other tweaks.
+
+  * In the preptool: 
+
+    - Added support for <referencegroup> elements.  
+
+    - Added support for the <rfc> version attribute.  
+
+    - Fixed a string formatting bug.  
+
+    - Added attribute valididty checking for integer-valued attributes.  
+
+    - Removed the forced inclusion of day for RFC publication dates, reverting
+      to permitting publication with only year and month.
+
+    - Added more sophisticated checking and setting of consensus, based on
+      what is valid for the given stream and category.  
+
+    - Refined the handling when given input that already contains boilerplate,
+      authors addresses and index.
+
+  * In the v2v3 converter:
+
+    - Added setting of the <rfc> version attribute.
+
+    - Removed dubious elimination of <format> elements pointing to alternative
+      reference URLs.
+
+    - Fixed a couple of instances of buggy error reporting.
+
+  * Changed util.postal.get_normalized_address() to return a filled-in adr 
+    structure even if no country could be identified, for more consistent code 
+    in other places.
+
+  * In the Relax NG schema files:
+
+    - Changed the v3 schema default value for <dl> newline so that the effect 
+      is the same as for the old 'hanging' default value.
+
+    - Added a 'derivedAnchor' attribute for <referencegroup>, matching that of
+      <reference>.
+
+  * In the CSS style sheet:
+
+    - Changed the CSS class for Reference Section definition lists from
+      'reference' to 'references'.  
+
+    - Added styling for table alignment and
+      applied the same styling for table labels as for figure labels.
+
+  * Added bcp14, em, iref, strong, sub, and sup to the permitted elements 
+    in <name>.
+
+  * Fixed some issues with the error messages for combinations of stream, 
+    category, and consensus.
+
+  * Added code to honour the "display" attribute of <cref>.
+
+  * Added a preptool action to check the <rfc> attributes submissionType 
+    (i.e., stream), category, and consensus for validity.  Invalid combinations 
+    are called out, and warnings are issued about setting missing settings to 
+    default values.
+
+  * With v2 formatters, treat consensus for BCPs the same way as STD 
+    documents, 
+
+  * Refactored some logging and address functionality, improved address
+    warnings and other address-related tweaks.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  17 Nov 2018 05:24:27 -0800
+
+xml2rfc (2.12.3) ietf; urgency=medium
+
+  This release fixes a schema issue.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  30 Oct 2018 15:11:30 -0700
+
+
+xml2rfc (2.12.2) ietf; urgency=medium
+
+  This bugfix release corrects a default setting for --v3 modes so they do not
+  try to apply DTD validation.  It refines the internationalised address
+  layout, and does re-factoring in a number of places.  Non-Latin author names
+  and addresses in Right-To-Left scripts are now properly aligned in the
+  Authors' Addresses section.  It also fixes an issue where needLines PI
+  settings were ineffectual under python2.7, and caused exceptions under
+  python3.5 and higher.  
+
+  Excerpted from the commit log:
+
+  * Changed the HTML renderer to properly place organisation in i18n 
+    address layout, and added back the role indication that was lost in 
+    previous i18n address layout work.
+
+  * Updated run.py to apply the --no-dtd option to all --v3 formats, fixing 
+    an issue in 2.12.1 with running --html --v3 on a converted --v2v3 file.
+
+  * Fixed an issue with needLines when set to a string value.
+
+  * Added simple bidi-support to author addresses, in order to have 
+    addresses in right-to-left scripts align properly.  Fixed a bug in the 
+    handling of non-Latin address information.
+
+  * Tweaked the vcard width to avoid having author names and addresses in 
+    right-to-left script end up far to the right, away from the ASCII 
+    information.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  30 Oct 2018 15:02:12 -0700
+
+
+xml2rfc (2.12.1) ietf; urgency=medium
+
+  This release provides some additional polish over release 2.12.0, and also a
+  few bugfixes.  The primary focus for this release has been HTML compliance
+  based on the W3C validator at https://validator.w3.org/.  Valid HTML 5 is
+  now generated for all documents used during testing.  From the commit log:
+
+  * Fixed a number of issues with the v3 html renderer, to improve the 
+    generated html.  Many of these were caught by the W3C validator at validator.w3.org:
+
+    - removed the <meta http-equiv="Content-Type" ...> element, as it should
+      not appear when there is a <meta charset=...> element
+
+    - removed type="text/javascript" from a <script> element (superfluous)
+
+    - removed a number of extraneous wrapping divs with identical id attributes
+
+    - corrected the generation of <dt><dd> items for xml <ol> entries with
+      percentage list types
+
+    - removed some attributes on html entries for xml <ol> lists that had
+      incorrectly been transferred from the xml
+
+    - corrected the block element generated for <references> to <section>
+
+    - fixed an issue where <xref> in <name> would generate nested html <a>
+      elements
+
+  * Also fixed some other issue:
+
+    - added a newline tail for block elements, to improve readability
+
+    - added missing space between author name and (editor)
+
+    - fixed the renderer for <note> to generate html <section> elements with
+      the right class attribute
+
+    - refactored the generation of enclosing divs to hold id="$anchor" to be
+      more consistent, with less code
+
+    - modified the rendering of <xref> with text content to more closely match
+      the historic rendering
+
+  * Updated python-version specific test masters.  Tox runs for py27, py34,
+    py35, and py36 aren now all clean.
+
+  * Changed some invalid <link> rel= values to valid ones in the preptool
+
+  * Tweaked the list of html block-level elements we use to control <div>
+    wrapping
+
+  * Disallowed <iref> as a direct child of <table> in the schema, as it
+    results in invalid html with the rendering specified in RFC 7992.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  29 Oct 2018 05:19:31 -0700
+
+
+xml2rfc (2.12.0) ietf; urgency=medium
+
+  This release introduces the vocabulary v3 html formatter.  In order to
+  invoke this formatter, use the regular --html switch for html output, and
+  add the --v3 switch to specify the v3 html formatter.
+
+  In v3 html formatter mode, xml2rfc accepts any valid xml2rfc input file, but
+  since the actual formatter only understands the XML elements and attributes
+  which have not been deprecated by RFC7991, it first applies the xml2rfc v2v3
+  converter in order to transform any deprecated markup to the elements and
+  attributes it understands, and then applies the preptool in order to
+  normalize the input before it starts rendering.
+
+  This is the first release of the v3 html formatter.  It is quite feature
+  complete, but has been tested only on a limited number of documents, so
+  expect that there could be some rough edges.
+
+  In building the html v3 formatter, a number of rough edges were also
+  discovered in the schema, RFC 7991; html format output, RFC 7992; and
+  preptool specification, RFC 7998.  The modifications applied in the code
+  are described in draft-levkowetz-xml2rfc-v3-implementation-notes-05.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  28 Oct 2018 13:47:19 -0700
+
+
+xml2rfc (2.11.1) ietf; urgency=medium
+
+  * Changed linebreaking for URLs in boilerplate and references to the old 
+    behaviour (don't break), added stream abbreviations according to RFC5741, 
+    and changed EMail: to Email: in RFC mode.
+
+  * Added the align attribute for element <table> to the schema.
+
+  * Changed the v2v3 converter handling of the table align attribute, and 
+    fixed an issue with lost whitespace after <spanx>.
+
+  * Added STD to the seriesInfo sort order list.
+
+  * Added an error message for <date> month content that is neither a month 
+    name or a number.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  11 Oct 2018 08:30:03 -0700
+
+
+xml2rfc (2.11.0) ietf; urgency=medium
+
+  This release is a result of the issue discussions on xml2rfc-dev, and
+  attempt to follow the discussion and projected resolution of issues #36-#40.
+  This results in a number of incompatibilities with previous releases, with
+  respect to the v3 tools, as expected.  The v2 tools are unaffected.
+  Details:
+
+  * Changed the default table alignment to 'center', in order to match v2.
+
+  * Changed the <dl> 'hanging' attribute name to 'newline', based on the 
+    discussion of issue #38, in the schema, v2v3 converter and text formatter.
+
+  * Added an attribute 'indent' to <dl> in the schema, according to the 
+    discussion of issue #39.  Added v2v3 and text support for the same.
+
+  * Added markers='true' in the v2v3 converter for sourcecode with markers,
+    and tweaked render_sourcecode() to honour the 'markers' setting.
+
+  * Removed the disallowed align attribute on sourcecode.
+
+  * Removed <br> from the schema, according to the resolution of issue #37.
+
+  * Tweaked the handling of the document title to only reflow if needed, 
+    with some refactoring.
+
+  * Corrected the handling of the align attribute on <artwork> and <figure>.
+
+  * Changed <prepTime> to hold an RFC 3339 timestamp with seconds 
+    resolution.
+
+  * Fixed a couple of issues with v2v3 conversion warnings, and added 
+    source line information for all elements created during conversion.
+
+  * Fixed a buglet in sourcode rendering.
+
+  * Added a warning about lxml versions that lack validation error xpath 
+    information, and tweaked the warn() method.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  07 Oct 2018 12:52:24 -0700
+
+
+xml2rfc (2.10.3) ietf; urgency=medium
+
+  This bugfix release works around a problem with lxml versions before 3.8.0,
+  and brings some other fixes and tweaks:
+
+  * Tweaked validation output to not break if validation error log elements
+    lack xpath information. Fixes issue #376.  (lxml<3.8.0 does not provide
+    the xpath of the offending element in error.path).
+
+  * Fixed a couple of issues with v2v3 conversion warnings, and added 
+    element sourceline information for all elements created during conversion.
+
+  * Fixed a buglet in sourcode rendering.
+
+  * Added a warning about lxml versions that lack validation error xpath 
+    information, and tweaked the warn() method.
+
+  * Tweaked the rendering of <eref>.
+
+  * Added <blockquote> to the list of block level elements in isblock().
+
+  * Added some values to xml2rfc.base.default_options, necessary when using 
+    xml2rfc as a library module (i.e., not getting options from run.py through 
+    command-line invocation).
+
+  * Added attribute markers="true"|"false" to <sourcecode> and changed the v3
+    text formatter to only output code markers if <sourcecode> has attribute
+    markers set to true.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  22 Sep 2018 09:28:09 -0700
+
+
+xml2rfc (2.10.2) ietf; urgency=medium
+
+  * Added a full listing of validation errors found, rather than just the
+    first, when running v3 validation on an (possibly v2v3 converted) input
+    file in preptool.  Also improved the error messages by providing the xpath
+    to the offending element.
+
+  * Added normalization of RFC 2119 phrases before checking for validity, and
+    updated tests files to include a <bcp14> test.
+
+  * Fixed several places where unexpected input could cause exceptions.  
+    Also turned the invalid input document warning into an error.  Fixes issue 
+    #375.
+
+  * Preserved the element tail when rendering <bcp14>.  Fixes issue #374.
+
+  * Fixed an issue where an empty <references/> section could cause an 
+    exception in the v2 text formatter.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Sep 2018 07:42:06 -0700
+
+
+xml2rfc (2.10.1) ietf; urgency=medium
+
+  This is primarily a bugfix release, to handle issues people have reported
+  with the new vocabulary v3 text formatter:
+
+  * Fixed an issue where the v2 text formatter could blow up for some v3
+    documents, rather than exit with a message.
+
+  * Fixed a problem in the v2v3 converter that could cause an Internet-Draft
+    <seriesInfo> element to be inserted even if one was alredy present.
+
+  * Tweaked the <seriesInfo> insertion code slightly, and expanded an error
+    message slightly.
+
+  * Fixed a couple of places where bad input could cause exceptions.  Fixes 
+    issue #366.
+
+  * Fixed a case where max() could be given an empty sequence.
+
+  * Tweaked the handling of <ul> with structured <li> content.  Fixes issue 
+    #365.
+
+  * Improved the handling of <br>.
+
+  * Added render_blockquote().  This fixes issue #359.
+
+  * Fixed a problem in the plaintext formatter where table cells were not 
+    filled in if the table was wider than the available width.  Also added 
+    support for formatted table cell content.
+
+  * Added a check in preptool for <keyword> elements containing multiple 
+    keywords.  Fixes issue #353.
+
+  * Moved the reading of input files to avoid multiple reads.  Fixes issue 
+    #352.
+
+  * Added a renderer for <bcp14> elements.
+
+  * Added error messages for empty artwork files.  Tweaked the error 
+    message for missing artwork text.  Addresses issue #370
+
+  * Forced no_dtd when running v2v3 to avoid complaints when converting an 
+    alredy converted file, and also with the v3 text formatter.
+
+  * Added a try/except around xinclude in order to provide error message  
+    without traceback on missing include files.
+
+  * Removed an assert that prevented rendering of document top when some 
+    elements are so long that the line width will be more than 72 characters.  
+    Added support for <note> with <name>.  Added <xref> format default for 
+    included references.  Added a warning for <xref>s without 'pn' attribute 
+    (which can happen if the <xref> is pointing at an element for which pn is 
+    not generated (this is probably an error in RFC 7998).  Fixes issue #346
+
+  * Tweaked the preptool to handle removeInRFC='true' elements that lacks <t> 
+    children.
+
+  * Added xml2rfc-dev@ietf.org to the release notification addresses.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Sep 2018 04:31:57 -0700
+
+
+xml2rfc (2.10.0) ietf; urgency=medium
+
+  This release introduces the vocabulary v3 text formatter.  In order to
+  invoke this formatter, use the regular --text switch for text output, and
+  add the --v3 switch to specify the v3 text formatter.
+
+  Xml2rfc in v3 text formatter mode accepts any valid xml2rfc input file, but
+  since the actual formatter only understands the XML elements and attributes
+  which have not been deprecated by RFC7991, it first applies the xml2rfc v2v3
+  converter in order to transform any deprecated markup to the elements and
+  attributes it understands, and then applies the preptool in order to
+  normalize the input before it starts rendering.
+
+  This is the first release of the v3 text formatter, and there are some
+  known rough edges and deficiencies:
+
+  - The current table output renders all table borders.  This differs from
+    the v2 formatter, and will be remedied in a later release.  The reason
+    for doing the first release with this rendering of tables is that the
+    table layout options have changed substantially with the possibility of
+    using rowspans, and the table layout code is much more complex than for v2
+    as a consequence.  With all table borders visible, the initial testing of
+    the layout code has been easier than if horizontal borders were not
+    rendered.
+
+  - The statement of work for the text formatter coding does not include
+    paginated output, and as a consequence the Table of Contents is much less
+    informative than it would be if it was able to show the page for each ToC
+    entry.
+
+  - The xml2rfc v3 vocabulary (RFC 7991) does not provide 'align' attributes
+    for tables, which means that the ability to center and right-align tables
+    is lost.  All tables are left-aligned. (Alignment of text within each cell
+    is still supported, though.)
+
+  - The index generation (using <iref> elements) has some known issues, which
+    will also be fixed in a subsequent release.
+
+  The v3 schema used in this release differs from the schema specified in
+  RFC7991 in some respects.  A separate document will be published with
+  details about the changes: draft-levkowetz-xml2rfc-v3-implementation-notes.
+  The issues leading to the changes will also be entered in the document 
+  issue trackers and sent to the xml2rfc-dev mailing list for discussion.
+
+  Feedback on the v3 text formatter will be appreciated.  Please send feedback
+  to xml2rfc-dev@ietf.org or henrik@levkowetz.com.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  12 Jul 2018 12:34:00 -0700
+
+
+xml2rfc (2.9.9) ietf; urgency=medium
+
+  * Applied patch from scott@kitterman.com to let run.py run under python 
+    3.  Fixes issue #345.
+
+  * Removed cc:codesprints@ietf.org from xml2rfc notifications.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  25 Jun 2018 05:06:26 -0700
+
+
+xml2rfc (2.9.8) ietf; urgency=medium
+
+  * Fixed a problem with release 2.9.7 when processing private mode input
+    files
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  17 Jun 2018 06:39:55 -0700
+
+
+xml2rfc (2.9.7) ietf; urgency=medium
+
+  * Added 2 warnings for problems with the <rfc/> docName string.
+
+  * Skipped extracting the longest word from empty table columns.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  15 Jun 2018 11:41:44 -0700
+
+
+xml2rfc (2.9.6) ietf; urgency=medium
+
+  * Fixed another <date> issue, where a <date> without a year would generate
+    a bad date string.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  21 Feb 2018 11:37:58 -0800
+
+xml2rfc (2.9.5) ietf; urgency=medium
+
+  * Fixed an issue where a <date> without a year attribute would generate a
+    copyright stanza without year.
+
+  * Tweaked the --version output to include the program name, to be closer 
+    to common practice.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  21 Feb 2018 05:19:07 -0800
+
+xml2rfc (2.9.4) ietf; urgency=high
+
+  * Fixed a bug in the date output format when no month or numeric month
+    is given in <date>.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  16 Feb 2018 14:12:11 -0800
+
+xml2rfc (2.9.3) ietf; urgency=medium
+
+  * Changed the way <date> defaults are calculated.  Previously, today's
+    date were used to populate missing day if month and year matched, and
+    to populate month if year matched.  However, if today's date lay in an
+    adjoining month, even if it was within days of that month, the day
+    would be set to the first of the given month.  This commit changes that,
+    to use the last day of the month instead of the first of the month, if
+    the month is the previous month to today's date.  This will result in
+    a different derived date than earlier, closer to today's date.  This
+    fixes issue #337.
+
+  * Fixed a bug in a preptool.py error message.  Reverted a prettyprinting 
+    change which caused inconsistent behaviour between writers.
+
+  * Moved normalize_month() to utils, for use in multiple writers.
+
+  * Made the makefile less verbose.
+
+  * Improved the pretty-printing of v2v3 output.  Fixed a bug in the 
+    attribute_xref_target() handler name that prevented it from being called.
+
+  * Removed whitespace normalization from v2v3 writer.
+
+  * Moved handling of exempted default attributes in preptool inside 
+    get_attribute_defaults(), for consistency.
+
+  * Added an option --liberal to permit re-processing of prepped source 
+    without error exit.  This mode will be needed when we make the preptool 
+    part of the default processing pipeline.  Also removed whitespace 
+    normalization for v2v3, exp, and preptool output, in order to not change 
+    authors' text formatting when not needed.
+
+  * Lowered the requirement on six to 1.4.1 in order to make installation
+    easier on some systems with locked system python libs that include six.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  15 Feb 2018 06:57:05 -0800
+
+
+xml2rfc (2.9.2) ietf; urgency=medium
+
+  * Fixed issues with packaging and with execution under python 2.7.  
+    Fixes issue #342 and #343.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  09 Feb 2018 18:24:35 -0800
+
+xml2rfc (2.9.1) ietf; urgency=medium
+
+  * Boilerplate grammar fix, see https://www.rfc-editor.org/errata/eid5248
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  09 Feb 2018 15:29:05 -0800
+
+xml2rfc (2.9.0) ietf; urgency=medium
+
+  This release introduces preptool functionality, through a --preptool output
+  mode.  With reservation for some points for which issues has been raised,
+  this follows the spedicfication in RFC7998.
+
+  The preptool currently takes vocabulary v3 input, and produces prepped
+  output.  When work on the text formatter commences, the idea is that the
+  input xml source will always be run through v2v3 conversion and preptool
+  processing before the output formatting, in order to increase consistency
+  and reduce complexity of the output formatter.
+
+  There are also some changes which are not related to the preptool
+  functionality: The tox tests have been changed to add testing under Python
+  3.6, and removed test runs for Python 3.3.  Although there is no intention
+  of breaking compatibility with Python 3.3, it may happen eventually since
+  there will not be any release testing with that version of Python.
+
+  The v2v3 converter in some cases could insert <seriesInfo> elements with
+  only a name= attribute, because the required seriesNo= attribute on <rfc>
+  was missing.  This has been changed.
+
+  In order to work around a debilitating issue with relax-ng validation in
+  libxml2 (time to validate increases exponentially with number of attributes
+  on the root element: https://bugzilla.gnome.org/show_bug.cgi?id=133736)
+  some empty attributes on <rfc> are removed during processing; for instance
+  obsoletes="" and updates="".  They don't contribute information, but
+  increase validation time with a factor ~20.
+
+  In order to identify the unicode scripts needed to display a document,
+  a module to efficiently identify the scripts related to unicode codepoints
+  has been written.  The 'uniscripts' module which was originally intended to
+  be used for this turned out not to be viable.  The new 'scripts' module can
+  be broken out for separate release as a library module, if desired.
+
+  In order to work with vocabulary v3 input, the parser has been slightly
+  modified to not do input validation according to rfc2629.dtd if not
+  appropriate.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  09 Feb 2018 23:52:55 +0100
+
+xml2rfc (2.8.5) ietf; urgency=low
+
+  * Changed a file open under python3 to use the newline= parameter to open()
+    instead of the deprecated 'U' mode (thanks to spf2@kitterman.com for
+    pointing that out).  Also changed the code to avoid a dangling open file
+    handle.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  21 Jan 2018 11:47:41 -0800
+
+xml2rfc (2.8.4) ietf; urgency=low
+
+  * Included test.py and tox.ini in the package MANIFEST in order to make 
+    testing possible during distro packaging.  Fixes issue #339.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  14 Jan 2018 11:08:01 -0800
+
+xml2rfc (2.8.3) ietf; urgency=low
+
+  * Changed the python 3 code that reads in an xml file to read as binary, 
+    in order to not run into issues with unicode conversion before we have had 
+    time to look at the encoding attribute of the <xml/> element.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  04 Jan 2018 05:27:31 -0800
+
+
+xml2rfc (2.8.2) ietf; urgency=low
+
+  * Modified the V2v3 conversion writer to work with generic lxml.etree
+    instances.
+
+  * Fixed a failure that could occur for hanging style lists without hangText
+    attributes.
+
+  * Tweaked mkrelease to work without the old tools control files and tools 
+    feeds being present.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  23 Sep 2017 07:15:37 -0700
+
+
+xml2rfc (2.8.1) ietf; urgency=low
+
+  This release improves the v2 to v3 conversion of <artwork/> elements
+  which contains <CODE BEGINS>; these are now converted to <sourcecode/>
+  elements.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Sep 2017 05:49:06 -0700
+
+xml2rfc (2.8.0) ietf; urgency=low
+
+  This is a small feature release which changes URLs in boilerplate to
+  use https: instead of http:.  There are also some bugfixes.
+
+  * Include notes when doing index processing.  Fixes issue #335.
+
+  * Include erefs with text equal to the URL in the URIs section.  See 
+    issue #334.
+
+  * Changed the use of http: to https: in many places.  In the generation 
+    of RFCs, the code uses a switchover date of August 21, 2017 when deciding 
+    whether to insert http: or https: URLs.  In practice, this means that RFCs 
+    with a date of September 2017 or later will get https:.  Also fixed URL 
+    line-breaking prevention to apply to https: URLS.  Fixes issue #333.
+
+  * In urlkeep(), prevent breaking also for https:, not only http: URLs
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  04 Sep 2017 07:54:02 -0700
+
+
+xml2rfc (2.7.0) ietf; urgency=low
+
+  This introduces the vocabulary v2 to v3 converter, which reads
+  RFC7749-compliant xml input, and writes RFC7991-compliant xml output,
+  converting elements marked as deprecated in RFC7991 to the equivalent new
+  constructs, or removing attributes and elements if no equivalent construct
+  exists.  Use the format switch --v2v3 to request v2v3 conversion.  Use
+  --verbose to have comments added to the converted xml detailing the
+  conversions which have been done.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  01 Jul 2017 12:04:07 -0700
+
+xml2rfc (2.6.2) ietf; urgency=low
+
+  * Refactored the input file reading to accept files with Mac line 
+    endings, using python's Universal Newline support.  This should make 
+    xml2rfc deal correctly with input files following DOS, MAC and Linux 
+    line-ending conventions.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Jun 2017 06:26:58 -0700
+
+xml2rfc (2.6.1) ietf; urgency=low
+
+  * Inialised the widow and orphan limit settings from PIs.  Did some related
+    refactoring.
+
+  * Added an option to show the known PIs, and their default values.  Also
+    commented out PIs for which there are no implementations from the internal
+    PI list, and did some refactoring of the option parser setup.
+
+  * Changed a number of numeric constants related to page breaking which
+    occured inline in the code, so that appropriate settings on the writer are
+    used instead: self.page_end_blank_lines, self.orphan_limit,
+    self.widow_limit.  Some refactoring.
+
+  * Restored support for the quiet= argument to writers, as this is used by
+    other tools that invoke writers, and backwards compatibility is desired.
+
+  * Added a mkrelease script.
+
+  * Limited the changelog on the pypi page to the 2 latest releases.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  03 Jun 2017 08:14:07 -0700
+
+
+xml2rfc (2.6.0) ietf; urgency=medium
+
+  * The implementation of the 'authorship' PI in the original TCL tool would
+    suppress the Author's Address section when set to "no", while in the
+    current implementation it removed author information on the first page.
+    Changed to the original semantics.  Also author organisation handling on
+    the first page changed to use the submissionType setting to trigger the
+    behaviour described in issue #311.  Fixes issue #311 without overlaying
+    this on the 'authorship' PI.
+
+  * Added a check for the 'needLines' PI within lists.
+
+  * Fixed a bug in the code for the 'sectionorphans' PI. Added a PI
+    'tocpagebreak' to force a page break before the ToC.  This, together with
+    the fix for #311 and needLines within lists, lets xml2rfc produce
+    rfc7754.txt correctly from suitable xml without postprocessing.
+
+  * Tweaked the eref output in text mode to avoid generating extraneous 
+    space characters.  Fixes issue #329.
+
+  * Merged in [2251] from ietf@augustcellars.com:
+    Changed to use the emph character in spanex so that the same thing happens
+    in both html and text if an unknown attribute is given.  Fixes issue #297"
+
+  * Merged in [2250] from ietf@augustcellars.com, with tweaks:
+    Added code to emit sections in two sections, numbered and un-numbered,
+    separately.  Then emit the numbered appendixes, the index, the unnumbered
+    appendixes, cref items, authors at the end of the document.  Fixes issue
+    #310.
+
+  * Merged in [2249] from ietf@augustcellars.com:
+    If you have an xref or similar element in an annotation in a reference,
+    any text that follows the xref is absent from the output HTML file.  Text
+    files emit correctly.  Fixed the html generation.
+
+  * Merged in [2248] from ietf@augustcellars.com: 
+    The HTML rendering for <xref> elements were inconsistent with the text
+    rendering.  Fixed this by doing something completely different than is
+    called for in the bug report:
+
+    We follow the layout of what the V3 HTML document says to do.  This
+    means that we use the child text of the xref when it exists to the
+    exclusion of any generated text.  When the child text does not exist
+    then we use the synthesized text string as the text for the anchor
+    element.  In all cases the anchor element is emitted with an href of the
+    target.  Fixes issue #293.
+
+  * Merged in [2247] from ietf@augustcellars.com:
+    Added true and false as legal values for the attribute numbered on a
+    section.xml Fixes issue #313
+
+  * Eliminated redundant PI parsing, now that each element carries the local 
+    PI settings.
+
+  * Merged in patch from martin.thomson@gmail.com, see ticket #307:
+    Fixed a problem where if there are no authors, references in HTML are
+    badly formatted.  Fixes issue #307 and #309.
+
+  * Merged in [2215] from ietf@augustcellars.com, with some tweaks to make
+    things work under python 3.x:
+    Don't split special terms with embedded forward slash on the slash
+    character.  Fixes issue #288.  Also added code to deal with an extra tab
+    in the middle of a sentence.
+
+  * Changed the handling of PIs such that each element in the parsed xml 
+    tree holds the PI state at that point of the xml document.  This provides 
+    the ability to use different PI settings at different points in the 
+    document.  This only makes sense for some PIs, though.  The following PIs 
+    will now be honoured if changed inside the document, in order to provide 
+    more flexibility: 'multiple-initials', 'artworkdelimiter', 'compact', 
+    'subcompact', 'text-list-symbols', 'colonspace'.
+
+  * Honour the way double initials are given in the XML, with or without 
+    interleaved spaces.  See issue #303, which says of multiple initials '... 
+    Expectation was that it would exactly match the initials attribute in the 
+    XML'
+
+  * Merged in [2070] from ietf@augustcellars.com:
+    Enabled the multiple-initial PI again.  The code now also looks for the PI
+    as the first element of the author element, to apply for that author entry
+    only, with a default of 'no'.
+
+  * Merged in [2064] from ietf@augustcellars.com:
+    Added handling for absent author initials for the html generator.
+
+  * Merged in [2062] from ietf@augustcellars.com:
+    This commit provides support for multiple author initials.  Fixes issue
+    #303.  Also fixes the issue of extra commas showing up when there are no
+    initials, just a surname.
+
+  * Merged in [2059] from ietf@augustcellars.com:
+    Changet to emit html not xhtml.  Addresses issues #263 and #279.
+
+  * Updated additional test masters needed to make the tox tests pass, and
+    changed the html encoding and decoding to use utf-8, to work with the
+    unicode and utf-8 tests.
+
+  * Removed python 2.6 from tox texting (a previous commit added python 3.5).
+
+  * Don't let the value of 'title' be None, make it an empty string if that 
+    happens.  Fixes issue #328
+
+  * Someone might want to set hangIndent to zero.  Test the value against None
+    explicitly to permit this to succeed.
+
+  * Added an --utf8 switch to xml2rfc.  In nroff mode, the output will 
+    contain utf-8 characters, not \[u8FD9] escapes; use groff with the -Kutf8 
+    switch to process the resulting nroff.
+
+  * Removed all references to xml.resource.org; it is not useful for 
+    fallback purposes any more.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  31 May 2017 05:04:20 -0700
+
+xml2rfc (2.5.2) ietf; urgency=medium
+
+  This is a maintenance release.  It changes the RFC boilerplate for stream
+  information to refer to RFC 7841 instead of RFC 5741, for RFCs dated
+  July 2016 or later.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  07 Oct 2016 15:09:20 +0000
+
+
+xml2rfc (2.5.1) ietf; urgency=medium
+
+  This is a bugfix maintenance release.
+
+  * Handled a situation where xml2rfc could crash if no source file name
+    was available.
+
+  From tonyh@att.com:
+  * Modified some tests to match Jim's recent changes
+
+  From ietf@augustcellars.com:
+
+  * Add the valid versions of the text files for the unicode test file.
+
+  * Fixes URIs which didn't add up.  This includes correcting code to deal
+    with the difference in unicode strings on Python 2.7 vs Python 3.4.  Build
+    the abstract when doing the indexing pass so that any references in it
+    will be included both times through Add the start of a unicode test file.
+    Fixes issue #290
+
+  * Fixed an xref generation failure: Check to see if there is text, and do
+    the right thing if there isn't.  The HTML version seems to be producing
+    adequate results.  It does an <a> element around an empty piece of text.
+    That is what was asked for.  Fixes issue #226.
+
+  * Fixed an exception on out-of-date dates.  1.  We make it an error instead
+    of a warning to have an incomplete and not this year date.  2.  We catch
+    the type exception and continue.  Fixes issue #285
+
+  * Replaced the space between the series info and the series value with a
+    non-breaking space.  Changed any slashes in the series value so that there
+    is a non-breaking zero width space following it.  If a URL is placed in
+    the series value, then it is still not going to do correct breaking on
+    this.  However this is not something that people should do.  Fixes issue
+    #296
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Oct 2015 18:54:31 +0000
+
+
+xml2rfc (2.5.0) ietf; urgency=medium
+
+  This release uses different installation settings than previous releases,
+  which should make installation under MS Window easier.  It also contains
+  a few bugfixes.  For details, see below:
+
+  * Applied patches from julian.reschke@gmx.de: Render <eref target='uri'> 
+    without text as inline <uri>.  Fixes issue #234.
+
+  * Changed setup.py to use the entry_points option instead of the scripts 
+    option, in order to work better on mswin systems.  Fixes issue #291.
+
+  * Made the reference sorting when using symrefs=yes and sortrefs=yes 
+    case-insensitive by mapping the reference keys to lowercase.  This is 
+    correct for ASCII keys but not necessarily for non-ASCII keys, depending on 
+    locale.  Fixes issue #295 (for now).
+
+  * Changed the path through reference resolution so that too old cached
+    references will be updated in the same block where it was discovered that
+    they were too old, rather than (erroneously) relying on this happening on
+    a later attempt.
+
+  * Set things up so that the processing instrunction dictionary isn't shared
+    between the index-building and the document-building runs, which they were
+    earlier, with the result that pi values could be different at the start of
+    the document-building than they should have been.  Fixes issue #292.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 May 2015 18:34:25 +0000
+
+
+xml2rfc (2.4.12) ietf; urgency=medium
+
+  * Modified the nroff table output for PI subcompact=yes so as to produce 
+    a list, rather than a paragraph of run-together list entries.  Fixes issue 
+    #287.
+
+  * Fixed a bug where a local variable would not always be set.
+
+  * Fixed the bug in 2.4.10 where xml2rfc wouldn't fetch references.
+
+  * Changed the cachetest so it exposes the bug found in 2.4.10 where 
+    reference resulution would fail without even attempting network access.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Apr 2015 17:28:58 +0000
+
+xml2rfc (2.4.11) ietf; urgency=medium
+
+  * Corrected when the deprecation message about using -f and --file is emitted.
+
+  * Changed where warnings about missing cache entry and --no-network is
+    emitted, in order to not emit warnings too early.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  10 Apr 2015 21:31:35 +0000
+
+xml2rfc (2.4.10) ietf; urgency=medium
+
+  * Catch bad arguments to the 'needlines' processing instruction.  Fixes 
+    issue #282.
+
+  * Make sure we don't ask textwrap to wrap text with within a width of 
+    zero.  Fixes issue #277.
+
+  * Reorganized the presentation of options, and corrected some of the help 
+    strings.  Marked the -f, --filename options in use for output filename as 
+    deprecated.
+
+  * Added a switch --no-network to turn off all attempts to use the network 
+    to resolve references.  When using this, processing will fail if the 
+    references required by the source file aren't available in the file cache.  
+    Also added code to refresh cached content if it's older than 14 days.  
+    Modified some tests to suit.  This closes issues #275 and #284.
+
+  * Fixed a bug where leading whitespace in title attributes weren't 
+    handled properly.  Fixes issue #274.
+
+  * Tweaked tox.ini to work around an issue with the py27 and py33 
+    environments after upgrading to 2.7.8 and 3.3.5, respectively.
+
+  * Added the attribute quote-title (default: true) to schema and writers, 
+    and updated the tests accordingly.  Fixes issue #283.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  08 Mar 2015 20:55:36 +0000
+
+
+xml2rfc (2.4.9) ietf; urgency=medium
+
+  * Applied a patch from Martin Thompson to render the ToC with sublevel 
+    indentation, instead of as a flat list, for html output, and updated the 
+    html regression test masters to match.
+
+  * Added a --no-headers switch, valid only for paginated text.  
+    Specifying this omits the output of headers and footers, but retains form 
+    feed and top-of-page line padding.
+
+  * Consistently use utf-8 as output encoding.  As long as all content is 
+    forced to be ascii, this doesn't change anything; if we permit non-ascii 
+    content, this ensures it's utf-8 encoded.
+
+  * Issue a warning for input containing tab characters, and expand to 8, 
+    not 4 characters.  Fixes issue #276.
+
+  * Added 'i.e.' as a non-sentence-ending string.  Added a test for some 
+    abbreviations, including 'i.e.'.  Fixes issue #115
+
+  * Changed the handling of rfcedstyle so as to include the Authors' 
+    Addresses section in the TOC.  Fixes issue #273.
+
+  * Added the ability to create unnumbered sections by using the attribute 
+    numbered="no" on the section element, with the constraints specified in 
+    draft-hoffman-xml2rfc-15.  Fixes issue #105.
+
+  * In the front page top right-hand matter, don't keep the blank line 
+    between authors and date that would otherwise be used for authors without 
+    affiliation.  Fixes issue #272.
+
+  * Rewrote the network access code to use the requests package instead of 
+    urllib.  Added cache cleaning to the tox test actions.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  28 Feb 2015 10:27:05 -0100
+
+xml2rfc (2.4.8) ietf; urgency=medium
+
+  * From Tony Hansen <tonyh@att.com>:
+    Added check of line_num+i against len(self.buf) before looking at
+    self.buf[line_num+i].  Resolves issue #258.
+
+  * Tweaked the word separator regex to handle words containing both '.' 
+    and '-' internally more correctly. Fixes issue #256.
+
+  * Now only emitting texttable word splitting warning once.
+
+  * Changed the sort order of iref index items to not be case sensitive.  
+    Fixes issue #255.
+
+  * Generally, changed http: URLs to https:, for improved security.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  05 Jun 2014 13:26:55 -0700
+
+
+xml2rfc (2.4.7) ietf; urgency=high
+
+  This release changes the reference resolution code to try 3 different
+  network hosts when trying to find bibxml reference files on the net,
+  instead of trying only xml.reference.org.  It now tries, in order::
+
+     http://xml2rfc.ietf.org/
+     http://xml2rfc.tools.ietf.org/
+     http://xml.reference.org/
+
+  The next release is expected to change this to using https: instead of http:,
+  but that change requires both that the resources be available over https,
+  and that there's been explicit testing of access over https, something which
+  is absent from the current test suite.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  22 May 2014 19:05:12 +0200
+
+
+xml2rfc (2.4.6) ietf; urgency=medium
+
+  This release addresses the known bugs in xml2rfc which has hindered the
+  RFC-Editor staff from consistently using xml2rfc v2 in production (and a
+  number of other bugs, too).  There still remains a number of open issues,
+  and these will be addressed in upcoming releases.  Here are some details
+  about the issues fixed:
+
+  * Tweaked the forward-slash part of the word-separator regex to handle IP 
+    address prefix lenght indications better.  Related to issue #252.
+    Thanks to Brian Carpenter for pointing this aspect out.
+
+  * Changed the code so as to not blow up on empty section titles.  Fixes
+    issue #245.
+
+  * Updated the textwrapping word-separator regex to handle slash-separated
+    words in a similar manner as hyphenated words, to avoid line-breaks that
+    place the forward slash at the start of a line.  Fixes issue #252.
+
+  * Updated the regex for end-of-sentence exceptions to treat a single
+    alphabetic character followed by period as end-of-sentence, rather than
+    considering it to be the abbreviation of a given name.  This fixes issue
+    #251.
+
+  * Updated the sorting to not sort the ref keys surrounded by squere
+    brackest, instead sorting only the key strings.  Fixes issue #250.  
+
+  * Added iref handling directly under section, and for figures, both of which
+    were missing previously.  Fixes issue #249.  Also modified the format in
+    which iref index page lists are emitted, to combine consecutive page
+    numbers into range indications, and eliminate repeat mentions of the same
+    page number.  Finally, changed things to avoid compressing the double
+    space between index item and page list to a single space.  This should
+    bring the iref output closer to that of xml2rfc v1.
+
+  * Removed a static copy of the initial text-list-symbols PI, instead
+    consulting the master PI dictionary every time, in order to catch changes
+    in the text-list-symbols setting.  Fixes issue #246
+
+  * Made a warning conditional on not building the indexes, to avoid duplicate
+    error messages.  Fixes issue #242.
+
+  * Provided the relevant counter when creating _RfcItem objects for Figures,
+    Tables, numbered References, and Crefs, to make it possible to refer to
+    them by xref elements with format='counter'.  Fixes issue #241.
+
+  * Added wrapping and indentation of long Obsoletes: and Updates: list in the
+    text formats.  Fixes issue #232.
+
+  * Tweaked the top_rfc test to require proper line wrapping for long
+    Obsoletes: lines; see issue #232.
+
+  * We're now using a blank string for source when rendering a cref element
+    with no source given, rather failing to concatenate None to a string.
+    Fixes issue #225.
+
+  * Rewrote the xml expansion code to use the same serialization mechanism
+    under python 2.x and 3.x, and removed external references by replacing
+    the doctype declaration during lxml serialization.
+
+  * Fixed some code that didn't work correctly under python 3.3, by making
+    sure to insert unicode strings instead of byte strings into unicode
+    templates.
+
+  * Fixed a bug where text was compared with an integer when handling the
+    needLines PI.
+
+  From Jim Schaad <ietf@augustcellars>:
+
+  * Fixed ticket #186 based on diffs provided by Leif Johansson <leifj@mnt.se>:
+    If the first parse of the XML tree generates a syntax error, then we now 
+    produce a warning of that fact.  This is in part to help me track down what 
+    is happening at odd intervolts on my system where it generates an error and 
+    then has entity resolution problems.
+
+  * Fixed the case of one reference section occurring with an eref.  In this
+    case we need to emit the extra header in both locations.  Fixes ticket
+    #222.
+
+  * Fixed a bug where text following a cref is missing.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 May 2014 16:18:22 +0200
+
+
+xml2rfc (2.4.5) ietf; urgency=medium
+
+  Another bugfix release, with a majority of the contributions from Jim Schaad.
+
+  * If there is not an RFC number then XXXX is used for the RFC number for to
+    internal:/rfc.number - matches v1 behavior.  Fixes issue #114.
+
+  * We now do a better (but not perfect) job of mking sure that section
+    headings are not orphaned.  If you have two section headings in a row then
+    the first may still be orphaned.  Fixes issue #166.
+
+  * All known page breaking issues have been fixed.  Closes issue #172.
+
+  * Fixed a number of places where the code has to be made to work with both
+    Python 2.7 unicode and string whitespace, and Python 3.3. whitespace
+    strings, which are always unicode.  Fixes issue #217.
+
+  * Don't count formatting lines (which we can now tell) when computing 
+    break hints.
+
+  * Catch any syntax errors raised while we're looking for an RFC number 
+    attribute on <rfc/>, so that we'll show all syntax errors found (during the 
+    next parse) instead of just one and one.
+
+  * Added tests which generate .txt from .nroff and compares that to the 
+    xml2rfc-generated .txt (with some tweaks to handle different number of 
+    starting blanklines.  Also corrected the number of initial blank lines 
+    output for RFCs in the raw text writer.
+
+  * Not all files on Windows systems have a common root.  This means that one
+    cannot always get a relative path between to absolute path file names.
+    Catch the error that occurs in these circumstances and just use the
+    absolute path name.
+
+  * Nested "format" style lists now include the level in the auto-generated
+    counter value.  Fixes issue #218.
+
+  * EREFs are now put into the references section for text based output.
+    Fixes issue #133.
+
+  * cref elements are not dealt with when inline is either yes or no for text
+    files.  They are also now populated for html files as well.  Fixes issue
+    #201.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  17 Jan 2014 17:08:54 +0100
+
+xml2rfc (2.4.4) ietf; urgency=medium
+
+  Another release with major contributions from Jim Schaad.  This release
+  primarily addresses page-breaking issues, but also improves the reporting
+  of syntax errors (if any) in the xml input.
+
+  From Jim Schaad <ietf@augustcellars.com>:
+
+  * We now do a better (but not perfect) job of mking sure that section
+    headings are not orphaned.  If you have two section headings in a row then
+    the first may still be orphaned.  Fixes issue #166.
+
+  * Improved autobreaking, in a number of different places.  Fixes issue #172.
+
+  * In all examples in the test suite, the .txt and .nroff output now have the
+    same page breaks.
+
+  * Eliminated the line-breaking of 'Section N' in text-tables which was
+    introduced in 2.4.4.  Fixes ticket #217.
+
+  * If there is not an RFC number then XXXX is used for the RFC number for to
+    internal:/rfc.number - matches v1 behavior.  Fixes issue #114.
+
+  From Henrik Levkowetz <henrik@levkowetz.com>:
+
+  * Instead of previously only showing one single syntax error per invocation
+    of xml2rfc, we're now showing all syntax errors found throughout the xml
+    file at once.
+
+  * Added tests which generate .txt from .nroff and compares that to the 
+    xml2rfc-generated .txt (with some tweaks to handle different number of 
+    starting blanklines.  Also corrected the number of initial blank lines 
+    output for RFCs in the raw text writer.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Dec 2013 21:20:04 +0100
+
+xml2rfc (2.4.4) ietf; urgency=medium
+
+  This is a bugfix release, with code fixes almost entirely from Jim Schaad.
+
+  From Jim Schaad <ietf@augustcellars.com>:
+
+  * Annotations now output more than just the first text field.  It now
+    expands all of the child elements as part of the output. Fixes issue #183.
+
+  * If the authors string is zero length, then we do not emit the comma
+    separating the authors and the title. Fixes issue #137.
+
+  * Each street line is now tagged as class vcardline so it is emitted on a
+    separate line. Fixes issue #153.
+
+  * Fixed a problem with unreferenced references warnings being emitted twice
+    if there were two references sections.
+
+  * Fixed some list indentation problems.  We now default to an indent of 3
+    for hanging lists which is the same thing that v1 did.  We also use a
+    value based on the bullet for format lists rather than using the 3 of a
+    default hang indent - this also now matches v1 behavior.
+
+  * Use width of bullet not default to 3*level+3
+
+  * Fixed issue #147 - a hangingText without any text in the body now emits
+    the hangingText. Fixes issue #117.
+
+  * Set of fixes that deal with xref in documents.
+
+  * Set of fixes that deal with references.
+
+  * We now use the anchor rather than the generated bullet as the id of the
+    reference element. Fixes issue #209.
+
+  * The html did not have the same check for symrefs when sorting references
+    that the text version did.  Copy it over so they both only sort if symrefs
+    is yes. Fixes issue #210 and #170.
+
+  * Anchors on t elements in a section were referencable, but no
+    those in lists.  They are now referencable. Fixes issue #149.
+
+  * We now generate a warning when we get a target in an xref that we have not
+    created an indexable reference for.  This basically gives us an internal
+    error check.
+
+  * We now generate a warning when a reference is created that is not targeted
+    by an xref in the document.
+
+  * Fixed the centering algorithm so that the nroff and txt output files are
+    more consistent.
+
+  * Left shift artwork that is greater than 69 characters wide and steal space
+    from the left margin. Fixes issue #129.
+
+  *  & 194 which deal with how figures are layout
+
+  * Fixed issue #132 - if the artwork has an alignment - then it overrides the
+    figure's version for the purpose of the artwork itself. Fixes issue #151.
+
+  * Suppres-title kills the title decoration (i.e. Figure 1:) which matches v1
+    behavior. Fixes issue #213.
+
+  * Convert all non-ASCII characters to entities when building the HTML body.
+    We now are correct when we advertise it as being a us-ascii file.
+
+  * Mixed two fixes back to the real source tree.
+
+  * Rewrite of the basic low level code to use unicode strings in many places
+    rather than convert the unicode characters into xml entity codes and try
+    to use them.  Doing so cleans up much of the line wrapping problems.
+
+  * URLs, when tagged to be not wrapped, now use different Unicode markers on
+    the slashes and hyphens so that they will preferentially break on slashes
+    rather than hyphens when a URL is too long to fit into a single line of
+    text.
+
+  * Tracker issues addressed: #192, #167, #168, #193, #200, #122, #139
+
+  * Increase the amount of text in the INSTALL document to deal with more
+    information on how to install for windows. Fixes issue #184.
+
+  * Don't emit the references section and TOC entry if there are no references
+    to be emitted. Fixes issue #205.
+
+  * Centering code did not take into account the .in X nroff command.  Always
+    use .in 0 for emission of raw text. Fixes issue #203.
+
+  * The TCL code for deciding on table column widths has been moved into the
+    new code. Fixes issue #173.
+
+  * We now look for and do expansions for header cells just like normal
+    cells. Fixes issue #131.
+
+  * We now remove all entity references when doing an xml output
+
+  * Fixed issue #146 - The code now allows for the assumption that the file
+    name given is what it really is and then tries with the .xml appended if
+    it is not found. Fixes issue #154.
+
+  * Lots of errors added to tell about bad table layouts
+
+  * allow make to run without pyflakes. Fixes issue #199.
+
+  From Henrik Levkowetz <henrik@levkowetz.com>:
+
+  * Modified the code that saves page-break hints when building the
+    unpaginated text so that it doesn't overwrite existing hints used for
+    artwork and tables (which should not be broken across pages if at all
+    possible) with hints that indicate regular text paragraphs (which may be
+    broken except if that creates a widow or orphan).  Fixes issue #179 by
+    making the code do for artwork and tables what needLines used to do,
+    without needing the manual needLines hint.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  11 Dec 2013 00:00:31 +0100
+
+xml2rfc (2.4.3) ietf; urgency=medium
+
+  This release adds compatibility with Python 3.3; the test suite has been
+  run for Python 2.6, 2.7 and 3.3 using the 'tox' tool.
+
+  This release also includes a large number of bugfixes, from people working
+  at improving xml2rfc during the IETF-88 code sprint.
+
+  Details:
+
+  From Tony Hansen <tony@att.com>:
+
+  * Eliminated spurious dots before author names on page 1.  Fixes issue #189.
+
+  * Fixed the style of nested letter-style lists.  Fixes issue #127
+
+  * Added a handling for empty <?rfc?> PIs within references.  Fixes issue #181.
+
+  * Removed trailing whitespace from reference title, organization.  Fixes
+    issue #171.
+
+  * Added support v1 list formats %o, %x, and %X.  Fixes issue #204.
+
+  * Fixed a bad html selector which had a trailing '3'.  Fixes issue #197.
+
+  From Jim Schaad <ietf@augustcellars>:
+
+  * Removed leading zeros on dates.  Fixes issue #206.
+
+  * Fixed a crash when a new page had just been created, and it was totally
+    empty.  It is unknown if this can occur someplace other than for the last
+    page, but it should have check in other locations to look for that.  In
+    addition we needed a change to figure out that we had already emitted a
+    header for the page we are not going to use any longer and delete it.  Fixes
+    issue #187.
+
+  * Handled the missing \& to escape a period at the beginning of a line.  If we
+    do a raw emission (i.e. inside of a figure) then we need to go back over the
+    lines we just put into the buffer and check to see if any of them have
+    leading periods and quote them.  Fixes issue #191.
+
+  * Removed extraneous .ce 0 and blank lines in the nroff.  Since it was using
+    the paging formatter in the process of building the nroff output, it kept
+    all of the blank lines at the end of each page and emitted them.  There is
+    no check in the nroff page_break function which removes any empty lines at
+    the end of the array prior to emitting the ".bp" directive (or not emitting
+    it if it is the last thing in the file.  Fixes issue #180.
+
+  * Now correctly picks up the day if a day is provided and uses the current day
+    for a draft if the month and year are current.  We now allow for both the
+    full name of the month and the abbreviated name of the month to be used,
+    however there may be some interesting questions to look at if November is
+    not in the current locale.  Fixes issue #195.
+
+  * Fixed the text-list-symbols PI to work at all levels.  The list should
+    inherit style from the nearest parent that has one.  Fixes issue #126.
+
+  From Elwyn Davies <elwynd@dial.pipex.com>: 
+
+  * Don't emit '\%' before 'Section' for xrefs in the nroff writer.  Fixes
+    issue #169.
+
+  From Henrik Levkowetz <henrik@levkowetz.com>:
+
+  * Modified the iref index output to use consistent sorting for items
+    and subitems.
+
+  * Removed the restriction to python 2.x from setup.py
+
+  * Ported xml2rfc to python 3.3 while maintaining compatibility with 2.6 
+    and 2.7.
+
+  * Added support for tox testing covering python versions 2.6, 2.7 and 3.3
+
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  17 Nov 2013 18:57:18 +0100
+
+xml2rfc (2.4.2) ietf; urgency=medium
+
+  This release fixes all major and critical issues registered in the issue
+  tracker as of 26 May 2013.  Details:
+
+  * Applied a patch from ht@inf.ed.ac.uk to sort references (when PI
+    sortrefs==yes), and added code to insert a link target if the reference
+    has a 'target' attribute. Fixes issue #175.
+
+  * Added pre-installation requirements to the INSTALL file.  Added code to
+    scripts/xml2rfc in order to avoid problems if that file is renamed to
+    scripts/xml2rfc.py.  This fixes issue #152.
+
+  * Added a setup requirement for python <3.0, as things don't currently
+    work if trying to run setup.py or xml2rfc with python 3.X.
+
+  * Added special cases to avoid adding double spaces after many common
+    abbreviations.  Refined the sentence-end double-space fixup further, to
+    look at whether what follows looks like the start of a new sentence.
+    This fixes issue #115.  
+
+  * Moved the get_initials() function to the BaseRfcWriter, as it now needs
+    to look at a PI.  Added code to return one initial only, or multiple,
+    depending on the PI 'multiple-initials' setting.  Fixes issue #138 (for
+    now).  It is possible that this resolution is too simpleminded, and a
+    cleaner way is needed to differentiate the handling of initials in the
+    current document versus initials in references.
+
+  * Added new undocumented PI multiple-initials to control whether multiple
+    initials will be shown for an author, or not.  The default is 'no',
+    matching the xml2rfc v1.x behaviour.
+
+  * Fixed the code which determines when an author affiliation doesn't need
+    to be listed again in the front page author list, and removes the
+    redundant affiliation (the old code would remove the *first* matching
+    organization, rather than the immediately preceeding organization name).
+    Also fixed a buggy test of when an organization element is present.
+    Fixes issue #135.
+
+  * Made appearance of 'Authors Address' (etc.) in ToC dependent on PI
+    'rfcedstyle' == 'yes'.  Fixes issue #125.
+
+  * Updated write_text() to handle long bullets that need to be wrapped
+    across lines better.  Fixes issue #124.
+
+  * Fixed two other cases of missing blank lines when PI 'compact' is 'no'.
+    Fixes issue #82 (some more).
+
+  * Disabled the iprnotified IP.  See issue #123; closes #123.
+
+  * When protecting http: URLs from line-breaking in nroff output, place the
+    \% outside enclosing parentheses, if any.  Fixes issue #120.
+
+  * Added a warning for incomplete and out-of-date <date/> elements.  Fixed
+    an issue with changeset [792].
+
+  * Issue a warning when the source file isn't for an RFC, but doesn't have
+    a docName attribute in the <rfc/> element.
+
+  * Fixed the use of separating lines in table drawing, to match v1 for text
+    and nroff output.  (There is no specification for the meaining of the
+    different styles though...).  Fixes issue #113.  Note that additional
+    style definitions are needed to get the correct results for the html
+    output.
+
+  * Refactored and re-wrote the paginated text writer and the nroff writer
+    in order to generate a ToC in nroff by re-using the fairly complex
+    post-rendering code which inserts the ToC (and iref entries) in the
+    paginated text writer.  As a side effect, the page-breaking calculations
+    for the nroff writer becomes the same as for the paginated writer.
+    Re-factored the line and page-break emitting code to be cleaner and more
+    readable.  Changed the code to not start inserting a ToC too close to
+    the end of a page (currently hardcoded to require at least 10 lines),
+    otherwise skip to a new page.  Fixes issue #109.
+
+  * Changed the author list in first-page header to show a blank line if no
+    organization has been given.  Fixes issue #108.
+
+  * Changed the wrapping of nroff output to match text output closely, in
+    order to minimize insertion of .bp in the middle of a line.  Fixes issue
+    #150 (mostly -- line breaks on hyphens may still cause .bp to be emitted
+    in the middle of a line in very rare cases).
+
+  * Changed nroff output for long titles (which will wrap) so that the
+    wrapped title text will be indented appropriately.  Fixes issue #128.
+
+  * Changed the handling of special characters (nbsp, nbhy) so as to emit
+    the proper non-breaking escapes for nroff.  Fixes issue #121.
+
+  * Changed start-of-line nroff escape handling, see issue #118.
+
+  * Changed the generation of xref text to use the same numeric indexes as
+    in the references section when symrefs='no'.  Don't start numbering over
+    again when starting a new references section (i.e., when moving from
+    normative to informative).  Don't re-sort numeric references
+    alphabetically; they are already sorted numerically.  Fixes issue #107.
+
+  * Changed os.linesep to '<NL>' when writing lines to text files.  The
+    library takes care of doing the right thing on different platforms;
+    writing os.linesep on the other hand will result in the file containing
+    '<CR><CR><NL>', which is wrong.  Fixes issue #141.
+
+  * Changed handling of include PIs to replace the PI instead of just
+    appending the included tree.  Updated a test file to match updated test
+    case.  Fixes issue #136.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  26 May 2013 14:45:51 +0200
+
+xml2rfc (2.4.1) ietf; urgency=medium
+
+  * Fixed a problem with very long hangindent bullet text followed by
+    <vspace/>, which could make xml2rfc abort with a traceback for
+    certain inputs.
+
+  * Fixed a mismatched argument count for string formatting which could
+    make xml2rfc abort with a traceback for certain inputs.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  13 Feb 2013 23:45:33 +0100
+
+
+xml2rfc (2.4.0) ietf; urgency=medium
+
+  With this release, all issues against the 2.x series of xml2rfc has been
+  resolved.  Without doubt there will be new issues in the issue tracker,
+  but the current clean slate is nice to have.
+
+  For full details on all tickets, there's always the issue tracker:
+  https://trac.tools.ietf.org/tools/xml2rfc/trac/report/
+
+  An extract from the commit log is available below:
+
+  * In some cases, the error messages when validating an xml document are 
+    correct, but too obscure.  If a required element is absent, the error 
+    message could say for instance 'Element references content does not follow 
+    the DTD, expecting (reference)+, got ', which is correct -- the DTD 
+    validator  got nothing, when it required something, so it says 'got ', with 
+    nothing after 'got'.  But for a regular user, we now add on 'nothing.' to 
+    make things clearer.  Fixes issue #102.
+
+  * It seems there could be a bug in separate invocation of 
+    lxml.etree.DTD.validate(tree) after parsing, compared to doing parsing with 
+    dtd_validation=True.  The former fails in a case when it shouldn't, while 
+    the latter succeeds in validating a valid document.  Declaring validation 
+    as successful if the dtd.error_log is empty, even if validation returned 
+    False.  This resolves issue #103.
+
+  * Factored out the code which gets an author's initials from the xml 
+    author element, and made the get_initials() utility function return 
+    initials fixed up with trailing spaces, if missing.  The current code does 
+    not mangle initials by removing any initials but the first one.  Fixes 
+    issue #63, closes issue #10.
+
+
+  * Added code to avoid breaking URLs in boilerplate across lines.  Fixes 
+    issue #78.
+  * Added PI defaults for 'figurecount' and 'tablecount' (not listed in the 
+    xml2rfc readme...)  Also removed coupling between explicitly set 
+    rfcedstyle, compact, and subcompact settings, to follow v1 practice.
+
+  * Refactored the PI defaults to appear all in the same place, rather than 
+    spread out throughout the code.
+
+
+  * Updated draw_table to insert blank rows when PI compact is 'no'. Fixes 
+    issue #82.
+
+  * Added tests and special handling for the case when a hanging type list 
+    has less space left on the first line, after the bullet, than what's needed 
+    for the first following word.  In that case, start the list text on the 
+    following line.  Fixes issue #85.
+
+  * Modified the page-breaking code to better keep section titles together 
+    with the section text, and keep figure preamble, figure, postamble and 
+    caption together.  Updated tests.  Fixes issue #100.
+
+  * Added handling of tocdepth to the html writer.  Fixes issue #101.
+
+  * Modified how the --base switch to the xml2rfc script works, to make it 
+    easier to generate multiple output formats and place them all in the same 
+    target directory.  Also changed the default extensions for two output 
+    formats (.raw.txt and .exp.xml).
+
+  * Tweaked the html template to not permit crazy wide pages.
+
+  * Rewrote parts of the parsing in order to get hold of the number 
+    attribute of the <rfc/> tag before the full parsing is done, in order to be 
+    able to later resolve the &rfc.number; entity (which, based on how 
+    convoluted it is to get that right, I'd like to deprecate.)  Fixes issue 
+    #86.
+
+  * Numerous small fixes to indentation and wrapping of references.  Avoid 
+    wrapping URLs in references if possible.  Avoid wrapping 'Section 3.14.' if 
+    possible.  Indent more like xml2rfc v1.
+
+  * Added reduction of doublespaces in regular text, except when they might 
+    be at the end of a sentence.  Xml2rfc v1 would do this, v2 didn't till now.
+
+  * Generalized the _format_counter() method to consistently handle list 
+    counter field-widths internally, and made it adjust the field-width to the 
+    max counter width based on the list length and counter type.  Fixes an v1 
+    to -v2 incompatibility for numbered lists with 10 items or more, and other 
+    similar cases.
+
+  * Added generic base conversion code, and used that to generate list 
+    letters which will work for lists with more than 26 items.
+
+  * Reworked code to render roman numerals in lists, to place whitespace 
+    correctly in justification field.  Fixes issue #94.
+
+  * Added consensus vs. no-consensus options for IAB RFCs' Status of This 
+    Memo section.  Fixes issue #88.
+
+  * Made <t/> elements with an anchor attribute generate html with an <a 
+    name='...'/> elemnt, for linking.  Closes issue #67.
+
+  * Applied boilerplate URL-splitting prevention only in the raw writer 
+    where later do paragraph line-wrapping, instead of generically.  Fixes 
+    issue #62.
+
+  * Now permitting all versions of lxml >= 2.2.8, but notice that there may 
+    be missing build dependencies for lxml 3.x which may cause installation of 
+    lxml to fail.  (That's an lxml issue, rather than an xml2rfc issue, 
+    though...)  This fixes issue #99.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  27 Jan 2013 23:20:44 +0100
+
+
+xml2rfc (2.3.11.3) ietf; urgency=medium
+
+  * Tweaked the install_required setting in setup.py to not pull down lxml 3.x
+    (as it's not been tested with xml2rfc) and bumped the version.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Jan 2013 17:38:18 +0100
+
+
+xml2rfc (2.3.11) ietf; urgency=medium
+
+  This release fixes all outstanding major bugs, details below.
+  The issue tracker is at https://tools.ietf.org/tools/xml2rfc/trac/.
+
+  * Updated the nroff writer to do backslash escaping on source text, to 
+    avoid escaping nroff control characters.  Fixes issue #77.
+
+  * Added a modified xref writer to the nroff output writer, in order to 
+    handle xref targets which should not be broken across lines.  This, 
+    together with changeset [688], fixes issue #80.
+
+  * Added text to the section test case to trigger the second part of issue 
+    #79.  It turns out that the changes in [688] fixed this, too; this closes 
+    issue #79.
+
+  * Tweaked the nroff generation to not break on hyphens, in order to avoid 
+    hyphenated words ending up with embedded spaces: 'pre-processing' becoming 
+    'pre- processing' if 'pre-' occurred at the end of an nroff text line.  
+    Also tweaked the line-width used in line-breaking to have matching 
+    line-breaks between .txt and .nroff output (with exception for lines ending 
+    in hyphens).
+
+  * Tweaked roman number list counter to output roman numbers in a field 5 
+    spaces wide, instead of having varied widths.  This is different from 
+    version 1, so may have to be reverted, depending on how people react.
+
+  * Added a warning for too long lines in figures and tables.  No 
+    outdenting for now; I'd like to consult some about that. Fixes issue #76.
+
+  * Updated tests showing that all list format specifiers mentioned in 
+    issue #70 now works.  Closes isssue #70.
+
+  * Changed spanx emphasis back to _this_ instead of -this-, matching the v1 
+    behaviour.  Addresses issue #70.
+
+  * Make <vspace/> in a hangindent list reset the indentation to the 
+    hang-indent, even if the bullet text is longer than the hang-indent.  
+    Addresses issue #70.
+
+  * Refined the page-breaking to not insert an extra page break for artwork
+    that won't fit on a page anyway.
+
+  * Refined the page-breaking to avoid breaking artwork and tables across 
+    pages, if possible.
+
+  * Fixed a problem with centering of titles and labels.  Fixes issue #73.
+
+  * Changed the leading and trailing whitespace lines of a page to better 
+    match legacy output.  Fixed the autobreaking algorithm to correctly avoid 
+    orphans and widows; fixes issue #72.  Removed an extra blank line at the 
+    top of the page following an early page break to avoid orphan or widow.
+
+  * Tweaked the generation of ToC dot-lines and page numbers to better 
+    match legacy xml2rfc.  Fixed a bug in the generation of xref text where 
+    trailing whitespace could cause double spaces.  Tweaked the output format 
+    to produce the correct number of leading blank lines on the first page of a 
+    document.
+
+  * Modified the handling of figure titles, so that given titles will be 
+    written also without anchor or figure counting.  Fixes issue #75.
+
+  * Tweaked the html writer to have a buffer interface that provides a 
+    self.buf similar to the other writers, for test purposes.
+
+  * Reworked the WriterElementTest suite to test all the output formats, 
+    not only paginated text.
+
+  * Added a note about /usr/local/bin permissions.  This closes issue #65.
+
+  * Added files describing possible install methods (INSTALL), and possible 
+    build commands (Makefile).
+
+  * The syntax that was used to specify the version of the lxml dependency 
+    ('>=') is not supported in python distutil setup.py files, and caused setup 
+    to try to find an lxml version greater than =2.2.8, which couldn't succeed. 
+    Fixed to say '>2.2.7' instead.  This was probably the cause of always 
+    reinstalling lxml even when it was present.
+
+  * Updated README.rst to cover the new --date option, and tweaked it a bit.
+
+  * Added some files to provide an enhanced source distribution package.
+
+  * Updated setup.py with maintainer and licence information.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Jan 2013 17:38:18 +0100
+
+xml2rfc (2.3.10) ietf; urgency=low
+
+  * Changed the output text for Internet-Draft references to omit the 
+    series name, but add (work in progress).  Updated the test case to match 
+    draft revision number.
+
+  * Updated all the rfc editor boilerplate in valid test facits to match the 
+    correct outcome (which is also what the code actually produces).
+
+  * Changed the diff test error message so that the valid text is output as 
+    the original, not as the changed text of a diff.
+
+  * Corrected test cases to match correct expiry using 185 days instead of 
+    183 days from document date.
+
+  * Added missing attributes to the XmlRfcError Exception subclass, 
+    necessary in order to make it resemble lxml's error class and provide 
+    consistent error messages to the user whether they come from lxml or our 
+    own code.
+
+  * Added a licence file, indicating the licencing used by the IETF for the 
+    xml2rfc code.
+
+  * Fixed up the xml2rfc cli script to provide better help texts by telling 
+    the option parser the appropriate option variable names.
+
+  * Fixed up the help text formatting by explicitly providing an appropriate
+    help text formatter to the option parser.  
+
+  * Added an option (--date=DATE)to provide the document date on the command
+    line.
+
+  * Added an option (--no-dtd) to disable the DTD validation step.  
+
+  * Added code to catch additional exceptions and provide appropriate user
+    information, instead of an exception traceback.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  03 Jan 2013 16:59:50 +0100
+

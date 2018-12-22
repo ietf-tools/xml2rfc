@@ -1,0 +1,494 @@
+
+
+
+
+Internet Engineering Task Force                         E.B. Davies, Ed.
+Internet-Draft                                          Folly Consulting
+Intended status: Informational                                   Q. Zhao
+Expires: September 2, 2009                             Huawei Technology
+                                                           March 1, 2009
+
+
+                   Put Your Internet Draft Title Here
+                     draft-ietf-xml2rfc-template-05
+
+Abstract
+
+   Insert an abstract: MANDATORY.  This template is for creating an
+   Internet Draft.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on September 2, 2009.
+
+Copyright Notice
+
+   Copyright (c) 2009 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents in effect on the date of
+   publication of this document (http://trustee.ietf.org/license-info).
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.
+
+Table of Contents
+
+   1.  Introduction
+       1.1.  Requirements Language
+   2.  Simple List
+   3.  Figures
+   4.  Subsections and Tables
+       4.1.  A Subsection
+       4.2.  Tables
+   5.  More about Lists
+       5.1.  Numbering Lists across Lists and Sections
+       5.2.  Where the List Numbering Continues
+       5.3.  nested lists
+       5.4.  List Formats
+   6.  Example of Code or MIB Module To Be Extracted
+   7.  Acknowledgements
+   8.  IANA Considerations
+   9.  Security Considerations
+   10.  References
+       10.1.  Normative References
+       10.2.  Informative References
+   Appendix A.  Additional Stuff
+   Contributors
+   Authors' Addresses
+
+1.  Introduction
+
+   The original specification of xml2rfc format is in RFC 2629
+   [RFC2629].
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+2.  Simple List
+
+   List styles: 'empty', 'symbols', 'letters', 'numbers', 'hanging',
+   'format'.
+
+   *  First bullet
+
+   *  Second bullet
+
+   You can write text here as well.
+
+3.  Figures
+
+   Figures should not exceed 69 characters wide to allow for the indent
+   of sections.
+
+   Preamble text - can be omitted or empty.
+
+   +-----------------------+
+   | Use XML, be Happy :-) |
+   |_______________________|
+
+                                  Figure 1
+
+   Cross-references allowed in pre- and postamble. [min_ref].
+
+   The CDATA means you don't need to escape meta-characters (especially
+   < (&lt;) and & (&amp;)) but is not essential.  Figures may also have
+   a title attribute but it won't be displayed unless there is also an
+   anchor.  White space, both horizontal and vertical, is significant in
+   figures even if you don't use CDATA.
+
+4.  Subsections and Tables
+
+4.1.  A Subsection
+
+   By default 3 levels of nesting show in table of contents but that can
+   be adjusted with the value of the "tocdepth" processing instruction.
+
+4.2.  Tables
+
+   .. are very similar to figures:
+
+   Tables use ttcol to define column headers and widths.  Every cell
+   then has a "c" element for its content.
+
+                          +----------+----------+
+                          | ttcol #1 | ttcol #2 |
+                          +==========+==========+
+                          |   c #1   |   c #2   |
+                          +----------+----------+
+                          |   c #3   |   c #4   |
+                          +----------+----------+
+                          |   c #5   |   c #6   |
+                          +----------+----------+
+
+                              Table 1: A Very
+                                Simple Table
+
+   which is a very simple example.
+
+5.  More about Lists
+
+   Lists with 'hanging labels': the list item is indented the amount of
+   the hangIndent:
+
+   short  
+           With a label shorter than the hangIndent.
+
+   fantastically long label
+           With a label longer than the hangIndent.
+
+   vspace_trick
+           Forces the new item to start on a new line.
+
+   Simulating more than one paragraph in a list item using <vspace>:
+
+   a.  First, a short item.
+
+   b.  Second, a longer list item.
+
+       And something that looks like a separate pararaph..
+
+   Simple indented paragraph using the "empty" style:
+
+      The quick, brown fox jumped over the lazy dog and lived to fool
+      many another hunter in the great wood in the west.
+
+5.1.  Numbering Lists across Lists and Sections
+
+   Numbering items continuously although they are in separate <list>
+   elements, maybe in separate sections using the "format" style and a
+   "counter" variable.
+
+   First list:
+
+   R1  #1
+
+   R2  #2
+
+   R3  #3
+
+   Specify the indent explicitly so that all the items line up nicely.
+
+   Second list:
+
+   R4  #4
+
+   R5  #5
+
+   R6  #6
+
+5.2.  Where the List Numbering Continues
+
+   List continues here.
+
+   Third list:
+
+   R7  #7
+
+   R8  #8
+
+   R9  #9
+
+   R10 #10
+
+   The end of the list.
+
+5.3.  nested lists
+
+   Simulating more than one paragraph in a list item using <vspace>:
+
+   a.  First, a short item.
+
+   b.  Second, a longer list item.
+
+       And something that looks like a separate paragraph.
+
+   c.  and a sublist, also with letters
+
+       A.  first subitem
+
+       B.  second subitem
+
+       C.  and a sub-sublist, also with letters
+
+           a.  first sub-subitem
+
+           b.  second sub-subitem
+
+5.4.  List Formats
+
+   many formats
+
+   a  first %c-item
+
+   b  more %c-items
+
+   A  first %C-item
+
+   B  more %C-items
+
+   1  first %d-item.
+
+   2  more %d-items.
+
+   i     first %i-item
+
+   ii    more %i-items
+
+   iii   more %i-items
+
+   iv    more %i-items
+
+   v     more %i-items
+
+   vi    more %i-items
+
+   vii   more %i-items
+
+   viii  more %i-items
+
+   ix    more %i-items
+
+   I     first %I-item
+
+   II    more %I-items
+
+   III   more %I-items
+
+   IV    more %I-items
+
+   V     more %I-items
+
+   VI    more %I-items
+
+   VII   more %I-items
+
+   VIII  more %I-items
+
+   IX    more %I-items
+
+   1   first %o-item
+
+   2   more %o-items
+
+   3   more %o-items
+
+   4   more %o-items
+
+   5   more %o-items
+
+   6   more %o-items
+
+   7   more %o-items
+
+   10  more %o-items
+
+   11  more %o-items
+
+   1   first %x-item
+
+   2   more %x-items
+
+   3   more %x-items
+
+   4   more %x-items
+
+   5   more %x-items
+
+   6   more %x-items
+
+   7   more %x-items
+
+   8   more %x-items
+
+   9   more %x-items
+
+   a   more %x-items
+
+   b   more %x-items
+
+   c   more %x-items
+
+   d   more %x-items
+
+   e   more %x-items
+
+   f   more %x-items
+
+   10  more %x-items
+
+   11  more %x-items
+
+   1   first %X-item
+
+   2   more %X-items
+
+   3   more %X-items
+
+   4   more %X-items
+
+   5   more %X-items
+
+   6   more %X-items
+
+   7   more %X-items
+
+   8   more %X-items
+
+   9   more %X-items
+
+   A   more %X-items
+
+   B   more %X-items
+
+   C   more %X-items
+
+   D   more %X-items
+
+   E   more %X-items
+
+   F   more %X-items
+
+   10  more %X-items
+
+   11  more %X-items
+
+6.  Example of Code or MIB Module To Be Extracted
+
+   The <artwork> element has a number of extra attributes that can be
+   used to substitute a more aesthetically pleasing rendition into HTML
+   output while continuing to use the ASCII art version in the text and
+   nroff outputs (see the xml2rfc README for details).  It also has a
+   "type" attribute.  This is currently ignored except in the case
+   'type="abnf"'.  In this case the "artwork" is expected to contain a
+   piece of valid Augmented Backus-Naur Format (ABNF) grammar.  This
+   will be syntax checked by xml2rfc and any errors will cause a fatal
+   error if the "strict" processing instruction is set to "yes".  The
+   ABNF will also be colorized in HTML output to highlight the syntactic
+   components.  Checking of additional "types" may be provided in future
+   versions of xml2rfc.
+
+   <CODE BEGINS> file "example.c"
+   /**** an example C program */
+
+   #include <stdio.h>
+
+   void
+   main(int argc, char *argv[])
+   {
+       int i;
+
+       printf("program arguments are:\n");
+       for (i = 0; i < argc; i++) {
+           printf("%d: \"%s\"\n", i, argv[i]);
+       }
+
+       exit(0);
+   } /* main */
+
+   /* end of file */
+   <CODE ENDS>
+
+7.  Acknowledgements
+
+   This template was derived from an initial version written by Pekka
+   Savola and contributed by him to the xml2rfc project.
+
+   This document is part of a plan to make xml2rfc indispensable
+   [DOMINATION].  This document may be shared as needed [SHARING].
+
+8.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+   All drafts are required to have an IANA considerations section (see
+   the update of RFC 2434 [I-D.narten-iana-considerations-rfc2434bis]
+   for a guide).  If the draft does not require IANA to do anything, the
+   section contains an explicit statement that this is the case (as
+   above).  If there are no requirements for IANA, the section will be
+   removed during conversion into an RFC by the RFC Editor.
+
+9.  Security Considerations
+
+   All drafts are required to have a security considerations section.
+   See RFC 3552 [RFC3552] for a guide.
+
+10.  References
+
+10.1.  Normative References
+
+   [min_ref]  authSurName, authInitials., "Minimal Reference", 2006.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+10.2.  Informative References
+
+   [DOMINATION]
+              Mad Dominators, Inc., "Ultimate Plan for Taking Over the
+              World", 1984, <http://www.example.com/dominator.html>.
+
+   [I-D.narten-iana-considerations-rfc2434bis]
+              Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", draft-narten-iana-
+              considerations-rfc2434bis-09 (work in progress), March 26,
+              2008,
+              <http://www.ietf.org/internet-drafts/draft-narten-iana-
+              considerations-rfc2434bis-09.txt>.
+
+   [RFC2629]  Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629,
+              DOI 10.17487/RFC2629, June 1999,
+              <https://www.rfc-editor.org/info/rfc2629>.
+
+   [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
+              Text on Security Considerations", BCP 72, RFC 3552,
+              DOI 10.17487/RFC3552, July 2003,
+              <https://www.rfc-editor.org/info/rfc3552>.
+
+   [SHARING]  Sesame Street, "I Learned to Share in Kindergarten", 1972,
+              <http://www.example.com/sharing.html>.
+
+Appendix A.  Additional Stuff
+
+   This becomes an Appendix.
+
+Contributors
+
+   This becomes an unnumbered section
+
+Authors' Addresses
+
+   Elwyn Davies (editor)
+   Folly Consulting
+   Soham
+   United Kingdom
+
+   Phone: +44 7889 488 335
+   Email: elwynd@dial.pipex.com
+
+
+   Quintin Zhao
+   Huawei Technology
+   125 Nagog Technology Park
+   Acton, MA 01719
+   United States
+
+   Email: quintin.zhao@huawei.com
