@@ -1588,12 +1588,15 @@ class BaseV3Writer(object):
         xml2rfc.log.write(msg)
 
     def msg(self, e, label, text):
-        lnum = getattr(e, 'sourceline', None)
-        file = getattr(e, 'base', None)
-        if lnum:
-            msg = "%s(%s): %s %s" % (file or self.xmlrfc.source, lnum, label, text, )
+        if e != None:
+            lnum = getattr(e, 'sourceline', None)
+            file = getattr(e, 'base', None)
+            if lnum:
+                msg = "%s(%s): %s %s" % (file or self.xmlrfc.source, lnum, label, text, )
+            else:
+                msg = "(No source line available): %s %s" % (label, text, )
         else:
-            msg = "(No source line available): %s %s" % (label, text, )
+            msg = "%s %s" % (label, text)
         self.log(msg)
         return msg
 
