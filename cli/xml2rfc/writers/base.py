@@ -1584,6 +1584,9 @@ class BaseV3Writer(object):
             debug.pprint('missing_handlers')
             debug.show('len(missing_handlers)')
 
+    def log(self, msg):
+        xml2rfc.log.write(msg)
+
     def msg(self, e, label, text):
         lnum = getattr(e, 'sourceline', None)
         file = getattr(e, 'base', None)
@@ -1591,7 +1594,7 @@ class BaseV3Writer(object):
             msg = "%s(%s): %s %s" % (file or self.xmlrfc.source, lnum, label, text, )
         else:
             msg = "(No source line available): %s %s" % (label, text, )
-        xml2rfc.log.write(msg)
+        self.log(msg)
         return msg
 
     def get_relevant_pis(self, e):
@@ -1652,7 +1655,7 @@ class BaseV3Writer(object):
 
     def die(self, e, text, trace=False):
         self.err(e, text, trace)
-        xml2rfc.log.write("Cannot continue, quitting now")
+        self.log("Cannot continue, quitting now")
         sys.exit(1)
 
 #     def get_valid_child_tags(self, tag):
