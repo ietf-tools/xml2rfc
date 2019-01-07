@@ -89,6 +89,7 @@ RUN apt-get install -qy \
 	procps \
 	python \
 	python-dev \
+	python-docutils \
 	python2.7 \
 	python3-cffi \
 	python3-dev \
@@ -130,6 +131,8 @@ RUN wget -q https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm get-
 RUN pip install certifi
 RUN pip install virtualenv
 RUN pip install tox
+# testing prerequisites
+RUN pip install dict2xml pypdf2
 
 # Additional python versions.  Python 3.5 is part of the distribution, 3.4
 # and 3.6 not available through apt.

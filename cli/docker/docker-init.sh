@@ -30,9 +30,8 @@ fi
 VIRTDIR="/home/$USER/$CWD/env"
 echo "Checking that there's a virtual environment for $TAG ..."
 if [ ! -f $VIRTDIR/bin/activate ]; then
-    echo "Setting up python virtualenv at /opt/home/$USER ..."
-    mkdir -p /opt/home/$USER
-    mkdir $VIRTDIR
+    echo "Setting up python virtualenv at $VIRTDIR ..."
+    mkdir -P $VIRTDIR
     virtualenv --system-site-packages $VIRTDIR
     echo -e "
 # This is from $VIRTDIR/bin/activate, to activate the
@@ -47,7 +46,6 @@ fi
 echo "Activating the virtual python environment ..."
 . $VIRTDIR/bin/activate
 
-chown -R $USER /opt/home/$USER
 chmod -R g+w   /usr/local/lib/		# so we can patch libs if needed
 
 echo "Checking for local font directory"
@@ -57,13 +55,13 @@ LOCAL_FONTS="/home/$USER/$CWD/.fonts"
 "
 
 echo "Checking for local fonts"
-found_fonts="$(ls $LOCAL_FONTS | fgrep .ttf | wc -l)"
-[ $fount_fonts = 1541 ] || echo "
- *** Missing local fonts: Expected 1541, fount $local_fonts ***
+found_fonts="$(ls $LOCAL_FONTS | fgrep .[to]tf | wc -l)"
+[ $found_fonts = 1541 ] || echo "
+ *** Missing local fonts: Expected 1541, found $found_fonts ***
 "
 
 echo "Linking in Noto fonts"
-ln -s $LOCAL_FONTS/*.ttf /usr/share/fonts/truetype/noto/
+ln -sf $LOCAL_FONTS/*.*tf /usr/share/fonts/truetype/noto/
 
 
 cd "/home/$USER/$CWD" || cd "/home/$USER/"
