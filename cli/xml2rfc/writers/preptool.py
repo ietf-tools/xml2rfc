@@ -32,7 +32,7 @@ from collections import OrderedDict
 from lxml import etree
 
 
-from xml2rfc import log, strings
+from xml2rfc import strings
 from xml2rfc.boilerplate_id_guidelines import boilerplate_draft_status_of_memo
 from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.boilerplate_tlp import boilerplate_tlp
@@ -177,7 +177,7 @@ class PrepToolWriter(BaseV3Writer):
 
         try:
             v3_rng.assertValid(self.tree)
-            log.note("The document validates according to the RFC7991 schema %s running preptool" % (when, ))
+            self.note(None, "The document validates according to the RFC7991 schema %s running preptool" % (when, ))
             return True
         except Exception as e:
             lxmlver = etree.LXML_VERSION[:3]
@@ -190,7 +190,7 @@ class PrepToolWriter(BaseV3Writer):
             for error in e.error_log:
                 path = getattr(error, 'path', '')
                 msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, path)
-                log.write(msg)
+                self.log(msg)
             if warn:
                 self.warn(self.root, 'Invalid document %s running preptool.' % (when, ))
                 return False
@@ -202,7 +202,7 @@ class PrepToolWriter(BaseV3Writer):
 
         self.prep()
         if self.errors:
-            log.write("Not creating output file due to errors (see above)")
+            self.log("Not creating output file due to errors (see above)")
             return self.errors
 
         # Use lxml's built-in serialization
@@ -215,7 +215,7 @@ class PrepToolWriter(BaseV3Writer):
         file.write(text.decode('utf-8'))
 
         if not self.options.quiet:
-            log.write('Created file', filename)
+            self.log('Created file %s' % filename)
 
     def prep(self):
         global refname_mapping
@@ -343,18 +343,18 @@ class PrepToolWriter(BaseV3Writer):
             func = getattr(self, func_name, None)
             if func:
                 if self.options.debug:
-                    log.note("Calling %s()" % func_name)
+                    self.note(None, "Calling %s()" % func_name)
                 for e in self.tree.xpath(ss):
                     func(e, e.getparent())
                     selector_visits[s] += 1
             else:
-                log.warn("No handler %s() found" % (func_name, ))
+                self.warn(None, "No handler %s() found" % (func_name, ))
 
 
         if self.options.debug:
             for s in selectors:
                 if selector_visits[s] == 0:
-                    log.note("Selector '%s' has not matched" % (s))
+                    self.note(None, "Selector '%s' has not matched" % (s))
 
         return self.tree
 
@@ -398,7 +398,7 @@ class PrepToolWriter(BaseV3Writer):
         if version not in ['3', ]:
             self.die(self.root, 'Expected <rfc> version="3", but found "%s"' % version)
         if not self.validate('before'):
-            log.note("Schema validation failed for input document")
+            self.note(None, "Schema validation failed for input document")
 
     def check_attribute_values(self, e, p):
         # attribute names
@@ -927,9 +927,10 @@ class PrepToolWriter(BaseV3Writer):
                 self.err(series_info_list[0], "The stream settings of the <seriesInfo> elements are inconsistent.  Found %s" % (', '.join(streams)))
         else:
             stream = list(streams)[0]
-            e.set('submissionType', stream)
-            for i in series_info_list:
-                i.set('stream', stream)
+            if stream:
+                e.set('submissionType', stream)
+                for i in series_info_list:
+                    i.set('stream', stream)
 
     # 5.4.2.2.  "Status of this Memo" Insertion
     # 
@@ -2055,7 +2056,7 @@ class PrepToolWriter(BaseV3Writer):
             del e.attrib[k]
         #
         if not self.validate('after', warn=True):
-            log.note("Schema validation failed for input document")
+            self.note(None, "Schema validation failed for input document")
         else:
             self.root.set('version', '3')
         #
