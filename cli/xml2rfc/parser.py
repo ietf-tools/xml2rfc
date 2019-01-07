@@ -43,6 +43,9 @@ class XmlRfcError(Exception):
         self.filename = filename
         self.line = line_no
 
+    def __str__(self):
+        return self.msg
+
 class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
     def __init__(self, cache_path=None, library_dirs=None, source=None,
@@ -143,9 +146,11 @@ class CachingResolver(lxml.etree.Resolver):
                 xml2rfc.log.error(str(e))                
         try:
             path = self.getReferenceRequest(request)
+            return self.resolve_filename(path, context)
         except Exception as e:
             xml2rfc.log.error(str(e))
-        return self.resolve_filename(path, context)
+            return None
+
     
     def getReferenceRequest(self, request, include=False, line_no=0):
         """ Returns the correct and most efficient path for an external request
