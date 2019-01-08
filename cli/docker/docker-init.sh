@@ -48,6 +48,8 @@ echo "Activating the virtual python environment ..."
 
 chmod -R g+w   /usr/local/lib/		# so we can patch libs if needed
 
+chmod g+rw /dev/pts/0                   # to make /usr/bin/pinentry work
+
 echo "Checking for local font directory"
 LOCAL_FONTS="/home/$USER/$CWD/.fonts"
 [ -d ls $LOCAL_FONTS ] || echo "
