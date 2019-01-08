@@ -15,8 +15,10 @@ try:
     reload(sys).setdefaultencoding("UTF-8") 
 except NameError:
     pass
-
-os.environ['GPG_TTY'] = os.ttyname(0)
+try:
+    os.environ['GPG_TTY'] = os.ttyname(0)
+except OSError:
+    pass
 
 description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
 
