@@ -16,6 +16,8 @@ try:
 except NameError:
     pass
 
+os.environ['GPG_TTY'] = os.ttyname(0)
+
 description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
 
 here = os.path.abspath(os.path.dirname(__file__))
