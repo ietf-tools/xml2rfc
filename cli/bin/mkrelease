@@ -195,14 +195,23 @@ note "\nCommitting version information for version $VER: $MSG"
 $do svn update
 $do svn commit $VERFILE setup.py -m "Set version info to release version $VER before tagging."
 
-note "Committing the changelog..."
+note "\nCommitting the changelog..."
 $do svn commit changelog -m "Changelog entry for $VER"
 
-note "Verifying there's no uncommitted changes..."
+note "\nVerifying there's no uncommitted changes..."
 $do svn st | grep "^[AMGRD] " && die "There seems to be uncommitted changes in this working copy"
 
-note "\nDoing the upload"
-$do make upload
+note "\nChecking that the changelog is valid rst ..."
+$do rst2html changelog > /dev/null	# verify that the changelog is valid rst
+
+note "\nDoing the upload..."
+$do export GPG_TTY=`tty` python setup.py sdist upload --sign
+
+note "\nCopying the tarfile to the web directory for xml2rfc"
+$do rsync dist/xml2rfc-$(shell xml2rfc --version).tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/ || true
+
+note "\nPushing the tarfile to other tools servers"
+$do toolpush /www/tools.ietf.org/tools/xml2rfc2/cli/
 
 note "\nCreating new tag 'tags/${WORK:+$WORK/}$VER' from $SRC"
 $do svn cp $REPO/$SRC $REPO/tags/${WORK:+$WORK/}$VER -m "Creating new tag 'tags/${WORK:+$WORK/}$VER' from $SRC"
