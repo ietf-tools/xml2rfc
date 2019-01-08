@@ -188,7 +188,7 @@ $do sed -i -r -e "/^__version__/s/'[\.0-9]+(dev[0-9]+)?'/'$VER'/" $VERFILE
 $do sed -i -r -e "/version=/s/'[\.0-9]+(dev[0-9]?)?'/'$VER'/" setup.py
 
 note "\nVerifying that we're now reporting the correct version"
-$do make install
+$do python setup.py -q install
 $do [ $(xml2rfc --version | awk '{print $2}') = $VER ] || die "Xml2rfc reported the wrong version number"
 
 note "\nCommitting version information for version $VER: $MSG"
