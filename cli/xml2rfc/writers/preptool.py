@@ -406,11 +406,11 @@ class PrepToolWriter(BaseV3Writer):
             ('quote-title', 'quoteTitle'),
         )
         for old, new in attribute_names:
-            for e in self.root.findall('.//*[@%s]'%old):
-                a = e.get(old)
+            for o in self.root.findall('.//*[@%s]'%old):
+                a = o.get(old)
                 if a:
-                    e.set(new, a)
-                del e.attrib[old]
+                    o.set(new, a)
+                del o.attrib[old]
 
 
         # Integer attributes
@@ -434,12 +434,23 @@ class PrepToolWriter(BaseV3Writer):
             ('author', 'surname'),
             ('author', 'initials'),
         }
+        # Attributes that may have leading or trailing space
+        space_attributes = {
+            ('u',       'format'),
+            ('iref',    'item'),
+            ('iref',    'subitem'),
+        }
         for c in e.iter():
             for a in c.attrib:
                 v = c.get(a)
-                if not isascii(v):
-                    if not (c.tag, a) in unicode_attributes:
+                if not (c.tag, a) in unicode_attributes:
+                    if not isascii(v):
                         self.err(c, 'Found non-ascii content in <%s> attribute value %s="%s"' % (c.tag, a, v))
+                if not (c.tag, a) in space_attributes:
+                    vv = v.strip()
+                    if vv != v:
+                        self.note(c, 'Stripped extra whitespace in <%s> attribute value %s="%s"' % (c.tag, a, v))
+                        c.set(a, vv)
 
 
         # Some attribute values we should check before we default set them,
