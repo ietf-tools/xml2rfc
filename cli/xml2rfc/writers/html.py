@@ -1514,7 +1514,7 @@ class HtmlWriter(BaseV3Writer):
             h = build(tag, id=x.get('slugifiedName'))
             s.append(h)
             #
-            numbered = p.get('numbered')
+            numbered = p.get('numbered') or 'true' if p.tag == 'references' else 'false'
             if numbered == 'true':
                 if number.startswith('appendix'):
                     number = number.replace('.', ' ', 1).title()
@@ -2019,8 +2019,6 @@ class HtmlWriter(BaseV3Writer):
             self.render(section, c)
         return section
 
-
-#    render_references = render_section
 
     # 9.47.  <seriesInfo>
     # 
