@@ -4007,6 +4007,8 @@ class TextWriter(BaseV3Writer):
         else:
             self.die(e, "Unexpected <xref> format: '%s'.  Expected 'counter', 'title', or 'default'" % (format, ))
 
+        # Prevent line breaking on dash
+        text = text.replace('-', '\u2011')
         text += (e.tail or '')
 
         return text
