@@ -595,6 +595,10 @@ class TextWriter(BaseV3Writer):
         }
         #text = self.render_author_name(e, width, **kwargs)
         text = ''
+        if e.find('./address/postal') is None:
+            # If we have <postal>, name and company will be generated as part
+            # of that; if not, we add it here:
+            text += self.render_author_name(e, width, **kwargs) + '\n'
         for c in e.iterchildren('address'):
             text = self.join(text, c, width, **kwargs)
         text = text.rstrip() + '\n\n'
@@ -2050,7 +2054,6 @@ class TextWriter(BaseV3Writer):
                 if city is not None and city.text:
                     cityline.append(city.text)
                 region = e.find('region')
-                debug.mark()
                 if region is not None and region.text:
                     if len(cityline) > 0: cityline.append(', ');
                     cityline.append(region.text)
