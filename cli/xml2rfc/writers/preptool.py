@@ -1053,7 +1053,10 @@ class PrepToolWriter(BaseV3Writer):
             tlp = "3.0"
             stream = "n/a"
         else:
-            tlp = "4.0"
+            # The only difference between 4.0 and 5.0 is selective the URL
+            # scheme, which we handle through interpolation with the http
+            # cutover date:
+            tlp = "5.0"                 
             stream = 'IETF' if subtype == 'IETF' else 'alt'
         format_dict = {'year': self.date.year, }
         format_dict['scheme'] = 'http' if self.date < self.boilerplate_https_date else 'https'
