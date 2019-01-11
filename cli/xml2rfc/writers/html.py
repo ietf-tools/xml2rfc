@@ -357,7 +357,10 @@ class HtmlWriter(BaseV3Writer):
     #    placed inside an HTML <title> element in the header.
 
         title = x.find('./front/title')
-        add.title(head, title)
+        text = title.text
+        if self.options.rfc:
+            text = ("RFC %s: " % self.root.get('number')) + text
+        add.title(head, None, text)
 
     # 6.3.3.  Document Metadata
     # 
