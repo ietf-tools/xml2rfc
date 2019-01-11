@@ -2087,7 +2087,7 @@ class HtmlWriter(BaseV3Writer):
         div.text = None
         pre = add.pre(div, None, x.text, classes=classes)
         if mark:
-            text = pre.text.strip()
+            text = pre.text
             text = (' file "%s"\n%s' % (file, text)) if text else '\n%s' % text
             text = "<CODE BEGINS>%s\n<CODE ENDS>" % text
             pre.text = text
