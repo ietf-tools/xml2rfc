@@ -992,8 +992,8 @@ class PrepToolWriter(BaseV3Writer):
                 consensus = 'n/a'
             try:
                 for para in boilerplate_rfc_status_of_memo[stream][category][consensus]:
-                    t = self.element('t')
-                    t.text = para.format(**format_dict).strip()
+                    para = para.format(**format_dict).strip()
+                    t = etree.fromstring(para)
                     section.append(t)
             except KeyError as exception:
                 if str(exception) in ["'rfc_number'", "'group_name'"]:
@@ -1010,8 +1010,8 @@ class PrepToolWriter(BaseV3Writer):
             exp = datetime.date(year=year, month=month, day=day) + datetime.timedelta(days=185)
             format_dict['expiration_date'] = format_date(exp.year, exp.month, exp.day, self.options.legacy_date_format)
             for para in boilerplate_draft_status_of_memo:
-                t = self.element('t')
-                t.text = para.format(**format_dict).strip()
+                para = para.format(**format_dict).strip()
+                t = etree.fromstring(para)
                 section.append(t)
         e.append(section)            
 
@@ -1073,8 +1073,8 @@ class PrepToolWriter(BaseV3Writer):
         elif ipr.startswith('pre5378'):
             paras += boilerplate_tlp[tlp]['pre5378'][:]
         for para in paras:
-            t = self.element('t')
-            t.text = para.format(**format_dict).strip()
+            para = para.format(**format_dict).strip()
+            t = etree.fromstring(para)
             section.append(t)
         e.append(section)
 

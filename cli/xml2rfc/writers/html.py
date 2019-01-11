@@ -1259,7 +1259,7 @@ class HtmlWriter(BaseV3Writer):
         if x.text:
             hh = add.a(h, x, href=target)            
         else:
-            hh = add.span(h, x, '<', build.a(target, href=target), '>')
+            hh = add.span(h, x, build.a(target, href=target))
         return hh
 
     # 9.25.  <figure>
