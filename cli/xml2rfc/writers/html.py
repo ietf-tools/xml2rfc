@@ -2047,7 +2047,7 @@ class HtmlWriter(BaseV3Writer):
             entry(h, name, value)
             return h
         elif self.part == 'references':
-            span = add.span(h, x, name, value, classes='seriesInfo')
+            span = add.span(h, x, name, ' ', value, classes='seriesInfo')
             return span
         else:
             self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
