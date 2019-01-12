@@ -7,7 +7,6 @@ import io
 import os
 
 import warnings
-import sys
 
 warnings.filterwarnings("ignore", message='There are known rendering problems with Cairo <= 1.14.0')
 warnings.filterwarnings("ignore", message='@font-face support needs Pango >= 1.38')
