@@ -2211,7 +2211,7 @@ class TextWriter(BaseV3Writer):
                 text = self.join(text, c, width, **kwargs)
 
         text = indent(text, 11, 0)
-        if len(label) > 10:
+        if len(label.strip()) > 10:
             label += '\n'
         else:
             text = text.lstrip()
