@@ -177,7 +177,6 @@ class PrepToolWriter(BaseV3Writer):
 
         try:
             v3_rng.assertValid(self.tree)
-            self.note(None, "The document validates according to the RFC7991 schema %s running preptool" % (when, ))
             return True
         except Exception as e:
             lxmlver = etree.LXML_VERSION[:3]
