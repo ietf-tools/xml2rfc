@@ -1,3 +1,56 @@
+xml2rfc (2.16.3) ietf; urgency=medium
+
+  This release fixes a number of bugs in the v3 output formats, found thanks
+  to review and testing done by the RFC Production Center (Alice, Sandy,
+  and Megan).  Thanks!
+
+  * Added CSS styling to avoid page breaks inside dl entries (which implies
+    not breaking a reference entry) and inside author address entries.  Also
+    added styling to avoid line breaks in reference URLs.  This fixes a number
+    of line- and page-break issues in the PDF output.
+
+  * When rendering a reference, don't run seriesInfo name and value together;
+    separate with a space.
+
+  * Added a missing colon to the Figure and Table captions when caption text
+    has been specified.
+
+  * Provided boilerplate templates as xml instead of as a text/plain blob
+    internally, in order to make boilerplate URLs render as links in formats
+    that supports it.
+
+  * Added missing section numbers in the HTML output of reference sections.
+
+  * Removed stripping of leading and trailing whitespace from <sourcecode>
+    content.
+
+  * Added 'RFC NNNN: ' to the HTML document title for RFCs.
+
+  * Added code to prevent line-breaking of reference tags containing dash
+    in the text format.
+
+  * Fixed rendering of author names in authors' addressses section when the
+    <address> element does not have a <postal> child element.
+
+  * Fixed an issue with missing whitespace in text rendering of references 
+    with reference tags of length 9.
+
+  * Fixed an issue where TLP version 4.0 was used instead of 5.0 used by
+    preptool when inserting boilerplate text, causing the use of http://
+    instead of https:// URLs in modern document boilerplate.
+
+  * Silenced some warnings that could occur during xml2rfc startup, triggered
+    by pdf lib imports when the available external libs have old versions.
+
+  * Fixed a bug in preptool.check_attribute_values(), and added code to strip
+    leading and trailing whitespace for attribute values where whitespace is
+    not meaningful.  This will cause accidentally included leading and
+    trailing whitespace to be accepted (with a comment during the preptool
+    phase).
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  13 Jan 2019 17:31:08 +0000
+
+
 xml2rfc (2.16.2) ietf; urgency=medium
 
   * Added exception handling for a command in setup.py that may fail in 
