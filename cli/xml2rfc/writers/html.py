@@ -921,22 +921,20 @@ class HtmlWriter(BaseV3Writer):
             #
             addr = add.address(h, x, classes='vcard')
             #
-            postal = x.find('.//postal')
+            address = x.find('./address')
+            postal = x.find('./address/postal')
+            if postal is None:
+                # We render author name as part of postal, so make sure it's there
+                address.insert(0, lxml.etree.Element('postal'))
             if ascii:
                 ascii_div = add.div(addr, None, classes='ascii')
-                if postal == None:
-                    add.div(ascii_div, None, build.span(ascii, classes=address_hcard_properties['name']), dir='auto')
                 for c in x.getchildren():
                     self.render(ascii_div, c)
                 add.div(addr, None, 'Additional contact information:', classes='alternative-contact')
                 nonasc_div = add.div(addr, None, classes='non-ascii')
-                if postal == None:
-                    add.div(nonasc_div, None, build.span(name, classes=address_hcard_properties['name']), dir='auto')
                 for c in x.getchildren():
                     self.render(nonasc_div, c)
             else:
-                if postal == None:
-                    add.div(addr, None, build.span(name, classes=address_hcard_properties['name']), dir='auto')
                 for c in x.getchildren():
                     self.render(addr, c)
             return addr
