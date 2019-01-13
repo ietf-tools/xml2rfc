@@ -595,10 +595,11 @@ class TextWriter(BaseV3Writer):
         }
         #text = self.render_author_name(e, width, **kwargs)
         text = ''
-        if e.find('./address/postal') is None:
-            # If we have <postal>, name and company will be generated as part
-            # of that; if not, we add it here:
-            text += self.render_author_name(e, width, **kwargs) + '\n'
+        address = e.find('./address')
+        postal = e.find('./address/postal')
+        if postal is None:
+            # We render author name as part of postal, so make sure it's there
+            address.insert(0, etree.Element('postal'))
         for c in e.iterchildren('address'):
             text = self.join(text, c, width, **kwargs)
         text = text.rstrip() + '\n\n'
