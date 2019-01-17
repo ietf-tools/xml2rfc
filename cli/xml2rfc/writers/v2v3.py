@@ -12,6 +12,7 @@ from io import open
 from lxml import etree
 from lxml.etree import Element, Comment, CDATA
 
+import xml2rfc
 from xml2rfc import log
 from xml2rfc.util.unicode import unicode_content_tags, isascii
 from xml2rfc.utils import find_duplicate_ids, hastext, isempty
@@ -335,6 +336,18 @@ class V2v3XmlWriter(BaseV3Writer):
 
         self.root.set('version', '3')
 
+        # Add a comment about the converter version
+        conversion_version = Comment(' xml2rfc v2v3 conversion %s ' % xml2rfc.__version__)
+        conversion_version.tail = '\n  '
+        self.root.insert(0, conversion_version)
+
+        # This is a workaround for not being able to do anything about
+        # namespaces other than when creating an element.  It lets us retain
+        # a namespace declaration for xi: in the root element.
+        dummy = self.element('{http://www.w3.org/2001/XInclude}include', nsmap=self.xmlrfc.nsmap)
+        self.root.insert(0, dummy)
+        lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap, keep_ns_prefixes='xi')
+        self.root.remove(dummy)
         return self.tree
 
     # ----------------------------------------------------------------------
