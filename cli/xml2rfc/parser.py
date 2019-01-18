@@ -366,11 +366,13 @@ class CachingResolver(lxml.etree.Resolver):
             self.sessions[netloc] = requests.Session()
         session = self.sessions[netloc]
         r = session.get(url)
+        for rr in r.history + [r, ]:
+            xml2rfc.log.note(' ... %s %s' % (rr.status_code, rr.url))
         if r.status_code == 200:
             if self.write_cache:
                 try:
                     xml = lxml.etree.fromstring(r.text.encode('utf8'))
-                    xml.set('{%s}base'%xml2rfc.utils.namespaces['xml'], url)
+                    xml.set('{%s}base'%xml2rfc.utils.namespaces['xml'], r.url)
                     text = lxml.etree.tostring(xml, encoding='utf-8')
                     write_path = os.path.join(self.write_cache, 
                                               xml2rfc.CACHE_PREFIX, basename)
