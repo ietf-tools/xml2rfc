@@ -52,9 +52,12 @@ RUN apt-get install -qy \
 	build-essential \
 	bzip2 \
 	ca-certificates \
+	cloc \
 	colordiff \
 	gcc \
+	gnupg2 \
 	groff \
+	host \
 	ipython \
 	less \
 	libbz2-dev \
