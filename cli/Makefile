@@ -61,7 +61,7 @@ pytests:
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
 	for type in .raw.txt .txt .nroff .html .exp.xml .v2v3.xml .prepped.xml ; do					\
-	  diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read -p "Copy [y/n]? " REPLY; [ "$$REPLY" = "y" ] && cp -v tmp/$$doc$$type tests/valid/; exit 1; } \
+	  diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read -p "Copy [y/n]? " REPLY; if [ "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
 	done ; if [ $$type = ascii ]; then echo "Diff nroff output with xml2rfc output:";\
 	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
 
@@ -102,7 +102,7 @@ tests/out/%.v3.$(py).html: tests/input/%.xml install
 
 %.test: %
 	@echo "Diffing $< against master"
-	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (2)"; read -p "Copy [y/n]? " REPLY; [ "$$REPLY" = "y" ] && cp -v $< tests/valid/; exit 1; }
+	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (2)"; read -p "Copy [y/n]? " REPLY; if [ "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.nroff.txt: %.nroff
 	@echo "Creating $@ from $<"
