@@ -1332,6 +1332,8 @@ class TextWriter(BaseV3Writer):
             "Get front page top left column"
             #left_parts = ['source', 'seriesInfo', 'obsoletes', 'updates', 'category', 'issn', 'expires', ]
             left = []
+            if self.root.get('ipr') == 'none':
+                return left
             if self.options.rfc:
                 # 
                 #    There is a set of additional information that is needed at the front
@@ -1439,8 +1441,9 @@ class TextWriter(BaseV3Writer):
                 else:
                     self.warn(self.root, "Expected a category, one of %s, but found none" % (','.join(strings.category_name.keys()), ))
                 #
-                exp = get_expiry_date(self.root, self.date)
-                left.append('Expires: %s' % format_date(exp.year, exp.month, exp.day, self.options.legacy_date_format))
+                if self.root.get('ipr') != 'none':
+                    exp = get_expiry_date(self.root, self.date)
+                    left.append('Expires: %s' % format_date(exp.year, exp.month, exp.day, self.options.legacy_date_format))
             return left
         #
         def get_right(front):

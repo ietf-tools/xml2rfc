@@ -601,6 +601,8 @@ class V2v3XmlWriter(BaseV3Writer):
 #         }
         def equal(e1, e2):
             return (e1.get('name'), e1.get('value')) ==  (e2.get('name'), e2.get('value'))
+        if e.get('ipr') == 'none':
+            return
         front = e.find('./front')
         title = e.find('./front/title')
         i = front.index(title) + 1 if title!=None else 0

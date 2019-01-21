@@ -1412,11 +1412,12 @@ class HtmlWriter(BaseV3Writer):
                 if category:
                     entry(dl, 'Intended Status', strings.category_name[category])
                 # Expiry date
-                exp = get_expiry_date(self.root, self.date)
-                expdate = build.date(year=str(exp.year), month=str(exp.month))
-                if exp.day:
-                    expdate.set('day', str(exp.day))
-                entry(dl, 'Expires', self.render_date(None, expdate))
+                if self.root.get('ipr') != 'none':
+                    exp = get_expiry_date(self.root, self.date)
+                    expdate = build.date(year=str(exp.year), month=str(exp.month))
+                    if exp.day:
+                        expdate.set('day', str(exp.day))
+                    entry(dl, 'Expires', self.render_date(None, expdate))
 
             authors = x.xpath('./author')
             dl.append( build.dt('Authors:' if len(authors)>1 else 'Author:', classes='label-authors' ))

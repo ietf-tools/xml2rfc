@@ -575,6 +575,8 @@ class PrepToolWriter(BaseV3Writer):
     #    RFCs.
     def front_insert_series_info(self, e, p):
         series = e.xpath('seriesInfo')
+        if self.root.get('ipr') == 'none':
+            return
         if series == None:
             title = e.find('title')
             if title != None:
@@ -953,6 +955,8 @@ class PrepToolWriter(BaseV3Writer):
     def boilerplate_insert_status_of_memo(self, e, p):
         if self.prepped:
             return
+        if self.root.get('ipr') == 'none':
+            return
         # submissionType: "IETF" | "IAB" | "IRTF" | "independent"
         # consensus: "false" | "true"
         # category: "std" | "bcp" | "exp" | "info" | "historic"
@@ -1024,6 +1028,9 @@ class PrepToolWriter(BaseV3Writer):
     def boilerplate_insert_copyright_notice(self, e, p):
         if self.prepped:
             return
+        ipr = self.root.get('ipr', '').lower()
+        if ipr == 'none':
+            return
         b = e.xpath('./section/name[text()="Copyright Notice"]')
         existing_copyright_notice = b[0] if b else None
         if existing_copyright_notice:
@@ -1052,9 +1059,8 @@ class PrepToolWriter(BaseV3Writer):
             tlp = "3.0"
             stream = "n/a"
         else:
-            # The only difference between 4.0 and 5.0 is selective the URL
-            # scheme, which we handle through interpolation with the http
-            # cutover date:
+            # The only difference between 4.0 and 5.0 is selective URL scheme,
+            # which we handle using the http cutover date, through interpolation:
             tlp = "5.0"                 
             stream = 'IETF' if subtype == 'IETF' else 'alt'
         format_dict = {'year': self.date.year, }

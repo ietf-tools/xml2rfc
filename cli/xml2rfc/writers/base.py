@@ -380,6 +380,7 @@ class BaseRfcWriter:
         'trust200811',
         'noModificationTrust200811',
         'noDerivativesTrust200811',
+        'none',
     ]
 
     # -------------------------------------------------------------------------
@@ -1696,6 +1697,8 @@ class BaseV3Writer(object):
     # methods for use in setting up page headers and footers
 
     def page_top_left(self):
+        if self.root.get('ipr') == 'none':
+            return ''
         number = self.root.get('number')
         if number != None:
             return 'RFC %s' % number
@@ -1729,7 +1732,7 @@ class BaseV3Writer(object):
 
     def page_bottom_center(self):
         # Either expiry date or category
-        if self.options.rfc:
+        if self.options.rfc or self.root.get('ipr') == 'none':
             cat = self.root.get('category')
             text = strings.category_name[cat]
         else:
