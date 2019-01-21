@@ -26,6 +26,12 @@ if ! id -u "$USER" &> /dev/null; then
     echo "$USER:$USER" | chpasswd
 fi
 
+if [ "$HOSTNAME" ]; then
+    hostname "$HOSTNAME"
+else
+    echo "Environment variable HOSTNAME is not set -- cannot set hostname"
+fi
+
 #VIRTDIR="/opt/home/$USER/$TAG"
 VIRTDIR="/home/$USER/$CWD/env"
 echo "Checking that there's a virtual environment for $TAG ..."
