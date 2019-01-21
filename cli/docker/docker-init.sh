@@ -58,12 +58,12 @@ chmod g+rw /dev/pts/0                   # to make /usr/bin/pinentry work
 
 echo "Checking for local font directory"
 LOCAL_FONTS="/home/$USER/$CWD/.fonts"
-[ -d ls $LOCAL_FONTS ] || echo "
+[ -d $LOCAL_FONTS ] || echo "
  *** Missing font directory: $LOCAL_FONTS ***
 "
 
 echo "Checking for local fonts"
-found_fonts="$(ls $LOCAL_FONTS | fgrep .[to]tf | wc -l)"
+found_fonts="$(ls $LOCAL_FONTS | grep '\.[to]tf' | wc -l)"
 [ $found_fonts = 1541 ] || echo "
  *** Missing local fonts: Expected 1541, found $found_fonts ***
 "

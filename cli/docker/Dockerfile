@@ -151,13 +151,21 @@ RUN make altinstall
 
 # Python 3.6
 WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.6.7/Python-3.6.7.tar.xz
-RUN tar xJf Python-3.6.7.tar.xz
-WORKDIR /usr/src/Python-3.6.7/
+RUN wget -q https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz
+RUN tar xJf Python-3.6.8.tar.xz
+WORKDIR /usr/src/Python-3.6.8/
 RUN ./configure
 RUN make
 RUN make altinstall
 
+# Python 3.7
+WORKDIR /usr/src
+RUN wget -q https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz
+RUN tar xJf Python-3.7.2.tar.xz
+WORKDIR /usr/src/Python-3.7.2/
+RUN ./configure
+RUN make
+RUN make altinstall
 
 ENV DDIR="/usr/local/share/xml2rfc"
 RUN mkdir -p $DDIR
