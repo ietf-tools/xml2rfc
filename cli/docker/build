@@ -77,8 +77,8 @@ trap 'echo "$program($LINENO): Command failed with error code $? ([$$] $0 $*)"; 
 # Option parsing
 
 # Options
-shortopts=f:ht:vV
-longopts=file=,help,tag=,verbose,version
+shortopts=f:F:ht:vV
+longopts=file=,flags=,help,tag=,verbose,version
 
 # Default values
 BRANCH=$(svn log -v ^/tags -l 1 | grep 'A /tags/cli/[1-9]' | awk '{print $2}' )
@@ -102,6 +102,7 @@ fi
 while true ; do
     case "$1" in
 	-h| --help)	usage; exit;;		# Show this help, then exit
+        -F| --flags)    FLAGS=$2; shift;;	# Flags for the docker build command
 	-f| --flavour)	FLAVOUR=$2; shift;;	# Build from Dockerfile-$ARG
 	-t| --tag)	TAG=$2; shift;;		# Use the given docker image tag, instead of the latest svn tags name
 	-v| --verbose)	VERBOSE=1;;		# Be more talkative
@@ -127,8 +128,9 @@ else
     die "Didn't expect to run this script on Linux -- are you inside docker?"
 fi
 
+
 docker rmi -f ${REPO}:${FLAVOUR:-$TAG} || true
-docker build -t ${REPO}:${FLAVOUR:-$TAG} -f $FILE $DIR
+docker build $FLAGS -t ${REPO}:${FLAVOUR:-$TAG} -f $FILE $DIR
 docker tag $(docker images -q | head -n 1) ${REPO}:${FLAVOUR:-latest}
 [ "$FLAVOUR" ] || docker push ${REPO}:latest
 docker push ${REPO}:${FLAVOUR:-$TAG}
