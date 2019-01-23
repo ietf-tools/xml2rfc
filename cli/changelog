@@ -1,3 +1,20 @@
+xml2rfc (2.17.1) ietf; urgency=medium
+
+  This release addresses a couple of issues with SCG rendering in HTML and
+  PDF formats, pointed out by sginoza@amsl.com, and adds testing under
+  Python 3.7:
+
+  * Added code to add missing <svg> element attribute viewBox, and scale 
+    down large svg images for use in html and pdf renderings.  Added an error 
+    case when the svg element doesn't contain sufficient information (width and 
+    height, or viewBox) to do so.  This improves the rendering in general, and 
+    in particular lets the PDF rendering show the full image, which was not 
+    always the case when viewBox was missing for a large image.
+
+  * Added Python 3.7 to the tox test settings.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  23 Jan 2019 16:48:34 +0000
+
 xml2rfc (2.17.0) ietf; urgency=medium
 
   * Added rudimentary support for ipr="none", in order to not shut out other
