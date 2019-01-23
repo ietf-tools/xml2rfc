@@ -58,6 +58,12 @@ def slugify(s):
     s = s.strip('-')
     return s
 
+def maybefloat(f):
+    try:
+        return float(f)
+    except (ValueError, TypeError):
+        return None
+
 def wrap_ascii(tag, conj, name, ascii, role='', classes=None):
     role = ('','') if role in ['',None] else (', ', role)
     if ascii:
@@ -744,6 +750,30 @@ class HtmlWriter(BaseV3Writer):
             if svg == None:
                 self.err(x, 'Expected <svg> content inside <artwork type="svg">, but did not find it:\n   %s ...' % (lxml.etree.tostring(x)[:256], ))
                 return None
+            #
+            # Deal with possible svg scaling issues.
+            vbox = svg.get('viewBox')
+            svgw = maybefloat(svg.get('width'))
+            svgh = maybefloat(svg.get('height'))
+            try:
+                if vbox:
+                    if not (svgw and svgh):
+                        x,y,w,h = vbox.split()
+                        svgw = float(w)-float(x)
+                        svgh = float(h)-float(y)
+                else:
+                    if svgw and svgh:
+                        svg.set('viewBox', '0 0 %s %s' % (svgw, svgh))
+                    else:
+                        self.err(x, "Cannot place SVG properly when neither viewBox nor width and height is available") 
+                        return None
+            except ValueError as e:
+                self.err(x, "Error when calculating SVG size: %s" % e)
+            imgw = 660 if self.options.image_svg else 724
+            if imgw < svgw:
+                svg.set('width', str(svgw/svgw*imgw))
+                svg.set('height', str(svgh/svgw*imgw))
+            #
             if self.options.image_svg:
                 data = build_dataurl('image/svg+xml', lxml.etree.tostring(svg))
                 add.img(div, None, src=data, alt=x.get('alt'))
