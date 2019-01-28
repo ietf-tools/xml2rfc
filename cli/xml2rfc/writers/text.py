@@ -2182,7 +2182,7 @@ class TextWriter(BaseV3Writer):
     #    Holds the URI for the reference.
     def render_reference(self, e, width, **kwargs):
         # rendering order: authors, title, seriesInfo, date, target, annotation
-        #p = e.getparent()
+        p = e.getparent()
         label = self.refname_mapping[e.get('anchor')]
         label = ('[%s]' % label).ljust(11)
         # ensure the desired ordering
@@ -2215,12 +2215,14 @@ class TextWriter(BaseV3Writer):
                 text = self.join(text, c, width, **kwargs)
 
         text = indent(text, 11, 0)
-        if len(label.strip()) > 10:
-            label += '\n'
+        if p.tag == 'referencegroup':
+            label = ''
         else:
-            text = text.lstrip()
-        ref = label + text
-        return ref
+            if len(label.strip()) > 10:
+                label += '\n'
+            else:
+                text = text.lstrip()
+        return label + text
 
 
 
@@ -2244,7 +2246,20 @@ class TextWriter(BaseV3Writer):
     #    this will be used both to "label" the reference group in the
     #    "References" section and as an identifier in links to this reference
     #    entry.
-
+    def render_referencegroup(self, e, width, **kwargs):
+        kwargs['joiners'].update({
+            'reference':    joiner('', '\n\n', '', 0, 0),
+        })
+        label = self.refname_mapping[e.get('anchor')]
+        label = ('[%s]' % label).ljust(11)
+        text = ''
+        for c in e.getchildren():
+            text = self.join(text, c, width, **kwargs)
+        if len(label.strip()) > 10:
+            label += '\n'
+        else:
+            text = text.lstrip()
+        return label + text
 
     # 2.42.  <references>
     # 
@@ -3774,7 +3789,7 @@ class TextWriter(BaseV3Writer):
         r = e.getparent().getparent()   # <reference>
         title = e.text.strip()
         quote_title = r.get('quoteTitle')
-        if quote_title:
+        if quote_title == 'true':
             title = '"%s"' % title
         return title
 
@@ -3971,13 +3986,16 @@ class TextWriter(BaseV3Writer):
     #    Content model: only text content.
     def render_xref(self, e, width, **kwargs):
         target = e.get('target')
-        link   = e.get('derivedContent')
+        #section = e.get('section')
+        #relative= e.get('relative')
+        content   = e.get('derivedContent')
         text   = e.text or ''
         format = e.get('format','default')
-        if link is None:
+        if content is None:
             self.die(e, "Found an <xref> without derivedContent: %s" % (etree.tostring(e),))
+        #
         if   format == 'counter':
-            text = link
+            text = content
         elif format == 'default':
             if target in self.refname_mapping:
                 ref = "[%s]" % self.refname_mapping[target]
@@ -3991,23 +4009,25 @@ class TextWriter(BaseV3Writer):
                     t = self.root.find('.//*[@anchor="%s"]'%(target, ))
                     if t is None:
                         t = self.root.find('.//*[@slugifiedName="%s"]'%(target, ))
-                if t.tag == 'name':
-                    t = t.getparent()
-                pn = t.get('pn')
-                if pn is None:
-                    self.warn(e, "Found an <xref referring to an element without pn: %s" % (etree.tostring(t),))
+                if t is None:
+                    self.warn(e, "Found an <xref referring to an element without pn, anchor, or slugifiedName: %s" % (etree.tostring(e),))
                 else:
-                    type, num = pn.split('-')[:2]
-                    ref = '%s %s'%(type.capitalize(), num)
-                    if text != ref:
-                        if text:
-                            text += ' (%s)'%ref
-                        else:
-                            text = ref
-            if text != link and text != '[%s]'%link and self.options.debug:
-                self.warn(e, 'Preptool specification failure: <xref> content should be "%s", but found derivedContent="%s"' % (text, link))
+                    if t.tag == 'name':
+                        t = t.getparent()
+                    pn = t.get('pn')
+                    if pn != None:
+                        type, num = pn.split('-')[:2]
+                        ref = '%s %s'%(type.capitalize(), num)
+                        if text != ref:
+                            if text:
+                                text += ' (%s)'%ref
+                            else:
+                                text = ref
+
+            if text != content and text != '[%s]'%content and self.options.debug:
+                self.warn(e, 'Preptool specification failure: <xref> content should be "%s", but found derivedContent="%s"' % (text, content))
         elif format == 'title':
-            text = link
+            text = content
         else:
             self.die(e, "Unexpected <xref> format: '%s'.  Expected 'counter', 'title', or 'default'" % (format, ))
 

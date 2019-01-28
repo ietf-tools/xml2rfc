@@ -1569,6 +1569,7 @@ class BaseV3Writer(object):
         self.inline_tags = self.get_inline_tags() - deprecated_element_tags
         self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
         self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
+        self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//referencegroup') ))
         #
         self.errors = []
         if options.debug:
