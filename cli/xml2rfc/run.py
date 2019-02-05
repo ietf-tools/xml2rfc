@@ -201,6 +201,7 @@ def main():
     if options.version:
         print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
         if options.verbose:
+            print('  Python %s' % sys.version.split()[0])
             extras = set(['pycairo', 'weasyprint'])
             try:
                 import pkg_resources
