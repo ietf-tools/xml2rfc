@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore", message='@font-face support needs Pango >= 1.3
 try:
     import weasyprint
     import_error = None
-except (ImportError, OSError) as e:
+except (ImportError, OSError, ValueError) as e:
     import_error = e
     weasyprint = False
 
