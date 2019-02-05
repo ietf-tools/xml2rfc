@@ -30,7 +30,7 @@ __all__ = ['XmlRfcError', 'CachingResolver', 'XmlRfcParser', 'XmlRfc',
 try:
     import weasyprint
     HAVE_WEASYPRINT = True
-except (ImportError, OSError):
+except (ImportError, OSError, ValueError):
     weasyprint = False
     HAVE_WEASYPRINT = False
 try:
