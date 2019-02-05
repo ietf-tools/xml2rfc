@@ -359,7 +359,13 @@ class CachingResolver(lxml.etree.Resolver):
                 else:
                     xml2rfc.log.note('Resolving ' + typename + '...', url)
                     xml2rfc.log.note('Loaded from cache', cached_path)
-                    return cached_path
+                    xml = lxml.etree.parse(cached_path)
+                    if self.validate_ref(xml):
+                        return cached_path
+                    else:
+                        xml2rfc.log.error('Failure validating reference xml from %s' % cached_path )
+                        os.path.unlink(cached_path)
+                        return url
 
         xml2rfc.log.note('Resolving ' + typename + '...', url)
         if not netloc in self.sessions:
@@ -372,14 +378,18 @@ class CachingResolver(lxml.etree.Resolver):
             if self.write_cache:
                 try:
                     xml = lxml.etree.fromstring(r.text.encode('utf8'))
-                    xml.set('{%s}base'%xml2rfc.utils.namespaces['xml'], r.url)
-                    text = lxml.etree.tostring(xml, encoding='utf-8')
-                    write_path = os.path.join(self.write_cache, 
-                                              xml2rfc.CACHE_PREFIX, basename)
-                    with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
-                        cache_file.write(text.decode('utf-8'))
-                    xml2rfc.log.note('Added file to cache: ', write_path)
-                    return write_path
+                    if self.validate_ref(xml):
+                        xml.set('{%s}base'%xml2rfc.utils.namespaces['xml'], r.url)
+                        text = lxml.etree.tostring(xml, encoding='utf-8')
+                        write_path = os.path.join(self.write_cache, 
+                                                  xml2rfc.CACHE_PREFIX, basename)
+                        with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
+                            cache_file.write(text.decode('utf-8'))
+                        xml2rfc.log.note('Added file to cache: ', write_path)
+                        return write_path
+                    else:
+                        xml2rfc.log.error('Failure validating reference xml from %s' % url )
+                        return url
                 except Exception as e:
                     xml2rfc.log.error(str(e))
                     return url
@@ -390,6 +400,10 @@ class CachingResolver(lxml.etree.Resolver):
             xml2rfc.log.note("URL retrieval failed with status code %s for '%s'" % (r.status_code, r.url))
             return ''
 
+    def validate_ref(self, xml):
+        ref_rng_file = os.path.join(os.path.dirname(__file__), 'data', 'reference.rng')
+        ref_rng = lxml.etree.RelaxNG(file=ref_rng_file)
+        return ref_rng.validate(xml)
 
 class AnnotatedElement(lxml.etree.ElementBase):
     pis = None
