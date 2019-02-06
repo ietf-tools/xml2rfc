@@ -2190,29 +2190,29 @@ class TextWriter(BaseV3Writer):
         for a in e.iterdescendants('author'):
             authors.append(a)
         elements = [ authors, ]
-        for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date', ):
+        for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date',):
             for c in e.iterdescendants(ctag):
                 elements.append(c)
-        target = e.get('target')
-        if target:
-            t = self.element('t')
-            t.text = '<%s>' % target
-            elements.append(t)
+        if p.tag != 'referencegroup':
+            target = e.get('target')
+            if target:
+                t = self.element('t')
+                t.text = '<%s>' % target
+                elements.append(t)
         kwargs['joiners'] = {
             None:           joiner('', ', ', '', 0, 0),
             'authors':      joiner('', '', '', 0, 0),
-            'annotation':   joiner('', '\n\n', '', 3, 0),
+            'annotation':   joiner('', '  ', '', 0, 0),
         }
         text = ''
         width = width-11
         for c in elements:
             text = self.join(text, c, width, **kwargs)
         text += '.'
-        text = fill(text, width=width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip()
-
         for ctag in ('annotation', ):
             for c in e.iterdescendants(ctag):
                 text = self.join(text, c, width, **kwargs)
+        text = fill(text, width=width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip()
 
         text = indent(text, 11, 0)
         if p.tag == 'referencegroup':
@@ -2249,12 +2249,18 @@ class TextWriter(BaseV3Writer):
     def render_referencegroup(self, e, width, **kwargs):
         kwargs['joiners'].update({
             'reference':    joiner('', '\n\n', '', 0, 0),
+            't':            joiner('', '\n\n', '', 11, 0),
         })
         label = self.refname_mapping[e.get('anchor')]
         label = ('[%s]' % label).ljust(11)
         text = ''
         for c in e.getchildren():
             text = self.join(text, c, width, **kwargs)
+        target = e.get('target')
+        if target:
+            t = self.element('t')
+            t.text = 'URL: <%s>' % target
+            text = self.join(text, t, width, **kwargs)
         if len(label.strip()) > 10:
             label += '\n'
         else:
