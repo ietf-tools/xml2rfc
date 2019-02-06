@@ -1,3 +1,43 @@
+xml2rfc (2.18.0) ietf; urgency=medium
+
+  This release provides additional support for <referencegroup> rendering, and
+  and adds validation of fetched reference files before they are used or put
+  in the reference cache.  A warning for un-cited references was added to the
+  preptool; this has been present for v2 renderers for a long time, but was
+  absent from the v3 specification.  A number of bugs have also been fixed.
+  From the commit log:
+
+  * Fixed an issue with the v3 html renderer when given an author without 
+    an address entry.  Fixes issue #390.
+
+  * Fixed a bug in the HTML renderer's SVG reading exception code.  Added
+    support for a <referencegroup> target attribute, and suppression of target
+    URLs for indivudual entries within a <referencegroup>.
+
+  * Adjusted the text rendering of reference annotations to match the html 
+    rendering better.  Added support for <referencegroup> target rendering.  
+    Suppressed rendering of target URLs for individual entries in a 
+    referencegroup.
+
+  * Added a preptool check for reference citations, as earlier provided by v2
+    renderers.  Made the reference section numbering code more general, to
+    support additional levels in the future.
+
+  * Added an attribute 'target' to <referencegroup>, in order to be able to
+    link out to for instance IETF STD and BCP documents.
+
+  * Added ValueError to the exceptions caught on 'import weasyprint' as a 
+    workaround for a problem in Python's locale.py file under 3.7.
+
+  * Added the Python version to the version list emitted with --version 
+    --verbose.
+
+  * Added validation of included reference files before usage, to prevent
+    html files fetched from dns-spoofing captive portals from being used.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  06 Feb 2019 13:22:38 -0800
+
+
 xml2rfc (2.17.2) ietf; urgency=medium
 
   * Added a v3 text renderer for <referencegroup>, and made it possible to 
