@@ -954,6 +954,9 @@ class HtmlWriter(BaseV3Writer):
             #
             address = x.find('./address')
             postal = x.find('./address/postal')
+            if address is None:
+                address = lxml.etree.Element('address')
+                x.append(address)
             if postal is None:
                 # We render author name as part of postal, so make sure it's there
                 address.insert(0, lxml.etree.Element('postal'))
