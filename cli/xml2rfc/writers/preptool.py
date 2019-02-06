@@ -16,7 +16,7 @@ from collections import namedtuple
 from contextlib import closing
 
 try:
-    import debug
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
@@ -58,8 +58,6 @@ pnprefix = {
     'table':        'table',
     'u':            'u',
 }
-
-refname_mapping = {}
 
 index_item = namedtuple('index_item', ['item', 'sub', 'anchor', 'page', ])
 
@@ -121,6 +119,7 @@ class PrepToolWriter(BaseV3Writer):
         self.iref_number = 0
         #
         self.prev_section_level = 0
+        self.prev_references_level = 0
         self.prev_paragraph_section = None
         #
         self.prepped = self.root.get('prepTime')
@@ -217,7 +216,6 @@ class PrepToolWriter(BaseV3Writer):
             self.log('Created file %s' % filename)
 
     def prep(self):
-        global refname_mapping
 
         ## Selector notation: Some selectors below have a handler annotation,
         ## with the selector and the annotation separated by a semicolon (;).
@@ -258,6 +256,7 @@ class PrepToolWriter(BaseV3Writer):
             './/name;insert_slugified_name()',  # 5.4.4.  <name> Slugification
             './/references;sort()',             # 5.4.5.  <reference> Sorting
             './/references;add_derived_anchor()',
+            './/references;check_usage()',
                                                 # 5.4.6.  "pn" Numbering
             './/boilerplate//section;add_number()',
             './front//abstract;add_number()',
@@ -309,8 +308,10 @@ class PrepToolWriter(BaseV3Writer):
             self.die(None, "XInclude processing failed: %s" % e)
 
         # Set up reference mapping for later use.
-        refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in (self.root.xpath('.//reference') + self.root.xpath('.//referencegroup')) )
-        refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
+        # The setup done in BaseV3Writer is not complete, as it didn't cover
+        # any references pulled in by the XInclude we just did.
+        self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in (self.root.xpath('.//reference') + self.root.xpath('.//referencegroup')) ))
+        self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
 
         # 
         # 5.1.2.  DTD Removal
@@ -1161,9 +1162,8 @@ class PrepToolWriter(BaseV3Writer):
     #    the rules for lexical sorting are.  The authors of this document
     #    acknowledge that getting consensus on this will be a difficult task.
     def references_sort(self, e, p):
-        global refname_mapping
         children = e.xpath('./reference') + e.xpath('./referencegroup')
-        children.sort(key=lambda x: refname_mapping[x.get('anchor')].upper() )
+        children.sort(key=lambda x: self.refname_mapping[x.get('anchor')].upper() )
         for c in children:
             e.remove(c)
         if len(e):
@@ -1172,11 +1172,19 @@ class PrepToolWriter(BaseV3Writer):
             e.append(c)
 
     def references_add_derived_anchor(self, e, p):
-        global refname_mapping
         children = e.xpath('./reference') + e.xpath('./referencegroup')
         for c in children:
             anchor = c.get('anchor')
-            c.set('derivedAnchor', refname_mapping[anchor])
+            c.set('derivedAnchor', self.refname_mapping[anchor])
+
+    def references_check_usage(self, e, p):
+        children = e.xpath('./reference') + e.xpath('./referencegroup')
+        for c in children:
+            anchor = self.refname_mapping[c.get('anchor')]
+            if not (   self.root.xpath('.//xref[target="%s"]'%anchor)
+                    or self.root.xpath('.//relref[target="%s"]'%anchor)):
+                        x = c if getattr(c, 'base') == getattr(e, 'base') else c.getparent()
+                        self.warn(x, "Unused reference: There seems to be no reference to [%s] in the document" % anchor)
 
     # 5.4.6.  "pn" Numbering
     # 
@@ -1218,6 +1226,7 @@ class PrepToolWriter(BaseV3Writer):
             self.middle_section_number = self.middle_section_number[:level+1]
         e.set('pn', '%s-%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in self.middle_section_number ]), ))
         self.prev_section_level = level
+        self.references_number[0] = self.middle_section_number[0]
 
     def table_add_number(self, e, p):
         self.table_number += 1
@@ -1232,12 +1241,14 @@ class PrepToolWriter(BaseV3Writer):
         e.set('pn', '%s-%s' % (pnprefix[e.tag], self.unicode_number, ))
 
     def references_add_number(self, e, p):
-        self.references_number[0] = self.middle_section_number[0] + 1
-        if len(list(p.iterchildren('references'))) > 1:
-            if len(self.references_number) == 1:
-                self.references_number.append(0)
-            self.references_number[1] += 1
-        e.set('pn', '%s-%s' % (pnprefix[e.tag], '.'.join([ str(s) for s in self.references_number ]), ))
+        level = len(list(e.iterancestors('references')))
+        if level > self.prev_references_level:
+            self.references_number.append(0)
+        self.references_number[level] += 1
+        if level < self.prev_references_level:
+            self.references_number = self.references_number[:level+1]
+        e.set('pn', '%s-%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in self.references_number ]), ))
+        self.prev_references_level = level
 
     def back_section_add_number(self, e, p):
         level = len(list(e.iterancestors('section')))
@@ -1435,7 +1446,7 @@ class PrepToolWriter(BaseV3Writer):
                     content = num
             elif format == 'default':
                 if   t.tag in [ 'reference', 'referencegroup' ]:
-                    content = '%s' % refname_mapping[t.get('anchor')]
+                    content = '%s' % self.refname_mapping[t.get('anchor')]
                 elif t.tag in [ 't', 'ul', 'ol', ]:
                     type, num, para = pn.split('-', 2)
                     content = "%s %s, Paragraph %s" % (type.capitalize(), num, para)
