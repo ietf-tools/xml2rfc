@@ -1180,9 +1180,9 @@ class PrepToolWriter(BaseV3Writer):
     def references_check_usage(self, e, p):
         children = e.xpath('./reference') + e.xpath('./referencegroup')
         for c in children:
-            anchor = self.refname_mapping[c.get('anchor')]
-            if not (   self.root.xpath('.//xref[target="%s"]'%anchor)
-                    or self.root.xpath('.//relref[target="%s"]'%anchor)):
+            anchor = c.get('anchor')
+            if not (   self.root.xpath('.//xref[@target="%s"]'%anchor)
+                    or self.root.xpath('.//relref[@target="%s"]'%anchor)):
                         x = c if getattr(c, 'base') == getattr(e, 'base') else c.getparent()
                         self.warn(x, "Unused reference: There seems to be no reference to [%s] in the document" % anchor)
 
