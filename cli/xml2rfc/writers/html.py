@@ -740,10 +740,11 @@ class HtmlWriter(BaseV3Writer):
                     self.err(x, "Internal error: Got an <artwork> src: attribute that did not start with 'data:' after prepping")
                 try:
                     f = urlopen(src)
+                    data = f.read()
+                    svg = lxml.etree.fromstring(data)
                 except IOError as e:
                     self.err(x, str(e))
-                data = f.read()
-                svg = lxml.etree.fromstring(data)
+                    svg = None
             else:
                 svg = x.find('s:svg', namespaces=namespaces)
                 svgfile = "inline:%s ..." % lxml.etree.tostring(svg)[:31]
@@ -1823,9 +1824,10 @@ class HtmlWriter(BaseV3Writer):
                 if len(inner):
                     inner[-1].tail = ', '
                 self.render(inner, c)
-        target = x.get('target')
-        if target:
-            inner.append( build.span(', <', build.a(target, href=target), '>') )
+        if p.tag != 'referencegroup':
+            target = x.get('target')
+            if target:
+                inner.append( build.span(', <', build.a(target, href=target), '>') )
         if len(inner):
             inner[-1].tail = '. '
         for ctag in ('annotation', ):
@@ -1858,6 +1860,9 @@ class HtmlWriter(BaseV3Writer):
         dd = add.dd(h, None)
         for c in x.getchildren():
             self.render(dd, c)
+        target = x.get('target')
+        if target:
+            dd.append( build.span('<', build.a(target, href=target), '>') )
         return dt, dd
 
     # 9.42.  <references>
