@@ -117,7 +117,6 @@ def get_normalized_address_info(writer, x, latin=True):
                 'country_name': country_name,
             }
     else:
-        writer.warn(x, "Did not find a recognized country entry for author %s" % full_author_name(author, latin))
         adr = {
                 'name': name,
                 'role': role,
