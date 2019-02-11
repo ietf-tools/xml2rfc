@@ -1572,19 +1572,19 @@ class BaseV3Writer(object):
         self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//referencegroup') ))
         #
         self.errors = []
-        if options.debug:
-            found_handlers = []
-            missing_handlers = []
-            for tag in self.element_tags:
-                func_name = "render_%s" % (tag.lower(),)
-                if getattr(self, func_name, False):
-                    found_handlers.append(func_name)
-                else:
-                    missing_handlers.append(func_name)
-            debug.pprint('found_handlers')
-            debug.show('len(found_handlers)')
-            debug.pprint('missing_handlers')
-            debug.show('len(missing_handlers)')
+#         if options.debug:
+#             found_handlers = []
+#             missing_handlers = []
+#             for tag in (self.get_element_tags() - deprecated_element_tags):
+#                 func_name = "render_%s" % (tag.lower(),)
+#                 if getattr(self, func_name, False):
+#                     found_handlers.append(func_name)
+#                 else:
+#                     missing_handlers.append(func_name)
+#             debug.pprint('found_handlers')
+#             debug.show('len(found_handlers)')
+#             debug.pprint('missing_handlers')
+#             debug.show('len(missing_handlers)')
 
     def log(self, msg):
         xml2rfc.log.write(msg)
@@ -1667,6 +1667,15 @@ class BaseV3Writer(object):
 #         refs = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:ref" % tag, namespaces=utils.namespaces)
 #         names = set([ r.get('name') for r in refs ])
 #         return names
+
+    def get_element_tags(self):
+        element_tags = set()
+        elements = self.schema.xpath("/x:grammar/x:define/x:element", namespaces=namespaces)
+        for element in elements:
+            name = element.get('name')
+            if not name in element_tags:
+                element_tags.add(name)
+        return element_tags
 
     def get_text_tags(self):
         "Get tags that can have text content from the schema"
