@@ -4023,15 +4023,16 @@ class TextWriter(BaseV3Writer):
                     pn = t.get('pn')
                     if pn != None:
                         type, num = pn.split('-')[:2]
-                        ref = '%s %s'%(type.capitalize(), num)
+                        if num.startswith('appendix'):
+                            type, num = num.replace('.', ' ', 1).title().split(None, 1)
+                            ref = "%s %s" % (type, num)
+                        else:
+                            ref = "%s %s" % (type.capitalize(), num)
                         if text != ref:
                             if text:
                                 text += ' (%s)'%ref
                             else:
                                 text = ref
-
-            if text != content and text != '[%s]'%content and self.options.debug:
-                self.warn(e, 'Preptool specification failure: <xref> content should be "%s", but found derivedContent="%s"' % (text, content))
         elif format == 'title':
             text = content
         else:
