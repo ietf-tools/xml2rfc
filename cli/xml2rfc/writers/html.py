@@ -654,6 +654,17 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    Not currently rendered to HTML.
     # 
+
+    def render_artset(self, h, x):
+        preflist = ['svg', 'binary-art', 'ascii-art', ]
+        for t in preflist:
+            for a in x.xpath('./artwork[@type="%s"]' % t):
+                artwork = self.render(h, a)
+                return artwork
+        else:
+            artwork = self.render(h, x[0])
+        return artwork
+
     # 9.5.  <artwork>
     # 
     #    Artwork can consist of either inline text or SVG.  If the artwork is
@@ -1316,7 +1327,7 @@ class HtmlWriter(BaseV3Writer):
         if name != None and name.text:
             add.span(h, None, id=name.get('slugifiedName'))
         figure = add.figure(h, x)
-        for c in x.iterchildren('artwork', 'sourcecode'):
+        for c in x.iterchildren('artset', 'artwork', 'sourcecode'):
             self.render(figure, c)
         pn = x.get('pn')
         caption = add.figcaption(figure, None)
@@ -2634,6 +2645,7 @@ class HtmlWriter(BaseV3Writer):
         'abstract',
         'address',
         'annotation',
+        'artset',
         'artwork',
         'aside',
         'author',

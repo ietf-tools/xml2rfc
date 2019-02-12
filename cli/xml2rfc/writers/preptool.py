@@ -1273,7 +1273,7 @@ class PrepToolWriter(BaseV3Writer):
             def num2str(num):
                 return '.'.join([ str(n) for n in num ])
             #
-            para_tags = ['artwork', 'aside', 'blockquote', 'list', 'dl', 'dd', 'ol', 'ul', 'dt', 'li', 'sourcecode', 't', 'figure', 'table', ]
+            para_tags = ['artset', 'artwork', 'aside', 'blockquote', 'list', 'dl', 'dd', 'ol', 'ul', 'dt', 'li', 'sourcecode', 't', 'figure', 'table', ]
             sect_tags = ['abstract', 'note', 'section', 'references' ]
             skip_tags = ['reference', ]
             if s.tag in sect_tags:
@@ -1579,6 +1579,17 @@ class PrepToolWriter(BaseV3Writer):
         e.set('src', src)
         return src
 
+    def element_artset(self, e, p):
+        anchors = [ w.get('anchor') for w in e.xpath('./artwork[@anchor]') ]
+        if anchors:
+            if not e.get('anchor'):
+                e.set('anchor', anchors[0])
+                self.warn(e, "Moved anchor '%s' on <artset><artwork> up to <artset>" % anchors[0])
+            if len(anchors) > 1:
+                self.warn(e, "Found multiple anchors within <artset>: %s.  Please use an anchor on <artset> instead.  Discarding anchors on <artwork>." % ','.join(anchors))
+                for w in e.xpath('./artwork[@anchor]'):
+                    del w.attribs['anchor']
+
     def element_artwork(self, e, p):
 
     #    1.  If an <artwork> element has a "src" attribute where no scheme is
@@ -1613,9 +1624,9 @@ class PrepToolWriter(BaseV3Writer):
     #    3.  If an <artwork> element has a "src" attribute, and the element
     #        has content, give an error.
 
-        ## This is nonsense, since the element content is specified for use
-        ## as a fallback if the rendering medium cannot handle the "src"
-        ## format.  See https://tools.ietf.org/html/rfc7991#section-2.5
+            if e.text and e.text.strip():
+                self.err(e, "Found <artwork> with both a 'src' attribute and content.  Please use <artset> with multiple <artwork> instances instead.")
+                e.text = None
 
     #    4.  If an <artwork> element has type='svg' and there is an "src"
     #        attribute, the data needs to be moved into the content of the
@@ -1631,38 +1642,20 @@ class PrepToolWriter(BaseV3Writer):
     #           <artwork> element with that data and remove the "src"
     #           attribute.
 
-        ## This conflicts with https://tools.ietf.org/html/rfc7991#section-2.5
-        ## and destroys content.  Will turn external src content into a data:
-        ## url if there is text content in <artwork>.
-
-                    awtext = (' '.join(list(e.itertext()))).strip()
-                    svg = None
-                    if awtext or self.options.image_svg:
-                        # keep svg in src attribute
-                        if scheme in ['file', 'http', 'https', 'data']:
-                            f = urlopen(src)
-                            data = f.read()
-                            if six.PY2:
-                                mediatype = f.info().gettype()
-                            else:
-                                mediatype = f.info().get_content_type()
-                            f.close()
-
-                            src = build_dataurl(mediatype, data)
-                            e.set('src', src)
-
     #        *  If the "src" URI scheme is "file:", "http:", or "https:", fill
     #           the content of the <artwork> element with the resolved XML
     #           from the URI in the "src" attribute.  If there is no
     #           "originalSrc" attribute, add an "originalSrc" attribute with
     #           the value of the URI and remove the "src" attribute.
-                    else:
-                        f = urlopen(src)
-                        data = f.read()
-                        f.close()
+
+                    if scheme in ['file', 'http', 'https', 'data']:
+                        with closing(urlopen(src)) as f:
+                            data = f.read()
                         svg = etree.fromstring(data)
                         e.append(svg)
                         del e.attrib['src']
+                    else:
+                        self.err(e, "Unexpected <artwork> src scheme: '%s'" % scheme)
 
     #        *  If the <artwork> element has an "alt" attribute, and the SVG
     #           does not have a <desc> element, add the <desc> element with
@@ -1720,12 +1713,13 @@ class PrepToolWriter(BaseV3Writer):
     #           "originalSrc" attribute with the value of the URI and remove
     #           the "src" attribute.
                 else:
-                    if e.text and e.text.strip() != '':
-                        self.err(e, 'Expected either text content or external content for <artwork src="" type="%s">, but found both' % (src, awtype or ''))
-                    with closing(urlopen(src)) as f:
-                        data = f.read()
-                    e.text = data
-                    del e.attrib['src']
+                    if scheme in ['file', 'http', 'https', 'data']:
+                        with closing(urlopen(src)) as f:
+                            data = f.read()
+                        e.text = data
+                        del e.attrib['src']
+                    else:
+                        self.err(e, "Unexpected <artwork> src scheme: '%s'" % scheme)
 
                 if src and not data:
                     self.warn(e, "No image data found in source %s" % src)

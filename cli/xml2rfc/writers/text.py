@@ -15,7 +15,7 @@ from lxml import etree
 from collections import namedtuple
 
 try:
-    import debug
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     debug = None
@@ -394,6 +394,22 @@ class TextWriter(BaseV3Writer):
     # 
     #    See Section 5 for a description of how to deal with issues of using
     #    "&" and "<" characters in artwork.
+
+    def render_artset(self, e, width, **kwargs):
+        preflist = ['ascii-art', ]
+        text = ''
+        for t in preflist:
+            for a in e.xpath('./artwork[@type="%s"]' % t):
+                text = self.join(text, a, width, **kwargs)
+                return text
+        else:
+            a = e[0]
+            if e.text and e.text.strip():
+                text = self.join(text, a, width, **kwargs)
+            else:
+                self.err(a, "Expected ascii-art text, but found none.")
+        return text
+
     def render_artwork(self, e, width, **kwargs):
         text = (e.text and e.text.expandtabs()) or "(Artwork only available as %s: <%s>)" % (e.get('type', '(unknown type)'), e.get('originalSrc'))
         text = text.strip('\n')
@@ -1254,6 +1270,7 @@ class TextWriter(BaseV3Writer):
     def render_figure(self, e, width, **kwargs):
         kwargs['joiners'].update({
             'name':     joiner('', ': ', '', 0, 0),
+            'artset':   joiner('', '', '', 0, 0),
             'artwork':  joiner('', '', '', 0, 0),
         })
         #
@@ -2782,6 +2799,7 @@ class TextWriter(BaseV3Writer):
             't':        joiner('', '\n\n', '', 3, 0),
             'name':     joiner('', '  ',   '', 0, 0),
             'section':  joiner('', '\n\n', '', 0, 0),
+            'artset':   joiner('', '',     '', 0, 0),
             'artwork':  joiner('', '\n\n', '', 3, 0),
         })
         text = ""
@@ -4137,6 +4155,7 @@ class TextWriter(BaseV3Writer):
         'abstract',
         'address',
         'annotation',
+        'artset',
         'artwork',
         'aside',
         'author',
