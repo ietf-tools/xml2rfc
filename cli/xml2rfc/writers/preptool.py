@@ -1433,8 +1433,7 @@ class PrepToolWriter(BaseV3Writer):
                     self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
                 type, num = split_pn(t, pn)
                 if num.startswith('appendix'):
-                    type
-                    num = num.replace('.', ' ', 1).title()
+                    num = num.split('.')[1].title()
                 elif re.search('^[a-z]', num):
                     num = num.title()
                 if t.tag == 'li':
