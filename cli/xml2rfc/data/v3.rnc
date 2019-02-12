@@ -316,7 +316,8 @@
        [ a:defaultValue = "false" ]
        attribute removeInRFC { "true" | "false" }?,
        name?,
-       (artwork
+       (artset
+        | artwork
         | aside
 	| author
         | blockquote
@@ -386,7 +387,7 @@
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { xsd:ID }?,
-       (artwork | dl | figure | iref | ol | t | table | ul)*
+       (artset | artwork | dl | figure | iref | ol | t | table | ul)*
      }
 
    blockquote =
@@ -397,7 +398,7 @@
        attribute pn { xsd:ID }?,
        attribute cite { text }?,
        attribute quotedFrom { text }?,
-       ((artwork | dl | figure | ol | sourcecode | t | ul)+
+       ((artset | artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
            | cref
@@ -460,7 +461,7 @@
        attribute anchor { xsd:ID }?,
        attribute derivedCounter { text }?,
        attribute pn { xsd:ID }?,
-       ((artwork | blockquote | dl | figure | ol | sourcecode | t | ul)+
+       ((artset | artwork | blockquote | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
            | cref
@@ -516,7 +517,7 @@
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { xsd:ID }?,
-       ((artwork | dl | figure | ol | sourcecode | t | ul)+
+       ((artset | artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
            | cref
@@ -715,7 +716,7 @@
        name?,
        iref*,
        preamble?,
-       (artwork | sourcecode)+,
+       (artset | artwork | sourcecode)+,
        postamble?
      }
 
@@ -753,6 +754,16 @@
         | u
         | xref)*
      }
+
+   artset =
+     element artset {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute anchor { xsd:ID }?,
+       attribute pn { xsd:ID }?,
+       artwork*
+     }
+
 
    artwork =
      element artwork {

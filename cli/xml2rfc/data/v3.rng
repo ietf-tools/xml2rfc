@@ -717,6 +717,7 @@
       </optional>
       <zeroOrMore>
         <choice>
+          <ref name="artset"/>
           <ref name="artwork"/>
           <ref name="aside"/>
           <ref name="author"/>
@@ -847,6 +848,7 @@
       </optional>
       <zeroOrMore>
         <choice>
+          <ref name="artset"/>
           <ref name="artwork"/>
           <ref name="dl"/>
           <ref name="figure"/>
@@ -886,6 +888,7 @@
       <choice>
         <oneOrMore>
           <choice>
+            <ref name="artset"/>
             <ref name="artwork"/>
             <ref name="dl"/>
             <ref name="figure"/>
@@ -1053,6 +1056,7 @@
       <choice>
         <oneOrMore>
           <choice>
+            <ref name="artset"/>
             <ref name="artwork"/>
             <ref name="blockquote"/>
             <ref name="dl"/>
@@ -1183,6 +1187,7 @@
       <choice>
         <oneOrMore>
           <choice>
+            <ref name="artset"/>
             <ref name="artwork"/>
             <ref name="dl"/>
             <ref name="figure"/>
@@ -1602,6 +1607,7 @@
       </optional>
       <oneOrMore>
         <choice>
+          <ref name="artset"/>
           <ref name="artwork"/>
           <ref name="sourcecode"/>
         </choice>
@@ -1680,6 +1686,29 @@
           <ref name="u"/>
           <ref name="xref"/>
         </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="artset">
+    <element name="artset">
+      <optional>
+        <attribute name="xml:base"/>
+      </optional>
+      <optional>
+        <attribute name="xml:lang"/>
+      </optional>
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <ref name="artwork"/>
       </zeroOrMore>
     </element>
   </define>
