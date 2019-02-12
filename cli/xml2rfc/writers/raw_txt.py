@@ -1438,6 +1438,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 line = line.replace(u'\u00A0', u' ')
                 line = line.replace(u'\u2011', u'-')
                 line = line.replace(u'\u200B', u'')
+                line = line.replace(u'\u2028', u' ')
             output.append(line);
         return output
 
