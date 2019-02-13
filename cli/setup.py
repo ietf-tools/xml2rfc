@@ -20,7 +20,7 @@ try:
 except OSError:
     pass
 
-description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
+description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the IETF xml2rfc v2 and v3 vocabularies."
 
 here = os.path.abspath(os.path.dirname(__file__))
 

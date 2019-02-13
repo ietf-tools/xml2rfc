@@ -8,17 +8,22 @@ tools to facilitate the formatting of drafts and RFCs according to the
 existing rules, and this tool, **xml2rfc**, is one of them.  It takes as input
 an xml file which contains the text and meta-information about author names
 etc., and transforms it into suitably formatted output.  The input xml file
-should follow the DTD given in RFC2629_ (or it's `inofficial successor`_).
+should follow the grammars in RFC7749_ (for v2 documents) or RFC7991_ (for 
+v3 documents). Note that the grammar for v3 is still being refined, and 
+changes will eventually be captured in the `bis draft for 7991`_. 
+Changes not yet captured can be seen in the xml2rfc source `v3.rng`_.
 
-The current incarnation of **xml2rfc** provides output in the following
-formats: Paginated and unpaginated ascii text, html, nroff, and expanded xml.
-Only the paginated text format is currently (January 2013) accepable as draft
-submissions to the IETF.
+**xml2rfc** provides a variety of output formats. See the command line
+help for a full list of formats. It also provides conversion from v2 to
+v3, and can run the preptool_ on its input.
 
 .. _IETF: https://www.ietf.org/
 .. _RFCs: https://www.rfc-editor.org/
-.. _RFC2629: https://tools.ietf.org/html/rfc2629
-.. _inofficial successor: https://tools.ietf.org/html/draft-mrose-writing-rfcs
+.. _RFC7749: https://tools.ietf.org/html/rfc7749
+.. _RFC7991: https://tools.ietf.org/html/rfc7991
+.. _bis draft for 7991: https://tools.ietf.org/html/draft-iab-rfc7991bis
+.. _v3.rng: https://trac.tools.ietf.org/tools/xml2rfc/trac/browser/trunk/cli/xml2rfc/data/v3.rng
+.. _preptool: https://tools.ietf.org/html/rfc7998
 
 Installation
 ============
