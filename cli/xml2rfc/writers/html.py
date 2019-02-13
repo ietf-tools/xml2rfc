@@ -2473,26 +2473,31 @@ class HtmlWriter(BaseV3Writer):
         section = x.get('section')
         relative= x.get('relative')
         #sformat  = x.get('sectionFormat')
-        content = x.get('derivedContent', '')
+        reftext = x.get('derivedContent', '')
         in_name = len(list(x.iterancestors('name'))) > 0
-        if content is None:
+        if reftext is None:
             self.die(x, "Found an <%s> without derivedContent: %s" % (x.tag, lxml.etree.tostring(x),))
         if not (section or relative):
             # plain xref
             if in_name:
-                hh = build.em(content, classes="xref")
+                hh = build.em(reftext, classes="xref")
             else:
-                a = build.a(content, href='#%s'%target, classes='xref')
-                a.tail = ''
-                if target in self.refname_mapping:
-                    if (x.text and x.text.strip()):
-                        a = build.a(target, href='#%s'%target, classes='xref')
-                        hh = build.span(content, ' [', a, ']', x.tail or '')
+                if reftext:
+                    a = build.a(reftext, href='#%s'%target, classes='xref')
+                    if target in self.refname_mapping:
+                        if x.text and x.text.strip() and x.text.strip() != reftext:
+                            hh = build.span(x.text, ' [', a, ']')
+                        else:
+                            hh = build.span('[', a, ']')
                     else:
-                        hh = build.span('[', a, ']', x.tail or '')
+                        if x.text and x.text.strip() and x.text.strip() != reftext:
+                            hh = build.span(x.text, ' (', a, ')')
+                        else:
+                            hh = a
                 else:
-                    a.tail = x.tail
+                    a = build.a(x.text or '', href='#%s'%target, classes='xref')
                     hh = a
+            hh.tail = x.tail
             h.append(hh)
             return hh
         else:
@@ -2522,7 +2527,7 @@ class HtmlWriter(BaseV3Writer):
                 span = add.span(h, None,
                     build.a('Section %s'%section, href=link, classes='relref'),
                     ' of [',
-                    build.a(content, href='#%s'%target, classes='xref'),
+                    build.a(reftext, href='#%s'%target, classes='xref'),
                     ']',
                 )
                 return span
@@ -2548,7 +2553,7 @@ class HtmlWriter(BaseV3Writer):
             elif format == 'comma':
                 span = add.span(h, None,
                     '[',
-                    build.a(content, href='#%s'%target, classes='xref'),
+                    build.a(reftext, href='#%s'%target, classes='xref'),
                     '], ',
                     build.a('Section %s'%section, href=link, classes='relref'),
                 )
@@ -2582,7 +2587,7 @@ class HtmlWriter(BaseV3Writer):
             elif format == 'parens':
                 span = add.span(h, None,
                     '[',
-                    build.a(content, href='#%s'%target, classes='xref'),
+                    build.a(reftext, href='#%s'%target, classes='xref'),
                     '] (',
                     build.a('Section %s'%section, href=link, classes='relref'),
                     ')',

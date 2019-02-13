@@ -1404,7 +1404,7 @@ class PrepToolWriter(BaseV3Writer):
     #       of the "target" attribute with no other adornment.  Issue a
     #       warning if the "derivedContent" attribute already exists and has a
     #       different value from what was being filled in.
-    def build_derived_content(self, e, p):
+    def build_derived_content(self, e):
         def split_pn(t, pn):
             if pn is None:
                 self.die(e, "Expected to find a pn= attribute on <%s anchor='%s'> when processing <xref>, but found none" % (t.tag, t.get('anchor')), trace=True)
@@ -1422,71 +1422,72 @@ class PrepToolWriter(BaseV3Writer):
                 if t is None:
                     self.die(e, "Found no element to match the <xref> target attribute '%s'" % (target, ))
         #
-        if e.text and e.text.strip():
-            content = e.text.strip()
-        else:
-            pn = t.get('pn')
-            #
-            format = e.get('format', 'default')
-            if   format == 'counter':
-                if not t.tag in ['section', 'table', 'figure', 'li', 'references', ]:
-                    self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
+        p = t
+        pn = None
+        while p != None and pn == None:
+            pn = p.get('pn')
+            p = p.getparent()
+        #
+        format = e.get('format', 'default')
+        if   format == 'counter':
+            if not t.tag in ['section', 'table', 'figure', 'li', 'references', 't', 'dt', ]:
+                self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
+            type, num = split_pn(t, pn)
+            if num.startswith('appendix'):
+                num = num.split('.')[1].title()
+            elif re.search('^[a-z]', num):
+                num = num.title()
+            if t.tag == 'li':
+                parent = t.getparent()
+                if not parent.tag == 'ol':
+                    self.die(e, "Using <xref> format='counter' with a <%s><%s> target is not supported" %(parent.tag, t.tag, ))
+                content = t.get('derivedCounter')
+            else:
+                content = num
+        elif format == 'default':
+            if   t.tag in [ 'reference', 'referencegroup' ]:
+                content = '%s' % self.refname_mapping[t.get('anchor')]
+            elif t.tag in [ 't', 'ul', 'ol', ]:
+                type, num, para = pn.split('-', 2)
+                content = "%s %s, Paragraph %s" % (type.capitalize(), num.title(), para)
+            elif t.tag == 'u':
+                try:
+                    content = expand_unicode_element(t, bare=True)
+                except (RuntimeError, ValueError) as exc:
+                    self.err(t, '%s' % exc)
+            elif t.tag == 'author':
+                content = full_author_name_expansion(t)
+            else:
                 type, num = split_pn(t, pn)
                 if num.startswith('appendix'):
-                    num = num.split('.')[1].title()
-                elif re.search('^[a-z]', num):
-                    num = num.title()
-                if t.tag == 'li':
-                    parent = t.getparent()
-                    if not parent.tag == 'ol':
-                        self.die(e, "Using <xref> format='counter' with a <%s><%s> target is not supported" %(parent.tag, t.tag, ))
-                    content = t.get('derivedCounter')
+                    type, num = num.replace('.', ' ', 1).title().split(None, 1)
+                    content = "%s %s" % (type, num)
                 else:
-                    content = num
-            elif format == 'default':
-                if   t.tag in [ 'reference', 'referencegroup' ]:
-                    content = '%s' % self.refname_mapping[t.get('anchor')]
-                elif t.tag in [ 't', 'ul', 'ol', ]:
-                    type, num, para = pn.split('-', 2)
-                    content = "%s %s, Paragraph %s" % (type.capitalize(), num, para)
-                elif t.tag == 'u':
-                    try:
-                        content = expand_unicode_element(t, bare=True)
-                    except (RuntimeError, ValueError) as exc:
-                        self.err(t, '%s' % exc)
-                elif t.tag == 'author':
-                    content = full_author_name_expansion(t)
-                else:
-                    type, num = split_pn(t, pn)
-                    if num.startswith('appendix'):
-                        type, num = num.replace('.', ' ', 1).title().split(None, 1)
-                        content = "%s %s" % (type, num)
-                    else:
-                        content = "%s %s" % (type.capitalize(), num)
-            elif format == 'title':
-                if t.tag in ['u', 'author', ]:
-                    self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
-                elif t.tag == 'reference':
-                    title = t.find('./front/title')
-                    if title is None:
-                        self.err(t, "Expected a <title> element when processing <xref> to <%s>, but found none" % (t.tag, ))
-                    content = title.text
-                elif t.find('./name') != None:
-                    name = t.find('./name')
-                    content = ' '.join(list(name.itertext()))
-                else:
-                    content = target
-            elif format == 'none':
-                content = ''
+                    content = "%s %s" % (type.capitalize(), num)
+        elif format == 'title':
+            if t.tag in ['u', 'author', ]:
+                self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
+            elif t.tag == 'reference':
+                title = t.find('./front/title')
+                if title is None:
+                    self.err(t, "Expected a <title> element when processing <xref> to <%s>, but found none" % (t.tag, ))
+                content = title.text
+            elif t.find('./name') != None:
+                name = t.find('./name')
+                content = ' '.join(list(name.itertext()))
             else:
-                self.err(e, "Expected format to be one of 'default', 'title', 'counter' or 'none', but found '%s'" % (format, ) )
+                content = target
+        elif format == 'none':
+            content = ''
+        else:
+            self.err(e, "Expected format to be one of 'default', 'title', 'counter' or 'none', but found '%s'" % (format, ) )
         return t, content
 
     def element_xref(self, e, p):
         if e.get('relative') or e.get('section'):
             self.element_relref(e, p)
         else:
-            t, content = self.build_derived_content(e, p)
+            t, content = self.build_derived_content(e)
             attr = e.get('derivedContent')
             if attr and attr != content:
                 self.err(e, "When processing <xref>, found derivedContent='%s' when trying to set it to '%s'" % (attr, content))
@@ -1499,7 +1500,7 @@ class PrepToolWriter(BaseV3Writer):
     # 
     #    For each <relref> element, fill in the "derivedLink" attribute.
     def element_relref(self, e, p, t=None):
-        t, content = self.build_derived_content(e, p)
+        t, content = self.build_derived_content(e)
         #
         label = 'Section'
         section = e.get('section')

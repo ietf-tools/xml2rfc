@@ -2799,7 +2799,7 @@ class TextWriter(BaseV3Writer):
             't':        joiner('', '\n\n', '', 3, 0),
             'name':     joiner('', '  ',   '', 0, 0),
             'section':  joiner('', '\n\n', '', 0, 0),
-            'artset':   joiner('', '',     '', 0, 0),
+            'artset':   joiner('', '\n\n', '', 0, 0),
             'artwork':  joiner('', '\n\n', '', 3, 0),
         })
         text = ""
@@ -4012,49 +4012,23 @@ class TextWriter(BaseV3Writer):
         target = e.get('target')
         #section = e.get('section')
         #relative= e.get('relative')
-        content   = e.get('derivedContent')
-        text   = e.text or ''
-        format = e.get('format','default')
-        if content is None:
+        reftext   = e.get('derivedContent')
+        if reftext is None:
             self.die(e, "Found an <xref> without derivedContent: %s" % (etree.tostring(e),))
         #
-        if   format == 'counter':
-            text = content
-        elif format == 'default':
+        if reftext:
             if target in self.refname_mapping:
-                ref = "[%s]" % self.refname_mapping[target]
-                if text != ref:
-                    if text:
-                        text += ' '
-                    text += ref
-            else:
-                t = self.root.find('.//*[@pn="%s"]'%(target, ))
-                if t is None:
-                    t = self.root.find('.//*[@anchor="%s"]'%(target, ))
-                    if t is None:
-                        t = self.root.find('.//*[@slugifiedName="%s"]'%(target, ))
-                if t is None:
-                    self.warn(e, "Found an <xref referring to an element without pn, anchor, or slugifiedName: %s" % (etree.tostring(e),))
+                if e.text and e.text.strip() and e.text.strip() != reftext:
+                    text = "%s [%s]" % (e.text, reftext)
                 else:
-                    if t.tag == 'name':
-                        t = t.getparent()
-                    pn = t.get('pn')
-                    if pn != None:
-                        type, num = pn.split('-')[:2]
-                        if num.startswith('appendix'):
-                            type, num = num.replace('.', ' ', 1).title().split(None, 1)
-                            ref = "%s %s" % (type, num)
-                        else:
-                            ref = "%s %s" % (type.capitalize(), num)
-                        if text != ref:
-                            if text:
-                                text += ' (%s)'%ref
-                            else:
-                                text = ref
-        elif format == 'title':
-            text = content
+                    text = "[%s]" % reftext
+            else:
+                if e.text and e.text.strip() and e.text.strip() != reftext:
+                    text = "%s (%s)" % (e.text, reftext)
+                else:
+                    text = "%s" % reftext
         else:
-            self.die(e, "Unexpected <xref> format: '%s'.  Expected 'counter', 'title', or 'default'" % (format, ))
+            text = e.text or ''
 
         # Prevent line breaking on dash
         text = text.replace('-', '\u2011')
