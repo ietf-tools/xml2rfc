@@ -50,6 +50,6 @@ try:
     from weasyprint.text import pango
     HAVE_PANGO = True
     PANGO_VERSION = pango.pango_version
-except (ImportError, OSError):
+except (ImportError, OSError, AttributeError):
     HAVE_PANGO = False
     PANGO_VERSION = None
