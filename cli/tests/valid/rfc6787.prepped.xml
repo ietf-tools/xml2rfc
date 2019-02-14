@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rfc version="3" category="std" consensus="true" docName="draft-ietf-speechsc-mrcpv2" indexInclude="true" ipr="pre5378Trust200902" number="6787" prepTime="2019-01-12T21:19:38" scripts="Common,Latin" sortRefs="false" submissionType="IETF" symRefs="true" tocDepth="3" tocInclude="true" xml:lang="en">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" version="3" category="std" consensus="true" docName="draft-ietf-speechsc-mrcpv2" indexInclude="true" ipr="pre5378Trust200902" number="6787" prepTime="2019-02-13T00:19:18" scripts="Common,Latin" sortRefs="false" submissionType="IETF" symRefs="true" tocDepth="3" tocInclude="true" xml:lang="en">
   <link href="https://dx.doi.org/10.17487/rfc6787" rel="alternate"/>
   <link href="urn:issn:2070-1721" rel="alternate"/>
   <link href="https://datatracker.ietf.org/doc/draft-ietf-speechsc-mrcpv2" rel="prev"/>
@@ -1013,11 +1013,11 @@ speaker identification</keyword>
       speech synthesis engines, speaker verification, and speaker
       identification engines. MRCPv2 enables the implementation of
       distributed Interactive Voice Response platforms
-      using <xref target="W3C.REC-voicexml20-20040316" format="default" sectionFormat="of" derivedContent="VoiceXML">VoiceXML</xref>
+      using <xref target="W3C.REC-voicexml20-20040316" format="default" sectionFormat="of" derivedContent="W3C.REC-voicexml20-20040316">VoiceXML</xref>
       browsers or other client applications while maintaining separate
       back-end speech processing capabilities on specialized speech
       processing servers. MRCPv2 is based on the
-      earlier <xref target="RFC4463" format="default" sectionFormat="of" derivedContent="Media Resource Control Protocol&#10;      (MRCP)">Media Resource Control Protocol
+      earlier <xref target="RFC4463" format="default" sectionFormat="of" derivedContent="RFC4463">Media Resource Control Protocol
       (MRCP) </xref> developed jointly by Cisco Systems, Inc., Nuance
       Communications, and Speechworks, Inc.  Although some of the
       method names are similar, the way in which these methods are
@@ -1031,15 +1031,15 @@ speaker identification</keyword>
       include that the solution be capable of reaching a media processing
       server, setting up communication channels to the media resources, and
       sending and receiving control messages and media streams to/from the
-      server. The <xref target="RFC3261" format="default" sectionFormat="of" derivedContent="Session Initiation Protocol&#10;      (SIP)">Session Initiation Protocol
+      server. The <xref target="RFC3261" format="default" sectionFormat="of" derivedContent="RFC3261">Session Initiation Protocol
       (SIP)</xref> meets these requirements.</t>
-      <t pn="section-1-3">The proprietary version of MRCP ran over the <xref target="RFC2326" format="default" sectionFormat="of" derivedContent="Real Time Streaming Protocol (RTSP)">Real Time Streaming Protocol (RTSP)</xref>. At the time
+      <t pn="section-1-3">The proprietary version of MRCP ran over the <xref target="RFC2326" format="default" sectionFormat="of" derivedContent="RFC2326">Real Time Streaming Protocol (RTSP)</xref>. At the time
       work on MRCPv2 was begun, the consensus was that this use of RTSP would
       break the RTSP protocol or cause backward-compatibility problems,
       something forbidden by Section 3.2 of <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="RFC4313"/>. 
       This is the reason why MRCPv2 does not run over RTSP.</t>
       <t pn="section-1-4">MRCPv2 leverages these capabilities by building upon SIP and the
-      <xref target="RFC4566" format="default" sectionFormat="of" derivedContent="Session Description Protocol (SDP)">Session Description Protocol (SDP)</xref>. MRCPv2
+      <xref target="RFC4566" format="default" sectionFormat="of" derivedContent="RFC4566">Session Description Protocol (SDP)</xref>. MRCPv2
       uses SIP to set up and tear down media and control sessions with the
       server. In addition, the client can use a SIP re-INVITE method (an
       INVITE dialog sent within an existing SIP session) to change the
@@ -1062,9 +1062,9 @@ speaker identification</keyword>
       <t pn="section-1-6">MRCPv2 defines the messages to control the different media processing
       resources and the state machines required to guide their operation. It
       also describes how these messages are carried over a transport-layer
-      protocol such as the <xref target="RFC0793" format="default" sectionFormat="of" derivedContent="Transmission Control&#10;      Protocol (TCP)">Transmission Control
-      Protocol (TCP)</xref> or the <xref target="RFC5246" format="default" sectionFormat="of" derivedContent="Transport Layer&#10;      Security (TLS) Protocol">Transport Layer
-      Security (TLS) Protocol</xref>. (Note: the <xref target="RFC4960" format="default" sectionFormat="of" derivedContent="Stream&#10;      Control Transmission Protocol (SCTP)">Stream
+      protocol such as the <xref target="RFC0793" format="default" sectionFormat="of" derivedContent="RFC0793">Transmission Control
+      Protocol (TCP)</xref> or the <xref target="RFC5246" format="default" sectionFormat="of" derivedContent="RFC5246">Transport Layer
+      Security (TLS) Protocol</xref>. (Note: the <xref target="RFC4960" format="default" sectionFormat="of" derivedContent="RFC4960">Stream
       Control Transmission Protocol (SCTP)</xref> is a viable transport for
       MRCPv2 as well, but the mapping onto SCTP is not described in this
       specification.)</t>
@@ -1073,14 +1073,14 @@ speaker identification</keyword>
       <name slugifiedName="name-document-conventions">Document Conventions</name>
       <t pn="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in <xref target="RFC2119" format="default" sectionFormat="of" derivedContent="RFC 2119">
+      document are to be interpreted as described in <xref target="RFC2119" format="default" sectionFormat="of" derivedContent="RFC2119">
       RFC 2119</xref>.</t>
       <t pn="section-2-2">Since many of the definitions and syntax are identical to those for
-      the <xref target="RFC2616" format="default" sectionFormat="of" derivedContent="Hypertext Transfer Protocol -- HTTP/1.1">Hypertext Transfer Protocol -- HTTP/1.1</xref>, this specification refers to the section where they
+      the <xref target="RFC2616" format="default" sectionFormat="of" derivedContent="RFC2616">Hypertext Transfer Protocol -- HTTP/1.1</xref>, this specification refers to the section where they
       are defined rather than copying it. For brevity, [HX.Y] is to be taken
       to refer to Section X.Y of RFC 2616.</t>
       <t pn="section-2-3">All the mechanisms specified in this document are described in both
-      prose and an augmented Backus-Naur form (<xref target="RFC5234" format="default" sectionFormat="of" derivedContent="ABNF">ABNF</xref>).</t>
+      prose and an augmented Backus-Naur form (<xref target="RFC5234" format="default" sectionFormat="of" derivedContent="RFC5234">ABNF</xref>).</t>
       <t pn="section-2-4">The complete message format in ABNF form is provided in <xref target="S.abnf" format="default" sectionFormat="of" derivedContent="Section 15"/> and is the normative format definition. Note
       that productions may be duplicated within the main body of the document
       for reading convenience. If a production in the body of the text
@@ -1105,7 +1105,7 @@ Aggregate of one or more "Media Resource" entities on
           <dd pn="section-2.1-1.8">Dual-Tone
             Multi-Frequency; a method of transmitting key presses in-band,
             either as actual tones (<xref target="Q.23" format="default" sectionFormat="of" derivedContent="Q.23">Q.23</xref>) or as
-            named tone events (<xref target="RFC4733" format="default" sectionFormat="of" derivedContent="RFC 4733">RFC 4733</xref>).</dd>
+            named tone events (<xref target="RFC4733" format="default" sectionFormat="of" derivedContent="RFC4733">RFC 4733</xref>).</dd>
           <dt pn="section-2.1-1.9">Endpointing</dt>
           <dd pn="section-2.1-1.10">The process of
             automatically detecting the beginning and end of speech in an
@@ -1132,10 +1132,10 @@ Aggregate of one or more "Media Resource" entities on
       <section numbered="true" toc="include" removeInRFC="false" pn="section-2.3">
         <name slugifiedName="name-uri-schemes">URI Schemes</name>
         <t pn="section-2.3-1">This document defines many protocol headers that contain URIs
-        (<xref target="RFC3986" format="default" sectionFormat="of" derivedContent="Uniform Resource Identifiers">Uniform Resource Identifiers</xref>) or
+        (<xref target="RFC3986" format="default" sectionFormat="of" derivedContent="RFC3986">Uniform Resource Identifiers</xref>) or
         lists of URIs for referencing media. The entire document, including
         the Security Considerations section (<xref target="sec.securityConsiderations" format="default" sectionFormat="of" derivedContent="Section 12"/>), assumes that HTTP or
-        <xref target="RFC2818" format="default" sectionFormat="of" derivedContent="HTTP over TLS (HTTPS)">HTTP over TLS (HTTPS)</xref> will be used as
+        <xref target="RFC2818" format="default" sectionFormat="of" derivedContent="RFC2818">HTTP over TLS (HTTPS)</xref> will be used as
         the URI addressing scheme unless otherwise stated. However,
         implementations MAY support other schemes (such as 'file'), provided
         they have addressed any security considerations described in this
@@ -1155,7 +1155,7 @@ Aggregate of one or more "Media Resource" entities on
       to establish an MRCPv2 control channel with the server to use its media
       processing resources. MRCPv2 servers are addressed using SIP URIs.</t>
       <t pn="section-3-2">SIP uses SDP with the offer/answer
-      model described in <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC 3264">RFC 3264</xref> to set up the
+      model described in <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC3264">RFC 3264</xref> to set up the
       MRCPv2 control channels and describe their characteristics. A separate
       MRCPv2 session is needed to control each of the media processing
       resources associated with the SIP dialog between the client and server.
@@ -1219,14 +1219,14 @@ Aggregate of one or more "Media Resource" entities on
             synthesizer resource that has very limited capabilities and can
             generate its media stream exclusively from concatenated audio
             clips. The speech data is described using a limited subset of the
-            <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="Speech Synthesis&#10;            Markup Language (SSML)">Speech Synthesis
+            <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="W3C.REC-speech-synthesis-20040907">Speech Synthesis
             Markup Language (SSML)</xref> elements. A basic synthesizer MUST
             support the SSML tags &lt;speak&gt;, &lt;audio&gt;, &lt;say-as&gt;,
             and &lt;mark&gt;.</dd>
           <dt pn="section-3.1-2.3">Speech Synthesizer</dt>
           <dd pn="section-3.1-2.4">A
 full-capability speech synthesis resource that can render speech
-            from text. Such a synthesizer MUST have full <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="SSML">SSML</xref>
+            from text. Such a synthesizer MUST have full <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="W3C.REC-speech-synthesis-20040907">SSML</xref>
             support.</dd>
           <dt pn="section-3.1-2.5">Recorder</dt>
           <dd pn="section-3.1-2.6">A resource capable
@@ -1238,7 +1238,7 @@ full-capability speech synthesis resource that can render speech
             the actual timestamps of the recorded media.</dd>
           <dt pn="section-3.1-2.7">DTMF Recognizer</dt>
           <dd pn="section-3.1-2.8">A
-            recognizer resource capable of extracting and interpreting <xref target="Q.23" format="default" sectionFormat="of" derivedContent="Dual-Tone Multi-Frequency (DTMF)"> Dual-Tone Multi-Frequency (DTMF)</xref> digits in a
+            recognizer resource capable of extracting and interpreting <xref target="Q.23" format="default" sectionFormat="of" derivedContent="Q.23"> Dual-Tone Multi-Frequency (DTMF)</xref> digits in a
             media stream and matching them against a supplied digit grammar. It
             could also do a semantic interpretation based on semantic tags in
             the grammar.</dd>
@@ -1264,7 +1264,7 @@ full-capability speech synthesis resource that can render speech
       <section numbered="true" toc="include" removeInRFC="false" pn="section-3.2">
         <name slugifiedName="name-server-and-resource-address">Server and Resource Addressing</name>
         <t pn="section-3.2-1">The MRCPv2 server is a generic SIP server, and is thus addressed by
-        a SIP URI (<xref target="RFC3261" format="default" sectionFormat="of" derivedContent="RFC 3261">RFC 3261</xref>).</t>
+        a SIP URI (<xref target="RFC3261" format="default" sectionFormat="of" derivedContent="RFC3261">RFC 3261</xref>).</t>
         <t pn="section-3.2-2">For example:</t>
         <artwork name="" type="" align="left" alt="" pn="section-3.2-3"><![CDATA[
      sip:mrcpv2@example.net   or
@@ -1277,7 +1277,7 @@ full-capability speech synthesis resource that can render speech
       <t pn="section-4-1">MRCPv2 requires a connection-oriented transport-layer protocol such
       as TCP to guarantee reliable sequencing and delivery of MRCPv2
       control messages between the client and the server. In order to meet the
-      requirements for security enumerated in <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="SPEECHSC&#10;      requirements">SPEECHSC
+      requirements for security enumerated in <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="RFC4313">SPEECHSC
       requirements</xref>, clients and servers MUST implement TLS as well. One
       or more connections between the client and the server can be shared
       among different MRCPv2 channels to the server. The individual messages
@@ -1386,7 +1386,7 @@ full-capability speech synthesis resource that can render speech
         value of "1".</t>
         <t pn="section-4.2-5">When the client wants to add a media processing resource to the
         session, it issues a new SDP offer, according to the procedures of
-        <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC 3264">RFC 3264</xref>, in a SIP re-INVITE request.
+        <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC3264">RFC 3264</xref>, in a SIP re-INVITE request.
         The SDP offer/answer exchange carried by this SIP transaction contains
         one or more additional control "m=" lines for the new resources to be
         allocated to the session. The server, on seeing the new "m=" line,
@@ -1400,13 +1400,13 @@ full-capability speech synthesis resource that can render speech
         if the resources of that type (beyond the first one) are not available.</t>
         <t pn="section-4.2-6">MRCPv2 clients and servers using TCP as a transport
         protocol MUST use the procedures specified
-        in <xref target="RFC4145" format="default" sectionFormat="of" derivedContent="RFC 4145">RFC 4145</xref> for setting up the
+        in <xref target="RFC4145" format="default" sectionFormat="of" derivedContent="RFC4145">RFC 4145</xref> for setting up the
         TCP connection, with the considerations described
         hereby. Similarly, MRCPv2 clients and servers using TCP/TLS as
         a transport protocol MUST use the procedures specified
-        in <xref target="RFC4572" format="default" sectionFormat="of" derivedContent="RFC 4572">RFC 4572</xref> for setting up the
+        in <xref target="RFC4572" format="default" sectionFormat="of" derivedContent="RFC4572">RFC 4572</xref> for setting up the
         TLS connection, with the considerations described hereby. The
-        a=setup attribute, as described in <xref target="RFC4145" format="default" sectionFormat="of" derivedContent="RFC&#10;        4145">RFC
+        a=setup attribute, as described in <xref target="RFC4145" format="default" sectionFormat="of" derivedContent="RFC4145">RFC
         4145</xref>, MUST be "active" for the offer from the client
         and MUST be "passive" for the answer from the MRCPv2
         server. The a=connection attribute MUST have a value of "new"
@@ -1422,7 +1422,7 @@ full-capability speech synthesis resource that can render speech
         existing connection or "new" if not. In the latter case, the
         client MUST initiate a new transport connection.</t>
         <t pn="section-4.2-7">When the client wants to deallocate the resource from this
-        session, it issues a new SDP offer, according to <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC 3264">RFC 3264</xref>, where the control "m=" line port MUST
+        session, it issues a new SDP offer, according to <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC3264">RFC 3264</xref>, where the control "m=" line port MUST
         be set to 0. This SDP offer is sent in a SIP re-INVITE request. This
         deallocates the associated MRCPv2 identifier and resource. The server
         MUST NOT close the TCP or TLS connection if it is currently
@@ -1443,7 +1443,7 @@ full-capability speech synthesis resource that can render speech
         exceptions given above, when using TCP, the "m=" lines MUST conform to
         <xref target="RFC4145" format="default" sectionFormat="of" derivedContent="RFC4145">RFC4145</xref>, which describes the usage of
         SDP for connection-oriented transport. When using TLS, the SDP "m=" line
-        for the control stream MUST conform to <xref target="RFC4572" format="default" sectionFormat="of" derivedContent="Connection-Oriented Media (COMEDIA)&#10;        over TLS">Connection-Oriented Media (COMEDIA)
+        for the control stream MUST conform to <xref target="RFC4572" format="default" sectionFormat="of" derivedContent="RFC4572">Connection-Oriented Media (COMEDIA)
         over TLS</xref>, which specifies the usage of SDP for establishing a
         secure connection-oriented transport over TLS.</t>
       </section>
@@ -1457,7 +1457,7 @@ full-capability speech synthesis resource that can render speech
         returned in the 200 OK. Note that "cmid" is defined in <xref target="sec.mediaStreams" format="default" sectionFormat="of" derivedContent="Section 4.4"/>.</t>
         <t pn="section-4.3-2">This example exchange adds a resource control channel for
           a synthesizer. Since a synthesizer also generates an audio stream,
-          this interaction also creates a receive-only <xref target="RFC3550" format="default" sectionFormat="of" derivedContent="Real-Time Protocol (RTP)">Real-Time Protocol (RTP)</xref> media session for
+          this interaction also creates a receive-only <xref target="RFC3550" format="default" sectionFormat="of" derivedContent="RFC3550">Real-Time Protocol (RTP)</xref> media session for
           the server to send audio to. The SIP dialog with the media
           source/sink is independent of MRCP and is not shown.</t>
         <figure align="left" suppress-title="false" pn="figure-2">
@@ -1710,7 +1710,7 @@ C->S:  ACK sip:mresources@server.example.com SIP/2.0
         <t pn="section-4.4-2">The association between control channels and their corresponding
         media sessions is established using a new "resource channel media
         identifier" media-level attribute ("cmid"). Valid values of this
-        attribute are the values of the "mid" attribute defined in <xref target="RFC5888" format="default" sectionFormat="of" derivedContent="RFC 5888">RFC 5888</xref>. If there is more than one audio
+        attribute are the values of the "mid" attribute defined in <xref target="RFC5888" format="default" sectionFormat="of" derivedContent="RFC5888">RFC 5888</xref>. If there is more than one audio
         "m=" line, then each audio "m=" line MUST have a "mid" attribute. Each
         control "m=" line MAY have one or more "cmid" attributes that match the
         resource control channel to the "mid" attributes of the audio "m=" lines
@@ -1750,7 +1750,7 @@ identification-tag = token]]></artwork>
         audio (or other media) to be sent on a single associated media
         session, it is the responsibility of the server either to
         multiplex the multiple streams onto the single RTP session or
-        to contain an embedded RTP mixer (see <xref target="RFC3550" format="default" sectionFormat="of" derivedContent="RFC&#10;        3550">RFC
+        to contain an embedded RTP mixer (see <xref target="RFC3550" format="default" sectionFormat="of" derivedContent="RFC3550">RFC
         3550</xref>) to combine the multiple streams into one. In the
         former case, the media stream will contain RTP packets
         generated by different sources, and hence the packets will
@@ -1807,13 +1807,13 @@ identification-tag = token]]></artwork>
     <section anchor="sec.messages" numbered="true" toc="include" removeInRFC="false" pn="section-5">
       <name slugifiedName="name-mrcpv2-specification">MRCPv2 Specification</name>
       <t pn="section-5-1">Except as otherwise indicated, MRCPv2 messages are Unicode
-      encoded in UTF-8 (<xref target="RFC3629" format="default" sectionFormat="of" derivedContent="RFC 3629">RFC 3629</xref>) to
+      encoded in UTF-8 (<xref target="RFC3629" format="default" sectionFormat="of" derivedContent="RFC3629">RFC 3629</xref>) to
       allow many different languages to be
-      represented.  <xref target="sec.defineGrammar" format="default" sectionFormat="of" derivedContent="DEFINE-GRAMMAR">DEFINE-GRAMMAR</xref>,
+      represented.  <xref target="sec.defineGrammar" format="default" sectionFormat="of" derivedContent="Section 9.8">DEFINE-GRAMMAR</xref>,
       for example, is one such exception, since its body can contain
       arbitrary XML in arbitrary (but specified via XML) encodings.
       MRCPv2 also allows message bodies to be represented in other
-      character sets (for example, <xref target="ISO.8859-1.1987" format="default" sectionFormat="of" derivedContent="ISO&#10;      8859-1">ISO
+      character sets (for example, <xref target="ISO.8859-1.1987" format="default" sectionFormat="of" derivedContent="ISO.8859-1.1987">ISO
       8859-1</xref>) because, in some locales, other character sets are
       already in widespread use. The MRCPv2 headers (the
       first line of an MRCP message) and header field names use only
@@ -2300,7 +2300,7 @@ S->C:   MRCP/2.0 ... 543256 200 COMPLETE
         <t pn="section-6.2-1">All MRCPv2 header fields, which include both the generic-headers
         defined in the following subsections and the resource-specific header
         fields defined later, follow the same generic format as that given in
-        Section 3.1 of <xref target="RFC5322" format="default" sectionFormat="of" derivedContent="RFC 5322">RFC 5322</xref>. Each header
+        Section 3.1 of <xref target="RFC5322" format="default" sectionFormat="of" derivedContent="RFC5322">RFC 5322</xref>. Each header
         field consists of a name followed by a colon (":") and the value.
         Header field names are case-insensitive. The value MAY be preceded by
         any amount of LWS (linear white space), though a single SP (space) is
@@ -2477,7 +2477,7 @@ value            =    token / quoted-string
           <name slugifiedName="name-content-id">Content-ID</name>
           <t pn="section-6.2.7-1">This header field contains an ID or name for the content by which
           it can be referenced. This header field operates according to the
-          specification in <xref target="RFC2392" format="default" sectionFormat="of" derivedContent="RFC 2392">RFC 2392</xref> and is
+          specification in <xref target="RFC2392" format="default" sectionFormat="of" derivedContent="RFC2392">RFC 2392</xref> and is
           required for content disambiguation in multipart messages. In
           MRCPv2, whenever the associated content is stored by either the
           client or the server, it MUST be retrievable using this ID. Such
@@ -2581,7 +2581,7 @@ fetch-timeout       =   "Fetch-Timeout" ":" 1*19DIGIT CRLF
         <section numbered="true" toc="include" removeInRFC="false" pn="section-6.2.13">
           <name slugifiedName="name-cache-control">Cache-Control</name>
           <t pn="section-6.2.13-1">If the server implements content caching, it MUST adhere to the
-          cache correctness rules of <xref target="RFC2616" format="default" sectionFormat="of" derivedContent="HTTP 1.1">HTTP 1.1</xref>
+          cache correctness rules of <xref target="RFC2616" format="default" sectionFormat="of" derivedContent="RFC2616">HTTP 1.1</xref>
           when accessing and caching stored content. In particular, the
           "expires" and "cache-control" header fields of the cached URI or
           document MUST be honored and take precedence over the Cache-Control
@@ -2730,11 +2730,11 @@ extension-av      = <any CHAR except CTLs or ";">
 age-av            = "Age=" delta-seconds
 ]]></artwork>
           <t pn="section-6.2.15-4">The Set-Cookie header field is specified
-          in <xref target="RFC6265" format="default" sectionFormat="of" derivedContent="RFC 6265">RFC 6265</xref>. The "Age"
+          in <xref target="RFC6265" format="default" sectionFormat="of" derivedContent="RFC6265">RFC 6265</xref>. The "Age"
           attribute is introduced in this specification to indicate
           the age of the cookie and is OPTIONAL. An MRCPv2 client or
           server MUST calculate the age of the cookie according to the
-          age calculation rules in the <xref target="RFC2616" format="default" sectionFormat="of" derivedContent="HTTP/1.1&#10;          specification">HTTP/1.1
+          age calculation rules in the <xref target="RFC2616" format="default" sectionFormat="of" derivedContent="RFC2616">HTTP/1.1
           specification</xref> and append the "Age" attribute
           accordingly.  This attribute is provided because time may
           have passed since the client received the cookie from an
@@ -2804,7 +2804,7 @@ com.example.companyB.paramxyz=Low
         (NLSML), an XML markup based on an early draft from the W3C, is the
         default standard for returning results back to the client. Hence, all
         servers implementing these resource types MUST support the media type
-        'application/nlsml+xml'. The <xref target="W3C.REC-emma-20090210" format="default" sectionFormat="of" derivedContent="Extensible MultiModal Annotation (EMMA)">Extensible MultiModal Annotation (EMMA)
+        'application/nlsml+xml'. The <xref target="W3C.REC-emma-20090210" format="default" sectionFormat="of" derivedContent="W3C.REC-emma-20090210">Extensible MultiModal Annotation (EMMA)
           </xref> format can be used to return results as well. This can be done
         by negotiating the format at session establishment time with SDP
         (a=resultformat:application/emma+xml) or with SIP (Allow/Accept). With
@@ -2869,7 +2869,7 @@ Content-Length:...
       clients through standard SIP machinery. The client MAY issue a SIP
       OPTIONS transaction to a server, which has the effect of requesting the
       capabilities of the server. The server MUST respond to such a request
-      with an SDP-encoded description of its capabilities according to <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC 3264">RFC 3264</xref>. The MRCPv2 capabilities are described
+      with an SDP-encoded description of its capabilities according to <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC3264">RFC 3264</xref>. The MRCPv2 capabilities are described
       by a single "m=" line containing the media type "application" and transport
       type "TCP/TLS/MRCPv2" or "TCP/MRCPv2". There MUST be one "resource"
       attribute for each media resource that the server supports, and
@@ -3208,7 +3208,7 @@ voice-name          =   "Voice-Name:"
 
 ]]></artwork>
           <t pn="section-8.4.6-3">The "Voice-" parameters are derived from the similarly named
-          attributes of the voice element specified in W3C's <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="Speech Synthesis Markup&#10;          Language Specification (SSML)">Speech Synthesis Markup
+          attributes of the voice element specified in W3C's <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="W3C.REC-speech-synthesis-20040907">Speech Synthesis Markup
           Language Specification (SSML)</xref>. Legal values for these
           parameters are as defined in that specification.</t>
           <t pn="section-8.4.6-4">These header fields MAY be sent in SET-PARAMS or GET-PARAMS requests
@@ -3235,7 +3235,7 @@ prosody-param-value   =    1*VCHAR
 
 ]]></artwork>
           <t pn="section-8.4.7-3">prosody-param-name is any one of the attribute names under the
-          prosody element specified in W3C's <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="Speech Synthesis Markup&#10;          Language Specification">Speech Synthesis Markup
+          prosody element specified in W3C's <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="W3C.REC-speech-synthesis-20040907">Speech Synthesis Markup
           Language Specification</xref>. The prosody-param-value is any one of
           the value choices of the corresponding prosody element attribute
           from that specification.</t>
@@ -3256,10 +3256,10 @@ prosody-param-value   =    1*VCHAR
         <section numbered="true" toc="include" removeInRFC="false" pn="section-8.4.8">
           <name slugifiedName="name-speech-marker">Speech-Marker</name>
           <t pn="section-8.4.8-1">This header field contains timestamp information in a "timestamp"
-          field. This is a <xref target="RFC5905" format="default" sectionFormat="of" derivedContent="Network Time Protocol (NTP)">Network Time Protocol (NTP)
+          field. This is a <xref target="RFC5905" format="default" sectionFormat="of" derivedContent="RFC5905">Network Time Protocol (NTP)
             </xref> timestamp, a 64-bit number in decimal form. It MUST be
-          synced with the <xref target="RFC3550" format="default" sectionFormat="of" derivedContent="Real-Time Protocol (RTP)">Real-Time Protocol (RTP)
-            </xref> timestamp of the media stream through the <xref target="RFC3550" format="default" sectionFormat="of" derivedContent="Real-Time Control Protocol (RTCP)">Real-Time Control Protocol (RTCP)</xref>.</t>
+          synced with the <xref target="RFC3550" format="default" sectionFormat="of" derivedContent="RFC3550">Real-Time Protocol (RTP)
+            </xref> timestamp of the media stream through the <xref target="RFC3550" format="default" sectionFormat="of" derivedContent="RFC3550">Real-Time Control Protocol (RTCP)</xref>.</t>
           <t pn="section-8.4.8-2">Markers are bookmarks that are defined within the markup. Most
           speech markup formats provide mechanisms to embed marker fields
           within speech texts. The synthesizer generates SPEECH-MARKER events
@@ -3293,7 +3293,7 @@ speech-marker       =   "Speech-Marker" ":"
           <name slugifiedName="name-speech-language">Speech-Language</name>
           <t pn="section-8.4.9-1">This header field specifies the default language of the speech
           data if the language is not specified in the markup. The value of
-          this header field MUST follow <xref target="RFC5646" format="default" sectionFormat="of" derivedContent="RFC 5646">RFC 5646</xref>
+          this header field MUST follow <xref target="RFC5646" format="default" sectionFormat="of" derivedContent="RFC5646">RFC 5646</xref>
           for its values. The header field MAY occur in SPEAK, SET-PARAMS, or
           GET-PARAMS requests.</t>
           <artwork name="" type="" align="left" alt="" pn="section-8.4.9-2"><![CDATA[
@@ -3350,7 +3350,7 @@ failed-uri          =   "Failed-URI" ":" absoluteURI CRLF
           a URI and the access fails, the server MUST provide the URI-specific
           or protocol-specific response code for the URI in the Failed-URI
           header field in the method response through this header field. The
-          value encoding is UTF-8 (<xref target="RFC3629" format="default" sectionFormat="of" derivedContent="RFC 3629">RFC 3629</xref>) to
+          value encoding is UTF-8 (<xref target="RFC3629" format="default" sectionFormat="of" derivedContent="RFC3629">RFC 3629</xref>) to
           accommodate any access protocol -- some access protocols might have a response
           string instead of a numeric response code.</t>
           <artwork name="" type="" align="left" alt="" pn="section-8.4.13-2"><![CDATA[failed-uri-cause    =   "Failed-URI-Cause" ":" 1*UTFCHAR CRLF]]></artwork>
@@ -3437,11 +3437,11 @@ lexicon-search-order =   "Lexicon-Search-Order" ":"
           the data. In either case, the data and the format used to markup the
           speech needs to be of a content type supported by the server.</t>
           <t pn="section-8.5.1-2">All MRCPv2 servers containing synthesizer resources MUST support
-          both plain text speech data and W3C's <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="Speech Synthesis Markup&#10;          Language">Speech Synthesis Markup
+          both plain text speech data and W3C's <xref target="W3C.REC-speech-synthesis-20040907" format="default" sectionFormat="of" derivedContent="W3C.REC-speech-synthesis-20040907">Speech Synthesis Markup
           Language</xref> and hence MUST support the media types 'text/plain'
           and 'application/ssml+xml'. Other formats MAY be supported.</t>
           <t pn="section-8.5.1-3">If the speech data is to be fetched by URI reference, the media
-          type 'text/uri-list' (see <xref target="RFC2483" format="default" sectionFormat="of" derivedContent="RFC 2483">RFC 2483</xref>) is
+          type 'text/uri-list' (see <xref target="RFC2483" format="default" sectionFormat="of" derivedContent="RFC2483">RFC 2483</xref>) is
           used to indicate one or more URIs that, when dereferenced, will
           contain the content to be spoken. If a list of speech URIs is
           specified, the resource MUST speak the speech data provided by each
@@ -3551,7 +3551,7 @@ Content-Length:...
           Content-ID. Lexicons that have been associated with a Content-ID can
           be referenced through the 'session' URI scheme (see <xref target="sec.sessionURIScheme" format="default" sectionFormat="of" derivedContent="Section 13.6"/>).</t>
           <t pn="section-8.5.2-3">If lexicon data is specified by external URI reference, the media
-          type 'text/uri-list' (see <xref target="RFC2483" format="default" sectionFormat="of" derivedContent="RFC 2483">RFC 2483</xref> ) is
+          type 'text/uri-list' (see <xref target="RFC2483" format="default" sectionFormat="of" derivedContent="RFC2483">RFC 2483</xref> ) is
           used to list the one or more URIs that may be dereferenced to obtain
           the lexicon data. All MRCPv2 servers MUST support the "http" and
           "https" URI access mechanisms, and MAY support other mechanisms.</t>
@@ -4798,7 +4798,7 @@ failed-uri               =  "Failed-URI" ":" absoluteURI CRLF
           URI and the access fails, the server MUST provide the URI-specific or
           protocol-specific response code for the URI in the Failed-URI header
           field through this header field in the method response. The value
-          encoding is UTF-8 (<xref target="RFC3629" format="default" sectionFormat="of" derivedContent="RFC 3629">RFC 3629</xref>) to
+          encoding is UTF-8 (<xref target="RFC3629" format="default" sectionFormat="of" derivedContent="RFC3629">RFC 3629</xref>) to
           accommodate any access protocol, some of which might have a response
           string instead of a numeric response code.</t>
           <artwork name="" type="" align="left" alt="" pn="section-9.4.21-2"><![CDATA[
@@ -4848,7 +4848,7 @@ new-audio-channel        =  "New-Audio-Channel" ":" BOOLEAN
           <name slugifiedName="name-speech-language-2">Speech-Language</name>
           <t pn="section-9.4.24-1">This header field specifies the language of recognition grammar
           data within a session or request, if it is not specified within the
-          data. The value of this header field MUST follow <xref target="RFC5646" format="default" sectionFormat="of" derivedContent="RFC 5646">RFC 5646</xref> for its values. This MAY occur in
+          data. The value of this header field MUST follow <xref target="RFC5646" format="default" sectionFormat="of" derivedContent="RFC5646">RFC 5646</xref> for its values. This MAY occur in
           DEFINE-GRAMMAR, RECOGNIZE, SET-PARAMS, or GET-PARAMS requests.</t>
           <artwork name="" type="" align="left" alt="" pn="section-9.4.24-2"><![CDATA[
 speech-language          =  "Speech-Language" ":" 1*VCHAR CRLF
@@ -5186,19 +5186,19 @@ abort-phrase-enrollment  =  "Abort-Phrase-Enrollment" ":"
           as typed media entities in the message body of the RECOGNIZE or
           DEFINE-GRAMMAR request. All MRCPv2 servers MUST accept grammars in
           the XML form (media type 'application/srgs+xml') of the W3C's
-          XML-based <xref target="W3C.REC-speech-grammar-20040316" format="default" sectionFormat="of" derivedContent="Speech&#10;          Grammar Markup Format (SRGS)">Speech
+          XML-based <xref target="W3C.REC-speech-grammar-20040316" format="default" sectionFormat="of" derivedContent="W3C.REC-speech-grammar-20040316">Speech
           Grammar Markup Format (SRGS)</xref> and MAY accept grammars in other
           formats. Examples include but are not limited to:
 
           </t>
           <ul spacing="normal" bare="false" empty="false" pn="section-9.5.1-2">
             <li pn="section-9.5.1-2.1">the ABNF form (media type 'application/srgs') of SRGS</li>
-            <li pn="section-9.5.1-2.2">Sun's <xref target="refs.javaSpeechGrammarFormat" format="default" sectionFormat="of" derivedContent="Java Speech&#10;              Grammar Format (JSGF)">Java Speech
+            <li pn="section-9.5.1-2.2">Sun's <xref target="refs.javaSpeechGrammarFormat" format="default" sectionFormat="of" derivedContent="refs.javaSpeechGrammarFormat">Java Speech
               Grammar Format (JSGF)</xref></li>
           </ul>
           <t pn="section-9.5.1-3">
 
-          Additionally, MRCPv2 servers MAY support the <xref target="W3C.REC-semantic-interpretation-20070405" format="default" sectionFormat="of" derivedContent="Semantic&#10;          Interpretation for Speech Recognition (SISR)">Semantic
+          Additionally, MRCPv2 servers MAY support the <xref target="W3C.REC-semantic-interpretation-20070405" format="default" sectionFormat="of" derivedContent="W3C.REC-semantic-interpretation-20070405">Semantic
           Interpretation for Speech Recognition (SISR)</xref>
           specification.</t>
           <t pn="section-9.5.1-4">When a grammar is specified inline in the request, the client
@@ -5222,7 +5222,7 @@ abort-phrase-enrollment  =  "Abort-Phrase-Enrollment" ":"
           <artwork name="" type="" align="left" alt="" pn="section-9.5.1-6"><![CDATA[session:help@root-level.store
 ]]></artwork>
           <t pn="section-9.5.1-7">Grammar data MAY be specified using external URI references. To
-          do so, the client uses a body of media type 'text/uri-list' (see <xref target="RFC2483" format="default" sectionFormat="of" derivedContent="RFC 2483">RFC 2483</xref> ) to list the one or more URIs that
+          do so, the client uses a body of media type 'text/uri-list' (see <xref target="RFC2483" format="default" sectionFormat="of" derivedContent="RFC2483">RFC 2483</xref> ) to list the one or more URIs that
           point to the grammar data. The client can use a body of media type
           'text/grammar-ref-list' (see <xref target="sec.grammar-ref-list" format="default" sectionFormat="of" derivedContent="Section 13.5.1"/>) if it wants to assign weights
           to the list of grammar URI. All MRCPv2 servers MUST support grammar
@@ -5458,7 +5458,7 @@ Content-Length:...
                 for example, information from a database, that would allow it
                 to select a preferred interpretation from among the possible
                 interpretations returned from the semantic interpreter.</li>
-              <li pn="section-9.6.1.1-2.2" derivedCounter="2.">A client-based dialog manager (e.g., <xref target="W3C.REC-voicexml20-20040316" format="default" sectionFormat="of" derivedContent="VoiceXML">VoiceXML</xref>) that was
+              <li pn="section-9.6.1.1-2.2" derivedCounter="2.">A client-based dialog manager (e.g., <xref target="W3C.REC-voicexml20-20040316" format="default" sectionFormat="of" derivedContent="W3C.REC-voicexml20-20040316">VoiceXML</xref>) that was
                 unable to select between several competing interpretations
                 could use this information to go back to the user and find out
                 what was intended. For example, it could issue a SPEAK request
@@ -5670,7 +5670,7 @@ Content-Length:...
             indicated by the "confidence" attribute of
             &lt;interpretation&gt;). Optional "timestamp-start" and
             "timestamp-end" attributes indicate the start and end times of a
-            spoken utterance, in <xref target="ISO.8601.1988" format="default" sectionFormat="of" derivedContent="ISO 8601&#10;            format">ISO 8601
+            spoken utterance, in <xref target="ISO.8601.1988" format="default" sectionFormat="of" derivedContent="ISO.8601.1988">ISO 8601
             format</xref>.</t>
             <t pn="section-9.6.3.4-2">Attributes: 
 
@@ -6084,7 +6084,7 @@ Content-Length:...
             content of media type 'text/grammar-ref-list'. This type defines a
             list of grammar URIs and allows each grammar URI to be assigned a
             weight in the list. This weight has the same meaning as the
-            weights described in Section 2.4.1 of <xref target="W3C.REC-speech-grammar-20040316" format="default" sectionFormat="of" derivedContent="the Speech Grammar Markup&#10;            Format (SRGS)">the Speech Grammar Markup
+            weights described in Section 2.4.1 of <xref target="W3C.REC-speech-grammar-20040316" format="default" sectionFormat="of" derivedContent="W3C.REC-speech-grammar-20040316">the Speech Grammar Markup
             Format (SRGS)</xref>.</li>
         </ol>
         <t pn="section-9.9-5">
@@ -6822,9 +6822,9 @@ S->C:    MRCP/2.0 ... INTERPRETATION-COMPLETE 543266 200 COMPLETE
       <section numbered="true" toc="include" removeInRFC="false" pn="section-9.22">
         <name slugifiedName="name-dtmf-detection">DTMF Detection</name>
         <t pn="section-9.22-1">Digits received as DTMF tones are delivered to the recognition
-        resource in the MRCPv2 server in the RTP stream according to <xref target="RFC4733" format="default" sectionFormat="of" derivedContent="RFC 4733">RFC 4733</xref>. The Automatic Speech Recognizer (ASR)
+        resource in the MRCPv2 server in the RTP stream according to <xref target="RFC4733" format="default" sectionFormat="of" derivedContent="RFC4733">RFC 4733</xref>. The Automatic Speech Recognizer (ASR)
         MUST support RFC 4733 to recognize digits, and it MAY support
-        recognizing <xref target="Q.23" format="default" sectionFormat="of" derivedContent="DTMF tones">DTMF tones</xref> in the audio.</t>
+        recognizing <xref target="Q.23" format="default" sectionFormat="of" derivedContent="Q.23">DTMF tones</xref> in the audio.</t>
       </section>
     </section>
     <section anchor="sec.recorderResource" numbered="true" toc="include" removeInRFC="false" pn="section-10">
@@ -6841,7 +6841,7 @@ S->C:    MRCP/2.0 ... INTERPRETATION-COMPLETE 543266 200 COMPLETE
       <t pn="section-10-3">
 
       Both these applications require functionality above and beyond
-      those specified by protocols such as <xref target="RFC2326" format="default" sectionFormat="of" derivedContent="RTSP">RTSP</xref>.
+      those specified by protocols such as <xref target="RFC2326" format="default" sectionFormat="of" derivedContent="RFC2326">RTSP</xref>.
       This includes audio endpointing (i.e., detecting speech or silence). The
       support for video is OPTIONAL and is mainly capturing video mails that
       may require the speech or audio processing mentioned above.</t>
@@ -7026,7 +7026,7 @@ failed-uri               =  "Failed-URI" ":" absoluteURI CRLF
           <t pn="section-10.4.6-1">When a recorder method needs to post the audio to a URI and
           access to the URI fails, the server MAY provide the URI-specific or
           protocol-specific response code through this header field in the
-          method response. The value encoding is UTF-8 (<xref target="RFC3629" format="default" sectionFormat="of" derivedContent="RFC 3629">RFC 3629</xref>) to accommodate any access
+          method response. The value encoding is UTF-8 (<xref target="RFC3629" format="default" sectionFormat="of" derivedContent="RFC3629">RFC 3629</xref>) to accommodate any access
           protocol --
           some access protocols might have a response string instead of a numeric
           response code.</t>
@@ -7047,12 +7047,12 @@ failed-uri-cause         =  "Failed-URI-Cause" ":" 1*UTFCHAR
           field is not specified in the RECORD request, the server MUST
           capture the audio, MUST encode it, and MUST send it in the STOP
           response or the RECORD-COMPLETE event as a message body. In this
-          case, the response carrying the audio content MUST include a <xref target="RFC2392" format="default" sectionFormat="of" derivedContent="Content ID (cid)">Content ID (cid)</xref> value in this header
+          case, the response carrying the audio content MUST include a <xref target="RFC2392" format="default" sectionFormat="of" derivedContent="RFC2392">Content ID (cid)</xref> value in this header
           pointing to the Content-ID in the message body.</t>
           <t pn="section-10.4.7-2">The server MUST also return the size in octets and the duration
           in milliseconds of the recorded audio waveform as parameters
           associated with the header field.</t>
-          <t pn="section-10.4.7-3">Implementations MUST support <xref target="RFC2616" format="default" sectionFormat="of" derivedContent="'http'">'http'</xref>, <xref target="RFC2818" format="default" sectionFormat="of" derivedContent="'https'">'https'</xref>, <xref target="RFC3986" format="default" sectionFormat="of" derivedContent="'file'">'file'</xref>, and <xref target="RFC2392" format="default" sectionFormat="of" derivedContent="'cid'">'cid'</xref> schemes in the URI. Note that
+          <t pn="section-10.4.7-3">Implementations MUST support <xref target="RFC2616" format="default" sectionFormat="of" derivedContent="RFC2616">'http'</xref>, <xref target="RFC2818" format="default" sectionFormat="of" derivedContent="RFC2818">'https'</xref>, <xref target="RFC3986" format="default" sectionFormat="of" derivedContent="RFC3986">'file'</xref>, and <xref target="RFC2392" format="default" sectionFormat="of" derivedContent="RFC2392">'cid'</xref> schemes in the URI. Note that
           implementations already exist that support other schemes.</t>
           <artwork name="" type="" align="left" alt="" pn="section-10.4.7-4"><![CDATA[
 record-uri               =  "Record-URI" ":" ["<" uri ">" 
@@ -7341,7 +7341,7 @@ S->C:  MRCP/2.0 ... START-OF-INPUT 543259 IN-PROGRESS
       apply to its implementation and usage.  Implementers should
       carefully read <xref target="sec.securityConsiderations" format="default" sectionFormat="of" derivedContent="Section 12"/>
       in this document and the corresponding section
-      of <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="the SPEECHSC requirements">the SPEECHSC requirements</xref>.
+      of <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="RFC4313">the SPEECHSC requirements</xref>.
       Implementers and deployers of this technology are strongly
       encouraged to check the state of the art for any new risks and
       solutions that might have been developed.</t>
@@ -8710,7 +8710,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
     <section anchor="sec.securityConsiderations" numbered="true" toc="include" removeInRFC="false" pn="section-12">
       <name slugifiedName="name-security-considerations">Security Considerations</name>
       <t pn="section-12-1">MRCPv2 is designed to comply with the security-related requirements
-      documented in <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="the SPEECHSC requirements">the SPEECHSC requirements</xref>.
+      documented in <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="RFC4313">the SPEECHSC requirements</xref>.
       Implementers and users of MRCPv2 are strongly encouraged to read the
       Security Considerations section of <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="RFC4313"/>,
       because that document contains discussion of a number of important
@@ -8762,7 +8762,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         server MUST NOT send a response to the client over a channel for which
         the TLS identities of the server or client differ from the channel
         over which the server received the corresponding request. Alternative
-        control-channel protection MAY be used if desired (e.g., <xref target="RFC4301" format="default" sectionFormat="of" derivedContent="Security Architecture for the Internet Protocol&#10;        (IPsec)">Security Architecture for the Internet Protocol
+        control-channel protection MAY be used if desired (e.g., <xref target="RFC4301" format="default" sectionFormat="of" derivedContent="RFC4301">Security Architecture for the Internet Protocol
         (IPsec)</xref>).</t>
       </section>
       <section numbered="true" toc="include" removeInRFC="false" pn="section-12.3">
@@ -8774,7 +8774,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         support a security mechanism for protection of audio media sessions.
         MRCPv2 clients that originate or consume audio similarly MUST support
         a security mechanism for protection of the audio. One such mechanism
-        is the <xref target="RFC3711" format="default" sectionFormat="of" derivedContent="Secure Real-time Transport&#10;        Protocol (SRTP)">Secure Real-time Transport
+        is the <xref target="RFC3711" format="default" sectionFormat="of" derivedContent="RFC3711">Secure Real-time Transport
         Protocol (SRTP)</xref>.</t>
       </section>
       <section numbered="true" toc="include" removeInRFC="false" pn="section-12.4">
@@ -8787,11 +8787,11 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         and voiceprints, is extremely sensitive and must always be protected.
         MRCPv2 clients and servers MUST implement HTTPS for indirect content
         access and SHOULD employ secure access for all sensitive indirect
-        content. Other secure URI schemes such as <xref target="RFC4217" format="default" sectionFormat="of" derivedContent="Secure FTP (FTPS)">Secure FTP (FTPS)</xref> MAY also be used. See <xref target="sec.SetCookie" format="default" sectionFormat="of" derivedContent="Section 6.2.15"/> for the header fields used to transfer
+        content. Other secure URI schemes such as <xref target="RFC4217" format="default" sectionFormat="of" derivedContent="RFC4217">Secure FTP (FTPS)</xref> MAY also be used. See <xref target="sec.SetCookie" format="default" sectionFormat="of" derivedContent="Section 6.2.15"/> for the header fields used to transfer
         cookie information between the MRCPv2 client and server if needed for
         authentication.</t>
         <t pn="section-12.4-2">Access to URIs provided by servers introduces risks that
-        need to be considered.  Although <xref target="RFC6454" format="default" sectionFormat="of" derivedContent="RFC&#10;        6454">RFC
+        need to be considered.  Although <xref target="RFC6454" format="default" sectionFormat="of" derivedContent="RFC6454">RFC
         6454</xref> discusses and focuses on a same-origin policy,
         which MRCPv2 does not restrict URIs to, it still provides an
         excellent description of the pitfalls of blindly following
@@ -8823,7 +8823,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         access to the underlying resource using the given URI. A downside to
         this approach is if an attacker uses the URI before the client uses
         the URI, then the client is denied the resource. Other methods would
-        be to adopt a mechanism similar to the <xref target="RFC4467" format="default" sectionFormat="of" derivedContent="URLAUTH&#10;        IMAP extension">URLAUTH
+        be to adopt a mechanism similar to the <xref target="RFC4467" format="default" sectionFormat="of" derivedContent="RFC4467">URLAUTH
         IMAP extension</xref>, where the server sets cryptographic checks on
         URI usage, as well as capabilities for expiration, revocation, and so
         on. Specifying such a mechanism is beyond the scope of this
@@ -8838,7 +8838,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         verification functions. This data can be extremely sensitive and can
         present substantial privacy and impersonation risks if stolen. Systems
         employing MRCPv2 SHOULD be deployed in ways that minimize these risks.
-        The <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="SPEECHSC requirements RFC">SPEECHSC requirements RFC</xref> contains a
+        The <xref target="RFC4313" format="default" sectionFormat="of" derivedContent="RFC4313">SPEECHSC requirements RFC</xref> contains a
         more extensive discussion of these risks and ways they may be
         mitigated.</t>
       </section>
@@ -8856,7 +8856,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         fetches, that the server does on behalf of the client.  To
         control this behavior, MRCPv2 has a number of server
         parameters that a client can configure.  With one such
-        parameter, <xref target="sec.FetchTimeout" format="default" sectionFormat="of" derivedContent="Fetch-Timeout">Fetch-Timeout</xref>, a malicious
+        parameter, <xref target="sec.FetchTimeout" format="default" sectionFormat="of" derivedContent="Section 6.2.12">Fetch-Timeout</xref>, a malicious
         client could set a very large value and then request the
         server to fetch a non-existent document.  It is RECOMMENDED
         that servers be cautious about accepting long timeout
@@ -8866,7 +8866,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         <name slugifiedName="name-delete-voiceprint-and-autho">DELETE-VOICEPRINT and Authorization</name>
         <t pn="section-12.8-1">Since this specification does not mandate a specific
         mechanism for authentication and authorization when
-        requesting <xref target="sec.DeleteVoiceprint" format="default" sectionFormat="of" derivedContent="DELETE-VOICEPRINT">DELETE-VOICEPRINT</xref>,
+        requesting <xref target="sec.DeleteVoiceprint" format="default" sectionFormat="of" derivedContent="Section 11.9">DELETE-VOICEPRINT</xref>,
         there is a risk that an MRCPv2 server may not do such a check
         for authentication and authorization.  In practice, each
         provider of voice biometric solutions does insist on its own
@@ -8882,7 +8882,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         <name slugifiedName="name-new-registries">New Registries</name>
         <t pn="section-13.1-1">This section describes the name spaces (registries) for MRCPv2 that
         IANA has created and now maintains. Assignment/registration
-        policies are described in <xref target="RFC5226" format="default" sectionFormat="of" derivedContent="RFC 5226">RFC 5226</xref>.</t>
+        policies are described in <xref target="RFC5226" format="default" sectionFormat="of" derivedContent="RFC5226">RFC 5226</xref>.</t>
         <section anchor="sec.registration.resources" numbered="true" toc="include" removeInRFC="false" pn="section-13.1.1">
           <name slugifiedName="name-mrcpv2-resource-types">MRCPv2 Resource Types</name>
           <t pn="section-13.1.1-1">IANA has created a new name space of "MRCPv2 Resource Types".
@@ -9108,7 +9108,7 @@ Parameters". All maintenance within and additions to the contents of
           registration policy as follows. Each name (corresponding to the
           "vendor-av-pair-name" ABNF production) MUST satisfy the syntax
           requirements of Internet Domain Names as described in Section 2.3.1
-          of <xref target="RFC1035" format="default" sectionFormat="of" derivedContent="RFC 1035">RFC 1035</xref> (and as updated or
+          of <xref target="RFC1035" format="default" sectionFormat="of" derivedContent="RFC1035">RFC 1035</xref> (and as updated or
           obsoleted by successive RFCs), with one exception, the order of the
           domain names is reversed. For example, a vendor-specific parameter
           "foo" by example.com would have the form "com.example.foo". The
@@ -9129,7 +9129,7 @@ reference to the definition of the parameter, preferably an RFC. The registry is
         <section numbered="true" toc="include" removeInRFC="false" pn="section-13.2.1">
           <name slugifiedName="name-application-nlsmlxml-media-">'application/nlsml+xml' Media Type Registration</name>
           <t pn="section-13.2.1-1">IANA has registered the following media type according
-          to the process defined in <xref target="RFC4288" format="default" sectionFormat="of" derivedContent="RFC 4288">RFC 4288</xref>.
+          to the process defined in <xref target="RFC4288" format="default" sectionFormat="of" derivedContent="RFC4288">RFC 4288</xref>.
           </t>
           <dl newline="false" spacing="normal" pn="section-13.2.1-2">
             <dt pn="section-13.2.1-2.1">To:</dt>
@@ -9148,7 +9148,7 @@ reference to the definition of the parameter, preferably an RFC. The registry is
               <dl newline="false" spacing="normal" pn="section-13.2.1-2.12.1">
                 <dt pn="section-13.2.1-2.12.1.1">charset:</dt>
                 <dd pn="section-13.2.1-2.12.1.2">All of the considerations described
-                  in <xref target="RFC3023" format="default" sectionFormat="of" derivedContent="RFC 3023">RFC 3023</xref> also apply to the
+                  in <xref target="RFC3023" format="default" sectionFormat="of" derivedContent="RFC3023">RFC 3023</xref> also apply to the
                   application/nlsml+xml media type.</dd>
               </dl>
             </dd>
@@ -9194,7 +9194,7 @@ reference to the definition of the parameter, preferably an RFC. The registry is
       <section numbered="true" toc="include" removeInRFC="false" pn="section-13.3">
         <name slugifiedName="name-nlsml-xml-schema-registrati">NLSML XML Schema Registration</name>
         <t pn="section-13.3-1">IANA has registered and now maintains the following XML
-        Schema. Information provided follows the template in <xref target="RFC3688" format="default" sectionFormat="of" derivedContent="RFC 3688">RFC 3688</xref>. </t>
+        Schema. Information provided follows the template in <xref target="RFC3688" format="default" sectionFormat="of" derivedContent="RFC3688">RFC 3688</xref>. </t>
         <dl newline="false" spacing="normal" pn="section-13.3-2">
           <dt pn="section-13.3-2.1">XML element type:</dt>
           <dd pn="section-13.3-2.2">schema</dd>
@@ -9209,7 +9209,7 @@ reference to the definition of the parameter, preferably an RFC. The registry is
       <section numbered="true" toc="include" removeInRFC="false" pn="section-13.4">
         <name slugifiedName="name-mrcpv2-xml-namespace-regist">MRCPv2 XML Namespace Registration</name>
         <t pn="section-13.4-1">IANA has registered and now maintains the following XML Name
-        space. Information provided follows the template in <xref target="RFC3688" format="default" sectionFormat="of" derivedContent="RFC 3688">RFC 3688</xref>. </t>
+        space. Information provided follows the template in <xref target="RFC3688" format="default" sectionFormat="of" derivedContent="RFC3688">RFC 3688</xref>. </t>
         <dl newline="false" spacing="normal" pn="section-13.4-2">
           <dt pn="section-13.4-2.1">XML element type:</dt>
           <dd pn="section-13.4-2.2">ns</dd>
@@ -9224,7 +9224,7 @@ reference to the definition of the parameter, preferably an RFC. The registry is
       <section anchor="sec.text-media-registrations" numbered="true" toc="include" removeInRFC="false" pn="section-13.5">
         <name slugifiedName="name-text-media-type-registratio">Text Media Type Registrations</name>
         <t pn="section-13.5-1">IANA has registered the following text media type
-        according to the process defined in <xref target="RFC4288" format="default" sectionFormat="of" derivedContent="RFC&#10;        4288">RFC
+        according to the process defined in <xref target="RFC4288" format="default" sectionFormat="of" derivedContent="RFC4288">RFC
         4288</xref>.</t>
         <section anchor="sec.grammar-ref-list" numbered="true" toc="include" removeInRFC="false" pn="section-13.5.1">
           <name slugifiedName="name-text-grammar-ref-list">text/grammar-ref-list</name>
@@ -9254,7 +9254,7 @@ reference to the definition of the parameter, preferably an RFC. The registry is
               and 'application/srgs+xml' apply.</dd>
             <dt pn="section-13.5.1-1.17">Interoperability considerations:</dt>
             <dd pn="section-13.5.1-1.18">'&gt;' must be
-              percent encoded in URIs according to <xref target="RFC3986" format="default" sectionFormat="of" derivedContent="RFC&#10;              3986">RFC
+              percent encoded in URIs according to <xref target="RFC3986" format="default" sectionFormat="of" derivedContent="RFC3986">RFC
               3986</xref>.</dd>
             <dt pn="section-13.5.1-1.19">Published specification:</dt>
             <dd pn="section-13.5.1-1.20">
@@ -9305,7 +9305,7 @@ This specification currently only defines a
       <section anchor="sec.sessionURIScheme" numbered="true" toc="include" removeInRFC="false" pn="section-13.6">
         <name slugifiedName="name-session-uri-scheme-registra">'session' URI Scheme Registration</name>
         <t pn="section-13.6-1">IANA has registered the following new URI scheme. The
-        information below follows the template given in <xref target="RFC4395" format="default" sectionFormat="of" derivedContent="RFC 4395">RFC 4395</xref>. </t>
+        information below follows the template given in <xref target="RFC4395" format="default" sectionFormat="of" derivedContent="RFC4395">RFC 4395</xref>. </t>
         <dl newline="false" spacing="normal" pn="section-13.6-2">
           <dt pn="section-13.6-2.1">URI scheme name:</dt>
           <dd pn="section-13.6-2.2">session</dd>
@@ -9314,7 +9314,7 @@ This specification currently only defines a
           <dt pn="section-13.6-2.5">URI scheme syntax:</dt>
           <dd pn="section-13.6-2.6">The syntax of this scheme is
             identical to that defined for the "cid" scheme in Section 2 of
-            <xref target="RFC2392" format="default" sectionFormat="of" derivedContent="RFC 2392">RFC 2392</xref>.</dd>
+            <xref target="RFC2392" format="default" sectionFormat="of" derivedContent="RFC2392">RFC 2392</xref>.</dd>
           <dt pn="section-13.6-2.7">URI scheme semantics:</dt>
           <dd pn="section-13.6-2.8">The URI is intended to
             identify a data resource previously given to the network computing
@@ -9329,7 +9329,7 @@ This specification currently only defines a
             protocols.</dd>
           <dt pn="section-13.6-2.9">Encoding considerations:</dt>
           <dd pn="section-13.6-2.10">There are no other encoding
-            considerations for the 'session' URIs not described in <xref target="RFC3986" format="default" sectionFormat="of" derivedContent="RFC 3986">RFC 3986</xref></dd>
+            considerations for the 'session' URIs not described in <xref target="RFC3986" format="default" sectionFormat="of" derivedContent="RFC3986">RFC 3986</xref></dd>
           <dt pn="section-13.6-2.11">Applications/protocols that use this URI scheme name:</dt>
           <dd pn="section-13.6-2.12">This
             scheme name is used by MRCPv2 clients and servers.</dd>
@@ -9344,7 +9344,7 @@ This specification currently only defines a
             session(s).</dd>
           <dt pn="section-13.6-2.15">Security considerations:</dt>
           <dd pn="section-13.6-2.16">Generic security
-            considerations for URIs described in <xref target="RFC3986" format="default" sectionFormat="of" derivedContent="RFC&#10;            3986">RFC
+            considerations for URIs described in <xref target="RFC3986" format="default" sectionFormat="of" derivedContent="RFC3986">RFC
             3986</xref> apply to this scheme as well. The URIs defined here
             provide an identification mechanism only. Given that the
             communication channel between client and server is secure, that
@@ -9364,7 +9364,7 @@ This specification currently only defines a
       <section numbered="true" toc="include" removeInRFC="false" pn="section-13.7">
         <name slugifiedName="name-sdp-parameter-registrations">SDP Parameter Registrations</name>
         <t pn="section-13.7-1">IANA has registered the following SDP parameter values.
-        The information for each follows the template given in <xref target="RFC4566" format="default" sectionFormat="of" derivedContent="RFC 4566">RFC 4566</xref>, Appendix B.</t>
+        The information for each follows the template given in <xref target="RFC4566" format="default" sectionFormat="of" derivedContent="RFC4566">RFC 4566</xref>, Appendix B.</t>
         <section numbered="true" toc="include" removeInRFC="false" pn="section-13.7.1">
           <name slugifiedName="name-sub-registry-proto">Sub-Registry "proto"</name>
           <t pn="section-13.7.1-1">"TCP/MRCPv2" value of the "proto" parameter</t>
@@ -9485,7 +9485,7 @@ This specification currently only defines a
         <t pn="section-14.1-1">The following is an example of a typical MRCPv2 session of speech
         synthesis and recognition between a client and a server. Although the
         SDP "s=" attribute in these examples has a text description value to
-        assist in understanding the examples, please keep in mind that <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC 3264">RFC 3264</xref> recommends that messages actually put
+        assist in understanding the examples, please keep in mind that <xref target="RFC3264" format="default" sectionFormat="of" derivedContent="RFC3264">RFC 3264</xref> recommends that messages actually put
         on the wire use a space or a dash.</t>
         <t pn="section-14.1-2">The figure below illustrates opening a session to the MRCPv2
         server. This exchange does not allocate a resource or setup media. It
@@ -10121,7 +10121,7 @@ User:   I want this. (clicks on picture of large root beer.)
     <section anchor="S.abnf" numbered="true" toc="include" removeInRFC="false" pn="section-15">
       <name slugifiedName="name-abnf-normative-definition">ABNF Normative Definition</name>
       <t pn="section-15-1">The following productions make use of the core rules defined in
-      Section B.1 of <xref target="RFC5234" format="default" sectionFormat="of" derivedContent="RFC 5234">RFC 5234</xref>.</t>
+      Section B.1 of <xref target="RFC5234" format="default" sectionFormat="of" derivedContent="RFC5234">RFC 5234</xref>.</t>
       <artwork name="" type="" align="left" alt="" pn="section-15-2"><![CDATA[
 LWS    =    [*WSP CRLF] 1*WSP ; linear whitespace
 

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" version="3" category="info" docName="elements-00" indexInclude="true" ipr="trust200902" prepTime="2019-02-11T18:57:02" scripts="Cherokee,Common,Greek,Han,Hebrew,Latin" sortRefs="false" submissionType="independent" symRefs="true" tocDepth="3" tocInclude="true">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" version="3" category="info" docName="elements-00" indexInclude="true" ipr="trust200902" prepTime="2019-02-12T20:38:50" scripts="Cherokee,Common,Greek,Han,Hebrew,Latin" sortRefs="false" submissionType="independent" symRefs="true" tocDepth="3" tocInclude="true">
   <front>
     <title>Xml2rfc Vocabulary V3 Elements Combined</title>
     <author fullname="An Author">
@@ -153,13 +153,73 @@
       <name slugifiedName="name-citations">Citations</name>
       <t pn="section-2-1">
 
-           This section contains a bunch of citations, in order to refer to each of the entries in
-           the <xref target="references-section" format="default" sectionFormat="of" derivedContent="Section 8"/>.  These references should be present:
-           <xref target="RFC2119" format="default" sectionFormat="of" derivedContent="RFC2119"/>
-        <xref target="RFC7997" format="default" sectionFormat="of" derivedContent="RFC7997"/>
-        <xref target="RFC8174" format="default" sectionFormat="of" derivedContent="RFC8174"/>
-        <xref target="RFC5083" format="default" sectionFormat="of" derivedContent="RFC5083"/>
-        <xref target="RFC5652" format="default" sectionFormat="of" derivedContent="RFC5652"/>
+            This section contains a bunch of citations, in order to test citation formats and also
+            in order to refer to each of the entries in
+            the <xref target="references-section" format="default" sectionFormat="of" derivedContent="Section 8"/>.  
+      </t>
+      <t pn="section-2-2"> Citations of References: </t>
+      <ul bare="false" empty="false" spacing="normal" pn="section-2-3">
+        <li pn="section-2-3.1">
+               Text and format="default": <xref target="RFC7997" format="default" sectionFormat="of" derivedContent="RFC7997">Text</xref>
+        </li>
+        <li pn="section-2-3.2">
+               Text and format="title": <xref target="RFC8174" format="title" sectionFormat="of" derivedContent="Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words">Text</xref>
+        </li>
+        <li pn="section-2-3.3">
+               Text and format="counter": Not supported
+            </li>
+        <li pn="section-2-3.4">
+               Text and format="none": <xref target="RFC5083" format="none" sectionFormat="of" derivedContent="">Text</xref>
+        </li>
+      </ul>
+      <t pn="section-2-4"> References to Sections, with explicit text: </t>
+      <ul bare="false" empty="false" spacing="normal" pn="section-2-5">
+        <li pn="section-2-5.1">
+               Text and format="default": <xref target="ul-with-subelements" format="default" sectionFormat="of" derivedContent="Section 3">Text</xref>
+        </li>
+        <li pn="section-2-5.2">
+               Text and format="title": <xref target="ul-with-subelements" format="title" sectionFormat="of" derivedContent="Unordered list with sub-elements">Text</xref>
+        </li>
+        <li pn="section-2-5.3">
+               Text and format="counter": <xref target="ul-with-subelements" format="counter" sectionFormat="of" derivedContent="3">Text</xref>
+        </li>
+        <li pn="section-2-5.4">
+               Text and format="none": <xref target="ul-with-subelements" format="none" sectionFormat="of" derivedContent="">Text</xref>
+        </li>
+      </ul>
+      <t pn="section-2-6"> References to Sections: </t>
+      <ul bare="false" empty="false" spacing="normal" pn="section-2-7">
+        <li pn="section-2-7.1">
+               Format="default": <xref target="ul-with-subelements" format="default" sectionFormat="of" derivedContent="Section 3"/>
+        </li>
+        <li pn="section-2-7.2">
+               Format="title": <xref target="ul-with-subelements" format="title" sectionFormat="of" derivedContent="Unordered list with sub-elements"/>
+        </li>
+        <li pn="section-2-7.3">
+               Format="counter": <xref target="ul-with-subelements" format="counter" sectionFormat="of" derivedContent="3"/>
+        </li>
+        <li pn="section-2-7.4">
+               Format="none": <xref target="ul-with-subelements" format="none" sectionFormat="of" derivedContent=""/>
+        </li>
+      </ul>
+      <t pn="section-2-8"> References to Appendix: </t>
+      <ul bare="false" empty="false" spacing="normal" pn="section-2-9">
+        <li pn="section-2-9.1">
+               Format="default": <xref target="back-matter" format="default" sectionFormat="of" derivedContent="Appendix A"/>
+        </li>
+        <li pn="section-2-9.2">
+               Format="title": <xref target="back-matter" format="title" sectionFormat="of" derivedContent="Some Back Matter"/>
+        </li>
+        <li pn="section-2-9.3">
+               Format="counter": <xref target="back-matter" format="counter" sectionFormat="of" derivedContent="A"/>
+        </li>
+        <li pn="section-2-9.4">
+               Format="none": <xref target="back-matter" format="none" sectionFormat="of" derivedContent=""/>
+        </li>
+      </ul>
+      <t pn="section-2-10">
+            These references should be present:
+            <xref target="RFC5652" format="default" sectionFormat="of" derivedContent="RFC5652"/>
         <xref target="RFC2634" format="default" sectionFormat="of" derivedContent="RFC2634"/>
         <xref target="RFC5035" format="default" sectionFormat="of" derivedContent="RFC5035"/>
         <xref target="RFC2045" format="default" sectionFormat="of" derivedContent="RFC2045"/>
@@ -170,7 +230,7 @@
         <xref target="RFC6838" format="default" sectionFormat="of" derivedContent="RFC6838"/>
       </t>
     </section>
-    <section numbered="true" removeInRFC="false" toc="include" pn="section-3">
+    <section anchor="ul-with-subelements" numbered="true" removeInRFC="false" toc="include" pn="section-3">
       <name slugifiedName="name-unordered-list-with-sub-ele">Unordered list with sub-elements</name>
       <ul bare="false" empty="false" spacing="normal" pn="section-3-1">
         <li pn="section-3-1.1">
@@ -236,7 +296,7 @@ Unordered list, third bullet, fourth element:
                 <path d="M3,26h5v5h-5zM168,26h5v5h-5z"/>
               </svg>
             </artwork>
-            <artwork type="ascii-art" align="left" pn="section-3-1.3.9.2">
+            <artwork type="ascii-art" align="right" pn="section-3-1.3.9.2">
 
               ..    ..   ..           
              .  .  . .  .  .      
@@ -250,7 +310,7 @@ Unordered list, third bullet, fourth element:
              .  .  .  . .  .       
               ..    ..   ..        
 
-                  </artwork>
+               </artwork>
           </artset>
         </li>
       </ul>

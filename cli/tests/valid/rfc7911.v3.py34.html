@@ -15,7 +15,7 @@
       that each path is identified by a Path Identifier in addition to the
       address prefix. 
     " name="description">
-<meta content="xml2rfc 2.16.2" name="generator">
+<meta content="xml2rfc 2.18.0" name="generator">
 <link href="tests/input/rfc7911.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <link rel="stylesheet" type="text/css" href="xml2rfc.css">
@@ -186,40 +186,40 @@
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The BGP specification <span>[<a href="#RFC4271" class="xref">RFC4271</a>] defines an Update-Send Process to advertise the
+<p id="section-1-1">The BGP specification <span>[<a href="#RFC4271" class="xref">RFC4271</a>]</span> defines an Update-Send Process to advertise the
       routes chosen by the Decision Process to other BGP speakers. No
       provisions are made to allow the advertisement of multiple paths for the
       same address prefix or Network Layer Reachability Information (NLRI).
       In fact, a route with the same NLRI as a previously advertised route
-      implicitly replaces the previous advertisement.</span><a href="#section-1-1" class="pilcrow">¶</a></p>
+      implicitly replaces the previous advertisement.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This document defines a BGP extension that allows the advertisement
       of multiple paths for the same address prefix without the new paths
       implicitly replacing any previous ones. The essence of the extension is
       that each path is identified by a Path Identifier in addition to the
       address prefix.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">The availability of the additional paths can help reduce or eliminate
-      persistent route oscillations <span>[<a href="#RFC3345" class="xref">RFC3345</a>].  It can also help with optimal routing and routing 
+      persistent route oscillations <span>[<a href="#RFC3345" class="xref">RFC3345</a>]</span>.  It can also help with optimal routing and routing 
       convergence in a network by providing potential alternate or backup paths, 
-      respectively.</span><a href="#section-1-3" class="pilcrow">¶</a></p>
+      respectively.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <section id="section-1.1">
         <h3 id="name-specification-of-requiremen">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-specification-of-requiremen" class="section-name selfRef">Specification of Requirements</a>
         </h3>
 <p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <span>[<a href="#RFC2119" class="xref">RFC2119</a>].</span><a href="#section-1.1-1" class="pilcrow">¶</a></p>
+        document are to be interpreted as described in <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 </section>
 </section>
 <section id="section-2">
       <h2 id="name-how-to-identify-a-path">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-how-to-identify-a-path" class="section-name selfRef">How to Identify a Path</a>
       </h2>
-<p id="section-2-1">As defined in <span>[<a href="#RFC4271" class="xref">RFC4271</a>], a path refers to the information reported in the
+<p id="section-2-1">As defined in <span>[<a href="#RFC4271" class="xref">RFC4271</a>]</span>, a path refers to the information reported in the
       Path Attribute field of an UPDATE message. As the procedures specified
-      in </span><span>[<a href="#RFC4271" class="xref">RFC4271</a>] allow only
+      in <span>[<a href="#RFC4271" class="xref">RFC4271</a>]</span> allow only
       the advertisement of one path for a particular address prefix, a path
       for an address prefix from a BGP peer can be keyed on the address
-      prefix.</span><a href="#section-2-1" class="pilcrow">¶</a></p>
+      prefix.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">In order for a BGP speaker to advertise multiple paths for the same
       address prefix, a new identifier (termed "Path Identifier" hereafter)
       needs to be introduced so that a particular path for an address prefix
@@ -242,7 +242,7 @@
 <p id="section-3-1">In order to carry the Path Identifier in an UPDATE message, the NLRI
       encoding MUST be extended by prepending the Path Identifier field, which
       is of four octets.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">For example, the NLRI encoding specified in <span>[<a href="#RFC4271" class="xref">RFC4271</a>] is extended as the following:</span><a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">For example, the NLRI encoding specified in <span>[<a href="#RFC4271" class="xref">RFC4271</a>]</span> is extended as the following:<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-3-3">
 <pre>
                +--------------------------------+
@@ -262,10 +262,10 @@
       <h2 id="name-add-path-capability">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-add-path-capability" class="section-name selfRef">ADD-PATH Capability</a>
       </h2>
-<p id="section-4-1">The ADD-PATH Capability is a BGP capability <span>[<a href="#RFC5492" class="xref">RFC5492</a>], with Capability Code
+<p id="section-4-1">The ADD-PATH Capability is a BGP capability <span>[<a href="#RFC5492" class="xref">RFC5492</a>]</span>, with Capability Code
       69. The Capability Length field of this capability is
       variable. The Capability Value field consists of one or more of the
-      following tuples:</span><a href="#section-4-1" class="pilcrow">¶</a></p>
+      following tuples:<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-4-2">
 <pre>
              +------------------------------------------------+
@@ -282,14 +282,14 @@
 <li class="ulEmpty" id="section-4-4.1">
           <p id="section-4-4.1.1">Address Family Identifier (AFI): <a href="#section-4-4.1.1" class="pilcrow">¶</a></p>
 <ul class="ulEmpty">
-<li class="ulEmpty" id="section-4-4.1.2.1">This field is the same as the one used in <span>[<a href="#RFC4760" class="xref">RFC4760</a>].</span><a href="#section-4-4.1.2.1" class="pilcrow">¶</a>
+<li class="ulEmpty" id="section-4-4.1.2.1">This field is the same as the one used in <span>[<a href="#RFC4760" class="xref">RFC4760</a>]</span>.<a href="#section-4-4.1.2.1" class="pilcrow">¶</a>
 </li>
           </ul>
 </li>
         <li class="ulEmpty" id="section-4-4.2">
           <p id="section-4-4.2.1">Subsequent Address Family Identifier (SAFI): <a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
 <ul class="ulEmpty">
-<li class="ulEmpty" id="section-4-4.2.2.1">This field is the same as the one used in <span>[<a href="#RFC4760" class="xref">RFC4760</a>].</span><a href="#section-4-4.2.2.1" class="pilcrow">¶</a>
+<li class="ulEmpty" id="section-4-4.2.2.1">This field is the same as the one used in <span>[<a href="#RFC4760" class="xref">RFC4760</a>]</span>.<a href="#section-4-4.2.2.1" class="pilcrow">¶</a>
 </li>
           </ul>
 </li>
@@ -302,7 +302,7 @@
               the &lt;AFI, SAFI&gt;.<a href="#section-4-4.3.2.1" class="pilcrow">¶</a>
 </li>
             <li class="ulEmpty" id="section-4-4.3.2.2">If any other value is received, then the capability SHOULD be
-              treated as not understood and ignored <span>[<a href="#RFC5492" class="xref">RFC5492</a>].</span><a href="#section-4-4.3.2.2" class="pilcrow">¶</a>
+              treated as not understood and ignored <span>[<a href="#RFC5492" class="xref">RFC5492</a>]</span>.<a href="#section-4-4.3.2.2" class="pilcrow">¶</a>
 </li>
           </ul>
 </li>
@@ -320,18 +320,18 @@
 <p id="section-5-1">The Path Identifier specified in <a href="#code" class="xref">Section 3</a> can be used to
       advertise multiple paths for the same address prefix without subsequent
       advertisements replacing the previous ones. Apart from the fact that
-      this is now possible, the route advertisement rules of <span>[<a href="#RFC4271" class="xref">RFC4271</a>] are not changed. In
+      this is now possible, the route advertisement rules of <span>[<a href="#RFC4271" class="xref">RFC4271</a>]</span> are not changed. In
       particular, a new advertisement for a given address prefix and a given
       Path Identifier replaces a previous advertisement for the same address
       prefix and Path Identifier. If a BGP speaker receives a message to
       withdraw a prefix with a Path Identifier not seen before, it SHOULD
-      silently ignore it.</span><a href="#section-5-1" class="pilcrow">¶</a></p>
+      silently ignore it.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">For a BGP speaker to be able to send multiple paths to its peer, that
       BGP speaker MUST advertise the ADD-PATH Capability with the Send/Receive
       field set to either 2 or 3, and MUST receive from its peer the ADD-PATH
       Capability with the Send/Receive field set to either 1 or 3, for the
       corresponding &lt;AFI, SAFI&gt;.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">A BGP speaker MUST follow the procedures defined in <span>[<a href="#RFC4271" class="xref">RFC4271</a>] when generating an
+<p id="section-5-3">A BGP speaker MUST follow the procedures defined in <span>[<a href="#RFC4271" class="xref">RFC4271</a>]</span> when generating an
       UPDATE message for a particular &lt;AFI, SAFI&gt; to a peer unless the
       BGP speaker advertises the ADD-PATH Capability to the peer indicating
       its ability to send multiple paths for the &lt;AFI, SAFI&gt;, and also
@@ -341,15 +341,15 @@
       the combination of the address prefix and the Path Identifier, and use
       the extended NLRI encodings specified in this document. The peer SHALL
       act accordingly in processing an UPDATE message related to a particular
-      &lt;AFI, SAFI&gt;.</span><a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">A BGP speaker SHOULD include the best route <span>[<a href="#RFC4271" class="xref">RFC4271</a>] when more than one path is
+      &lt;AFI, SAFI&gt;.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">A BGP speaker SHOULD include the best route <span>[<a href="#RFC4271" class="xref">RFC4271</a>]</span> when more than one path is
       advertised to a neighbor, unless it is a path received from
-      that neighbor.</span><a href="#section-5-4" class="pilcrow">¶</a></p>
+      that neighbor.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">As the Path Identifiers are locally assigned, and may or may not be
       persistent across a control plane restart of a BGP speaker, an
       implementation SHOULD take special care so that the underlying
-      forwarding plane of a "Receiving Speaker" as described in <span>[<a href="#RFC4724" class="xref">RFC4724</a>] is not affected
-      during the graceful restart of a BGP session.</span><a href="#section-5-5" class="pilcrow">¶</a></p>
+      forwarding plane of a "Receiving Speaker" as described in <span>[<a href="#RFC4724" class="xref">RFC4724</a>]</span> is not affected
+      during the graceful restart of a BGP session.<a href="#section-5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-6">
@@ -359,11 +359,11 @@
 <p id="section-6-1">The extension proposed in this document provides a mechanism for a
       BGP speaker to advertise multiple paths over a BGP session. Care needs
       to be taken in its deployment to ensure consistent routing and
-      forwarding in a network <span>[<a href="#ADDPATH" class="xref">ADDPATH</a>].</span><a href="#section-6-1" class="pilcrow">¶</a></p>
+      forwarding in a network <span>[<a href="#ADDPATH" class="xref">ADDPATH</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">The only explicit indication that the encoding described in <a href="#code" class="xref">Section 3</a>
       is in use in a particular BGP session is the exchange of Capabilities
-      described in <a href="#capa" class="xref">Section 4</a>.  If the exchange is successful <span>[<a href="#RFC5492" class="xref">RFC5492</a>], then the BGP speakers
-      will be able to process all BGP UPDATES properly, as described in </span><a href="#ops" class="xref">Section 5</a>.
+      described in <a href="#capa" class="xref">Section 4</a>.  If the exchange is successful <span>[<a href="#RFC5492" class="xref">RFC5492</a>]</span>, then the BGP speakers
+      will be able to process all BGP UPDATES properly, as described in <a href="#ops" class="xref">Section 5</a>.
       However, if, for example, a packet analyzer is used on the wire to examine 
       an active BGP session, it may not be able to properly decode the BGP UPDATES
       because it lacks prior knowledge of the exchanged Capabilities.<a href="#section-6-2" class="pilcrow">¶</a></p>
@@ -373,8 +373,8 @@
       speaker is configured to advertise multiple paths to the internal
       neighbors, and additional information is needed for the application, the
       speaker could use attributes such as the Edge_Discriminator attribute
-      <span>[<a href="#FAST" class="xref">FAST</a>]. The use of that type of
-      additional information is outside the scope of this document.</span><a href="#section-6-3" class="pilcrow">¶</a></p>
+      <span>[<a href="#FAST" class="xref">FAST</a>]</span>. The use of that type of
+      additional information is outside the scope of this document.<a href="#section-6-3" class="pilcrow">¶</a></p>
 </section>
 <section id="section-7">
       <h2 id="name-iana-considerations">
@@ -394,17 +394,17 @@
       a large number of prefixes may be received by a BGP speaker, potentially
       depleting memory resources or even causing network-wide instability, which
       can be considered a denial-of-service attack.  Note that this is not a new
-      vulnerability, but one that is present in the base BGP specification <span>[<a href="#RFC4272" class="xref">RFC4272</a>].</span><a href="#section-8-1" class="pilcrow">¶</a></p>
+      vulnerability, but one that is present in the base BGP specification <span>[<a href="#RFC4272" class="xref">RFC4272</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <p id="section-8-2">
   The use of the ADD-PATH Capability is intended to address specific
   needs related to, for example, <span>eliminating route oscillations that
-  were induced by the MULTI_EXIT_DISC (MED) attribute [<a href="#STOP-OSC" class="xref">STOP-OSC</a>].
+  were induced by the MULTI_EXIT_DISC (MED) attribute [<a href="#STOP-OSC" class="xref">STOP-OSC</a>]</span>.
 
   While describing the applications for the
       ADD-PATH Capability is outside the scope of this document, users
       are encouraged to examine their behavior and potential impact by
-      studying the best practices described in </span><span>[<a href="#ADDPATH" class="xref">ADDPATH</a>].</span><a href="#section-8-2" class="pilcrow">¶</a></p>
-<p id="section-8-3">Security concerns in the base operation of <span>BGP [<a href="#RFC4271" class="xref">RFC4271</a>] also apply.</span><a href="#section-8-3" class="pilcrow">¶</a></p>
+      studying the best practices described in <span>[<a href="#ADDPATH" class="xref">ADDPATH</a>]</span>.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-3">Security concerns in the base operation of <span>BGP [<a href="#RFC4271" class="xref">RFC4271</a>]</span> also apply.<a href="#section-8-3" class="pilcrow">¶</a></p>
 </section>
 <section id="section-9">
       <h2 id="name-references">
