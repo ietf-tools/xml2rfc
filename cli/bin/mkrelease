@@ -205,10 +205,10 @@ note "\nChecking that the changelog is valid rst ..."
 $do rst2html changelog > /dev/null	# verify that the changelog is valid rst
 
 note "\nDoing the upload..."
-$do export GPG_TTY=`tty` python setup.py sdist upload --sign
+$do python setup.py sdist upload --sign
 
 note "\nCopying the tarfile to the web directory for xml2rfc"
-$do rsync dist/xml2rfc-$(shell xml2rfc --version).tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/ || true
+$do rsync dist/xml2rfc-$(xml2rfc --version | awk '{print $2}').tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/ || true
 
 note "\nPushing the tarfile to other tools servers"
 $do toolpush /www/tools.ietf.org/tools/xml2rfc2/cli/
