@@ -1,3 +1,85 @@
+xml2rfc (2.19.0) ietf; urgency=medium
+
+   **Changed handling of alternative artwork**
+
+   The way <artwork> has been specified to handle the presence of both
+   SVG artwork and text fallback (in Section 2.5 of [RFC7991]) has the
+   result that any SVG content has to be placed as a data: URL in the
+   "src" attribute when an ascii-art fallback is present.  This makes
+   the SVG effectively uneditable once the preptool has been run, even
+   if the SVG artwork was originally provided as a regular SVG XML file
+   external to the document XML file.
+
+   In order to be able to more easily deal with alternative instances of
+   artwork, and in the future possibly deal smoothly with a wider number
+   of alternative artwork formats than is currently provided for, a new
+   element <artset> could be introduced, presenting a set of alternative
+   artwork executions.  This would let the renderer pick the most
+   appropriate <artwork> instance for its format from the alternatives
+   present within an <artset> element, based on the "type" attribute of
+   each enclosed <artwork> element.
+
+   If more than one <artwork> element is found within an <artset>
+   element, with the same "type" attribute, the renderer could select
+   the first one, or possibly choose between the alternative instances
+   based on the output format and some quality of the alternative
+   instances that made one more suitable than the other for that
+   particular format, such as size, aspect ratio, or whatnot.
+
+   Implementation:  Xml2rfc as of version 2.18.0 implements this, with a
+      preference list when rendering to HTML and PDF of ( "svg",
+      "binary-art", "ascii-art" ), while the text renderer uses the list
+      ( "ascii-art", ) -- i.e., one entry only.  The Relax-NG compact
+      schema used for <artset> is this::
+
+        artset =
+          element artset {
+            attribute xml:base { text }?,
+            attribute xml:lang { text }?,
+            attribute anchor { xsd:ID }?,
+            attribute pn { xsd:ID }?,
+            artwork*
+          }
+
+      The <artset> element can occur anywhere an <artwork> element can
+      occur.  The first anchor on an <artwork> element within an
+      <artset> element will be promoted to the <artset> element if it
+      has none; apart from that, anchors on <artwork> elements within an
+      <artset> element will be removed by the preptool.
+
+   Additionally, this release contains some other fixes and changes.  From
+   the commit log:
+
+  * Normalized the expansion of <xref> to be more consistent conceptually 
+    and across renderings.  Added back rendering support for format='none'.
+
+  * Added another exception class to the import exception catch for pango,
+    to avoid a crash in some environments.
+
+  * Applied a patch from rjs@nostrum.com to improve the xml2rfc description.
+
+  * Disallow lxml 4.3.1, as it can cause segfaults with some Python 
+    versions.  Fixes issue #393.
+
+  * Put back LICENCE which has been lost from the source distribution tarball
+    at some point.
+
+  * Adjusted the <xref format="counter"/> output for appendices.
+
+  * Added code to remove any usage of Unicode U+2028 LINE SEPARATOR from the
+    text output also in legacy mode.
+
+  * Fixed a problem with the text format rendering of <xref> for an appendix.
+
+  * Added a get_element_tags() method in BaseV3Writer, and commented out 
+    some debug code.
+
+  * Removed a warning about missing country that would appear even if no 
+    <address> or <postal> was supplied.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  12 Feb 2019 16:43:44 +0000
+
+
 xml2rfc (2.18.0) ietf; urgency=medium
 
   This release provides additional support for <referencegroup> rendering, and
