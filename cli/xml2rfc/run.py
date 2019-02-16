@@ -6,7 +6,7 @@ import sys
 import os
 
 # If this script is renamed to 'xml2rfc.py' on a Windows system, the import
-# of the realy xml2rfc module will break.  In order to handle this, we remove
+# of the real xml2rfc module will break.  In order to handle this, we remove
 # the directory of the script file from the python system path:
 script_dir = os.path.dirname(os.path.realpath(__file__))
 if script_dir in sys.path:
