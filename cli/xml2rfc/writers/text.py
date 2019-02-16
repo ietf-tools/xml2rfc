@@ -36,6 +36,15 @@ wrapper = utils.TextWrapper(width=72, break_on_hyphens=False)
 seen = set()
 index_item = namedtuple('indexitem', ['item', 'subitem', 'anchor', 'page', ])
 joiner = namedtuple('joiner', ['init', 'join', 'first', 'indent', 'hang', ])
+base_joiners = {
+            None:           joiner('', '\n\n', '', 0, 0),
+            etree.Comment:  joiner('', '', '', 0, 0),
+            etree.PI:       joiner('', '', '', 0, 0),
+        }
+
+def set_joiners(kwargs, update):
+    kwargs['joiners'] = copy.copy(base_joiners)
+    kwargs['joiners'].update(update)
 
 def indent(text, indent=3, hang=0):
     lines = []
@@ -108,14 +117,7 @@ class TextWriter(BaseV3Writer):
 
     def write(self, filename):
         """Write the document to a file """
-        joiners = {
-            None:   joiner('', '\n\n', '', 0, 0),
-            #'':     joiner('', ' ', '', 0, 0),
-        }
-        # get rid of comments so we can ignore them in the rest of the code
-        for c in self.tree.xpath('.//comment()'):
-            p = c.getparent()
-            p.remove(c)
+        joiners = base_joiners
         text = self.render(self.root, width=72, joiners=joiners)
         if not text.endswith('\n'):
             text += '\n'
@@ -137,8 +139,8 @@ class TextWriter(BaseV3Writer):
             log.write('Created file', filename)
 
     def render(self, e, width, **kw):
-        if e.tag is etree.PI:
-            return ''
+        if e.tag in (etree.PI, etree.Comment):
+            return e.tail.lstrip() if (e.tail and e.tail.strip()) else ''
         kwargs = copy.deepcopy(kw)
         func_name = "render_%s" % (e.tag.lower(),)
         func = getattr(self, func_name, self.default_renderer)
@@ -156,8 +158,6 @@ class TextWriter(BaseV3Writer):
         Render element e, then format and join it to text using the
         appropriate settings in joiners.
         '''
-        if e.tag is etree.PI:
-            return text
         assert 'joiners' in kwargs
         joiners = kwargs['joiners']
         j = joiners[e.tag] if e.tag in joiners else joiners[None]
@@ -261,10 +261,10 @@ class TextWriter(BaseV3Writer):
             return text, False
 
     def quote_renderer(self, e, width, prefix, by, cite, **kwargs):
-        kwargs['joiners'] = {
+        set_joiners(kwargs, {
             None:      joiner('', '\n', '', 0, 0),
             't':       joiner('', '\n\n', '', 0, 0),
-        }
+        })
         width = width if width else 69
         text, plain = self.text_or_block_renderer('', e, width-3, **kwargs)
         if plain:
@@ -313,7 +313,9 @@ class TextWriter(BaseV3Writer):
     # 
     #    This element appears as a child element of <author> (Section 2.7).
     def render_address(self, e, width, **kwargs):
-        kwargs['joiners'] = { None:       joiner('', '\n', '', 0, 0), }
+        set_joiners(kwargs, {
+            None:       joiner('', '\n', '', 0, 0),
+        })
         text = ""
         for c in e.getchildren():
             text = self.join(text, c, width, **kwargs)
@@ -606,9 +608,9 @@ class TextWriter(BaseV3Writer):
         """
         Render one author entry for the Authors' Addresses section.
         """
-        kwargs['joiners'] = {
+        set_joiners(kwargs, {
             None:       joiner('', '\n', '', 0, 0),  # default 
-        }
+        })
         #text = self.render_author_name(e, width, **kwargs)
         text = ''
         address = e.find('./address')
@@ -1060,11 +1062,11 @@ class TextWriter(BaseV3Writer):
                     indent = 3
         else:
             indent = int(indent)
-        kwargs['joiners'] = {
+        set_joiners(kwargs, {
             None:       joiner('', tjoin, '', 0, 0),
             'dt':       joiner('', tjoin, '', 0, 0),
             'dd':       joiner('', djoin, '', indent, 0),
-        }
+        })
         # rendering
         text = ""
         prev = None
@@ -1318,8 +1320,8 @@ class TextWriter(BaseV3Writer):
             parts = ['\n\n']
             parts.append(self.render_first_page_top(e, width, **kwargs))
             for c in e.getchildren():
-                if c.tag in ['title', 'seriesInfo', 'author', 'date', 'area', 'workgroup', 'keyword', etree.PI, ]:
-                    # handled in render_first_page_top()
+                if c.tag in ['title', 'seriesInfo', 'author', 'date', 'area', 'workgroup', 'keyword', etree.PI, etree.Comment, ]:
+                    # handled in render_first_page_top() or discarded
                     continue
                 parts.append(self.render(c, width, **kwargs))
         return '\n\n'.join(parts)
@@ -1721,7 +1723,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    One or more <section> elements (Section 2.46)
     def render_middle(self, e, width, **kwargs):
-        kwargs['joiners'] = { None:       joiner('', '\n\n', '', 0, 0), } # default 
+        kwargs['joiners'] = base_joiners
         text = ""
         for c in e.getchildren():
             text = self.join(text, c, width, **kwargs)
@@ -2049,7 +2051,7 @@ class TextWriter(BaseV3Writer):
         for k in adr:
             if isinstance(adr[k], list):
                 adr[k] = '\n'.join(adr[k])
-        kwargs['joiners'] = { None: joiner('', '\n', '', 0, 0), }
+        set_joiners(kwargs, { None: joiner('', '\n', '', 0, 0), })
         if adr:
             try:
                 text = format_address(adr, latin=latin)
@@ -2216,11 +2218,11 @@ class TextWriter(BaseV3Writer):
                 t = self.element('t')
                 t.text = '<%s>' % target
                 elements.append(t)
-        kwargs['joiners'] = {
+        set_joiners(kwargs, {
             None:           joiner('', ', ', '', 0, 0),
             'authors':      joiner('', '', '', 0, 0),
             'annotation':   joiner('', '  ', '', 0, 0),
-        }
+        })
         text = ''
         width = width-11
         for c in elements:

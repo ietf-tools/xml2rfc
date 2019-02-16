@@ -241,7 +241,6 @@ class HtmlWriter(BaseV3Writer):
         self.filename = filename
 
         """Write the document to a file """
-        # get rid of comments so we can ignore them in the rest of the code
         html_tree = self.html_tree()
 
         # Check for duplicate IDs
@@ -263,18 +262,25 @@ class HtmlWriter(BaseV3Writer):
 
 
     def render(self, h, x):
+        res = None
         if x.tag in (lxml.etree.PI, lxml.etree.Comment):
-            return
-        func_name = "render_%s" % (x.tag.lower(),)
-        func = getattr(self, func_name, None)
-        if func == None:
-            func = self.default_renderer
-            if x.tag in self.__class__.deprecated_element_tags:
-                self.warn(x, "Was asked to render a deprecated element: <%s>", (x.tag, ))
-            elif not x.tag in seen:
-                self.warn(x, "No renderer for <%s> found" % (x.tag, ))
-                seen.add(x.tag)
-        res = func(h, x)
+            tail = x.tail if x.tail and x.tail.strip() else ''
+            if len(h):
+                last = h[-1]
+                last.tail = (last.tail or '') + tail
+            else:
+                h.text = (h.text or '') + tail
+        else:
+            func_name = "render_%s" % (x.tag.lower(),)
+            func = getattr(self, func_name, None)
+            if func == None:
+                func = self.default_renderer
+                if x.tag in self.__class__.deprecated_element_tags:
+                    self.warn(x, "Was asked to render a deprecated element: <%s>", (x.tag, ))
+                elif not x.tag in seen:
+                    self.warn(x, "No renderer for <%s> found" % (x.tag, ))
+                    seen.add(x.tag)
+            res = func(h, x)
         return res
 
 
