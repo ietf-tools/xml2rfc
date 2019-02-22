@@ -1956,8 +1956,8 @@ class HtmlWriter(BaseV3Writer):
     #    element).  When used, this <a class='xref'> HTML tag is always
     #    surrounded by square brackets, for example, "[<a class='xref'
     #    href='#foo'>foo</a>]".
-    def render_relref(self, h, x):
-        return self.render_xref(h, x)
+
+    ## Deprecated, removed by preptool
 
 
     # 9.44.1.  displayFormat='of'
@@ -2492,12 +2492,14 @@ class HtmlWriter(BaseV3Writer):
                     a = build.a(reftext, href='#%s'%target, classes='xref')
                     if target in self.refname_mapping:
                         if x.text and x.text.strip() and x.text.strip() != reftext:
-                            hh = build.span(x.text, ' [', a, ']')
+                            aa = build.a(x.text, href='#%s'%target, classes='xref')
+                            hh = build.span(aa, ' [', a, ']')
                         else:
                             hh = build.span('[', a, ']')
                     else:
                         if x.text and x.text.strip() and x.text.strip() != reftext:
-                            hh = build.span(x.text, ' (', a, ')')
+                            aa = build.a(x.text, href='#%s'%target, classes='xref')
+                            hh = build.span(aa, ' (', a, ')')
                         else:
                             hh = a
                 else:
@@ -2508,7 +2510,7 @@ class HtmlWriter(BaseV3Writer):
             return hh
         else:
             link    = x.get('derivedLink')
-            format  = x.get('displayFormat', x.get('sectionFormat'))
+            format  = x.get('sectionFormat')
             # 9.44.1.  displayFormat='of'
             # 
             #    The output is an <a class='relref'> HTML tag, with contents of
