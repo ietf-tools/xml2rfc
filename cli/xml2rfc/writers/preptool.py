@@ -1527,7 +1527,7 @@ class PrepToolWriter(BaseV3Writer):
             url = t.get('target')
             if url is None:
                 self.err(e, "Cannot build a href for <reference anchor='%s'> without having a target= attribute giving the URL." % (t.get('anchor'), ))
-            link = "%s%s" % (url, relative)
+            link = "%s#%s" % (url, relative)
             e.set('derivedLink', link)
             if '-' in relative:
                 l, __ = relative.split('-', 1)
