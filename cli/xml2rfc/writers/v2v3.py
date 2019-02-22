@@ -668,8 +668,6 @@ class V2v3XmlWriter(BaseV3Writer):
     #       <xref> because it makes no sense semantically.
     #
     def element_xref(self, e, p):
-        if 'format' in e.attrib and e.get('format') == 'none':
-            stripattr(e, ['format'])
         stripattr(e, ['pageno'])
 
     # 2.66.2.  "pageno" Attribute
