@@ -44,6 +44,7 @@ pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
 env/bin/python:
 	echo "Install virtualenv in $$PWD/env/ in order to run tests locally."
 
+.PHONY: install
 install:
 	python --version
 	python setup.py --quiet install
@@ -149,7 +150,7 @@ utf8test: cleantmp  env/bin/python install
 	@ xml2rfc --cache tests/cache --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep tests/input/utf8.xml
 	doc=utf8 ; postnrofffix="cat" ; type=utf8; $(CHECKOUTPUT)
 
-v3featuretest: tests/out/draft-v3-features.prepped.xml.test
+v3featuretest: tests/out/draft-v3-features.prepped.xml.test tests/out/draft-v3-features.text.test tests/out/draft-v3-features.v3.$(py).html.test
 
 dateshifttest: cleantmp install
 	@ xml2rfc --cache tests/cache --no-network --date 2013-02-01 --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml
