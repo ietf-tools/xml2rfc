@@ -413,7 +413,11 @@ class TextWriter(BaseV3Writer):
         return text
 
     def render_artwork(self, e, width, **kwargs):
-        text = (e.text and e.text.expandtabs()) or "(Artwork only available as %s: <%s>)" % (e.get('type', '(unknown type)'), e.get('originalSrc'))
+        msg  = ( "(Artwork only available as %s: %s)"
+                    % ( e.get('type', '(unknown type)'),
+                        e.get('originalSrc') or 'No external link available, see %s.html for artwork.'%self.root.get('docName')))
+        msg  = fill(msg, width=width, **kwargs)
+        text = (e.text and e.text.expandtabs()) or msg
         text = text.strip('\n')
         text = '\n'.join( [ l.rstrip() for l in text.splitlines() ] )
         return align(text, e.get('align', 'left'), width)
