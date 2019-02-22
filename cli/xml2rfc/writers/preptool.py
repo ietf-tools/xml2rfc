@@ -22,10 +22,10 @@ except ImportError:
     pass
 
 if six.PY2:
-    from urlparse import urlsplit, urlunsplit
+    from urlparse import urlsplit, urlunsplit, urljoin
     from urllib import urlopen
 elif six.PY3:
-    from urllib.parse import urlsplit, urlunsplit
+    from urllib.parse import urlsplit, urlunsplit, urljoin
     from urllib.request import urlopen
 
 from collections import OrderedDict
@@ -1519,7 +1519,7 @@ class PrepToolWriter(BaseV3Writer):
         if relative is None:
             for s in t.xpath('.//seriesInfo'):
                 if s.get('name') in ['RFC', 'Internet-Draft']:
-                    relative = 'section-%s' % section
+                    relative = '#section-%s' % section
                     break
             if not relative:
                 self.err(e, "Cannot build a href for this <%s> with a section= attribute without also having a relative= attribute." % (e.tag))
@@ -1527,7 +1527,7 @@ class PrepToolWriter(BaseV3Writer):
             url = t.get('target')
             if url is None:
                 self.err(e, "Cannot build a href for <reference anchor='%s'> without having a target= attribute giving the URL." % (t.get('anchor'), ))
-            link = "%s#%s" % (url, relative)
+            link = urljoin(url, relative, allow_fragments=True)
             e.set('derivedLink', link)
             if '-' in relative:
                 l, __ = relative.split('-', 1)
