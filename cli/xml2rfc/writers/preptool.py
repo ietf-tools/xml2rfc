@@ -236,6 +236,7 @@ class PrepToolWriter(BaseV3Writer):
             '.;insert_preptime()',              # 5.2.4.  "prepTime" Insertion
             './/ol[@group]',                    # 5.2.5.  <ol> Group "start" Insertion
             '//*;insert_attribute_defaults()',  # 5.2.6.  Attribute Default Value Insertion
+            './/relref;to_xref()',
             './/section',                       # 5.2.7.  Section "toc" attribute
             './/note[@removeInRFC="true"]',     # 5.2.8.  "removeInRFC" Warning Paragraph
             './/section[@removeInRFC="true"]',     
@@ -388,6 +389,12 @@ class PrepToolWriter(BaseV3Writer):
             if not e.target in self.keep_pis:
                 p.remove(e)
 
+    def relref_to_xref(self, e, p):
+        e.attrib['sectionFormat'] = e.attrib['displayFormat']
+        del e.attrib['displayFormat']
+        e.tag = 'xref'
+        self.note(e, "Changed <relref> to <xref>, which now supports equivalent functionality.")
+        
     # 5.1.4.  Validity Check
     # 
     #    Check the input against the RELAX NG (RNG) in [RFC7991].  If the
@@ -707,7 +714,7 @@ class PrepToolWriter(BaseV3Writer):
                 if not k in e.attrib:
                     if (e.tag, k) in [('rfc', 'consensus')]:
                         continue
-                    #debug.say('Setting <%s %s="%s">' % (e.tag, k, defaults[k]))
+                    #debug.say('L%-5s: Setting <%s %s="%s">' % (e.sourceline, e.tag, k, defaults[k]))
                     if ':' in k:
                         ns, tag = k.split(':',1)
                         q = etree.QName(namespaces[ns], tag)
