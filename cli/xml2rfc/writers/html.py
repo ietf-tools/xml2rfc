@@ -776,9 +776,9 @@ class HtmlWriter(BaseV3Writer):
             try:
                 if vbox:
                     if not (svgw and svgh):
-                        x,y,w,h = vbox.split()
-                        svgw = float(w)-float(x)
-                        svgh = float(h)-float(y)
+                        xo,yo,w,h = vbox.split()
+                        svgw = float(w)-float(xo)
+                        svgh = float(h)-float(yo)
                 else:
                     if svgw and svgh:
                         svg.set('viewBox', '0 0 %s %s' % (svgw, svgh))
