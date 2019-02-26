@@ -20,6 +20,7 @@ except ImportError:
 
 # Local libs
 import xml2rfc
+from xml2rfc.util.name import short_author_name_parts
 from xml2rfc.util.unicode import expand_unicode_element
 from xml2rfc.writers.base import BaseRfcWriter, default_options
 
@@ -565,8 +566,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             for j, author in enumerate(authors):
                 organization = author.find('organization')
                 email = author.find('address/email')
-                surname = author.attrib.get('surname')
-                initials = self.get_initials(author)
+                initials, surname = short_author_name_parts(author)
+                initials = self.get_initials(author) or initials
                 a = None
                 if j == len(authors) - 1 and len(authors) > 1:
                     last.tail = ' and '

@@ -27,7 +27,8 @@ from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc import utils
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, get_expiry_date, format_date
-from xml2rfc.util.name import short_author_name, short_author_ascii_name
+from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_author_name_parts
+
 from xml2rfc.util.num import ol_style_formatter, num_width
 from xml2rfc.util.unicode import expand_unicode_element
 from xml2rfc.util.postal import get_normalized_address_info, format_address
@@ -681,9 +682,8 @@ class TextWriter(BaseV3Writer):
             if i == len(authors) - 1 and len(authors) > 1:
                 buf.append('and ')
             organization = author.find('organization')
-            surname = author.attrib.get('surname', '')
+            initials, surname = short_author_name_parts(author)
             if surname:
-                initials = self.get_initials(author)
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
                     if len(initials) > 0:

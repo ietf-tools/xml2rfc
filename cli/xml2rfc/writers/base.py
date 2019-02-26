@@ -23,7 +23,7 @@ except ImportError:
 
 from xml2rfc import strings
 from xml2rfc.util.date import extract_date, format_date, get_expiry_date
-from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion
+from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
 from xml2rfc.util.unicode import punctuation, unicode_replacements, unicode_content_tags, downcode
 from xml2rfc.utils import namespaces
 
@@ -43,7 +43,7 @@ default_options = Values(defaults={
         'id_base_url': 'https://www.ietf.org/archive/id/',
         'image_svg': False,
         'indent': 2,
-        'legacy': False,
+        'legacy': True,
         'legacy_date_format': True,
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
@@ -53,6 +53,8 @@ default_options = Values(defaults={
         'omit_headers': None,
         'output_filename': None,
         'output_path': None,
+        'pdf': False,
+        'preptool': False,
         'quiet': False,
         'remove_pis': False,
         'rfc': None,
@@ -60,6 +62,7 @@ default_options = Values(defaults={
         'strict': False,
         'utf8': False,
         'verbose': False,
+        'v2v3': False,
         'vocabulary': 'v2',
     })
 
@@ -689,11 +692,11 @@ class BaseRfcWriter:
         buf = []
         for i, author in enumerate(authors):
             organization = author.find('organization')
-            surname = author.attrib.get('surname', '')
+            initials, surname = short_author_name_parts(author)
             if i == len(authors) - 1 and len(authors) > 1:
                 buf.append('and ')
             if surname:
-                initials = self.get_initials(author)
+                initials = self.get_initials(author) or initials
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
                     if len(initials) > 0:
