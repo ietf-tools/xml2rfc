@@ -102,7 +102,7 @@ class V2v3XmlWriter(BaseV3Writer):
                         p.insert(i, xi)
                     else:
                         self.warn(e, 'Invalid value in %s' % lxml.etree.tostring(e))
-        lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap)
+#        lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap)
 
 
     def post_process_lines(self, lines):
@@ -344,10 +344,10 @@ class V2v3XmlWriter(BaseV3Writer):
         # This is a workaround for not being able to do anything about
         # namespaces other than when creating an element.  It lets us retain
         # a namespace declaration for xi: in the root element.
-        dummy = self.element('{http://www.w3.org/2001/XInclude}include', nsmap=self.xmlrfc.nsmap)
-        self.root.insert(0, dummy)
-        lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap, keep_ns_prefixes='xi')
-        self.root.remove(dummy)
+#         dummy = self.element('{http://www.w3.org/2001/XInclude}include', nsmap=self.xmlrfc.nsmap)
+#         self.root.insert(0, dummy)
+#         lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap, keep_ns_prefixes='xi')
+#         self.root.remove(dummy)
         return self.tree
 
     # ----------------------------------------------------------------------

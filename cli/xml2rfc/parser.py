@@ -4,16 +4,17 @@
 
 """ Public XML parser module """
 
-import re
+import io
+import lxml.etree
 import os
-import codecs
+import re
+import requests
 import shutil
 import six
 import time
-import requests
-import lxml.etree
 import xml2rfc.log
 import xml2rfc.utils
+
 from xml2rfc.writers import base
 
 try:
@@ -383,7 +384,7 @@ class CachingResolver(lxml.etree.Resolver):
                         text = lxml.etree.tostring(xml, encoding='utf-8')
                         write_path = os.path.join(self.write_cache, 
                                                   xml2rfc.CACHE_PREFIX, basename)
-                        with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
+                        with io.open(write_path, 'w', encoding='utf-8') as cache_file:
                             cache_file.write(text.decode('utf-8'))
                         xml2rfc.log.note('Added file to cache: ', write_path)
                         return write_path
@@ -417,13 +418,13 @@ class AnnotatedElement(lxml.etree.ElementBase):
 class XmlRfcParser:
 
     nsmap = {
-        'xi':   'http://www.w3.org/2001/XInclude',
+        b'xi':   b'http://www.w3.org/2001/XInclude',
     }
 
 
     """ XML parser container with callbacks to construct an RFC tree """
     def __init__(self, source, verbose=None, quiet=None, options=base.default_options,
-                 cache_path=None, templates_path=None, library_dirs=None,
+                 cache_path=None, templates_path=None, library_dirs=None, add_xmlns=False,
                  no_network=None, network_locs=[
                      'https://xml2rfc.ietf.org/public/rfc/',
                      'https://xml2rfc.tools.ietf.org/public/rfc/',
@@ -440,12 +441,8 @@ class XmlRfcParser:
         self.network_locs = network_locs
 
         if self.source:
-            if six.PY2:
-                with open(self.source, "rU") as f:
-                    self.text = f.read()
-            else:
-                with open(self.source, "rb", newline=None) as f:
-                    self.text = f.read()
+            with io.open(self.source, "rbU") as f:
+                self.text = f.read()
 
         # Initialize templates directory
         self.templates_path = templates_path or \
@@ -490,13 +487,19 @@ class XmlRfcParser:
     def delete_cache(self, path=None):
         self.cachingResolver.delete_cache(path=path)
 
-    def parse(self, remove_comments=True, remove_pis=False, quiet=False, strip_cdata=True, normalize=False):
+    def parse(self, remove_comments=True, remove_pis=False, quiet=False, strip_cdata=True, normalize=False, add_xmlns=False):
         """ Parses the source XML file and returns an XmlRfc instance """
         if not (self.quiet or quiet):
             xml2rfc.log.write('Parsing file', self.source)
 
+        # workaround for not being able to explicitly set namespaces on the
+        # xml root element in lxml: Insert it before we parse:
+        text = self.text
+        if add_xmlns and not self.nsmap[b'xi'] in text:
+            text = text.replace(b'<rfc ', b'<rfc xmlns:%s="%s" ' % (b'xi', self.nsmap[b'xi']), 1)
+
         # Get an iterating parser object
-        file = six.BytesIO(self.text)
+        file = six.BytesIO(text)
         context = lxml.etree.iterparse(file,
                                       dtd_validation=False,
                                       load_dtd=True,
@@ -575,7 +578,7 @@ class XmlRfcParser:
         parser.set_element_class_lookup(element_lookup)
 
         # Parse the XML file into a tree and create an rfc instance
-        file = six.BytesIO(self.text)
+        file = six.BytesIO(text)
         tree = lxml.etree.parse(file, parser)
         xmlrfc = XmlRfc(tree, self.default_dtd_path, nsmap=self.nsmap)
         xmlrfc.source = self.source
