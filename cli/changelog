@@ -1,3 +1,56 @@
+xml2rfc (2.20.0) ietf; urgency=medium
+
+  This release changes the rendering of <xref> elements with text content by
+  v3 formatters, and reintroduces <xref format="none"> under v3 in order to
+  properly cover the combinatorial space of rendering of <xref> with and
+  without text content.  It fixes a number of issues, including a somewhat
+  unexpected issue with namespace normalization, and improves the rendering
+  output in some edge cases.  More details from the commit log:
+
+  * Removed namespace cleanup and normalisation during the v2v3 conversion, 
+    as it can have negative effects for inlined <svg> when the SVG namespace is 
+    specified in multiple places.
+
+  * Changed handling of reference//author entries with fullname but without
+    initials and surname in order to derive those the same way for references
+    as it's done in other places.
+
+  * Dropped support for Py34.  Support is now Py27 (untill end 2019), and
+    Python 3.5 - 3.7.
+
+  * Tweaked the CSS for bcp14 keyword elements.
+
+  * Fixed a problem where a temporary valuable name stomped on a 
+    method-wide name.
+
+  * Fixed a problem where <xref> "relative" attributes were treated as 
+    fragment identifiers instead of as relative URL paths.
+
+  * Improved the placeholder text emitted by the v3 text renderer for 
+    artwork without ascii-art.
+
+  * Removed stripping of the now (again) functional <xref> format value "none"
+    from the v2v3 converter.
+
+  * Tweaked the rendering of <xref> having both derivedContent (section 
+    information, for instance) and text content, to generate hyperlinks to the 
+    xref target for both of them.  Simplified the html renderer by eliminating 
+    extra code for <relref>, now covered by the generic <xref> code.
+
+  * Fixed a problem with a missing hash character between path and fragment 
+    identifiers in derivedLink generation.
+
+  * Added a conversion of <relref> elements to the generic <xref> form to 
+    preptool.  Tweaked a debug print statement.
+
+  * Added An SVG diagram of the processing flow for v2 and v3 documents, used
+    by xml2rfc3.rst, to doc/
+
+  * Added an rST-formatted Introduction to xml2rfc version 3 to doc/
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  26 Feb 2019 13:22:09 -0800
+
+
 xml2rfc (2.19.1) ietf; urgency=medium
 
   This is a small bugfix release.  From the commit log:
