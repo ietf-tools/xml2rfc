@@ -1,3 +1,11 @@
+xml2rfc (2.20.1) ietf; urgency=medium
+
+  * Handle initials==Null return value from short_author_name_parts().  
+    Fixes issue #397
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  27 Feb 2019 05:14:17 -0800
+
+
 xml2rfc (2.20.0) ietf; urgency=medium
 
   This release changes the rendering of <xref> elements with text content by
@@ -7,8 +15,8 @@ xml2rfc (2.20.0) ietf; urgency=medium
   unexpected issue with namespace normalization, and improves the rendering
   output in some edge cases.  More details from the commit log:
 
-  * Removed namespace cleanup and normalisation during the v2v3 conversion, 
-    as it can have negative effects for inlined <svg> when the SVG namespace is 
+  * Removed namespace cleanup and normalisation during the v2v3 conversion, as
+    it can have negative effects for inlined <svg> when the SVG namespace is
     specified in multiple places.
 
   * Changed handling of reference//author entries with fullname but without
@@ -32,9 +40,9 @@ xml2rfc (2.20.0) ietf; urgency=medium
   * Removed stripping of the now (again) functional <xref> format value "none"
     from the v2v3 converter.
 
-  * Tweaked the rendering of <xref> having both derivedContent (section 
-    information, for instance) and text content, to generate hyperlinks to the 
-    xref target for both of them.  Simplified the html renderer by eliminating 
+  * Tweaked the rendering of <xref> having both derivedContent (section
+    information, for instance) and text content, to generate hyperlinks to the
+    xref target for both of them.  Simplified the html renderer by eliminating
     extra code for <relref>, now covered by the generic <xref> code.
 
   * Fixed a problem with a missing hash character between path and fragment 
