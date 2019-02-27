@@ -567,7 +567,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 organization = author.find('organization')
                 email = author.find('address/email')
                 initials, surname = short_author_name_parts(author)
-                initials = self.get_initials(author) or initials
+                initials = self.get_initials(author) or initials or ''
                 a = None
                 if j == len(authors) - 1 and len(authors) > 1:
                     last.tail = ' and '
