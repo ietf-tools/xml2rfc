@@ -696,7 +696,7 @@ class BaseRfcWriter:
             if i == len(authors) - 1 and len(authors) > 1:
                 buf.append('and ')
             if surname:
-                initials = self.get_initials(author) or initials
+                initials = self.get_initials(author) or initials or ''
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
                     if len(initials) > 0:

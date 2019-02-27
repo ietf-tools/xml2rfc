@@ -684,6 +684,7 @@ class TextWriter(BaseV3Writer):
             organization = author.find('organization')
             initials, surname = short_author_name_parts(author)
             if surname:
+                initials = initials or ''
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
                     if len(initials) > 0:
