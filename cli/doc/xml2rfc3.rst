@@ -27,7 +27,7 @@ to convert the ``XML`` markup to the text format used for RFC and draft publicat
 In December 2016, `RFC 7991`_ presented a revised and expanded markup vocabulary
 based on the original `RFC 2629` vocabulary.  Given that the `RFC 2629` vocabulary
 had received a number of extensions over the years, the de facto vocabulary
-implemented by the ``xml2rfc`` tool in 2016 was called vocabulary 'v2' for short,
+implemented by the ``xml2rfc`` tool in 2016 was called vocabulary '``v2``' for short,
 and the vocabulary in `RFC 7991`_ was called '``v3``'.
 
 Recent versions of ``xml2rfc``, starting with version 2.7.0, have gradually
@@ -134,7 +134,7 @@ Syntax Changes in ``v3`` ``XML`` Sources
 
 First of all, please note that you can use ``v2`` ``XML`` source files with
 ``xml2rfc``, and still request ``v3`` output formatters.  In this case, ``xml2rfc``
-will run the ``v2-to-v3`` converter internally, to convert any ``v2`` elements
+will run the ``v2``-to-``v3`` converter internally, to convert any ``v2`` elements
 in your input source to the equivalent ``v3`` constructs.  Everything should
 work as expected, but as long as you are using ``v2`` elements in your
 input file, there will be a conversion step, and you will not be in full
