@@ -657,7 +657,7 @@ class TextWriter(BaseV3Writer):
             name = '%s (%s)' % (name, aname)
         #
         o = e.find('./organization')
-        if o != None:
+        if o != None and o.get('showOnFrontPage') == 'true':
             organization = self.render_front_organization(o, **kwargs)
         else:
             organization = None

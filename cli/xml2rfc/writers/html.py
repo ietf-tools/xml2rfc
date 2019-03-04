@@ -905,9 +905,11 @@ class HtmlWriter(BaseV3Writer):
                 role = build.span(role, classes=x.get('role'))
             if name:
                 div.append(wrap_ascii('div', '', name, ascii, role, classes='author-name'))
-            org, ascii  = short_org_name_set(x)
-            if org:
-                div.append(wrap_ascii('div', '', org, ascii, None, classes='org'))
+            o = x.find('organization')
+            if o != None and o.get('showOnFrontPage') == 'true':
+                org, ascii  = short_org_name_set(x)
+                if org:
+                    div.append(wrap_ascii('div', '', org, ascii, None, classes='org'))
             return div
 
     # 9.7.2.  Authors of This Document
