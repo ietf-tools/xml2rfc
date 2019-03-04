@@ -104,14 +104,18 @@ def main():
     plain_options = optparse.OptionGroup(optionparser, 'Plain Options')
     plain_options.add_option('-C', '--clear-cache', action='callback', callback=clear_cache,
                             help='purge the cache and exit')
-    plain_options.add_option('-H', '--pi-help', action='callback', callback=print_pi_help,
-                            help='show the names and default values of PIs')
     plain_options.add_option(      '--debug', action='store_true',
                             help='Show debugging output')
+    plain_options.add_option('-H', '--pi-help', action='callback', callback=print_pi_help,
+                            help='show the names and default values of PIs')
     plain_options.add_option('-n', '--no-dtd', action='store_true',
                             help='disable DTD validation step')
     plain_options.add_option('-N', '--no-network', action='store_true', default=False,
                             help='don\'t use the network to resolve references')
+    plain_options.add_option('-O', '--no-org-info', dest='first_page_author_org', action='store_false', default=True,
+                            help='don\'t show author orgainzation info on page one (legacy only)')
+    plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
+                            help='Remove XML processing instructions')
     plain_options.add_option('-q', '--quiet', action='store_true',
                             help='dont print anything')
     plain_options.add_option('-u', '--utf8', action='store_true',
@@ -120,8 +124,6 @@ def main():
                             help='print extra information')
     plain_options.add_option('-V', '--version', action='store_true', 
                             help='display the version number and exit')
-    plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
-                            help='Remove XML processing instructions')
     optionparser.add_option_group(plain_options)
 
 

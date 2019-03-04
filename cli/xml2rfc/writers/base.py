@@ -16,7 +16,7 @@ import xml2rfc.utils
 from optparse import Values
 
 try:
-    import debug
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
@@ -40,6 +40,7 @@ default_options = Values(defaults={
         'dtd': None,
         'external_css': False,
         'filename': None,
+        'first_page_author_org': True,
         'id_base_url': 'https://www.ietf.org/archive/id/',
         'image_svg': False,
         'indent': 2,
@@ -790,8 +791,6 @@ class BaseRfcWriter:
     def _prepare_top_right(self):
         """ Returns a list of lines for the top right header """
         lines = []
-        # Render author?
-        stream = self.r.attrib.get('submissionType', self.defaults['submissionType'])
         # Keep track of previous organization and remove if redundant.
         last_org = None
         last_pos = None
@@ -806,7 +805,7 @@ class BaseRfcWriter:
                          get('surname', '') + role)
             organization = author.find('organization')
             org_name = ''
-            if stream != 'IAB':
+            if self.options.first_page_author_org:
                 if organization is not None:
                     abbrev = organization.attrib.get("abbrev", None)
                     if  abbrev != None and abbrev.strip() != '':
