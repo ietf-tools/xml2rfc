@@ -111,6 +111,16 @@ def minwidth(text):
     return min([ len(w) for w in words ]+[0])
 
 
+def pagelength(text):
+    """
+    Find the length of the last page of text, assuming that pages are separated
+    by ^L
+    """
+    pos = text.rfind('\f')
+    if pos == -1:
+        pos = 0
+    return text.count('\n', pos)
+
 class TextWriter(BaseV3Writer):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
@@ -118,6 +128,7 @@ class TextWriter(BaseV3Writer):
 
     def write(self, filename):
         """Write the document to a file """
+
         joiners = base_joiners
         text = self.render(self.root, width=72, joiners=joiners)
         if not text.endswith('\n'):
@@ -2541,23 +2552,11 @@ class TextWriter(BaseV3Writer):
     #    4.  One optional <back> element (Section 2.8)
     def render_rfc(self, e, width, **kwargs):
         self.part = e.tag
-        paginated = kwargs.pop('paginated', False)
-        parts = []
+        #paginated = kwargs.pop('paginated', False)
+        text = ''
         for c in e.getchildren():
             self.part = c.tag
-            ctext = self.render(c, width, **kwargs)
-            if ctext:
-                if isinstance(ctext, list):
-                    parts += ctext
-                else:
-                    parts.append(ctext)
-        if paginated:
-            text = self.page_join(parts)
-        else:
-            for part in parts:
-                if isinstance(part, tuple):
-                    debug.show('part')
-            text = "\n\n".join(parts)
+            text = self.join(text, c, width, **kwargs)
         return text
 
     # 2.45.1.  "category" Attribute
@@ -3959,7 +3958,7 @@ class TextWriter(BaseV3Writer):
         try:
             text = expand_unicode_element(e)
         except (RuntimeError, ValueError) as exception:
-            text = None
+            text = ''
             self.err(e, exception)
         text += e.tail or ''
         return text
