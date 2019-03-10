@@ -104,6 +104,8 @@ class PrepToolWriter(BaseV3Writer):
         self.liberal = liberal if liberal != None else options.accept_prepped
         self.keep_pis = keep_pis
         #
+        self.v3_rng = etree.RelaxNG(file=self.rng_file)
+        #
         self.ol_counts = {}
         self.attribute_defaults = {}
         # 
@@ -172,10 +174,8 @@ class PrepToolWriter(BaseV3Writer):
         for attr, id, e in dups:
             self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
 
-        v3_rng = etree.RelaxNG(file=self.v3_rng_file)
-
         try:
-            v3_rng.assertValid(self.tree)
+            self.v3_rng.assertValid(self.tree)
             return True
         except Exception as e:
             lxmlver = etree.LXML_VERSION[:3]
