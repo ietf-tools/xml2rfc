@@ -776,7 +776,7 @@ class HtmlWriter(BaseV3Writer):
             try:
                 if vbox:
                     if not (svgw and svgh):
-                        xo,yo,w,h = vbox.split()
+                        xo,yo,w,h = re.split(',? +', vbox.strip('()'))
                         svgw = float(w)-float(xo)
                         svgh = float(h)-float(yo)
                 else:
@@ -1545,6 +1545,25 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    This element does not add any direct output to HTML.
     render_middle = skip_renderer
+
+    ## Potential extension: <math>
+    ##
+    ## Same content as for instance <name>, but may contain unicode
+    ## characters of categories L*, P*, Sm, Sk or Zs.  For categories L*, the script
+    ## must be either Common, Greek, or Hebrew.
+    ##
+    ## def render_math(self, s, x):
+    ##     for t in x.itertext():
+    ##         for c in t:
+    ##             cat = unicode.category(c)
+    ##             if cat.beginswith('L'):
+    ##                scr = get_script(c)
+    ##                if not scr in ['Common', 'Greek', 'Hebrew', ]:
+    ##                   self.err(x, ...)
+    ##     div = add.div(h, x, classes="inline-math")
+    ##     for c in x.getchildren():
+    ##         self.render(div, c)
+    ##
 
     # 9.32.  <name>
     # 
