@@ -91,8 +91,11 @@ def expand_unicode_element(e, bare=False):
         parts = re.findall('{([a-z]+)}', format)
     if len(parts) == 0 or not all(p for p in permitted):
         raise ValueError('Expected <unicode> expansion parts to be one or more of %s, but found format="%s"' % (', '.join(permitted), val))
-    if not any(p for p in required):
-        raise ValueError('Expected <unicode> expansion parts to include at least one of %s, but found format="%s"' % (', '.join(required), val))
+    if not any(p in parts for p in required):
+        if len(required) > 1:
+            raise ValueError('Expected <unicode> expansion parts to include at least one of %s, but found format="%s"' % (', '.join(['"%s"'%r for r in required]), val))
+        else:
+            raise ValueError('Expected <unicode> expansion parts to include at least "%s", but found format="%s"' % (required[0], val))            
     if len(parts) > 3:
         raise ValueError('Expected up to 3 dash-separated <unicode> expansion parts, but found %d: format="%s"' % (len(parts), format))
     #
