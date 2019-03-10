@@ -38,12 +38,15 @@ default_options = Values(defaults={
         'debug': False,
         'doi_base_url': 'https://doi.org/',
         'dtd': None,
+        'expand': False,
         'external_css': False,
         'filename': None,
         'first_page_author_org': True,
+        'html': False,
         'id_base_url': 'https://www.ietf.org/archive/id/',
         'image_svg': False,
         'indent': 2,
+        'info': False,
         'legacy': True,
         'legacy_date_format': True,
         'legacy_list_symbols': False,
@@ -51,18 +54,23 @@ default_options = Values(defaults={
         'no_css': False,
         'no_dtd': None,
         'no_network': False,
+        'nroff': False,
         'omit_headers': None,
         'output_filename': None,
         'output_path': None,
+        'pagination': True,
         'pdf': False,
         'preptool': False,
         'quiet': False,
         'remove_pis': False,
+        'raw': False,
         'rfc': None,
         'rfc_base_url': 'https://www.rfc-editor.org/info/',
         'strict': False,
+        'text': True,
         'utf8': False,
         'verbose': False,
+        'version': False,
         'v2v3': False,
         'vocabulary': 'v2',
     })
@@ -1540,7 +1548,8 @@ class BaseRfcWriter:
         """ Writes the finished buffer to a file """
         raise NotImplementedError('write_to_file() needs to be overridden')
 
-
+# --------------------------------------------------------------------------------------------------
+# Sets of various kinds of tags in the v3 schema
         
 deprecated_element_tags = set([
     'c',
@@ -1555,20 +1564,60 @@ deprecated_element_tags = set([
     'vspace',
 ])
 
+v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
+v3_schema = lxml.etree.ElementTree(file=v3_rng_file)
+
+def get_element_tags():
+    element_tags = set()
+    elements = v3_schema.xpath("/x:grammar/x:define/x:element", namespaces=namespaces)
+    for element in elements:
+        name = element.get('name')
+        if not name in element_tags:
+            element_tags.add(name)
+    return element_tags
+
+def get_text_tags():
+    "Get tags that can have text content from the schema"
+    text_tags = set()
+    texts = v3_schema.xpath("/x:grammar/x:define/x:element//x:text", namespaces=namespaces)
+    for t in texts:
+        element = list(t.iterancestors('{*}element'))[0]
+        name = element.get('name')
+        if not name in text_tags:
+            text_tags.add(name)
+    return text_tags
+
+def get_inline_tags():
+    "Get tags that can occur within text from the schema"
+    inline_tags = set()
+    referenced = v3_schema.xpath("/x:grammar/x:define/x:element//x:ref", namespaces=namespaces)
+    for ref in referenced:
+        name = ref.get('name')
+        if not name in inline_tags:
+            p = ref.getparent()
+            text = p.find('x:text', namespaces=namespaces)
+            if text != None:
+                inline_tags.add(name)
+    return inline_tags
+
+text_tags   = get_text_tags() - deprecated_element_tags
+inline_tags = get_inline_tags() - deprecated_element_tags
+block_tags =  get_element_tags() - text_tags - deprecated_element_tags
+
+# --------------------------------------------------------------------------------------------------
 
 class BaseV3Writer(object):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+        global v3_rng_file, v3_schema
         self.xmlrfc = xmlrfc
         self.tree = xmlrfc.tree
         self.root = self.tree.getroot()
         self.options = options
         self.date = date
+        self.rng_file = v3_rng_file
+        self.schema = v3_schema
         self.index_items = []
-        self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
-        self.schema = lxml.etree.ElementTree(file=self.v3_rng_file)
-        self.text_tags   = self.get_text_tags() - deprecated_element_tags
-        self.inline_tags = self.get_inline_tags() - deprecated_element_tags
         self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
         self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
         self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//referencegroup') ))
@@ -1670,39 +1719,6 @@ class BaseV3Writer(object):
 #         names = set([ r.get('name') for r in refs ])
 #         return names
 
-    def get_element_tags(self):
-        element_tags = set()
-        elements = self.schema.xpath("/x:grammar/x:define/x:element", namespaces=namespaces)
-        for element in elements:
-            name = element.get('name')
-            if not name in element_tags:
-                element_tags.add(name)
-        return element_tags
-
-    def get_text_tags(self):
-        "Get tags that can have text content from the schema"
-        text_tags = set()
-        texts = self.schema.xpath("/x:grammar/x:define/x:element//x:text", namespaces=namespaces)
-        for t in texts:
-            element = list(t.iterancestors('{*}element'))[0]
-            name = element.get('name')
-            if not name in text_tags:
-                text_tags.add(name)
-        return text_tags
-
-    def get_inline_tags(self):
-        "Get tags that can occur within text from the schema"
-        inline_tags = set()
-        referenced = self.schema.xpath("/x:grammar/x:define/x:element//x:ref", namespaces=namespaces)
-        for ref in referenced:
-            name = ref.get('name')
-            if not name in inline_tags:
-                p = ref.getparent()
-                text = p.find('x:text', namespaces=namespaces)
-                if text != None:
-                    inline_tags.add(name)
-        return inline_tags
-
     def write(self, filename):
         raise NotImplementedError()
 
@@ -1798,12 +1814,12 @@ class BaseV3Writer(object):
                         e.tail = '\n'+' '*(i-ind)
                 return
             #
-            if e.tag not in self.text_tags:
+            if e.tag not in text_tags:
                 if len(e) and (e.text is None or e.text.strip()==''):
                     e.text = '\n'+' '*(i+ind)
             elif e.tag in ['blockquote', 'li', 'dd', 'td', 'th' ]: # mixed content
                 pass
-                if len(e) and e[0] not in self.inline_tags and (e.text is None or e.text.strip()==''):
+                if len(e) and e[0] not in inline_tags and (e.text is None or e.text.strip()==''):
                     e.text = '\n'+' '*(i+ind)
             elif e.tag in ['artwork', 'sourcecode', ]:
                 pass
@@ -1823,7 +1839,7 @@ class BaseV3Writer(object):
             for c in e:
                 indent(c, i+ind)
             #
-            if e.tag not in self.inline_tags:# and e.tag not in ['artwork', 'sourcecode', ]:
+            if e.tag not in inline_tags:# and e.tag not in ['artwork', 'sourcecode', ]:
                 if e.tail is None or e.tail.strip()=='':
                     if e.getnext() != None:
                         e.tail = '\n'+' '*i
