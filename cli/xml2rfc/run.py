@@ -164,6 +164,8 @@ def main():
                            help='use the legacy date format, rather than the new one.')
     textoptions.add_option('--list-symbols', metavar='4*CHAR',
                            help='use the characters given as list bullet symbols.')
+    textoptions.add_option('-P', '--no-pagination', dest='pagination', action='store_false', default=True,
+                            help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated.')
     optionparser.add_option_group(textoptions)
 
     htmloptions = optparse.OptionGroup(optionparser, 'Html Format Options')
@@ -198,6 +200,14 @@ def main():
     options.doi_base_url = "https://doi.org/"
     options.no_css = False
     options.image_svg = False
+
+    # Check that the default_options have values for all options, for people
+    # calling xml2rfc library functions, rather than the command-line
+    from xml2rfc.writers.base import default_options
+    for key in options.__dict__:
+        if not key in default_options.__dict__:
+            sys.stderr.write("  Option missing from base.default_options: %s\n" % key)
+            sys.exit(2)
 
     # Show version information, then exit
     if options.version:
