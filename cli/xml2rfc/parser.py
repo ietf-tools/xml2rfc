@@ -137,14 +137,8 @@ class CachingResolver(lxml.etree.Resolver):
                 return self.resolve_string(self.rfc_number, context)
             return self.resolve_string("XXXX", context)
         if not urlparse(request).netloc:
-            # Format the request from the relative path of the source so that 
-            # We get the exact same path as in the XML document
             if request.startswith("file:///"):
-                request = request[8:]
-            try:
-                request = os.path.relpath(request, self.source_dir)
-            except ValueError as e:
-                xml2rfc.log.error(str(e))                
+                request = request[7:]
         try:
             path = self.getReferenceRequest(request)
             return self.resolve_filename(path, context)
@@ -289,7 +283,6 @@ class CachingResolver(lxml.etree.Resolver):
                         #     result = os.path.join(self.source_dir, request)
                         #     attempts.append(result)
                 else:
-                    # Hanging filename
                     for dir in self.library_dirs:
                         # NOTE: Recursion can be implemented here
                         # Try local library directories
@@ -461,12 +454,13 @@ class XmlRfcParser:
         #   2. Default to /usr/share/xml2rfc
         # Split on colon or semi-colon delimiters
         if not library_dirs:
-            library_dirs = os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc:')
+            library_dirs = os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc')
         self.library_dirs = []
-        for raw_dir in re.split(':|;', library_dirs):
+        srcdir = os.path.abspath(os.path.dirname(self.source))
+        for raw_dir in re.split(':|;', library_dirs) + [ srcdir ]:
             # Convert empty directory to source dir
             if raw_dir == '': 
-                raw_dir = os.path.abspath(os.path.dirname(self.source))
+                raw_dir = srcdir
             else:
                 raw_dir = os.path.normpath(os.path.expanduser(raw_dir))
             # Add dir if its unique
