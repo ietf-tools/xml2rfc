@@ -3834,10 +3834,6 @@ class TextWriter(BaseV3Writer):
             if pp.tag == 'rfc':
                 doc_name = self.root.get('docName')
                 if doc_name:
-                    if '.' in doc_name:
-                        self.warn(self.root, "The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
-                    if not re.search('-\d\d$', doc_name):
-                        self.warn(self.root, "The 'docName' attribute of the <rfc/> element should have a revision number as the last component: docName=\"draft-foo-bar-02\".")
                     title += '\n'+doc_name.strip().center(width).rstrip()
             return title
 

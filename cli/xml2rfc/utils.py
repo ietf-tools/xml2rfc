@@ -558,8 +558,10 @@ def build_dataurl(mime, data, base64enc=False):
 namespaces={
     'x':    'http://relaxng.org/ns/structure/1.0',
     'a':    'http://relaxng.org/ns/compatibility/annotations/1.0',
+    'xi':   'http://www.w3.org/2001/XInclude',
+    'svg':  'http://www.w3.org/2000/svg',
     'xml':  'http://www.w3.org/XML/1998/namespace',
-    's':    'http://www.w3.org/2000/svg',
+    'xlink':'http://www.w3.org/1999/xlink',
 }
 
 

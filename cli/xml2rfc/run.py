@@ -396,6 +396,8 @@ def main():
 
     # Remember if we're building an RFC
     options.rfc = xmlrfc.tree.getroot().get('number')
+    if options.rfc:
+        options.pagination = False
 
     # Check if we've received a version="3" document, and adjust accordingly
     if xmlrfc.tree.getroot().get('version') == '3':

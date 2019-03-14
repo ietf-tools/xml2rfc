@@ -227,6 +227,7 @@ class PrepToolWriter(BaseV3Writer):
                                                 # 5.1.2.  DTD Removal
             '//processing-instruction()',       # 5.1.3.  Processing Instruction Removal
             '.;validate_before()',              # 5.1.4.  Validity Check
+            '/rfc;check_attribute_values()',
             '.;check_attribute_values()',       # 
             '.;check_ascii_text()',
             './/*[@anchor]',                    # 5.1.5.  Check "anchor"
@@ -302,7 +303,6 @@ class PrepToolWriter(BaseV3Writer):
         #    against the base URI potentially modified by a previously inserted
         #    xml:base attribute).  The tool may be configurable with a limit on
         #    the depth of recursion.
-
         try:
             self.tree.xinclude()
         except etree.XIncludeError as e:
@@ -406,6 +406,16 @@ class PrepToolWriter(BaseV3Writer):
             self.die(self.root, 'Expected <rfc> version="3", but found "%s"' % version)
         if not self.validate('before'):
             self.note(None, "Schema validation failed for input document")
+
+    def rfc_check_attribute_values(self, e,  p):
+        doc_name = e.get('docName')
+        if doc_name and doc_name.strip():
+            if '.' in doc_name:
+                self.warn(e, "The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
+            if not re.search('-\d\d$', doc_name):
+                self.warn(e, "The 'docName' attribute of the <rfc/> element should have a revision number as the last component: docName=\"draft-foo-bar-02\".")
+        else:
+            self.warn(e, "Expected a 'docName' attribute in the <rfc/> element, but found none.")
 
     def check_attribute_values(self, e, p):
         # attribute names
@@ -1670,7 +1680,7 @@ class PrepToolWriter(BaseV3Writer):
                     alt = e.get('alt')
                     if alt and svg != None:
                         if not svg.xpath('.//desc'):
-                            desc = self.element('{%s}desc'%namespaces['s'], line=e.sourceline)
+                            desc = self.element('{%s}desc'%namespaces['svg'], line=e.sourceline)
                             desc.text = alt
                             desc.tail = '\n'
                             desc.sourceline = e.sourceline

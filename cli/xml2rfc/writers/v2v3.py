@@ -624,10 +624,6 @@ class V2v3XmlWriter(BaseV3Writer):
                 e.insert(0, self.element('link', rel='prev', href="https://datatracker.ietf.org/doc/%s"%(e.get('docName'), ), line=e.sourceline))
         elif 'docName' in e.attrib:
             value=e.get('docName')
-            if '.' in value:
-                log.warn("The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
-            if not re.search('-\d\d$', value):
-                log.warn("The 'docName' attribute of the <rfc/> element should have a revision number as the last component when submitted: docName=\"draft-foo-bar-02\".")
             new = self.element('seriesInfo', name="Internet-Draft", value=value, line=e.sourceline)
             if not 'Internet-Draft' in [ s.get('name') for s in series ]:
                 front.insert(i, new)
