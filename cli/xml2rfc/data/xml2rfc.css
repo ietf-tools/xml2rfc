@@ -3,10 +3,6 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
 
-@viewport {
-  zoom: 1.0;
-  width: extend-to-zoom;
-}
 @-ms-viewport {
   width: extend-to-zoom;
   zoom: 1.0;
@@ -612,30 +608,6 @@ hr.addr {
   }
 }
 
-.ears thead .left {
-  string-set: ears-top-left content();
-}
-
-.ears thead .center {
-  string-set: ears-top-center content();
-}
-
-.ears thead .right {
-  string-set: ears-top-right content();
-}
-
-.ears tfoot .left {
-  string-set: ears-bottom-left content();
-}
-
-.ears tfoot .center {
-  string-set: ears-bottom-center content();
-}
-
-.ears tfoot .right {
-  string-set: ears-bottom-right content();
-}
-
 @page :first {
   padding-top: 0;
   @top-left {
@@ -656,41 +628,6 @@ hr.addr {
   size: A4;
   margin-bottom: 45mm;
   padding-top: 20px;
-  @top-left {
-    content: 'Internet-Draft';
-    vertical-align: bottom;
-    border-bottom: solid 1px #ccc;
-  }
-  @top-left {
-    content: string(ears-top-left);
-    vertical-align: bottom;
-    border-bottom: solid 1px #ccc;
-  }
-  @top-center {
-    content: string(ears-top-center);
-    vertical-align: bottom;
-    border-bottom: solid 1px #ccc;
-  }
-  @top-right {
-    content: string(ears-top-right);
-    vertical-align: bottom;
-    border-bottom: solid 1px #ccc;
-  }
-  @bottom-left {
-    content: string(ears-bottom-left);
-    vertical-align: top;
-    border-top: solid 1px #ccc;
-  }
-  @bottom-center {
-    content: string(ears-bottom-center);
-    vertical-align: top;
-    border-top: solid 1px #ccc;
-  }
-  @bottom-right {
-      content: '[Page ' counter(page) ']';
-      vertical-align: top;
-      border-top: solid 1px #ccc;
-  }
 }
 
 /* Changes introduced to fix issues found during implementation */
@@ -878,3 +815,16 @@ caption a[href] {
   font-weight: bold;
   font-size: 0.9em;
 }
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
