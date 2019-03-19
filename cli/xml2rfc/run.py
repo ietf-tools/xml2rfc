@@ -20,8 +20,8 @@ import os
 import xml2rfc
 
 try:
-    import debug
-    assert debug
+    from xmlrfc import debug
+    debug.debug = True
 except ImportError:
     pass
 
