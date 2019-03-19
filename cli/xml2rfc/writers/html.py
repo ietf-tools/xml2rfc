@@ -769,7 +769,8 @@ class HtmlWriter(BaseV3Writer):
                 self.err(x, 'Expected <svg> content inside <artwork type="svg">, but did not find it:\n   %s ...' % (lxml.etree.tostring(x)[:256], ))
                 return None
             # For w3.org validator compatibility
-            del svg.attrib['version']
+            if svg.get('attribute', None):
+                del svg.attrib['version']
             #
             # Deal with possible svg scaling issues.
             vbox = svg.get('viewBox')
@@ -790,9 +791,9 @@ class HtmlWriter(BaseV3Writer):
             except ValueError as e:
                 self.err(x, "Error when calculating SVG size: %s" % e)
             imgw = 660 if self.options.image_svg else 724
-
-            svg.set('width', str(svgw/svgw*imgw))
-            svg.set('height', str(svgh/svgw*imgw))
+            if imgw < svgw:
+                svg.set('width', str(svgw/svgw*imgw))
+                svg.set('height', str(svgh/svgw*imgw))
             #
             if self.options.image_svg:
                 data = build_dataurl('image/svg+xml', lxml.etree.tostring(svg))
