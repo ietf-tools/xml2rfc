@@ -1568,41 +1568,65 @@ v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', '
 v3_schema = lxml.etree.ElementTree(file=v3_rng_file)
 
 def get_element_tags():
-    element_tags = set()
+    tags = set()
     elements = v3_schema.xpath("/x:grammar/x:define/x:element", namespaces=namespaces)
     for element in elements:
         name = element.get('name')
-        if not name in element_tags:
-            element_tags.add(name)
-    return element_tags
+        if not name in tags:
+            tags.add(name)
+    return tags
+
+def get_meta_tags():
+    "Get tags that can have text content but don't occur in regular text"
+    tags = set()
+    for elem in ['author', 'address', 'front', 'postal', 'reference' ]:
+        refs = v3_schema.xpath("/x:grammar/x:define[@name='%s']//x:ref"%elem, namespaces=namespaces)
+        for r in refs:
+            name = r.get('name')
+            if not name in tags:
+                tags.add(name)
+    return tags
 
 def get_text_tags():
     "Get tags that can have text content from the schema"
-    text_tags = set()
+    tags = set()
     texts = v3_schema.xpath("/x:grammar/x:define/x:element//x:text", namespaces=namespaces)
     for t in texts:
         element = list(t.iterancestors('{*}element'))[0]
         name = element.get('name')
-        if not name in text_tags:
-            text_tags.add(name)
-    return text_tags
+        if not name in tags:
+            tags.add(name)
+    return tags
+
+def get_text_or_block_tags():
+    "Get tags that can have either text or block contents from the schema"
+    tags = set()
+    texts = v3_schema.xpath("/x:grammar/x:define/x:element/x:choice/*/x:choice//x:text", namespaces=namespaces)
+    for t in texts:
+        element = list(t.iterancestors('{*}element'))[0]
+        name = element.get('name')
+        if not name in tags:
+            tags.add(name)
+    return tags
 
 def get_inline_tags():
     "Get tags that can occur within text from the schema"
-    inline_tags = set()
+    tags = set()
     referenced = v3_schema.xpath("/x:grammar/x:define/x:element//x:ref", namespaces=namespaces)
     for ref in referenced:
         name = ref.get('name')
-        if not name in inline_tags:
+        if not name in tags:
             p = ref.getparent()
             text = p.find('x:text', namespaces=namespaces)
             if text != None:
-                inline_tags.add(name)
-    return inline_tags
+                tags.add(name)
+    return tags
 
+meta_tags   = get_meta_tags() - deprecated_element_tags
 text_tags   = get_text_tags() - deprecated_element_tags
 inline_tags = get_inline_tags() - deprecated_element_tags
-block_tags =  get_element_tags() - text_tags - deprecated_element_tags
+block_tags  = get_element_tags() - text_tags - deprecated_element_tags
+mixed_tags  = get_text_or_block_tags() - deprecated_element_tags
 
 # --------------------------------------------------------------------------------------------------
 
@@ -1611,13 +1635,17 @@ class BaseV3Writer(object):
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
         global v3_rng_file, v3_schema
         self.xmlrfc = xmlrfc
-        self.tree = xmlrfc.tree
-        self.root = self.tree.getroot()
+        self.tree = xmlrfc.tree if xmlrfc else None
+        self.root = self.tree.getroot() if xmlrfc else None
         self.options = options
         self.date = date
         self.rng_file = v3_rng_file
         self.schema = v3_schema
         self.index_items = []
+        self.meta_tags = set(meta_tags)
+        self.text_tags = set(text_tags)
+        self.inline_tags = set(inline_tags)
+        self.mixed_tags = set(mixed_tags)
         self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
         self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
         self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//referencegroup') ))
