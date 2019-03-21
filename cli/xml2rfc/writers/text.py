@@ -32,18 +32,35 @@ from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_
 from xml2rfc.util.num import ol_style_formatter, num_width
 from xml2rfc.util.unicode import expand_unicode_element
 from xml2rfc.util.postal import get_normalized_address_info, format_address
+from xml2rfc.utils import justify_inline
+
 
 IndexItem   = namedtuple('indexitem', ['item', 'subitem', 'anchor', 'page', ])
 Joiner      = namedtuple('joiner', ['init', 'join', 'first', 'indent', 'hang', ])
 # We don't use namedtuple for Line, because the resulting objects would be immutable:
 class Line(object):
-    text = None
-    elem = None
     def __init__(self, text, elem):
         assert isinstance(text, six.text_type)
         self.text = text
         self.elem = elem
-        
+        self.page = None
+        self.block = None
+# a couple of factory functions.  We may modify the resulting lines later,
+# which is why we can't just use static instances.
+def blankline():
+    return [ Line('', None) ]
+def pagefeed():
+    return [ Line('\f', None) ]
+
+class Block(object):
+    " Used to hold line block information needed for pagination."
+    def __init__(self, elem, prev, next=None, beg=None, end=None):
+        self.prev = prev                # previous block
+        self.next = next                # next block
+        self.elem = elem                # the block's element
+        self.beg  = beg                 # beginning line of block
+        self.end  = end                 # ending line of block
+
 wrapper = utils.TextWrapper(width=72, break_on_hyphens=False)
 seen = set()
 
@@ -149,28 +166,68 @@ def minwidth(arg):
     words = text.split()
     return min([ len(w) for w in words ]+[0])
 
-def pagelength(text):
-    """
-    Find the length of the last page of text, assuming that pages are separated
-    by ^L
-    """
-    pos = text.rfind('\f')
-    if pos == -1:
-        pos = 0
-    return text.count('\n', pos)
+def stripl(l):
+    while l and l[0].text.strip() == '':
+        del l[0]
+    while l and l[-1].text.strip() == '':
+        del l[-1]
+    return l
+
+def findblocks(lines):
+    "Iterate through all lines, adding block beg/end and back/fwd links"
+    elem = None                         # last seen element
+    prev = None                         # previous block
+    keep = False                        # True if previous keepWithNext was true
+    block = None
+    for n, l in enumerate(lines):
+        if   l.elem == None:
+            if block!=None and not keep and not block.end:
+                block.end = n
+        elif l.elem != elem:
+            elem = l.elem
+            if not keep:
+                block = Block(elem, prev, beg=n)
+                if prev!=None:
+                    prev.next = block
+                    if not prev.end:
+                        prev.end = n
+                prev = block
+            keep = l.elem.get('keepWithNext') == 'true' or l.elem.tag == 'section'
+            l.block = block
+        else:
+            l.block = block
+    block.end = n
+    return lines
 
 class TextWriter(BaseV3Writer):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
         super(TextWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
+        self.options.min_section_start_lines = 5
 
     def write(self, filename):
         """Write the document to a file """
 
         joiners = base_joiners
         lines = self.render(self.root, width=72, joiners=joiners)
-#         for l in lines:
-#             sys.stderr.write("%12s %s\n" % (line.elem.tag, line.text))
+        if self.options.pagination:
+            lines = findblocks(lines)
+            lines = self.paginate(lines)
+            lines = self.update_toc(lines)
+        if self.options.verbose:
+            for i, l in enumerate(lines):
+                try:
+                    if l.block:
+                        sys.stderr.write(("%3d %8s %3d-%3d %s\n" % (i, l.elem!=None and l.elem.tag or '-', l.block.beg, l.block.end, l.text)).encode('utf8'))
+                    else:
+                        sys.stderr.write(("%3d %8s         %s\n" % (i, l.elem!=None and l.elem.tag or '-', l.text)).encode('utf8'))
+                except:
+                    debug.show('l.block.beg')
+                    debug.show('l.block.end')
+                    debug.show('l.block.prev')
+                    debug.show('l.block.this')
+                    debug.show('l.block.next')
+
         text = ('\n'.join( l.text for l in lines )).rstrip() + '\n'
         # Replace some code points whose utility has ended
         text = text.replace(u'\u00A0', u' ')
@@ -203,6 +260,115 @@ class TextWriter(BaseV3Writer):
                 seen.add(e.tag)
         res = func(e, width, **kwargs)
         return res
+
+    def paginate(self, lines):
+        """
+        The maximum length of page text is 48 lines.  Above this there are 4 lines of
+        top header, or 4 blank lines on the first page, below this there are 5 lines
+        of footer, with ^L on the last line and the footer on the next-to-last line.
+        """
+        header = justify_inline(self.page_top_left(),
+                                self.page_top_center(),
+                                self.page_top_right())
+        m = 0
+        n = 4+48
+        page = 1
+        paginated = []
+        while m < len(lines):
+            footer = justify_inline(self.page_bottom_left(),
+                                    self.page_bottom_center(),
+                                    "[Page %s]" % page)
+            # if the current block ends 1 after n, we'll have a widow line on
+            # the next page.  If the current block starts 1 before n, we'll
+            # have an orphan line on this page.  In either case, we insert the
+            # page break one line earlier, at n-1, and add a filler line.
+            l = len(lines)
+            nn = n
+            pad = 0
+            if l < n:
+                pad = n - l
+                nn = -1                 # last line
+            block = lines[nn].block
+            if block is None:
+                pass                    # break here
+            else:
+                olen = nn - block.beg            # number of lines left at the end of this page
+                wlen = block.end - nn            # number of lines at the start of next page
+                blen = block.end - block.beg
+                if lines[block.beg].elem.tag == 'section':
+                    tcount = 0
+                    for r in range(block.beg, nn):
+                        if lines[r].elem!=None and lines[r].elem.tag != 'section':
+                            tcount += 1
+                    if ( wlen == 1
+                            or tcount < self.options.min_section_start_lines ):
+#                         if wlen == 1:
+#                             debug.say('Adjusting break on page %s to avoid a widow: w%s o%s' % (page, wlen, olen))
+#                         elif tcount < self.options.min_section_start_lines:
+#                             debug.say('Adjusting break on page %s to shift section start' % page)
+#                         else:
+#                             pass
+                        adj = n - block.beg
+                        pad += adj
+                        n -= adj
+                elif lines[block.beg].elem.tag in ['artset', 'artwork', 'figure', 'sourcecode', 'table', ]:
+                    if blen < 48:
+                        adj = n - block.beg
+                        pad += adj
+                        n -= adj
+                elif (olen == 1 or wlen == 1) and blen != 1:
+#                     if olen == 1:
+#                         debug.say('Adjusting break on page %s to avoid an orphan' % page)
+#                     else:
+#                         debug.say('Adjusting break on page %s to avoid a widow' % page)
+                    n -= 1
+                    pad += 1
+                else:
+                    pass
+            # Transfer lines to next page
+            pagestart = len(paginated)
+            if page > 1:
+                paginated += pagefeed() + mklines(header, None) + blankline()*2
+            paginated += lines[m:n]
+            paginated += blankline() * pad
+            paginated += blankline() * 3 + mklines(footer, None)
+            # make note of each line's page
+            for i in range(pagestart, len(paginated)):
+                paginated[i].page = page
+                if paginated[i].elem != None:
+                    paginated[i].elem.page = page
+            # Set the next page start
+            m = n
+            # discard blank lines at the top of the next page, if any
+            while m < l and lines[m].text.strip() == '':
+                m += 1
+            # advance page end to the next potential page break
+            n = m + 48
+            page += 1
+
+        return paginated
+
+    def update_toc(self, lines):
+        toc = self.root.find('./front/boilerplate/section[@anchor="toc"]')
+        in_toc = False
+        for i, l in enumerate(lines):
+            if l.elem is None:
+                continue
+            elif l.elem == toc:
+                in_toc = True
+            elif in_toc and l.elem.tag == 'section':
+                # end of toc
+                in_toc = False
+                break
+            elif l.elem.tag == 'li':
+                xref = l.elem.find('.//xref[2]')
+                if xref!= None:
+                    id = xref.get('target')
+                    target = self.get_element_from_id(id)
+                    xref.set('pageno', '%s'%target.page )
+            else:
+                pass
+        return lines
 
     def tjoin(self, text, e, width, **kwargs):
         '''
@@ -243,17 +409,16 @@ class TextWriter(BaseV3Writer):
         res = mklines(self.render(e, width, **kwargs), e)
         if lines:
             for i in range(j.join.count('\n')-1):
-                lines.append( Line('', None) )
+                lines += blankline()
         lines += lindent(res, j.indent, j.hang)
         return lines
 
 
     def element(self, tag, line=None, **attribs):
-        e = etree.Element(tag, **attribs)
+        e = self.root.makeelement(tag, attrib=attribs)
         if line:
             e.sourceline = line
         return e
-
 
     def get_initials(self, author):
         """author is an rfc2629 author element.  Return the author initials,
@@ -692,7 +857,7 @@ class TextWriter(BaseV3Writer):
             lines = self.ljoin(lines, c, width, **kwargs)
         while lines and lines[-1].text.strip() == '':
             lines = lines[:-1]
-        lines += [ Line('', None) ]
+        lines += blankline()
         return lines
 
     def render_author_name(self, e, width, **kwargs):
@@ -1141,12 +1306,20 @@ class TextWriter(BaseV3Writer):
             'dd':       Joiner('', djoin, '', indent, 0),
         })
         # rendering
+        lines = []
         text = ''
         prev = None
         for c in e.getchildren():
             text = self.tjoin(text, c, width, prev=prev, newline=newline, **kwargs)
-            prev = c
-        return mklines(text, e)
+            if c.tag == 'dd':
+                if lines:
+                    for i in range(tjoin.count('\n')-1):
+                        lines += blankline()
+                lines += mklines(text, prev)
+                text = ''
+            if c.tag == 'dt':
+                prev = c
+        return lines
 
 
     # 2.21.  <dt>
@@ -1398,7 +1571,7 @@ class TextWriter(BaseV3Writer):
                     # handled in render_first_page_top() or discarded
                     continue
                 res = self.render(c, width, **kwargs)
-                lines += [ Line('', None) ] + res
+                lines += blankline() + res
             return lines
 
     def render_first_page_top(self, e, width, **kwargs):
@@ -1726,9 +1899,13 @@ class TextWriter(BaseV3Writer):
         p = e.getparent()
         text = p._initial_text(e, p)
         tt, __ = self.text_or_block_renderer(e, width, **kwargs)
-        tt = mktext(tt)
-        text += tt.lstrip()
-        return text
+        if isinstance(tt, list):
+            lines = stripl(tt)
+            lines[0].text = text + lines[0].text.lstrip()
+        else:
+            text += tt.lstrip()
+            lines = mklines(text, e)
+        return lines
 
     def get_ol_li_initial_text(self, e, p):
         text = p._format % p._int2str(p._counter)
@@ -2025,10 +2202,10 @@ class TextWriter(BaseV3Writer):
             't':    Joiner('', ljoin, '', indent, 0),
         })
         # rendering
-        text = ""
+        lines = []
         for c in e.getchildren():
-            text = self.tjoin(text, c, width, **kwargs)
-        return mklines(text, e)
+            lines = self.ljoin(lines, c, width, **kwargs)
+        return lines
 
     # 2.35.  <organization>
     # 
@@ -2404,7 +2581,6 @@ class TextWriter(BaseV3Writer):
         })
         lines = []
         if e.find('name') != None:
-            assert e[0].tag == 'name'
             pn = e.get('pn')
             text = pn.split('-',1)[1].replace('-', ' ').title() +'.'
             lines += mklines(self.tjoin(text, e[0], width, **kwargs), e)
@@ -2614,7 +2790,6 @@ class TextWriter(BaseV3Writer):
     #    4.  One optional <back> element (Section 2.8)
     def render_rfc(self, e, width, **kwargs):
         self.part = e.tag
-        #paginated = kwargs.pop('paginated', False)
         lines = []
         for c in e.getchildren():
             self.part = c.tag
@@ -2881,7 +3056,6 @@ class TextWriter(BaseV3Writer):
         })
         lines = []
         if e.find('name') != None:
-            assert e[0].tag == 'name'
             lines += mklines(self.tjoin(text, e[0], width, **kwargs), e)
         for c in e[1:]:
             lines = self.ljoin(lines, c, width, **kwargs)
@@ -3377,6 +3551,8 @@ class TextWriter(BaseV3Writer):
             return c
 
         def build_line(cells, i, cols, last=False):
+            def table(e):
+                return list(e.iterancestors('table'))[0]
             line = ''
             e = cells[i][0].element
             for j in range(cols):
@@ -3392,7 +3568,7 @@ class TextWriter(BaseV3Writer):
                     line = line[:-1] + border(line[-1], part[0]) + part[1:]
                 else:
                     line = part
-            return Line(line, e)
+            return Line(line, table(e))
 
         # ----------------------------------------------------------------------
         rows, cols = get_dimensions(e)
@@ -3994,7 +4170,7 @@ class TextWriter(BaseV3Writer):
         #
         indent = len(e._symbol)+2
         if e._bare:
-            first = self.render(e[0], width, **kwargs)
+            first = mktext(self.render(e[0], width, **kwargs))
             if first:
                 indent = min(8, len(first.split()[0])+2)
         #
@@ -4004,10 +4180,10 @@ class TextWriter(BaseV3Writer):
             't':    Joiner('', ljoin, '', indent, 0),
         })
         # rendering
-        text = ""
+        lines = []
         for c in e.getchildren():
-            text = self.tjoin(text, c, width, **kwargs)
-        return mklines(text, e)
+            lines = self.ljoin(lines, c, width, **kwargs)
+        return lines
         
 
     def render_u(self, e, width, **kwargs):

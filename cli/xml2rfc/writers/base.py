@@ -1742,6 +1742,15 @@ class BaseV3Writer(object):
         self.log("Cannot continue, quitting now")
         sys.exit(1)
 
+    # methods operating on the xml tree
+
+    def get_element_from_id(self, id):
+        for a in 'anchor', 'pn', 'slugifiedName':
+            elem = self.root.find('.//*[@%s="%s"]'%(a, id, ))
+            if elem != None:
+                break
+        return elem
+
 #     def get_valid_child_tags(self, tag):
 #         refs = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:ref" % tag, namespaces=utils.namespaces)
 #         names = set([ r.get('name') for r in refs ])

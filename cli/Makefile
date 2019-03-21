@@ -70,7 +70,7 @@ CHECKOUTPUT=	\
 #
 # Generic rules
 
-%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test %.text.test %.v3.$(py).html.test
+%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test 
 	@echo "Diffing .nroff.txt against regular .txt"
 	@doc=$(basename $@); diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo checking v3 validity
@@ -88,6 +88,9 @@ tests/out/%.prepped.xml: tests/input/%.xml install
 	xml2rfc --cache tests/cache --no-network --utf8 --out $@ --prep $<
 
 tests/out/%.text: tests/input/%.xml install
+	xml2rfc --cache tests/cache --no-network --base tests/out/ --text --v3 --strict --no-pagination --legacy-date-format $< --out $@
+
+tests/out/%.pages.text: tests/input/%.xml install
 	xml2rfc --cache tests/cache --no-network --base tests/out/ --text --v3 --strict --legacy-date-format $< --out $@
 
 tests/out/%.v3.$(py).html: tests/input/%.xml install
