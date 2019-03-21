@@ -199,6 +199,17 @@ def findblocks(lines):
     block.end = n
     return lines
 
+def expand_ellipsis(text, width):
+    if re.search(r'\u2026\d+$', text):
+        head, tail = text.rsplit('\u2026', 1)   # split on ellipsis
+        if tail != '0000':
+            tail = '%4s' % tail.lstrip('0')     # strip leading zeros
+        last = head.splitlines()[-1]
+        lack = width - (len(last) + len(tail))
+        elip = (' .'*40)[-lack:]
+        text = head + elip + tail
+    return text
+
 class TextWriter(BaseV3Writer):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
@@ -209,25 +220,13 @@ class TextWriter(BaseV3Writer):
         """Write the document to a file """
 
         joiners = base_joiners
+        if self.options.pagination:
+            self.add_pageno_placeholders()
         lines = self.render(self.root, width=72, joiners=joiners)
         if self.options.pagination:
             lines = findblocks(lines)
             lines = self.paginate(lines)
             lines = self.update_toc(lines)
-        if self.options.verbose:
-            for i, l in enumerate(lines):
-                try:
-                    if l.block:
-                        sys.stderr.write(("%3d %8s %3d-%3d %s\n" % (i, l.elem!=None and l.elem.tag or '-', l.block.beg, l.block.end, l.text)).encode('utf8'))
-                    else:
-                        sys.stderr.write(("%3d %8s         %s\n" % (i, l.elem!=None and l.elem.tag or '-', l.text)).encode('utf8'))
-                except:
-                    debug.show('l.block.beg')
-                    debug.show('l.block.end')
-                    debug.show('l.block.prev')
-                    debug.show('l.block.this')
-                    debug.show('l.block.next')
-
         text = ('\n'.join( l.text for l in lines )).rstrip() + '\n'
         # Replace some code points whose utility has ended
         text = text.replace(u'\u00A0', u' ')
@@ -260,6 +259,11 @@ class TextWriter(BaseV3Writer):
                 seen.add(e.tag)
         res = func(e, width, **kwargs)
         return res
+
+    def add_pageno_placeholders(self):
+        toc = self.root.find('./front/boilerplate/section[@anchor="toc"]')
+        for e in toc.xpath('.//xref[2]'):
+            e.set('pageno', '0000')
 
     def paginate(self, lines):
         """
@@ -302,12 +306,6 @@ class TextWriter(BaseV3Writer):
                             tcount += 1
                     if ( wlen == 1
                             or tcount < self.options.min_section_start_lines ):
-#                         if wlen == 1:
-#                             debug.say('Adjusting break on page %s to avoid a widow: w%s o%s' % (page, wlen, olen))
-#                         elif tcount < self.options.min_section_start_lines:
-#                             debug.say('Adjusting break on page %s to shift section start' % page)
-#                         else:
-#                             pass
                         adj = n - block.beg
                         pad += adj
                         n -= adj
@@ -317,10 +315,6 @@ class TextWriter(BaseV3Writer):
                         pad += adj
                         n -= adj
                 elif (olen == 1 or wlen == 1) and blen != 1:
-#                     if olen == 1:
-#                         debug.say('Adjusting break on page %s to avoid an orphan' % page)
-#                     else:
-#                         debug.say('Adjusting break on page %s to avoid a widow' % page)
                     n -= 1
                     pad += 1
                 else:
@@ -351,23 +345,42 @@ class TextWriter(BaseV3Writer):
     def update_toc(self, lines):
         toc = self.root.find('./front/boilerplate/section[@anchor="toc"]')
         in_toc = False
+        toc_start = None
+        toc_end = None
         for i, l in enumerate(lines):
             if l.elem is None:
                 continue
             elif l.elem == toc:
                 in_toc = True
+                toc_start = i
             elif in_toc and l.elem.tag == 'section':
                 # end of toc
                 in_toc = False
+                toc_end = i
                 break
-            elif l.elem.tag == 'li':
+            elif in_toc and l.elem.tag in ['li', 't']:
+                #debug.say('')
                 xref = l.elem.find('.//xref[2]')
                 if xref!= None:
                     id = xref.get('target')
                     target = self.get_element_from_id(id)
-                    xref.set('pageno', '%s'%target.page )
+                    page = self.get_element_page(target)
+                    xref.set('pageno', '%s'%page )
+            elif in_toc and l.elem!=None:
+                self.error(l.elem, "Unexpected condition. <%s> in toc" % (l.elem.tag))
             else:
                 pass
+        # new toc, to be used to replace the old one
+        toclines = self.render(toc, width=72, joiners=base_joiners)
+        if toc_start and toc_end:
+            j = 2
+            for i in range(toc_start+2, toc_end):
+                old = lines[i]
+                if old.elem is None:
+                    continue
+                new = toclines[j]
+                lines[i].text = new.text
+                j += 1
         return lines
 
     def tjoin(self, text, e, width, **kwargs):
@@ -1905,6 +1918,10 @@ class TextWriter(BaseV3Writer):
         else:
             text += tt.lstrip()
             lines = mklines(text, e)
+        if self.options.pagination:
+            for i, l in enumerate(lines):
+                if '\u2026' in l.text:
+                    lines[i].text = expand_ellipsis(l.text, width)
         return lines
 
     def get_ol_li_initial_text(self, e, p):
@@ -3423,6 +3440,9 @@ class TextWriter(BaseV3Writer):
     # 
     #    o  "true"
     def render_t(self, e, width, **kwargs):
+        def rreplace(s, old, new, max):
+            lst = s.rsplit(old, max)
+            return new.join(lst)
         text = fill(self.inner_text_renderer(e), width=width, **kwargs)
         lines = mklines(text, e)
         return lines
@@ -4265,6 +4285,9 @@ class TextWriter(BaseV3Writer):
                     text = "%s (%s)" % (e.text, reftext)
                 else:
                     text = "%s" % reftext
+            pageno = e.get('pageno')
+            if pageno:
+                text += ' \u2026' '%04d' % int(pageno)
         else:
             text = e.text or ''
 

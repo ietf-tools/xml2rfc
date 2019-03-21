@@ -1751,6 +1751,15 @@ class BaseV3Writer(object):
                 break
         return elem
 
+    def get_element_page(self, e):
+        page = getattr(e, 'page', None)
+        if not page:
+            for a in e.iterancestors():
+                page = getattr(a, 'page', None)
+                if page != None:
+                    break
+        return page
+
 #     def get_valid_child_tags(self, tag):
 #         refs = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:ref" % tag, namespaces=utils.namespaces)
 #         names = set([ r.get('name') for r in refs ])
