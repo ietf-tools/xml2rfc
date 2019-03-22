@@ -889,7 +889,12 @@ class PrepToolWriter(BaseV3Writer):
     #    to "true" on the previous element.
     def attribute_keepwithprevious_true(self, e, p):
         value = e.get('keepWithPrevious')
-        prev = e.getprevious()
+        # XXX TODO: This is too simple.  We need to find the previous
+        # content-generating element of relevant types, probably something
+        # like ['t', 'dl', 'ol', 'figure', 'table', ], and update that:
+        prev = e.getprevious()          
+        if prev is None:
+            return
         prev_attrs = self.get_attribute_names(prev.tag)
         if value=='true' and prev!=None and 'keepWithNext' in prev_attrs:
             prev.set('keepWithNext', value)
@@ -1814,7 +1819,7 @@ class PrepToolWriter(BaseV3Writer):
                 # Replace the first dot for later use in derivedContent
                 num = num.replace('.', ' ', 1) 
             #
-            t = self.element('t')
+            t = self.element('t', keepWithNext='true')
             pn = s.get('pn')
             if not pn:
                 self.die(s, "No no pn entry found for section, can't continue: %s" % (etree.tostring(s)))

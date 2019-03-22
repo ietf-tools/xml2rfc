@@ -185,6 +185,8 @@ def findblocks(lines):
                 block.end = n
         elif l.elem != elem:
             elem = l.elem
+            if elem.tag not in ['t', 'dl', 'ol', 'figure', 'table', ]:
+                keep = False
             if not keep:
                 block = Block(elem, prev, beg=n)
                 if prev!=None:
@@ -227,6 +229,14 @@ class TextWriter(BaseV3Writer):
             lines = findblocks(lines)
             lines = self.paginate(lines)
             lines = self.update_toc(lines)
+        if self.options.debug:
+            for i, l in enumerate(lines):
+                tag  = l.elem.tag  if l.elem!=None else '-'
+                page = l.elem.page if l.elem!=None else '-'
+                if l.block:
+                    sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)).encode('utf8'))
+                else:
+                    sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)).encode('utf8'))
         text = ('\n'.join( l.text for l in lines )).rstrip() + '\n'
         # Replace some code points whose utility has ended
         text = text.replace(u'\u00A0', u' ')
@@ -291,10 +301,25 @@ class TextWriter(BaseV3Writer):
             pad = 0
             if l < n:
                 pad = n - l
-                nn = -1                 # last line
+                nn = l - 1                 # last line
             block = lines[nn].block
             if block is None:
-                pass                    # break here
+                # check backwards for section start.  If we find one, check
+                # again for another, in case it's a subsection.
+                found = None
+                i = nn
+                while i > nn-12:
+                    for j in range(1,4):
+                        k = i - j
+                        if lines[k].elem != None and lines[k].elem.tag == 'section':
+                            found = True
+                            i = k
+                            break       # break for loop
+                    else:
+                        break           # break while loop
+                if found:
+                    pad = nn - i
+                    n = i
             else:
                 olen = nn - block.beg            # number of lines left at the end of this page
                 wlen = block.end - nn            # number of lines at the start of next page
@@ -304,13 +329,12 @@ class TextWriter(BaseV3Writer):
                     for r in range(block.beg, nn):
                         if lines[r].elem!=None and lines[r].elem.tag != 'section':
                             tcount += 1
-                    if ( wlen == 1
-                            or tcount < self.options.min_section_start_lines ):
+                    if wlen == 1 or tcount < self.options.min_section_start_lines:
                         adj = n - block.beg
                         pad += adj
                         n -= adj
                 elif lines[block.beg].elem.tag in ['artset', 'artwork', 'figure', 'sourcecode', 'table', ]:
-                    if blen < 48:
+                    if blen < 48 or olen < self.options.min_section_start_lines:
                         adj = n - block.beg
                         pad += adj
                         n -= adj
@@ -359,7 +383,6 @@ class TextWriter(BaseV3Writer):
                 toc_end = i
                 break
             elif in_toc and l.elem.tag in ['li', 't']:
-                #debug.say('')
                 xref = l.elem.find('.//xref[2]')
                 if xref!= None:
                     id = xref.get('target')
