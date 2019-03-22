@@ -1,3 +1,33 @@
+xml2rfc (2.22.0) ietf; urgency=medium
+
+  This release adds pagination of internet-drafts in --v3 --text mode.  It
+  does not affect text output of RFCs, which remains unpaginated.  There
+  are also some changes in order to make generated html validate in the
+  W3C validator (validator.w3.org), and other bugfixes.
+
+  Details from the commit log:
+
+  * Tweaked the makefile to provide better diffs.
+
+  * Did a substantial refactoring of the text formatter, to carry 
+    information of the origin element of each line of code down to the 
+    generated text level, in order to be able to correctly implement page 
+    breaking for tables and keepWith* labelled elements.  Added page
+    breaking for drafts, and added page numbers to the Table of Contents
+    when in page breaking mode.
+
+  * Moved warnings for missing <rfc> docName attributes from v3 renderers 
+    to preptool, in order to always issue these warnings.
+
+  * Fixed a problem with local file name resolution that prevented the use 
+    of xinclude href without path.
+
+  * Removed invalid CSS, and tweaked the invisible space above H* in order 
+    not to overlay links in earlier text.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  22 Mar 2019 06:01:47 -0700
+
+
 xml2rfc (2.21.1) ietf; urgency=medium
 
   This is a bugfix release, containing a number of fixes and adjustments
