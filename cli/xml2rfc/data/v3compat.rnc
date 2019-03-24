@@ -391,19 +391,7 @@
        attribute pn { xsd:ID }?,
        attribute cite { text }?,
        attribute quotedFrom { text }?,
-       (text
-       | bcp14
-       | cref
-       | em
-       | eref
-       | iref
-       | relref
-       | strong
-       | sub
-       | sup
-       | tt
-       | u
-       | xref)*
+       (artset | artwork | dl | figure | ol | sourcecode | t | ul)*
      }
 
    \list =
@@ -453,19 +441,7 @@
        attribute anchor { xsd:ID }?,
        attribute derivedCounter { text }?,
        attribute pn { xsd:ID }?,
-       (text
-           | bcp14
-           | cref
-           | em
-           | eref
-           | iref
-           | relref
-           | strong
-           | sub
-           | sup
-           | tt
-           | u
-           | xref)*
+       (artset | artwork | blockquote | dl | figure | ol | sourcecode | t | ul)*
      }
 
    dl =
@@ -508,19 +484,7 @@
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { xsd:ID }?,
-       (text
-       | bcp14
-       | cref
-       | em
-       | eref
-       | iref
-       | relref
-       | strong
-       | sub
-       | sup
-       | tt
-       | u
-       | xref)*
+       (artset | artwork | dl | figure | ol | sourcecode | t | ul)*
      }
 
    xref =
@@ -773,6 +737,7 @@
        attribute originalSrc { text }?,
        (text | svg)
      }
+
    svg = 
      element svg {
        attribute xml:base { text }?,
@@ -835,19 +800,7 @@
        [ a:defaultValue = "1" ] attribute rowspan { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
-       (text 
-       | bcp14
-       | cref
-       | em
-       | eref
-       | iref
-       | relref
-       | strong
-       | sub
-       | sup
-       | tt
-       | u
-       | xref)*
+       (artwork | dl | figure | ol | sourcecode | t | ul)*
      }
 
    th =
@@ -859,19 +812,7 @@
        [ a:defaultValue = "1" ] attribute rowspan { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
-       (text
-       | bcp14
-       | cref
-       | em
-       | eref
-       | iref
-       | relref
-       | strong
-       | sub
-       | sup
-       | tt
-       | u
-       | xref)
+       (artwork | dl | figure | ol | sourcecode | t | ul)*
      }
 
    postamble =
