@@ -1,0 +1,634 @@
+<?xml encoding="UTF-8"?>
+
+<!-- xml2rfc Version 3 grammar -->
+
+<!ELEMENT rfc (link*,front,middle,back?)>
+<!ATTLIST rfc
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  number CDATA #IMPLIED
+  obsoletes CDATA ''
+  updates CDATA ''
+  category (std|bcp|exp|info|historic) #IMPLIED
+  mode CDATA #IMPLIED
+  consensus (no|yes|false|true) 'false'
+  seriesNo CDATA #IMPLIED
+  ipr CDATA #IMPLIED
+  iprExtract IDREF #IMPLIED
+  submissionType (IETF|IAB|IRTF|independent) 'IETF'
+  docName CDATA #IMPLIED
+  sortRefs (true|false) 'false'
+  symRefs (true|false) 'true'
+  tocInclude (true|false) 'true'
+  tocDepth CDATA '3'
+  prepTime CDATA #IMPLIED
+  indexInclude (true|false) 'true'
+  version CDATA #IMPLIED
+  scripts CDATA 'Common,Latin'
+  expiresDate CDATA #IMPLIED>
+
+<!ELEMENT link EMPTY>
+<!ATTLIST link
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  href CDATA #REQUIRED
+  rel CDATA #IMPLIED>
+
+<!ELEMENT front (title,seriesInfo*,author+,date?,area*,workgroup*,
+                 keyword*,abstract?,note*,boilerplate?)>
+<!ATTLIST front
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT title (#PCDATA)>
+<!ATTLIST title
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  abbrev CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT author (organization?,address?)>
+<!ATTLIST author
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  initials CDATA #IMPLIED
+  asciiInitials CDATA #IMPLIED
+  surname CDATA #IMPLIED
+  asciiSurname CDATA #IMPLIED
+  fullname CDATA #IMPLIED
+  role (editor|contributor) #IMPLIED
+  asciiFullname CDATA #IMPLIED>
+
+<!ELEMENT organization (#PCDATA)>
+<!ATTLIST organization
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  abbrev CDATA #IMPLIED
+  ascii CDATA #IMPLIED
+  asciiAbbrev CDATA #IMPLIED
+  showOnFrontPage (true|false) 'true'>
+
+<!ELEMENT address (postal?,phone?,facsimile?,email?,uri?)>
+<!ATTLIST address
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT postal ((city|code|country|region|street)*|postalLine+)>
+<!ATTLIST postal
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT extaddr (#PCDATA)>
+<!ATTLIST extaddr
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT pobox (#PCDATA)>
+<!ATTLIST pobox
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT street (#PCDATA)>
+<!ATTLIST street
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT cityarea (#PCDATA)>
+<!ATTLIST cityarea
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT city (#PCDATA)>
+<!ATTLIST city
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT region (#PCDATA)>
+<!ATTLIST region
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT code (#PCDATA)>
+<!ATTLIST code
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT sortingcode (#PCDATA)>
+<!ATTLIST sortingcode
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT country (#PCDATA)>
+<!ATTLIST country
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT postalLine (#PCDATA)>
+<!ATTLIST postalLine
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT phone (#PCDATA)>
+<!ATTLIST phone
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT facsimile (#PCDATA)>
+<!ATTLIST facsimile
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT email (#PCDATA)>
+<!ATTLIST email
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  ascii CDATA #IMPLIED>
+
+<!ELEMENT uri (#PCDATA)>
+<!ATTLIST uri
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT date EMPTY>
+<!ATTLIST date
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  day CDATA #IMPLIED
+  month CDATA #IMPLIED
+  year CDATA #IMPLIED>
+
+<!ELEMENT area (#PCDATA)>
+<!ATTLIST area
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT workgroup (#PCDATA)>
+<!ATTLIST workgroup
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT keyword (#PCDATA)>
+<!ATTLIST keyword
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT abstract (dl|ol|t|ul)+>
+<!ATTLIST abstract
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT note (name?,(dl|ol|t|ul)+)>
+<!ATTLIST note
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  title CDATA #IMPLIED
+  pn ID #IMPLIED
+  removeInRFC (true|false) 'false'>
+
+<!ELEMENT boilerplate (section)+>
+<!ATTLIST boilerplate
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT middle (section)+>
+<!ATTLIST middle
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT section (name?,
+                   (artset|artwork|aside|author|blockquote|dl|figure
+                    |iref|ol|sourcecode|t|table|texttable|ul)*,
+                   section*)>
+<!ATTLIST section
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED
+  title CDATA #IMPLIED
+  numbered (true|false) 'true'
+  toc (include|exclude|default) 'default'
+  removeInRFC (true|false) 'false'>
+
+<!ELEMENT name (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|sub|sup|tt
+                |xref)*>
+<!ATTLIST name
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  slugifiedName ID #IMPLIED>
+
+<!ELEMENT t (#PCDATA|bcp14|cref|em|eref|iref|list|relref|spanx|strong
+             |sub|sup|tt|u|vspace|xref)*>
+<!ATTLIST t
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED
+  hangText CDATA #IMPLIED
+  keepWithNext (false|true) 'false'
+  keepWithPrevious (false|true) 'false'>
+
+<!ELEMENT aside (artset|artwork|dl|figure|iref|ol|t|table|ul)*>
+<!ATTLIST aside
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT blockquote (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|sub
+                      |sup|tt|u|xref)*>
+<!ATTLIST blockquote
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED
+  cite CDATA #IMPLIED
+  quotedFrom CDATA #IMPLIED>
+
+<!ELEMENT list (t)+>
+<!ATTLIST list
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  style CDATA 'empty'
+  hangIndent CDATA #IMPLIED
+  counter CDATA #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT ol (li)+>
+<!ATTLIST ol
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  type CDATA '1'
+  start CDATA '1'
+  group CDATA #IMPLIED
+  spacing (normal|compact) 'normal'
+  pn ID #IMPLIED>
+
+<!ELEMENT ul (li)+>
+<!ATTLIST ul
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  spacing (normal|compact) 'normal'
+  empty (false|true) 'false'
+  bare (false|true) 'false'
+  pn ID #IMPLIED>
+
+<!ELEMENT li (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|sub|sup|tt|u
+              |xref)*>
+<!ATTLIST li
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  derivedCounter CDATA #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT dl (dt,dd)+>
+<!ATTLIST dl
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  spacing (normal|compact) 'normal'
+  newline (false|true) 'false'
+  indent CDATA #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT dt (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|sub|sup|tt
+              |xref)*>
+<!ATTLIST dt
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT dd (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|sub|sup|tt|u
+              |xref)*>
+<!ATTLIST dd
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT xref (#PCDATA)>
+<!ATTLIST xref
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  target IDREF #REQUIRED
+  pageno (true|false) 'false'
+  format (default|title|counter|none) 'default'
+  derivedContent CDATA #IMPLIED
+  sectionFormat (of|comma|parens|bare) 'of'
+  section CDATA #IMPLIED
+  relative CDATA #IMPLIED
+  derivedLink CDATA #IMPLIED>
+
+<!ELEMENT relref (#PCDATA)>
+<!ATTLIST relref
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  target IDREF #REQUIRED
+  displayFormat (of|comma|parens|bare) 'of'
+  derivedContent CDATA #IMPLIED
+  section CDATA #REQUIRED
+  relative CDATA #IMPLIED
+  derivedLink CDATA #IMPLIED>
+
+<!ELEMENT eref (#PCDATA)>
+<!ATTLIST eref
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  target CDATA #REQUIRED>
+
+<!ELEMENT iref EMPTY>
+<!ATTLIST iref
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  item CDATA #REQUIRED
+  subitem CDATA ''
+  primary (true|false) 'false'
+  pn ID #IMPLIED>
+
+<!ELEMENT cref (#PCDATA|em|eref|relref|strong|sub|sup|tt|xref)*>
+<!ATTLIST cref
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  source CDATA #IMPLIED
+  display (true|false) 'true'>
+
+<!ELEMENT tt (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|sub|sup
+              |xref)*>
+<!ATTLIST tt
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT strong (#PCDATA|bcp14|cref|em|eref|iref|relref|sub|sup|tt
+                  |xref)*>
+<!ATTLIST strong
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT em (#PCDATA|bcp14|cref|eref|iref|relref|strong|sub|sup|tt
+              |xref)*>
+<!ATTLIST em
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT sub (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|tt|xref)*>
+<!ATTLIST sub
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT sup (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|tt|xref)*>
+<!ATTLIST sup
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT spanx (#PCDATA)>
+<!ATTLIST spanx
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  xml:space (default|preserve) 'preserve'
+  style CDATA 'emph'>
+
+<!ELEMENT vspace EMPTY>
+<!ATTLIST vspace
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  blankLines CDATA '0'>
+
+<!ELEMENT figure (name?,iref*,preamble?,(artset|artwork|sourcecode)+,
+                  postamble?)>
+<!ATTLIST figure
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED
+  title CDATA ''
+  suppress-title (true|false) 'false'
+  src CDATA #IMPLIED
+  originalSrc CDATA #IMPLIED
+  align (left|center|right) 'left'
+  alt CDATA ''
+  width CDATA ''
+  height CDATA ''>
+
+<!ELEMENT table (name?,iref*,thead?,tbody+,tfoot?)>
+<!ATTLIST table
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  align (left|center|right) 'center'
+  anchor ID #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT preamble (#PCDATA|bcp14|cref|em|eref|iref|relref|spanx|strong
+                    |sub|sup|tt|u|xref)*>
+<!ATTLIST preamble
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT artset (artwork)*>
+<!ATTLIST artset
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED>
+
+<!ELEMENT artwork ((#PCDATA|svg))*>
+<!ATTLIST artwork
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED
+  xml:space CDATA #IMPLIED
+  name CDATA ''
+  type CDATA ''
+  src CDATA #IMPLIED
+  align (left|center|right) 'left'
+  alt CDATA ''
+  width CDATA ''
+  height CDATA ''
+  originalSrc CDATA #IMPLIED>
+
+<!ELEMENT svg EMPTY>
+<!ATTLIST svg
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT sourcecode (#PCDATA)>
+<!ATTLIST sourcecode
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  pn ID #IMPLIED
+  name CDATA ''
+  type CDATA ''
+  markers (true|false) 'false'
+  src CDATA #IMPLIED
+  originalSrc CDATA #IMPLIED>
+
+<!ELEMENT thead (tr)+>
+<!ATTLIST thead
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED>
+
+<!ELEMENT tbody (tr)+>
+<!ATTLIST tbody
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED>
+
+<!ELEMENT tfoot (tr)+>
+<!ATTLIST tfoot
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED>
+
+<!ELEMENT tr (td|th)+>
+<!ATTLIST tr
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED>
+
+<!ELEMENT td (#PCDATA|bcp14|cref|em|eref|iref|relref|strong|sub|sup|tt|u
+              |xref)*>
+<!ATTLIST td
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  colspan CDATA '1'
+  rowspan CDATA '1'
+  align (left|center|right) 'left'>
+
+<!ELEMENT th ((#PCDATA|bcp14|cref|em|eref|iref|relref|strong|sub|sup|tt|u|xref))*>
+<!ATTLIST th
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  colspan CDATA '1'
+  rowspan CDATA '1'
+  align (left|center|right) 'left'>
+
+<!ELEMENT postamble (#PCDATA|cref|eref|iref|spanx|xref)*>
+<!ATTLIST postamble
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT texttable (name?,preamble?,ttcol+,c*,postamble?)>
+<!ATTLIST texttable
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #IMPLIED
+  title CDATA ''
+  suppress-title (true|false) 'false'
+  align (left|center|right) 'center'
+  style (all|none|headers|full) 'full'>
+
+<!ELEMENT ttcol (#PCDATA|cref|eref|iref|xref)*>
+<!ATTLIST ttcol
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  width CDATA #IMPLIED
+  align (left|center|right) 'left'>
+
+<!ELEMENT c (#PCDATA|cref|eref|iref|spanx|xref)*>
+<!ATTLIST c
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT bcp14 (#PCDATA)>
+<!ATTLIST bcp14
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT back (displayreference*,references*,section*)>
+<!ATTLIST back
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT displayreference EMPTY>
+<!ATTLIST displayreference
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  target IDREF #REQUIRED
+  to CDATA #REQUIRED>
+
+<!ELEMENT references (name?,(references+|(reference|referencegroup)*))>
+<!ATTLIST references
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  pn ID #IMPLIED
+  anchor ID #IMPLIED
+  title CDATA #IMPLIED>
+
+<!ELEMENT reference (stream?,front,
+                     (annotation|format|refcontent|seriesInfo)*)>
+<!ATTLIST reference
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #REQUIRED
+  derivedAnchor CDATA #IMPLIED
+  target CDATA #IMPLIED
+  quoteTitle (true|false) 'true'
+  quote-title (true|false) #IMPLIED>
+
+<!ELEMENT stream (#PCDATA)>
+
+<!ELEMENT referencegroup (reference)+>
+<!ATTLIST referencegroup
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  anchor ID #REQUIRED
+  derivedAnchor CDATA #IMPLIED
+  target CDATA #IMPLIED>
+
+<!ELEMENT seriesInfo EMPTY>
+<!ATTLIST seriesInfo
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  name CDATA #REQUIRED
+  value CDATA #REQUIRED
+  asciiName CDATA #IMPLIED
+  asciiValue CDATA #IMPLIED
+  status CDATA #IMPLIED
+  stream (IETF|IAB|IRTF|independent) #IMPLIED>
+
+<!ELEMENT format EMPTY>
+<!ATTLIST format
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED
+  target CDATA #IMPLIED
+  type CDATA #REQUIRED
+  octets CDATA #IMPLIED>
+
+<!ELEMENT annotation (#PCDATA|bcp14|cref|em|eref|iref|relref|spanx
+                      |strong|sub|sup|tt|u|xref)*>
+<!ATTLIST annotation
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT refcontent (#PCDATA|bcp14|em|strong|sub|sup|tt)*>
+<!ATTLIST refcontent
+  xml:base CDATA #IMPLIED
+  xml:lang CDATA #IMPLIED>
+
+<!ELEMENT u (#PCDATA)>
+<!ATTLIST u
+  anchor ID #IMPLIED
+  ascii CDATA #IMPLIED
+  format CDATA 'lit-name-num'
+  pn ID #IMPLIED>
