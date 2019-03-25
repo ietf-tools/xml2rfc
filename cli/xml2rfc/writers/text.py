@@ -3095,9 +3095,12 @@ class TextWriter(BaseV3Writer):
             'name':     Joiner('', '  ', '', 0, 0),
         })
         lines = []
-        if e.find('name') != None:
-            lines += mklines(self.tjoin(text, e[0], width, **kwargs), e)
-        for c in e[1:]:
+        name = e.find('name')
+        if name != None:
+            lines += mklines(self.tjoin(text, name, width, **kwargs), e)
+        for c in e.getchildren():
+            if c.tag == 'name':
+                continue
             lines = self.ljoin(lines, c, width, **kwargs)
         return lines
 
