@@ -216,6 +216,7 @@ class PrepToolWriter(BaseV3Writer):
             self.log('Created file %s' % filename)
 
     def prep(self):
+        self.log('Prepping %s' % self.xmlrfc.source)
 
         ## Selector notation: Some selectors below have a handler annotation,
         ## with the selector and the annotation separated by a semicolon (;).
@@ -876,9 +877,14 @@ class PrepToolWriter(BaseV3Writer):
     def attribute_title(self, e, p):
         title = e.get('title')
         del e.attrib['title']
-        name = self.element('name', line=e.sourceline)
-        name.text = title
-        e.insert(0, name)
+        name = e.find('name')
+        if title:
+            if name is None:
+                name = self.element('name', line=e.sourceline)
+                name.text = title
+                e.insert(0, name)
+            else:
+                self.warn(e, "Found both title attribute and <name> element for section; dropping the title.")
 
     # 5.3.4.  "keepWithPrevious" Conversion
     # 
