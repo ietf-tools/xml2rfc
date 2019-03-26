@@ -202,7 +202,6 @@ else
     docker run -ti -p $PORT:8000 -v "$HOME:/home/$WHO" \
 	    -e USER="$WHO" -e CWD="${PWD#$HOME/}"	\
 	    -e TAG="$TAG" -e FILEDIR=${FILEDIR#$HOME} -e UID="$WHOUID" -e GID="$WHOGID"	\
-            -v $HOME/.gnupg/gpg-agent.docker.conf:/home/$WHO/.gnupg/gpg-agent.conf \
 	    "$REPO:$TAG" "$@"
 
     echo ""
