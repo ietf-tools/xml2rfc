@@ -4312,7 +4312,7 @@ class TextWriter(BaseV3Writer):
                 else:
                     text = "%s" % reftext
             pageno = e.get('pageno')
-            if pageno:
+            if pageno and pageno.isdigit():
                 text += ' \u2026' '%04d' % int(pageno)
         else:
             text = e.text or ''
