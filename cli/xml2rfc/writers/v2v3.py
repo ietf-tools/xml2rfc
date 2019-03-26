@@ -20,7 +20,7 @@ from xml2rfc.writers.base import default_options, BaseV3Writer
 
 
 try:
-    import debug
+    from xml2rfc import debug
     assert debug
 except ImportError:
     pass
@@ -250,6 +250,7 @@ class V2v3XmlWriter(BaseV3Writer):
     def convert2to3(self):
         if self.root.get('version') in ['3', ]:
             return self.tree
+        self.log('Converting v2 to v3: %s' % self.xmlrfc.source)
 
         selectors = [
             # we need to process list before block elements that might get
