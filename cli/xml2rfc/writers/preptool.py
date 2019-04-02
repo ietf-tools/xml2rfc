@@ -437,6 +437,8 @@ class PrepToolWriter(BaseV3Writer):
             'date':     ('year', 'day', ),
             'dl':       ('indent', ),
             'format':   ('octets', ),
+            'ol':       ('indent', ),
+            'ul':       ('indent', ),
         }
         tags = integer_attributes.keys()
         for c in e.iter(tags):
@@ -1857,7 +1859,7 @@ class PrepToolWriter(BaseV3Writer):
                     li = self.element('li')
                     li.append(toc_entry_t(e))
                     if sub:
-                        ul = self.element('ul', empty='true', spacing='compact', bare="true")
+                        ul = self.element('ul', empty='true', spacing='compact', bare="true", indent="2")
                         for s in sub:
                             ul.append(s)
                         li.append(ul)
@@ -1871,7 +1873,7 @@ class PrepToolWriter(BaseV3Writer):
             name.text = "Table of Contents"
             toc.append(name)
             self.name_insert_slugified_name(name, toc)
-            ul = self.element('ul', empty='true', spacing='compact', bare="true")
+            ul = self.element('ul', empty='true', spacing='compact', bare="true", indent="2")
             toc.append(ul)
             for s in toc_entries(self.root):
                 ul.append(s)
