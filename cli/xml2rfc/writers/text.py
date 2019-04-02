@@ -2235,6 +2235,7 @@ class TextWriter(BaseV3Writer):
         ljoin  = '\n' if compact else '\n\n'
         #
         indent = len(e._format % (' '*num_width(fchar, len(list(e))))) + len('  ')
+        indent = int( e.get('indent') or indent )
         e._padding = indent
         kwargs['joiners'].update({
             None:   Joiner('', ljoin, '', indent, 0),
@@ -4219,6 +4220,7 @@ class TextWriter(BaseV3Writer):
             first = mktext(self.render(e[0], width, **kwargs))
             if first:
                 indent = min(8, len(first.split()[0])+2)
+        indent = int( e.get('indent') or indent )
         #
         kwargs['joiners'].update({
             None:   Joiner('', ljoin, '', indent, 0),
@@ -4238,6 +4240,11 @@ class TextWriter(BaseV3Writer):
         except (RuntimeError, ValueError) as exception:
             text = ''
             self.err(e, exception)
+        anchor = e.get('anchor')
+        xref = self.root.find('.//xref[@target="%s"]'%anchor) if anchor else None
+        if xref != None:
+            # render only literal here
+            text = e.text
         text += e.tail or ''
         return text
 
