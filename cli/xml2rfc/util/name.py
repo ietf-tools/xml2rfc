@@ -11,12 +11,15 @@ except ImportError:
     pass
 
 def get_initials(a):
-    root = list(a.iterancestors())[-1]
-    number = root.get('number')
     initials = a.get('initials')
-    if number and number.isdigit() and int(number) <= 1272:
-        # limit to one initial for RFC 1272 and earlier
-        initials = initials.split('.')[0]
+    pp = a.getparent().getparent()
+    if pp.tag == 'reference':
+        s = pp.find('seriesInfo[@name="RFC"]')
+        if s != None:
+            number = s.get('value')
+            if number and number.isdigit() and int(number) <= 1272:
+                # limit to one initial for RFC 1272 and earlier
+                initials = initials.split('.')[0]
     return initials
 
 def short_author_name_parts(a):

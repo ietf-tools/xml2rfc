@@ -945,7 +945,7 @@ class TextWriter(BaseV3Writer):
         used by the RFC Editor.
         """
         buf = []
-        authors = e.getchildren()
+        authors = list(e.iterdescendants('author'))
         for i, author in enumerate(authors):
             if i == len(authors) - 1 and len(authors) > 1:
                 buf.append('and ')
@@ -2497,10 +2497,7 @@ class TextWriter(BaseV3Writer):
         label = self.refname_mapping[e.get('anchor')]
         label = ('[%s]' % label).ljust(11)
         # ensure the desired ordering
-        authors = self.element('authors')
-        for a in e.iterdescendants('author'):
-            authors.append(a)
-        elements = [ authors, ]
+        elements = []
         for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date',):
             for c in e.iterdescendants(ctag):
                 elements.append(c)
@@ -2512,11 +2509,10 @@ class TextWriter(BaseV3Writer):
                 elements.append(url)
         set_joiners(kwargs, {
             None:           Joiner('', ', ', '', 0, 0),
-            'authors':      Joiner('', '', '', 0, 0),
             'annotation':   Joiner('', '  ', '', 0, 0),
         })
-        text = ''
         width = width-11
+        text = self.render_authors(e, width, **kwargs)
         for c in elements:
             text = self.tjoin(text, c, width, **kwargs)
         text += '.'
