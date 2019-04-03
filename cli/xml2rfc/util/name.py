@@ -5,17 +5,27 @@ from __future__ import unicode_literals, print_function
 from xml2rfc.uniscripts import is_script
 
 try:
-    import debug
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
 
-def short_author_name_parts(a):
+def get_initials(a):
+    root = list(a.iterancestors())[-1]
+    number = root.get('number')
     initials = a.get('initials')
+    if number and number.isdigit() and int(number) <= 1272:
+        # limit to one initial for RFC 1272 and earlier
+        initials = initials.split('.')[0]
+    return initials
+
+def short_author_name_parts(a):
+    initials = get_initials(a)
     surname  = a.get('surname')
     if initials!=None and surname!=None:
         if initials and not initials.endswith('.') and is_script(initials, 'Latin'):
             initials += '.'
+
         parts = [initials, surname]
     else:
         fullname = a.get('fullname') or ''
@@ -124,7 +134,7 @@ def full_author_name(a, latin=False):
     if fullname:
         return fullname
     else:
-        initials = a.get('initials')
+        initials = get_initials(a)
         surname  = a.get('surname')
         if initials and not initials.endswith('.'):
             initials += '.'
@@ -135,7 +145,7 @@ def full_author_ascii_name(a):
     if fullname:
         full = fullname
     else:
-        initials = a.get('asciiInitials') or a.get('initials')
+        initials = a.get('asciiInitials') or get_initials(a)
         surname  = a.get('asciiSurname')  or a.get('surname')
         if initials and not initials.endswith('.'):
             initials += '.'
