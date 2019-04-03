@@ -198,6 +198,8 @@ class PrepToolWriter(BaseV3Writer):
     def write(self, filename):
         """ Public method to write the XML document to a file """
 
+        if not self.options.quiet:
+            self.log('Prepping %s' % self.xmlrfc.source)
         self.prep()
         if self.errors:
             self.log("Not creating output file due to errors (see above)")
@@ -216,7 +218,6 @@ class PrepToolWriter(BaseV3Writer):
             self.log('Created file %s' % filename)
 
     def prep(self):
-        self.log('Prepping %s' % self.xmlrfc.source)
 
         ## Selector notation: Some selectors below have a handler annotation,
         ## with the selector and the annotation separated by a semicolon (;).
