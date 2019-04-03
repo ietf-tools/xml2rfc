@@ -2533,6 +2533,7 @@ class HtmlWriter(BaseV3Writer):
             h.append(hh)
             return hh
         else:
+            label = 'Section' if section[0].isdigit() else 'Appendix'
             link    = x.get('derivedLink')
             format  = x.get('sectionFormat')
             # 9.44.1.  displayFormat='of'
@@ -2557,7 +2558,7 @@ class HtmlWriter(BaseV3Writer):
             #    for an overview.
             if format == 'of':
                 span = add.span(h, None,
-                    build.a('Section %s'%section, href=link, classes='relref'),
+                    build.a('%s %s'%(label, section), href=link, classes='relref'),
                     ' of [',
                     build.a(reftext, href='#%s'%target, classes='xref'),
                     ']',
@@ -2587,7 +2588,7 @@ class HtmlWriter(BaseV3Writer):
                     '[',
                     build.a(reftext, href='#%s'%target, classes='xref'),
                     '], ',
-                    build.a('Section %s'%section, href=link, classes='relref'),
+                    build.a('%s %s'%(label, section), href=link, classes='relref'),
                 )
                 return span
 
@@ -2621,7 +2622,7 @@ class HtmlWriter(BaseV3Writer):
                     '[',
                     build.a(reftext, href='#%s'%target, classes='xref'),
                     '] (',
-                    build.a('Section %s'%section, href=link, classes='relref'),
+                    build.a('%s %s'%(label, section), href=link, classes='relref'),
                     ')',
                 )
                 return span
@@ -2646,7 +2647,7 @@ class HtmlWriter(BaseV3Writer):
             #    2.3</a> and ...
             elif format == 'bare':
                 span = add.span(h, None,
-                    build.a('Section %s'%section, href=link, classes='relref'),
+                    build.a('%s %s'%(label, section), href=link, classes='relref'),
                 )
                 return span
             else:
