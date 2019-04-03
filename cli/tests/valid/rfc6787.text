@@ -72,282 +72,280 @@ Table of Contents
 
    1.  Introduction
    2.  Document Conventions
-       2.1.  Definitions
-       2.2.  State-Machine Diagrams
-       2.3.  URI Schemes
+     2.1.  Definitions
+     2.2.  State-Machine Diagrams
+     2.3.  URI Schemes
    3.  Architecture
-       3.1.  MRCPv2 Media Resource Types
-       3.2.  Server and Resource Addressing
+     3.1.  MRCPv2 Media Resource Types
+     3.2.  Server and Resource Addressing
    4.  MRCPv2 Basics
-       4.1.  Connecting to the Server
-       4.2.  Managing Resource Control Channels
-       4.3.  SIP Session Example
-       4.4.  Media Streams and RTP Ports
-       4.5.  MRCPv2 Message Transport
-       4.6.  MRCPv2 Session Termination
+     4.1.  Connecting to the Server
+     4.2.  Managing Resource Control Channels
+     4.3.  SIP Session Example
+     4.4.  Media Streams and RTP Ports
+     4.5.  MRCPv2 Message Transport
+     4.6.  MRCPv2 Session Termination
    5.  MRCPv2 Specification
-       5.1.  Common Protocol Elements
-       5.2.  Request
-       5.3.  Response
-       5.4.  Status Codes
-       5.5.  Events
+     5.1.  Common Protocol Elements
+     5.2.  Request
+     5.3.  Response
+     5.4.  Status Codes
+     5.5.  Events
    6.  MRCPv2 Generic Methods, Headers, and Result Structure
-       6.1.  Generic Methods
-             6.1.1.  SET-PARAMS
-             6.1.2.  GET-PARAMS
-       6.2.  Generic Message Headers
-             6.2.1.  Channel-Identifier
-             6.2.2.  Accept
-             6.2.3.  Active-Request-Id-List
-             6.2.4.  Proxy-Sync-Id
-             6.2.5.  Accept-Charset
-             6.2.6.  Content-Type
-             6.2.7.  Content-ID
-             6.2.8.  Content-Base
-             6.2.9.  Content-Encoding
-             6.2.10.  Content-Location
-             6.2.11.  Content-Length
-             6.2.12.  Fetch Timeout
-             6.2.13.  Cache-Control
-             6.2.14.  Logging-Tag
-             6.2.15.  Set-Cookie
-             6.2.16.  Vendor-Specific Parameters
-       6.3.  Generic Result Structure
-             6.3.1.  Natural Language Semantics Markup Language
+     6.1.  Generic Methods
+       6.1.1.  SET-PARAMS
+       6.1.2.  GET-PARAMS
+     6.2.  Generic Message Headers
+       6.2.1.  Channel-Identifier
+       6.2.2.  Accept
+       6.2.3.  Active-Request-Id-List
+       6.2.4.  Proxy-Sync-Id
+       6.2.5.  Accept-Charset
+       6.2.6.  Content-Type
+       6.2.7.  Content-ID
+       6.2.8.  Content-Base
+       6.2.9.  Content-Encoding
+       6.2.10.  Content-Location
+       6.2.11.  Content-Length
+       6.2.12.  Fetch Timeout
+       6.2.13.  Cache-Control
+       6.2.14.  Logging-Tag
+       6.2.15.  Set-Cookie
+       6.2.16.  Vendor-Specific Parameters
+     6.3.  Generic Result Structure
+       6.3.1.  Natural Language Semantics Markup Language
    7.  Resource Discovery
    8.  Speech Synthesizer Resource
-       8.1.  Synthesizer State Machine
-       8.2.  Synthesizer Methods
-       8.3.  Synthesizer Events
-       8.4.  Synthesizer Header Fields
-             8.4.1.  Jump-Size
-             8.4.2.  Kill-On-Barge-In
-             8.4.3.  Speaker-Profile
-             8.4.4.  Completion-Cause
-             8.4.5.  Completion-Reason
-             8.4.6.  Voice-Parameter
-             8.4.7.  Prosody-Parameters
-             8.4.8.  Speech-Marker
-             8.4.9.  Speech-Language
-             8.4.10.  Fetch-Hint
-             8.4.11.  Audio-Fetch-Hint
-             8.4.12.  Failed-URI
-             8.4.13.  Failed-URI-Cause
-             8.4.14.  Speak-Restart
-             8.4.15.  Speak-Length
-             8.4.16.  Load-Lexicon
-             8.4.17.  Lexicon-Search-Order
-       8.5.  Synthesizer Message Body
-             8.5.1.  Synthesizer Speech Data
-             8.5.2.  Lexicon Data
-       8.6.  SPEAK Method
-       8.7.  STOP
-       8.8.  BARGE-IN-OCCURRED
-       8.9.  PAUSE
-       8.10.  RESUME
-       8.11.  CONTROL
-       8.12.  SPEAK-COMPLETE
-       8.13.  SPEECH-MARKER
-       8.14.  DEFINE-LEXICON
+     8.1.  Synthesizer State Machine
+     8.2.  Synthesizer Methods
+     8.3.  Synthesizer Events
+     8.4.  Synthesizer Header Fields
+       8.4.1.  Jump-Size
+       8.4.2.  Kill-On-Barge-In
+       8.4.3.  Speaker-Profile
+       8.4.4.  Completion-Cause
+       8.4.5.  Completion-Reason
+       8.4.6.  Voice-Parameter
+       8.4.7.  Prosody-Parameters
+       8.4.8.  Speech-Marker
+       8.4.9.  Speech-Language
+       8.4.10.  Fetch-Hint
+       8.4.11.  Audio-Fetch-Hint
+       8.4.12.  Failed-URI
+       8.4.13.  Failed-URI-Cause
+       8.4.14.  Speak-Restart
+       8.4.15.  Speak-Length
+       8.4.16.  Load-Lexicon
+       8.4.17.  Lexicon-Search-Order
+     8.5.  Synthesizer Message Body
+       8.5.1.  Synthesizer Speech Data
+       8.5.2.  Lexicon Data
+     8.6.  SPEAK Method
+     8.7.  STOP
+     8.8.  BARGE-IN-OCCURRED
+     8.9.  PAUSE
+     8.10.  RESUME
+     8.11.  CONTROL
+     8.12.  SPEAK-COMPLETE
+     8.13.  SPEECH-MARKER
+     8.14.  DEFINE-LEXICON
    9.  Speech Recognizer Resource
-       9.1.  Recognizer State Machine
-       9.2.  Recognizer Methods
-       9.3.  Recognizer Events
-       9.4.  Recognizer Header Fields
-             9.4.1.  Confidence-Threshold
-             9.4.2.  Sensitivity-Level
-             9.4.3.  Speed-Vs-Accuracy
-             9.4.4.  N-Best-List-Length
-             9.4.5.  Input-Type
-             9.4.6.  No-Input-Timeout
-             9.4.7.  Recognition-Timeout
-             9.4.8.  Waveform-URI
-             9.4.9.  Media-Type
-             9.4.10.  Input-Waveform-URI
-             9.4.11.  Completion-Cause
-             9.4.12.  Completion-Reason
-             9.4.13.  Recognizer-Context-Block
-             9.4.14.  Start-Input-Timers
-             9.4.15.  Speech-Complete-Timeout
-             9.4.16.  Speech-Incomplete-Timeout
-             9.4.17.  DTMF-Interdigit-Timeout
-             9.4.18.  DTMF-Term-Timeout
-             9.4.19.  DTMF-Term-Char
-             9.4.20.  Failed-URI
-             9.4.21.  Failed-URI-Cause
-             9.4.22.  Save-Waveform
-             9.4.23.  New-Audio-Channel
-             9.4.24.  Speech-Language
-             9.4.25.  Ver-Buffer-Utterance
-             9.4.26.  Recognition-Mode
-             9.4.27.  Cancel-If-Queue
-             9.4.28.  Hotword-Max-Duration
-             9.4.29.  Hotword-Min-Duration
-             9.4.30.  Interpret-Text
-             9.4.31.  DTMF-Buffer-Time
-             9.4.32.  Clear-DTMF-Buffer
-             9.4.33.  Early-No-Match
-             9.4.34.  Num-Min-Consistent-Pronunciations
-             9.4.35.  Consistency-Threshold
-             9.4.36.  Clash-Threshold
-             9.4.37.  Personal-Grammar-URI
-             9.4.38.  Enroll-Utterance
-             9.4.39.  Phrase-Id
-             9.4.40.  Phrase-NL
-             9.4.41.  Weight
-             9.4.42.  Save-Best-Waveform
-             9.4.43.  New-Phrase-Id
-             9.4.44.  Confusable-Phrases-URI
-             9.4.45.  Abort-Phrase-Enrollment
-       9.5.  Recognizer Message Body
-             9.5.1.  Recognizer Grammar Data
-             9.5.2.  Recognizer Result Data
-             9.5.3.  Enrollment Result Data
-             9.5.4.  Recognizer Context Block
-       9.6.  Recognizer Results
-             9.6.1.  Markup Functions
-             9.6.2.  Overview of Recognizer Result Elements and
-                     Their Relationships
-             9.6.3.  Elements and Attributes
-       9.7.  Enrollment Results
-             9.7.1.  <num-clashes> Element
-             9.7.2.  <num-good-repetitions> Element
-             9.7.3.  <num-repetitions-still-needed> Element
-             9.7.4.  <consistency-status> Element
-             9.7.5.  <clash-phrase-ids> Element
-             9.7.6.  <transcriptions> Element
-             9.7.7.  <confusable-phrases> Element
-       9.8.  DEFINE-GRAMMAR
-       9.9.  RECOGNIZE
-       9.10.  STOP
-       9.11.  GET-RESULT
-       9.12.  START-OF-INPUT
-       9.13.  START-INPUT-TIMERS
-       9.14.  RECOGNITION-COMPLETE
-       9.15.  START-PHRASE-ENROLLMENT
-       9.16.  ENROLLMENT-ROLLBACK
-       9.17.  END-PHRASE-ENROLLMENT
-       9.18.  MODIFY-PHRASE
-       9.19.  DELETE-PHRASE
-       9.20.  INTERPRET
-       9.21.  INTERPRETATION-COMPLETE
-       9.22.  DTMF Detection
+     9.1.  Recognizer State Machine
+     9.2.  Recognizer Methods
+     9.3.  Recognizer Events
+     9.4.  Recognizer Header Fields
+       9.4.1.  Confidence-Threshold
+       9.4.2.  Sensitivity-Level
+       9.4.3.  Speed-Vs-Accuracy
+       9.4.4.  N-Best-List-Length
+       9.4.5.  Input-Type
+       9.4.6.  No-Input-Timeout
+       9.4.7.  Recognition-Timeout
+       9.4.8.  Waveform-URI
+       9.4.9.  Media-Type
+       9.4.10.  Input-Waveform-URI
+       9.4.11.  Completion-Cause
+       9.4.12.  Completion-Reason
+       9.4.13.  Recognizer-Context-Block
+       9.4.14.  Start-Input-Timers
+       9.4.15.  Speech-Complete-Timeout
+       9.4.16.  Speech-Incomplete-Timeout
+       9.4.17.  DTMF-Interdigit-Timeout
+       9.4.18.  DTMF-Term-Timeout
+       9.4.19.  DTMF-Term-Char
+       9.4.20.  Failed-URI
+       9.4.21.  Failed-URI-Cause
+       9.4.22.  Save-Waveform
+       9.4.23.  New-Audio-Channel
+       9.4.24.  Speech-Language
+       9.4.25.  Ver-Buffer-Utterance
+       9.4.26.  Recognition-Mode
+       9.4.27.  Cancel-If-Queue
+       9.4.28.  Hotword-Max-Duration
+       9.4.29.  Hotword-Min-Duration
+       9.4.30.  Interpret-Text
+       9.4.31.  DTMF-Buffer-Time
+       9.4.32.  Clear-DTMF-Buffer
+       9.4.33.  Early-No-Match
+       9.4.34.  Num-Min-Consistent-Pronunciations
+       9.4.35.  Consistency-Threshold
+       9.4.36.  Clash-Threshold
+       9.4.37.  Personal-Grammar-URI
+       9.4.38.  Enroll-Utterance
+       9.4.39.  Phrase-Id
+       9.4.40.  Phrase-NL
+       9.4.41.  Weight
+       9.4.42.  Save-Best-Waveform
+       9.4.43.  New-Phrase-Id
+       9.4.44.  Confusable-Phrases-URI
+       9.4.45.  Abort-Phrase-Enrollment
+     9.5.  Recognizer Message Body
+       9.5.1.  Recognizer Grammar Data
+       9.5.2.  Recognizer Result Data
+       9.5.3.  Enrollment Result Data
+       9.5.4.  Recognizer Context Block
+     9.6.  Recognizer Results
+       9.6.1.  Markup Functions
+       9.6.2.  Overview of Recognizer Result Elements and Their
+         Relationships
+       9.6.3.  Elements and Attributes
+     9.7.  Enrollment Results
+       9.7.1.  <num-clashes> Element
+       9.7.2.  <num-good-repetitions> Element
+       9.7.3.  <num-repetitions-still-needed> Element
+       9.7.4.  <consistency-status> Element
+       9.7.5.  <clash-phrase-ids> Element
+       9.7.6.  <transcriptions> Element
+       9.7.7.  <confusable-phrases> Element
+     9.8.  DEFINE-GRAMMAR
+     9.9.  RECOGNIZE
+     9.10.  STOP
+     9.11.  GET-RESULT
+     9.12.  START-OF-INPUT
+     9.13.  START-INPUT-TIMERS
+     9.14.  RECOGNITION-COMPLETE
+     9.15.  START-PHRASE-ENROLLMENT
+     9.16.  ENROLLMENT-ROLLBACK
+     9.17.  END-PHRASE-ENROLLMENT
+     9.18.  MODIFY-PHRASE
+     9.19.  DELETE-PHRASE
+     9.20.  INTERPRET
+     9.21.  INTERPRETATION-COMPLETE
+     9.22.  DTMF Detection
    10.  Recorder Resource
-       10.1.  Recorder State Machine
-       10.2.  Recorder Methods
-       10.3.  Recorder Events
-       10.4.  Recorder Header Fields
-              10.4.1.  Sensitivity-Level
-              10.4.2.  No-Input-Timeout
-              10.4.3.  Completion-Cause
-              10.4.4.  Completion-Reason
-              10.4.5.  Failed-URI
-              10.4.6.  Failed-URI-Cause
-              10.4.7.  Record-URI
-              10.4.8.  Media-Type
-              10.4.9.  Max-Time
-              10.4.10.  Trim-Length
-              10.4.11.  Final-Silence
-              10.4.12.  Capture-On-Speech
-              10.4.13.  Ver-Buffer-Utterance
-              10.4.14.  Start-Input-Timers
-              10.4.15.  New-Audio-Channel
-       10.5.  Recorder Message Body
-       10.6.  RECORD
-       10.7.  STOP
-       10.8.  RECORD-COMPLETE
-       10.9.  START-INPUT-TIMERS
-       10.10.  START-OF-INPUT
+     10.1.  Recorder State Machine
+     10.2.  Recorder Methods
+     10.3.  Recorder Events
+     10.4.  Recorder Header Fields
+       10.4.1.  Sensitivity-Level
+       10.4.2.  No-Input-Timeout
+       10.4.3.  Completion-Cause
+       10.4.4.  Completion-Reason
+       10.4.5.  Failed-URI
+       10.4.6.  Failed-URI-Cause
+       10.4.7.  Record-URI
+       10.4.8.  Media-Type
+       10.4.9.  Max-Time
+       10.4.10.  Trim-Length
+       10.4.11.  Final-Silence
+       10.4.12.  Capture-On-Speech
+       10.4.13.  Ver-Buffer-Utterance
+       10.4.14.  Start-Input-Timers
+       10.4.15.  New-Audio-Channel
+     10.5.  Recorder Message Body
+     10.6.  RECORD
+     10.7.  STOP
+     10.8.  RECORD-COMPLETE
+     10.9.  START-INPUT-TIMERS
+     10.10.  START-OF-INPUT
    11.  Speaker Verification and Identification
-       11.1.  Speaker Verification State Machine
-       11.2.  Speaker Verification Methods
-       11.3.  Verification Events
-       11.4.  Verification Header Fields
-              11.4.1.  Repository-URI
-              11.4.2.  Voiceprint-Identifier
-              11.4.3.  Verification-Mode
-              11.4.4.  Adapt-Model
-              11.4.5.  Abort-Model
-              11.4.6.  Min-Verification-Score
-              11.4.7.  Num-Min-Verification-Phrases
-              11.4.8.  Num-Max-Verification-Phrases
-              11.4.9.  No-Input-Timeout
-              11.4.10.  Save-Waveform
-              11.4.11.  Media-Type
-              11.4.12.  Waveform-URI
-              11.4.13.  Voiceprint-Exists
-              11.4.14.  Ver-Buffer-Utterance
-              11.4.15.  Input-Waveform-URI
-              11.4.16.  Completion-Cause
-              11.4.17.  Completion-Reason
-              11.4.18.  Speech-Complete-Timeout
-              11.4.19.  New-Audio-Channel
-              11.4.20.  Abort-Verification
-              11.4.21.  Start-Input-Timers
-       11.5.  Verification Message Body
-              11.5.1.  Verification Result Data
-              11.5.2.  Verification Result Elements
-       11.6.  START-SESSION
-       11.7.  END-SESSION
-       11.8.  QUERY-VOICEPRINT
-       11.9.  DELETE-VOICEPRINT
-       11.10.  VERIFY
-       11.11.  VERIFY-FROM-BUFFER
-       11.12.  VERIFY-ROLLBACK
-       11.13.  STOP
-       11.14.  START-INPUT-TIMERS
-       11.15.  VERIFICATION-COMPLETE
-       11.16.  START-OF-INPUT
-       11.17.  CLEAR-BUFFER
-       11.18.  GET-INTERMEDIATE-RESULT
+     11.1.  Speaker Verification State Machine
+     11.2.  Speaker Verification Methods
+     11.3.  Verification Events
+     11.4.  Verification Header Fields
+       11.4.1.  Repository-URI
+       11.4.2.  Voiceprint-Identifier
+       11.4.3.  Verification-Mode
+       11.4.4.  Adapt-Model
+       11.4.5.  Abort-Model
+       11.4.6.  Min-Verification-Score
+       11.4.7.  Num-Min-Verification-Phrases
+       11.4.8.  Num-Max-Verification-Phrases
+       11.4.9.  No-Input-Timeout
+       11.4.10.  Save-Waveform
+       11.4.11.  Media-Type
+       11.4.12.  Waveform-URI
+       11.4.13.  Voiceprint-Exists
+       11.4.14.  Ver-Buffer-Utterance
+       11.4.15.  Input-Waveform-URI
+       11.4.16.  Completion-Cause
+       11.4.17.  Completion-Reason
+       11.4.18.  Speech-Complete-Timeout
+       11.4.19.  New-Audio-Channel
+       11.4.20.  Abort-Verification
+       11.4.21.  Start-Input-Timers
+     11.5.  Verification Message Body
+       11.5.1.  Verification Result Data
+       11.5.2.  Verification Result Elements
+     11.6.  START-SESSION
+     11.7.  END-SESSION
+     11.8.  QUERY-VOICEPRINT
+     11.9.  DELETE-VOICEPRINT
+     11.10.  VERIFY
+     11.11.  VERIFY-FROM-BUFFER
+     11.12.  VERIFY-ROLLBACK
+     11.13.  STOP
+     11.14.  START-INPUT-TIMERS
+     11.15.  VERIFICATION-COMPLETE
+     11.16.  START-OF-INPUT
+     11.17.  CLEAR-BUFFER
+     11.18.  GET-INTERMEDIATE-RESULT
    12.  Security Considerations
-       12.1.  Rendezvous and Session Establishment
-       12.2.  Control Channel Protection
-       12.3.  Media Session Protection
-       12.4.  Indirect Content Access
-       12.5.  Protection of Stored Media
-       12.6.  DTMF and Recognition Buffers
-       12.7.  Client-Set Server Parameters
-       12.8.  DELETE-VOICEPRINT and Authorization
+     12.1.  Rendezvous and Session Establishment
+     12.2.  Control Channel Protection
+     12.3.  Media Session Protection
+     12.4.  Indirect Content Access
+     12.5.  Protection of Stored Media
+     12.6.  DTMF and Recognition Buffers
+     12.7.  Client-Set Server Parameters
+     12.8.  DELETE-VOICEPRINT and Authorization
    13.  IANA Considerations
-       13.1.  New Registries
-              13.1.1.  MRCPv2 Resource Types
-              13.1.2.  MRCPv2 Methods and Events
-              13.1.3.  MRCPv2 Header Fields
-              13.1.4.  MRCPv2 Status Codes
-              13.1.5.  Grammar Reference List Parameters
-              13.1.6.  MRCPv2 Vendor-Specific Parameters
-       13.2.  NLSML-Related Registrations
-              13.2.1.  'application/nlsml+xml' Media Type
-                      Registration
-       13.3.  NLSML XML Schema Registration
-       13.4.  MRCPv2 XML Namespace Registration
-       13.5.  Text Media Type Registrations
-              13.5.1.  text/grammar-ref-list
-       13.6.  'session' URI Scheme Registration
-       13.7.  SDP Parameter Registrations
-              13.7.1.  Sub-Registry "proto"
-              13.7.2.  Sub-Registry "att-field (media-level)"
+     13.1.  New Registries
+       13.1.1.  MRCPv2 Resource Types
+       13.1.2.  MRCPv2 Methods and Events
+       13.1.3.  MRCPv2 Header Fields
+       13.1.4.  MRCPv2 Status Codes
+       13.1.5.  Grammar Reference List Parameters
+       13.1.6.  MRCPv2 Vendor-Specific Parameters
+     13.2.  NLSML-Related Registrations
+       13.2.1.  'application/nlsml+xml' Media Type Registration
+     13.3.  NLSML XML Schema Registration
+     13.4.  MRCPv2 XML Namespace Registration
+     13.5.  Text Media Type Registrations
+       13.5.1.  text/grammar-ref-list
+     13.6.  'session' URI Scheme Registration
+     13.7.  SDP Parameter Registrations
+       13.7.1.  Sub-Registry "proto"
+       13.7.2.  Sub-Registry "att-field (media-level)"
    14.  Examples
-       14.1.  Message Flow
-       14.2.  Recognition Result Examples
-              14.2.1.  Simple ASR Ambiguity
-              14.2.2.  Mixed Initiative
-              14.2.3.  DTMF Input
-              14.2.4.  Interpreting Meta-Dialog and Meta-Task
-                      Utterances
-              14.2.5.  Anaphora and Deixis
-              14.2.6.  Distinguishing Individual Items from Sets
-                      with One Member
-              14.2.7.  Extensibility
+     14.1.  Message Flow
+     14.2.  Recognition Result Examples
+       14.2.1.  Simple ASR Ambiguity
+       14.2.2.  Mixed Initiative
+       14.2.3.  DTMF Input
+       14.2.4.  Interpreting Meta-Dialog and Meta-Task Utterances
+       14.2.5.  Anaphora and Deixis
+       14.2.6.  Distinguishing Individual Items from Sets with One
+         Member
+       14.2.7.  Extensibility
    15.  ABNF Normative Definition
    16.  XML Schemas
-       16.1.  NLSML Schema Definition
-       16.2.  Enrollment Results Schema Definition
-       16.3.  Verification Results Schema Definition
+     16.1.  NLSML Schema Definition
+     16.2.  Enrollment Results Schema Definition
+     16.3.  Verification Results Schema Definition
    17.  References
-       17.1.  Normative References
-       17.2.  Informative References
+     17.1.  Normative References
+     17.2.  Informative References
    Appendix A.  Contributors
    Appendix B.  Acknowledgements
    Authors' Addresses
