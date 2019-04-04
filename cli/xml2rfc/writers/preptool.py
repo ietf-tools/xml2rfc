@@ -128,7 +128,7 @@ class PrepToolWriter(BaseV3Writer):
         #
         self.index_entries = []
         #
-        self.spacer = '  '
+        self.spacer = '\u00a0\u00a0'
         #
         self.boilerplate_https_date = datetime.date(year=2017, month=8, day=21)
 
@@ -1856,6 +1856,17 @@ class PrepToolWriter(BaseV3Writer):
                     l = toc_entries(c)
                     if l:
                         sub += l
+                if sub:
+                    li = sub[0]
+                    m = len(li.find('t').find('xref').get('derivedContent'))
+                    for li in sub:
+                        xref = li.find('t').find('xref')
+                        num = xref.get('derivedContent')
+                        l = len(num)
+                        if (l > m
+                            and xref.tail[-1] in [' ', '\u00a0', ] and xref.tail[-2] in [' ', '\u00a0', ]
+                            and not num.startswith('Appendix')):
+                            xref.tail = xref.tail[:-1]
                 if e.tag in ['section', 'references', ]:
                     li = self.element('li')
                     li.append(toc_entry_t(e))
