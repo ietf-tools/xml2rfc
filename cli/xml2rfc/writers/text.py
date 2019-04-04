@@ -204,6 +204,7 @@ def findblocks(lines):
 def expand_ellipsis(text, width):
     if re.search(r'\u2026\d+$', text):
         head, tail = text.rsplit('\u2026', 1)   # split on ellipsis
+        head += ' '
         if tail != '0000':
             tail = '%4s' % tail.lstrip('0')     # strip leading zeros
         last = head.splitlines()[-1]
@@ -4213,15 +4214,17 @@ class TextWriter(BaseV3Writer):
         #
         indent = len(e._symbol)+2
         if e._bare:
-            first = mktext(self.render(e[0], width, **kwargs))
+            first = mktext(self.render(e[-1], width, **kwargs))
             if first:
                 indent = min(8, len(first.split()[0])+2)
+        padding = indent
         indent = int( e.get('indent') or indent )
+        hang = max(padding, indent) - indent
         #
         kwargs['joiners'].update({
             None:   Joiner('', ljoin, '', indent, 0),
             'li':   Joiner('', ljoin, '', 0, 0),
-            't':    Joiner('', ljoin, '', indent, 0),
+            't':    Joiner('', ljoin, '', indent, hang),
         })
         # rendering
         lines = []
@@ -4316,7 +4319,7 @@ class TextWriter(BaseV3Writer):
                     text = "%s" % reftext
             pageno = e.get('pageno')
             if pageno and pageno.isdigit():
-                text += ' \u2026' '%04d' % int(pageno)
+                text += '\u2026' '%04d' % int(pageno)
         else:
             text = e.text or ''
 
