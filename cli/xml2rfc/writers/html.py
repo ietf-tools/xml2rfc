@@ -778,8 +778,10 @@ class HtmlWriter(BaseV3Writer):
             svgh = maybefloat(svg.get('height'))
             try:
                 if vbox:
+                    xo,yo,w,h = re.split(',? +', vbox.strip('()'))
+                    # rewrite viewbox in the simplest syntax, in case needed for pdf lib
+                    svg.set('viewBox', '%s %s %s %s' % (xo,yo,w,h))
                     if not (svgw and svgh):
-                        xo,yo,w,h = re.split(',? +', vbox.strip('()'))
                         svgw = float(w)-float(xo)
                         svgh = float(h)-float(yo)
                 else:
