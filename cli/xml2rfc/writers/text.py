@@ -2569,7 +2569,7 @@ class TextWriter(BaseV3Writer):
         target = e.get('target')
         if target:
             t = self.element('t')
-            t.text = 'URL: <%s>' % target
+            t.text = '<%s>' % target
             lines = self.ljoin(lines, t, width, **kwargs)
         if len(label.strip()) > 10:
             lines = [ Line(label, e) ] + lines
