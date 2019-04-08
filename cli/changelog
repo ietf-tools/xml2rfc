@@ -1,3 +1,36 @@
+xml2rfc (2.22.3) ietf; urgency=medium
+
+  This release brings further tweaks and imporvements to the v3 text
+  format output in the area of Table of Content formatting, and fixes a
+  number of bugs.
+
+  * Tweaked the handling of ToC page numbers in the v3 text format.
+
+  * Tweaked the xml inserted by the preptool for the ToC to give ToC
+    indentation and spacing which better match the legacy text format
+    (and also looks better).
+
+  * Added a rewrite of <svg> viewBox values to the simplest acceptable
+    format, to make sure it will be understood by our pdf generation libs.
+
+  * Added a test case for <xref section=...>
+
+  * Tweaked the section label for fragment <xref> rendering to say
+    'Appendix' instead of 'Section' for appendix references.
+
+  * Added a pre-rfc1272 reference to elements.xml to test the author
+    initials handling for early RFCs.
+
+  * Tweaked the get_initials() code for use on <reference> authors.
+    Refactored part of the text.render_reference() code to support
+    get_initials() properly.
+
+  * Added special initials handling for RFCs 1272 and below, to apply the
+    single initials handling enforced at that time.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  08 Apr 2019 04:16:58 -0700
+
+
 xml2rfc (2.22.2) ietf; urgency=medium
 
   This release fixes a couple of issues discovered by users who are now
