@@ -66,7 +66,7 @@ def expand_unicode_element(e, bare=False):
             for c in e.text:
                 if isinstance(c, six.binary_type):
                     c = six.text_type(c, encoding='latin1')
-                names.append(unicodedata.name(c))
+                names.append(unicodedata.name(c, 'U+%04x'%ord(c)))
             return ', '.join(names)
         except ValueError as exc:
             raise ValueError('When looking for the name of "%s", got: %s' % (c, exc))
