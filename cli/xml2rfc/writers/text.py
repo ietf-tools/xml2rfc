@@ -1717,10 +1717,10 @@ class TextWriter(BaseV3Writer):
             else:
                 # Internet-Draft
                 group = front.find('workgroup')
-                if group is None:
-                    left.append('Network Working Group')
-                else:
+                if group != None and group.text:
                     left.append(group.text.strip())
+                else:
+                    left.append('Network Working Group')
                 left.append('Internet-Draft')
                 #
                 category = self.root.get('category', '')
