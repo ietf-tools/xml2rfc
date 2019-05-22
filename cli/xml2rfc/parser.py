@@ -4,6 +4,8 @@
 
 """ Public XML parser module """
 
+import base64
+import hashlib
 import io
 import lxml.etree
 import os
@@ -18,9 +20,9 @@ import xml2rfc.utils
 from xml2rfc.writers import base
 
 try:
-    from urllib.parse import urlparse, urljoin
+    from urllib.parse import urlparse, urljoin, urlsplit
 except ImportError:
-    from urlparse import urlparse, urljoin
+    from urlparse import urlparse, urljoin, urlsplit
 
 try:
     import debug
@@ -340,8 +342,10 @@ class CachingResolver(lxml.etree.Resolver):
 
             Checks for the existence of the cache and creates it if necessary.
         """
-        scheme, netloc, path, params, query, fragment = urlparse(url)
-        basename = os.path.basename(path)
+        scheme, netloc, path, query, fragment = urlsplit(url)
+        root, ext = os.path.splitext(path)
+        hash = '-'+base64.urlsafe_b64encode(hashlib.sha1(query)) if query else ''
+        basename = os.path.basename(root+hash+ext)
         typename = self.include and 'include' or 'entity'
         # Try to load the URL from each cache in `read_cache`
         for dir in self.read_caches:
