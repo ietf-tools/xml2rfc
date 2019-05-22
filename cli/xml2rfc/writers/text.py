@@ -303,47 +303,48 @@ class TextWriter(BaseV3Writer):
             if l < n:
                 pad = n - l
                 nn = l - 1                 # last line
-            block = lines[nn].block
-            if block is None:
-                # check backwards for section start.  If we find one, check
-                # again for another, in case it's a subsection.
-                found = None
-                i = nn
-                while i > nn-12:
-                    for j in range(1,4):
-                        k = i - j
-                        if lines[k].elem != None and lines[k].elem.tag == 'section':
-                            found = True
-                            i = k
-                            break       # break for loop
-                    else:
-                        break           # break while loop
-                if found:
-                    pad = nn - i
-                    n = i
             else:
-                olen = nn - block.beg            # number of lines left at the end of this page
-                wlen = block.end - nn            # number of lines at the start of next page
-                blen = block.end - block.beg
-                if lines[block.beg].elem.tag == 'section':
-                    tcount = 0
-                    for r in range(block.beg, nn):
-                        if lines[r].elem!=None and lines[r].elem.tag != 'section':
-                            tcount += 1
-                    if wlen == 1 or tcount < self.options.min_section_start_lines:
-                        adj = n - block.beg
-                        pad += adj
-                        n -= adj
-                elif lines[block.beg].elem.tag in ['artset', 'artwork', 'figure', 'sourcecode', 'table', ]:
-                    if blen < 48 or olen < self.options.min_section_start_lines:
-                        adj = n - block.beg
-                        pad += adj
-                        n -= adj
-                elif (olen == 1 or wlen == 1) and blen != 1:
-                    n -= 1
-                    pad += 1
+                block = lines[nn].block
+                if block is None:
+                    # check backwards for section start.  If we find one, check
+                    # again for another, in case it's a subsection.
+                    found = None
+                    i = nn
+                    while i > nn-12:
+                        for j in range(1,4):
+                            k = i - j
+                            if lines[k].elem != None and lines[k].elem.tag == 'section':
+                                found = True
+                                i = k
+                                break       # break for loop
+                        else:
+                            break           # break while loop
+                    if found:
+                        pad = nn - i
+                        n = i
                 else:
-                    pass
+                    olen = nn - block.beg            # number of lines left at the end of this page
+                    wlen = block.end - nn            # number of lines at the start of next page
+                    blen = block.end - block.beg
+                    if lines[block.beg].elem.tag == 'section':
+                        tcount = 0
+                        for r in range(block.beg, nn):
+                            if lines[r].elem!=None and lines[r].elem.tag != 'section':
+                                tcount += 1
+                        if wlen == 1 or tcount < self.options.min_section_start_lines:
+                            adj = n - block.beg
+                            pad += adj
+                            n -= adj
+                    elif lines[block.beg].elem.tag in ['artset', 'artwork', 'figure', 'sourcecode', 'table', ]:
+                        if blen < 48 or olen < self.options.min_section_start_lines:
+                            adj = n - block.beg
+                            pad += adj
+                            n -= adj
+                    elif (olen == 1 or wlen == 1) and blen != 1:
+                        n -= 1
+                        pad += 1
+                    else:
+                        pass
             # Transfer lines to next page
             pagestart = len(paginated)
             if page > 1:
