@@ -886,6 +886,9 @@ class TextWriter(BaseV3Writer):
         #text = self.render_author_name(e, width, **kwargs)
         lines = []
         address = e.find('./address')
+        if address is None:
+            address = etree.Element('address')
+            e.append(address)
         postal = e.find('./address/postal')
         if postal is None:
             # We render author name as part of postal, so make sure it's there
