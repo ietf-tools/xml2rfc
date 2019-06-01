@@ -276,6 +276,7 @@ class PrepToolWriter(BaseV3Writer):
             './/ol;add_counter()',
             './/xref',                          # 5.4.8.  <xref> Processing
             './/relref',                        # 5.4.9.  <relref> Processing
+            './/artset',                        #         <artwork> Processing
             './/artwork',                       # 5.5.1.  <artwork> Processing
             './/sourcecode',                    # 5.5.2.  <sourcecode> Processing
             #
@@ -1613,13 +1614,19 @@ class PrepToolWriter(BaseV3Writer):
     def element_artset(self, e, p):
         anchors = [ w.get('anchor') for w in e.xpath('./artwork[@anchor]') ]
         if anchors:
+            anchors.sort()
             if not e.get('anchor'):
                 e.set('anchor', anchors[0])
                 self.warn(e, "Moved anchor '%s' on <artset><artwork> up to <artset>" % anchors[0])
             if len(anchors) > 1:
-                self.warn(e, "Found multiple anchors within <artset>: %s.  Please use an anchor on <artset> instead.  Discarding anchors on <artwork>." % ','.join(anchors))
-                for w in e.xpath('./artwork[@anchor]'):
-                    del w.attribs['anchor']
+                if e.get('anchor') == anchors[0]:
+                    self.warn(e, "Found multiple anchors on <artwork> within <artset>.  Please use an anchor on <artset> instead.")
+                    self.warn(e, "-- Keeping anchor '%s', discarding '%s'." % (anchors[0], "', '".join(anchors[1:])))
+                else:
+                    self.warn(e, "Found an anchor on <artset>, but also multiple anchors on <artwork> within <artset>.  Please use only the one on <artset>.")
+                    self.warn(e, "-- Discarding anchors '%s'." % ("', '".join(anchors)))
+            for w in e.xpath('./artwork[@anchor]'):
+                del w.attrib['anchor']
 
     def element_artwork(self, e, p):
 
