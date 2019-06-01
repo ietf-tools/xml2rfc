@@ -663,13 +663,14 @@ class HtmlWriter(BaseV3Writer):
 
     def render_artset(self, h, x):
         preflist = ['svg', 'binary-art', 'ascii-art', ]
+        div = add.div(h, x)
         for t in preflist:
             for a in x.xpath('./artwork[@type="%s"]' % t):
-                artwork = self.render(h, a)
+                artwork = self.render(div, a)
                 return artwork
         else:
-            artwork = self.render(h, x[0])
-        return artwork
+            artwork = self.render(div, x[0])
+        return div
 
     # 9.5.  <artwork>
     # 
