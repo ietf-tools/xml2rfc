@@ -379,7 +379,7 @@ class CachingResolver(lxml.etree.Resolver):
             if self.write_cache:
                 try:
                     xml = lxml.etree.fromstring(r.text.encode('utf8'))
-                    if xml.getroot().tag != 'reference':
+                    if xml.tag != 'reference':
                         return url
                     else:
                         if self.validate_ref(xml):
