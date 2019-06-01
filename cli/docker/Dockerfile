@@ -143,15 +143,27 @@ RUN pip install dict2xml pypdf2
 
 # Python 3.4
 WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.4.9/Python-3.4.9.tar.xz
-RUN tar xJf Python-3.4.9.tar.xz
-RUN rm Python-3.4.9.tar.xz
-WORKDIR /usr/src/Python-3.4.9/
+RUN wget -q https://www.python.org/ftp/python/3.4.10/Python-3.4.10.tar.xz
+RUN tar xJf Python-3.4.10.tar.xz
+RUN rm Python-3.4.10.tar.xz
+WORKDIR /usr/src/Python-3.4.10/
 RUN ./configure
 RUN make
 RUN make altinstall
 WORKDIR /usr/src
-RUN rm -rf /usr/src/Python-3.4.9/
+RUN rm -rf /usr/src/Python-3.4.10/
+
+# Python 3.5
+WORKDIR /usr/src
+RUN wget -q https://www.python.org/ftp/python/3.5.7/Python-3.5.7.tar.xz
+RUN tar xJf Python-3.5.7.tar.xz
+RUN rm Python-3.5.7.tar.xz
+WORKDIR /usr/src/Python-3.5.7/
+RUN ./configure
+RUN make
+RUN make altinstall
+WORKDIR /usr/src
+RUN rm -rf /usr/src/Python-3.5.7/
 
 # Python 3.6
 WORKDIR /usr/src
@@ -167,15 +179,15 @@ RUN rm -rf /usr/src/Python-3.6.8/
 
 # Python 3.7
 WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz
-RUN tar xJf Python-3.7.2.tar.xz
-RUN rm Python-3.7.2.tar.xz
-WORKDIR /usr/src/Python-3.7.2/
+RUN wget -q https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
+RUN tar xJf Python-3.7.3.tar.xz
+RUN rm Python-3.7.3.tar.xz
+WORKDIR /usr/src/Python-3.7.3/
 RUN ./configure
 RUN make
 RUN make altinstall
 WORKDIR /usr/src/
-RUN rm -rf /usr/src/Python-3.7.2/
+RUN rm -rf /usr/src/Python-3.7.3/
 
 ENV DDIR="/usr/local/share/xml2rfc"
 RUN mkdir -p $DDIR
