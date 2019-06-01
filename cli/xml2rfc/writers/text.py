@@ -369,6 +369,8 @@ class TextWriter(BaseV3Writer):
         return paginated
 
     def update_toc(self, lines):
+        if self.root.get('tocInclude') != 'true':
+            return lines
         toc = self.root.find('./front/boilerplate/section[@anchor="toc"]')
         in_toc = False
         toc_start = None
