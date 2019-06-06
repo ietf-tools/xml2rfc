@@ -1236,12 +1236,13 @@ class BaseRfcWriter:
                 refs_newcounter = refs_counter + '.' + str(len(references)+1)
                 self._indexReferences(refs_newcounter, title="URIs", level=2, subCounter=len(references)+1)
 
-        for reference_list in references:
-            for ref in reference_list:
-                if len(ref):
-                    ref_counter += 1
-                    title = ref.find("front/title").text
-                    self._indexRef(ref_counter, title=title, anchor=ref.attrib["anchor"])
+
+        for ref in self.r.xpath('.//references//reference'):
+            if len(ref):
+                ref_counter += 1
+                title = ref.find("front/title")
+                if title != None:
+                    self._indexRef(ref_counter, title=title.text, anchor=ref.attrib["anchor"])
 
         # Appendix sections
         back = self.r.find('back')
