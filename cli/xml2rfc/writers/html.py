@@ -1875,6 +1875,9 @@ class HtmlWriter(BaseV3Writer):
             self.render(inner, c)
         for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date', ):
             for c in x.iterdescendants(ctag):
+                if p.tag == 'referencegroup' and c.tag == 'seriesInfo' and c.get('name') == 'DOI':
+                    # Don't render DOI within a reference group
+                    continue              
                 if len(inner):
                     inner[-1].tail = ', '
                 self.render(inner, c)
