@@ -447,6 +447,22 @@ class V2v3XmlWriter(BaseV3Writer):
                 self.warn(e, "Found non-whitespace content after <CODE ENDS>")
                 e.tail = tail
             stripattr(e, ['align', 'alt', 'height', 'suppress-title', 'width', ])
+        src = e.get('src')
+        if e.text and e.text.strip() and src:
+            # We have both text content and a src attribute -- convert to
+            # <artset> with 2 <artwork)
+            ext = os.path.splitext(src)[1][1:]
+            artset = self.element('artset', line=e.sourceline)
+            extart = self.copy(e, 'artwork')
+            extart.text = None
+            extart.tail = None
+            extart.set('type', ext)
+            artset.append(extart)
+            stripattr(e, ['src'])
+            e.set('type', 'ascii-art')
+            artset.append(e)
+            p.append(artset)
+
 
     def element_back(self, e, p):
         # XXXX The RFCs don't say anything about the text rendering of
