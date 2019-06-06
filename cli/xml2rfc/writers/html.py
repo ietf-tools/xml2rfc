@@ -317,6 +317,13 @@ class HtmlWriter(BaseV3Writer):
         if len(e.xpath('.//*[@class="pilcrow"]')) == 0:
             id = e.get('id')
             if id:
+                if len(e):
+                    if e[-1].tail:
+                        e[-1].tail = e[-1].tail.rstrip()
+                elif e.text:
+                    e.text = e.text.rstrip()
+                else:
+                    pass
                 add.a(e, None, pilcrow, classes='pilcrow', href='#%s'%id)
             else:
                 self.warn(e, 'Tried to add a pilcrow to <%s>, but found no "id" attribute' % e.tag)
@@ -2219,7 +2226,7 @@ class HtmlWriter(BaseV3Writer):
         p = add.p(h, x)
         for c in x.getchildren():
             self.render(p, c)
-        add.a(p, None, pilcrow, classes='pilcrow', href='#%s'%x.get('pn'))
+        self.maybe_add_pilcrow(p)
         return p
 
     # 
