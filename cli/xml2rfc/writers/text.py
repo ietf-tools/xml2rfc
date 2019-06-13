@@ -1944,7 +1944,8 @@ class TextWriter(BaseV3Writer):
         tt, __ = self.text_or_block_renderer(e, width, **kwargs)
         if isinstance(tt, list):
             lines = stripl(tt)
-            lines[0].text = text + lines[0].text.lstrip()
+            if lines:
+                lines[0].text = text + lines[0].text.lstrip()
         else:
             text += tt.lstrip()
             lines = mklines(text, e)
