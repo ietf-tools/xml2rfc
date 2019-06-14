@@ -65,7 +65,7 @@ default_options = Values(defaults={
         'remove_pis': False,
         'raw': False,
         'rfc': None,
-        'rfc_base_url': 'https://www.rfc-editor.org/info/',
+        'rfc_base_url': 'https://www.rfc-editor.org/rfc/',
         'strict': False,
         'text': True,
         'utf8': False,
