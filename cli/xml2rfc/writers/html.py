@@ -1441,7 +1441,7 @@ class HtmlWriter(BaseV3Writer):
                         alist = []
                         for num in items.split(','):
                             num = num.strip()
-                            a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%num), classes='eref')
+                            a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%num), classes='eref')
                             a.tail = ' '
                             alist.append(a)
                         entry(dl, section.title(), *alist)
@@ -1467,7 +1467,7 @@ class HtmlWriter(BaseV3Writer):
                     if items:
                         for num in items.split(','):
                             num = num.strip()
-                            a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%num), classes='eref')
+                            a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%num), classes='eref')
                             a.tail = ' '
                             entry(dl, section.title(), a)
                         a.tail += '(if approved)'
@@ -2130,7 +2130,7 @@ class HtmlWriter(BaseV3Writer):
         value = x.get('value')
         if   self.part == 'front':
             if   name == 'RFC':
-                value = build.a(value, href=os.path.join(self.options.rfc_base_url, 'rfc%s.txt'%value), classes='eref')
+                value = build.a(value, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%value), classes='eref')
             elif name == 'DOI':
                 value = build.a(value, href=os.path.join(self.options.doi_base_url, value), classes='eref')
             elif name == 'Internet-Draft':
