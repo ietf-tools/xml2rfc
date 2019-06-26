@@ -33,11 +33,6 @@ def display_version(self, opt, value, parser):
     sys.exit()
 
 
-def clear_cache(self, opt, value, parser):
-    xml2rfc.parser.XmlRfcParser('').delete_cache()
-    sys.exit()
-
-
 def print_pi_help(self, opt, value, parser):
     pis = xml2rfc.parser.XmlRfc(None, None).pis.items()
     pis.sort()
@@ -102,7 +97,7 @@ def main():
 
 
     plain_options = optparse.OptionGroup(optionparser, 'Plain Options')
-    plain_options.add_option('-C', '--clear-cache', action='callback', callback=clear_cache,
+    plain_options.add_option('-C', '--clear-cache', action='store_true', default=False,
                             help='purge the cache and exit')
     plain_options.add_option(      '--debug', action='store_true',
                             help='Show debugging output')
@@ -238,6 +233,11 @@ def main():
                 pass
         sys.exit(0)
 
+    # Clear cache and exit if requested
+    if options.clear_cache:
+        xml2rfc.parser.XmlRfcParser('').delete_cache(path=options.cache)
+        sys.exit(0)
+
     if len(args) < 1:
         optionparser.print_help()
         sys.exit(2)
@@ -342,6 +342,7 @@ def main():
             if not os.access(options.cache, os.W_OK):
                 print('Cache directory is not writable: %s' % options.cache)
                 sys.exit(1)
+    #
     options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
     if options.omit_headers and not options.text:
         sys.exit("You can only use --no-headers with paginated text output.")

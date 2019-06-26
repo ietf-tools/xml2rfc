@@ -32,6 +32,7 @@ default_options = Values(defaults={
         'add_xinclude': None,
         'basename': None,
         'cache': None,
+        'clear_cache': False,
         'css': None,
         'date': datetime.date.today(),
         'datestring': None,
