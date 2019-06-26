@@ -100,7 +100,9 @@ def get_normalized_address_info(writer, x, latin=True):
                 break
     if country_info:
         country_name = get_value(country_element, latin=latin)
-        if re.match('[A-Z]{2,3}', country_name):
+        if country_name in ['US', 'USA']:
+            country_name = country_info.official_name
+        elif re.match('[A-Z]{2,3}', country_name):
             country_name = country_info.name
         adr = {
                 'name': name,
