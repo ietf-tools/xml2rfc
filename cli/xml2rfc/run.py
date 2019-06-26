@@ -172,11 +172,13 @@ def main():
     htmloptions.add_option('--css', default=None,
                            help='Use the given CSS file instead of the builtin')
     htmloptions.add_option('--external-css', action='store_true', default=False,
-                           help='place css in an external file')
+                           help='place css (and js) in external files')
     htmloptions.add_option('--rfc-base-url', default="https://www.rfc-editor.org/rfc/",
                            help='Base URL for RFC links')
     htmloptions.add_option('--id-base-url', default="https://www.ietf.org/archive/id/",
                            help='Base URL for Internet-Draft links')
+    htmloptions.add_option('--metadata-js-url', default="metadata.js",
+                           help='URL for the metadata script')
     optionparser.add_option_group(htmloptions)
 
     v2v3options = optparse.OptionGroup(optionparser, 'V2-V3 Converter Options')
