@@ -372,7 +372,14 @@ class CachingResolver(lxml.etree.Resolver):
         if not netloc in self.sessions:
             self.sessions[netloc] = requests.Session()
         session = self.sessions[netloc]
-        r = session.get(url)
+        for i in range(4):
+            try:
+                r = session.get(url)
+                break
+            except Exception as e:
+                debug.show('type(e)')
+                debug.show('e.__class__.__name__')
+                xml2rfc.log.warn('  retrying %s' % (e, url))
         for rr in r.history + [r, ]:
             xml2rfc.log.note(' ... %s %s' % (rr.status_code, rr.url))
         if r.status_code == 200:

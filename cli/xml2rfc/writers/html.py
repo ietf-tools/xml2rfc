@@ -12,14 +12,17 @@ import six
 import unicodedata
 import xml2rfc
 
+from contextlib import closing
 from io import open
 from lxml.html import html_parser
 from lxml.html.builder import ElementMaker
 
 if six.PY2:
     from urllib import urlopen
+    from urlparse import urlparse, urljoin
 elif six.PY3:
     from urllib.request import urlopen
+    from urllib.parse import urlparse, urljoin
 
 try:
     import debug
@@ -492,6 +495,31 @@ class HtmlWriter(BaseV3Writer):
             head.append(link)
 
         body = add.body(html, None)
+
+        scheme = urlparse(self.options.metadata_js_url).scheme
+        if scheme in ['http', 'https', 'ftp', 'file', ]:
+            with closing(urlopen(self.options.metadata_js_url)) as f:
+                js = f.read()
+        elif scheme:
+            self.err(x, "Cannot handle scheme: %s in --metadata-js-url value" % scheme)
+            js = ''
+        else:
+            jsin = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', self.options.metadata_js_url)
+            with open(jsin) as f:
+                js = f.read()
+
+        if self.options.external_css:
+            dest_dir = os.path.dirname(self.filename)+os.sep
+            jsout = urljoin(dest_dir, self.options.metadata_js_url)
+            # Only write to the destination if it's a local file:
+            if jsout.startswith(dest_dir):
+                with open(cssout, 'w', encoding='utf-8') as f:
+                    f.write(css)
+            s = add.script(body, None, src=self.options.metadata_js_url)
+        else:
+            s = add.script(body, None)
+            s.text = '\n'+js
+        s.tail = '\n'
 
     # 6.4.  Page Headers and Footers
     # 
