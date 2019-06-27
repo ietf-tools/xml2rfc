@@ -1,3 +1,79 @@
+xml2rfc (2.23.0) ietf; urgency=medium
+
+  This release adds v2v3 support for conversion of v2 code with both text and
+  external image sources to v3 <artset> format, and provides improved cache
+  handling.  It also contains a long list of bugfixes.  Here is an excerpt
+  from the commit log:
+
+  * Fixed an issue where cache clearing did not consider custom cache 
+    locations.
+
+  * Added retry on connection error for external includes.  This fixes an
+    issue which has appearing more often recently, where the first connection
+    to fetch a reference file has failed to provide the right redirect.
+
+  * Added inclusion of metadata.js in the html renderer, for future handling
+    of dynamic metadata (updated-by and obsoleted-by information, for
+    instance).  Added a default instance of the metadata javascript file to
+    the distribution, and added an command-line option to specify an
+    alternative version of the javascript metadata script.
+
+  * Added <script> to the list of elements treated as blocks for HTML output
+    formatting purposes.
+
+  * Show 'US' as "United States of America" (official name rather than short 
+    name according to ISO 3166-1)
+
+  * Changed the default RFC base URL in run.py, and the extension used in 
+    html.py.
+
+  * Added code to the v2v3 converter to create an <artset> for legacy 
+    artwork with both a 'src' attribute and text content.
+
+  * Changed <reference> rendering when part of a <referencegroup> to not 
+    include the DOI.
+
+  * Fixed a crash that could occur during index building with multiple levels
+    of <references>.
+
+  * Tweaked the text format <artwork> placeholder (when no text format 
+    artwork is present) to look at both 'src' and 'originalSrc' for an URL
+    for alternative artwork.
+
+  * Changed the handling of pilcrow links at end of paragraphs and similar 
+    to follow immediately after the content, without wrappable space, to avoid 
+    the appearence of having double blandk lines when the pilcrow would be 
+    wrapped to sit by itself on a line.
+
+  * Added a HTML div to hold artset anchor, fixing an issue where artset
+    anchors would not always be present.
+
+  * Refined the preptool warnings regarding artset/artwork anchor handling.
+
+  * Eliminated toc update work when tocInclude is false.
+
+  * Only apply validation of cache entries as references if they are 
+    <reference> entries.
+
+  * Refined the reference URL cache handling for URLs with query arguments, 
+    to avoid cache collisions.
+
+  * Eliminated an incorrect check for page break after section header at end
+    of document.  Fixes issue #409.
+
+  * Handled authors without address elements for v3 text.  Fixes issue #408.
+
+  * Dealt better with <workgroup> without content.
+
+  * Changed the schema to require at least one instance of <artwork> within 
+    <artset>.  Fixes issue #405.
+
+  * Added a default rendering (code point number) for code points without 
+    unicode code point names.  Fixes issues #401 and #402.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  26 Jun 2019 20:36:37 +0000
+
+
 xml2rfc (2.22.3) ietf; urgency=medium
 
   This release brings further tweaks and imporvements to the v3 text
