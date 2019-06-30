@@ -101,7 +101,7 @@ setup(
         'Topic :: Text Processing :: Markup :: XML',
         'License :: OSI Approved :: BSD License',
     ],
-    license="Simplified BSD Licence",
+    license="BSD-3-Clause",
 
     # Program data
     #scripts=['scripts/xml2rfc'],
