@@ -344,7 +344,7 @@ class CachingResolver(lxml.etree.Resolver):
         """
         scheme, netloc, path, query, fragment = urlsplit(url)
         root, ext = os.path.splitext(path)
-        hash = '-'+base64.urlsafe_b64encode(hashlib.sha1(query)) if query else ''
+        hash = '-'+base64.urlsafe_b64encode(hashlib.sha1(query.encode()).digest()).decode() if query else ''
         basename = os.path.basename(root+hash+ext)
         typename = self.include and 'include' or 'entity'
         # Try to load the URL from each cache in `read_cache`
