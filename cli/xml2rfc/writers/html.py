@@ -2378,7 +2378,7 @@ class HtmlWriter(BaseV3Writer):
         ul = build.ul()
         p = x.getparent()
         panchor = p.get('anchor')
-        classes = h.get('class', '')
+        classes = ''
         if panchor in ['toc', ]:
             hh = wrap(ul, 'nav', **{'class': panchor})
             classes += ' '+panchor if classes else panchor
