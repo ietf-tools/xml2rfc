@@ -249,8 +249,8 @@ class TextWriter(BaseV3Writer):
             log.write("Not creating output file due to errors (see above)")
             return
 
-        # Use lxml's built-in serialization
-        with open(filename, 'w', encoding='utf-8') as file:
+        encoding = 'utf-8-sig' if self.options.bom else 'utf-8'
+        with open(filename, 'w', encoding=encoding) as file:
             file.write(text)
 
         if not self.options.quiet:

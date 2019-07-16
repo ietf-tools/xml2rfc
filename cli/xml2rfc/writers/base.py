@@ -31,6 +31,7 @@ default_options = Values(defaults={
         'accept_prepped': None,
         'add_xinclude': None,
         'basename': None,
+        'bom': False,
         'cache': None,
         'clear_cache': False,
         'css': None,
