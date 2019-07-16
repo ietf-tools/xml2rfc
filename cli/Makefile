@@ -82,19 +82,22 @@ tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out
 	xml2rfc --cache tests/cache --no-network --base tests/out/ --raw --legacy --text --nroff --html --exp --v2v3 --strict $<
 
 tests/out/%.v2v3.xml: tests/input/%.xml install
-	xml2rfc --cache tests/cache --no-network --base tests/out/ --v2v3 --strict --legacy-date-format $< --out $@
+	xml2rfc --cache tests/cache --no-network --v2v3 --strict --legacy-date-format $< --out $@
 
 tests/out/%.prepped.xml: tests/input/%.xml install
 	xml2rfc --cache tests/cache --no-network --utf8 --out $@ --prep $<
 
 tests/out/%.text: tests/input/%.xml install
-	xml2rfc --cache tests/cache --no-network --base tests/out/ --text --v3 --strict --no-pagination --legacy-date-format $< --out $@
+	xml2rfc --cache tests/cache --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@
 
 tests/out/%.pages.text: tests/input/%.xml install
-	xml2rfc --cache tests/cache --no-network --base tests/out/ --text --v3 --strict --legacy-date-format $< --out $@
+	xml2rfc --cache tests/cache --no-network --text --v3 --strict --legacy-date-format $< --out $@
+
+tests/out/%.bom.text: tests/input/%.xml install
+	xml2rfc --cache tests/cache --no-network --text --v3 --strict --bom $< --out $@
 
 tests/out/%.v3.$(py).html: tests/input/%.xml install
-	xml2rfc --cache tests/cache --no-network --base tests/out/ --html --v3 --external --strict --legacy-date-format $< --out $@
+	xml2rfc --cache tests/cache --no-network --html --v3 --external --strict --legacy-date-format $< --out $@
 
 .PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt 
 
@@ -159,7 +162,9 @@ dateshifttest: cleantmp install
 	@ xml2rfc --cache tests/cache --no-network --date 2013-02-01 --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml
 	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
-elementstest: tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.v3.$(py).html.test
+elementstest: tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.$(py).html.test
+
+bomtest: tests/out/elements.bom.text.test
 
 cleantmp:
 	[ -d tmp ] || mkdir -p tmp
@@ -168,7 +173,7 @@ cleantmp:
 	[ -d tests/out ] && rm -f tests/out/* && cp xml2rfc/templates/rfc2629* tests/out/
 
 
-tests: test regressiontests cachetest drafttest utf8test v3featuretest  elementstest
+tests: test regressiontests cachetest drafttest utf8test v3featuretest  elementstest bomtest
 
 noflakestests: install pytests regressiontests
 
