@@ -2605,6 +2605,7 @@ class HtmlWriter(BaseV3Writer):
                     build.a(reftext, href='#%s'%target, classes='xref'),
                     ']',
                 )
+                span.tail = x.tail
                 return span
 
             # 9.44.2.  displayFormat='comma'
@@ -2632,6 +2633,7 @@ class HtmlWriter(BaseV3Writer):
                     '], ',
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
                 )
+                span.tail = x.tail
                 return span
 
 
