@@ -159,7 +159,7 @@ def main():
                            help='use the legacy date format, rather than the new one.')
     textoptions.add_option('--list-symbols', metavar='4*CHAR',
                            help='use the characters given as list bullet symbols.')
-    textoptions.add_option('--bom', action='store_true', default=False,
+    textoptions.add_option('--bom', '--BOM', action='store_true', default=False,
                            help='Add a BOM (unicode byte order mark) to the start of text files')
     textoptions.add_option('-P', '--no-pagination', dest='pagination', action='store_false', default=True,
                             help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated.')
