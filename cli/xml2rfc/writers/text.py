@@ -1211,10 +1211,17 @@ class TextWriter(BaseV3Writer):
     def render_date(self, e, width, **kwargs):
         #pp = e.getparent().getparent()
         #if pp.tag == 'rfc':
+        have_date = e.get('day') or e.get('month') or e.get('year')
         year, month, day = extract_date(e, self.date)
         date = format_date(year, month, day, self.options.legacy_date_format)
+        if e.text and have_date:
+            date = "%s (%s)" % (e.text, date)
+        elif e.text:
+            date = e.text
+        else:
+            # date = date
+            pass
         return date
-
 
     # 2.18.  <dd>
     # 

@@ -1255,9 +1255,17 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <time datetime="2014-10" class="published">October 2014</time>
     def render_date(self, h, x):
+        have_date = x.get('day') or x.get('month') or x.get('year')
         parts = extract_date(x, self.options.date)
         text = format_date(*parts, legacy=self.options.legacy_date_format)
-        datetime = format_date_iso(*parts)
+        datetime = format_date_iso(*parts) if have_date else x.text
+        if x.text and have_date:
+            text = "%s (%s)" % (x.text, text)
+        elif x.text:
+            text = x.text
+        else:
+            # text = text
+            pass
         time = add.time(h, x, text, datetime=datetime)
         if x.getparent() == self.root.find('front'):
             time.set('class', 'published')
