@@ -321,7 +321,7 @@ class HtmlWriter(BaseV3Writer):
     def null_renderer(self, h, x):
         return None
 
-    def maybe_add_pilcrow(self, e):
+    def maybe_add_pilcrow(self, e, first=False):
         if len(e.xpath('.//*[@class="pilcrow"]')) == 0:
             id = e.get('id')
             if id:
@@ -332,7 +332,11 @@ class HtmlWriter(BaseV3Writer):
                     e.text = e.text.rstrip()
                 else:
                     pass
-                add.a(e, None, pilcrow, classes='pilcrow', href='#%s'%id)
+                p = build.a(pilcrow, classes='pilcrow', href='#%s'%id)
+                if first:
+                    e.insert(0, p)
+                else:
+                    e.append(p)
             else:
                 self.warn(e, 'Tried to add a pilcrow to <%s>, but found no "id" attribute' % e.tag)
 
@@ -762,7 +766,7 @@ class HtmlWriter(BaseV3Writer):
                 div = add.div(h, x, pre, classes=classes)
                 div.text = None
                 if x.getparent().tag != 'figure':
-                    self.maybe_add_pilcrow(div)
+                    self.maybe_add_pilcrow(div, first=True)
                 return div
             
     # 9.5.2.  SVG Artwork
