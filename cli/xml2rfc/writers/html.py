@@ -1388,7 +1388,7 @@ class HtmlWriter(BaseV3Writer):
             self.render(figure, c)
         pn = x.get('pn')
         caption = add.figcaption(figure, None)
-        a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn)
+        a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn, classes='selfRef')
         if name != None and name.text:
             a.tail = ':\n'
             a = add.a(caption, None, href='#%s'%name.get('slugifiedName'), classes='selfRef')
@@ -2280,7 +2280,7 @@ class HtmlWriter(BaseV3Writer):
         table = add.table(h, x, classes=align)
         caption = add.caption(table, None)
         pn = x.get('pn')
-        a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn)
+        a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn, classes='selfRef')
         if name != None:
             a.tail = ':\n'
             a = add.a(caption, None, href='#%s'%name.get('slugifiedName'), classes='selfRef')
