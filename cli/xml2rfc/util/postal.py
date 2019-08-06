@@ -207,12 +207,14 @@ def get_address_format_rules(address, latin=False):
     return address_format, rules
 
 def format_address(address, latin=False):
+    def hasword(line):
+        return re.search(r'\w', line, re.U) != None
     address_format, rules = get_address_format_rules(address, latin)
     address_line_formats = address_format.split('%n')
     address_lines = [
         _format_address_line(lf, address, rules)
         for lf in address_line_formats]
-    address_lines = filter(None, address_lines)
+    address_lines = filter(hasword, address_lines)
     return '\n'.join(address_lines)
 
 def enhance_address_format(rules, address_format):

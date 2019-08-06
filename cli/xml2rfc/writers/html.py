@@ -172,6 +172,11 @@ def _format_address_line(line_format, address, rules):
     return fields
 
 def format_address(address, latin=False):
+    def hasword(item):
+        if item is None:
+            return False
+        line = ''.join(list(item.itertext()))
+        return re.search(r'\w', line, re.U) != None
     rules = i18naddress.get_validation_rules(address)
     address_format = (
         rules.address_latin_format if latin else rules.address_format)
@@ -180,7 +185,7 @@ def format_address(address, latin=False):
     address_lines = [
         build.div(*_format_address_line(lf, address, rules), dir='auto')
         for lf in address_line_formats]
-    address_lines = filter(lambda n: n!=None and ''.join(list(n.itertext())), address_lines)
+    address_lines = filter(hasword, address_lines)
     return address_lines
 
 def get_bidi_alignment(address):
