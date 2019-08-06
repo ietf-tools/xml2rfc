@@ -1728,7 +1728,7 @@ class BaseV3Writer(object):
         return False
 
     def note(self, e, text, label='Note:'):
-        if not self.options.quiet:
+        if self.options.verbose:
             if not self.silenced(e, text):
                 self.msg(e, label, text)
 
