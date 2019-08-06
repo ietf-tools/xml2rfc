@@ -35,9 +35,8 @@ def note(*args):
 def warn(*args):
     """ Prints a warning message unless quiet """
     if not quiet:
-        write_err.write('Warning: ' + ' '.join(args))
+        write_err.write('Warning: ' + ' '.join(args).strip())
         write_err.write('\n')
-
 
 def error(*args):
     """ This is typically called after an exception was already raised. """
