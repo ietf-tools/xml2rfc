@@ -216,17 +216,19 @@ def format_address(address, latin=False):
     return '\n'.join(address_lines)
 
 def enhance_address_format(rules, address_format):
-    # FIELD_MAPPING = {
-    #     'A': 'street_address',
-    #     'C': 'city',
-    #     'D': 'city_area',
-    #     'N': 'name',
-    #     'O': 'company_name',
-    #     'S': 'country_area',
-    #     'X': 'sorting_code',
-    #     'Z': 'postal_code'}
-    # Add extended address field '%E' (fails for 4 countries: Guinea, Hungary,
-    # Iran and China, which gets special treatment):
+    #     'A': 'street_address'
+    #     'C': 'city'
+    #     'D': 'city_area'
+    #     'E': 'extended_address'
+    #     'N': 'name'
+    #     'O': 'company_name'
+    #     'S': 'country_area'
+    #     'X': 'sorting_code'
+    #     'Y': 'country_name '
+    #     'Z': 'postal_code'
+
+    # Add extended address field '%E' (the code fails for 4 countries: Guinea,
+    # Hungary, Iran and China, which won't have %E support):
     address_format = address_format.replace('%N%n%O%n%A', '%N%n%O%n%E%n%A')
     address_format = address_format.replace('%A%n%O%n%N', '%A%n%E%n%O%n%N')
     address_format = address_format.replace('%O%n%N%n%A', '%O%n%N%n%E%n%A')
@@ -237,7 +239,11 @@ def enhance_address_format(rules, address_format):
     # This is incorrect, but suits us better when listing authors
     # in the Authors' Addresses section: move the name to the first line
     address_format = '%N%n' + re.sub(r'%N(%n)?', '', address_format)
+    # Get rid of any trailing newlines we might have created
     address_format = re.sub(r'%n$', '', address_format)
+    # Add some spacing, for a few special cases
+    address_format = re.sub(r'%([A-Z])%([A-Z])', r'%\1 %\2', address_format)
+    address_format = re.sub(r'%([A-Z])%([A-Z])', r'%\1 %\2', address_format)
     # country-specific fixes, if any
     #if rules['country_code'] == 'SE':
     #    pass
