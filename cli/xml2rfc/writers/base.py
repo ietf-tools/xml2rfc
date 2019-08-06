@@ -21,11 +21,11 @@ try:
 except ImportError:
     pass
 
-from xml2rfc import strings
+from xml2rfc import strings, log
 from xml2rfc.util.date import extract_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
 from xml2rfc.util.unicode import punctuation, unicode_replacements, unicode_content_tags, downcode
-from xml2rfc.utils import namespaces
+from xml2rfc.utils import namespaces, find_duplicate_ids
 
 default_options = Values(defaults={
         'accept_prepped': None,
@@ -1644,6 +1644,7 @@ class BaseV3Writer(object):
         self.options = options
         self.date = date
         self.rng_file = v3_rng_file
+        self.v3_rng = None
         self.schema = v3_schema
         self.index_items = []
         self.meta_tags = set(meta_tags)
@@ -1905,3 +1906,48 @@ class BaseV3Writer(object):
                         e.tail = '\n'+' '*(i-ind)
         indent(e, 0)
         e.tail = None
+
+    def validate(self, when='', warn=False):
+        # Note: Our schema doesn't permit xi:include elements, so the document
+        # must have had XInclude processing done before calling validate()
+
+        # The lxml Relax NG validator checks that xsd:ID values are unique,
+        # but unfortunately the error messages are completely unhelpful (lxml
+        # 4.1.1, libxml 2.9.1): "Element li has extra content: t" when 't' has
+        # a duplicate xsd:ID attribute.  So we check all attributes with
+        # content specified as xsd:ID first, and give better messages:
+
+        # Get the attributes we need to check
+        if when and not when.startswith(' '):
+            when = ' '+when
+        dups = find_duplicate_ids(self.schema, self.tree)
+        for attr, id, e in dups:
+            self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
+
+        try:
+            if not self.v3_rng:
+                self.v3_rng = lxml.etree.RelaxNG(file=self.rng_file)
+                
+            self.v3_rng.assertValid(self.tree)
+            return True
+        except Exception as e:
+            lxmlver = lxml.etree.LXML_VERSION[:3]
+            if lxmlver < (3, 8, 0):
+                self.warn(None, "The available version of the lxml library (%s) does not provide xpath "
+                          "information as part of validation errors.  Upgrade to version 3.8.0 or "
+                          "higher for better error messages." % ('.'.join(str(v) for v in lxmlver), ))
+            # These warnings are occasionally incorrect -- disable this
+            # output for now:
+            if hasattr(e, 'error_log'):
+                for error in e.error_log:
+                    path = getattr(error, 'path', '')
+                    msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, path)
+                    self.log(msg)
+            else:
+                log.warn('\nInvalid document: %s' % (e,))
+            if warn:
+                self.warn(self.root, 'Invalid document%s.' % (when, ))
+                return False
+            else:
+                self.die(self.root, 'Invalid document%s.' % (when, ))
+        

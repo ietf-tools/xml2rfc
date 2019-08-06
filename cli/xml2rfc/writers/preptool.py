@@ -42,7 +42,7 @@ from xml2rfc.util.date import extract_date, format_date, normalize_month
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import unicode_content_tags, bare_unicode_tags, expand_unicode_element, isascii, downcode
-from xml2rfc.utils import build_dataurl, namespaces, find_duplicate_ids
+from xml2rfc.utils import build_dataurl, namespaces
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.v2v3 import slugify
 
@@ -160,40 +160,7 @@ class PrepToolWriter(BaseV3Writer):
         return e
 
     def validate(self, when, warn=False):
-        # Note: Our schema doesn't permit xi:include elements, so the document
-        # must have had XInclude processing done before calling validate()
-
-        # The lxml Relax NG validator checks that xsd:ID values are unique,
-        # but unfortunately the error messages are completely unhelpful (lxml
-        # 4.1.1, libxml 2.9.1): "Element li has extra content: t" when 't' has
-        # a duplicate xsd:ID attribute.  So we check all attributes with
-        # content specified as xsd:ID first, and give better messages:
-
-        # Get the attributes we need to check
-        dups = find_duplicate_ids(self.schema, self.tree)
-        for attr, id, e in dups:
-            self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
-
-        try:
-            self.v3_rng.assertValid(self.tree)
-            return True
-        except Exception as e:
-            lxmlver = etree.LXML_VERSION[:3]
-            if lxmlver < (3, 8, 0):
-                self.warn(None, "The available version of the lxml library (%s) does not provide xpath "
-                          "information as part of validation errors.  Upgrade to version 3.8.0 or "
-                          "higher for better error messages." % ('.'.join(str(v) for v in lxmlver), ))
-            # These warnings are occasionally incorrect -- disable this
-            # output for now:
-            for error in e.error_log:
-                path = getattr(error, 'path', '')
-                msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, path)
-                self.log(msg)
-            if warn:
-                self.warn(self.root, 'Invalid document %s running preptool.' % (when, ))
-                return False
-            else:
-                self.die(self.root, 'Invalid document %s running preptool.' % (when, ))
+        return super(PrepToolWriter, self).validate(when='%s running preptool'%when, warn=warn)
 
     def write(self, filename):
         """ Public method to write the XML document to a file """

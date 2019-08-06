@@ -15,7 +15,7 @@ from lxml.etree import Element, Comment, CDATA
 import xml2rfc
 from xml2rfc import log
 from xml2rfc.util.unicode import unicode_content_tags, isascii
-from xml2rfc.utils import find_duplicate_ids, hastext, isempty
+from xml2rfc.utils import hastext, isempty
 from xml2rfc.writers.base import default_options, BaseV3Writer
 
 
@@ -62,16 +62,7 @@ class V2v3XmlWriter(BaseV3Writer):
         self.schema = etree.ElementTree(file=self.v3_rng_file)
 
     def validate(self):
-        v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
-        v3_rng = lxml.etree.RelaxNG(file=v3_rng_file)
-        try:
-            v3_rng.assertValid(self.root)
-            log.note("The document validates according to the RFC7991 schema")
-        except Exception as e:
-            dups = find_duplicate_ids(self.schema, self.tree)
-            for attr, id, e in dups:
-                self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
-            log.warn('\nInvalid document: %s' % (e,))
+        return super(V2v3XmlWriter, self).validate(when='when running v2v3 conversion', warn=True)
 
     def add_xinclude(self):
         for e in self.root.xpath('.//back//reference'):
@@ -349,6 +340,7 @@ class V2v3XmlWriter(BaseV3Writer):
 #         self.root.insert(0, dummy)
 #         lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap, keep_ns_prefixes='xi')
 #         self.root.remove(dummy)
+        self.log('Completed v2 to v3 conversion')
         return self.tree
 
     # ----------------------------------------------------------------------
