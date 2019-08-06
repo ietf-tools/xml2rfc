@@ -9,7 +9,7 @@ import re
 import xml2rfc.log
 
 try:
-    import debug
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
@@ -173,7 +173,7 @@ def get_normalized_address_info(writer, x, latin=True):
             writer.note(x, "Postal address check failed for author %s." % full_author_name(author, latin))
             for item in e.errors:
                 if adr[item]:
-                    writer.note(x, "  Postal address has unexpected address info: %s: %s" % (address_field_elements[item], (adr[item])), label='')
+                    writer.note(x, "  Postal address has unexpected address field or field value: %s: %s" % (address_field_elements[item], (adr[item])), label='')
                 else:
                     writer.note(x, "  Postal address is missing an address element: %s" % (address_field_elements[item], ), label='')
         if list_parts:
@@ -216,8 +216,17 @@ def format_address(address, latin=False):
     return '\n'.join(address_lines)
 
 def enhance_address_format(rules, address_format):
-    # Add extended address field (fails for 4 countries: Guinea, Hungary,
-    # Iran and China):
+    # FIELD_MAPPING = {
+    #     'A': 'street_address',
+    #     'C': 'city',
+    #     'D': 'city_area',
+    #     'N': 'name',
+    #     'O': 'company_name',
+    #     'S': 'country_area',
+    #     'X': 'sorting_code',
+    #     'Z': 'postal_code'}
+    # Add extended address field '%E' (fails for 4 countries: Guinea, Hungary,
+    # Iran and China, which gets special treatment):
     address_format = address_format.replace('%N%n%O%n%A', '%N%n%O%n%E%n%A')
     address_format = address_format.replace('%A%n%O%n%N', '%A%n%E%n%O%n%N')
     address_format = address_format.replace('%O%n%N%n%A', '%O%n%N%n%E%n%A')
@@ -225,6 +234,10 @@ def enhance_address_format(rules, address_format):
         address_format = '%Y%n' + address_format
     else:
         address_format = address_format + '%n%Y'
+    # This is incorrect, but suits us better when listing authors
+    # in the Authors' Addresses section: move the name to the first line
+    address_format = '%N%n' + re.sub(r'%N(%n)?', '', address_format)
+    address_format = re.sub(r'%n$', '', address_format)
     # country-specific fixes, if any
     #if rules['country_code'] == 'SE':
     #    pass
