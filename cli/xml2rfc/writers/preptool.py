@@ -1514,7 +1514,7 @@ class PrepToolWriter(BaseV3Writer):
                     relative = '#section-%s' % section
                     break
             if not relative:
-                self.err(e, "Cannot build a href for this <%s> with a section= attribute without also having a relative= attribute." % (e.tag))
+                self.err(e, 'Cannot build a href for <%s target="%s"> with a section= attribute without also having a relative= attribute.' % (e.tag, e.get('target')))
         if relative:
             url = t.get('target')
             if url is None:
