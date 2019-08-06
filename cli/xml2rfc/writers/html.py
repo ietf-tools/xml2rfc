@@ -372,6 +372,7 @@ class HtmlWriter(BaseV3Writer):
 
         add.meta(head, None, charset='utf-8')
         add.meta(head, None, name="scripts", content=x.get('scripts'))
+        add.meta(head, None, name="viewport" content="initial-scale=1.0")
 
     # 6.3.2.  Document Title
     # 
