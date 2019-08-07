@@ -1290,6 +1290,7 @@ class HtmlWriter(BaseV3Writer):
         dd = add.dd(h, x, style=style)
         for c in x.getchildren():
             self.render(dd, c)
+        self.maybe_add_pilcrow(dd)
         return dd
 
     # 9.19.  <displayreference>
