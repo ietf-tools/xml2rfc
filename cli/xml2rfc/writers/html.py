@@ -1930,8 +1930,10 @@ class HtmlWriter(BaseV3Writer):
                 self.render(inner, c)
         if p.tag != 'referencegroup':
             target = x.get('target')
+            if len(inner):
+                inner[-1].tail = ', '
             if target:
-                inner.append( build.span(', <', build.a(target, href=target), '>') )
+                inner.append( build.span('<', build.a(target, href=target), '>') )
         if len(inner):
             inner[-1].tail = '. '
         for ctag in ('annotation', ):
