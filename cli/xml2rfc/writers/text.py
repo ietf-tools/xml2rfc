@@ -13,6 +13,7 @@ import textwrap
 from codecs import open
 from lxml import etree
 from collections import namedtuple
+from kitchen.text.display import textual_width as displength
 
 try:
     from xml2rfc import debug
@@ -1635,8 +1636,8 @@ class TextWriter(BaseV3Writer):
             for i in range(t):
                 l = left[i]
                 r = right[i]
-                #assert len(l)+len(r)<70
-                w = 72-len(l)-len(r)
+                #assert displength(l)+displength(r)<70
+                w = 72-displength(l)-displength(r)
                 lines.append(l+' '*w+r)
             return '\n'.join(lines).rstrip()+'\n'
         #
