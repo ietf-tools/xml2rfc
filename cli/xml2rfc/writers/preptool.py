@@ -357,7 +357,7 @@ class PrepToolWriter(BaseV3Writer):
     def processing_instruction(self, e, p):
         if p != None:
             if not e.target in self.keep_pis:
-                p.remove(e)
+                self.remove(p, e)
 
     def relref_to_xref(self, e, p):
         e.attrib['sectionFormat'] = e.attrib['displayFormat']
@@ -2008,7 +2008,7 @@ class PrepToolWriter(BaseV3Writer):
     #    If in RFC production mode, remove all <cref> elements.
     def cref_removal(self, e, p):
         if self.options.rfc:
-            p.remove(e)
+            self.remove(p, e)
 
     # 5.6.3.  <link> Processing
     def attribute_link_rel_alternate_removal(self, e, p):
@@ -2061,7 +2061,7 @@ class PrepToolWriter(BaseV3Writer):
     #    If in RFC production mode, remove XML comments.
     def comment_removal(self, e, p):
         if self.options.rfc:
-            p.remove(e)
+            self.remove(p, e)
 
     # 5.6.5.  "xml:base" and "originalSrc" Removal
     # 

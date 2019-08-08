@@ -1950,4 +1950,15 @@ class BaseV3Writer(object):
                 return False
             else:
                 self.die(self.root, 'Invalid document%s.' % (when, ))
-        
+
+    def remove(self, p, e):
+        # Element.remove(child) removes both the child and its tail, so in
+        # order not to loose text when removing comments or other elements,
+        # we need to handle that case:
+        if e.tail:
+            s = e.getprevious()
+            if s != None:
+                s.text += e.tail
+            else:
+                p.text += e.tail
+        p.remove(e)
