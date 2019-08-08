@@ -1958,7 +1958,7 @@ class BaseV3Writer(object):
         if e.tail:
             s = e.getprevious()
             if s != None:
-                s.text += e.tail
+                s.tail = (s.tail or '') + e.tail
             else:
-                p.text += e.tail
+                p.text = (p.text or '') + e.tail
         p.remove(e)
