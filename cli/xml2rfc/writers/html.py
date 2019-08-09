@@ -766,7 +766,7 @@ class HtmlWriter(BaseV3Writer):
                 div = add.div(h, x, pre, classes=classes)
                 div.text = None
                 if x.getparent().tag != 'figure':
-                    self.maybe_add_pilcrow(div, first=True)
+                    self.maybe_add_pilcrow(div)
                 return div
             
     # 9.5.2.  SVG Artwork
