@@ -2690,6 +2690,7 @@ class HtmlWriter(BaseV3Writer):
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
                     ')',
                 )
+                span.tail = x.tail
                 return span
 
             # 
@@ -2714,6 +2715,7 @@ class HtmlWriter(BaseV3Writer):
                 span = add.span(h, None,
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
                 )
+                span.tail = x.tail
                 return span
             else:
                 self.err(x, 'Unexpected value combination: section: %s  relative: %s  format: %s' %(section, relative, format))
