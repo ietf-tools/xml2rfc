@@ -69,6 +69,7 @@ default_options = Values(defaults={
         'raw': False,
         'rfc': None,
         'rfc_base_url': 'https://www.rfc-editor.org/rfc/',
+        'rfc_reference_base_url': None,
         'strict': False,
         'text': True,
         'utf8': False,
