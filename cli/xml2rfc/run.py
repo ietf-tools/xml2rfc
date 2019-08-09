@@ -321,7 +321,7 @@ def main():
     #
     num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, options.pdf ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
-        sys.exit('Cannot give an explicit filename with more than one format, '
+        sys.exit('Cannot use an explicit output filename when generating more than one format, '
                  'use --path instead.')
     if num_formats < 1:
         # Default to paginated text output
