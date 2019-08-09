@@ -62,9 +62,9 @@ pytests:
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
 	for type in .raw.txt .txt .nroff .html .exp.xml .v2v3.xml .prepped.xml ; do					\
-	  diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read -p "Copy [y/n]? " REPLY; if [ "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
+	  diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read -p "Copy [y/n]? " REPLY; if [ "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
 	done ; if [ $$type = ascii ]; then echo "Diff nroff output with xml2rfc output:";\
-	diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
+	diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
 
 # ----------------------------------------------------------------------
 #
@@ -72,7 +72,7 @@ CHECKOUTPUT=	\
 
 %.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test 
 	@echo "Diffing .nroff.txt against regular .txt"
-	@doc=$(basename $@); diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
+	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo checking v3 validity
 	doc=$(basename $@); xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.v2v3.xml
 	doc=$(basename $@); xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
@@ -97,7 +97,7 @@ tests/out/%.bom.text: tests/input/%.xml install
 	xml2rfc --cache tests/cache --no-network --text --v3 --strict --bom $< --out $@
 
 tests/out/%.v3.$(py).html: tests/input/%.xml install
-	xml2rfc --cache tests/cache --no-network --html --v3 --external --strict --legacy-date-format $< --out $@
+	xml2rfc --cache tests/cache --no-network --html --v3 --external --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc $< --out $@
 
 .PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt 
 
@@ -160,7 +160,7 @@ v3featuretest: tests/out/draft-v3-features.prepped.xml.test tests/out/draft-v3-f
 
 dateshifttest: cleantmp install
 	@ xml2rfc --cache tests/cache --no-network --date 2013-02-01 --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml
-	@diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
 elementstest: tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.$(py).html.test
 
@@ -180,7 +180,7 @@ noflakestests: install pytests regressiontests
 regressiontests: drafttest rfctest
 
 test2:	test
-	@ xml2rfc --cache tests/cache --no-network --utf8tests/input/rfc6635.xml --legacy --text --out tmp/rfc6635.txt	&& diff -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt 
+	@ xml2rfc --cache tests/cache --no-network --utf8tests/input/rfc6635.xml --legacy --text --out tmp/rfc6635.txt	&& diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt 
 
 upload: install
 	rst2html changelog > /dev/null	# verify that the changelog is valid rst
