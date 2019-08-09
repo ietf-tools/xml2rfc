@@ -1,3 +1,67 @@
+xml2rfc (2.24.0) ietf; urgency=medium
+
+  * Added a switch --rfc-reference-base-url to specify an alternative base url
+    when using <xref> section links.
+
+  * Added support for <xref> section references in the v3 text formatter.
+    Refactored some of the xref handling in preptool.  Added warnings for some
+    xref attribute and content combinations that don't make sense.
+
+  * Tweaked the error message for use of -o with multiple output formats.
+
+  * Tweaked the layout of v3 text front page to correctly handle unicode
+    codepoints of different width than 1, in order to get correct line lengths
+    for authors with CJK names.
+
+  * Handled a problem with an unwanted space between year and the following
+    comma in HTML <reference><date> rendering.
+
+  * When using the built-in lxml Element remove() method, it unexpectedly
+    removes not only the element, but also the element's tail.  Dealt with
+    this by using our own remove() where needed.
+
+  * Added pilcrows on <dd>, to match pilcrows on other list entries.
+
+  * Removed address lines with only punctuation from the author address
+    rendering, eliminating for instance lines containing only a comma.
+
+  * Added a viewport meta tag, to improve rendering on some devices.
+
+  * Added class 'selfRef' on some Figure and Table links that were missing it.
+
+  * Changed the address format to always start with the author name, according
+    to a conversation with the RFC-Editor staff in Prague.
+
+  * Changed the V3 writer note() method to obey quiet and verbose in the same
+    manner as log.note().
+
+  * Changed the v3 validate() from being separate methods for the v2v3
+    converter and the preptool to a common method on BaseV3Writer.
+
+  * Tweaked the <date> handling to make year ranges and fuzzy dates possible.
+
+  * Fixed an issue where text was lost when immediately preceded by <xref>.
+
+  * Added a BOM test, and removed some irrelevant switches.
+
+  * Added a --bom text format option, to insert a BOM mark at the beginning of
+    the text format output.
+
+  * Made the line spacing of <sourcecode> the same as for <artwork>.
+
+  * Removed stripping of horizontal whitespace at the start of artwork in list
+    items.
+
+  * Removed an unwanted attribute inheritance of 'ulEmpty' for <ul>.
+
+  * Fixed an issue with the CSS stylesheet for compact <dl> lists.
+
+  * Removed an unintentional change that would permit a 'contributor' author
+    role.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  09 Aug 2019 13:19:32 +0000
+
+
 xml2rfc (2.23.1) ietf; urgency=medium
 
   * Fixed a bug in the handling of sha1 and base64 methods when generating 
