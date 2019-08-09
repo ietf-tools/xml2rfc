@@ -11,9 +11,9 @@ import six
 import textwrap
 
 from codecs import open
-from lxml import etree
 from collections import namedtuple
 from kitchen.text.display import textual_width as displength
+from lxml import etree
 
 try:
     from xml2rfc import debug
@@ -4318,28 +4318,41 @@ class TextWriter(BaseV3Writer):
     #    Content model: only text content.
     def render_xref(self, e, width, **kwargs):
         target = e.get('target')
-        #section = e.get('section')
-        #relative= e.get('relative')
+        section = e.get('section')
         reftext   = e.get('derivedContent')
         if reftext is None:
             self.die(e, "Found an <xref> without derivedContent: %s" % (etree.tostring(e),))
         #
-        if reftext:
-            if target in self.refname_mapping:
-                if e.text and e.text.strip() and e.text.strip() != reftext:
-                    text = "%s [%s]" % (e.text, reftext)
+        if not section:
+            if reftext:
+                if target in self.refname_mapping:
+                    if e.text and e.text.strip() and e.text.strip() != reftext:
+                        text = "%s [%s]" % (e.text, reftext)
+                    else:
+                        text = "[%s]" % reftext
                 else:
-                    text = "[%s]" % reftext
+                    if e.text and e.text.strip() and e.text.strip() != reftext:
+                        text = "%s (%s)" % (e.text, reftext)
+                    else:
+                        text = "%s" % reftext
+                pageno = e.get('pageno')
+                if pageno and pageno.isdigit():
+                    text += '\u2026' '%04d' % int(pageno)
             else:
-                if e.text and e.text.strip() and e.text.strip() != reftext:
-                    text = "%s (%s)" % (e.text, reftext)
-                else:
-                    text = "%s" % reftext
-            pageno = e.get('pageno')
-            if pageno and pageno.isdigit():
-                text += '\u2026' '%04d' % int(pageno)
+                text = e.text or ''
         else:
-            text = e.text or ''
+            label = 'Section' if section[0].isdigit() else 'Appendix'
+            sform  = e.get('sectionFormat')
+            if   sform == 'of':
+                text = '%s %s of [%s]' % (label, section, reftext)
+            elif sform == 'comma':
+                text = '[%s], %s %s' % (reftext, label, section)
+            elif sform == 'parens':
+                text = '[%s] (%s %s)' % (reftext, label, section)
+            elif sform == 'bare':
+                text = '%s' % (section, )
+            else:
+                self.err(e, 'Unexpected value combination: section: %s  sectionFormat: %s' %(section, sform))
 
         # Prevent line breaking on dash
         text = text.replace('-', '\u2011')

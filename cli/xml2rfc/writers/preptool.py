@@ -1478,19 +1478,61 @@ class PrepToolWriter(BaseV3Writer):
                 content = target
         elif format == 'none':
             content = ''
+            if not e.text:
+                self.warn(e, 'Expected <%s format="none"> to have text content, but found none.  There will be no text rendered for this element.' % (e.tag, ))
         else:
             self.err(e, "Expected format to be one of 'default', 'title', 'counter' or 'none', but found '%s'" % (format, ) )
         return t, content
 
     def element_xref(self, e, p):
-        if e.get('relative') or e.get('section'):
-            self.element_relref(e, p)
-        else:
-            t, content = self.build_derived_content(e)
+        section = e.get('section')
+        relative = e.get('relative')
+        t, content = self.build_derived_content(e)
+        if not (section or relative):
             attr = e.get('derivedContent')
             if attr and attr != content:
                 self.err(e, "When processing <xref>, found derivedContent='%s' when trying to set it to '%s'" % (attr, content))
             e.set('derivedContent', content)
+        else:
+            if relative != None and section is None:
+                self.err("Cannot render an <%s> with a relative= attribute without also having a section= attribute." % (e.tag))
+            if t.tag != 'reference':
+                self.err(e, "Expected the target of an <%s> with a section= attribute to be a <reference>, found <%s>" % (e.tag, t.tag, ))
+            if relative is None:
+                for s in t.xpath('.//seriesInfo'):
+                    if s.get('name') in ['RFC', 'Internet-Draft']:
+                        relative = '#section-%s' % section
+                        break
+                if not relative:
+                    self.err(e, 'Cannot build a href for <%s target="%s"> with a section= attribute without also having a relative= attribute.' % (e.tag, e.get('target')))
+            if relative:
+                url = t.get('target')
+                if url is None:
+                    self.err(e, "Cannot build a href for <reference anchor='%s'> without having a target= attribute giving the URL." % (t.get('anchor'), ))
+                link = urljoin(url, relative, allow_fragments=True)
+                e.set('derivedLink', link)
+            if e.text:
+                content = e.text.strip()
+            attr = e.get('derivedContent')
+            if attr and attr != content:
+                self.err(e, "When processing <xref>, found derivedContent='%s' when trying to set it to '%s'" % (attr, content))
+            e.set('derivedContent', content)
+            #
+            sform  = e.get('sectionFormat')
+            if   sform == 'of':
+                if not content:
+                    self.err(e, 'Found sectionFormat="%s" with blank derivedContent' % sform)
+            elif sform == 'comma':
+                if not content:
+                    self.err(e, 'Found sectionFormat="%s" with blank derivedContent' % sform)
+            elif sform == 'parens':
+                if not content:
+                    self.err(e, 'Found sectionFormat="%s" with blank derivedContent' % sform)
+            elif sform == 'bare':
+                if format in ['title', 'counter', 'none']:
+                    self.warn(e, 'Unexpected format="%s" used with sectionFormat="bare".  Omit format or use format="default"' % (sform, ))
+                if e.text:
+                    self.warn(e, 'Unexpected text content: %s.  Text content is not useful with sectionFormat="bare"' % (e.text, ))
 
     # 5.4.9.  <relref> Processing
     # 
@@ -1498,51 +1540,7 @@ class PrepToolWriter(BaseV3Writer):
     #    <reference> element, give an error.
     # 
     #    For each <relref> element, fill in the "derivedLink" attribute.
-    def element_relref(self, e, p, t=None):
-        t, content = self.build_derived_content(e)
-        #
-        label = 'Section'
-        section = e.get('section')
-        relative = e.get('relative')
-        if relative != None and section is None:
-            self.err("Cannot render an <%s> with a relative= attribute without also having a section= attribute." % (e.tag))
-        if t.tag != 'reference':
-            self.err(e, "Expected the target of an <%s> with a section= attribute to be a <reference>, found <%s>" % (e.tag, t.tag, ))
-        if relative is None:
-            for s in t.xpath('.//seriesInfo'):
-                if s.get('name') in ['RFC', 'Internet-Draft']:
-                    relative = '#section-%s' % section
-                    break
-            if not relative:
-                self.err(e, 'Cannot build a href for <%s target="%s"> with a section= attribute without also having a relative= attribute.' % (e.tag, e.get('target')))
-        if relative:
-            url = t.get('target')
-            if url is None:
-                self.err(e, "Cannot build a href for <reference anchor='%s'> without having a target= attribute giving the URL." % (t.get('anchor'), ))
-            link = urljoin(url, relative, allow_fragments=True)
-            e.set('derivedLink', link)
-            if '-' in relative:
-                l, __ = relative.split('-', 1)
-                if l in pnprefix.values():
-                    label = l.capitalize()
-        if e.text:
-            content = e.text.strip()
-        else:
-#            part_format = e.get('sectionFormat', e.get('displayFormat', 'of'))
-            values = dict(label=label, section=section, target=content)
-#             if   part_format == 'of':
-#                 content = '{label} {section} of {target}'.format(**values)
-#             elif part_format == 'comma':
-#                 content = '{target}, Section {section}'.format(**values)
-#             elif part_format == 'parens':
-#                 content = '{target} (Section {section})'.format(**values)
-#             elif part_format == 'bare':
-#                 content = '{section}'.format(**values)
-            content = '{target}'.format(**values)
-        attr = e.get('derivedContent')
-        if attr and attr != content:
-            self.err(e, "When processing <xref>, found derivedContent='%s' when trying to set it to '%s'" % (attr, content))
-        e.set('derivedContent', content)
+
 
     # 5.5.  Inclusion
     # 
