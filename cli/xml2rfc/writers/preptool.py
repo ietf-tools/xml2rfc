@@ -242,7 +242,8 @@ class PrepToolWriter(BaseV3Writer):
             './/u;add_number()',
             './/ol;add_counter()',
             './/xref',                          # 5.4.8.  <xref> Processing
-            './/relref',                        # 5.4.9.  <relref> Processing
+            # Relref processing be handled under .//xref:
+                                                # 5.4.9.  <relref> Processing
             './/artset',                        #         <artwork> Processing
             './/artwork',                       # 5.5.1.  <artwork> Processing
             './/sourcecode',                    # 5.5.2.  <sourcecode> Processing
