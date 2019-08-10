@@ -7,8 +7,10 @@ from __future__ import unicode_literals, print_function, division
 import base64
 import re
 import six
+import sys
 import textwrap
 
+from collections import OrderedDict
 from lxml.etree import _Comment
 
 if six.PY2:
@@ -565,6 +567,18 @@ namespaces={
 }
 
 
+def sdict(d):
+    "Create an ordered dict from the given dict, with sorted initial insertion"
+    # For python 3.6 and later, lxml obeys dictionary insertion order for
+    # attributes, for earlier it sorts initial attributes, so we need to
+    # use a regular dict for 3.6 and later
+    if sys.version_info.major == 3 and sys.version_info.minor >= 6:
+        return dict( (k, d[k]) for k in sorted(list(d.keys())) )
+    else:
+        if isinstance(d, OrderedDict):
+            return d
+        return OrderedDict( (k, d[k]) for k in sorted(list(d.keys())) )
+
 # ----------------------------------------------------------------------
 # Element operations
 
@@ -592,3 +606,4 @@ def is_htmlblock(h):
     return h.tag in set([ 'address', 'article', 'aside', 'blockquote', 'div', 'dl', 'figure',
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'nav', 'ol', 'p', 'pre', 'script', 'section',
         'table', 'ul', ])
+

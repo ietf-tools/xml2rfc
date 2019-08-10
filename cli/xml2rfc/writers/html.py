@@ -41,7 +41,7 @@ from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
 from xml2rfc.util.postal import ( get_normalized_address_info, address_hcard_properties,
                                 enhance_address_format, address_field_mapping, )
 from xml2rfc.util.unicode import expand_unicode_element
-from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids, build_dataurl
+from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids, build_dataurl, sdict
 
 #from xml2rfc import utils
 
@@ -89,7 +89,7 @@ class ClassElementMaker(ElementMaker):
 
     def __call__(self, tag, *children, **attrib):
         classes = attrib.pop('classes', None)
-        attrib = dict( (k,v) for k,v in attrib.items() if v != None)
+        attrib = sdict(dict( (k,v) for k,v in attrib.items() if v != None))
         elem = super(ClassElementMaker, self).__call__(tag, *children, **attrib)
         if classes:
             elem.set('class', classes)
@@ -444,7 +444,7 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <link rel="alternate" type="application/rfc+xml" href="source.xml">
 
-        add.link(head, None, rel='alternate', type='application/rfc+xml', href=self.xmlrfc.source)
+        add.link(head, None, href=self.xmlrfc.source, rel='alternate', type='application/rfc+xml')
 
     # 6.3.5.  Link to License
     # 
@@ -455,7 +455,7 @@ class HtmlWriter(BaseV3Writer):
     #    <link rel="license"
     #       href="https://trustee.ietf.org/trust-legal-provisions.html">
 
-        add.link(head, None, rel='license', href="#copyright")
+        add.link(head, None, href="#copyright", rel='license')
 
     # 6.3.6.  Style
     # 
@@ -488,12 +488,12 @@ class HtmlWriter(BaseV3Writer):
             cssout = os.path.join(os.path.dirname(self.filename), 'xml2rfc.css')
             with open(cssout, 'w', encoding='utf-8') as f:
                 f.write(css)
-            add.link(head, None, rel="stylesheet", href="xml2rfc.css", type="text/css")
+            add.link(head, None, href="xml2rfc.css", rel="stylesheet", type="text/css")
         elif self.options.no_css:
             pass
         else:
             add.style(head, None, css, type="text/css")
-        add.link(head, None, rel="stylesheet", href="rfc-local.css", type="text/css")
+        add.link(head, None, href="rfc-local.css", rel="stylesheet", type="text/css")
 
     # 6.3.7.  Links
     # 
@@ -1598,7 +1598,7 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    This element is rendered as its HTML counterpart, in the HTML header.
     def render_link(self, h, x):
-        link = add.link(h, x, rel=x.get('rel'), href=x.get('href'))
+        link = add.link(h, x, href=x.get('href'), rel=x.get('rel'))
         return link
         
     # 9.31.  <middle>
@@ -1704,7 +1704,7 @@ class HtmlWriter(BaseV3Writer):
         if len(type) > 1 and '%' in type:
             ol = add.dl(h, x, classes='olPercent')
         else:
-            attrib = dict([ (k,v) for (k,v) in x.attrib.items() if k in ['start', 'type', ] ])
+            attrib = sdict(dict( (k,v) for (k,v) in x.attrib.items() if k in ['start', 'type', ] ))
             ol = add.ol(h, x, classes=x.get('spacing'), **attrib)
         for c in x.getchildren():
             self.render(ol, c)

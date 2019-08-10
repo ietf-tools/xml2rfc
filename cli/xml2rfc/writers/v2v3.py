@@ -8,6 +8,7 @@ import lxml.etree
 import datetime
 import traceback as tb
 
+from collections import OrderedDict
 from io import open
 from lxml import etree
 from lxml.etree import Element, Comment, CDATA
@@ -15,7 +16,7 @@ from lxml.etree import Element, Comment, CDATA
 import xml2rfc
 from xml2rfc import log
 from xml2rfc.util.unicode import unicode_content_tags, isascii
-from xml2rfc.utils import hastext, isempty
+from xml2rfc.utils import hastext, isempty, sdict
 from xml2rfc.writers.base import default_options, BaseV3Writer
 
 
@@ -122,7 +123,7 @@ class V2v3XmlWriter(BaseV3Writer):
     # --- Element Operations -------------------------------------------
 
     def element(self, tag, line=None, **kwargs):
-        e = Element(tag, **kwargs)
+        e = Element(tag, sdict(kwargs))
         if line:
             e.sourceline = line
         elif self.options.debug:
@@ -749,7 +750,7 @@ class V2v3XmlWriter(BaseV3Writer):
         # convert to dl, ul, or ol
         nstyle = None
         style = e.get('style', '').strip()
-        attribs = {}
+        attribs = OrderedDict()
         comments = []
         if not style:
             # otherwise look for the nearest list parent with a style and use it

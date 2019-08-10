@@ -28,7 +28,6 @@ elif six.PY3:
     from urllib.parse import urlsplit, urlunsplit, urljoin
     from urllib.request import urlopen
 
-from collections import OrderedDict
 from lxml import etree
 
 
@@ -42,7 +41,7 @@ from xml2rfc.util.date import extract_date, format_date, normalize_month
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import unicode_content_tags, bare_unicode_tags, expand_unicode_element, isascii, downcode
-from xml2rfc.utils import build_dataurl, namespaces
+from xml2rfc.utils import build_dataurl, namespaces, sdict
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.v2v3 import slugify
 
@@ -142,15 +141,14 @@ class PrepToolWriter(BaseV3Writer):
             ignored_attributes = set(['keepWithNext', 'keepWithPrevious', 'toc', 'pageno', ])
             attr = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:attribute" % tag, namespaces=namespaces)
             defaults = dict( (a.get('name'), a.get("{%s}defaultValue"%namespaces['a'], None)) for a in attr )
-            keys = list( set(defaults.keys()) - ignored_attributes)
-            keys.sort()
-            self.attribute_defaults[tag] = OrderedDict( (k, defaults[k]) for k in keys if defaults[k] )
+            keys = set(defaults.keys()) - ignored_attributes
+            self.attribute_defaults[tag] = sdict(dict( (k, defaults[k]) for k in keys if defaults[k] ))
         return copy.copy(self.attribute_defaults[tag])
 
     def element(self, tag, line=None, **kwargs):
         attrib = self.get_attribute_defaults(tag)
         attrib.update(kwargs)
-        e = etree.Element(tag, **attrib)
+        e = etree.Element(tag, **sdict(attrib))
         if line:
             e.sourceline = line
         elif self.options.debug:
@@ -1881,6 +1879,7 @@ class PrepToolWriter(BaseV3Writer):
             self.warn(e, "Found an existing Index section, not inserting another one")
             return
         def mkxref(self, text, **kwargs):
+            kwargs = sdict(kwargs)
             xref = self.element('xref', **kwargs)
             xref.text = text
             xref.tail = '\n'+' '*16
@@ -2031,7 +2030,7 @@ class PrepToolWriter(BaseV3Writer):
             item_href = "urn:issn:2070-1721"
             urnlink = e.find('.//link[@rel="item"][@href="%s"]' % (item_href, ))
             if urnlink is None :
-                e.insert(0, self.element('link', rel='alternate', href=item_href))
+                e.insert(0, self.element('link', href=item_href, rel='alternate'))
     #    3.  If in RFC production mode, check if there is a <link> element
     #        with a DOI for this RFC; if not, add one of the form <link
     #        rel="describedBy" href="https://dx.doi.org/10.17487/rfcdd"> where
@@ -2044,7 +2043,7 @@ class PrepToolWriter(BaseV3Writer):
             doi_href = "https://dx.doi.org/10.17487/rfc%s" % self.rfcnumber
             doilink = e.find('.//link[@href="%s"]' % (doi_href, ))
             if doilink is None:
-                e.insert(0, self.element('link', rel='alternate', href=doi_href))
+                e.insert(0, self.element('link', href=doi_href, rel='alternate'))
 
     # 
     #    4.  If in RFC production mode, check if there is a <link> element
