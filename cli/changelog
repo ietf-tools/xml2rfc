@@ -6,6 +6,14 @@ xml2rfc (2.24.0) ietf; urgency=medium
   * Added a switch --rfc-reference-base-url to specify an alternative base url
     when using <xref> section links.
 
+  * Stabilized XML and HTML output attribute order.  With lxml 4.40, the
+    handling of attribute order changed for Py 3.6 and higher, to match the
+    use of ordered dictionaries in Py3.6+.  Initial attributes set on an
+    element are now sorted by key value.  This matches what lxml did
+    previously, and still does for Py 2.7 and Py 3.[0-5].  Enforcing sorted
+    initial attributes under Py 3.6+ makes our output more stable under
+    varying versions of lxml and Python.
+
   * Added support for <xref> section references in the v3 text formatter.
     Refactored some of the xref handling in preptool.  Added warnings for some
     xref attribute and content combinations that don't make sense.
@@ -45,10 +53,9 @@ xml2rfc (2.24.0) ietf; urgency=medium
 
   * Fixed an issue where text was lost when immediately preceded by <xref>.
 
-  * Added a BOM test, and removed some irrelevant switches.
-
   * Added a --bom text format option, to insert a BOM mark at the beginning of
-    the text format output.
+    the text format output.  Also added a BOM test, and removed some
+    irrelevant switches.
 
   * Made the line spacing of <sourcecode> the same as for <artwork>.
 
