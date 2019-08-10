@@ -2,28 +2,28 @@
 <html lang="en" class="RFC">
 <head>
 <meta charset="utf-8">
-<meta name="scripts" content="Common,Latin">
-<meta name="viewport" content="initial-scale=1.0">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
 <title>RFC 7911: Advertisement of Multiple Paths in BGP</title>
-<meta name="author" content="Daniel Walton">
-<meta name="author" content="Alvaro Retana">
-<meta name="author" content="Enke Chen">
-<meta name="author" content="John Scudder">
-<meta name="description" content="
+<meta content="Daniel Walton" name="author">
+<meta content="Alvaro Retana" name="author">
+<meta content="Enke Chen" name="author">
+<meta content="John Scudder" name="author">
+<meta content="
        This document defines a BGP extension that allows the advertisement
       of multiple paths for the same address prefix without the new paths
       implicitly replacing any previous ones. The essence of the extension is
       that each path is identified by a Path Identifier in addition to the
       address prefix. 
-    ">
-<meta name="generator" content="xml2rfc 2.23.1">
-<link rel="alternate" type="application/rfc+xml" href="tests/input/rfc7911.xml">
-<link rel="license" href="#copyright">
-<link rel="stylesheet" href="xml2rfc.css" type="text/css">
-<link rel="stylesheet" href="rfc-local.css" type="text/css">
-<link rel="alternate" href="https://dx.doi.org/10.17487/rfc7911">
-  <link rel="alternate" href="urn:issn:2070-1721">
-  <link rel="prev" href="https://datatracker.ietf.org/doc/draft-ietf-idr-add-paths">
+    " name="description">
+<meta content="xml2rfc 2.23.1" name="generator">
+<link href="tests/input/rfc7911.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<link href="xml2rfc.css" rel="stylesheet" type="text/css">
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<link href="https://dx.doi.org/10.17487/rfc7911" rel="alternate">
+  <link href="urn:issn:2070-1721" rel="alternate">
+  <link href="https://datatracker.ietf.org/doc/draft-ietf-idr-add-paths" rel="prev">
   </head>
 <body>
 <script src="metadata.js"></script>
@@ -241,14 +241,15 @@
       is of four octets.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">For example, the NLRI encoding specified in <span>[<a href="#RFC4271" class="xref">RFC4271</a>]</span> is extended as the following:<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-3-3">
-<a href="#section-3-3" class="pilcrow">¶</a><pre>
+<pre>
                +--------------------------------+
                | Path Identifier (4 octets)     |
                +--------------------------------+
                | Length (1 octet)               |
                +--------------------------------+
                | Prefix (variable)              |
-               +--------------------------------+</pre></div>
+               +--------------------------------+</pre><a href="#section-3-3" class="pilcrow">¶</a>
+</div>
 <p id="section-3-4">The usage of the extended NLRI encodings is specified in <a href="#ops" class="xref">Section 5</a>.<a href="#section-3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -262,14 +263,15 @@
       variable. The Capability Value field consists of one or more of the
       following tuples:<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-4-2">
-<a href="#section-4-2" class="pilcrow">¶</a><pre>
+<pre>
              +------------------------------------------------+
              | Address Family Identifier (2 octets)           |
              +------------------------------------------------+
              | Subsequent Address Family Identifier (1 octet) |
              +------------------------------------------------+
              | Send/Receive (1 octet)                         |
-             +------------------------------------------------+</pre></div>
+             +------------------------------------------------+</pre><a href="#section-4-2" class="pilcrow">¶</a>
+</div>
 <p id="section-4-3">The meaning and use of the fields are as follows:<a href="#section-4-3" class="pilcrow">¶</a></p>
 <ul class="ulEmpty">
 <li class="ulEmpty" id="section-4-4.1">

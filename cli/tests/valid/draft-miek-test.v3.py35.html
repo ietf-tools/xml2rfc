@@ -24,10 +24,10 @@
 <meta content="XML" name="keyword">
 <meta content="Pandoc" name="keyword">
 <meta content="Extensible Markup Language" name="keyword">
-<link type="application/rfc+xml" rel="alternate" href="tests/input/draft-miek-test.xml">
-<link rel="license" href="#copyright">
-<link href="xml2rfc.css" rel="stylesheet" type="text/css">
-<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<link href="tests/input/draft-miek-test.xml" type="application/rfc+xml" rel="alternate">
+<link href="#copyright" rel="license">
+<link href="xml2rfc.css" type="text/css" rel="stylesheet">
+<link href="rfc-local.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <script src="metadata.js"></script>
@@ -456,9 +456,10 @@ non-existent  |                       | xsltproc
                When using Pandoc2rfc consider adding the following sentence to
                an Acknowledgements section:<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-2.1-3">
-<a href="#section-2.1-3" class="pilcrow">¶</a><pre>
+<pre>
  This document was produced using the Pandoc2rfc tool.
-               </pre></div>
+               </pre><a href="#section-2.1-3" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 </section>
@@ -641,10 +642,11 @@ non-existent  |                       | xsltproc
 <p id="section-7.2-1">
                Just use the normal sectioning commands available in Pandoc, for instance:<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.2-2">
-<a href="#section-7.2-2" class="pilcrow">¶</a><pre>
+<pre>
 # Section1 One
 Bla
-               </pre></div>
+               </pre><a href="#section-7.2-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.2-3">
                Converts to: <code>&lt;section title="Section1
                One" anchor="section1-one"&gt;</code> If you have another section that is also
@@ -669,12 +671,13 @@ Bla
 <a href="#section-7.3.1" class="section-number selfRef">7.3.1. </a><a href="#name-symbol" class="section-name selfRef">Symbol</a>
           </h4>
 <div class="artwork art-text alignLeft" id="section-7.3.1-1">
-<a href="#section-7.3.1-1" class="pilcrow">¶</a><pre>
+<pre>
 A symbol list.
 
 * Item one;
 * Item two.
-                  </pre></div>
+                  </pre><a href="#section-7.3.1-1" class="pilcrow">¶</a>
+</div>
 <p id="section-7.3.1-2">
                   Converts to <code>&lt;list style="symbol"&gt;</code>:<a href="#section-7.3.1-2" class="pilcrow">¶</a></p>
 <ul>
@@ -693,12 +696,13 @@ A symbol list.
 <a href="#section-7.3.2" class="section-number selfRef">7.3.2. </a><a href="#name-number" class="section-name selfRef">Number</a>
           </h4>
 <div class="artwork art-text alignLeft" id="section-7.3.2-1">
-<a href="#section-7.3.2-1" class="pilcrow">¶</a><pre>
+<pre>
 A numbered list.
 
 1. Item one;
 1. Item two.
-                  </pre></div>
+                  </pre><a href="#section-7.3.2-1" class="pilcrow">¶</a>
+</div>
 <p id="section-7.3.2-2">
                   Converts to <code>&lt;list style="numbers"&gt;</code>:<a href="#section-7.3.2-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal" id="section-7.3.2-3">
@@ -719,12 +723,13 @@ A numbered list.
 <p id="section-7.3.3-1">
                   Using the default list markers from Pandoc:<a href="#section-7.3.3-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.3.3-2">
-<a href="#section-7.3.3-2" class="pilcrow">¶</a><pre>
+<pre>
 A list using the default list markers.
 
 #. Item one;
 #. Item two.
-                  </pre></div>
+                  </pre><a href="#section-7.3.3-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.3.3-3">
                   Converts to <code>&lt;list style="empty"&gt;</code>:<a href="#section-7.3.3-3" class="pilcrow">¶</a></p>
 <ul class="ulEmpty">
@@ -745,10 +750,11 @@ A list using the default list markers.
 <p id="section-7.3.4-1">
                   Use the supported Pandoc syntax:<a href="#section-7.3.4-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.3.4-2">
-<a href="#section-7.3.4-2" class="pilcrow">¶</a><pre>
+<pre>
 ii. Item one;
 ii. Item two.
-                  </pre></div>
+                  </pre><a href="#section-7.3.4-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.3.4-3">
                   Converts to <code>&lt;list style="format %i."&gt;</code>:<a href="#section-7.3.4-3" class="pilcrow">¶</a></p>
 <dl class="olPercent" id="section-7.3.4-4">
@@ -764,10 +770,11 @@ ii. Item two.
 <p id="section-7.3.4-5">
                   If you use uppercase Roman numerals, they convert to a different style:<a href="#section-7.3.4-5" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.3.4-6">
-<a href="#section-7.3.4-6" class="pilcrow">¶</a><pre>
+<pre>
 II. Item one;
 II. Item two.
-                  </pre></div>
+                  </pre><a href="#section-7.3.4-6" class="pilcrow">¶</a>
+</div>
 <p id="section-7.3.4-7">
                   Yields <code>&lt;list style="format (%d) "&gt;</code>:<a href="#section-7.3.4-7" class="pilcrow">¶</a></p>
 <dl class="olPercent" id="section-7.3.4-8">
@@ -790,10 +797,11 @@ II. Item two.
 <p id="section-7.3.5-1">
                   A numbered list.<a href="#section-7.3.5-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.3.5-2">
-<a href="#section-7.3.5-2" class="pilcrow">¶</a><pre>
+<pre>
 a.  Item one;
 b.  Item two.
-                  </pre></div>
+                  </pre><a href="#section-7.3.5-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.3.5-3">
                   Converts to <code>&lt;list style="letters"&gt;</code>:<a href="#section-7.3.5-3" class="pilcrow">¶</a></p>
 <ol start="1" type="a" class="normal" id="section-7.3.5-4">
@@ -807,10 +815,11 @@ b.  Item two.
 <p id="section-7.3.5-5">
                   Uppercasing the letters works too (note two spaces after the letter.<a href="#section-7.3.5-5" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.3.5-6">
-<a href="#section-7.3.5-6" class="pilcrow">¶</a><pre>
+<pre>
 A.  Item one;
 B.  Item two.
-                  </pre></div>
+                  </pre><a href="#section-7.3.5-6" class="pilcrow">¶</a>
+</div>
 <p id="section-7.3.5-7">
                   Becomes:<a href="#section-7.3.5-7" class="pilcrow">¶</a></p>
 <dl class="olPercent" id="section-7.3.5-8">
@@ -833,7 +842,7 @@ B.  Item two.
 <p id="section-7.3.6-1">
                   This is more like a description list, so we need to use:<a href="#section-7.3.6-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.3.6-2">
-<a href="#section-7.3.6-2" class="pilcrow">¶</a><pre>
+<pre>
 First item that needs clarification:
 
 :   Explanation one
@@ -844,7 +853,8 @@ More stuff, because item is difficult to explain.
 Second item that needs clarification:
 
 :   Explanation two
-                  </pre></div>
+                  </pre><a href="#section-7.3.6-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.3.6-3">
                   Converts to: <code>&lt;list style="hanging"&gt;</code> and <code>&lt;t hangText="First item that..."&gt;</code><a href="#section-7.3.6-3" class="pilcrow">¶</a></p>
 <p id="section-7.3.6-4">
@@ -861,9 +871,10 @@ Second item that needs clarification:
 <p id="section-7.4-1">
                Indent the paragraph with 4 spaces.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.4-2">
-<a href="#section-7.4-2" class="pilcrow">¶</a><pre>
+<pre>
 Like this
-               </pre></div>
+               </pre><a href="#section-7.4-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.4-3">
                Converts to:
                <code>&lt;figure&gt;&lt;artwork&gt; ...</code>
@@ -923,9 +934,10 @@ Like this
 <p id="section-7.5-1">
                Any paragraph like:<a href="#section-7.5-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.5-2">
-<a href="#section-7.5-2" class="pilcrow">¶</a><pre>
+<pre>
 &gt; quoted text
-               </pre></div>
+               </pre><a href="#section-7.5-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.5-3">
                Converts to: <code>&lt;t&gt;&lt;list style="empty"&gt; ...</code>
                paragraph, making it indented.<a href="#section-7.5-3" class="pilcrow">¶</a></p>
@@ -944,9 +956,10 @@ Like this
 <p id="section-7.6.1-1">
                   Any reference like:<a href="#section-7.6.1-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.6.1-2">
-<a href="#section-7.6.1-2" class="pilcrow">¶</a><pre>
+<pre>
 [Click here](URI)
-                  </pre></div>
+                  </pre><a href="#section-7.6.1-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.6.1-3">
                   Converts to: <code>&lt;ulink target="URI"&gt;Click here ...</code><a href="#section-7.6.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -959,24 +972,27 @@ Like this
 <p id="section-7.6.2-1">
                   Any reference like:<a href="#section-7.6.2-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.6.2-2">
-<a href="#section-7.6.2-2" class="pilcrow">¶</a><pre>
+<pre>
 [Click here](#localid)
-                  </pre></div>
+                  </pre><a href="#section-7.6.2-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.6.2-3">
                   Converts to: <code>&lt;link target="localid"&gt;Click here ...</code><a href="#section-7.6.2-3" class="pilcrow">¶</a></p>
 <p id="section-7.6.2-4">
                   For referring to RFCs (for which you manually need add the reference source in
                   the template, with an external XML entity), you can just use:<a href="#section-7.6.2-4" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.6.2-5">
-<a href="#section-7.6.2-5" class="pilcrow">¶</a><pre>
+<pre>
 [](#RFC2119)
-                  </pre></div>
+                  </pre><a href="#section-7.6.2-5" class="pilcrow">¶</a>
+</div>
 <p id="section-7.6.2-6">
                   And it does the right thing. Referencing sections is done with:<a href="#section-7.6.2-6" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.6.2-7">
-<a href="#section-7.6.2-7" class="pilcrow">¶</a><pre>
+<pre>
 See [](#pandoc-constructs)
-                  </pre></div>
+                  </pre><a href="#section-7.6.2-7" class="pilcrow">¶</a>
+</div>
 <p id="section-7.6.2-8">
                   The word 'Section' is inserted automatically: ... see
                   <a href="#pandoc-constructs" class="xref">Section 7</a>
@@ -1088,23 +1104,26 @@ See [](#pandoc-constructs)
 <p id="section-7.9-1">
                The footnote syntax of Pandoc is slightly abused to support an index. Footnotes are entered in two steps, you have a marker in the text, and later you give actual footnote text. Like this:<a href="#section-7.9-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.9-2">
-<a href="#section-7.9-2" class="pilcrow">¶</a><pre>
+<pre>
 [^1]
 
 [^1]: footnote text
-               </pre></div>
+               </pre><a href="#section-7.9-2" class="pilcrow">¶</a>
+</div>
 <p id="section-7.9-3">
                We re-use this syntax for the <code>&lt;iref&gt;</code> tag.  The above text translates to:<a href="#section-7.9-3" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.9-4">
-<a href="#section-7.9-4" class="pilcrow">¶</a><pre>
+<pre>
 &lt;iref item="footnote text"/&gt;
-               </pre></div>
+               </pre><a href="#section-7.9-4" class="pilcrow">¶</a>
+</div>
 <p id="section-7.9-5">
                Sub items are also supported. Use an exclamation mark (<code>!</code>) to separate them:<a href="#section-7.9-5" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.9-6">
-<a href="#section-7.9-6" class="pilcrow">¶</a><pre>
+<pre>
 [^1]: item!sub item
-               </pre></div>
+               </pre><a href="#section-7.9-6" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 </section>
@@ -1129,10 +1148,11 @@ See [](#pandoc-constructs)
                amend the <code>Makefile</code> and add
                something like this:<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-8.1-2">
-<a href="#section-8.1-2" class="pilcrow">¶</a><pre>
+<pre>
 allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
         cat $@ &gt; allsections.pdc
-               </pre></div>
+               </pre><a href="#section-8.1-2" class="pilcrow">¶</a>
+</div>
 <p id="section-8.1-3">
                And then process <code>allsection.pdc</code> in the normal way.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -1146,15 +1166,17 @@ allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
                If you use double quotes in the documents title in the
                <code>docName</code> attribute, like:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-8.2-2">
-<a href="#section-8.2-2" class="pilcrow">¶</a><pre>
+<pre>
 &lt;rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02"&gt;
-               </pre></div>
+               </pre><a href="#section-8.2-2" class="pilcrow">¶</a>
+</div>
 <p id="section-8.2-3">
                The Makefile will pick this up automatically and make a symbolic link:<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-8.2-4">
-<a href="#section-8.2-4" class="pilcrow">¶</a><pre>
+<pre>
 draft-gieben-writing-rfcs-pandoc-00.txt -&gt; draft.txt
-               </pre></div>
+               </pre><a href="#section-8.2-4" class="pilcrow">¶</a>
+</div>
 <p id="section-8.2-5">
                This makes uploading the file to the i-d tracker a bit easier.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
 </section>
@@ -1273,10 +1295,11 @@ draft-gieben-writing-rfcs-pandoc-00.txt -&gt; draft.txt
 <a href="#section-a.4" class="section-number selfRef">A.4. </a><a href="#name-verbatim-code-blocks" class="section-name selfRef">Verbatim code blocks</a>
         </h2>
 <div class="artwork art-text alignLeft" id="section-a.4-1">
-<a href="#section-a.4-1" class="pilcrow">¶</a><pre>
+<pre>
 A verbatim code block
 jkasjksajassjasjsajsajkas
-               </pre></div>
+               </pre><a href="#section-a.4-1" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="reference-tests">
@@ -1439,9 +1462,10 @@ jkasjksajassjasjsajsajkas
             <p id="section-a.7-11.3.1">
                      Another item with some artwork, indented by 8 spaces.<a href="#section-a.7-11.3.1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-a.7-11.3.2">
-<a href="#section-a.7-11.3.2" class="pilcrow">¶</a><pre>
+<pre>
 Artwork
-                        </pre></div>
+                        </pre><a href="#section-a.7-11.3.2" class="pilcrow">¶</a>
+</div>
 </li>
           <li id="section-a.7-11.4">
                      Final item.<a href="#section-a.7-11.4" class="pilcrow">¶</a>
@@ -1450,9 +1474,10 @@ Artwork
 <p id="section-a.7-12">
                xml2rfc does not allow this, so the second paragraph is faked with a<a href="#section-a.7-12" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-a.7-13">
-<a href="#section-a.7-13" class="pilcrow">¶</a><pre>
+<pre>
 &lt;vspace blankLines='1'&gt;
-               </pre></div>
+               </pre><a href="#section-a.7-13" class="pilcrow">¶</a>
+</div>
 <p id="section-a.7-14">
                Ordered lists.<a href="#section-a.7-14" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal" id="section-a.7-15">
@@ -1544,10 +1569,11 @@ Artwork
                      Tell something about it. Tell something about it. Tell something about
       it. Tell something about it. Tell something about it. Tell something about it.<a href="#section-a.7-30.2.1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-a.7-30.2.2">
-<a href="#section-a.7-30.2.2" class="pilcrow">¶</a><pre>
+<pre>
 miek.nl.    IN  NS  a.miek.nl.                             
 a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue            
-                     </pre></div>
+                     </pre><a href="#section-a.7-30.2.2" class="pilcrow">¶</a>
+</div>
 <p id="section-a.7-30.2.3">
                      Tell some more about it. Tell some more about it. Tell some more about it.<a href="#section-a.7-30.2.3" class="pilcrow">¶</a></p>
 </dd>
@@ -1709,9 +1735,10 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
 <p id="section-a.8-7">
                This table has no caption, and therefor no reference. But you can refer to some of the other tables, with for instance:<a href="#section-a.8-7" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-a.8-8">
-<a href="#section-a.8-8" class="pilcrow">¶</a><pre>
+<pre>
 See [](#tab-here-s-the)
-               </pre></div>
+               </pre><a href="#section-a.8-8" class="pilcrow">¶</a>
+</div>
 <p id="section-a.8-9">
                Which will become "See <a href="#tab-here-s-the" class="xref">Table 2</a>".<a href="#section-a.8-9" class="pilcrow">¶</a></p>
 <p id="section-a.8-10">
@@ -1776,11 +1803,12 @@ This is a figure
 <p id="section-a.10-4">
                Test the use of <code>@title</code>:<a href="#section-a.10-4" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-a.10-5">
-<a href="#section-a.10-5" class="pilcrow">¶</a><pre>
+<pre>
 This is a figure with a title
 This is a figure with a title
 @title: and here it is: a title, don't mess it up *
-               </pre></div>
+               </pre><a href="#section-a.10-5" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="verse-tests">
