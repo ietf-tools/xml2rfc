@@ -2,8 +2,10 @@
 
 from __future__ import print_function
 
-import sys
+import io
 import os
+import six
+import sys
 
 # If this script is renamed to 'xml2rfc.py' on a Windows system, the import
 # of the real xml2rfc module will break.  In order to handle this, we remove
@@ -601,8 +603,12 @@ def main():
             prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
             info = extract_anchor_info(xmlrfc.tree)
-            with open(filename, 'w') as fp:
-                json.dump(info, fp, indent=2, ensure_ascii=False, encoding='utf-8')
+            if six.PY2:
+                with open(filename, 'w') as fp:
+                    json.dump(info, fp, indent=2, ensure_ascii=False, encoding='utf-8')
+            else:
+                with io.open(filename, 'w', encoding='utf-8') as fp:
+                    json.dump(info, fp, indent=2, ensure_ascii=False)
             if not options.quiet:
                 xml2rfc.log.write('Created file', filename)
 
