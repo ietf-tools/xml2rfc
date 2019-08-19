@@ -351,29 +351,6 @@ def main():
     if options.omit_headers and not options.text:
         sys.exit("You can only use --no-headers with paginated text output.")
     #
-    if options.text and not options.legacy:
-        if options.legacy_list_symbols and options.list_symbols:
-            sys.exit("You cannot specify both --list-symbols and --legacy_list_symbols.")
-        if options.list_symbols:
-            options.list_symbols = tuple(list(options.list_symbols))
-        elif options.legacy_list_symbols:
-            options.list_symbols = ('o', '*', '+', '-')
-        else:
-            options.list_symbols = ('*', '-', 'o', '+')
-    else:
-        if options.legacy_list_symbols:
-            sys.exit("You can only use --legacy_list_symbols with v3 text output.")
-        if options.list_symbols:
-            sys.exit("You can only use --list_symbols with v3 text output.")
-
-    if not options.legacy:
-        # I.e., V3 formatter
-        options.no_dtd = True        
-        if options.nroff:
-            sys.exit("You can only use --nroff in legacy mode")
-        if options.raw:
-            sys.exit("You can only use --raw in legacy mode")
-
     if options.utf8:
         xml2rfc.log.warn("The --utf8 switch is deprecated.  Use the new unicode insertion element <u>\nto refer to unicode values in a protocol specification.")
 
@@ -415,9 +392,34 @@ def main():
         options.legacy = False
         options.no_dtd = True
         options.vocabulary = 'v3'
-        if options.list_symbols is None:
-            options.list_symbols = ('*', '-', 'o', '+')
 
+    # ------------------------------------------------------------------
+    # Additional option checks that depend on the option.legacy settin which
+    # we may have adjusted as a result of the <rfc version="..."> setting:
+    if options.text and not options.legacy:
+        if options.legacy_list_symbols and options.list_symbols:
+            sys.exit("You cannot specify both --list-symbols and --legacy_list_symbols.")
+        if options.list_symbols:
+            options.list_symbols = tuple(list(options.list_symbols))
+        elif options.legacy_list_symbols:
+            options.list_symbols = ('o', '*', '+', '-')
+        else:
+            options.list_symbols = ('*', '-', 'o', '+')
+    else:
+        if options.legacy_list_symbols:
+            sys.exit("You can only use --legacy-list-symbols with v3 text output.")
+        if options.list_symbols:
+            sys.exit("You can only use --list-symbols with v3 text output.")
+
+    if not options.legacy:
+        # I.e., V3 formatter
+        options.no_dtd = True        
+        if options.nroff:
+            sys.exit("You can only use --nroff in legacy mode")
+        if options.raw:
+            sys.exit("You can only use --raw in legacy mode")
+
+    # ------------------------------------------------------------------
     # Validate the document unless disabled
     if not options.no_dtd:
         ok, errors = xmlrfc.validate(dtd_path=options.dtd)
