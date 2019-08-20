@@ -1506,13 +1506,13 @@ class PrepToolWriter(BaseV3Writer):
                     self.err(e, 'Cannot build a href for <%s target="%s"> with a section= attribute without also having a relative= attribute.' % (e.tag, e.get('target')))
             if relative:
                 url = t.get('target')
-                if url is None:
-                    self.err(e, "Cannot build a href for <reference anchor='%s'> without having a target= attribute giving the URL." % (t.get('anchor'), ))
                 if self.options.rfc_reference_base_url:
-                    ss = t.xpath('./seriesInfo[@name="RFC"]')
+                    ss = t.xpath('.//seriesInfo[@name="RFC"]')
                     if ss:
                         num = ss[0].get('value')
                         url = urljoin(self.options.rfc_reference_base_url, "rfc%s" % num)
+                if url is None:
+                    self.err(e, "Cannot build a href for <reference anchor='%s'> without having a target= attribute giving the URL." % (t.get('anchor'), ))
                 link = urljoin(url, relative, allow_fragments=True)
                 e.set('derivedLink', link)
             if e.text:
