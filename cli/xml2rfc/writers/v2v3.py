@@ -123,7 +123,7 @@ class V2v3XmlWriter(BaseV3Writer):
     # --- Element Operations -------------------------------------------
 
     def element(self, tag, line=None, **kwargs):
-        e = Element(tag, sdict(kwargs))
+        e = Element(tag, **sdict(kwargs))
         if line:
             e.sourceline = line
         elif self.options.debug:
