@@ -1053,6 +1053,7 @@ class V2v3XmlWriter(BaseV3Writer):
                 l.remove(t)
         else:
             self.replace(e, None, "<vspace/> deprecated and removed")
+            self.warn(e, "Deprecated <vspace/> element removed, but no good conversion found  The output will most likely need fixup.")
 
     # 3.10.1.  "blankLines" Attribute
     # 
