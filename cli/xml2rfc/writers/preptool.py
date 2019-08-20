@@ -1512,7 +1512,7 @@ class PrepToolWriter(BaseV3Writer):
                     ss = t.xpath('./seriesInfo[@name="RFC"]')
                     if ss:
                         num = ss[0].get('value')
-                        url = urljoin(self.options.rfc_reference_base_url, num)
+                        url = urljoin(self.options.rfc_reference_base_url, "rfc%s" % num)
                 link = urljoin(url, relative, allow_fragments=True)
                 e.set('derivedLink', link)
             if e.text:
