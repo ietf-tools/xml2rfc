@@ -383,7 +383,7 @@ class PrepToolWriter(BaseV3Writer):
                 self.warn(e, "The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
             if not re.search('-\d\d$', doc_name):
                 self.warn(e, "The 'docName' attribute of the <rfc/> element should have a revision number as the last component: docName=\"draft-foo-bar-02\".")
-        else:
+        elif not self.options.rfc:
             self.warn(e, "Expected a 'docName' attribute in the <rfc/> element, but found none.")
 
     def check_attribute_values(self, e, p):
@@ -2053,7 +2053,13 @@ class PrepToolWriter(BaseV3Writer):
     #        one does not exist, give an error.
             converted_from = e.find('.//link[@rel="prev"]')
             if converted_from is None:
-                self.warn(e, "Expected a <link> with rel='prev' providing the datatracker url for the origin draft.")
+                docName = self.root.get("docName")
+                if docName:
+                    e.insert(0, self.element('link', rel='prev', href="https://datatracker.ietf.org/doc/%s"%(docName, ), line=e.sourceline))
+                else:
+                    self.warn(e, 'Expected a <link> with rel="prev" providing the datatracker url for the origin draft,'
+                                 ' or alternatively a "docName" attribute on <rfc> from which to construct such a <link> element.'
+                        )
             else:
                 converted_from_href = converted_from.get('href', '')
                 if not converted_from_href.startswith("https://datatracker.ietf.org/doc/draft-"):
