@@ -61,7 +61,7 @@ class PdfWriter(BaseV3Writer):
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
 
-        writer = weasyprint.HTML(string=html)
+        writer = weasyprint.HTML(string=html, base_url="")
 
         cssin  = self.options.css or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'xml2rfc.css')
         css = weasyprint.CSS(cssin)
