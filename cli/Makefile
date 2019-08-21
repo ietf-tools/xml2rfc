@@ -70,7 +70,7 @@ CHECKOUTPUT=	\
 #
 # Generic rules
 
-%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test 
+%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test %.pdf.test
 	@echo "Diffing .nroff.txt against regular .txt"
 	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo checking v3 validity
@@ -98,6 +98,9 @@ tests/out/%.bom.text: tests/input/%.xml install
 
 tests/out/%.v3.$(py).html: tests/input/%.xml install
 	xml2rfc --cache tests/cache --no-network --html --v3 --external --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@
+
+tests/out/%.pdf: tests/input/%.xml install
+	xml2rfc --cache tests/cache --no-network --pdf --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@
 
 .PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt 
 
