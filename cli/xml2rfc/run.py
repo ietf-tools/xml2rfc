@@ -176,8 +176,10 @@ def main():
                            help='Base URL for RFC links')
     htmloptions.add_option('--id-base-url', default="https://www.ietf.org/archive/id/",
                            help='Base URL for Internet-Draft links')
-    htmloptions.add_option('--rfc-reference-base-url', default=None,
+    htmloptions.add_option('--rfc-reference-base-url', default="https://rfc-editor.org/rfc/",
                            help='Base URL for RFC reference targets, replacing the target="..." value given in the reference entry')
+    htmloptions.add_option('--id-reference-base-url', default="https://tools.ietf.org/html/",
+                           help='Base URL for I-D reference targets')
     htmloptions.add_option('--metadata-js-url', default="metadata.js",
                            help='URL for the metadata script')
     optionparser.add_option_group(htmloptions)
@@ -359,6 +361,9 @@ def main():
     if options.rfc_reference_base_url:
         if not options.rfc_reference_base_url.endswith('/'):
             options.rfc_reference_base_url += '/'
+    if options.id_reference_base_url:
+        if not options.id_reference_base_url.endswith('/'):
+            options.id_reference_base_url += '/'
 
     # ------------------------------------------------------------------
 

@@ -1511,6 +1511,11 @@ class PrepToolWriter(BaseV3Writer):
                     if ss:
                         num = ss[0].get('value')
                         url = urljoin(self.options.rfc_reference_base_url, "rfc%s" % num)
+                if self.options.id_reference_base_url:
+                    ss = t.xpath('.//seriesInfo[@name="Internet-Draft"]')
+                    if ss:
+                        name = ss[0].get('value')
+                        url = urljoin(self.options.id_reference_base_url, name)
                 if url is None:
                     self.err(e, "Cannot build a href for <reference anchor='%s'> without having a target= attribute giving the URL." % (t.get('anchor'), ))
                 link = urljoin(url, relative, allow_fragments=True)
