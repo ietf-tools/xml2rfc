@@ -13,7 +13,7 @@ import xml2rfc.utils
 from xml2rfc.walkpdf import xmldoc
 
 try:
-    import debug
+    from xml2rfc import debug
     assert debug
 except ImportError:
     pass
