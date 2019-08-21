@@ -97,7 +97,7 @@ tests/out/%.bom.text: tests/input/%.xml install
 	xml2rfc --cache tests/cache --no-network --text --v3 --strict --bom $< --out $@
 
 tests/out/%.v3.$(py).html: tests/input/%.xml install
-	xml2rfc --cache tests/cache --no-network --html --v3 --external --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc $< --out $@
+	xml2rfc --cache tests/cache --no-network --html --v3 --external --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@
 
 .PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt 
 
