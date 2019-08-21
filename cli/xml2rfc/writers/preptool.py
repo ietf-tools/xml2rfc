@@ -197,6 +197,7 @@ class PrepToolWriter(BaseV3Writer):
             '/rfc;check_attribute_values()',
             '.;check_attribute_values()',       # 
             '.;check_ascii_text()',
+            './/bcp14;check_key_words()',
             './/*[@anchor]',                    # 5.1.5.  Check "anchor"
             '.;insert_version()',               # 5.2.1.  "version" Insertion
             './front;insert_series_info()',     # 5.2.2.  "seriesInfo" Insertion
@@ -516,6 +517,15 @@ class PrepToolWriter(BaseV3Writer):
                 else:
                     self.err(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
                     c.tail = downcode(c.tail)
+
+    def bcp14_check_key_words(self, e, p):
+        # according to RFC 2119 and 8174
+        permitted_words = [ "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+            "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", "OPTIONAL", ]
+        text = re.sub('(\s+|\u00a0)', ' ', e.text, re.UNICODE).strip()
+        if not text in permitted_words:
+            self.warn(e, "Expected one of the permitted words or phrases from RFC 2119 and RFC 8174 in <bcp14/>, "
+                         "but found '%s'." % (etree.tostring(e).strip()))
 
     # 5.1.5.  Check "anchor"
     # 
