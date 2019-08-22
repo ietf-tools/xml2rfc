@@ -265,7 +265,7 @@ class TextWriter(BaseV3Writer):
         func = getattr(self, func_name, self.default_renderer)
         if func == self.default_renderer:
             if e.tag in self.__class__.deprecated_element_tags:
-                self.warn(e, "Was asked to render a deprecated element: <%s>", (e.tag, ))
+                self.warn(e, "Was asked to render a deprecated element: <%s>" % (e.tag, ))
             elif not e.tag in seen:
                 self.warn(e, "No renderer for <%s> found" % (e.tag, ))
                 seen.add(e.tag)
