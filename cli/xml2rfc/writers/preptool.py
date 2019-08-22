@@ -95,7 +95,7 @@ def slugify_name(name):
 class PrepToolWriter(BaseV3Writer):
     """ Writes an XML file where the input has been modified according to RFC 7998"""
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None, keep_pis=[]):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None, keep_pis=['v3xml2rfc']):
         super(PrepToolWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         if not quiet is None:
             options.quiet = quiet
@@ -164,7 +164,7 @@ class PrepToolWriter(BaseV3Writer):
         """ Public method to write the XML document to a file """
 
         if not self.options.quiet:
-            self.log('Prepping %s' % self.xmlrfc.source)
+            self.log(' Prepping %s' % self.xmlrfc.source)
         self.prep()
         if self.errors:
             self.log("Not creating output file due to errors (see above)")
@@ -180,7 +180,7 @@ class PrepToolWriter(BaseV3Writer):
         file.write(text.decode('utf-8'))
 
         if not self.options.quiet:
-            self.log('Created file %s' % filename)
+            self.log(' Created file %s' % filename)
 
     def prep(self):
 
@@ -192,7 +192,7 @@ class PrepToolWriter(BaseV3Writer):
             './/keyword',                       # 2.28.   Keyword
                                                 # 5.1.1.  XInclude Processing
                                                 # 5.1.2.  DTD Removal
-            '//processing-instruction()',       # 5.1.3.  Processing Instruction Removal
+            '//processing-instruction();removal()',       # 5.1.3.  Processing Instruction Removal
             '.;validate_before()',              # 5.1.4.  Validity Check
             '/rfc;check_attribute_values()',
             '.;check_attribute_values()',       # 
@@ -259,6 +259,7 @@ class PrepToolWriter(BaseV3Writer):
             '.;attribute_removal()',            # 5.6.5.  "xml:base" and "originalSrc" Removal
             '.;validate_after()',               # 5.6.6.  Compliance Check
             '.;insert_scripts()',               # 5.7.1.  "scripts" Insertion
+            '.;final_pi_removal()',
             '.;pretty_print_prep()',            # 5.7.2.  Pretty-Format
         ]
         # Setup
@@ -354,10 +355,15 @@ class PrepToolWriter(BaseV3Writer):
     # 
     #    Remove processing instructions.
 
-    def processing_instruction(self, e, p):
+    def processing_instruction_removal(self, e, p):
         if p != None:
             if not e.target in self.keep_pis:
                 self.remove(p, e)
+
+    def final_pi_removal(self, e, p):
+        self.keep_pis = []
+        for i in e.xpath('.//processing-instruction()'):
+            self.processing_instruction_removal(i, i.getparent())
 
     def relref_to_xref(self, e, p):
         e.attrib['sectionFormat'] = e.attrib['displayFormat']
