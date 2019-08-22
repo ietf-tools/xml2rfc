@@ -22,7 +22,7 @@ import os
 import xml2rfc
 
 try:
-    from xmlrfc import debug
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
@@ -339,9 +339,7 @@ def main():
         if not os.path.exists(options.cache):
             try:
                 os.makedirs(options.cache)
-                if options.verbose:
-                    xml2rfc.log.write('Created cache directory at', 
-                                      options.cache)
+                xml2rfc.log.note('Created cache directory at', options.cache)
             except OSError as e:
                 print('Unable to make cache directory: %s ' % options.cache)
                 print(e)
@@ -356,7 +354,7 @@ def main():
         sys.exit("You can only use --no-headers with paginated text output.")
     #
     if options.utf8:
-        xml2rfc.log.warn("The --utf8 switch is deprecated.  Use the new unicode insertion element <u>\nto refer to unicode values in a protocol specification.")
+        xml2rfc.log.warn("The --utf8 switch is deprecated.  Use the new unicode insertion element <u> to refer to unicode values in a protocol specification.")
 
     if options.rfc_reference_base_url:
         if not options.rfc_reference_base_url.endswith('/'):

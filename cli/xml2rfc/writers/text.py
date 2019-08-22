@@ -255,7 +255,7 @@ class TextWriter(BaseV3Writer):
             file.write(text)
 
         if not self.options.quiet:
-            log.write('Created file', filename)
+            self.log(' Created file %s' % filename)
 
     def render(self, e, width, **kw):
         if e.tag in (etree.PI, etree.Comment):

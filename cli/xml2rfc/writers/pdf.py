@@ -96,7 +96,7 @@ class PdfWriter(BaseV3Writer):
                 file.write(pdf)
             
             if not self.options.quiet:
-                xml2rfc.log.write('Created file', filename)
+                self.log(' Created file %s' % filename)
         else:
             self.err(None, 'PDF creation failed')
 

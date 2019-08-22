@@ -266,7 +266,7 @@ class HtmlWriter(BaseV3Writer):
             file.write(text)
 
         if not self.options.quiet:
-            log.write('Created file', filename)
+            self.log(' Created file', filename)
 
 
     def render(self, h, x):

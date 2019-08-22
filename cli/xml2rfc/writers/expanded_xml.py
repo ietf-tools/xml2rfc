@@ -37,4 +37,4 @@ class ExpandedXmlWriter:
         file.write(text.decode('ascii'))
 
         if not self.options.quiet:
-            xml2rfc.log.write('Created file', filename)
+            xml2rfc.log.write(' Created file', filename)

@@ -1446,7 +1446,7 @@ class BaseRfcWriter:
             self.write_to_file(tmpfile)
 
         if not self.options.quiet and filename:
-            xml2rfc.log.write('Created file', filename)
+            xml2rfc.log.write(' Created file', filename)
 
     def write_erefs(self, refs_counter, refs_subsection):
         """ Only text versions do this so provide a default that does nothing
@@ -1464,7 +1464,7 @@ class BaseRfcWriter:
         if not self.indexmode:
             for item in self._index:
                 if item.autoAnchor.startswith("rfc.ref.") and not item.used:
-                    xml2rfc.log.warn("no <xref> in <rfc> targets <reference anchor='%s'>" % item.anchor)
+                    xml2rfc.log.warn("No <xref> in <rfc> targets <reference anchor='%s'>" % item.anchor)
 
     def needLines(self, count):
         """ Deal with the needLines PI """

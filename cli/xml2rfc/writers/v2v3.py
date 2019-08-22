@@ -105,7 +105,6 @@ class V2v3XmlWriter(BaseV3Writer):
         """ Public method to write the XML document to a file """
 
         self.convert2to3()
-        self.validate()
         if self.options.add_xinclude:
             self.add_xinclude()
 
@@ -118,7 +117,7 @@ class V2v3XmlWriter(BaseV3Writer):
         file.write(text.decode('utf-8'))
 
         if not self.options.quiet:
-            log.write('Created file', filename)
+            self.log(' Created file %s' % filename)
 
     # --- Element Operations -------------------------------------------
 
@@ -242,7 +241,7 @@ class V2v3XmlWriter(BaseV3Writer):
     def convert2to3(self):
         if self.root.get('version') in ['3', ]:
             return self.tree
-        self.log('Converting v2 to v3: %s' % self.xmlrfc.source)
+        log.note(' Converting v2 to v3: %s' % self.xmlrfc.source)
 
         selectors = [
             # we need to process list before block elements that might get
@@ -341,7 +340,7 @@ class V2v3XmlWriter(BaseV3Writer):
 #         self.root.insert(0, dummy)
 #         lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap, keep_ns_prefixes='xi')
 #         self.root.remove(dummy)
-        self.log('Completed v2 to v3 conversion')
+        log.note(' Completed v2 to v3 conversion')
         return self.tree
 
     # ----------------------------------------------------------------------

@@ -6,7 +6,6 @@ from io import open
 from lxml import etree
 
 from xml2rfc.writers.base import BaseV3Writer
-from xml2rfc import log
 
 class ExpandV3XmlWriter(BaseV3Writer):
     """ Writes a duplicate XML file but with all includes expanded """
@@ -39,6 +38,6 @@ class ExpandV3XmlWriter(BaseV3Writer):
         file.write(text.decode('utf-8'))
 
         if not self.options.quiet:
-            log.write('Created file', filename)
+            self.log(' Created file %s' % filename)
 
             

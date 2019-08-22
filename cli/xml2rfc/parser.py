@@ -122,7 +122,7 @@ class CachingResolver(lxml.etree.Resolver):
             path = os.path.join(dir, xml2rfc.CACHE_PREFIX)
             if os.access(path, os.W_OK):
                 shutil.rmtree(path)
-                xml2rfc.log.write('Deleted cache directory at', path)
+                xml2rfc.log.note('Deleted cache directory at', path)
 
                 
     def resolve(self, request, public_id, context):
@@ -503,8 +503,7 @@ class XmlRfcParser:
 
     def parse(self, remove_comments=True, remove_pis=False, quiet=False, strip_cdata=True, normalize=False, add_xmlns=False):
         """ Parses the source XML file and returns an XmlRfc instance """
-        if not (self.quiet or quiet):
-            xml2rfc.log.write('Parsing file', self.source)
+        xml2rfc.log.note('Parsing file', self.source)
 
         # workaround for not being able to explicitly set namespaces on the
         # xml root element in lxml: Insert it before we parse:

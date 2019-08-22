@@ -30,7 +30,7 @@ def write(*args):
 
 def note(*args):
     if verbose and not quiet:
-        write(*args)
+        write(' ', *args)
 
 def warn(*args):
     """ Prints a warning message unless quiet """
