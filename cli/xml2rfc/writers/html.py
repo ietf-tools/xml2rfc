@@ -1724,7 +1724,9 @@ class HtmlWriter(BaseV3Writer):
     def render_li_dl(self, h, x):
         label = x.get('derivedCounter')
         dt = add.dt(h, None, label)
-        dd = add.dd(h, x)
+        indent = x.getparent().get('indent')
+        style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent else None
+        dd = add.dd(h, x, style=style)
         for c in x.getchildren():
             self.render(dd, c)
         self.maybe_add_pilcrow(dd)
@@ -1739,7 +1741,9 @@ class HtmlWriter(BaseV3Writer):
     #      <li>Wheels on a big rig</li>
     #    </ol>
     def render_li_ol(self, h, x):
-        li = add.li(h, x)
+        indent = x.getparent().get('indent')
+        style = 'margin-left: %.1fem' % ((int(indent)-2)*0.5) if indent and int(indent)>2 else None
+        li = add.li(h, x, style=style)
         for c in x.getchildren():
             self.render(li, c)
         self.maybe_add_pilcrow(li)
