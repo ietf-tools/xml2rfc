@@ -8,6 +8,13 @@
 # py27 - py35.  For py36 and later, dictionary key order is insertion order,
 # so the test masters for lxml-generated html output have to be different for
 # python 3 versions 3.6 and higher, compared to 2.7 - 3.5
+
+# Regarding PDF testing: This is mainly done when running test.py, which not
+# only generates a test PDF file, but deconstructs it and looks at some of
+# the content.  Generating PDF files for each input file and just making
+# binary comparisons is prone to false negatives, so in general there's no
+# PDF file generation below.
+
 export PYTHONHASHSEED = 0
 
 datetime_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T_ ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]
@@ -55,7 +62,7 @@ test:	install flaketest pytests
 
 flaketest:
 	pyflakes xml2rfc
-	[ -d tests/failed/ ] && rm -f tests/failed/*
+	@[ -d tests/failed/ ] && rm -f tests/failed/*
 
 pytests:
 	python test.py --verbose
@@ -71,7 +78,7 @@ CHECKOUTPUT=	\
 #
 # Generic rules
 
-%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.prepped.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test %.pdf
+%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test %.prepped.xml.test
 	@echo " Diffing .nroff.txt against regular .txt"
 	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo " Checking v3 validity"
@@ -85,7 +92,17 @@ tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out
 tests/out/%.v2v3.xml: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --v2v3 --strict --legacy-date-format $< --out $@"
 
-tests/out/%.prepped.xml: tests/input/%.xml install
+tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html install
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external --legacy-date-format $@" 2>/dev/null
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/valid/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
+
+# These contains index sections, which renders with different whitespace from
+# prepped source than directly.  Don't compare html from prepped with master
+# for these:
+tests/out/draft-miek-test.prepped.xml: tests/input/draft-miek-test.xml install
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
+tests/out/draft-v3-features.prepped.xml: tests/input/draft-v3-features.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
 
 tests/out/%.text: tests/input/%.xml install
@@ -171,10 +188,10 @@ elementstest: tests/out/elements.prepped.xml.test tests/out/elements.text.test t
 bomtest: tests/out/elements.bom.text.test
 
 cleantmp:
-	[ -d tmp ] || mkdir -p tmp
-	[ -d tmp ] && rm -f tmp/*
-	[ -d tests/out ] || mkdir -p tests/out
-	[ -d tests/out ] && rm -f tests/out/* && cp xml2rfc/templates/rfc2629* tests/out/
+	@[ -d tmp ] || mkdir -p tmp
+	@[ -d tmp ] && rm -f tmp/*
+	@[ -d tests/out ] || mkdir -p tests/out
+	@[ -d tests/out ] && rm -f tests/out/* && cp xml2rfc/templates/rfc2629* tests/out/
 
 
 tests: test regressiontests cachetest drafttest utf8test v3featuretest  elementstest bomtest
