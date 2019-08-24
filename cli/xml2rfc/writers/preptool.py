@@ -1026,7 +1026,7 @@ class PrepToolWriter(BaseV3Writer):
             if not day:
                 day = self.date.day
             exp = datetime.date(year=year, month=month, day=day) + datetime.timedelta(days=185)
-            format_dict['expiration_date'] = format_date(exp.year, exp.month, exp.day, self.options.legacy_date_format)
+            format_dict['expiration_date'] = format_date(exp.year, exp.month, exp.day)
             for para in boilerplate_draft_status_of_memo:
                 para = para.format(**format_dict).strip()
                 t = etree.fromstring(para)
@@ -1486,14 +1486,14 @@ class PrepToolWriter(BaseV3Writer):
                 if title is None:
                     self.err(t, "Expected a <title> element when processing <xref> to <%s>, but found none" % (t.tag, ))
                 content = title.text
-            elif t.find('./name') != None:
-                name = t.find('./name')
+            elif t.tag == 'name' or t.find('./name') != None:
+                name = t if t.tag == 'name' else t.find('./name')
                 content = ' '.join(list(name.itertext()))
             else:
                 content = target
         elif format == 'none':
             content = ''
-            if not e.text:
+            if self.options.verbose and not e.text:
                 self.warn(e, 'Expected <%s format="none"> to have text content, but found none.  There will be no text rendered for this element.' % (e.tag, ))
         else:
             self.err(e, "Expected format to be one of 'default', 'title', 'counter' or 'none', but found '%s'" % (format, ) )
@@ -1505,7 +1505,7 @@ class PrepToolWriter(BaseV3Writer):
         t, content = self.build_derived_content(e)
         if not (section or relative):
             attr = e.get('derivedContent')
-            if attr and attr != content:
+            if self.options.verbose and attr and attr != content:
                 self.err(e, "When processing <xref>, found derivedContent='%s' when trying to set it to '%s'" % (attr, content))
             e.set('derivedContent', content)
         else:
@@ -1824,13 +1824,19 @@ class PrepToolWriter(BaseV3Writer):
             if num.startswith('Appendix'):
                 # Replace the first dot for later use in derivedContent
                 num = num.replace('.', ' ', 1) 
+                num_format = 'default'
+            elif not num:
+                num_format = 'none'
+            else:
+                num_format = 'counter'
             #
             t = self.element('t', keepWithNext='true')
             pn = s.get('pn')
             if not pn:
                 self.die(s, "No no pn entry found for section, can't continue: %s" % (etree.tostring(s)))
-            xref = self.element('xref', target=pn, format='counter', derivedContent=num)
-            xref.tail = ('.'+self.spacer) if num else self.spacer
+
+            xref = self.element('xref', target=pn, format=num_format, derivedContent=num)
+            xref.tail = ('.'+self.spacer) if num.strip() else self.spacer
             t.append(xref)
             # <xref> can only contain text, not markup. so we need to reduce
             # the name content to plain text:
@@ -1910,7 +1916,7 @@ class PrepToolWriter(BaseV3Writer):
             li = self.element('li')
             t = self.element('t', anchor=anchor)
             t.text = '\n'+' '*16
-            xref = mkxref(self, letter, target=anchor, format='default', derivedContent=letter)
+            xref = mkxref(self, letter, target=anchor, format='none', derivedContent=letter)
             t.append(xref)
             li.append(t)
             #
@@ -1931,7 +1937,7 @@ class PrepToolWriter(BaseV3Writer):
             li.append(t)
             for i in item_entries:
                 if i.anchor:
-                    xref = mkxref(self, i.item, target=i.anchor, format='default', derivedContent=i.item)
+                    xref = mkxref(self, i.item, target=i.anchor, format='none', derivedContent=i.item)
                     t.append(xref)
                 else:
                     self.err(e, "Did not expect an <iref> here, skipping it")
@@ -1969,7 +1975,7 @@ class PrepToolWriter(BaseV3Writer):
             letters = uniq([ i.item[0].upper() for i in self.index_entries ])
             # set up the index index
             for letter in letters:
-                xref = mkxref(self, letter, target='rfc.index.%s'%letter, derivedContent=letter)
+                xref = mkxref(self, letter, target='rfc.index.%s'%letter, format='none', derivedContent=letter)
                 index_index.append(xref)
             # one letter entry per letter
             index_ul = self.element('ul', empty='true', spacing='compact', bare="true")
