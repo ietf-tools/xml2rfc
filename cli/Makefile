@@ -95,7 +95,7 @@ tests/out/%.v2v3.xml: tests/input/%.xml install
 tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external --legacy-date-format $@" 2>/dev/null
-	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/valid/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
 
 # These contains index sections, which renders with different whitespace from
 # prepped source than directly.  Don't compare html from prepped with master
@@ -149,7 +149,7 @@ miektest: cleantmp install
 	doc=draft-miek-test ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 cachetest: cleantmp install
-	@echo " Clearing cache ..."
+	@echo "\n Clearing cache ..."
 	@PS4=" " /bin/bash -cx "xml2rfc --cache .cache --clear-cache"
 	@echo " Filling cache ..."
 	@PS4=" " /bin/bash -cx "xml2rfc --cache .cache tests/input/rfc6787.xml --base tmp/ --raw"
@@ -194,7 +194,7 @@ cleantmp:
 	@[ -d tests/out ] && rm -f tests/out/* && cp xml2rfc/templates/rfc2629* tests/out/
 
 
-tests: test regressiontests cachetest drafttest utf8test v3featuretest  elementstest bomtest
+tests: test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest
 
 noflakestests: install pytests regressiontests
 
