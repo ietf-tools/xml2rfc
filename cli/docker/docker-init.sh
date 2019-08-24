@@ -62,15 +62,19 @@ LOCAL_FONTS="/home/$USER/$CWD/.fonts"
  *** Missing font directory: $LOCAL_FONTS ***
 "
 
+FONT_COUNT=1605
 echo "Checking for local fonts"
-found_fonts="$(ls $LOCAL_FONTS | grep '\.[to]tf' | wc -l)"
-[ $found_fonts = 1541 ] || echo "
- *** Missing local fonts: Expected 1541, found $found_fonts ***
+local_fonts="$(ls $LOCAL_FONTS | grep '\.[to]tf' | wc -l)"
+[ $local_fonts = $FONT_COUNT ] || echo "
+ *** Missing local fonts: Expected $FONT_COUNT, found $found_fonts ***
 "
 
-echo "Linking in Noto fonts"
-ln -sf $LOCAL_FONTS/*.*tf /usr/share/fonts/truetype/noto/
-
+# Check that local fonts are linked to fontconfig dir
+found_fonts="$(ls /usr/share/fonts/truetype/noto/ | grep '\.[to]tf' | wc -l)"
+[ $found_fonts = $local_fonts ] || {
+  echo "Linking in Noto fonts"
+  ln -sf $LOCAL_FONTS/*.[to]tf /usr/share/fonts/truetype/noto/
+}
 
 cd "/home/$USER/$CWD" || cd "/home/$USER/"
 
