@@ -1,3 +1,67 @@
+xml2rfc (2.25.0) ietf; urgency=medium
+
+  This rounds up the remaining known issues raised by the RFC Editor staff.
+  Commit log excerpt:
+
+  * Rolled back an earlier requirements change, and added a restriction on 
+    pycountry due to a buggy release.
+
+  * Fixed a number of issues with the xml generated for ToC and Index.  This
+    makes the ToC output from prepped files the same as from unprepped files,
+    which was not the case earlier.
+
+  * Fixed an log() argument error.
+
+  * Modified test input files to silence known issues with legacy rfc xml
+    test files, in order to more easily be able to see newly appearing errors.
+
+  * Fixed a string formatting error.  Fixes issue #417.
+
+  * Changed processing progress messages to more consistently obey --quiet, 
+    and to be visually distinct from errors and warnings.
+
+  * Modified the PI stripping so as to be able to silence warnings during 
+    preptool processing.
+
+  * Added indentation handling for variations of <ol> on request from the
+    rfc-editor staff.
+
+  * Moved the check for appropriate <bcp14> content from the text renderer 
+    to the preptool, and tweaked it to permit &nbsp;, e.g., 'MUST&nbsp;NOT'.
+
+  * Added a base_url setting to avoid an error message during pdf generation.
+
+  * Added an option --id-reference-base-url to set base url for rendering 
+    of <xref> with I-D section references, with a sensible default; and set a 
+    default value for --rfc-reference-base-url for <xref> with section= ease of 
+    use.
+
+  * Tweaked the conditions for a preptool warning about missing docName to 
+    only apply in non-rfc mode, and added generation of any missing <link 
+    rel='prev'> element from docName if present.
+
+  * Widened the search for seriesInfo elements when handling the 
+    --rfc-reference-base-url option, in order to handle all possible 
+    placements, and fixed a bug in the creation of target URL when
+    using this option.
+
+  * Added a warning for <vspace> elements without proper v3 alternatives 
+    during v2v3 conversion.
+
+  * Fixed a bug introduced in [3201] when stabilizing attribute order,
+    which could cause errors when running v2v3 conversion with XInclude
+    insertion.
+
+  * Changed the code for --info dump to work for both py27 and py3x.
+
+  * The --legacy-list-symbols option was checked for validity before the 
+    version attribute of the input file was seen.  Moved this check (and some 
+    similar cases) later, in order to permit it to be used with v3 input 
+    without giving the --v3 option.  Fixes issue #414.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  26 Aug 2019 05:43:29 -0700
+
+
 xml2rfc (2.24.0) ietf; urgency=medium
 
   This release addresses a number of issues and minor feature requests from
