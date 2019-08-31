@@ -16,6 +16,10 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
 
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
 @-ms-viewport {
   width: extend-to-zoom;
   zoom: 1.0;
@@ -173,6 +177,11 @@ dl > dt {
   float: left;
   margin-right: 1em;
 }
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
 dl > dd {
   margin-bottom: .8em;
   min-height: 1.3em;
@@ -188,10 +197,9 @@ dl > dd > dl {
 /* links */
 a {
   text-decoration: none;
-  z-index: 2;
 }
 a[href] {
-  color: #3E8EDE;
+  color: #22e; /* Arlen: WCAG 2019 */
 }
 a[href]:hover {
   background-color: #f2f2f2;
@@ -244,6 +252,7 @@ aside, blockquote {
 }
 blockquote {
   background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
   border: 1px solid #ddd;
   border-radius: 3px;
   margin: 1em 0;
@@ -287,7 +296,7 @@ table p {
 
 /* pilcrow */
 a.pilcrow {
-  color: #777;
+  color: #666; /* Arlen: AHDJ 2019 */
   text-decoration: none;
   visibility: hidden;
   user-select: none;
@@ -348,7 +357,7 @@ hr {
 
 /* The prepared/rendered info at the very bottom of the page */
 .docInfo {
-  color: #999;
+  color: #666; /* Arlen: WCAG 2019 */
   font-size: 0.9em;
   font-style: italic;
   margin-top: 2em;
@@ -462,17 +471,17 @@ hr.addr {
   right: 0.2em;
   padding: 0.2em;
   content: "The RFC Editor will remove this note";
-  color: #b76427;
-  background-color: rgba(249, 232, 105, 0.3);
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
 }
 .rfcEditorRemove {
   position: relative;
   padding-top: 1.8em;
-  background-color: rgba(249, 232, 105, 0.3);
+  background-color: #ffd; /* Arlen: WCAG 2019 */
   border-radius: 3px;
 }
 .cref {
-  background-color: rgba(249, 232, 105, 0.3);
+  background-color: #ffd; /* Arlen: WCAG 2019 */
   padding: 2px 4px;
 }
 .crefSource {
@@ -621,6 +630,34 @@ hr.addr {
   }
 }
 
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
 @page :first {
   padding-top: 0;
   @top-left {
@@ -641,10 +678,53 @@ hr.addr {
   size: A4;
   margin-bottom: 45mm;
   padding-top: 20px;
+  /* The follwing is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
 }
 
 /* Changes introduced to fix issues found during implementation */
-
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
 /* Separate body from document info even without intervening H1 */
 section {
   clear: both;
