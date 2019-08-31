@@ -164,7 +164,8 @@ class V2v3XmlWriter(BaseV3Writer):
                     b.text = a.text
                 if a.tail != None:
                     b.tail = a.tail
-                b.sourceline = a.sourceline
+                if a.sourceline:
+                    b.sourceline = a.sourceline
                 copyattr(a, b)
                 for child in a.iterchildren():
                     b.append(child)         # moves child from a to b
@@ -176,7 +177,7 @@ class V2v3XmlWriter(BaseV3Writer):
                     else:
                         c.tail = a.tail
                 p.remove(a)
-        if b != None:
+        if b != None and a.sourceline:
             b.sourceline = a.sourceline
         return b
 
@@ -229,7 +230,8 @@ class V2v3XmlWriter(BaseV3Writer):
         if t is None:
             t = self.element('t', line=e.sourceline)
         t.text = e.text
-        t.sourceline = e.sourceline
+        if e.sourceline:
+            t.sourceline = e.sourceline
         e.text = None
         for c in e.iterchildren():
             t.append(c)
@@ -416,7 +418,7 @@ class V2v3XmlWriter(BaseV3Writer):
     # 
     #    Deprecated.
     def element_artwork(self, e, p):
-        if e.text and e.text.strip():
+        if e.text and e.text.strip() and not ']]>' in e.text:
             e.text = CDATA(e.text)          # prevent text from being mucked up by other processors
         stripattr(e, ['height', '{http://www.w3.org/XML/1998/namespace}space', 'width', ])
         if e.text and re.search(r'^\s*<CODE BEGINS>', e.text):
@@ -511,7 +513,7 @@ class V2v3XmlWriter(BaseV3Writer):
     # 
     def element_figure(self, e, p):
         comments = []
-        embedded = e.find('./artwork')
+        embedded = e.find('.//artwork')
         if embedded == None:
             embedded = e.find('./sourcecode')
         if embedded != None:
@@ -532,8 +534,11 @@ class V2v3XmlWriter(BaseV3Writer):
             and e.find('name')==None and e.find('preamble')==None and e.find('postamble')==None ):
             pos = p.index(e)
             embedded.tail = e.tail
+            children = e.getchildren()
             p.remove(e)
-            p.insert(pos, embedded)
+            for c in children:
+                p.insert(pos, c)
+                pos += 1
         else:
             stripattr(e, ['align', 'height', 'src', 'suppress-title', 'width', ])
             if self.options.strict:
