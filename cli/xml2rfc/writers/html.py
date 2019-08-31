@@ -2716,11 +2716,15 @@ class HtmlWriter(BaseV3Writer):
             #    href="http://www.rfc-editor.org/info/rfc9999#s-2.3">Section
             #    2.3</a> and ...
             elif format == 'bare':
-                span = add.span(h, None,
-                    build.a('%s %s'%(label, section), href=link, classes='relref'),
-                )
-                span.tail = x.tail
-                return span
+                a = build.a(reftext, href=link, classes='relref')
+                if x.text and x.text.strip() and x.text.strip() != reftext:
+                    aa = build.a(x.text, href='#%s'%target, classes='xref')
+                    hh = build.span(aa, ' (', a, ')')
+                else:
+                    hh = a
+                hh.tail = x.tail
+                h.append(hh)
+                return hh
             else:
                 self.err(x, 'Unexpected value combination: section: %s  relative: %s  format: %s' %(section, relative, format))
 
