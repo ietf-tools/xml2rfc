@@ -1444,8 +1444,11 @@ class PrepToolWriter(BaseV3Writer):
         #
         format = e.get('format', 'default')
         if   format == 'counter':
-            if not t.tag in ['section', 'table', 'figure', 'li', 'references', 't', 'dt', ]:
+            if not t.tag in ['section', 'table', 'figure', 'li', 'reference', 'references', 't', 'dt', ]:
                 self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
+            elif t.tag == 'reference':
+                if not e.get('section'):
+                    self.die(e, "Using <xref> format='%s' with a <%s> target requires a section attribute" % (format, t.tag, ))
             type, num = split_pn(t, pn)
             if num.startswith('appendix'):
                 num = num.split('.')[1].title()
@@ -1456,6 +1459,8 @@ class PrepToolWriter(BaseV3Writer):
                 if not parent.tag == 'ol':
                     self.die(e, "Using <xref> format='counter' with a <%s><%s> target is not supported" %(parent.tag, t.tag, ))
                 content = t.get('derivedCounter')
+            elif t.tag == 'reference':
+                content = e.get('section')
             else:
                 content = num
         elif format == 'default':
@@ -1558,6 +1563,7 @@ class PrepToolWriter(BaseV3Writer):
                     self.warn(e, 'Unexpected format="%s" used with sectionFormat="bare".  Omit format or use format="default"' % (sform, ))
                 if e.text:
                     self.warn(e, 'Unexpected text content: %s.  Text content is not useful with sectionFormat="bare"' % (e.text, ))
+
 
     # 5.4.9.  <relref> Processing
     # 
