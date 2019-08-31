@@ -653,7 +653,7 @@ class XmlRfcParser:
 
         return xmlrfc
 
-class XmlRfc:
+class XmlRfc(object):
     """ Internal representation of an RFC document
 
         Contains an lxml.etree.ElementTree, with some additional helper
@@ -663,11 +663,14 @@ class XmlRfc:
     """
 
     pis = {}
+    source = "(unknown source)"
 
-    def __init__(self, tree, default_dtd_path, nsmap={}):
+    def __init__(self, tree, default_dtd_path, source=None, nsmap={}):
         self.default_dtd_path = default_dtd_path
         self.tree = tree
         self.nsmap = nsmap
+        if source:
+            self.source = source
         # Pi default values
         self.pis = {
             "artworkdelimiter":	None,
