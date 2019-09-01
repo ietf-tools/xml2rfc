@@ -1329,17 +1329,18 @@ class TextWriter(BaseV3Writer):
             indent = None
         if indent is None:
             indent = 3
-            for dt in e.iterchildren('dt'):
-                dt._text = self.inner_text_renderer(dt)
-                l = len(dt._text)
-                if l+2 > indent:
-                    indent = l+2
-            if newline:
-                if indent > 15:                   # XXX Somewhat arbitrary choice
-                    indent = 3
-            else:
-                if indent > 24:                   # XXX Somewhat arbitrary choice
-                    indent = 3
+# Commented out: code to adapt the indentation to the longest term in the list        
+#             for dt in e.iterchildren('dt'):
+#                 dt._text = self.inner_text_renderer(dt)
+#                 l = len(dt._text)
+#                 if l+2 > indent:
+#                     indent = l+2
+#             if newline:
+#                 if indent > 15:                   # XXX Somewhat arbitrary choice
+#                     indent = 3
+#             else:
+#                 if indent > 24:                   # XXX Somewhat arbitrary choice
+#                     indent = 3
         else:
             indent = int(indent)
         set_joiners(kwargs, {
