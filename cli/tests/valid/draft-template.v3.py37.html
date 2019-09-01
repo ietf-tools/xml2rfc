@@ -12,7 +12,7 @@
        Insert an abstract: MANDATORY. This template is for creating an
       Internet Draft. 
     " name="description">
-<meta content="xml2rfc 2.23.1" name="generator">
+<meta content="xml2rfc 2.25.0" name="generator">
 <meta content="template" name="keyword">
 <link href="tests/input/draft-template.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -20,7 +20,9 @@
 <link href="rfc-local.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<script src="metadata.js"></script>
+<script>
+async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#metadata");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("metadata");if(e){e.style.background="#eee";try{var t;t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t),s=(await o.json())[0],r="",d="https://datatracker.ietf.org/doc",l="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",n=s.doc_id.toLowerCase(),i=s.doc_id.slice(0,3).toLowerCase(),f=s.doc_id.slice(3).replace(/^0+/,""),h={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let u="<dl style='overflow:hidden'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){s[e]=s[e].toLowerCase();var t=s[e].split(" ");sLen=t.length;var o="",p=1;for(let e=0;e<sLen;e++)p<sLen?o=o+a(t[e])+" ":o+=a(t[e]),p++;s[e]=o}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var b,g="",y=1;b=s[e].length;for(let t=0;t<b;t++)s[e][t]&&(s[e][t]=String(s[e][t]).toLowerCase(),g=y<b?g+"<a href='"+r+"/rfc/".concat(s[e][t])+"'>"+s[e][t].slice(3)+"</a>, ":g+"<a href='"+r+"/rfc/".concat(s[e][t])+"'>"+s[e][t].slice(3)+"</a>",y++);s[e]=g}else if("see_also"==e){var m,w="",L=1;m=s[e].length;for(let t=0;t<m;t++)if(s[e][t]){s[e][t]=String(s[e][t]);var _=s[e][t].slice(0,3),v=s[e][t].slice(3).replace(/^0+/,"");w=L<m?w+"<a href='"+r+"/"+_.toLowerCase()+"/".concat(v.toLowierCase())+"'>"+_+" "+v+"</a>, ":w+"<a href='"+r+"/"+_.toLowerCase()+"/".concat(v.toLowerCase())+"'>"+_+" "+v+"</a>",L++}s[e]=w}else if("errata_url"==e){var C="";C=s[e]?C+"<a href='"+s[e]+"'>Errata exist</a>, <a href='"+d+"/"+n+"'>Datatracker</a>, <a href='"+l+"/?"+i+"="+f+"&submit="+i+"'>IPR</a>, <a href='"+c+"/"+n+"'>Info page</a>":"<a href='"+d+"/"+n+"'>Datatracker</a>, <a href='"+l+"/?"+i+"="+f+"&submit="+i+"'>IPR</a>, <a href='"+c+"/"+n+"'>Info page</a>",s[e]=C}""!=s[e]?"Errata"==h[e]?u+=`<dt>More info:</dt><dd>${s[e]}</dd>`:u+=`<dt>${h[e]}:</dt><dd>${s[e]}</dd>`:"Errata"==h[e]&&(u+=`<dt>More info:</dt><dd>${s[e]}</dd>`)}),u+="</dl>",e.innerHTML=u}catch(e){console.log(e)}}else console.log("Could not locate metadata <div> element");function a(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.addEventListener("load",addMetadata);</script>
+<script src="metadata.min.js"></script>
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
