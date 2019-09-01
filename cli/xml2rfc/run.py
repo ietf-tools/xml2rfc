@@ -171,7 +171,7 @@ def main():
     htmloptions.add_option('--css', default=None,
                            help='Use the given CSS file instead of the builtin')
     htmloptions.add_option('--external-css', action='store_true', default=False,
-                           help='place css (and js) in external files')
+                           help='place css in external files')
     htmloptions.add_option('--rfc-base-url', default="https://www.rfc-editor.org/rfc/",
                            help='Base URL for RFC links')
     htmloptions.add_option('--id-base-url', default="https://www.ietf.org/archive/id/",
@@ -180,7 +180,7 @@ def main():
                            help='Base URL for RFC reference targets, replacing the target="..." value given in the reference entry')
     htmloptions.add_option('--id-reference-base-url', default="https://tools.ietf.org/html/",
                            help='Base URL for I-D reference targets')
-    htmloptions.add_option('--metadata-js-url', default="metadata.js",
+    htmloptions.add_option('--metadata-js-url', default="metadata.min.js",
                            help='URL for the metadata script')
     optionparser.add_option_group(htmloptions)
 
