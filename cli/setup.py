@@ -30,9 +30,9 @@ with open(os.path.join(here, 'requirements.txt'), encoding='utf-8') as file:
 
 # Check python versions
 major, minor = sys.version_info[:2] 
-if not ((major == 2 and minor >= 6) or (major == 3 and minor >= 3)):
+if not ((major == 2 and minor > 6) or (major == 3 and minor >= 5)):
     print("") 
-    print("The xml2rfc installation requires python 2.6, 2.7, or 3.3") 
+    print("The xml2rfc installation requires python 2.7 or 3.5+") 
     print("Can't proceed, quitting.") 
     exit() 
 
