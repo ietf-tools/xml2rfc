@@ -54,7 +54,7 @@ default_options = Values(defaults={
         'legacy_date_format': True,
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
-        'metadata_js_url': 'metadata.js',
+        'metadata_js_url': 'metadata.min.js',
         'no_css': False,
         'no_dtd': None,
         'no_network': False,
