@@ -210,6 +210,7 @@ class HtmlWriter(BaseV3Writer):
         super(HtmlWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         self.anchor_tags = self.get_tags_with_anchor()
         self.duplicate_html_ids = set()
+        self.filename = None
 
     def get_tags_with_anchor(self):
         anchor_nodes = self.schema.xpath("//x:define/x:element//x:attribute[@name='anchor']", namespaces=namespaces)
@@ -518,18 +519,22 @@ class HtmlWriter(BaseV3Writer):
             with open(jsin) as f:
                 js = f.read()
 
-        if self.options.external_css:
-            dest_dir = os.path.dirname(self.filename)+os.sep
-            jsout = urljoin(dest_dir, self.options.metadata_js_url)
-            # Only write to the destination if it's a local file:
-            if jsout.startswith(dest_dir):
-                with open(cssout, 'w', encoding='utf-8') as f:
-                    f.write(css)
-            s = add.script(body, None, src=self.options.metadata_js_url)
-        else:
+        if js:
             s = add.script(body, None)
             s.text = '\n'+js
-        s.tail = '\n'
+            s.tail = '\n'
+            # 
+            if self.filename:
+                dest_dir = os.path.dirname(self.filename)+os.sep
+                jsout = urljoin(dest_dir, self.options.metadata_js_url)
+                # Only write to the destination if it's a local file:
+                if jsout.startswith(dest_dir):
+                    with open(cssout, 'w', encoding='utf-8') as f:
+                        f.write(css)
+            # Add external script tag -- the content might be newer than the
+            # JS we included above
+            s = add.script(body, None, src=self.options.metadata_js_url)
+            s.tail = '\n'
 
     # 6.4.  Page Headers and Footers
     # 
@@ -2716,10 +2721,10 @@ class HtmlWriter(BaseV3Writer):
             #    href="http://www.rfc-editor.org/info/rfc9999#s-2.3">Section
             #    2.3</a> and ...
             elif format == 'bare':
-                a = build.a(reftext, href=link, classes='relref')
-                if x.text and x.text.strip() and x.text.strip() != reftext:
-                    aa = build.a(x.text, href='#%s'%target, classes='xref')
-                    hh = build.span(aa, ' (', a, ')')
+                a = build.a(section, href=link, classes='relref')
+                if x.text and x.text.strip() and x.text.strip() != section:
+                    aa = build.a(x.text, href=link, classes='relref')
+                    hh = build.span(a, ' (', aa, ')')
                 else:
                     hh = a
                 hh.tail = x.tail

@@ -1554,21 +1554,15 @@ class PrepToolWriter(BaseV3Writer):
             e.set('derivedContent', content)
             #
             sform  = e.get('sectionFormat')
-            if   sform == 'of':
-                if not content:
-                    self.err(e, 'Found sectionFormat="%s" with blank derivedContent' % sform)
-            elif sform == 'comma':
-                if not content:
-                    self.err(e, 'Found sectionFormat="%s" with blank derivedContent' % sform)
-            elif sform == 'parens':
+            if   sform in ['of', 'comma', 'parens', ]:
                 if not content:
                     self.err(e, 'Found sectionFormat="%s" with blank derivedContent' % sform)
             elif sform == 'bare':
-                if format in ['title', 'counter', 'none']:
-                    self.warn(e, 'Unexpected format="%s" used with sectionFormat="bare".  Omit format or use format="default"' % (sform, ))
-                if e.text:
-                    self.warn(e, 'Unexpected text content: %s.  Text content is not useful with sectionFormat="bare"' % (e.text, ))
-
+                format = e.get('format')
+                if format in ['title', 'counter', 'none', ]:
+                    self.warn(e, 'Unexpected format="%s" used with sectionFormat="bare".  Setting format has no effect with sectionFormat="bare"' % (format, ))
+            else:
+                self.err(e, 'Unexpected sectionFormat: "%s"' % (sform, ))
 
     # 5.4.9.  <relref> Processing
     # 

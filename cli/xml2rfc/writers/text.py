@@ -4341,7 +4341,11 @@ class TextWriter(BaseV3Writer):
             elif sform == 'parens':
                 text = '[%s] (%s %s)' % (reftext, label, section)
             elif sform == 'bare':
-                text = '%s' % (section, )
+                etext = e.text and e.text.strip()
+                if etext and etext != section:
+                    text = '%s (%s)' % (section, etext)
+                else:
+                    text = '%s' % (section, )
             else:
                 self.err(e, 'Unexpected value combination: section: %s  sectionFormat: %s' %(section, sform))
 
