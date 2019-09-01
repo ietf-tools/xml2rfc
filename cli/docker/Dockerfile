@@ -138,20 +138,8 @@ RUN pip install tox
 # testing prerequisites
 RUN pip install dict2xml pypdf2
 
-# Additional python versions.  Python 3.5 is part of the distribution, 3.4
-# and 3.6 not available through apt.
-
-# Python 3.4
-WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.4.10/Python-3.4.10.tar.xz
-RUN tar xJf Python-3.4.10.tar.xz
-RUN rm Python-3.4.10.tar.xz
-WORKDIR /usr/src/Python-3.4.10/
-RUN ./configure
-RUN make
-RUN make altinstall
-WORKDIR /usr/src
-RUN rm -rf /usr/src/Python-3.4.10/
+# Additional python versions.  Python 3.5 is part of the distribution,
+# 3.6 and 3.7 not available through apt.
 
 # Python 3.5
 WORKDIR /usr/src
@@ -167,27 +155,27 @@ RUN rm -rf /usr/src/Python-3.5.7/
 
 # Python 3.6
 WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz
-RUN tar xJf Python-3.6.8.tar.xz
-RUN rm Python-3.6.8.tar.xz
-WORKDIR /usr/src/Python-3.6.8/
+RUN wget -q https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tar.xz
+RUN tar xJf Python-3.6.9.tar.xz
+RUN rm Python-3.6.9.tar.xz
+WORKDIR /usr/src/Python-3.6.9/
 RUN ./configure
 RUN make
 RUN make altinstall
 WORKDIR /usr/src
-RUN rm -rf /usr/src/Python-3.6.8/
+RUN rm -rf /usr/src/Python-3.6.9/
 
 # Python 3.7
 WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
-RUN tar xJf Python-3.7.3.tar.xz
-RUN rm Python-3.7.3.tar.xz
-WORKDIR /usr/src/Python-3.7.3/
+RUN wget -q https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tar.xz
+RUN tar xJf Python-3.7.4.tar.xz
+RUN rm Python-3.7.4.tar.xz
+WORKDIR /usr/src/Python-3.7.4/
 RUN ./configure
 RUN make
 RUN make altinstall
 WORKDIR /usr/src/
-RUN rm -rf /usr/src/Python-3.7.3/
+RUN rm -rf /usr/src/Python-3.7.4/
 
 ENV DDIR="/usr/local/share/xml2rfc"
 RUN mkdir -p $DDIR
