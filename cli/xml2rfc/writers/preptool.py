@@ -285,6 +285,16 @@ class PrepToolWriter(BaseV3Writer):
         self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in (self.root.xpath('.//reference') + self.root.xpath('.//referencegroup')) ))
         self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
 
+        # Check for duplicate <displayreference> 'to' values:
+        seen = {}
+        for e in self.root.xpath('.//displayreference'):
+            to = e.get('to')
+            if to in set(seen.keys()):
+                self.die(e, 'Found duplicate displayreference value: "%s" has already been used in %s' % (to, etree.tostring(seen[to]).strip()))
+            else:
+                seen[to] = e
+        del seen
+
         # 
         # 5.1.2.  DTD Removal
         # 
