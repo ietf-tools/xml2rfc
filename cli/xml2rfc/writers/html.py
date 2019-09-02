@@ -274,17 +274,17 @@ class HtmlWriter(BaseV3Writer):
         try:
             if urlparse(fn).scheme:
                 with closing(urlopen(fn)) as f:
-                    return f.read()
+                    return f.read(), fn
             else:
                 for path in ['.', data_dir, ]:
                     for ext in ['', '.css', ]:
                         cssin = os.path.join(path, fn + ext)
                         if os.path.exists(cssin):
                             with open(cssin) as f:
-                                return f.read()
+                                return f.read(), cssin
         except IOError as e:
             self.err(self.root, "Error when trying to read external css: %s" % e)
-        return None
+        return None, None
 
 
     def render(self, h, x):
@@ -501,12 +501,17 @@ class HtmlWriter(BaseV3Writer):
         data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
         
         css = None
+        self.css_js = os.path.join(data_dir, 'xml2rfc.js')
         if self.options.css:
-            css = self.read_css(data_dir, self.options.css)
+            css, cssin = self.read_css(data_dir, self.options.css)
         if not css:
             cssin = os.path.join(data_dir, 'xml2rfc.css')
             with open(cssin, encoding='utf-8') as f:
                 css = f.read()
+        else:
+            jsin = os.path.splitext(cssin)[0] + '.js'
+            if os.path.exists(jsin):
+                self.css_js = jsin
 
         if self.options.external_css:
             cssout = os.path.join(os.path.dirname(self.filename), 'xml2rfc.css')
@@ -615,6 +620,10 @@ class HtmlWriter(BaseV3Writer):
         for c in [ e for e in [ x.find('front'), x.find('middle'), x.find('back') ] if e != None]:
             self.part = c.tag
             self.render(body, c)
+
+        with open(self.css_js, encoding='utf-8') as f:
+            js = f.read()
+        add.script(body, None, js)
 
         return html
 
