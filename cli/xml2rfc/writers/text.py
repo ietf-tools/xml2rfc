@@ -3220,7 +3220,7 @@ class TextWriter(BaseV3Writer):
         name = e.get('name')
         value = e.get('value')
         if name == 'Internet-Draft':
-            return value + ' (work in progress)'
+            return 'Internet Draft, ' + value
         else:
             return name + '\u00A0' + value.replace('/', '/' + '\u200B')
 

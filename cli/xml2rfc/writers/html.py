@@ -529,7 +529,6 @@ class HtmlWriter(BaseV3Writer):
                 if dest_dir:
                     dest_dir += os.sep                    
                 jsout = urljoin(dest_dir, self.options.metadata_js_url)
-                debug.show('self.options.metadata_js_url')
                 # Only write to the destination if it's a local file:
                 if jsout.startswith(dest_dir):
                     with open(jsout, 'w', encoding='utf-8') as f:
@@ -2199,7 +2198,10 @@ class HtmlWriter(BaseV3Writer):
             entry(h, name, value)
             return h
         elif self.part == 'references':
-            span = add.span(h, x, name, ' ', value, classes='seriesInfo')
+            if name == 'Internet-Draft':            
+                span = add.span(h, x, 'Internet Draft, ', value, classes='seriesInfo')
+            else:
+                span = add.span(h, x, name, ' ', value, classes='seriesInfo')
             return span
         else:
             self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
