@@ -270,6 +270,23 @@ class HtmlWriter(BaseV3Writer):
             self.log(' Created file %s' % filename)
 
 
+    def read_css(self, data_dir, fn):
+        try:
+            if urlparse(fn).scheme:
+                with closing(urlopen(fn)) as f:
+                    return f.read()
+            else:
+                for path in ['.', data_dir, ]:
+                    for ext in ['', '.css', ]:
+                        cssin = os.path.join(path, fn + ext)
+                        if os.path.exists(cssin):
+                            with open(cssin) as f:
+                                return f.read()
+        except IOError as e:
+            self.err(self.root, "Error when trying to read external css: %s" % e)
+        return None
+
+
     def render(self, h, x):
         res = None
         if x.tag in (lxml.etree.PI, lxml.etree.Comment):
@@ -481,9 +498,15 @@ class HtmlWriter(BaseV3Writer):
     #    </style>
     #    <link rel="stylesheet" type="text/css" href="rfc-local.css">
 
-        cssin  = self.options.css or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'xml2rfc.css')
-        with open(cssin, encoding='utf-8') as f:
-            css = f.read()
+        data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+        
+        css = None
+        if self.options.css:
+            css = self.read_css(data_dir, self.options.css)
+        if not css:
+            cssin = os.path.join(data_dir, 'xml2rfc.css')
+            with open(cssin, encoding='utf-8') as f:
+                css = f.read()
 
         if self.options.external_css:
             cssout = os.path.join(os.path.dirname(self.filename), 'xml2rfc.css')
@@ -592,11 +615,6 @@ class HtmlWriter(BaseV3Writer):
         for c in [ e for e in [ x.find('front'), x.find('middle'), x.find('back') ] if e != None]:
             self.part = c.tag
             self.render(body, c)
-
-        jsin  = self.options.css or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'xml2rfc.js')
-        with open(jsin, encoding='utf-8') as f:
-            js = f.read()
-        add.script(body, None, js)
 
         return html
 
