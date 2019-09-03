@@ -1,3 +1,58 @@
+xml2rfc (2.26.0) ietf; urgency=medium
+
+  * Added an alternative style sheet from Martin Thomson (reachable with
+    --css=mt) and rewrote the code to read in alternative style sheets to look
+    in more places. Also added a mt.js file to go with the mt.css file, and
+    tweaked the html renderer to load an alternative .js file if an
+    alternative .css file is set and a matching .js exists.
+
+  * Fixed an issue with nested <ul> with emtpy="true".
+
+  * Added a test, with error exit, for duplicate <displayreference> 
+    replacement terms.  Fixes issue #421.
+
+  * Changed the rendering of Internet-Draft references to follow
+    draft-flanagan-7322bis-03 (RFC Style Guide bis) more closely.
+
+  * Made the address pane for authors' addresses wider, to accomodate very 
+    long email addresses.  Changed the bottom margin for some styles used by 
+    figures in order to get the same caption placement for figures and tables.
+
+  * Removed the computed <dl><dd> text mode indentation, and replaced it 
+    with a fixed indentation of 3.
+
+  * Added an example section using <aside> to element.xml.  Updated the 
+    <xref> examples that use the section attribute.
+
+  * Updated the prepping and rendering of <xref> with section settings to
+    better handle sectionFormat="bare", and changed the handlin of the
+    metadata.js script in HTML output.
+
+  * Added a minified version of the metadata.js script, updated the help text
+    for the --external-css switch, and changed the default for the
+    --metadata-js-url switch to use the minified metadata.js file, and changed
+    the metadata_js_url setting for invocation of xml2rfc renderers as library
+    modules to use the minified metadata.js
+
+  * Updated metadata.js with a new copy received from the RFC Editor staff.
+
+  * Added a warning for mismatch between <rfc number="..."> and 
+    <seriesInfo name="RFC" value="...">.
+
+  * Modified the v2v3 conversion code to deal correctly with multiple 
+    instances of <artwork> within an unlabelled Figure.  Modified the converter 
+    to avoid some lxml-related issues under python 3.x.
+
+  * Updated XmlRfc.__init__() with a new keyword argument to set source 
+    file, needed when using the v2v3 converter as a library function (such as 
+    from id2xml in v3 mode).
+
+  * Incorporated a new updated copy of the original CSS stylesheet received 
+    from the original contractor.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  02 Sep 2019 22:01:48 +0000
+
+
 xml2rfc (2.25.0) ietf; urgency=medium
 
   This rounds up the remaining known issues raised by the RFC Editor staff.

@@ -1634,10 +1634,13 @@ class TextWriter(BaseV3Writer):
             return '\n'.join(lines).rstrip()+'\n'
         #
         def wrap(label, items, suffix=''):
-            wrapper = textwrap.TextWrapper(width=48, subsequent_indent=' '*len('%s: '%label))
+            wrapper = textwrap.TextWrapper(width=48, subsequent_indent=' '*len(label))
             line = '%s%s%s' % (label, items, suffix)
             return wrapper.wrap(line)
         #
+        def normalize(t):
+            return re.sub(r',\s*', ', ', t)
+
         def get_left(front):
             "Get front page top left column"
             #left_parts = ['source', 'seriesInfo', 'obsoletes', 'updates', 'category', 'issn', 'expires', ]
@@ -1701,10 +1704,10 @@ class TextWriter(BaseV3Writer):
                 #       may appear in future RFCs.
                 obsoletes = self.root.get('obsoletes')
                 if obsoletes:
-                    left += wrap('Obsoletes: ', obsoletes)
+                    left += wrap('Obsoletes: ', normalize(obsoletes))
                 updates = self.root.get('updates')
                 if updates:
-                    left += wrap('Updates: ', updates)
+                    left += wrap('Updates: ', normalize(updates))
                 #    Category: <category>  This indicates the initial RFC document
                 #       category of the publication.  These are defined in [RFC2026].
                 #       Currently, this is always one of: Standards Track, Best Current
@@ -1738,10 +1741,10 @@ class TextWriter(BaseV3Writer):
                 #
                 obsoletes = self.root.get('obsoletes')
                 if obsoletes:
-                    left += wrap('Obsoletes', obsoletes, ' (if approved)')
+                    left += wrap('Obsoletes: ', normalize(obsoletes), ' (if approved)')
                 updates = self.root.get('updates')
                 if updates:
-                    left += wrap('Updates', updates, ' (if approved)')
+                    left += wrap('Updates: ', normalize(updates), ' (if approved)')
                 #
                 if category:
                     if category in strings.category_name:

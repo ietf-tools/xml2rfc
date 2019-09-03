@@ -1501,11 +1501,11 @@ class HtmlWriter(BaseV3Writer):
             #   * Intended Status: <Cagegory Name>
             #   * Expires: <Date>
 
-            def entry(dl, name, value):
-                if value != None:
+            def entry(dl, name, *values):
+                if values != None:
                     cls = slugify(name)
                     dl.append( build.dt('%s:'%name, classes='label-%s'%cls))
-                    dl.append( build.dd(value, classes=cls))
+                    dl.append( build.dd(*values, classes=cls))
             #
             dl = build.dl(id='identifiers')
             h.append( build.div(dl, classes='document-information' ))
@@ -1522,6 +1522,8 @@ class HtmlWriter(BaseV3Writer):
                         alist = []
                         for num in items.split(','):
                             num = num.strip()
+                            if alist:
+                                alist[-1].tail = ', '
                             a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%num), classes='eref')
                             a.tail = ' '
                             alist.append(a)
@@ -1546,12 +1548,15 @@ class HtmlWriter(BaseV3Writer):
                 for section in ['obsoletes', 'updates']:
                     items = self.root.get(section)
                     if items:
+                        alist = []
                         for num in items.split(','):
                             num = num.strip()
+                            if alist:
+                                alist[-1].tail = ', '
                             a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%num), classes='eref')
-                            a.tail = ' '
-                            entry(dl, section.title(), a)
-                        a.tail += '(if approved)'
+                            alist.append(a)
+                        entry(dl, section.title(), *alist)
+                        a.tail = ' (if approved)'
                 # Publication date
                 entry(dl, 'Published', self.render_date(None, x.find('date')))
                 # Intended category
