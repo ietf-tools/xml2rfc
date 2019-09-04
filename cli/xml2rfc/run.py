@@ -257,14 +257,15 @@ def main():
     In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
     depends on external libaries that must be installed as native packages.
 
-    First, install the Cairo, Pango, and GDK-PixBuf library files on your
+    1. First, install the Cairo, Pango, and GDK-PixBuf library files on your
     system.  See installation instructions on the WeasyPrint Docs:
     
         https://weasyprint.readthedocs.io/en/stable/install.html
 
     (Python 3 is not needed if your system Python is 2.7, though).
 
-    Next, install the pycairo and weasyprint python modules using pip.
+
+    2. Next, install the pycairo and weasyprint python modules using pip.
     Depending on your system, you may need to use 'sudo' or install in
     user-specific directories, using the --user switch.  On OS X in
     particular, you may also need to install a newer version of setuptools
@@ -280,8 +281,19 @@ def main():
 
         pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
 
-    With these installed and available to xml2rfc, the --pdf switch will be
-    enabled.
+
+    3. Finally, install the full Noto Font package:
+
+       * Download the full font file from:
+         https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
+         or follow the 'DOWNLOAD ALL FONTS' link on this page:
+         https://www.google.com/get/noto/
+
+       * Follow the installation instructions at
+         https://www.google.com/get/noto/help/install/
+    
+    With these libraries, modules, and fonts installed and available to
+    xml2rfc, the --pdf switch will be enabled.
     """
 
     missing = ""
