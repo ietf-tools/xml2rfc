@@ -1851,7 +1851,7 @@ class PrepToolWriter(BaseV3Writer):
                 self.die(s, "No no pn entry found for section, can't continue: %s" % (etree.tostring(s)))
 
             xref = self.element('xref', target=pn, format=num_format, derivedContent=num)
-            xref.tail = ('.'+self.spacer) if num.strip() else self.spacer
+            xref.tail = ('.'+self.spacer) if num.strip() else ( self.spacer if num else '')
             t.append(xref)
             # <xref> can only contain text, not markup. so we need to reduce
             # the name content to plain text:
