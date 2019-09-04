@@ -926,10 +926,12 @@ caption a[href] {
   padding-top: 24px;
  }
 /* Float artwork pilcrow to the right */
-.artwork a.pilcrow {
-  display: block;
-  line-height: 0.7;
-  margin-top: 0.15em;
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
 }
 /* Make pilcrows on dd visible */
 @media screen {
@@ -949,3 +951,11 @@ caption a[href] {
 .alignRight {
   margin: 1em 0 0 0;
 }
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
