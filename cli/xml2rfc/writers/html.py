@@ -558,9 +558,12 @@ class HtmlWriter(BaseV3Writer):
                     dest_dir += os.sep                    
                 jsout = urljoin(dest_dir, self.options.metadata_js_url)
                 # Only write to the destination if it's a local file:
-                if jsout.startswith(dest_dir):
-                    with open(jsout, 'w', encoding='utf-8') as f:
-                        f.write(js)
+                if not urlparse(jsout).scheme and jsout.startswith(dest_dir):
+                    try:
+                        with open(jsout, 'w', encoding='utf-8') as f:
+                            f.write(js)
+                    except IOError as exception:
+                        log.warn("Could not write to %s: %s" % (jsout, e))
             # Add external script tag -- the content might be newer than the
             # JS we included above
             s = add.script(body, None, src=self.options.metadata_js_url)
