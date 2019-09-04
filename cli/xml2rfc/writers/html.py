@@ -1688,7 +1688,7 @@ class HtmlWriter(BaseV3Writer):
             s.append(h)
             #
             numbered = p.get('numbered') or ('true' if p.tag == 'references' else 'false')
-            if numbered == 'true':
+            if number and numbered == 'true':
                 if number.startswith('appendix'):
                     number = number.replace('.', ' ', 1).title()
                 elif re.search('^[a-z]', number):
