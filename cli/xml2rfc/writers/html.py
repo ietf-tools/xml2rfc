@@ -563,7 +563,7 @@ class HtmlWriter(BaseV3Writer):
                         with open(jsout, 'w', encoding='utf-8') as f:
                             f.write(js)
                     except IOError as exception:
-                        log.warn("Could not write to %s: %s" % (jsout, e))
+                        log.warn("Could not write to %s: %s" % (jsout, exception))
             # Add external script tag -- the content might be newer than the
             # JS we included above
             s = add.script(body, None, src=self.options.metadata_js_url)
