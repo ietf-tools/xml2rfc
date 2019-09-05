@@ -244,6 +244,7 @@ class TextWriter(BaseV3Writer):
         text = text.replace(u'\u00A0', u' ')
         text = text.replace(u'\u2011', u'-')
         text = text.replace(u'\u200B', u'')
+        text = text.replace(u'\u2060', u'')
         assert text == text.replace(u'\u2028', u' ')
 
         if self.errors:
@@ -1639,7 +1640,7 @@ class TextWriter(BaseV3Writer):
             return wrapper.wrap(line)
         #
         def normalize(t):
-            return re.sub(r',\s*', ', ', t)
+            return re.sub(r',\s*', ', ', t).strip(', ')
 
         def get_left(front):
             "Get front page top left column"
@@ -3223,7 +3224,10 @@ class TextWriter(BaseV3Writer):
         name = e.get('name')
         value = e.get('value')
         if name == 'Internet-Draft':
-            return 'Internet Draft, ' + value
+            if self.options.id_is_work_in_progress:
+                return 'Work in Progress' + ', ' + value
+            else:
+                return name + ', ' + value
         else:
             return name + '\u00A0' + value.replace('/', '/' + '\u200B')
 
