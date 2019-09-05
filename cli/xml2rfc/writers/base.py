@@ -47,6 +47,7 @@ default_options = Values(defaults={
         'html': False,
         'id_base_url': 'https://www.ietf.org/archive/id/',
         'id_reference_base_url': 'https://tools.ietf.org/html/',
+        'id_is_work_in_progress': False,
         'image_svg': False,
         'indent': 2,
         'info': False,

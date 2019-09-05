@@ -149,6 +149,8 @@ def main():
                            help='with --text and --html: use the v3 formatter, rather than the legacy one.')
     formatoptions.add_option('--legacy', default=True, action='store_true',
                            help='with --text and --html: use the legacy text formatter, rather than the v3 one.')
+    formatoptions.add_option('--id-is-work-in-progress', default=False, action='store_true',
+                           help='in references, refer to Internet-Drafts as "Work in Progress".')
     optionparser.add_option_group(formatoptions)
 
     textoptions = optparse.OptionGroup(optionparser, 'Text Format Options')
@@ -174,7 +176,7 @@ def main():
                            help='place css in external files')
     htmloptions.add_option('--rfc-base-url', default="https://www.rfc-editor.org/rfc/",
                            help='Base URL for RFC links')
-    htmloptions.add_option('--id-base-url', default="https://www.ietf.org/archive/id/",
+    htmloptions.add_option('--id-base-url', default="https://tools.ietf.org/html/",
                            help='Base URL for Internet-Draft links')
     htmloptions.add_option('--rfc-reference-base-url', default="https://rfc-editor.org/rfc/",
                            help='Base URL for RFC reference targets, replacing the target="..." value given in the reference entry')
