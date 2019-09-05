@@ -1135,7 +1135,7 @@ class PrepToolWriter(BaseV3Writer):
     def reference_insert_target(self, e, p):
         target_pattern = {
             "RFC":              os.path.join(self.options.rfc_base_url, 'rfc{value}'),
-            "Internet-Draft":   os.path.join(self.options.id_base_url, '{value}'),
+            "Internet-Draft":   os.path.join(self.options.id_base_url, '{value}.txt'),
             "DOI":              os.path.join(self.options.doi_base_url, '{value}'),
         }
         if not e.get('target'):
