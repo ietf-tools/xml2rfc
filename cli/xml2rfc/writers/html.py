@@ -1523,7 +1523,7 @@ class HtmlWriter(BaseV3Writer):
                     items = self.root.get(section)
                     if items:
                         alist = []
-                        for num in items.split(','):
+                        for num in filter(None, items.split(',')):
                             num = num.strip()
                             if alist:
                                 alist[-1].tail = ', '
@@ -1552,7 +1552,7 @@ class HtmlWriter(BaseV3Writer):
                     items = self.root.get(section)
                     if items:
                         alist = []
-                        for num in items.split(','):
+                        for num in filter(None, items.split(',')):
                             num = num.strip()
                             if alist:
                                 alist[-1].tail = ', '
@@ -2234,7 +2234,10 @@ class HtmlWriter(BaseV3Writer):
             return h
         elif self.part == 'references':
             if name == 'Internet-Draft':            
-                span = add.span(h, x, 'Internet Draft, ', value, classes='seriesInfo')
+                if self.options.id_is_work_in_progress:
+                    span = add.span(h, x, 'Work in Progress, ', value, classes='seriesInfo')
+                else:
+                    span = add.span(h, x, name, ', ', value, classes='seriesInfo')
             else:
                 span = add.span(h, x, name, ' ', value, classes='seriesInfo')
             return span
