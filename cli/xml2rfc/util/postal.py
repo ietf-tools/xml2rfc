@@ -53,6 +53,12 @@ def get_value(e, latin=True):
         value = e.text or ''
     return value
 
+country_alias = {
+    "UK": "United Kingdom",
+    "Republic of Korea": "Korea, Republic of",
+    "South Korea": "Korea, Republic of",
+}
+
 def get_iso_country_info(e):
     country_info = None
     ascii = e.get('ascii')
@@ -63,8 +69,8 @@ def get_iso_country_info(e):
     else:
         return None
     # Special case, this is used bu unknown to pycountry
-    if name == 'UK':
-        name = 'United Kingdom'
+    if name in country_alias:
+        name = country_alias[name]
     try:
         if hasattr(pycountry.countries, 'lookup'):
             country_info = pycountry.countries.lookup(name)
