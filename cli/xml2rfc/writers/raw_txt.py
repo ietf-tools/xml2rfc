@@ -9,7 +9,7 @@ import lxml
 import re
 
 try:
-    import debug
+    from xml2rfc import debug
     assert debug
 except ImportError:
     pass
@@ -769,7 +769,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     refstring.append(', '+seriesInfo.attrib['value'] + ' (work in progress)')
                 else:
                     refstring.append(', '+seriesInfo.attrib['name'] + u'\u00A0' +
-                                     seriesInfo.attrib['value'].replace('/', '/' + u'\u200B'))
+                                     seriesInfo.attrib['value'].replace('/', '/' + u'\uE060'))
             date = ref.find('front/date')
             if date is not None:
                 month = date.attrib.get('month', '')
@@ -858,7 +858,6 @@ class RawTextRfcWriter(BaseRfcWriter):
                 inline_text, null = \
                     self._combine_inline_elements(ttcol.getchildren())
                 text += inline_text
-            text = self.wrapper.replace(text)
             matrix[row].append(text)
 
         num_columns = len(matrix[0])
@@ -883,7 +882,6 @@ class RawTextRfcWriter(BaseRfcWriter):
                 inline_text, null = \
                     self._combine_inline_elements(cell.getchildren())
                 text += inline_text
-            text = self.wrapper.replace(text)
             matrix[row].append(text)
 
         # Get table style and determine maximum width of table
@@ -1439,6 +1437,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 line = line.replace(u'\u2011', u'-')
                 line = line.replace(u'\u200B', u'')
                 line = line.replace(u'\u2028', u' ')
+                line = line.replace(u'\u2060', u'')
+                assert line == line.replace(u'\uE060', u'')
             output.append(line);
         return output
 

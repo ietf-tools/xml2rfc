@@ -162,7 +162,7 @@ def downcode(str, replacements=None):
         replacements = unicode_replacements
 
     while True:
-        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\u2028\r\n])', str)
+        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\u2028\uE060\r\n])', str)
         if not match:
             return str
         if match.group(1) in unicode_replacements:

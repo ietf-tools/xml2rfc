@@ -63,7 +63,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def _length(self, text):
         """ Get rid of the zero width items before getting the length
         """
-        return len(re.sub(u'[\u2060|\u200B]', '', text))
+        return len(re.sub(u'[\u200B|\u2060|\uE060]', '', text))
 
     def _indent(self, amount, buf=None):
         # Writes an indent command if it differs from the last
@@ -312,6 +312,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         text = re.sub(u'\u00A0', r'\\0', text)
         text = re.sub(u'\u200B', r'\\&', text)
         text = re.sub(u'\u200B', r'\\&', text)
+        assert u'\uE060' not in text
 
         # wrapping quoting
         if flow_text:

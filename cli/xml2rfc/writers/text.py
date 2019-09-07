@@ -107,7 +107,7 @@ def fill(text, **kwargs):
     initial=' '*(first+indent)
     subsequent_indent = ' '*(indent+hang)
     if keep:
-        text = utils.urlkeep(text)
+        text = utils.urlkeep(text, max=kwargs['width'])
     result = wrapper.fill(text, initial=initial, subsequent_indent=subsequent_indent, **kwargs)
     result = result.replace('\u2028','\n')
     return result
@@ -246,6 +246,7 @@ class TextWriter(BaseV3Writer):
         text = text.replace(u'\u200B', u'')
         text = text.replace(u'\u2060', u'')
         assert text == text.replace(u'\u2028', u' ')
+        assert text == text.replace(u'\uE060', u'')
 
         if self.errors:
             log.write("Not creating output file due to errors (see above)")
@@ -3229,7 +3230,7 @@ class TextWriter(BaseV3Writer):
             else:
                 return name + ', ' + value
         else:
-            return name + '\u00A0' + value.replace('/', '/' + '\u200B')
+            return name + '\u00A0' + value.replace('/', '/' + '\uE060')
 
     # 2.48.  <sourcecode>
     # 

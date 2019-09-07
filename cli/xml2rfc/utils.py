@@ -41,8 +41,9 @@ class TextWrapper(textwrap.TextWrapper):
             u'[ \t\n\r\f\v]+|'                                  # any ASCII whitespace
             u'[^\\s-]*\\w+/(?=[A-Za-z]\\w*)|'                   # forward-slash separated words
             u'[^\\s-]*\\w+[^0-9\\s]-(?=\\w+[^0-9\\s])|'         # hyphenated words
+            u'\u200b|'                                          # &zwsp; zero-width space is breakable space
             u'''(?<=[\\w\\!"'\\&\\.\\,\\?])-{2,}(?=\\w))'''     # em-dash
-            u'(?![\u2060|\u200B])')                             # UNLESS &wj; or &zwbs; or &nbsp;
+            u'(?![\u00A0|\u2060|\uE060])')                      # UNLESS &nbsp; or &wj; 
 
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
@@ -70,12 +71,6 @@ class TextWrapper(textwrap.TextWrapper):
         # Start of next sentence regex
         self.sentence_start_re = re.compile("^[\"'([]*[A-Z]")
 
-        # XmlCharRef replacements that occur AFTER line breaking logic
-        self.post_break_replacements = {
-            u'\u2060': '',    # wj
-            u'\u200B': '',    # zwsp
-        }
-
         self.break_on_hyphens = True
 
 
@@ -100,14 +95,6 @@ class TextWrapper(textwrap.TextWrapper):
                 i += 2
             else:
                 i += 1
-
-    def replace(self, text):
-        """ Replace control entities with the proper character 
-            after breaking has occured.
-        """
-        for key, val in self.post_break_replacements.items():
-            text = re.sub(re.escape(key), val, text)
-        return text
 
     def wrap(self, text, initial='', subsequent_indent=None, width=None,
         fix_doublespace=True, fix_sentence_endings=True, drop_whitespace=True):
@@ -142,12 +129,16 @@ class TextWrapper(textwrap.TextWrapper):
         chunks = []
         max_word_len = self.width - len(self.subsequent_indent)
         for chunk in parts:
-            chunk2 = self.replace(chunk)
+            # remove zero-width characters before looking at length
+            chunk2 = re.sub('[\u200B\u200C\u2060\uE060]', '', chunk)
             if len(chunk2) > max_word_len:
-                chunk2 = chunk.replace(u'\u200B', '')
+                # No use trying not to break when we have a chunk longer
+                # than available horizontal space.  Remove wj and nbsp and
+                # try again.
+                chunk2 = re.sub('[\u2060\uE060]', '', chunk).replace('\u00A0', ' ')
                 bits = self._split(chunk2)
                 for bit in bits:
-                    chunk3 = self.replace(bit)
+                    chunk3 = re.sub('[\u2060\uE060]', '', bit).replace('\u00A0', ' ')
                     if len(chunk3) > max_word_len:
                         chunks += self._split(chunk3)
                     else:
@@ -160,6 +151,8 @@ class TextWrapper(textwrap.TextWrapper):
             self._fix_sentence_endings(chunks)
         wrapped = self._wrap_chunks(chunks)
         self.width = _width
+        for i, chunk in enumerate(wrapped):
+            wrapped[i] = chunk.replace(u'\uE060', '')
         return wrapped
 
     def fill(self, *args, **kwargs):
@@ -209,22 +202,24 @@ def ascii_split(text):
     return re.split("[ \t\n\r\f\v]+", text)
 
 
-def urlkeep(text):
+def urlkeep(text, max=72):
     """ Insert word join XML entities on forward slashes and hyphens
         in a URL so that it stays on one line
     """
-    wj_char = u'\u2060'
-    zwsp_char = u'\u200B'
+    wj_char = u'\uE060'
     def replacer(match):
-        return match.group(0).replace('/', '/' + zwsp_char) \
-                             .replace('/' + zwsp_char + '/' + zwsp_char, '/' + wj_char +'/' + wj_char) \
-                             .replace('-', '-' + wj_char) \
-                             .replace(':', ':' + wj_char)
-                             
+        url = match.group(0)
+        if len(url) > max:
+            return url
+        else:
+            return ( url.replace('/', '/' + wj_char) 
+                        .replace('-', '-' + wj_char) 
+                        .replace(':', ':' + wj_char)
+                    )
     if 'http://' in text:
-        return re.sub('(?<=http:)\S*', replacer, text)
+        text = re.sub('http:\S*', replacer, text)
     if 'https://' in text:
-        return re.sub('(?<=https:)\S*', replacer, text)
+        text = re.sub('https:\S*', replacer, text)
     return text
 
 # ----------------------------------------------------------------------
@@ -282,7 +277,7 @@ def safeTagSlashedWords(tree):
     """
     slashList = {}
     for element in _slash_replacements:
-        slashList[element] = re.sub(u'/', u'\u200B/\u200B', element)
+        slashList[element] = re.sub(u'/', u'\uE060/\uE060', element)
         
     for element in tree.iter():
         if element.text:
@@ -326,6 +321,7 @@ def _replace_unicode_characters(str):
     """ replace those Unicode characters that we do not use internally
         &wj; &zwsp; &nbsp; &nbhy;
     """
+    str = str.replace('\uE060', '\u2060')
     while True:
         match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\r\n])', str)
         if not match:

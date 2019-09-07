@@ -25,7 +25,7 @@ def arrstrip(arr):
     return arr
 
 
-def diff_test(case, valid, test, failpath):
+def diff_test(case, valid, test, failpath, format):
     """ Compare two strings.  If not equal, fail with a useful diff and save
         second string to a file.
     """
@@ -41,13 +41,13 @@ def diff_test(case, valid, test, failpath):
         fh = open(failpath, 'w')
         fh.write(test)
         fh.close()
-        case.fail("Output doesn't match, file saved to %s.\nDIFF:\n%s" % (failpath, '\n'.join(diff)))
+        case.fail("Output doesn't match for %s, file saved to %s.\nDIFF:\n%s" % (format, failpath, '\n'.join(diff)))
 
 def strip_formatting_whitespace(text):
     """ We use non-breaking space, non-breaking hyphen
         internally for formattin purposes - they need to be cleaned out
     """
-    return text.replace(u'\u00A0', ' ').replace(u'\u2011', '-')
+    return text.replace(u'\u00A0', ' ').replace(u'\u2011', '-').replace(u'\uE060', '')
 
 class XmlRfcDummy():
     """ Dummy rfc used for test fixtures """
@@ -151,7 +151,7 @@ output_format = [
     {
         "ext": "html",
         "spacefix": lambda x: x,
-        "unicodefix": lambda x: x,
+        "unicodefix": xml2rfc.utils.safeReplaceUnicode,
         "slashfix": xml2rfc.utils.safeTagSlashedWords,
         "writer": xml2rfc.HtmlRfcWriter,
         "postrendering": html_post_rendering,
@@ -211,7 +211,7 @@ class WriterElementTest(unittest.TestCase):
             slashfix(element)
             testfunc(element)
             output = postrendering('\n'.join(arrstrip(postprocessing(writer.buf))))  # Don't care about initial blank
-            diff_test(self, valid, output, validpath.replace('valid', 'failed'))
+            diff_test(self, valid, output, validpath.replace('valid', 'failed'), format['ext'])
 
     def test_references(self):
         return self.function_test('references', 'write_reference_list')
@@ -289,20 +289,20 @@ class WriterRootTest(unittest.TestCase):
     def header_footer_test(self):
         output = '\n'.join(self.writer._make_footer_and_header(1))
         output = strip_formatting_whitespace(output)
-        diff_test(self, self.valid, output, self.failpath)
+        diff_test(self, self.valid, output, self.failpath, 'txt')
 
     def top_test(self):
         self.writer.write_top(self.writer._prepare_top_left(), 
                               self.writer._prepare_top_right())
         output = '\n'.join(self.writer.buf)  # Care about initial blank
         output = strip_formatting_whitespace(output)
-        diff_test(self, self.valid, output, self.failpath)
+        diff_test(self, self.valid, output, self.failpath, 'txt')
 
     def status_test(self):
         self.writer.write_status_section()
         output = '\n'.join(arrstrip(self.writer.buf))  # Don't care about initial blank
         output = strip_formatting_whitespace(output)
-        diff_test(self, self.valid, output, self.failpath)
+        diff_test(self, self.valid, output, self.failpath, 'txt')
 
 
 class WriterDraftTest(WriterRootTest):
