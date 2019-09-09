@@ -1,3 +1,58 @@
+xml2rfc (2.27.0) ietf; urgency=medium
+
+  * Added a test for handling of &wj; and &nbsp; during text linebreaking.
+
+  * Corrected the line break handling for &wj; and &zwsp; and changed to
+    using a unicode private use code for internal "don't break" handling,
+    in order to make use of &wj; possible in the XML source input.
+
+  * Added country name aliases for South Korea.
+
+  * In text renderer: Reverted 'Internet Draft' to 'Internet-Draft' for
+    series name rendering.  Stripped empty parts from Updates: and
+    Obsoletes: lists.  Added removal of U+2060 (word joiner) before
+    emitting rendered text.
+
+  * Adjusted the preptool inserted reference target value for 
+    Internet-Drafts to include a trailing '.txt' to avoid 404s
+
+  * Added U+2060 (word joiner) to the list of code points that should not
+    trigger non-ASCII warnings
+
+  * Added an --id-is-work-in-progress switch to let the RPC automatically
+    add a <refcontent> element indicating "Work in Progress" for
+    Internet-Drafts.
+
+  * In HTML output, removed blank items from Updates and Obsoletes lists, 
+    and reverted 'Internet Draft' in reference rendering to 'Internet-Draft'.
+
+  * Added entity definitions for &wj; and &zwsp;
+
+  * Fixed pyflakes issue; a variable name mismatch.
+
+  * Updated the installation instructions emitted when --pdf is specified 
+    without having the necessary libraries in place to also include 
+    instructions for Noto font installation.
+
+  * Fixed an issue with the ToC generation where sections without numbers 
+    might still be rendered with the whitespace intended to go between number 
+    and section title.
+
+  * Fixed an issue with the HTML ToC where sections without numbers might 
+    still be rendered with the whitespace intended to go between number and 
+    section title.
+
+  * Removed pilcrows from print layout to avoid spurious extra lines for 
+    paragraphs where the pilcrow would not fit at the end of the last line.
+
+  * Fixed an insufficient test for URL vs. local file when handling the 
+    --metadata-js-url switch.
+
+  * Tweaked the CSS for print to avoid reference entries beginning on a new 
+    line, below the reference tag.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  09 Sep 2019 10:03:13 -0700
+
 xml2rfc (2.26.0) ietf; urgency=medium
 
   * Fixed a broken rendering of Obsoletes: and Updates:, broken in different 
