@@ -1155,9 +1155,13 @@ class PrepToolWriter(BaseV3Writer):
             for c in e.xpath('.//seriesInfo'):
                 series_name = c.get('name')
                 if series_name in ['Internet-Draft', ]:
-                    refcontent = self.element('refcontent')
-                    refcontent.text = "Work in Progress"
-                    e.append(refcontent)
+                    for refcontent in e.xpath('.//refcontent'):
+                        if refcontent.text == "Work in Progress":
+                            break
+                    else:
+                        refcontent = self.element('refcontent')
+                        refcontent.text = "Work in Progress"
+                        e.append(refcontent)
 
     def reference_sort_series_info(self, e, p):
         def series_order(s):
