@@ -2234,10 +2234,7 @@ class HtmlWriter(BaseV3Writer):
             return h
         elif self.part == 'references':
             if name == 'Internet-Draft':            
-                if self.options.id_is_work_in_progress:
-                    span = add.span(h, x, 'Work in Progress, ', value, classes='seriesInfo')
-                else:
-                    span = add.span(h, x, name, ', ', value, classes='seriesInfo')
+                span = add.span(h, x, name, ', ', value, classes='seriesInfo')
             else:
                 span = add.span(h, x, name, ' ', value, classes='seriesInfo')
             return span

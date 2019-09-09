@@ -114,6 +114,9 @@ tests/out/%.pages.text: tests/input/%.xml install
 tests/out/%.bom.text: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --text --v3 --strict --bom $< --out $@"
 
+tests/out/%.wip.text: tests/input/%.xml install
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --text --v3 --strict --id-is-work-in-progress $< --out $@"
+
 tests/out/%.v3.$(py).html: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --html --v3 --external --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
 
@@ -187,6 +190,8 @@ elementstest: tests/out/elements.prepped.xml.test tests/out/elements.text.test t
 
 bomtest: tests/out/elements.bom.text.test
 
+wiptest: tests/out/elements.wip.text.test
+
 cleantmp:
 	@[ -d tmp ] || mkdir -p tmp
 	@[ -d tmp ] && rm -f tmp/*
@@ -194,7 +199,7 @@ cleantmp:
 	@[ -d tests/out ] && rm -f tests/out/* && cp xml2rfc/templates/rfc2629* tests/out/
 
 
-tests: test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest
+tests: test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest wiptest
 
 noflakestests: install pytests regressiontests
 

@@ -222,6 +222,7 @@ class PrepToolWriter(BaseV3Writer):
             './/boilerplate;insert_copyright_notice()', # 5.4.2.3.  "Copyright Notice" Insertion
             './/boilerplate//section',          # 5.2.7.  Section "toc" attribute
             './/reference;insert_target()',     # 5.4.3.  <reference> "target" Insertion
+            './/reference;insert_work_in_progress()',
             './/reference;sort_series_info()',  #         <reference> sort <seriesInfo>
             './/name;insert_slugified_name()',  # 5.4.4.  <name> Slugification
             './/references;sort()',             # 5.4.5.  <reference> Sorting
@@ -1148,6 +1149,15 @@ class PrepToolWriter(BaseV3Writer):
                         break
                     else:
                         self.err(c, 'Expected a value= attribute value for <seriesInfo name="%s">, but found none' % (series_name, ))
+
+    def reference_insert_work_in_progress(self, e, p):
+        if self.options.id_is_work_in_progress:
+            for c in e.xpath('.//seriesInfo'):
+                series_name = c.get('name')
+                if series_name in ['Internet-Draft', ]:
+                    refcontent = self.element('refcontent')
+                    refcontent.text = "Work in Progress"
+                    e.append(refcontent)
 
     def reference_sort_series_info(self, e, p):
         def series_order(s):

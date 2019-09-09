@@ -3225,10 +3225,7 @@ class TextWriter(BaseV3Writer):
         name = e.get('name')
         value = e.get('value')
         if name == 'Internet-Draft':
-            if self.options.id_is_work_in_progress:
-                return 'Work in Progress' + ', ' + value
-            else:
-                return name + ', ' + value
+            return name + ', ' + value
         else:
             return name + '\u00A0' + value.replace('/', '/' + '\uE060')
 
