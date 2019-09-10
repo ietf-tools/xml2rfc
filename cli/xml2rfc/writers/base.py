@@ -45,7 +45,7 @@ default_options = Values(defaults={
         'filename': None,
         'first_page_author_org': True,
         'html': False,
-        'id_base_url': 'https://www.ietf.org/archive/id/',
+        'id_base_url': 'https://tools.ietf.org/html/',
         'id_reference_base_url': 'https://tools.ietf.org/html/',
         'id_is_work_in_progress': False,
         'image_svg': False,

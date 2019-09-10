@@ -22,10 +22,10 @@ except ImportError:
     pass
 
 if six.PY2:
-    from urlparse import urlsplit, urlunsplit, urljoin
+    from urlparse import urlsplit, urlunsplit, urljoin, urlparse
     from urllib import urlopen
 elif six.PY3:
-    from urllib.parse import urlsplit, urlunsplit, urljoin
+    from urllib.parse import urlsplit, urlunsplit, urljoin, urlparse
     from urllib.request import urlopen
 
 from lxml import etree
@@ -1136,9 +1136,14 @@ class PrepToolWriter(BaseV3Writer):
     def reference_insert_target(self, e, p):
         target_pattern = {
             "RFC":              os.path.join(self.options.rfc_base_url, 'rfc{value}'),
-            "Internet-Draft":   os.path.join(self.options.id_base_url, '{value}.txt'),
+            "Internet-Draft":   os.path.join(self.options.id_base_url,  '{value}'),
             "DOI":              os.path.join(self.options.doi_base_url, '{value}'),
         }
+        # tools.ietf.org has code to deal with draft urls (text, html, and pdf) lacking
+        # extension, but others may not.  www.ietf.org/archive/id/ only has .txt versions:
+        if urlparse(self.options.id_base_url).netloc != 'tools.ietf.org':
+            target_pattern["Internet-Draft"] = os.path.join(self.options.id_base_url,  '{value}.txt'),
+
         if not e.get('target'):
             for c in e.xpath('.//seriesInfo'):
                 series_name = c.get('name')
