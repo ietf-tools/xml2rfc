@@ -19,7 +19,8 @@ def get_initials(a):
             number = s.get('value')
             if number and number.isdigit() and int(number) <= 1272:
                 # limit to one initial for RFC 1272 and earlier
-                initials = initials.split('.')[0]
+                if initials:
+                    initials = initials.split('.')[0]
     return initials
 
 def short_author_name_parts(a):
