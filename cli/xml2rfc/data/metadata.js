@@ -1,5 +1,3 @@
-window.addEventListener('load',addMetadata);
-
 async function addMetadata() {
 
   // Copy all CSS rules for "#identifiers" to "#metadata"
@@ -8,7 +6,7 @@ async function addMetadata() {
         for (let i = 0; i < cssRules.length; i++) {
             if (/#identifiers/.exec(cssRules[i].selectorText)) {
                 const rule = cssRules[i].cssText.
-                             replace('#identifiers','#metadata');
+                             replace('#identifiers','#external-updates');
                 document.styleSheets[0].
                         insertRule(rule, document.styleSheets[0].cssRules.length);
             }
@@ -17,27 +15,52 @@ async function addMetadata() {
         console.log(e);
     }
 
+    function getMeta(metaName) {
+        const metas = document.getElementsByTagName('meta');
+
+        for (let i = 0; i < metas.length; i++) {
+            if (metas[i].getAttribute('name') === metaName) {
+                return metas[i].getAttribute('content');
+            }
+        }
+
+        return '';
+    }
+
   // Retrieve the "metadata" element from the document
-    const div = document.getElementById('metadata');
+    const div = document.getElementById('external-metadata');
     if (!div) {
         console.log("Could not locate metadata <div> element");
         return;
     }
-    div.style.background='#eee';
 
-
-  // Insert the metadata block
+  // Insert the external metadata block
   // [TODO: make this more sophisticated and linkify the values]
     try {
 
         var jsonFile;
-        if (document.URL.indexOf('html') >= 0){
-            jsonFile = document.URL.replace(/html$/,'json');
-        } else {
-            jsonFile = document.URL + '.json';
+        var metadata = '';
+        var rfcnum = getMeta('rfc.number');
+        if (rfcnum) {
+            jsonfile = 'https://rfc-editor.org/rfc/rfc'+rfcnum+'.json';
+            try {
+                const response = await fetch(jsonfile);
+                metadata = (await response.json())[0];
+            } catch(e) {
+                if (document.URL.indexOf('html') >= 0){
+                    jsonfile = document.URL.replace(/html$/,'json');
+                } else {
+                    jsonfile = document.URL + '.json';
+                }
+                const response = await fetch(jsonfile);
+                metadata = (await response.json())[0];
+            }
         }
-        const response = await fetch(jsonFile);
-        const metadata = (await response.json())[0];
+        if (! metadata) {
+            return;
+        } 
+        div.style.display = 'block';
+        
     //const base_url = 'https//www.rfc-editor.org';
         const base_url = '';
         const datatracker_base= 'https://datatracker.ietf.org/doc';
@@ -60,7 +83,7 @@ async function addMetadata() {
             'errata_url': 'Errata',
         };
 
-        let metadataHTML = "<dl style='overflow:hidden'>";
+        let metadataHTML = "<dl style='overflow:hidden' id='external-updates'>";
         ['status', 'obsoletes', 'obsoleted_by', 'updates',
          'updated_by', 'see_also', 'errata_url'].forEach(key => {
       //if (metadata[key]){
@@ -157,3 +180,5 @@ async function addMetadata() {
     }
 
 }
+window.removeEventListener('load', addMetadata);
+window.addEventListener('load',addMetadata);

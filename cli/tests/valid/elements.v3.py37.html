@@ -1,336 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="Cherokee,Common,Greek,Han,Hebrew,Latin" name="scripts">
-<meta content="initial-scale=1.0" name="viewport">
-<title>Xml2rfc Vocabulary V3 Elements Combined</title>
-<meta content="An Author" name="author">
-<meta content="רוני אבן (Roni Even)" name="author">
-<meta content="田中花子 様 (Hanako Tanaka)" name="author">
-<meta content="xml2rfc 2.27.0" name="generator">
-<link href="tests/input/elements.xml" rel="alternate" type="application/rfc+xml">
-<link href="#copyright" rel="license">
-<link href="xml2rfc.css" rel="stylesheet" type="text/css">
-<link href="rfc-local.css" rel="stylesheet" type="text/css">
+   <meta charset="utf-8">
+   <meta content="Cherokee,Common,Greek,Han,Hebrew,Latin" name="scripts">
+   <meta content="initial-scale=1.0" name="viewport">
+   <title>Xml2rfc Vocabulary V3 Elements Combined</title>
+   <meta content="An Author" name="author">
+   <meta content="רוני אבן (Roni Even)" name="author">
+   <meta content="田中花子 様 (Hanako Tanaka)" name="author">
+   <meta content="xml2rfc 2.27.0" name="generator">
+   <link href="tests/input/elements.xml" rel="alternate" type="application/rfc+xml">
+   <link href="#copyright" rel="license">
+   <link href="xml2rfc.css" rel="stylesheet" type="text/css">
+   <link href="rfc-local.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <script>
-async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#metadata");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("metadata");if(e){e.style.background="#eee";try{var t;t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t),s=(await o.json())[0],r="",d="https://datatracker.ietf.org/doc",l="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",n=s.doc_id.toLowerCase(),i=s.doc_id.slice(0,3).toLowerCase(),f=s.doc_id.slice(3).replace(/^0+/,""),h={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let u="<dl style='overflow:hidden'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){s[e]=s[e].toLowerCase();var t=s[e].split(" ");sLen=t.length;var o="",p=1;for(let e=0;e<sLen;e++)p<sLen?o=o+a(t[e])+" ":o+=a(t[e]),p++;s[e]=o}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var b,g="",y=1;b=s[e].length;for(let t=0;t<b;t++)s[e][t]&&(s[e][t]=String(s[e][t]).toLowerCase(),g=y<b?g+"<a href='"+r+"/rfc/".concat(s[e][t])+"'>"+s[e][t].slice(3)+"</a>, ":g+"<a href='"+r+"/rfc/".concat(s[e][t])+"'>"+s[e][t].slice(3)+"</a>",y++);s[e]=g}else if("see_also"==e){var m,w="",L=1;m=s[e].length;for(let t=0;t<m;t++)if(s[e][t]){s[e][t]=String(s[e][t]);var _=s[e][t].slice(0,3),v=s[e][t].slice(3).replace(/^0+/,"");w=L<m?w+"<a href='"+r+"/"+_.toLowerCase()+"/".concat(v.toLowierCase())+"'>"+_+" "+v+"</a>, ":w+"<a href='"+r+"/"+_.toLowerCase()+"/".concat(v.toLowerCase())+"'>"+_+" "+v+"</a>",L++}s[e]=w}else if("errata_url"==e){var C="";C=s[e]?C+"<a href='"+s[e]+"'>Errata exist</a>, <a href='"+d+"/"+n+"'>Datatracker</a>, <a href='"+l+"/?"+i+"="+f+"&submit="+i+"'>IPR</a>, <a href='"+c+"/"+n+"'>Info page</a>":"<a href='"+d+"/"+n+"'>Datatracker</a>, <a href='"+l+"/?"+i+"="+f+"&submit="+i+"'>IPR</a>, <a href='"+c+"/"+n+"'>Info page</a>",s[e]=C}""!=s[e]?"Errata"==h[e]?u+=`<dt>More info:</dt><dd>${s[e]}</dd>`:u+=`<dt>${h[e]}:</dt><dd>${s[e]}</dd>`:"Errata"==h[e]&&(u+=`<dt>More info:</dt><dd>${s[e]}</dd>`)}),u+="</dl>",e.innerHTML=u}catch(e){console.log(e)}}else console.log("Could not locate metadata <div> element");function a(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.addEventListener("load",addMetadata);</script>
+   async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#metadata");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("metadata");if(e){e.style.background="#eee";try{var t;t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t),s=(await o.json())[0],r="",d="https://datatracker.ietf.org/doc",l="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",n=s.doc_id.toLowerCase(),i=s.doc_id.slice(0,3).toLowerCase(),f=s.doc_id.slice(3).replace(/^0+/,""),h={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let u="<dl style='overflow:hidden'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){s[e]=s[e].toLowerCase();var t=s[e].split(" ");sLen=t.length;var o="",p=1;for(let e=0;e<sLen;e++)p<sLen?o=o+a(t[e])+" ":o+=a(t[e]),p++;s[e]=o}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var b,g="",y=1;b=s[e].length;for(let t=0;t<b;t++)s[e][t]&&(s[e][t]=String(s[e][t]).toLowerCase(),g=y<b?g+"<a href='"+r+"/rfc/".concat(s[e][t])+"'>"+s[e][t].slice(3)+"</a>, ":g+"<a href='"+r+"/rfc/".concat(s[e][t])+"'>"+s[e][t].slice(3)+"</a>",y++);s[e]=g}else if("see_also"==e){var m,w="",L=1;m=s[e].length;for(let t=0;t<m;t++)if(s[e][t]){s[e][t]=String(s[e][t]);var _=s[e][t].slice(0,3),v=s[e][t].slice(3).replace(/^0+/,"");w=L<m?w+"<a href='"+r+"/"+_.toLowerCase()+"/".concat(v.toLowierCase())+"'>"+_+" "+v+"</a>, ":w+"<a href='"+r+"/"+_.toLowerCase()+"/".concat(v.toLowerCase())+"'>"+_+" "+v+"</a>",L++}s[e]=w}else if("errata_url"==e){var C="";C=s[e]?C+"<a href='"+s[e]+"'>Errata exist</a>, <a href='"+d+"/"+n+"'>Datatracker</a>, <a href='"+l+"/?"+i+"="+f+"&submit="+i+"'>IPR</a>, <a href='"+c+"/"+n+"'>Info page</a>":"<a href='"+d+"/"+n+"'>Datatracker</a>, <a href='"+l+"/?"+i+"="+f+"&submit="+i+"'>IPR</a>, <a href='"+c+"/"+n+"'>Info page</a>",s[e]=C}""!=s[e]?"Errata"==h[e]?u+=`<dt>More info:</dt><dd>${s[e]}</dd>`:u+=`<dt>${h[e]}:</dt><dd>${s[e]}</dd>`:"Errata"==h[e]&&(u+=`<dt>More info:</dt><dd>${s[e]}</dd>`)}),u+="</dl>",e.innerHTML=u}catch(e){console.log(e)}}else console.log("Could not locate metadata <div> element");function a(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.addEventListener("load",addMetadata);</script>
 <script src="metadata.min.js"></script>
 <table class="ears">
-<thead><tr>
-<td class="left">Internet-Draft</td>
-<td class="center">Xml2rfc Vocabulary V3 Elements Combined</td>
-<td class="right">July 2018</td>
-</tr></thead>
-<tfoot><tr>
-<td class="left">Author, et al.</td>
-<td class="center">Expires January 13, 2019</td>
-<td class="right">[Page]</td>
-</tr></tfoot>
+   <thead><tr>
+      <td class="left">Internet-Draft</td>
+      <td class="center">Xml2rfc Vocabulary V3 Elements Combined</td>
+      <td class="right">July 2018</td>
+      </tr></thead>
+   <tfoot><tr>
+      <td class="left">Author, et al.</td>
+      <td class="center">Expires January 13, 2019</td>
+      <td class="right">[Page]</td>
+      </tr></tfoot>
 </table>
+
 <div class="document-information">
-<dl id="identifiers">
-<dt class="label-obsoletes">Obsoletes:</dt>
-<dd class="obsoletes">
-<a href="https://www.rfc-editor.org/rfc/rfc1234" class="eref">1234</a>, <a href="https://www.rfc-editor.org/rfc/rfc5678" class="eref">5678</a>, <a href="https://www.rfc-editor.org/rfc/rfc9012" class="eref">9012</a>, <a href="https://www.rfc-editor.org/rfc/rfc3456" class="eref">3456</a>, <a href="https://www.rfc-editor.org/rfc/rfc7890" class="eref">7890</a> (if approved)</dd>
-<dt class="label-published">Published:</dt>
-<dd class="published">
-<time datetime="2018-07-12" class="published">July 12, 2018</time>
-    </dd>
-<dt class="label-intended-status">Intended Status:</dt>
-<dd class="intended-status">Informational</dd>
-<dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2019-01-13">January 13, 2019</time></dd>
-<dt class="label-authors">Authors:</dt>
-<dd class="authors">
-<div class="author">
-      <div class="author-name">A. Author</div>
-</div>
-<div class="author">
-      <div class="author-name">
-<span class="non-ascii">ר. אבן</span> (<span class="ascii">R. Even</span>)</div>
-<div class="org">
-<span class="non-ascii">וואווי</span> (<span class="ascii">Huawei</span>)</div>
-</div>
-<div class="author">
-      <div class="author-name">
-<span class="non-ascii">田. 様</span> (<span class="ascii">H. Tanaka</span>)</div>
-</div>
-</dd>
-</dl>
+   <dl id="identifiers">
+      <dt class="label-obsoletes">Obsoletes:</dt>
+      <dd class="obsoletes">
+         <a href="https://www.rfc-editor.org/rfc/rfc1234" class="eref">1234</a>, <a href="https://www.rfc-editor.org/rfc/rfc5678" class="eref">5678</a>, <a href="https://www.rfc-editor.org/rfc/rfc9012" class="eref">9012</a>, <a href="https://www.rfc-editor.org/rfc/rfc3456" class="eref">3456</a>, <a href="https://www.rfc-editor.org/rfc/rfc7890" class="eref">7890</a> (if approved)</dd>
+      <dt class="label-published">Published:</dt>
+      <dd class="published">
+         <time datetime="2018-07-12" class="published">July 12, 2018</time>
+      </dd>
+      <dt class="label-intended-status">Intended Status:</dt>
+      <dd class="intended-status">Informational</dd>
+      <dt class="label-expires">Expires:</dt>
+      <dd class="expires"><time datetime="2019-01-13">January 13, 2019</time></dd>
+      <dt class="label-authors">Authors:</dt>
+      <dd class="authors">
+         <div class="author">
+            <div class="author-name">A. Author</div>
+         </div>
+         <div class="author">
+            <div class="author-name">
+               <span class="non-ascii">ר. אבן</span> (<span class="ascii">R. Even</span>)</div>
+            <div class="org">
+               <span class="non-ascii">וואווי</span> (<span class="ascii">Huawei</span>)</div>
+         </div>
+         <div class="author">
+            <div class="author-name">
+               <span class="non-ascii">田. 様</span> (<span class="ascii">H. Tanaka</span>)</div>
+         </div>
+      </dd>
+   </dl>
 </div>
 <h1 id="title">Xml2rfc Vocabulary V3 Elements Combined</h1>
 <div id="status-of-memo">
-<section id="section-boilerplate.1">
-        <h2 id="name-status-of-this-memo">
-<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
-        </h2>
-<p id="section-boilerplate.1-1">
-        This Internet-Draft is submitted in full conformance with the
-        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
-<p id="section-boilerplate.1-2">
-        Internet-Drafts are working documents of the Internet Engineering Task
-        Force (IETF). Note that other groups may also distribute working
-        documents as Internet-Drafts. The list of current Internet-Drafts is
-        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
-<p id="section-boilerplate.1-3">
-        Internet-Drafts are draft documents valid for a maximum of six months
-        and may be updated, replaced, or obsoleted by other documents at any
-        time. It is inappropriate to use Internet-Drafts as reference
-        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
-<p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 January 2019.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
-</section>
+   <section id="section-boilerplate.1">
+      <h2 id="name-status-of-this-memo">
+         <a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+      </h2>
+      <p id="section-boilerplate.1-1">
+         This Internet-Draft is submitted in full conformance with the
+         provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+      <p id="section-boilerplate.1-2">
+         Internet-Drafts are working documents of the Internet Engineering Task
+         Force (IETF). Note that other groups may also distribute working
+         documents as Internet-Drafts. The list of current Internet-Drafts is
+         at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+      <p id="section-boilerplate.1-3">
+         Internet-Drafts are draft documents valid for a maximum of six months
+         and may be updated, replaced, or obsoleted by other documents at any
+         time. It is inappropriate to use Internet-Drafts as reference
+         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+      <p id="section-boilerplate.1-4">
+         This Internet-Draft will expire on 13 January 2019.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+   </section>
 </div>
 <div id="copyright">
-<section id="section-boilerplate.2">
-        <h2 id="name-copyright-notice">
-<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
-        </h2>
-<p id="section-boilerplate.2-1">
-            Copyright (c) 2018 IETF Trust and the persons identified as the
-            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
-<p id="section-boilerplate.2-2">
-            This document is subject to BCP 78 and the IETF Trust's Legal
-            Provisions Relating to IETF Documents
-            (https://trustee.ietf.org/license-info) in effect on the date of
-            publication of this document. Please review these documents
-            carefully, as they describe your rights and restrictions with
-            respect to this document.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
-</section>
+   <section id="section-boilerplate.2">
+      <h2 id="name-copyright-notice">
+         <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+      </h2>
+      <p id="section-boilerplate.2-1">
+         Copyright (c) 2018 IETF Trust and the persons identified as the
+         document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+      <p id="section-boilerplate.2-2">
+         This document is subject to BCP 78 and the IETF Trust's Legal
+         Provisions Relating to IETF Documents
+         (https://trustee.ietf.org/license-info) in effect on the date of
+         publication of this document. Please review these documents
+         carefully, as they describe your rights and restrictions with
+         respect to this document.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+   </section>
 </div>
 <div id="toc">
-<section id="section-boilerplate.3">
-        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
-<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
-        </h2>
-<nav class="toc"><ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-boilerplate.3-1.1">
+   <section id="section-boilerplate.3">
+      <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+         <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+      </h2>
+      <nav class="toc"><ul class="toc ulEmpty">
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.1">
             <p id="section-boilerplate.3-1.1.1"><a href="#section-1" class="xref">1</a>.  <a href="#name-rfc-2119-key-words" class="xref">RFC 2119 key words</a><a href="#section-boilerplate.3-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.2">
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.2">
             <p id="section-boilerplate.3-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-citations" class="xref">Citations</a><a href="#section-boilerplate.3-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.3">
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.3">
             <p id="section-boilerplate.3-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-unordered-list-with-sub-ele" class="xref">Unordered list with sub-elements</a><a href="#section-boilerplate.3-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.4">
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.4">
             <p id="section-boilerplate.3-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-ordered-list-with-sub-eleme" class="xref">Ordered list with sub-elements</a><a href="#section-boilerplate.3-1.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.5">
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.5">
             <p id="section-boilerplate.3-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-definition-list-with-sub-el" class="xref">Definition list with sub-elements</a><a href="#section-boilerplate.3-1.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.6">
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.6">
             <p id="section-boilerplate.3-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-table" class="xref">Table</a><a href="#section-boilerplate.3-1.6.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.7">
-            <p id="section-boilerplate.3-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-unicode-literals" class="xref">Unicode Literals</a><a href="#section-boilerplate.3-1.7.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-boilerplate.3-1.7.2.1">
-                <p id="section-boilerplate.3-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-single-characters" class="xref">Single Characters</a><a href="#section-boilerplate.3-1.7.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="toc ulEmpty" id="section-boilerplate.3-1.7.2.2">
-                <p id="section-boilerplate.3-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-character-strings" class="xref">Character Strings</a><a href="#section-boilerplate.3-1.7.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.8">
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.7">
+         <p id="section-boilerplate.3-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-unicode-literals" class="xref">Unicode Literals</a><a href="#section-boilerplate.3-1.7.1" class="pilcrow">¶</a></p>
+         <ul class="toc ulEmpty">
+            <li class="toc ulEmpty" id="section-boilerplate.3-1.7.2.1">
+               <p id="section-boilerplate.3-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-single-characters" class="xref">Single Characters</a><a href="#section-boilerplate.3-1.7.2.1.1" class="pilcrow">¶</a></p>
+            </li>
+            <li class="toc ulEmpty" id="section-boilerplate.3-1.7.2.2">
+               <p id="section-boilerplate.3-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-character-strings" class="xref">Character Strings</a><a href="#section-boilerplate.3-1.7.2.2.1" class="pilcrow">¶</a></p>
+            </li>
+         </ul>
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.8">
             <p id="section-boilerplate.3-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-irregular-date-specificatio" class="xref">Irregular date specifications</a><a href="#section-boilerplate.3-1.8.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.9">
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.9">
             <p id="section-boilerplate.3-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-aside-and-word-joiner" class="xref">Aside and Word Joiner</a><a href="#section-boilerplate.3-1.9.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.10">
-            <p id="section-boilerplate.3-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-references" class="xref">References</a><a href="#section-boilerplate.3-1.10.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.1">
-                <p id="section-boilerplate.3-1.10.2.1.1"><a href="#section-10.1" class="xref">10.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-boilerplate.3-1.10.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2">
-                <p id="section-boilerplate.3-1.10.2.2.1"><a href="#section-10.2" class="xref">10.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-boilerplate.3-1.10.2.2.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2.2.1">
-                    <p id="section-boilerplate.3-1.10.2.2.2.1.1"><a href="#section-10.2.1" class="xref">10.2.1</a>.  <a href="#name-cms-references" class="xref">CMS References</a><a href="#section-boilerplate.3-1.10.2.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2.2.2">
-                    <p id="section-boilerplate.3-1.10.2.2.2.2.1"><a href="#section-10.2.2" class="xref">10.2.2</a>.  <a href="#name-ess-references" class="xref">ESS References</a><a href="#section-boilerplate.3-1.10.2.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2.2.3">
-                    <p id="section-boilerplate.3-1.10.2.2.2.3.1"><a href="#section-10.2.3" class="xref">10.2.3</a>.  <a href="#name-mime-spec-references" class="xref">MIME-SPEC References</a><a href="#section-boilerplate.3-1.10.2.2.2.3.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2.2.4">
-                    <p id="section-boilerplate.3-1.10.2.2.2.4.1"><a href="#section-10.2.4" class="xref">10.2.4</a>.  <a href="#name-other-references" class="xref">Other References</a><a href="#section-boilerplate.3-1.10.2.2.2.4.1" class="pilcrow">¶</a></p>
-</li>
-                </ul>
-</li>
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.10">
+         <p id="section-boilerplate.3-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-references" class="xref">References</a><a href="#section-boilerplate.3-1.10.1" class="pilcrow">¶</a></p>
+         <ul class="toc ulEmpty">
+            <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.1">
+               <p id="section-boilerplate.3-1.10.2.1.1"><a href="#section-10.1" class="xref">10.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-boilerplate.3-1.10.2.1.1" class="pilcrow">¶</a></p>
+            </li>
+            <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2">
+            <p id="section-boilerplate.3-1.10.2.2.1"><a href="#section-10.2" class="xref">10.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-boilerplate.3-1.10.2.2.1" class="pilcrow">¶</a></p>
+            <ul class="toc ulEmpty">
+               <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2.2.1">
+                  <p id="section-boilerplate.3-1.10.2.2.2.1.1"><a href="#section-10.2.1" class="xref">10.2.1</a>.  <a href="#name-cms-references" class="xref">CMS References</a><a href="#section-boilerplate.3-1.10.2.2.2.1.1" class="pilcrow">¶</a></p>
+               </li>
+               <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2.2.2">
+                  <p id="section-boilerplate.3-1.10.2.2.2.2.1"><a href="#section-10.2.2" class="xref">10.2.2</a>.  <a href="#name-ess-references" class="xref">ESS References</a><a href="#section-boilerplate.3-1.10.2.2.2.2.1" class="pilcrow">¶</a></p>
+               </li>
+               <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2.2.3">
+                  <p id="section-boilerplate.3-1.10.2.2.2.3.1"><a href="#section-10.2.3" class="xref">10.2.3</a>.  <a href="#name-mime-spec-references" class="xref">MIME-SPEC References</a><a href="#section-boilerplate.3-1.10.2.2.2.3.1" class="pilcrow">¶</a></p>
+               </li>
+               <li class="toc ulEmpty" id="section-boilerplate.3-1.10.2.2.2.4">
+                  <p id="section-boilerplate.3-1.10.2.2.2.4.1"><a href="#section-10.2.4" class="xref">10.2.4</a>.  <a href="#name-other-references" class="xref">Other References</a><a href="#section-boilerplate.3-1.10.2.2.2.4.1" class="pilcrow">¶</a></p>
+               </li>
             </ul>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.11">
+            </li>
+         </ul>
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.11">
             <p id="section-boilerplate.3-1.11.1"><a href="#section-appendix.a" class="xref">Appendix A</a>.  <a href="#name-some-back-matter" class="xref">Some Back Matter</a><a href="#section-boilerplate.3-1.11.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc ulEmpty" id="section-boilerplate.3-1.12">
+         </li>
+         <li class="toc ulEmpty" id="section-boilerplate.3-1.12">
             <p id="section-boilerplate.3-1.12.1"><a href="#section-appendix.b" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-boilerplate.3-1.12.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</nav>
-</section>
+         </li>
+         </ul>
+      </nav>
+   </section>
 </div>
 <section id="section-1">
-      <h2 id="name-rfc-2119-key-words">
-<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-rfc-2119-key-words" class="section-name selfRef">RFC 2119 key words</a>
-      </h2>
-<p id="section-1-1">
-           The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>",
-           "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>",
-           "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>",
-           "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>", "<span class="bcp14">MAY</span>",
-           and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as described in
-           BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when, they
-           appear in all capitals, as shown here.<a href="#section-1-1" class="pilcrow">¶</a></p>
+   <h2 id="name-rfc-2119-key-words">
+      <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-rfc-2119-key-words" class="section-name selfRef">RFC 2119 key words</a>
+   </h2>
+   <p id="section-1-1">
+      The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>",
+      "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>",
+      "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>",
+      "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>", "<span class="bcp14">MAY</span>",
+      and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as described in
+      BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when, they
+      appear in all capitals, as shown here.<a href="#section-1-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-2">
-      <h2 id="name-citations">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-citations" class="section-name selfRef">Citations</a>
-      </h2>
-<p id="section-2-1">
+   <h2 id="name-citations">
+      <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-citations" class="section-name selfRef">Citations</a>
+   </h2>
+   <p id="section-2-1">
 
-            This section contains a bunch of citations, in order to test citation formats and also
-            
-            in order to refer to each of the entries in
-            the <a href="#references-section" class="xref">Section 10</a>.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2"> Citations of References:<a href="#section-2-2" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-2-3.1">
-               Text and format="default": <span><a href="#RFC7997" class="xref">Text</a> [<a href="#RFC7997" class="xref">RFC7997</a>]</span><a href="#section-2-3.1" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-3.2">
-               Text and format="title": <span><a href="#RFC8174" class="xref">Text</a> [<a href="#RFC8174" class="xref">Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</a>]</span><a href="#section-2-3.2" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-3.3">
-               Text and format="counter": Not supported<a href="#section-2-3.3" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-3.4">
-               Text and format="none": <a href="#RFC5083" class="xref">Text</a><a href="#section-2-3.4" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-2-4"> Citations of multiple Sections in References, using sectionFormat="bare":<a href="#section-2-4" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-2-5.1">
-               No text and no format attribute: Sections
-               <a href="https://rfc-editor.org/rfc/rfc7997#section-3.2" class="relref">3.2</a> and 
-               <a href="https://rfc-editor.org/rfc/rfc7997#section-3.3" class="relref">3.3</a> of
-               <span>[<a href="#RFC7997" class="xref">RFC7997</a>]</span>.<a href="#section-2-5.1" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-5.2">
-               No text and format="default": Sections
-               <a href="https://rfc-editor.org/rfc/rfc7997#section-3.2" class="relref">3.2</a> and 
-               <a href="https://rfc-editor.org/rfc/rfc7997#section-3.3" class="relref">3.3</a> of
-               <span>[<a href="#RFC7997" class="xref">RFC7997</a>]</span>.<a href="#section-2-5.2" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-5.3">
-               No text and format="title": Not meaningful<a href="#section-2-5.3" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-5.4">
-               No text and format="counter": Not meaningful<a href="#section-2-5.4" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-5.5">
-               No text and format="none": Not meaningful<a href="#section-2-5.5" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-2-6"> Citations of multiple Sections in References, using text and sectionFormat="bare":<a href="#section-2-6" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-2-7.1">
-               Text and format="default": Sections
-               <span><a href="https://rfc-editor.org/rfc/rfc7997#section-3.2" class="relref">3.2</a> (<a href="https://rfc-editor.org/rfc/rfc7997#section-3.2" class="relref">Person Names</a>)</span> and 
-               <span><a href="https://rfc-editor.org/rfc/rfc7997#section-3.3" class="relref">3.3</a> (<a href="https://rfc-editor.org/rfc/rfc7997#section-3.3" class="relref">Company Names</a>)</span> of
-               <span>[<a href="#RFC7997" class="xref">RFC7997</a>]</span>.<a href="#section-2-7.1" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-7.2">
-               Text and format="title": Not meaningful<a href="#section-2-7.2" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-7.3">
-               Text and format="counter": Not meaningful<a href="#section-2-7.3" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-7.4">
-               Text and format="none": Not meaningful<a href="#section-2-7.4" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-2-8"> References to Sections, with explicit text:<a href="#section-2-8" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-2-9.1">
-               Text and format="default": <span><a href="#ul-with-subelements" class="xref">Text</a> (<a href="#ul-with-subelements" class="xref">Section 3</a>)</span><a href="#section-2-9.1" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-9.2">
-               Text and format="title": <span><a href="#ul-with-subelements" class="xref">Text</a> (<a href="#ul-with-subelements" class="xref">Unordered list with sub-elements</a>)</span><a href="#section-2-9.2" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-9.3">
-               Text and format="counter": <span><a href="#ul-with-subelements" class="xref">Text</a> (<a href="#ul-with-subelements" class="xref">3</a>)</span><a href="#section-2-9.3" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-9.4">
-               Text and format="none": <a href="#ul-with-subelements" class="xref">Text</a><a href="#section-2-9.4" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-2-10"> References to Sections:<a href="#section-2-10" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-2-11.1">
-               Format="default": <a href="#ul-with-subelements" class="xref">Section 3</a><a href="#section-2-11.1" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-11.2">
-               Format="title": <a href="#ul-with-subelements" class="xref">Unordered list with sub-elements</a><a href="#section-2-11.2" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-11.3">
-               Format="counter": <a href="#ul-with-subelements" class="xref">3</a><a href="#section-2-11.3" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-11.4">
-               Format="none": <a href="#ul-with-subelements" class="xref"></a><a href="#section-2-11.4" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-2-12"> References to Appendix:<a href="#section-2-12" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-2-13.1">
-               Format="default": <a href="#back-matter" class="xref">Appendix A</a><a href="#section-2-13.1" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-13.2">
-               Format="title": <a href="#back-matter" class="xref">Some Back Matter</a><a href="#section-2-13.2" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-13.3">
-               Format="counter": <a href="#back-matter" class="xref">A</a><a href="#section-2-13.3" class="pilcrow">¶</a>
-</li>
-        <li id="section-2-13.4">
-               Format="none": <a href="#back-matter" class="xref"></a><a href="#section-2-13.4" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-2-14">
-            These references should be present:
-            <span>[<a href="#RFC5652" class="xref">RFC5652</a>]</span>
-        <span>[<a href="#RFC2634" class="xref">RFC2634</a>]</span>
-        <span>[<a href="#RFC5035" class="xref">RFC5035</a>]</span>
-        <span>[<a href="#RFC2045" class="xref">RFC2045</a>]</span>
-        <span>[<a href="#RFC2046" class="xref">RFC2046</a>]</span>
-        <span>[<a href="#RFC2047" class="xref">RFC2047</a>]</span>
-        <span>[<a href="#RFC2049" class="xref">RFC2049</a>]</span>
-        <span>[<a href="#RFC4289" class="xref">RFC4289</a>]</span>
-        <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span><a href="#section-2-14" class="pilcrow">¶</a></p>
+      This section contains a bunch of citations, in order to test citation formats and also
+
+      in order to refer to each of the entries in
+      the <a href="#references-section" class="xref">Section 10</a>.<a href="#section-2-1" class="pilcrow">¶</a></p>
+   <p id="section-2-2"> Citations of References:<a href="#section-2-2" class="pilcrow">¶</a></p>
+   <ul>
+      <li id="section-2-3.1">
+         Text and format="default": <span><a href="#RFC7997" class="xref">Text</a> [<a href="#RFC7997" class="xref">RFC7997</a>]</span><a href="#section-2-3.1" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-3.2">
+         Text and format="title": <span><a href="#RFC8174" class="xref">Text</a> [<a href="#RFC8174" class="xref">Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</a>]</span><a href="#section-2-3.2" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-3.3">
+         Text and format="counter": Not supported<a href="#section-2-3.3" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-3.4">
+         Text and format="none": <a href="#RFC5083" class="xref">Text</a><a href="#section-2-3.4" class="pilcrow">¶</a>
+      </li>
+   </ul>
+   <p id="section-2-4"> Citations of multiple Sections in References, using sectionFormat="bare":<a href="#section-2-4" class="pilcrow">¶</a></p>
+   <ul>
+      <li id="section-2-5.1">
+         No text and no format attribute: Sections
+         <a href="https://rfc-editor.org/rfc/rfc7997#section-3.2" class="relref">3.2</a> and 
+         <a href="https://rfc-editor.org/rfc/rfc7997#section-3.3" class="relref">3.3</a> of
+         <span>[<a href="#RFC7997" class="xref">RFC7997</a>]</span>.<a href="#section-2-5.1" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-5.2">
+         No text and format="default": Sections
+         <a href="https://rfc-editor.org/rfc/rfc7997#section-3.2" class="relref">3.2</a> and 
+         <a href="https://rfc-editor.org/rfc/rfc7997#section-3.3" class="relref">3.3</a> of
+         <span>[<a href="#RFC7997" class="xref">RFC7997</a>]</span>.<a href="#section-2-5.2" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-5.3">
+         No text and format="title": Not meaningful<a href="#section-2-5.3" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-5.4">
+         No text and format="counter": Not meaningful<a href="#section-2-5.4" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-5.5">
+         No text and format="none": Not meaningful<a href="#section-2-5.5" class="pilcrow">¶</a>
+      </li>
+   </ul>
+   <p id="section-2-6"> Citations of multiple Sections in References, using text and sectionFormat="bare":<a href="#section-2-6" class="pilcrow">¶</a></p>
+   <ul>
+      <li id="section-2-7.1">
+         Text and format="default": Sections
+         <span><a href="https://rfc-editor.org/rfc/rfc7997#section-3.2" class="relref">3.2</a> (<a href="https://rfc-editor.org/rfc/rfc7997#section-3.2" class="relref">Person Names</a>)</span> and 
+         <span><a href="https://rfc-editor.org/rfc/rfc7997#section-3.3" class="relref">3.3</a> (<a href="https://rfc-editor.org/rfc/rfc7997#section-3.3" class="relref">Company Names</a>)</span> of
+         <span>[<a href="#RFC7997" class="xref">RFC7997</a>]</span>.<a href="#section-2-7.1" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-7.2">
+         Text and format="title": Not meaningful<a href="#section-2-7.2" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-7.3">
+         Text and format="counter": Not meaningful<a href="#section-2-7.3" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-7.4">
+         Text and format="none": Not meaningful<a href="#section-2-7.4" class="pilcrow">¶</a>
+      </li>
+   </ul>
+   <p id="section-2-8"> References to Sections, with explicit text:<a href="#section-2-8" class="pilcrow">¶</a></p>
+   <ul>
+      <li id="section-2-9.1">
+         Text and format="default": <span><a href="#ul-with-subelements" class="xref">Text</a> (<a href="#ul-with-subelements" class="xref">Section 3</a>)</span><a href="#section-2-9.1" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-9.2">
+         Text and format="title": <span><a href="#ul-with-subelements" class="xref">Text</a> (<a href="#ul-with-subelements" class="xref">Unordered list with sub-elements</a>)</span><a href="#section-2-9.2" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-9.3">
+         Text and format="counter": <span><a href="#ul-with-subelements" class="xref">Text</a> (<a href="#ul-with-subelements" class="xref">3</a>)</span><a href="#section-2-9.3" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-9.4">
+         Text and format="none": <a href="#ul-with-subelements" class="xref">Text</a><a href="#section-2-9.4" class="pilcrow">¶</a>
+      </li>
+   </ul>
+   <p id="section-2-10"> References to Sections:<a href="#section-2-10" class="pilcrow">¶</a></p>
+   <ul>
+      <li id="section-2-11.1">
+         Format="default": <a href="#ul-with-subelements" class="xref">Section 3</a><a href="#section-2-11.1" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-11.2">
+         Format="title": <a href="#ul-with-subelements" class="xref">Unordered list with sub-elements</a><a href="#section-2-11.2" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-11.3">
+         Format="counter": <a href="#ul-with-subelements" class="xref">3</a><a href="#section-2-11.3" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-11.4">
+         Format="none": <a href="#ul-with-subelements" class="xref"></a><a href="#section-2-11.4" class="pilcrow">¶</a>
+      </li>
+   </ul>
+   <p id="section-2-12"> References to Appendix:<a href="#section-2-12" class="pilcrow">¶</a></p>
+   <ul>
+      <li id="section-2-13.1">
+         Format="default": <a href="#back-matter" class="xref">Appendix A</a><a href="#section-2-13.1" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-13.2">
+         Format="title": <a href="#back-matter" class="xref">Some Back Matter</a><a href="#section-2-13.2" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-13.3">
+         Format="counter": <a href="#back-matter" class="xref">A</a><a href="#section-2-13.3" class="pilcrow">¶</a>
+      </li>
+      <li id="section-2-13.4">
+         Format="none": <a href="#back-matter" class="xref"></a><a href="#section-2-13.4" class="pilcrow">¶</a>
+      </li>
+   </ul>
+   <p id="section-2-14">
+      These references should be present:
+      <span>[<a href="#RFC5652" class="xref">RFC5652</a>]</span>
+      <span>[<a href="#RFC2634" class="xref">RFC2634</a>]</span>
+      <span>[<a href="#RFC5035" class="xref">RFC5035</a>]</span>
+      <span>[<a href="#RFC2045" class="xref">RFC2045</a>]</span>
+      <span>[<a href="#RFC2046" class="xref">RFC2046</a>]</span>
+      <span>[<a href="#RFC2047" class="xref">RFC2047</a>]</span>
+      <span>[<a href="#RFC2049" class="xref">RFC2049</a>]</span>
+      <span>[<a href="#RFC4289" class="xref">RFC4289</a>]</span>
+      <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span><a href="#section-2-14" class="pilcrow">¶</a></p>
 </section>
 <div id="ul-with-subelements">
-<section id="section-3">
+   <section id="section-3">
       <h2 id="name-unordered-list-with-sub-ele">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-unordered-list-with-sub-ele" class="section-name selfRef">Unordered list with sub-elements</a>
+         <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-unordered-list-with-sub-ele" class="section-name selfRef">Unordered list with sub-elements</a>
       </h2>
-<ul>
-<li id="section-3-1.1">
-               Unordered list, first bullet. [<span class="bcp14">MUST</span>], [<span class="bcp14">MUST NOT</span>]<a href="#section-3-1.1" class="pilcrow">¶</a>
-</li>
-        <li id="section-3-1.2">
-               Unordered list, second bullet. Text only. Octavio fuit, cum illam severitatem in eo non arbitrantur. erunt etiam, et ii quidem eruditi Graecis litteris, contemnentes Latinas, qui se plane Graecum dici velit, ut a Scaevola est praetore salutatus Athenis Albucius.  In physicis plurimum posuit. ea scientia et verborum vis et natura orationis et consequentium repugnantiumve ratio potest perspici.<a href="#section-3-1.2" class="pilcrow">¶</a>
-</li>
-        <li id="section-3-1.3">
-          <p id="section-3-1.3.1">
-                  Unordered list, third bullet, element t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-3-1.3.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-3-1.3.2">
-<pre>
+      <ul>
+         <li id="section-3-1.1">
+            Unordered list, first bullet. [<span class="bcp14">MUST</span>], [<span class="bcp14">MUST NOT</span>]<a href="#section-3-1.1" class="pilcrow">¶</a>
+         </li>
+         <li id="section-3-1.2">
+            Unordered list, second bullet. Text only. Octavio fuit, cum illam severitatem in eo non arbitrantur. erunt etiam, et ii quidem eruditi Graecis litteris, contemnentes Latinas, qui se plane Graecum dici velit, ut a Scaevola est praetore salutatus Athenis Albucius.  In physicis plurimum posuit. ea scientia et verborum vis et natura orationis et consequentium repugnantiumve ratio potest perspici.<a href="#section-3-1.2" class="pilcrow">¶</a>
+         </li>
+         <li id="section-3-1.3">
+         <p id="section-3-1.3.1">
+            Unordered list, third bullet, element t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-3-1.3.1" class="pilcrow">¶</a></p>
+         <div class="artwork art-text alignLeft" id="section-3-1.3.2">
+            <pre>
         Unordered list, third bullet, second element:
         +-------------------------------------------+
         |                                           |       
@@ -338,92 +339,92 @@ async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(le
         |                                           |       
         +-------------------------------------------+
                </pre><a href="#section-3-1.3.2" class="pilcrow">¶</a>
-</div>
-<dl class="dlParallel" id="section-3-1.3.3">
+         </div>
+         <dl class="dlParallel" id="section-3-1.3.3">
             <dt id="section-3-1.3.3.1">Unordered list, third bullet, third element: Definition list, element dt.</dt>
             <dd style="margin-left: 8.0em" id="section-3-1.3.3.2">
-                     Element dd.  Indent 16.  Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem misisti.<a href="#section-3-1.3.3.2" class="pilcrow">¶</a>
-</dd>
-          </dl>
-<span id="name-some-figure-name"></span><figure id="figure-1">
+               Element dd.  Indent 16.  Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem misisti.<a href="#section-3-1.3.3.2" class="pilcrow">¶</a>
+            </dd>
+         </dl>
+         <span id="name-some-figure-name"></span><figure id="figure-1">
             <div class="artwork art-text alignLeft" id="section-3-1.3.4.1">
-<pre>
+               <pre>
 Unordered list, third bullet, fourth element:
                     Figure
                         Figure
                            Figure
                   </pre>
-</div>
-<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-some-figure-name" class="selfRef">Some figure name</a>
+            </div>
+            <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+               <a href="#name-some-figure-name" class="selfRef">Some figure name</a>
             </figcaption></figure>
-<dl class="olPercent" id="section-3-1.3.5">
+         <dl class="olPercent" id="section-3-1.3.5">
             <dt>REQ1:</dt>
-<dd style="margin-left: 4.0em" id="section-3-1.3.5.1">Unordered list, third bullet, fifth element: Ordered list, element li.  Text only.<a href="#section-3-1.3.5.1" class="pilcrow">¶</a>
-</dd>
+            <dd style="margin-left: 4.0em" id="section-3-1.3.5.1">Unordered list, third bullet, fifth element: Ordered list, element li.  Text only.<a href="#section-3-1.3.5.1" class="pilcrow">¶</a>
+            </dd>
             <dt>REQ2:</dt>
-<dd style="margin-left: 4.0em" id="section-3-1.3.5.2">
-              <p id="section-3-1.3.5.2.1">
-                        Unordered list, third bullet, fifth element: Ordered list, element t. Nam cum ad me de virtute misisti.  Quae est enim contra Cyrenaicos satis acute, nihil ad iucunde vivendum reperiri posse, quod coniunctione tali sit aptius.  Quae etsi mihi nullo modo nec divelli nec distrahi possint, sic de iustitia iudicandum est, quae non modo non impediri rationem amicitiae, si summum bonum diceret, primum in eo essent.<a href="#section-3-1.3.5.2.1" class="pilcrow">¶</a></p>
-</dd>
-          </dl>
-<div id="section-3-1.3.6">
-<pre class="sourcecode">&lt;CODE BEGINS&gt; file "sample.py"
+            <dd style="margin-left: 4.0em" id="section-3-1.3.5.2">
+               <p id="section-3-1.3.5.2.1">
+                  Unordered list, third bullet, fifth element: Ordered list, element t. Nam cum ad me de virtute misisti.  Quae est enim contra Cyrenaicos satis acute, nihil ad iucunde vivendum reperiri posse, quod coniunctione tali sit aptius.  Quae etsi mihi nullo modo nec divelli nec distrahi possint, sic de iustitia iudicandum est, quae non modo non impediri rationem amicitiae, si summum bonum diceret, primum in eo essent.<a href="#section-3-1.3.5.2.1" class="pilcrow">¶</a></p>
+            </dd>
+         </dl>
+         <div id="section-3-1.3.6">
+            <pre class="sourcecode">&lt;CODE BEGINS&gt; file "sample.py"
 
                   # Unordered list, third bullet, sixth element
                   A = 1;
                
 &lt;CODE ENDS&gt;</pre><a href="#section-3-1.3.6" class="pilcrow">¶</a>
-</div>
-<ul>
-<li id="section-3-1.3.7.1">Unordered list, third bullet, seventh element: Unordered list, element li. Text only.<a href="#section-3-1.3.7.1" class="pilcrow">¶</a>
-</li>
+         </div>
+         <ul>
+            <li id="section-3-1.3.7.1">Unordered list, third bullet, seventh element: Unordered list, element li. Text only.<a href="#section-3-1.3.7.1" class="pilcrow">¶</a>
+            </li>
             <li id="section-3-1.3.7.2">
-              <p id="section-3-1.3.7.2.1">
-                        Element t. Atque ut odia, invidiae, despicationes adversantur voluptatibus, sic amicitiae non posse iucunde vivi, nisi sapienter, honeste iusteque vivatur, nec sapienter, honeste, iuste, nisi iucunde.  Democritea dicit perpauca mutans, sed ita, ut ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.<a href="#section-3-1.3.7.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<p id="section-3-1.3.8">
-                  Unordered list, third bullet, eight and ninth element: Text and SVG Artwork:<a href="#section-3-1.3.8" class="pilcrow">¶</a></p>
-<div id="section-3-1.3.9">
+               <p id="section-3-1.3.7.2.1">
+                  Element t. Atque ut odia, invidiae, despicationes adversantur voluptatibus, sic amicitiae non posse iucunde vivi, nisi sapienter, honeste iusteque vivatur, nec sapienter, honeste, iuste, nisi iucunde.  Democritea dicit perpauca mutans, sed ita, ut ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.<a href="#section-3-1.3.7.2.1" class="pilcrow">¶</a></p>
+            </li>
+         </ul>
+         <p id="section-3-1.3.8">
+            Unordered list, third bullet, eight and ninth element: Text and SVG Artwork:<a href="#section-3-1.3.8" class="pilcrow">¶</a></p>
+         <div id="section-3-1.3.9">
             <div class="artwork art-svg alignRight" id="section-3-1.3.9.1">
-<svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
-                <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"></path>
-                <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"></path>
-                <path d="M3,26h5v5h-5zM168,26h5v5h-5z"></path>
-              </svg><a href="#section-3-1.3.9.1" class="pilcrow">¶</a>
-</div>
-</div>
-</li>
-        <li id="section-3-1.4">
-          <p id="section-3-1.4.1">Artset include with &lt;xi:include&gt;<a href="#section-3-1.4.1" class="pilcrow">¶</a></p>
-<div class="artwork art-svg alignLeft" id="section-3-1.4.2">
-<svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57" xml:base="/home/henrik/src/xml2rfc/trunk/cli/tests/input/./ietf.svg">
-              <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"></path>
-              <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"></path>
-              <path d="M3,26h5v5h-5zM168,26h5v5h-5z"></path>
-            </svg><a href="#section-3-1.4.2" class="pilcrow">¶</a>
-</div>
-</li>
+               <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
+                  <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"></path>
+                  <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"></path>
+                  <path d="M3,26h5v5h-5zM168,26h5v5h-5z"></path>
+               </svg><a href="#section-3-1.3.9.1" class="pilcrow">¶</a>
+            </div>
+         </div>
+         </li>
+         <li id="section-3-1.4">
+            <p id="section-3-1.4.1">Artset include with &lt;xi:include&gt;<a href="#section-3-1.4.1" class="pilcrow">¶</a></p>
+            <div class="artwork art-svg alignLeft" id="section-3-1.4.2">
+               <svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57" xml:base="/home/henrik/src/xml2rfc/trunk/cli/tests/input/./ietf.svg">
+                  <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"></path>
+                  <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"></path>
+                  <path d="M3,26h5v5h-5zM168,26h5v5h-5z"></path>
+               </svg><a href="#section-3-1.4.2" class="pilcrow">¶</a>
+            </div>
+         </li>
       </ul>
-</section>
+   </section>
 </div>
 <section id="section-4">
-      <h2 id="name-ordered-list-with-sub-eleme">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-ordered-list-with-sub-eleme" class="section-name selfRef">Ordered list with sub-elements</a>
-      </h2>
-<ol start="1" type="1" class="normal" id="section-4-1">
-        <li id="section-4-1.1">
-               Ordered list, first bullet.<a href="#section-4-1.1" class="pilcrow">¶</a>
-</li>
-        <li id="section-4-1.2">
-               Ordered list, second bullet. Text only. Octavio fuit, cum illam severitatem in eo non arbitrantur. erunt etiam, et ii quidem eruditi Graecis litteris, contemnentes Latinas, qui se plane Graecum dici velit, ut a Scaevola est praetore salutatus Athenis Albucius.  In physicis plurimum posuit. ea scientia et verborum vis et natura orationis et consequentium repugnantiumve ratio potest perspici.<a href="#section-4-1.2" class="pilcrow">¶</a>
-</li>
-        <li id="section-4-1.3">
-          <p id="section-4-1.3.1">
-                  Ordered list, third bullet, element t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-4-1.3.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-4-1.3.2">
-<pre>
+   <h2 id="name-ordered-list-with-sub-eleme">
+      <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-ordered-list-with-sub-eleme" class="section-name selfRef">Ordered list with sub-elements</a>
+   </h2>
+   <ol start="1" type="1" class="normal" id="section-4-1">
+      <li id="section-4-1.1">
+         Ordered list, first bullet.<a href="#section-4-1.1" class="pilcrow">¶</a>
+      </li>
+      <li id="section-4-1.2">
+         Ordered list, second bullet. Text only. Octavio fuit, cum illam severitatem in eo non arbitrantur. erunt etiam, et ii quidem eruditi Graecis litteris, contemnentes Latinas, qui se plane Graecum dici velit, ut a Scaevola est praetore salutatus Athenis Albucius.  In physicis plurimum posuit. ea scientia et verborum vis et natura orationis et consequentium repugnantiumve ratio potest perspici.<a href="#section-4-1.2" class="pilcrow">¶</a>
+      </li>
+      <li id="section-4-1.3">
+      <p id="section-4-1.3.1">
+         Ordered list, third bullet, element t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-4-1.3.1" class="pilcrow">¶</a></p>
+      <div class="artwork art-text alignLeft" id="section-4-1.3.2">
+         <pre>
         Ordered list, third bullet, second element:
         +-------------------------------------------+
         |                                           |       
@@ -431,71 +432,71 @@ Unordered list, third bullet, fourth element:
         |                                           |       
         +-------------------------------------------+
                </pre><a href="#section-4-1.3.2" class="pilcrow">¶</a>
-</div>
-<dl class="dlParallel" id="section-4-1.3.3">
-            <dt id="section-4-1.3.3.1">Ordered list, third bullet, third element: Definition list, element dt.</dt>
-            <dd id="section-4-1.3.3.2">
-                     Element dd.  Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem misisti.<a href="#section-4-1.3.3.2" class="pilcrow">¶</a>
-</dd>
-          </dl>
-<span id="name-some-figure-name-2"></span><figure id="figure-2">
-            <div class="artwork art-text alignLeft" id="section-4-1.3.4.1">
-<pre>
+      </div>
+      <dl class="dlParallel" id="section-4-1.3.3">
+         <dt id="section-4-1.3.3.1">Ordered list, third bullet, third element: Definition list, element dt.</dt>
+         <dd id="section-4-1.3.3.2">
+            Element dd.  Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem misisti.<a href="#section-4-1.3.3.2" class="pilcrow">¶</a>
+         </dd>
+      </dl>
+      <span id="name-some-figure-name-2"></span><figure id="figure-2">
+         <div class="artwork art-text alignLeft" id="section-4-1.3.4.1">
+            <pre>
 Ordered list, third bullet, fourth element:
                     Figure
                         Figure
                            Figure
                   </pre>
-</div>
-<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
-<a href="#name-some-figure-name-2" class="selfRef">Some figure name</a>
-            </figcaption></figure>
-<ol start="1" type="1" class="normal" id="section-4-1.3.5">
-            <li id="section-4-1.3.5.1">Ordered list, third bullet, fifth element: Ordered list, element li.  Text only.<a href="#section-4-1.3.5.1" class="pilcrow">¶</a>
-</li>
-            <li id="section-4-1.3.5.2">
-              <p id="section-4-1.3.5.2.1">
-                        Ordered list, third bullet, fifth element: Ordered list, element t. Nam cum ad me de virtute misisti.  Quae est enim contra Cyrenaicos satis acute, nihil ad iucunde vivendum reperiri posse, quod coniunctione tali sit aptius.  Quae etsi mihi nullo modo nec divelli nec distrahi possint, sic de iustitia iudicandum est, quae non modo non impediri rationem amicitiae, si summum bonum diceret, primum in eo essent.<a href="#section-4-1.3.5.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ol>
-<div id="section-4-1.3.6">
-<pre class="sourcecode">
+         </div>
+         <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+            <a href="#name-some-figure-name-2" class="selfRef">Some figure name</a>
+         </figcaption></figure>
+      <ol start="1" type="1" class="normal" id="section-4-1.3.5">
+         <li id="section-4-1.3.5.1">Ordered list, third bullet, fifth element: Ordered list, element li.  Text only.<a href="#section-4-1.3.5.1" class="pilcrow">¶</a>
+         </li>
+         <li id="section-4-1.3.5.2">
+            <p id="section-4-1.3.5.2.1">
+               Ordered list, third bullet, fifth element: Ordered list, element t. Nam cum ad me de virtute misisti.  Quae est enim contra Cyrenaicos satis acute, nihil ad iucunde vivendum reperiri posse, quod coniunctione tali sit aptius.  Quae etsi mihi nullo modo nec divelli nec distrahi possint, sic de iustitia iudicandum est, quae non modo non impediri rationem amicitiae, si summum bonum diceret, primum in eo essent.<a href="#section-4-1.3.5.2.1" class="pilcrow">¶</a></p>
+         </li>
+      </ol>
+      <div id="section-4-1.3.6">
+         <pre class="sourcecode">
                   # Ordered list, third bullet, sixth element
                   A = 1;
                </pre><a href="#section-4-1.3.6" class="pilcrow">¶</a>
-</div>
-<ul>
-<li id="section-4-1.3.7.1">Ordered list, third bullet, seventh element: Unordered list, element li. Text only.<a href="#section-4-1.3.7.1" class="pilcrow">¶</a>
-</li>
-            <li id="section-4-1.3.7.2">
-              <p id="section-4-1.3.7.2.1">
-                        Element t. Atque ut odia, invidiae, despicationes adversantur voluptatibus, sic amicitiae non posse iucunde vivi, nisi sapienter, honeste iusteque vivatur, nec sapienter, honeste, iuste, nisi iucunde.  Democritea dicit perpauca mutans, sed ita, ut ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                        See <a href="#back-matter" class="xref">Appendix A</a>, <span><a href="https://tools.ietf.org/html/draft-levkowetz-xml2rfc-v3-implementation-notes-09#section-3.1" class="relref">Section 3.1</a> of [<a href="#I-D.levkowetz-xml2rfc-v3-implementation-notes" class="xref">I-D.levkowetz-xml2rfc-v3-implementation-notes</a>]</span>
-                        and also <span><a href="https://rfc-editor.org/rfc/rfc8174#section-A.1" class="relref">Appendix A.1</a> of [<a href="#RFC8174" class="xref">RFC8174</a>]</span><a href="#section-4-1.3.7.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-</li>
-      </ol>
+      </div>
+      <ul>
+         <li id="section-4-1.3.7.1">Ordered list, third bullet, seventh element: Unordered list, element li. Text only.<a href="#section-4-1.3.7.1" class="pilcrow">¶</a>
+         </li>
+         <li id="section-4-1.3.7.2">
+            <p id="section-4-1.3.7.2.1">
+               Element t. Atque ut odia, invidiae, despicationes adversantur voluptatibus, sic amicitiae non posse iucunde vivi, nisi sapienter, honeste iusteque vivatur, nec sapienter, honeste, iuste, nisi iucunde.  Democritea dicit perpauca mutans, sed ita, ut ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+               See <a href="#back-matter" class="xref">Appendix A</a>, <span><a href="https://tools.ietf.org/html/draft-levkowetz-xml2rfc-v3-implementation-notes-09#section-3.1" class="relref">Section 3.1</a> of [<a href="#I-D.levkowetz-xml2rfc-v3-implementation-notes" class="xref">I-D.levkowetz-xml2rfc-v3-implementation-notes</a>]</span>
+               and also <span><a href="https://rfc-editor.org/rfc/rfc8174#section-A.1" class="relref">Appendix A.1</a> of [<a href="#RFC8174" class="xref">RFC8174</a>]</span><a href="#section-4-1.3.7.2.1" class="pilcrow">¶</a></p>
+         </li>
+      </ul>
+      </li>
+   </ol>
 </section>
 <section id="section-5">
-      <h2 id="name-definition-list-with-sub-el">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-definition-list-with-sub-el" class="section-name selfRef">Definition list with sub-elements</a>
-      </h2>
-<dl class="dlParallel" id="section-5-1">
-        <dt id="section-5-1.1">Term 1</dt>
-        <dd id="section-5-1.2">
-               Definition list, first bullet.<a href="#section-5-1.2" class="pilcrow">¶</a>
-</dd>
-        <dt id="section-5-1.3">Term 2</dt>
-        <dd id="section-5-1.4">
-               Definition list, second bullet. Text only. Octavio fuit, cum illam severitatem in eo non arbitrantur. erunt etiam, et ii quidem eruditi Graecis litteris, contemnentes Latinas, qui se plane Graecum dici velit, ut a Scaevola est praetore salutatus Athenis Albucius.  In physicis plurimum posuit. ea scientia et verborum vis et natura orationis et consequentium repugnantiumve ratio potest perspici.<a href="#section-5-1.4" class="pilcrow">¶</a>
-</dd>
-        <dt id="section-5-1.5">Term 3</dt>
-        <dd id="section-5-1.6">
-          <p id="section-5-1.6.1">
-                  Definition list, third bullet, element t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-5-1.6.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-5-1.6.2">
-<pre>
+   <h2 id="name-definition-list-with-sub-el">
+      <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-definition-list-with-sub-el" class="section-name selfRef">Definition list with sub-elements</a>
+   </h2>
+   <dl class="dlParallel" id="section-5-1">
+      <dt id="section-5-1.1">Term 1</dt>
+      <dd id="section-5-1.2">
+         Definition list, first bullet.<a href="#section-5-1.2" class="pilcrow">¶</a>
+      </dd>
+      <dt id="section-5-1.3">Term 2</dt>
+      <dd id="section-5-1.4">
+         Definition list, second bullet. Text only. Octavio fuit, cum illam severitatem in eo non arbitrantur. erunt etiam, et ii quidem eruditi Graecis litteris, contemnentes Latinas, qui se plane Graecum dici velit, ut a Scaevola est praetore salutatus Athenis Albucius.  In physicis plurimum posuit. ea scientia et verborum vis et natura orationis et consequentium repugnantiumve ratio potest perspici.<a href="#section-5-1.4" class="pilcrow">¶</a>
+      </dd>
+      <dt id="section-5-1.5">Term 3</dt>
+      <dd id="section-5-1.6">
+         <p id="section-5-1.6.1">
+            Definition list, third bullet, element t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-5-1.6.1" class="pilcrow">¶</a></p>
+         <div class="artwork art-text alignLeft" id="section-5-1.6.2">
+            <pre>
         Definition list, third bullet, second element:
         +-------------------------------------------+
         |                                           |       
@@ -503,76 +504,76 @@ Ordered list, third bullet, fourth element:
         |                                           |       
         +-------------------------------------------+
                </pre><a href="#section-5-1.6.2" class="pilcrow">¶</a>
-</div>
-<dl class="dlParallel" id="section-5-1.6.3">
+         </div>
+         <dl class="dlParallel" id="section-5-1.6.3">
             <dt id="section-5-1.6.3.1">Definition list, third bullet, third element: Definition list, element dt.</dt>
             <dd id="section-5-1.6.3.2">
-                     Element dd.  Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem misisti.<a href="#section-5-1.6.3.2" class="pilcrow">¶</a>
-</dd>
-          </dl>
-<span id="name-some-figure-name-3"></span><figure id="figure-3">
+               Element dd.  Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem misisti.<a href="#section-5-1.6.3.2" class="pilcrow">¶</a>
+            </dd>
+         </dl>
+         <span id="name-some-figure-name-3"></span><figure id="figure-3">
             <div class="artwork art-text alignLeft" id="section-5-1.6.4.1">
-<pre>
+               <pre>
 Definition list, third bullet, fourth element:
                     Figure
                         Figure
                            Figure
                   </pre>
-</div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
-<a href="#name-some-figure-name-3" class="selfRef">Some figure name</a>
+            </div>
+            <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+               <a href="#name-some-figure-name-3" class="selfRef">Some figure name</a>
             </figcaption></figure>
-<ol start="1" type="1" class="normal" id="section-5-1.6.5">
+         <ol start="1" type="1" class="normal" id="section-5-1.6.5">
             <li id="section-5-1.6.5.1">Definition list, third bullet, fifth element: Ordered list, element li.  Text only.<a href="#section-5-1.6.5.1" class="pilcrow">¶</a>
-</li>
+            </li>
             <li id="section-5-1.6.5.2">
-              <p id="section-5-1.6.5.2.1">
-                        Definition list, third bullet, fifth element: Ordered list, element t. Nam cum ad me de virtute misisti.  Quae est enim contra Cyrenaicos satis acute, nihil ad iucunde vivendum reperiri posse, quod coniunctione tali sit aptius.  Quae etsi mihi nullo modo nec divelli nec distrahi possint, sic de iustitia iudicandum est, quae non modo non impediri rationem amicitiae, si summum bonum diceret, primum in eo essent.<a href="#section-5-1.6.5.2.1" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-5-1.6.5.2.2.1">UL within OL within DL, item one<a href="#section-5-1.6.5.2.2.1" class="pilcrow">¶</a>
-</li>
-                <li id="section-5-1.6.5.2.2.2">UL within OL within DL, item two<a href="#section-5-1.6.5.2.2.2" class="pilcrow">¶</a>
-</li>
-              </ul>
-<ul class="ulEmpty">
-<li class="ulEmpty" id="section-5-1.6.5.2.3.1">UL within OL within DL, empty="true"; item one<a href="#section-5-1.6.5.2.3.1" class="pilcrow">¶</a>
-</li>
-                <li class="ulEmpty" id="section-5-1.6.5.2.3.2">UL within OL within DL, empty="true"; item two<a href="#section-5-1.6.5.2.3.2" class="pilcrow">¶</a>
-</li>
-              </ul>
-<ul class="ulEmpty">
-<li class="ulEmpty" id="section-5-1.6.5.2.4.1">UL within OL within DL, bare="true"; item one<a href="#section-5-1.6.5.2.4.1" class="pilcrow">¶</a>
-</li>
-                <li class="ulEmpty" id="section-5-1.6.5.2.4.2">UL within OL within DL, bare="true"; item two<a href="#section-5-1.6.5.2.4.2" class="pilcrow">¶</a>
-</li>
-              </ul>
-</li>
-          </ol>
-<div id="section-5-1.6.6">
-<pre class="sourcecode">
+            <p id="section-5-1.6.5.2.1">
+               Definition list, third bullet, fifth element: Ordered list, element t. Nam cum ad me de virtute misisti.  Quae est enim contra Cyrenaicos satis acute, nihil ad iucunde vivendum reperiri posse, quod coniunctione tali sit aptius.  Quae etsi mihi nullo modo nec divelli nec distrahi possint, sic de iustitia iudicandum est, quae non modo non impediri rationem amicitiae, si summum bonum diceret, primum in eo essent.<a href="#section-5-1.6.5.2.1" class="pilcrow">¶</a></p>
+            <ul>
+               <li id="section-5-1.6.5.2.2.1">UL within OL within DL, item one<a href="#section-5-1.6.5.2.2.1" class="pilcrow">¶</a>
+               </li>
+               <li id="section-5-1.6.5.2.2.2">UL within OL within DL, item two<a href="#section-5-1.6.5.2.2.2" class="pilcrow">¶</a>
+               </li>
+            </ul>
+            <ul class="ulEmpty">
+               <li class="ulEmpty" id="section-5-1.6.5.2.3.1">UL within OL within DL, empty="true"; item one<a href="#section-5-1.6.5.2.3.1" class="pilcrow">¶</a>
+               </li>
+               <li class="ulEmpty" id="section-5-1.6.5.2.3.2">UL within OL within DL, empty="true"; item two<a href="#section-5-1.6.5.2.3.2" class="pilcrow">¶</a>
+               </li>
+            </ul>
+            <ul class="ulEmpty">
+               <li class="ulEmpty" id="section-5-1.6.5.2.4.1">UL within OL within DL, bare="true"; item one<a href="#section-5-1.6.5.2.4.1" class="pilcrow">¶</a>
+               </li>
+               <li class="ulEmpty" id="section-5-1.6.5.2.4.2">UL within OL within DL, bare="true"; item two<a href="#section-5-1.6.5.2.4.2" class="pilcrow">¶</a>
+               </li>
+            </ul>
+            </li>
+         </ol>
+         <div id="section-5-1.6.6">
+            <pre class="sourcecode">
                   # Definition list, third bullet, sixth element
                   A = 1;
                </pre><a href="#section-5-1.6.6" class="pilcrow">¶</a>
-</div>
-<ul>
-<li id="section-5-1.6.7.1">Definition list, third bullet, seventh element: Unordered list, element li. Text only.<a href="#section-5-1.6.7.1" class="pilcrow">¶</a>
-</li>
+         </div>
+         <ul>
+            <li id="section-5-1.6.7.1">Definition list, third bullet, seventh element: Unordered list, element li. Text only.<a href="#section-5-1.6.7.1" class="pilcrow">¶</a>
+            </li>
             <li id="section-5-1.6.7.2">
-              <p id="section-5-1.6.7.2.1">
-                        Element t. Atque ut odia, invidiae, despicationes adversantur voluptatibus, sic amicitiae non posse iucunde vivi, nisi sapienter, honeste iusteque vivatur, nec sapienter, honeste, iuste, nisi iucunde.  Democritea dicit perpauca mutans, sed ita, ut ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.<a href="#section-5-1.6.7.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<p id="section-5-1.6.8">Definition list, third bullet, eight element, t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-5-1.6.8" class="pilcrow">¶</a></p>
-<p id="section-5-1.6.9">Definition list, third bullet, ninth element, t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-5-1.6.9" class="pilcrow">¶</a></p>
-</dd>
-      </dl>
+               <p id="section-5-1.6.7.2.1">
+                  Element t. Atque ut odia, invidiae, despicationes adversantur voluptatibus, sic amicitiae non posse iucunde vivi, nisi sapienter, honeste iusteque vivatur, nec sapienter, honeste, iuste, nisi iucunde.  Democritea dicit perpauca mutans, sed ita, ut ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.<a href="#section-5-1.6.7.2.1" class="pilcrow">¶</a></p>
+            </li>
+         </ul>
+         <p id="section-5-1.6.8">Definition list, third bullet, eight element, t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-5-1.6.8" class="pilcrow">¶</a></p>
+         <p id="section-5-1.6.9">Definition list, third bullet, ninth element, t.  Quid? si nos non interpretum fungimur munere, sed tuemur ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.  Extremum autem esse bonorum eum voluptate vivere.  Sic faciam igitur, inquit: unam rem explicabo, eamque maximam, de physicis alias, et quidem locis pluribus.<a href="#section-5-1.6.9" class="pilcrow">¶</a></p>
+      </dd>
+   </dl>
 </section>
 <section id="section-6">
-      <h2 id="name-table">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-table" class="section-name selfRef">Table</a>
-      </h2>
-<div class="artwork art-text alignLeft" id="section-6-1">
-<pre>
+   <h2 id="name-table">
+      <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-table" class="section-name selfRef">Table</a>
+   </h2>
+   <div class="artwork art-text alignLeft" id="section-6-1">
+      <pre>
       +-----+-----+-----------+
       |     |     |           |
       +-----+-----+-----+-----+
@@ -591,625 +592,625 @@ Definition list, third bullet, fourth element:
       |     |     |     |     |
       +-----+-----+-----+-----+
          </pre><a href="#section-6-1" class="pilcrow">¶</a>
-</div>
-<span id="name-header-footer-colspan-and-r"></span><table class="center" id="table-1">
-        <caption>
-<a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-header-footer-colspan-and-r" class="selfRef">Header, footer, colspan and rowspan<br>Default alignment</a>
-        </caption>
-<thead>
-          <tr>
+   </div>
+   <span id="name-header-footer-colspan-and-r"></span><table class="center" id="table-1">
+      <caption>
+         <a href="#table-1" class="selfRef">Table 1</a>:
+         <a href="#name-header-footer-colspan-and-r" class="selfRef">Header, footer, colspan and rowspan<br>Default alignment</a>
+      </caption>
+      <thead>
+         <tr>
             <th class="text-left" rowspan="1" colspan="1">A</th>
             <th class="text-left" rowspan="1" colspan="1">B</th>
             <th class="text-left" rowspan="1" colspan="2">C D</th>
-          </tr>
-          <tr>
+         </tr>
+         <tr>
             <th class="text-left" rowspan="1" colspan="1">1</th>
             <th class="text-left" rowspan="1" colspan="1">2</th>
             <th class="text-left" rowspan="1" colspan="1">3</th>
             <th class="text-left" rowspan="1" colspan="1">4</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1"> Long text in a single cell</td>
             <td class="text-left" rowspan="1" colspan="1">b1</td>
             <td class="text-left" rowspan="1" colspan="1">c1</td>
             <td class="text-left" rowspan="1" colspan="1">d1</td>
-          </tr>
-          <tr>
+         </tr>
+         <tr>
             <td class="text-left" rowspan="3" colspan="1">Long text in a 3-cell column.  Quid igitur est? inquit; audire enim cupio, quid non probes eius, a quo dissentias.</td>
             <td class="text-left" rowspan="1" colspan="3">Long text in a 3-cell row.  Quid enim est a Cyrenaicisque melius liberiusque defenditur, tamen eius modi tempora incidunt, ut labore et dolore disputandum putant.</td>
-          </tr>
-          <tr>
+         </tr>
+         <tr>
             <td class="text-left" rowspan="3" colspan="1">Another 3-cell column.</td>
             <td class="text-left" rowspan="1" colspan="1">c3</td>
             <td class="text-left" rowspan="1" colspan="1">d3</td>
-          </tr>
-          <tr>
+         </tr>
+         <tr>
             <td class="text-left" rowspan="1" colspan="2">x</td>
-          </tr>
-          <tr>
+         </tr>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1">a5</td>
             <td class="text-left" rowspan="1" colspan="1">c5</td>
             <td class="text-left" rowspan="1" colspan="1">d5</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
+         </tr>
+      </tbody>
+      <tfoot>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1">aa</td>
             <td class="text-left" rowspan="1" colspan="1">bb</td>
             <td class="text-left" rowspan="1" colspan="1">cc</td>
             <td class="text-left" rowspan="1" colspan="1">dd</td>
-          </tr>
-        </tfoot>
-      </table>
-<span id="name-aligned-left"></span><table class="left" id="table-2">
-        <caption>
-<a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-aligned-left" class="selfRef">Aligned left</a>
-        </caption>
-<tbody>
-          <tr>
+         </tr>
+      </tfoot>
+   </table>
+   <span id="name-aligned-left"></span><table class="left" id="table-2">
+      <caption>
+         <a href="#table-2" class="selfRef">Table 2</a>:
+         <a href="#name-aligned-left" class="selfRef">Aligned left</a>
+      </caption>
+      <tbody>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1">One</td>
             <td class="text-left" rowspan="1" colspan="1">Two</td>
-          </tr>
-          <tr>
+         </tr>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1">Alpha</td>
             <td class="text-left" rowspan="1" colspan="1">Beta</td>
-          </tr>
-        </tbody>
-      </table>
-<span id="name-aligned-center"></span><table class="center" id="table-3">
-        <caption>
-<a href="#table-3" class="selfRef">Table 3</a>:
-<a href="#name-aligned-center" class="selfRef">Aligned center</a>
-        </caption>
-<tbody>
-          <tr>
+         </tr>
+      </tbody>
+   </table>
+   <span id="name-aligned-center"></span><table class="center" id="table-3">
+      <caption>
+         <a href="#table-3" class="selfRef">Table 3</a>:
+         <a href="#name-aligned-center" class="selfRef">Aligned center</a>
+      </caption>
+      <tbody>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1">One</td>
             <td class="text-left" rowspan="1" colspan="1">Two</td>
-          </tr>
-          <tr>
+         </tr>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1">Alpha</td>
             <td class="text-left" rowspan="1" colspan="1">Beta</td>
-          </tr>
-        </tbody>
-      </table>
-<span id="name-aligned-right"></span><table class="right" id="table-4">
-        <caption>
-<a href="#table-4" class="selfRef">Table 4</a>:
-<a href="#name-aligned-right" class="selfRef">Aligned right</a>
-        </caption>
-<tbody>
-          <tr>
+         </tr>
+      </tbody>
+   </table>
+   <span id="name-aligned-right"></span><table class="right" id="table-4">
+      <caption>
+         <a href="#table-4" class="selfRef">Table 4</a>:
+         <a href="#name-aligned-right" class="selfRef">Aligned right</a>
+      </caption>
+      <tbody>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1">One</td>
             <td class="text-left" rowspan="1" colspan="1">Two</td>
-          </tr>
-          <tr>
+         </tr>
+         <tr>
             <td class="text-left" rowspan="1" colspan="1">Alpha</td>
             <td class="text-left" rowspan="1" colspan="1">Beta</td>
-          </tr>
-        </tbody>
-      </table>
+         </tr>
+      </tbody>
+   </table>
 </section>
 <section id="section-7">
-      <h2 id="name-unicode-literals">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-unicode-literals" class="section-name selfRef">Unicode Literals</a>
-      </h2>
-<section id="section-7.1">
-        <h3 id="name-single-characters">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-single-characters" class="section-name selfRef">Single Characters</a>
-        </h3>
-<dl class="dlNewline" id="section-7.1-1">
-          <dt id="section-7.1-1.1">Expansion "num":</dt>
-          <dd id="section-7.1-1.2">
+   <h2 id="name-unicode-literals">
+      <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-unicode-literals" class="section-name selfRef">Unicode Literals</a>
+   </h2>
+   <section id="section-7.1">
+      <h3 id="name-single-characters">
+         <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-single-characters" class="section-name selfRef">Single Characters</a>
+      </h3>
+      <dl class="dlNewline" id="section-7.1-1">
+         <dt id="section-7.1-1.1">Expansion "num":</dt>
+         <dd id="section-7.1-1.2">
             <p id="section-7.1-1.2.1">Example XML:<a href="#section-7.1-1.2.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.2.2">
-<pre>Use the character &lt;u format="num"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.2.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.2.3">expands to:<a href="#section-7.1-1.2.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.2.4">
-                    Use the character <span class="unicode">U+0394</span>.<a href="#section-7.1-1.2.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.1-1.3">Expansion "name":</dt>
-          <dd id="section-7.1-1.4">
+            <div class="artwork art-text alignLeft" id="section-7.1-1.2.2">
+               <pre>Use the character &lt;u format="num"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.2.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.2.3">expands to:<a href="#section-7.1-1.2.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.2.4">
+               Use the character <span class="unicode">U+0394</span>.<a href="#section-7.1-1.2.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.1-1.3">Expansion "name":</dt>
+         <dd id="section-7.1-1.4">
             <p id="section-7.1-1.4.1">Example XML:<a href="#section-7.1-1.4.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.4.2">
-<pre>Use the character &lt;u format="name-num"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.4.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.4.3">expands to:<a href="#section-7.1-1.4.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.4.4">
-                    Use the character <span class="unicode">GREEK CAPITAL LETTER DELTA (U+0394)</span>.<a href="#section-7.1-1.4.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.1-1.5">Expansion "num-lit":</dt>
-          <dd id="section-7.1-1.6">
+            <div class="artwork art-text alignLeft" id="section-7.1-1.4.2">
+               <pre>Use the character &lt;u format="name-num"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.4.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.4.3">expands to:<a href="#section-7.1-1.4.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.4.4">
+               Use the character <span class="unicode">GREEK CAPITAL LETTER DELTA (U+0394)</span>.<a href="#section-7.1-1.4.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.1-1.5">Expansion "num-lit":</dt>
+         <dd id="section-7.1-1.6">
             <p id="section-7.1-1.6.1">Example XML:<a href="#section-7.1-1.6.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.6.2">
-<pre>Use the character &lt;u format="num-lit"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.6.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.6.3">expands to:<a href="#section-7.1-1.6.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.6.4">
-                    Use the character <span class="unicode">U+0394 ("Δ")</span>.<a href="#section-7.1-1.6.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.1-1.7">Expansion "num-name":</dt>
-          <dd id="section-7.1-1.8">
+            <div class="artwork art-text alignLeft" id="section-7.1-1.6.2">
+               <pre>Use the character &lt;u format="num-lit"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.6.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.6.3">expands to:<a href="#section-7.1-1.6.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.6.4">
+               Use the character <span class="unicode">U+0394 ("Δ")</span>.<a href="#section-7.1-1.6.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.1-1.7">Expansion "num-name":</dt>
+         <dd id="section-7.1-1.8">
             <p id="section-7.1-1.8.1">Example XML:<a href="#section-7.1-1.8.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.8.2">
-<pre>Use the &lt;u format="{num} character ({name})"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.8.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.8.3">expands to:<a href="#section-7.1-1.8.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.8.4">
-                    Use the <span class="unicode">U+0394 character (GREEK CAPITAL LETTER DELTA)</span>.<a href="#section-7.1-1.8.4" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-7.1-1.8.5.1">Tab: <span class="unicode">U+0009 (U+0009)</span><a href="#section-7.1-1.8.5.1" class="pilcrow">¶</a>
-</li>
-              <li id="section-7.1-1.8.5.2">Char(128): <span class="unicode">U+0080 (U+0080)</span><a href="#section-7.1-1.8.5.2" class="pilcrow">¶</a>
-</li>
+            <div class="artwork art-text alignLeft" id="section-7.1-1.8.2">
+               <pre>Use the &lt;u format="{num} character ({name})"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.8.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.8.3">expands to:<a href="#section-7.1-1.8.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.8.4">
+               Use the <span class="unicode">U+0394 character (GREEK CAPITAL LETTER DELTA)</span>.<a href="#section-7.1-1.8.4" class="pilcrow">¶</a></p>
+            <ul>
+               <li id="section-7.1-1.8.5.1">Tab: <span class="unicode">U+0009 (U+0009)</span><a href="#section-7.1-1.8.5.1" class="pilcrow">¶</a>
+               </li>
+               <li id="section-7.1-1.8.5.2">Char(128): <span class="unicode">U+0080 (U+0080)</span><a href="#section-7.1-1.8.5.2" class="pilcrow">¶</a>
+               </li>
             </ul>
-</dd>
-          <dt id="section-7.1-1.9">Expansion "num-lit-name":</dt>
-          <dd id="section-7.1-1.10">
+         </dd>
+         <dt id="section-7.1-1.9">Expansion "num-lit-name":</dt>
+         <dd id="section-7.1-1.10">
             <p id="section-7.1-1.10.1">Example XML:<a href="#section-7.1-1.10.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.10.2">
-<pre>Use the character &lt;u format="num-lit-name"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.10.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.10.3">expands to:<a href="#section-7.1-1.10.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.10.4">
-                    Use the character <span class="unicode">U+0394 ("Δ", GREEK CAPITAL LETTER DELTA)</span>.<a href="#section-7.1-1.10.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.1-1.11">Expansion "num-name-lit":</dt>
-          <dd id="section-7.1-1.12">
+            <div class="artwork art-text alignLeft" id="section-7.1-1.10.2">
+               <pre>Use the character &lt;u format="num-lit-name"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.10.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.10.3">expands to:<a href="#section-7.1-1.10.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.10.4">
+               Use the character <span class="unicode">U+0394 ("Δ", GREEK CAPITAL LETTER DELTA)</span>.<a href="#section-7.1-1.10.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.1-1.11">Expansion "num-name-lit":</dt>
+         <dd id="section-7.1-1.12">
             <p id="section-7.1-1.12.1">Example XML:<a href="#section-7.1-1.12.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.12.2">
-<pre>Use the character &lt;u format="num-name-lit"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.12.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.12.3">expands to:<a href="#section-7.1-1.12.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.12.4">
-                    Use the character <span class="unicode">U+0394 (GREEK CAPITAL LETTER DELTA, "Δ")</span>.<a href="#section-7.1-1.12.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.1-1.13">Expansion "ascii-lit-num":</dt>
-          <dd id="section-7.1-1.14">
+            <div class="artwork art-text alignLeft" id="section-7.1-1.12.2">
+               <pre>Use the character &lt;u format="num-name-lit"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.12.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.12.3">expands to:<a href="#section-7.1-1.12.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.12.4">
+               Use the character <span class="unicode">U+0394 (GREEK CAPITAL LETTER DELTA, "Δ")</span>.<a href="#section-7.1-1.12.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.1-1.13">Expansion "ascii-lit-num":</dt>
+         <dd id="section-7.1-1.14">
             <p id="section-7.1-1.14.1">Example XML:<a href="#section-7.1-1.14.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.14.2">
-<pre>Use the character &lt;u ascii="Delta" format="ascii-lit-num" ascii="Delta"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.14.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.14.3">expands to:<a href="#section-7.1-1.14.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.14.4">
-                    Use the character <span class="unicode">"Delta" ("Δ", U+0394)</span>.<a href="#section-7.1-1.14.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.1-1.15">Expansion "lit-name-num":</dt>
-          <dd id="section-7.1-1.16">
+            <div class="artwork art-text alignLeft" id="section-7.1-1.14.2">
+               <pre>Use the character &lt;u ascii="Delta" format="ascii-lit-num" ascii="Delta"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.14.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.14.3">expands to:<a href="#section-7.1-1.14.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.14.4">
+               Use the character <span class="unicode">"Delta" ("Δ", U+0394)</span>.<a href="#section-7.1-1.14.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.1-1.15">Expansion "lit-name-num":</dt>
+         <dd id="section-7.1-1.16">
             <p id="section-7.1-1.16.1">Example XML:<a href="#section-7.1-1.16.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.16.2">
-<pre>Use the &lt;u format="{lit} character ({name}, {num})"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.16.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.16.3">expands to:<a href="#section-7.1-1.16.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.16.4">
-                    Use the <span class="unicode">"Δ" character (GREEK CAPITAL LETTER DELTA, U+0394)</span><a href="#section-7.1-1.16.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.1-1.17">Expansion "lit-num":</dt>
-          <dd id="section-7.1-1.18">
+            <div class="artwork art-text alignLeft" id="section-7.1-1.16.2">
+               <pre>Use the &lt;u format="{lit} character ({name}, {num})"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.16.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.16.3">expands to:<a href="#section-7.1-1.16.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.16.4">
+               Use the <span class="unicode">"Δ" character (GREEK CAPITAL LETTER DELTA, U+0394)</span><a href="#section-7.1-1.16.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.1-1.17">Expansion "lit-num":</dt>
+         <dd id="section-7.1-1.18">
             <p id="section-7.1-1.18.1">Example XML:<a href="#section-7.1-1.18.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.1-1.18.2">
-<pre>Use the &lt;u format="{lit} character ({num})"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.18.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.1-1.18.3">expands to:<a href="#section-7.1-1.18.3" class="pilcrow">¶</a></p>
-<p id="section-7.1-1.18.4">
-                    Use the <span class="unicode">"Δ" character (U+0394)</span>.<a href="#section-7.1-1.18.4" class="pilcrow">¶</a></p>
-</dd>
-        </dl>
-</section>
-<section id="section-7.2">
-        <h3 id="name-character-strings">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-character-strings" class="section-name selfRef">Character Strings</a>
-        </h3>
-<dl class="dlNewline" id="section-7.2-1">
-          <dt id="section-7.2-1.1">Expansion "num-lit":</dt>
-          <dd id="section-7.2-1.2">
+            <div class="artwork art-text alignLeft" id="section-7.1-1.18.2">
+               <pre>Use the &lt;u format="{lit} character ({num})"&gt;Δ&lt;/u&gt;.</pre><a href="#section-7.1-1.18.2" class="pilcrow">¶</a>
+            </div>
+            <p id="section-7.1-1.18.3">expands to:<a href="#section-7.1-1.18.3" class="pilcrow">¶</a></p>
+            <p id="section-7.1-1.18.4">
+               Use the <span class="unicode">"Δ" character (U+0394)</span>.<a href="#section-7.1-1.18.4" class="pilcrow">¶</a></p>
+         </dd>
+      </dl>
+   </section>
+   <section id="section-7.2">
+      <h3 id="name-character-strings">
+         <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-character-strings" class="section-name selfRef">Character Strings</a>
+      </h3>
+      <dl class="dlNewline" id="section-7.2-1">
+         <dt id="section-7.2-1.1">Expansion "num-lit":</dt>
+         <dd id="section-7.2-1.2">
             <p id="section-7.2-1.2.1">Example XML:<a href="#section-7.2-1.2.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.2-1.2.2">
-<pre>
+            <div class="artwork art-text alignLeft" id="section-7.2-1.2.2">
+               <pre>
 For example, the characters &lt;u ascii="STPETER" format="num-lit"&gt;ᏚᎢᎵᎬᎢᎬᏒ&lt;/u&gt; from
 the Cherokee block look similar to the ASCII characters "STPETER".</pre><a href="#section-7.2-1.2.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.2-1.2.3">expands to:<a href="#section-7.2-1.2.3" class="pilcrow">¶</a></p>
-<p id="section-7.2-1.2.4">
-                    For example, the characters <span class="unicode">U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 ("ᏚᎢᎵᎬᎢᎬᏒ")</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.2.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.2-1.3">Expansion "num-name":</dt>
-          <dd id="section-7.2-1.4">
+            </div>
+            <p id="section-7.2-1.2.3">expands to:<a href="#section-7.2-1.2.3" class="pilcrow">¶</a></p>
+            <p id="section-7.2-1.2.4">
+               For example, the characters <span class="unicode">U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 ("ᏚᎢᎵᎬᎢᎬᏒ")</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.2.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.2-1.3">Expansion "num-name":</dt>
+         <dd id="section-7.2-1.4">
             <p id="section-7.2-1.4.1">Example XML:<a href="#section-7.2-1.4.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.2-1.4.2">
-<pre>
+            <div class="artwork art-text alignLeft" id="section-7.2-1.4.2">
+               <pre>
 For example, the characters &lt;u ascii="STPETER" format="num-name"&gt;ᏚᎢᎵᎬᎢᎬᏒ&lt;/u&gt; from
 the Cherokee block look similar to the ASCII characters "STPETER".</pre><a href="#section-7.2-1.4.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.2-1.4.3">expands to:<a href="#section-7.2-1.4.3" class="pilcrow">¶</a></p>
-<p id="section-7.2-1.4.4">
-                    For example, the characters <span class="unicode">U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.4.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.2-1.5">Expansion "num-lit-name":</dt>
-          <dd id="section-7.2-1.6">
+            </div>
+            <p id="section-7.2-1.4.3">expands to:<a href="#section-7.2-1.4.3" class="pilcrow">¶</a></p>
+            <p id="section-7.2-1.4.4">
+               For example, the characters <span class="unicode">U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.4.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.2-1.5">Expansion "num-lit-name":</dt>
+         <dd id="section-7.2-1.6">
             <p id="section-7.2-1.6.1">Example XML:<a href="#section-7.2-1.6.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.2-1.6.2">
-<pre>
+            <div class="artwork art-text alignLeft" id="section-7.2-1.6.2">
+               <pre>
 For example, the characters &lt;u ascii="STPETER" format="num-lit-name"&gt;ᏚᎢᎵᎬᎢᎬᏒ&lt;/u&gt; from
 the Cherokee block look similar to the ASCII characters "STPETER".</pre><a href="#section-7.2-1.6.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.2-1.6.3">expands to:<a href="#section-7.2-1.6.3" class="pilcrow">¶</a></p>
-<p id="section-7.2-1.6.4">
-                    For example, the characters <span class="unicode">U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 ("ᏚᎢᎵᎬᎢᎬᏒ", CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.6.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.2-1.7">Expansion "num-name-lit":</dt>
-          <dd id="section-7.2-1.8">
+            </div>
+            <p id="section-7.2-1.6.3">expands to:<a href="#section-7.2-1.6.3" class="pilcrow">¶</a></p>
+            <p id="section-7.2-1.6.4">
+               For example, the characters <span class="unicode">U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 ("ᏚᎢᎵᎬᎢᎬᏒ", CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.6.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.2-1.7">Expansion "num-name-lit":</dt>
+         <dd id="section-7.2-1.8">
             <p id="section-7.2-1.8.1">Example XML:<a href="#section-7.2-1.8.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.2-1.8.2">
-<pre>
+            <div class="artwork art-text alignLeft" id="section-7.2-1.8.2">
+               <pre>
 For example, the characters &lt;u ascii="STPETER" format="num-name-lit"&gt;ᏚᎢᎵᎬᎢᎬᏒ&lt;/u&gt; from
 the Cherokee block look similar to the ASCII characters "STPETER".</pre><a href="#section-7.2-1.8.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.2-1.8.3">expands to:<a href="#section-7.2-1.8.3" class="pilcrow">¶</a></p>
-<p id="section-7.2-1.8.4">
-                    For example, the characters <span class="unicode">U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV, "ᏚᎢᎵᎬᎢᎬᏒ")</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.8.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.2-1.9">Expansion "ascii-lit-num":</dt>
-          <dd id="section-7.2-1.10">
+            </div>
+            <p id="section-7.2-1.8.3">expands to:<a href="#section-7.2-1.8.3" class="pilcrow">¶</a></p>
+            <p id="section-7.2-1.8.4">
+               For example, the characters <span class="unicode">U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV, "ᏚᎢᎵᎬᎢᎬᏒ")</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.8.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.2-1.9">Expansion "ascii-lit-num":</dt>
+         <dd id="section-7.2-1.10">
             <p id="section-7.2-1.10.1">Example XML:<a href="#section-7.2-1.10.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.2-1.10.2">
-<pre>
+            <div class="artwork art-text alignLeft" id="section-7.2-1.10.2">
+               <pre>
 For example, the characters &lt;u ascii="STPETER" format="ascii-lit-num"&gt;ᏚᎢᎵᎬᎢᎬᏒ&lt;/u&gt; from
 the Cherokee block look similar to the ASCII characters "STPETER".</pre><a href="#section-7.2-1.10.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.2-1.10.3">expands to:<a href="#section-7.2-1.10.3" class="pilcrow">¶</a></p>
-<p id="section-7.2-1.10.4">
-                    For example, the characters <span class="unicode">"STPETER" ("ᏚᎢᎵᎬᎢᎬᏒ", U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.10.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.2-1.11">Expansion "lit-name-num":</dt>
-          <dd id="section-7.2-1.12">
+            </div>
+            <p id="section-7.2-1.10.3">expands to:<a href="#section-7.2-1.10.3" class="pilcrow">¶</a></p>
+            <p id="section-7.2-1.10.4">
+               For example, the characters <span class="unicode">"STPETER" ("ᏚᎢᎵᎬᎢᎬᏒ", U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.10.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.2-1.11">Expansion "lit-name-num":</dt>
+         <dd id="section-7.2-1.12">
             <p id="section-7.2-1.12.1">Example XML:<a href="#section-7.2-1.12.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.2-1.12.2">
-<pre>
+            <div class="artwork art-text alignLeft" id="section-7.2-1.12.2">
+               <pre>
 For example, the &lt;u ascii="STPETER" format="{lit} characters ({name}, {num})"&gt;ᏚᎢᎵᎬᎢᎬᏒ&lt;/u&gt; from
 the Cherokee block look similar to the ASCII characters "STPETER".</pre><a href="#section-7.2-1.12.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.2-1.12.3">expands to:<a href="#section-7.2-1.12.3" class="pilcrow">¶</a></p>
-<p id="section-7.2-1.12.4">
-                    For example, the <span class="unicode">"ᏚᎢᎵᎬᎢᎬᏒ" characters (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV, U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.12.4" class="pilcrow">¶</a></p>
-</dd>
-          <dt id="section-7.2-1.13">Expansion "lit-num":</dt>
-          <dd id="section-7.2-1.14">
+            </div>
+            <p id="section-7.2-1.12.3">expands to:<a href="#section-7.2-1.12.3" class="pilcrow">¶</a></p>
+            <p id="section-7.2-1.12.4">
+               For example, the <span class="unicode">"ᏚᎢᎵᎬᎢᎬᏒ" characters (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV, U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.12.4" class="pilcrow">¶</a></p>
+         </dd>
+         <dt id="section-7.2-1.13">Expansion "lit-num":</dt>
+         <dd id="section-7.2-1.14">
             <p id="section-7.2-1.14.1">Example XML:<a href="#section-7.2-1.14.1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.2-1.14.2">
-<pre>
+            <div class="artwork art-text alignLeft" id="section-7.2-1.14.2">
+               <pre>
 For example, the &lt;u ascii="STPETER" format="{lit} characters ({num})"&gt;ᏚᎢᎵᎬᎢᎬᏒ&lt;/u&gt; from
 the Cherokee block look similar to the ASCII characters "STPETER".</pre><a href="#section-7.2-1.14.2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.2-1.14.3">expands to:<a href="#section-7.2-1.14.3" class="pilcrow">¶</a></p>
-<p id="section-7.2-1.14.4">
-                    For example, the <span class="unicode">"ᏚᎢᎵᎬᎢᎬᏒ" characters (U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.14.4" class="pilcrow">¶</a></p>
-</dd>
-        </dl>
-</section>
+            </div>
+            <p id="section-7.2-1.14.3">expands to:<a href="#section-7.2-1.14.3" class="pilcrow">¶</a></p>
+            <p id="section-7.2-1.14.4">
+               For example, the <span class="unicode">"ᏚᎢᎵᎬᎢᎬᏒ" characters (U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2)</span> from the Cherokee block look similar to the ASCII characters "STPETER".<a href="#section-7.2-1.14.4" class="pilcrow">¶</a></p>
+         </dd>
+      </dl>
+   </section>
 </section>
 <section id="section-8">
-      <h2 id="name-irregular-date-specificatio">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-irregular-date-specificatio" class="section-name selfRef">Irregular date specifications</a>
-      </h2>
-<p id="section-8-1">
+   <h2 id="name-irregular-date-specificatio">
+      <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-irregular-date-specificatio" class="section-name selfRef">Irregular date specifications</a>
+   </h2>
+   <p id="section-8-1">
 
-            You can now use date ranges like "2002-2003" (See <span>[<a href="#DATE-RANGE" class="xref">DATE-RANGE</a>]</span>) and
-            fuzzy dates such as "Spring 1814" (See <span>[<a href="#FUZZY-DATE" class="xref">FUZZY-DATE</a>]</span>) by omitting
-            the year/month/day attributes of &lt;date&gt;, and instead provide text content.<a href="#section-8-1" class="pilcrow">¶</a></p>
+      You can now use date ranges like "2002-2003" (See <span>[<a href="#DATE-RANGE" class="xref">DATE-RANGE</a>]</span>) and
+      fuzzy dates such as "Spring 1814" (See <span>[<a href="#FUZZY-DATE" class="xref">FUZZY-DATE</a>]</span>) by omitting
+      the year/month/day attributes of &lt;date&gt;, and instead provide text content.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 <div id="aside">
-<section id="section-9">
+   <section id="section-9">
       <h2 id="name-aside-and-word-joiner">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-aside-and-word-joiner" class="section-name selfRef">Aside and Word Joiner</a>
+         <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-aside-and-word-joiner" class="section-name selfRef">Aside and Word Joiner</a>
       </h2>
-<aside id="section-9-1">
-        <p id="section-9-1.1">
+      <aside id="section-9-1">
+         <p id="section-9-1.1">
 
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at sapien mauris.
-                Integer sit amet ultrices urna. Mauris at arcu vestibulum, suscipit nisi id, auctor
-                felis. Donec porttitor enim id augue ullamcorper tincidunt. Curabitur sit amet
-                volutpat turpis. Vestibulum vitae velit nisl. Phasellus ac dolor eu eros pulvinar
-                scelerisque. Pellentesque volutpat id lacus rutrum sodales.<a href="#section-9-1.1" class="pilcrow">¶</a></p>
-<p id="section-9-1.2">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at sapien mauris.
+            Integer sit amet ultrices urna. Mauris at arcu vestibulum, suscipit nisi id, auctor
+            felis. Donec porttitor enim id augue ullamcorper tincidunt. Curabitur sit amet
+            volutpat turpis. Vestibulum vitae velit nisl. Phasellus ac dolor eu eros pulvinar
+            scelerisque. Pellentesque volutpat id lacus rutrum sodales.<a href="#section-9-1.1" class="pilcrow">¶</a></p>
+         <p id="section-9-1.2">
 
-                Nam ut tortor ut dui fermentum viverra. Quisque sed aliquam enim. Pellentesque
-                vestibulum risus sed ligula eleifend commodo. Sed vel lacus id mauris dapibus
-                lobortis. Suspendisse quis pellentesque nisl, vitae pulvinar felis. Ut at hendrerit
-                odio. Morbi non sem non ligula posuere ultrices.<a href="#section-9-1.2" class="pilcrow">¶</a></p>
-</aside>
-<aside id="section-9-2">
-        <p id="section-9-2.1">
+            Nam ut tortor ut dui fermentum viverra. Quisque sed aliquam enim. Pellentesque
+            vestibulum risus sed ligula eleifend commodo. Sed vel lacus id mauris dapibus
+            lobortis. Suspendisse quis pellentesque nisl, vitae pulvinar felis. Ut at hendrerit
+            odio. Morbi non sem non ligula posuere ultrices.<a href="#section-9-1.2" class="pilcrow">¶</a></p>
+      </aside>
+      <aside id="section-9-2">
+         <p id="section-9-2.1">
 
-                In dignissim lacus et auctor sagittis. Integer ex tellus, mollis vel ultrices sed,
-                porta eget lacus. Sed sapien leo, gravida ac sapien vel, feugiat fermentum neque.
-                Vivamus magna urna, malesuada sit amet odio at, gravida aliquam magna. Curabitur
-                imperdiet eros eu lectus vestibulum semper. Vestibulum vitae accumsan tortor.
-                Praesent nunc ex, ultrices vel semper sit amet, scelerisque a dui.<a href="#section-9-2.1" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-9-2.2.1">
-                Maecenas laoreet ante in fringilla commodo.
-                Fusce ullamcorper mattis neque, a
-                maximus velit maximus eu.<a href="#section-9-2.2.1" class="pilcrow">¶</a>
-</li>
-          <li id="section-9-2.2.2">
-                In scelerisque commodo ex, sit amet tincidunt metus
-                porttitor sed.
-                Sed eget lorem eget felis lacinia auctor non dignissim nisi.<a href="#section-9-2.2.2" class="pilcrow">¶</a>
-</li>
-          <li id="section-9-2.2.3">
-                Phasellus quis sapien varius, sollicitudin nisi eget, venenatis turpis.
-                In tincidunt
-                aliquet felis, vel fermentum enim tincidunt eget.
-                Morbi rutrum ex sit amet mauris
-                dignissim mattis.<a href="#section-9-2.2.3" class="pilcrow">¶</a>
-</li>
-          <li id="section-9-2.2.4">
-                Nullam pharetra, augue vitae commodo sodales, urna enim bibendum
-                enim, et viverra tellus nisl eget urna.<a href="#section-9-2.2.4" class="pilcrow">¶</a>
-</li>
-          <li id="section-9-2.2.5">
-                Morbi commodo orci id commodo malesuada.
-                Nulla maximus eros dui, eget pellentesque lorem sagittis sed.<a href="#section-9-2.2.5" class="pilcrow">¶</a>
-</li>
-          <li id="section-9-2.2.6">
-                Donec at erat
-                ultrices, pellentesque orci ut, fermentum est. Sed sed molestie lorem. Praesent eget
-                sem ut eros mollis fermentum.<a href="#section-9-2.2.6" class="pilcrow">¶</a>
-</li>
-          <li id="section-9-2.2.7">
-                Nullam ex elit, maximus at turpis a, porttitor
-                fringilla felis. Sed ut sodales elit, sit amet dictum sapien.<a href="#section-9-2.2.7" class="pilcrow">¶</a>
-</li>
-        </ul>
-</aside>
-<aside id="section-9-3">
-        <p id="section-9-3.1">This sentence has no word joiner 'wj' in the double-word.<a href="#section-9-3.1" class="pilcrow">¶</a></p>
-<p id="section-9-3.2">This sentence has a word joiner 'wj' in this double-⁠word.<a href="#section-9-3.2" class="pilcrow">¶</a></p>
-<p id="section-9-3.3">This longer sentence has no word joiner 'wj' in the double-word.<a href="#section-9-3.3" class="pilcrow">¶</a></p>
-<p id="section-9-3.4">This longer sentence has a word joiner 'wj' in this double-⁠word.<a href="#section-9-3.4" class="pilcrow">¶</a></p>
-<p id="section-9-3.5">This longer longer sentence has no word joiner 'wj' in the double-word.<a href="#section-9-3.5" class="pilcrow">¶</a></p>
-<p id="section-9-3.6">This longer longer sentence has a word joiner 'wj' in this double-⁠word.<a href="#section-9-3.6" class="pilcrow">¶</a></p>
-<p id="section-9-3.7">This longer longer longer sentence has no word joiner 'wj' in the double-word.<a href="#section-9-3.7" class="pilcrow">¶</a></p>
-<p id="section-9-3.8">This longer longer longer sentence has a word joiner 'wj' in this double-⁠word.<a href="#section-9-3.8" class="pilcrow">¶</a></p>
-</aside>
-<aside id="section-9-4">
-        <p id="section-9-4.1">This sentence has no 'nbsp' in the double word.<a href="#section-9-4.1" class="pilcrow">¶</a></p>
-<p id="section-9-4.2">This sentence has a 'nbsp' in this double word.<a href="#section-9-4.2" class="pilcrow">¶</a></p>
-<p id="section-9-4.3">This longer sentence has no 'nbsp' in the double word.<a href="#section-9-4.3" class="pilcrow">¶</a></p>
-<p id="section-9-4.4">This longer sentence has a 'nbsp' in this double word.<a href="#section-9-4.4" class="pilcrow">¶</a></p>
-<p id="section-9-4.5">This longer longer sentence has no 'nbsp' in the double word.<a href="#section-9-4.5" class="pilcrow">¶</a></p>
-<p id="section-9-4.6">This longer longer sentence has a 'nbsp' in this double word.<a href="#section-9-4.6" class="pilcrow">¶</a></p>
-<p id="section-9-4.7">This longer longer longer sentence has no 'nbsp' in the double word.<a href="#section-9-4.7" class="pilcrow">¶</a></p>
-<p id="section-9-4.8">This longer longer longer sentence has a 'nbsp' in this double word.<a href="#section-9-4.8" class="pilcrow">¶</a></p>
-<p id="section-9-4.9">This longer longer longer longer sentence has no 'nbsp' in the double word.<a href="#section-9-4.9" class="pilcrow">¶</a></p>
-<p id="section-9-4.10">This longer longer longer longer sentence has a 'nbsp' in this double word.<a href="#section-9-4.10" class="pilcrow">¶</a></p>
-</aside>
-</section>
+            In dignissim lacus et auctor sagittis. Integer ex tellus, mollis vel ultrices sed,
+            porta eget lacus. Sed sapien leo, gravida ac sapien vel, feugiat fermentum neque.
+            Vivamus magna urna, malesuada sit amet odio at, gravida aliquam magna. Curabitur
+            imperdiet eros eu lectus vestibulum semper. Vestibulum vitae accumsan tortor.
+            Praesent nunc ex, ultrices vel semper sit amet, scelerisque a dui.<a href="#section-9-2.1" class="pilcrow">¶</a></p>
+         <ul>
+            <li id="section-9-2.2.1">
+               Maecenas laoreet ante in fringilla commodo.
+               Fusce ullamcorper mattis neque, a
+               maximus velit maximus eu.<a href="#section-9-2.2.1" class="pilcrow">¶</a>
+            </li>
+            <li id="section-9-2.2.2">
+               In scelerisque commodo ex, sit amet tincidunt metus
+               porttitor sed.
+               Sed eget lorem eget felis lacinia auctor non dignissim nisi.<a href="#section-9-2.2.2" class="pilcrow">¶</a>
+            </li>
+            <li id="section-9-2.2.3">
+               Phasellus quis sapien varius, sollicitudin nisi eget, venenatis turpis.
+               In tincidunt
+               aliquet felis, vel fermentum enim tincidunt eget.
+               Morbi rutrum ex sit amet mauris
+               dignissim mattis.<a href="#section-9-2.2.3" class="pilcrow">¶</a>
+            </li>
+            <li id="section-9-2.2.4">
+               Nullam pharetra, augue vitae commodo sodales, urna enim bibendum
+               enim, et viverra tellus nisl eget urna.<a href="#section-9-2.2.4" class="pilcrow">¶</a>
+            </li>
+            <li id="section-9-2.2.5">
+               Morbi commodo orci id commodo malesuada.
+               Nulla maximus eros dui, eget pellentesque lorem sagittis sed.<a href="#section-9-2.2.5" class="pilcrow">¶</a>
+            </li>
+            <li id="section-9-2.2.6">
+               Donec at erat
+               ultrices, pellentesque orci ut, fermentum est. Sed sed molestie lorem. Praesent eget
+               sem ut eros mollis fermentum.<a href="#section-9-2.2.6" class="pilcrow">¶</a>
+            </li>
+            <li id="section-9-2.2.7">
+               Nullam ex elit, maximus at turpis a, porttitor
+               fringilla felis. Sed ut sodales elit, sit amet dictum sapien.<a href="#section-9-2.2.7" class="pilcrow">¶</a>
+            </li>
+         </ul>
+      </aside>
+      <aside id="section-9-3">
+         <p id="section-9-3.1">This sentence has no word joiner 'wj' in the double-word.<a href="#section-9-3.1" class="pilcrow">¶</a></p>
+         <p id="section-9-3.2">This sentence has a word joiner 'wj' in this double-⁠word.<a href="#section-9-3.2" class="pilcrow">¶</a></p>
+         <p id="section-9-3.3">This longer sentence has no word joiner 'wj' in the double-word.<a href="#section-9-3.3" class="pilcrow">¶</a></p>
+         <p id="section-9-3.4">This longer sentence has a word joiner 'wj' in this double-⁠word.<a href="#section-9-3.4" class="pilcrow">¶</a></p>
+         <p id="section-9-3.5">This longer longer sentence has no word joiner 'wj' in the double-word.<a href="#section-9-3.5" class="pilcrow">¶</a></p>
+         <p id="section-9-3.6">This longer longer sentence has a word joiner 'wj' in this double-⁠word.<a href="#section-9-3.6" class="pilcrow">¶</a></p>
+         <p id="section-9-3.7">This longer longer longer sentence has no word joiner 'wj' in the double-word.<a href="#section-9-3.7" class="pilcrow">¶</a></p>
+         <p id="section-9-3.8">This longer longer longer sentence has a word joiner 'wj' in this double-⁠word.<a href="#section-9-3.8" class="pilcrow">¶</a></p>
+      </aside>
+      <aside id="section-9-4">
+         <p id="section-9-4.1">This sentence has no 'nbsp' in the double word.<a href="#section-9-4.1" class="pilcrow">¶</a></p>
+         <p id="section-9-4.2">This sentence has a 'nbsp' in this double word.<a href="#section-9-4.2" class="pilcrow">¶</a></p>
+         <p id="section-9-4.3">This longer sentence has no 'nbsp' in the double word.<a href="#section-9-4.3" class="pilcrow">¶</a></p>
+         <p id="section-9-4.4">This longer sentence has a 'nbsp' in this double word.<a href="#section-9-4.4" class="pilcrow">¶</a></p>
+         <p id="section-9-4.5">This longer longer sentence has no 'nbsp' in the double word.<a href="#section-9-4.5" class="pilcrow">¶</a></p>
+         <p id="section-9-4.6">This longer longer sentence has a 'nbsp' in this double word.<a href="#section-9-4.6" class="pilcrow">¶</a></p>
+         <p id="section-9-4.7">This longer longer longer sentence has no 'nbsp' in the double word.<a href="#section-9-4.7" class="pilcrow">¶</a></p>
+         <p id="section-9-4.8">This longer longer longer sentence has a 'nbsp' in this double word.<a href="#section-9-4.8" class="pilcrow">¶</a></p>
+         <p id="section-9-4.9">This longer longer longer longer sentence has no 'nbsp' in the double word.<a href="#section-9-4.9" class="pilcrow">¶</a></p>
+         <p id="section-9-4.10">This longer longer longer longer sentence has a 'nbsp' in this double word.<a href="#section-9-4.10" class="pilcrow">¶</a></p>
+      </aside>
+   </section>
 </div>
 <div id="references-section">
-<section id="section-10">
+   <section id="section-10">
       <h2 id="name-references">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
+         <a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
-<section id="section-10.1">
-        <h3 id="name-normative-references">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
-        </h3>
-<dl class="references">
-<dt id="RFC2119">[RFC2119]</dt>
-        <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
-<dt id="RFC7997">[RFC7997]</dt>
-        <dd>
-<span class="refAuthor">Flanagan, H., Ed.</span>, <span class="refTitle">"The Use of Non-ASCII Characters in RFCs"</span>, <span class="stream">IAB</span>, <span class="seriesInfo">RFC 7997</span>, <span class="seriesInfo">DOI 10.17487/RFC7997</span>, <time datetime="2016-12">December 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7997">https://www.rfc-editor.org/info/rfc7997</a>&gt;</span>. </dd>
-<dt id="RFC8174">[RFC8174]</dt>
-      <dd>
-<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
-</dl>
-</section>
-<section id="section-10.2">
-        <h3 id="name-informative-references">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
-        </h3>
-<div id="CMS">
-<section id="section-10.2.1">
-          <h4 id="name-cms-references">
-<a href="#section-10.2.1" class="section-number selfRef">10.2.1. </a><a href="#name-cms-references" class="section-name selfRef">CMS References</a>
-          </h4>
-<dl class="references">
-<dt id="I-D.levkowetz-xml2rfc-v3-implementation-notes">[I-D.levkowetz-xml2rfc-v3-implementation-notes]</dt>
-          <dd>
-<span class="refAuthor">Levkowetz, H.</span>, <span class="refTitle">"Implementation notes for RFC7991, "The 'xml2rfc' Version 3 Vocabulary""</span>, <span class="seriesInfo">Internet-Draft, draft-levkowetz-xml2rfc-v3-implementation-notes-09</span>, <time datetime="2019-06-28">June 28, 2019</time>, <span>&lt;<a href="https://tools.ietf.org/html/draft-levkowetz-xml2rfc-v3-implementation-notes-09">https://tools.ietf.org/html/draft-levkowetz-xml2rfc-v3-implementation-notes-09</a>&gt;</span>. </dd>
-<dt id="RFC5083">[RFC5083]</dt>
-          <dd>
-<span class="refAuthor">Housley, R.</span>, <span class="refTitle">"Cryptographic Message Syntax (CMS) Authenticated-Enveloped-Data Content Type"</span>, <span class="seriesInfo">RFC 5083</span>, <span class="seriesInfo">DOI 10.17487/RFC5083</span>, <time datetime="2007-11">November 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5083">https://www.rfc-editor.org/info/rfc5083</a>&gt;</span>. </dd>
-<dt id="RFC5652">[RFC5652]</dt>
-        <dd>
-<span class="refAuthor">Housley, R.</span>, <span class="refTitle">"Cryptographic Message Syntax (CMS)"</span>, <span class="seriesInfo">STD 70</span>, <span class="seriesInfo">RFC 5652</span>, <span class="seriesInfo">DOI 10.17487/RFC5652</span>, <time datetime="2009-09">September 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5652">https://www.rfc-editor.org/info/rfc5652</a>&gt;</span>. </dd>
-</dl>
-</section>
-</div>
-<div id="ESS">
-<section id="section-10.2.2">
-          <h4 id="name-ess-references">
-<a href="#section-10.2.2" class="section-number selfRef">10.2.2. </a><a href="#name-ess-references" class="section-name selfRef">ESS References</a>
-          </h4>
-<dl class="references">
-<dt id="RFC2634">[RFC2634]</dt>
-          <dd>
-<span class="refAuthor">Hoffman, P., Ed.</span>, <span class="refTitle">"Enhanced Security Services for S/MIME"</span>, <span class="seriesInfo">RFC 2634</span>, <span class="seriesInfo">DOI 10.17487/RFC2634</span>, <time datetime="1999-06">June 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2634">https://www.rfc-editor.org/info/rfc2634</a>&gt;</span>. </dd>
-<dt id="RFC5035">[RFC5035]</dt>
-        <dd>
-<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"Enhanced Security Services (ESS) Update: Adding CertID Algorithm Agility"</span>, <span class="seriesInfo">RFC 5035</span>, <span class="seriesInfo">DOI 10.17487/RFC5035</span>, <time datetime="2007-08">August 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5035">https://www.rfc-editor.org/info/rfc5035</a>&gt;</span>. </dd>
-</dl>
-</section>
-</div>
-<div id="MIME-SPEC">
-<section id="section-10.2.3">
-          <h4 id="name-mime-spec-references">
-<a href="#section-10.2.3" class="section-number selfRef">10.2.3. </a><a href="#name-mime-spec-references" class="section-name selfRef">MIME-SPEC References</a>
-          </h4>
-<dl class="references">
-<dt id="RFC2045">[RFC2045]</dt>
-          <dd>
-<span class="refAuthor">Freed, N.</span><span class="refAuthor"> and N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies"</span>, <span class="seriesInfo">RFC 2045</span>, <span class="seriesInfo">DOI 10.17487/RFC2045</span>, <time datetime="1996-11">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2045">https://www.rfc-editor.org/info/rfc2045</a>&gt;</span>. </dd>
-<dt id="RFC2046">[RFC2046]</dt>
-          <dd>
-<span class="refAuthor">Freed, N.</span><span class="refAuthor"> and N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types"</span>, <span class="seriesInfo">RFC 2046</span>, <span class="seriesInfo">DOI 10.17487/RFC2046</span>, <time datetime="1996-11">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2046">https://www.rfc-editor.org/info/rfc2046</a>&gt;</span>. </dd>
-<dt id="RFC2047">[RFC2047]</dt>
-          <dd>
-<span class="refAuthor">Moore, K.</span>, <span class="refTitle">"MIME (Multipurpose Internet Mail Extensions) Part Three: Message Header Extensions for Non-ASCII Text"</span>, <span class="seriesInfo">RFC 2047</span>, <span class="seriesInfo">DOI 10.17487/RFC2047</span>, <time datetime="1996-11">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2047">https://www.rfc-editor.org/info/rfc2047</a>&gt;</span>. </dd>
-<dt id="RFC2049">[RFC2049]</dt>
-          <dd>
-<span class="refAuthor">Freed, N.</span><span class="refAuthor"> and N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Five: Conformance Criteria and Examples"</span>, <span class="seriesInfo">RFC 2049</span>, <span class="seriesInfo">DOI 10.17487/RFC2049</span>, <time datetime="1996-11">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2049">https://www.rfc-editor.org/info/rfc2049</a>&gt;</span>. </dd>
-<dt id="RFC4289">[RFC4289]</dt>
-          <dd>
-<span class="refAuthor">Freed, N.</span><span class="refAuthor"> and J. Klensin</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Four: Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 4289</span>, <span class="seriesInfo">DOI 10.17487/RFC4289</span>, <time datetime="2005-12">December 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4289">https://www.rfc-editor.org/info/rfc4289</a>&gt;</span>. </dd>
-<dt id="RFC6838">[RFC6838]</dt>
-        <dd>
-<span class="refAuthor">Freed, N.</span><span class="refAuthor">, Klensin, J.</span><span class="refAuthor">, and T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6838">https://www.rfc-editor.org/info/rfc6838</a>&gt;</span>. </dd>
-</dl>
-</section>
-</div>
-<section id="section-10.2.4">
-          <h4 id="name-other-references">
-<a href="#section-10.2.4" class="section-number selfRef">10.2.4. </a><a href="#name-other-references" class="section-name selfRef">Other References</a>
-          </h4>
-<dl class="references">
-<dt id="DATE-RANGE">[DATE-RANGE]</dt>
-          <dd>
-<span class="refAuthor">Moe, J.</span>, <span class="refTitle">"Document with date range"</span>, <time datetime="2002-2003">2002-2003</time>. </dd>
-<dt id="FUZZY-DATE">[FUZZY-DATE]</dt>
-          <dd>
-<span class="refAuthor">Mae, J.</span>, <span class="refTitle">"Document with fuzzy date"</span>, <time datetime="Second quarter 2010">Second quarter 2010</time>. </dd>
-<dt id="RFC0952">[RFC0952]</dt>
-        <dd>
-<span class="refAuthor">Harrenstien, K.</span><span class="refAuthor">, Stahl, M.</span><span class="refAuthor">, and E. Feinler</span>, <span class="refTitle">"DoD Internet host table specification"</span>, <span class="seriesInfo">RFC 952</span>, <span class="seriesInfo">DOI 10.17487/RFC0952</span>, <time datetime="1985-10">October 1985</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc952">https://www.rfc-editor.org/info/rfc952</a>&gt;</span>. </dd>
-</dl>
-</section>
-</section>
-</section>
+      <section id="section-10.1">
+         <h3 id="name-normative-references">
+            <a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+         </h3>
+         <dl class="references">
+            <dt id="RFC2119">[RFC2119]</dt>
+            <dd>
+               <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+            <dt id="RFC7997">[RFC7997]</dt>
+            <dd>
+               <span class="refAuthor">Flanagan, H., Ed.</span>, <span class="refTitle">"The Use of Non-ASCII Characters in RFCs"</span>, <span class="stream">IAB</span>, <span class="seriesInfo">RFC 7997</span>, <span class="seriesInfo">DOI 10.17487/RFC7997</span>, <time datetime="2016-12">December 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7997">https://www.rfc-editor.org/info/rfc7997</a>&gt;</span>. </dd>
+            <dt id="RFC8174">[RFC8174]</dt>
+            <dd>
+               <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+         </dl>
+      </section>
+      <section id="section-10.2">
+         <h3 id="name-informative-references">
+            <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+         </h3>
+         <div id="CMS">
+            <section id="section-10.2.1">
+               <h4 id="name-cms-references">
+                  <a href="#section-10.2.1" class="section-number selfRef">10.2.1. </a><a href="#name-cms-references" class="section-name selfRef">CMS References</a>
+               </h4>
+               <dl class="references">
+                  <dt id="I-D.levkowetz-xml2rfc-v3-implementation-notes">[I-D.levkowetz-xml2rfc-v3-implementation-notes]</dt>
+                  <dd>
+                     <span class="refAuthor">Levkowetz, H.</span>, <span class="refTitle">"Implementation notes for RFC7991, "The 'xml2rfc' Version 3 Vocabulary""</span>, <span class="seriesInfo">Internet-Draft, draft-levkowetz-xml2rfc-v3-implementation-notes-09</span>, <time datetime="2019-06-28">June 28, 2019</time>, <span>&lt;<a href="https://tools.ietf.org/html/draft-levkowetz-xml2rfc-v3-implementation-notes-09">https://tools.ietf.org/html/draft-levkowetz-xml2rfc-v3-implementation-notes-09</a>&gt;</span>. </dd>
+                  <dt id="RFC5083">[RFC5083]</dt>
+                  <dd>
+                     <span class="refAuthor">Housley, R.</span>, <span class="refTitle">"Cryptographic Message Syntax (CMS) Authenticated-Enveloped-Data Content Type"</span>, <span class="seriesInfo">RFC 5083</span>, <span class="seriesInfo">DOI 10.17487/RFC5083</span>, <time datetime="2007-11">November 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5083">https://www.rfc-editor.org/info/rfc5083</a>&gt;</span>. </dd>
+                  <dt id="RFC5652">[RFC5652]</dt>
+                  <dd>
+                     <span class="refAuthor">Housley, R.</span>, <span class="refTitle">"Cryptographic Message Syntax (CMS)"</span>, <span class="seriesInfo">STD 70</span>, <span class="seriesInfo">RFC 5652</span>, <span class="seriesInfo">DOI 10.17487/RFC5652</span>, <time datetime="2009-09">September 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5652">https://www.rfc-editor.org/info/rfc5652</a>&gt;</span>. </dd>
+               </dl>
+            </section>
+         </div>
+         <div id="ESS">
+            <section id="section-10.2.2">
+               <h4 id="name-ess-references">
+                  <a href="#section-10.2.2" class="section-number selfRef">10.2.2. </a><a href="#name-ess-references" class="section-name selfRef">ESS References</a>
+               </h4>
+               <dl class="references">
+                  <dt id="RFC2634">[RFC2634]</dt>
+                  <dd>
+                     <span class="refAuthor">Hoffman, P., Ed.</span>, <span class="refTitle">"Enhanced Security Services for S/MIME"</span>, <span class="seriesInfo">RFC 2634</span>, <span class="seriesInfo">DOI 10.17487/RFC2634</span>, <time datetime="1999-06">June 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2634">https://www.rfc-editor.org/info/rfc2634</a>&gt;</span>. </dd>
+                  <dt id="RFC5035">[RFC5035]</dt>
+                  <dd>
+                     <span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"Enhanced Security Services (ESS) Update: Adding CertID Algorithm Agility"</span>, <span class="seriesInfo">RFC 5035</span>, <span class="seriesInfo">DOI 10.17487/RFC5035</span>, <time datetime="2007-08">August 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5035">https://www.rfc-editor.org/info/rfc5035</a>&gt;</span>. </dd>
+               </dl>
+            </section>
+         </div>
+         <div id="MIME-SPEC">
+            <section id="section-10.2.3">
+               <h4 id="name-mime-spec-references">
+                  <a href="#section-10.2.3" class="section-number selfRef">10.2.3. </a><a href="#name-mime-spec-references" class="section-name selfRef">MIME-SPEC References</a>
+               </h4>
+               <dl class="references">
+                  <dt id="RFC2045">[RFC2045]</dt>
+                  <dd>
+                     <span class="refAuthor">Freed, N.</span><span class="refAuthor"> and N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies"</span>, <span class="seriesInfo">RFC 2045</span>, <span class="seriesInfo">DOI 10.17487/RFC2045</span>, <time datetime="1996-11">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2045">https://www.rfc-editor.org/info/rfc2045</a>&gt;</span>. </dd>
+                  <dt id="RFC2046">[RFC2046]</dt>
+                  <dd>
+                     <span class="refAuthor">Freed, N.</span><span class="refAuthor"> and N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types"</span>, <span class="seriesInfo">RFC 2046</span>, <span class="seriesInfo">DOI 10.17487/RFC2046</span>, <time datetime="1996-11">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2046">https://www.rfc-editor.org/info/rfc2046</a>&gt;</span>. </dd>
+                  <dt id="RFC2047">[RFC2047]</dt>
+                  <dd>
+                     <span class="refAuthor">Moore, K.</span>, <span class="refTitle">"MIME (Multipurpose Internet Mail Extensions) Part Three: Message Header Extensions for Non-ASCII Text"</span>, <span class="seriesInfo">RFC 2047</span>, <span class="seriesInfo">DOI 10.17487/RFC2047</span>, <time datetime="1996-11">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2047">https://www.rfc-editor.org/info/rfc2047</a>&gt;</span>. </dd>
+                  <dt id="RFC2049">[RFC2049]</dt>
+                  <dd>
+                     <span class="refAuthor">Freed, N.</span><span class="refAuthor"> and N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Five: Conformance Criteria and Examples"</span>, <span class="seriesInfo">RFC 2049</span>, <span class="seriesInfo">DOI 10.17487/RFC2049</span>, <time datetime="1996-11">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2049">https://www.rfc-editor.org/info/rfc2049</a>&gt;</span>. </dd>
+                  <dt id="RFC4289">[RFC4289]</dt>
+                  <dd>
+                     <span class="refAuthor">Freed, N.</span><span class="refAuthor"> and J. Klensin</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Four: Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 4289</span>, <span class="seriesInfo">DOI 10.17487/RFC4289</span>, <time datetime="2005-12">December 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4289">https://www.rfc-editor.org/info/rfc4289</a>&gt;</span>. </dd>
+                  <dt id="RFC6838">[RFC6838]</dt>
+                  <dd>
+                     <span class="refAuthor">Freed, N.</span><span class="refAuthor">, Klensin, J.</span><span class="refAuthor">, and T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6838">https://www.rfc-editor.org/info/rfc6838</a>&gt;</span>. </dd>
+               </dl>
+            </section>
+         </div>
+         <section id="section-10.2.4">
+            <h4 id="name-other-references">
+               <a href="#section-10.2.4" class="section-number selfRef">10.2.4. </a><a href="#name-other-references" class="section-name selfRef">Other References</a>
+            </h4>
+            <dl class="references">
+               <dt id="DATE-RANGE">[DATE-RANGE]</dt>
+               <dd>
+                  <span class="refAuthor">Moe, J.</span>, <span class="refTitle">"Document with date range"</span>, <time datetime="2002-2003">2002-2003</time>. </dd>
+               <dt id="FUZZY-DATE">[FUZZY-DATE]</dt>
+               <dd>
+                  <span class="refAuthor">Mae, J.</span>, <span class="refTitle">"Document with fuzzy date"</span>, <time datetime="Second quarter 2010">Second quarter 2010</time>. </dd>
+               <dt id="RFC0952">[RFC0952]</dt>
+               <dd>
+                  <span class="refAuthor">Harrenstien, K.</span><span class="refAuthor">, Stahl, M.</span><span class="refAuthor">, and E. Feinler</span>, <span class="refTitle">"DoD Internet host table specification"</span>, <span class="seriesInfo">RFC 952</span>, <span class="seriesInfo">DOI 10.17487/RFC0952</span>, <time datetime="1985-10">October 1985</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc952">https://www.rfc-editor.org/info/rfc952</a>&gt;</span>. </dd>
+            </dl>
+         </section>
+      </section>
+   </section>
 </div>
 <div id="back-matter">
-<section id="section-appendix.a">
+   <section id="section-appendix.a">
       <h2 id="name-some-back-matter">
-<a href="#section-appendix.a" class="section-number selfRef">Appendix A. </a><a href="#name-some-back-matter" class="section-name selfRef">Some Back Matter</a>
+         <a href="#section-appendix.a" class="section-number selfRef">Appendix A. </a><a href="#name-some-back-matter" class="section-name selfRef">Some Back Matter</a>
       </h2>
-<p id="section-appendix.a-1">
+      <p id="section-appendix.a-1">
 
-            Fusce viverra ipsum tempor finibus pharetra. Vestibulum fermentum
-            porta neque et maximus. Aliquam tristique nibh in neque aliquam
-            pharetra. Sed sapien felis, efficitur at finibus et, porttitor non
-            quam. Nulla a ultrices nibh, ac commodo lacus. Integer vitae lorem ut
-            sapien venenatis maximus. Morbi ut faucibus nunc, vitae pretium
-            lorem. Aliquam sit amet tortor ut turpis dapibus ullamcorper. Proin
-            at ligula nec magna molestie eleifend.<a href="#section-appendix.a-1" class="pilcrow">¶</a></p>
-</section>
+         Fusce viverra ipsum tempor finibus pharetra. Vestibulum fermentum
+         porta neque et maximus. Aliquam tristique nibh in neque aliquam
+         pharetra. Sed sapien felis, efficitur at finibus et, porttitor non
+         quam. Nulla a ultrices nibh, ac commodo lacus. Integer vitae lorem ut
+         sapien venenatis maximus. Morbi ut faucibus nunc, vitae pretium
+         lorem. Aliquam sit amet tortor ut turpis dapibus ullamcorper. Proin
+         at ligula nec magna molestie eleifend.<a href="#section-appendix.a-1" class="pilcrow">¶</a></p>
+   </section>
 </div>
 <div id="authors-addresses">
-<section id="section-appendix.b">
+   <section id="section-appendix.b">
       <h2 id="name-authors-addresses">
-<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+         <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">An Author</span></div>
-<div dir="auto" class="left"><span class="org">ElfTools</span></div>
-<div dir="auto" class="left"><span class="street-address">Midtskogveien 18     </span></div>
-<div dir="auto" class="left">
-<span class="postal-code">2020</span> <span class="locality">Skedsmokorset</span>
-</div>
-<div dir="auto" class="left"><span class="country-name">Norway              </span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:henrik@levkowetz.com" class="email">henrik@levkowetz.com</a>
-</div>
-</address>
-<address class="vcard">
-        <div class="ascii">
-<div dir="auto" class="left"><span class="fn nameRole">Roni Even</span></div>
-<div dir="auto" class="left"><span class="org">Huawei</span></div>
-<div dir="auto" class="left"><span class="street-address">David Hamelech 14</span></div>
-<div dir="auto" class="left">
-<span class="locality">Tel Aviv</span> <span class="postal-code">64953</span>
-</div>
-<div dir="auto" class="left"><span class="country-name">Israel</span></div>
-</div>
-<div class="alternative-contact">Additional contact information:</div>
-<div class="non-ascii">
-<div dir="auto" class="right"><span class="fn nameRole">רוני אבן</span></div>
-<div dir="auto" class="right"><span class="org">וואווי</span></div>
-<div dir="auto" class="right"><span class="street-address">דוד המלך 14</span></div>
-<div dir="auto" class="right">
-<span class="locality">תל אביב</span> <span class="postal-code">64953</span>
-</div>
-<div dir="auto" class="right"><span class="country-name">ישראל</span></div>
-</div>
-</address>
-<address class="vcard">
-        <div class="ascii">
-<div dir="auto" class="left"><span class="fn nameRole">Hanako Tanaka</span></div>
-<div dir="auto" class="left"><span class="extended-address">3-kai B-goshitsu</span></div>
-<div dir="auto" class="left">
-<span class="street-address">4-3-2 Hakusan, Bunkyo-ku</span>, <span class="region">Tokyo</span>
-</div>
-<div dir="auto" class="left"><span class="postal-code">112-0001</span></div>
-<div dir="auto" class="left"><span class="country-name">Japan</span></div>
-</div>
-<div class="alternative-contact">Additional contact information:</div>
-<div class="non-ascii">
-<div dir="auto" class="left"><span class="fn nameRole">田中花子 様</span></div>
-<div dir="auto" class="left"><span class="country-name">日本</span></div>
-<div dir="auto" class="left">〒<span class="postal-code">112-0001</span>
-</div>
-<div dir="auto" class="left"><span class="region">東京都</span></div>
-<div dir="auto" class="left"><span class="street-address">文京区 白山4丁目3番2号</span></div>
-<div dir="auto" class="left"><span class="extended-address">3階B号室</span></div>
-</div>
-</address>
-</section>
+      <address class="vcard">
+         <div dir="auto" class="left"><span class="fn nameRole">An Author</span></div>
+         <div dir="auto" class="left"><span class="org">ElfTools</span></div>
+         <div dir="auto" class="left"><span class="street-address">Midtskogveien 18     </span></div>
+         <div dir="auto" class="left">
+            <span class="postal-code">2020</span> <span class="locality">Skedsmokorset</span>
+         </div>
+         <div dir="auto" class="left"><span class="country-name">Norway              </span></div>
+         <div class="email">
+            <span>Email:</span>
+            <a href="mailto:henrik@levkowetz.com" class="email">henrik@levkowetz.com</a>
+         </div>
+      </address>
+      <address class="vcard">
+         <div class="ascii">
+            <div dir="auto" class="left"><span class="fn nameRole">Roni Even</span></div>
+            <div dir="auto" class="left"><span class="org">Huawei</span></div>
+            <div dir="auto" class="left"><span class="street-address">David Hamelech 14</span></div>
+            <div dir="auto" class="left">
+               <span class="locality">Tel Aviv</span> <span class="postal-code">64953</span>
+            </div>
+            <div dir="auto" class="left"><span class="country-name">Israel</span></div>
+         </div>
+         <div class="alternative-contact">Additional contact information:</div>
+         <div class="non-ascii">
+            <div dir="auto" class="right"><span class="fn nameRole">רוני אבן</span></div>
+            <div dir="auto" class="right"><span class="org">וואווי</span></div>
+            <div dir="auto" class="right"><span class="street-address">דוד המלך 14</span></div>
+            <div dir="auto" class="right">
+               <span class="locality">תל אביב</span> <span class="postal-code">64953</span>
+            </div>
+            <div dir="auto" class="right"><span class="country-name">ישראל</span></div>
+         </div>
+      </address>
+      <address class="vcard">
+         <div class="ascii">
+            <div dir="auto" class="left"><span class="fn nameRole">Hanako Tanaka</span></div>
+            <div dir="auto" class="left"><span class="extended-address">3-kai B-goshitsu</span></div>
+            <div dir="auto" class="left">
+               <span class="street-address">4-3-2 Hakusan, Bunkyo-ku</span>, <span class="region">Tokyo</span>
+            </div>
+            <div dir="auto" class="left"><span class="postal-code">112-0001</span></div>
+            <div dir="auto" class="left"><span class="country-name">Japan</span></div>
+         </div>
+         <div class="alternative-contact">Additional contact information:</div>
+         <div class="non-ascii">
+            <div dir="auto" class="left"><span class="fn nameRole">田中花子 様</span></div>
+            <div dir="auto" class="left"><span class="country-name">日本</span></div>
+            <div dir="auto" class="left">〒<span class="postal-code">112-0001</span>
+            </div>
+            <div dir="auto" class="left"><span class="region">東京都</span></div>
+            <div dir="auto" class="left"><span class="street-address">文京区 白山4丁目3番2号</span></div>
+            <div dir="auto" class="left"><span class="extended-address">3階B号室</span></div>
+         </div>
+      </address>
+   </section>
 </div>
 <script>var toc = document.getElementById("toc");
 var tocToggle = toc.querySelector("h2");
 var tocNav = toc.querySelector("nav");
 
 // mobile menu toggle
-tocToggle.onclick = function(event) {
+   tocToggle.onclick = function(event) {
     if (window.innerWidth < 1024) {
- var tocNavDisplay = tocNav.currentStyle ? tocNav.currentStyle.display : getComputedStyle(tocNav, null).display;
- if (tocNavDisplay == "none") {
-     tocNav.style.display = "block";
- } else {
-     tocNav.style.display = "none";
- }
+        var tocNavDisplay = tocNav.currentStyle ? tocNav.currentStyle.display : getComputedStyle(tocNav, null).display;
+        if (tocNavDisplay == "none") {
+            tocNav.style.display = "block";
+        } else {
+            tocNav.style.display = "none";
+        }
     }
 }
 
 // toc anchor scroll to anchor
-tocNav.addEventListener("click", function (event) {
+   tocNav.addEventListener("click", function (event) {
     event.preventDefault();
     if (event.target.nodeName == 'A') {
- if (window.innerWidth < 1024) {
-     tocNav.style.display = "none";
- }
- var href = event.target.getAttribute("href");
- var anchorId = href.substr(1);
- var anchor =  document.getElementById(anchorId);
- anchor.scrollIntoView(true);
- window.history.pushState("","",href);
+        if (window.innerWidth < 1024) {
+            tocNav.style.display = "none";
+        }
+        var href = event.target.getAttribute("href");
+        var anchorId = href.substr(1);
+        var anchor =  document.getElementById(anchorId);
+        anchor.scrollIntoView(true);
+        window.history.pushState("","",href);
     }
 });
 
 // switch toc mode when window resized
 window.onresize = function () {
     if (window.innerWidth < 1024) {
- tocNav.style.display = "none";
+        tocNav.style.display = "none";
     } else {
- tocNav.style.display = "block";
+        tocNav.style.display = "block";
     }
 }
 </script>

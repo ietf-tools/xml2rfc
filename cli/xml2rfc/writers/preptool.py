@@ -339,6 +339,10 @@ class PrepToolWriter(BaseV3Writer):
                 if selector_visits[s] == 0:
                     self.note(None, "Selector '%s' has not matched" % (s))
 
+        if self.errors:
+            self.log("Not creating output file due to errors (see above)")
+            return None
+
         return self.tree
 
     # ----------------------------------------------------------------

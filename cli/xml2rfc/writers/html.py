@@ -442,6 +442,12 @@ class HtmlWriter(BaseV3Writer):
         for keyword in x.xpath('./front/keyword'):
             add.meta(head, None, name='keyword', content=keyword.text)
 
+    ## Additional meta information, not specified in RFC 7992:
+        if self.options.rfc:
+            add.meta(head, None, name='rfc.number', content=self.root.get('number'))
+        else:
+            add.meta(head, None, name='ietf.draft', content=self.root.get('docName'))
+
     #    For example:
     # 
     #    <meta name="author" content="Joe Hildebrand">
@@ -548,10 +554,6 @@ class HtmlWriter(BaseV3Writer):
                 js = f.read()
 
         if js:
-            s = add.script(body, None)
-            s.text = '\n'+js
-            s.tail = '\n'
-            # 
             if self.filename:
                 dest_dir = os.path.dirname(self.filename)
                 if dest_dir:
@@ -1509,9 +1511,12 @@ class HtmlWriter(BaseV3Writer):
                     cls = slugify(name)
                     dl.append( build.dt('%s:'%name, classes='label-%s'%cls))
                     dl.append( build.dd(*values, classes=cls))
-            #
+            # First page, top, external document information
+            # This will be filled in by javascript from external JSON at rendering time
+            h.append( build.div(classes='document-information', id="external-metadata" ))
+            # First page, top, internal document information
             dl = build.dl(id='identifiers')
-            h.append( build.div(dl, classes='document-information' ))
+            h.append( build.div(dl, classes='document-information', id="internal-metadata" ))
             if self.options.rfc:
                 # Stream
                 stream = self.root.get('submissionType')
