@@ -399,7 +399,14 @@ def main():
         # matches lxml.etree._LogEntry, so we can use the same logging function
         xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e.error_log)
         sys.exit(1)
-        
+    # check doctype
+    if xmlrfc.tree.docinfo:
+        root = xmlrfc.tree.getroot()
+        docinfo = xmlrfc.tree.docinfo
+        version = root.get('version', '2')
+        if version == '3' and docinfo.system_url.lower() == 'rfc2629.dtd':
+            xml2rfc.log.error('Incompatible schema information: found "rfc2629.dtd" in <DOCTYPE> of a version 3 file')
+            sys.exit(1)
 
     # Remember if we're building an RFC
     options.rfc = xmlrfc.tree.getroot().get('number')
@@ -577,9 +584,10 @@ def main():
             xmlrfc.tree = v2v3.convert2to3()
             prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
-            writer = xml2rfc.TextWriter(xmlrfc, options=options, date=options.date)
-            writer.write(filename)
-            options.output_filename = None
+            if xmlrfc.tree:
+                writer = xml2rfc.TextWriter(xmlrfc, options=options, date=options.date)
+                writer.write(filename)
+                options.output_filename = None
 
         if options.html and not options.legacy:
             xmlrfc = parser.parse(remove_comments=False, quiet=True, add_xmlns=True)
@@ -591,9 +599,10 @@ def main():
             xmlrfc.tree = v2v3.convert2to3()
             prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
-            writer = xml2rfc.HtmlWriter(xmlrfc, options=options, date=options.date)
-            writer.write(filename)
-            options.output_filename = None
+            if xmlrfc.tree:
+                writer = xml2rfc.HtmlWriter(xmlrfc, options=options, date=options.date)
+                writer.write(filename)
+                options.output_filename = None
 
         if options.pdf:
             xmlrfc = parser.parse(remove_comments=False, quiet=True, add_xmlns=True)
@@ -605,9 +614,10 @@ def main():
             xmlrfc.tree = v2v3.convert2to3()
             prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
-            writer = xml2rfc.PdfWriter(xmlrfc, options=options, date=options.date)
-            writer.write(filename)
-            options.output_filename = None
+            if xmlrfc.tree:
+                writer = xml2rfc.PdfWriter(xmlrfc, options=options, date=options.date)
+                writer.write(filename)
+                options.output_filename = None
 
         if options.info:
             xmlrfc = parser.parse(remove_comments=False, quiet=True)
@@ -619,15 +629,16 @@ def main():
             xmlrfc.tree = v2v3.convert2to3()
             prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
             xmlrfc.tree = prep.prep()
-            info = extract_anchor_info(xmlrfc.tree)
-            if six.PY2:
-                with open(filename, 'w') as fp:
-                    json.dump(info, fp, indent=2, ensure_ascii=False, encoding='utf-8')
-            else:
-                with io.open(filename, 'w', encoding='utf-8') as fp:
-                    json.dump(info, fp, indent=2, ensure_ascii=False)
-            if not options.quiet:
-                xml2rfc.log.write('Created file', filename)
+            if xmlrfc.tree:
+                info = extract_anchor_info(xmlrfc.tree)
+                if six.PY2:
+                    with open(filename, 'w') as fp:
+                        json.dump(info, fp, indent=2, ensure_ascii=False, encoding='utf-8')
+                else:
+                    with io.open(filename, 'w', encoding='utf-8') as fp:
+                        json.dump(info, fp, indent=2, ensure_ascii=False)
+                if not options.quiet:
+                    xml2rfc.log.write('Created file', filename)
 
     except xml2rfc.RfcWriterError as e:
         xml2rfc.log.error('Unable to convert the document: ' + args[0],  
