@@ -1380,8 +1380,7 @@ class TextWriter(BaseV3Writer):
         kwargs.pop('newline', False)
         indent = kwargs['joiners']['dd'].indent
         join   = len(kwargs['joiners']['dd'].join)
-        width -= 24
-        text = fill(self.inner_text_renderer(e), width=width, **kwargs)
+        text = fill(self.inner_text_renderer(e), width=width-3, **kwargs)
         if len(text) < indent:
             text = text+' '*max(0, indent-join-len(text))
         return text
