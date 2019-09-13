@@ -199,11 +199,16 @@ cleantmp:
 	@[ -d tests/out ] && rm -f tests/out/* && cp xml2rfc/templates/rfc2629* tests/out/
 
 
-tests: test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest wiptest
+tests: minify test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest wiptest
 
 noflakestests: install pytests regressiontests
 
 regressiontests: drafttest rfctest
+
+minify: xml2rfc/data/metadata.min.js
+
+%.min.js: %.js
+	bin/uglifycall $<
 
 test2:	test
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --utf8 tests/input/rfc6635.xml --legacy --text --out tmp/rfc6635.txt	&& diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt "
