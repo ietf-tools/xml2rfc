@@ -52,7 +52,7 @@ default_options = Values(defaults={
         'indent': 2,
         'info': False,
         'legacy': True,
-        'legacy_date_format': True,
+        'legacy_date_format': False,
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
         'metadata_js_url': 'metadata.min.js',
