@@ -170,6 +170,9 @@ class PrepToolWriter(BaseV3Writer):
             self.log("Not creating output file due to errors (see above)")
             return self.errors
 
+        # remove the index, which should not be part of the prepped output
+        self.remove_index()
+
         # Use lxml's built-in serialization
         file = open(filename, 'w', encoding='utf-8')
 
@@ -2200,3 +2203,11 @@ class PrepToolWriter(BaseV3Writer):
     # 
     #    Pretty-format the XML output.  (Note: there are many tools that do an
     #    adequate job.)
+
+    def remove_index(self):
+        index_index = self.root.find('./back/section/t[@anchor="rfc.index.index"]')
+        if index_index:
+            index = index_index.getparent()
+            assert index.tag == 'section'
+            self.remove(index.getparent(), index)
+        
