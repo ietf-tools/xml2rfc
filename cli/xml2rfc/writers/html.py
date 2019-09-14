@@ -25,7 +25,7 @@ elif six.PY3:
     from urllib.parse import urlparse, urljoin
 
 try:
-    import debug
+    from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
@@ -1507,7 +1507,7 @@ class HtmlWriter(BaseV3Writer):
             #   * Expires: <Date>
 
             def entry(dl, name, *values):
-                if values != None:
+                if filter(lambda x: x!=None, values):
                     cls = slugify(name)
                     dl.append( build.dt('%s:'%name, classes='label-%s'%cls))
                     dl.append( build.dd(*values, classes=cls))
@@ -1548,7 +1548,8 @@ class HtmlWriter(BaseV3Writer):
             else:
                 # Workgroup
                 for wg in x.xpath('./workgroup'):
-                    entry(dl, 'Workgroup', wg.text)
+                    if wg.text and wg.text.strip():
+                        entry(dl, 'Workgroup', wg.text.strip())
                 # Internet-Draft
                 for series in x.xpath('./seriesInfo'):
                     entry(dl, series.get('name'), series.get('value'))

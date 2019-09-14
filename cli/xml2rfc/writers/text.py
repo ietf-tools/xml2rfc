@@ -1726,10 +1726,12 @@ class TextWriter(BaseV3Writer):
                 #
             else:
                 # Internet-Draft
-                group = front.find('workgroup')
-                if group != None and group.text:
-                    left.append(group.text.strip())
-                else:
+                found = False
+                for group in front.xpath('./workgroup'):
+                    if group.text and group.text.strip():
+                        found = True
+                        left.append(group.text.strip())
+                if not found:
                     left.append('Network Working Group')
                 left.append('Internet-Draft')
                 #
