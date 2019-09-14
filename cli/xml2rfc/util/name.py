@@ -140,7 +140,7 @@ def full_author_name(a, latin=False):
     else:
         initials = get_initials(a)
         surname  = a.get('surname')
-        if initials and not initials.endswith('.'):
+        if initials and not initials.endswith('.') and is_script(initials, 'Latin'):
             initials += '.'
         return ' '.join( n for n in [initials, surname] if n )
 
