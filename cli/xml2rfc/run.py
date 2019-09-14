@@ -400,13 +400,10 @@ def main():
         xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e.error_log)
         sys.exit(1)
     # check doctype
-    if xmlrfc.tree.docinfo:
-        root = xmlrfc.tree.getroot()
-        docinfo = xmlrfc.tree.docinfo
-        version = root.get('version', '2')
-        if version == '3' and docinfo.system_url.lower() == 'rfc2629.dtd':
-            xml2rfc.log.error('Incompatible schema information: found "rfc2629.dtd" in <DOCTYPE> of a version 3 file')
-            sys.exit(1)
+    if xmlrfc.tree.docinfo and xmlrfc.tree.docinfo.system_url:
+        version = xmlrfc.tree.getroot().get('version', '2')
+        if version == '3' and xmlrfc.tree.docinfo.system_url.lower() == 'rfc2629.dtd':
+            sys.exit('Incompatible schema information: found "rfc2629.dtd" in <DOCTYPE> of a version 3 file')
 
     # Remember if we're building an RFC
     options.rfc = xmlrfc.tree.getroot().get('number')
