@@ -1519,6 +1519,9 @@ class PrepToolWriter(BaseV3Writer):
                 if num.startswith('appendix'):
                     type, num = num.replace('.', ' ', 1).title().split(None, 1)
                     content = "%s %s" % (type, num)
+                elif num[0].isalpha():
+                    type, num = 'Appendix', num.title()
+                    content = "%s %s" % (type, num)
                 else:
                     content = "%s %s" % (type.capitalize(), num)
         elif format == 'title':
