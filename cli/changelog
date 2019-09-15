@@ -1,3 +1,37 @@
+xml2rfc (2.28.0) ietf; urgency=medium
+
+  * Fixed the handling of empty <workgroup> entries when writing HTML, and 
+    added handling for multiple <workgroup> entries for text output.  Fixes 
+    issue #425.
+
+  * Fixed an inconsistency in the handling of non-ASCII author initials.
+
+  * Added some XML cleanup before writing prepped output.
+
+  * Fixed a case where for instance 'Section b.2' would be emitted instead 
+    of the correct 'Appendix B.2'
+
+  * Changed the restricted right margin for <dt> terms.
+
+  * Added a check for conflicting schema information for v3 input files, 
+    and fixed a failure to heed the presence of preptool errors when genreating 
+    v3 format outputs.
+
+  * Adjusted the library call default value for --legacy-date-format to
+    match the command line setting.
+
+  * Added a script to minify javascript (through an external service), and 
+    added a javascript minification step to the Makefile.
+
+  * Added a html <div> for external metadata, and updated metadata.js to 
+    look for online metadata also for documents served from disk.
+
+  * Fixed a problem with authors without any name, with only organization 
+    information present.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  15 Sep 2019 13:22:04 -0700
+
+
 xml2rfc (2.27.1) ietf; urgency=medium
 
   * Refined the preptool code that inserts reference target URLs to use an
