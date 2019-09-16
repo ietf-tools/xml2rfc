@@ -454,7 +454,7 @@ class XmlRfcParser:
         self.network_locs = network_locs
 
         if self.source:
-            with io.open(self.source, "rbU") as f:
+            with io.open(self.source, "rb", newline=None) as f:
                 self.text = f.read()
 
         # Initialize templates directory
