@@ -1547,9 +1547,13 @@ class HtmlWriter(BaseV3Writer):
 
             else:
                 # Workgroup
+                found = False
                 for wg in x.xpath('./workgroup'):
                     if wg.text and wg.text.strip():
                         entry(dl, 'Workgroup', wg.text.strip())
+                        found = True
+                if not found:
+                    entry(dl, 'Workgroup', 'Network Working Group')
                 # Internet-Draft
                 for series in x.xpath('./seriesInfo'):
                     entry(dl, series.get('name'), series.get('value'))
