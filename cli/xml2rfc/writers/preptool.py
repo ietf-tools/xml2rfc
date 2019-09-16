@@ -2206,7 +2206,7 @@ class PrepToolWriter(BaseV3Writer):
 
     def remove_index(self):
         index_index = self.root.find('./back/section/t[@anchor="rfc.index.index"]')
-        if index_index:
+        if index_index != None:
             index = index_index.getparent()
             assert index.tag == 'section'
             self.remove(index.getparent(), index)
