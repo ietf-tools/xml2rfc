@@ -216,6 +216,9 @@ def full_org_ascii_name(a):
     org = a.find('organization')
     if org == None:
         return ''
-    org_name = org.get('ascii') or org.text or ''
+    if is_script(org.text, 'Latin'):
+        org_name = org.text
+    else:
+        org_name = org.get('ascii') or ''
     return org_name
     

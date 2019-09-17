@@ -28,7 +28,7 @@ from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc import utils
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, get_expiry_date, format_date
-from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_author_name_parts
+from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_author_name_parts, short_org_name_set
 
 from xml2rfc.util.num import ol_style_formatter, num_width
 from xml2rfc.util.unicode import expand_unicode_element
@@ -2283,16 +2283,10 @@ class TextWriter(BaseV3Writer):
     # 
     #    The ASCII equivalent of the organization's name.
     def render_front_organization(self, e, **kwargs):
-        abbrev = e.get('abbrev')
-        if abbrev:
-            org = abbrev.strip()
-        else:
-            org = e.text or ''
-            org = org.strip()
-        if org:
-            ascii = e.get('ascii')
-            if ascii:
-                org += ' (%s)' % ascii.strip()
+        author = e.getparent()
+        org, ascii = short_org_name_set(author)
+        if ascii:
+            org += ' (%s)' % ascii.strip()
         return org
 
     def render_organization(self, e, width, **kwargs):
@@ -2300,9 +2294,9 @@ class TextWriter(BaseV3Writer):
         if e != None:
             org = e.text or ''
             org = org.strip()
-            if org:
+            if org and not is_script(org, 'Latin'):
                 ascii = e.get('ascii')
-                if ascii:
+                if ascii and ascii != org:
                     org += ' (%s)' % ascii.strip()
             text = fill(org, width=width, **kwargs)
         return text
