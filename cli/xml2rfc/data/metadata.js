@@ -38,11 +38,11 @@ async function addMetadata() {
   // [TODO: make this more sophisticated and linkify the values]
     try {
 
-        var jsonFile;
+        var jsonfile;
         var metadata = '';
         var rfcnum = getMeta('rfc.number');
         if (rfcnum) {
-            jsonfile = 'https://rfc-editor.org/rfc/rfc'+rfcnum+'.json';
+            jsonfile = 'https://www.rfc-editor.org/rfc/rfc'+rfcnum+'.json';
             try {
                 const response = await fetch(jsonfile);
                 metadata = (await response.json())[0];
@@ -90,7 +90,7 @@ async function addMetadata() {
             if (key == 'status'){
                 metadata[key] = metadata[key].toLowerCase();
                 var status_array = metadata[key].split(" ");
-                sLen = status_array.length;
+                var sLen = status_array.length;
                 var status_string="",s_counter =1;
                 for (let i=0;i<sLen;i++){
                     if (s_counter < sLen){
