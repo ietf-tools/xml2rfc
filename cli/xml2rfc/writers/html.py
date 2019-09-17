@@ -2431,6 +2431,10 @@ class HtmlWriter(BaseV3Writer):
                 h.append(span)
                 return span
         else:
+            if self.options.rfc:
+                rfc_number = self.root.get('number')
+                h1 = build.h1("RFC %s" % rfc_number, id='rfcnum')
+                h.append(h1)
             h1 = build.h1(title, id='title')
             h.append(h1)
             return h1
