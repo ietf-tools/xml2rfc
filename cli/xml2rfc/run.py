@@ -638,8 +638,9 @@ def main():
                     xml2rfc.log.write('Created file', filename)
 
     except xml2rfc.RfcWriterError as e:
-        xml2rfc.log.error('Unable to convert the document: ' + args[0],  
-                          '\n  ' + e.msg)
+        xml2rfc.log.write(e.msg)
+        xml2rfc.log.write('Unable to complete processing %s' % args[0])
+        sys.exit(1)
 
 if __name__ == '__main__':
 
