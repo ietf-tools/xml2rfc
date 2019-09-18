@@ -9,7 +9,6 @@ import textwrap
 import lxml
 import os
 import re
-import sys
 import xml2rfc.log
 import xml2rfc.util
 import xml2rfc.utils
@@ -1686,7 +1685,6 @@ class BaseV3Writer(object):
                 msg = "(No source line available): %s %s" % (label, text, )
         else:
             msg = "%s %s" % (label, text)
-        self.log(msg)
         return msg
 
     def get_relevant_pis(self, e):
@@ -1733,22 +1731,24 @@ class BaseV3Writer(object):
     def note(self, e, text, label='Note:'):
         if self.options.verbose:
             if not self.silenced(e, text):
-                self.msg(e, label, text)
+                self.log(self.msg(e, label, text))
 
     def warn(self, e, text):
         if not self.silenced(e, text):
-            self.msg(e, 'Warning:', text)
+            self.log(self.msg(e, 'Warning:', text))
 
     def err(self, e, text, trace=False):
         msg = self.msg(e, 'Error:', text)
+        self.errors.append(msg)
         if trace or self.options.debug:
             raise RuntimeError(msg)
-        self.errors.append(msg)
+        else:
+            self.log(msg)
 
     def die(self, e, text, trace=False):
-        self.err(e, text, trace)
-        self.log("Cannot continue, quitting now")
-        sys.exit(1)
+        msg = self.msg(e, 'Error:', text)
+        self.errors.append(msg)
+        raise RfcWriterError(msg)
 
     # methods operating on the xml tree
 
