@@ -288,32 +288,35 @@ class TextWriter(BaseV3Writer):
         header = justify_inline(self.page_top_left(),
                                 self.page_top_center(),
                                 self.page_top_right())
-        m = 0
-        n = 4+48
+        start_lineno = 0                # start of unbroken text
+        break_target = 4+48             # projected next break
         page = 1
+        textlen = len(lines)
         paginated = []
-        while m < len(lines):
+        while start_lineno < textlen:
             footer = justify_inline(self.page_bottom_left(),
                                     self.page_bottom_center(),
                                     "[Page %s]" % page)
-            # if the current block ends 1 after n, we'll have a widow line on
-            # the next page.  If the current block starts 1 before n, we'll
+            # if the current block ends 1 after break_target, we'll have a widow line on
+            # the next page.  If the current block starts 1 before break_target, we'll
             # have an orphan line on this page.  In either case, we insert the
-            # page break one line earlier, at n-1, and add a filler line.
-            l = len(lines)
-            nn = n
+            # page break one line earlier, at break_target-1, and add a filler line.
+            break_lineno = break_target
             pad = 0
-            if l < n:
-                pad = n - l
-                nn = l - 1                 # last line
+            if break_lineno >= textlen:
+                # The remaining text fits on the next page, this is the last page break
+                pad = break_lineno - textlen
+                break_target = textlen - 1                 # last line
             else:
-                block = lines[nn].block
+                # See if we need to adjust break point to avoid break right after a section
+                # heading, and avoid creating orphans or widows
+                block = lines[break_target].block
                 if block is None:
                     # check backwards for section start.  If we find one, check
                     # again for another, in case it's a subsection.
                     found = None
-                    i = nn
-                    while i > nn-12:
+                    i = break_target
+                    while i > break_target-12:
                         for j in range(1,4):
                             k = i - j
                             if lines[k].elem != None and lines[k].elem.tag == 'section':
@@ -323,28 +326,29 @@ class TextWriter(BaseV3Writer):
                         else:
                             break           # break while loop
                     if found:
-                        pad = nn - i
-                        n = i
+                        pad = break_target - i
+                        break_lineno = i
                 else:
-                    olen = nn - block.beg            # number of lines left at the end of this page
-                    wlen = block.end - nn            # number of lines at the start of next page
-                    blen = block.end - block.beg
+                    # Look for orphan and widow cases
+                    olen = break_target - block.beg # number of lines left at the end of this page
+                    wlen = block.end - break_target # number of lines at the start of next page
+                    blen = block.end - block.beg    # complete block length
                     if lines[block.beg].elem.tag == 'section':
                         tcount = 0
-                        for r in range(block.beg, nn):
+                        for r in range(block.beg, break_target):
                             if lines[r].elem!=None and lines[r].elem.tag != 'section':
                                 tcount += 1
                         if wlen == 1 or tcount < self.options.min_section_start_lines:
-                            adj = n - block.beg
+                            adj = break_lineno - block.beg
                             pad += adj
-                            n -= adj
+                            break_lineno -= adj
                     elif lines[block.beg].elem.tag in ['artset', 'artwork', 'figure', 'sourcecode', 'table', ]:
                         if blen < 48 or olen < self.options.min_section_start_lines:
-                            adj = n - block.beg
+                            adj = break_lineno - block.beg
                             pad += adj
-                            n -= adj
+                            break_lineno -= adj
                     elif (olen == 1 or wlen == 1) and blen != 1:
-                        n -= 1
+                        break_lineno -= 1
                         pad += 1
                     else:
                         pass
@@ -352,7 +356,7 @@ class TextWriter(BaseV3Writer):
             pagestart = len(paginated)
             if page > 1:
                 paginated += pagefeed() + mklines(header, None) + blankline()*2
-            paginated += lines[m:n]
+            paginated += lines[start_lineno:break_lineno]
             paginated += blankline() * pad
             paginated += blankline() * 3 + mklines(footer, None)
             # make note of each line's page
@@ -361,12 +365,12 @@ class TextWriter(BaseV3Writer):
                 if paginated[i].elem != None:
                     paginated[i].elem.page = page
             # Set the next page start
-            m = n
+            start_lineno = break_lineno
             # discard blank lines at the top of the next page, if any
-            while m < l and lines[m].text.strip() == '':
-                m += 1
+            while start_lineno < textlen and lines[start_lineno].text.strip() == '':
+                start_lineno += 1
             # advance page end to the next potential page break
-            n = m + 48
+            break_target = start_lineno + 48
             page += 1
 
         return paginated
