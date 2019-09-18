@@ -1,12 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent" [
-<!-- One method to get references from the online citation libraries.
-     There has to be one entity for each item to be referenced. 
-     An alternate method (rfc include) is described in the references. --><!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY RFC2629 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2629.xml">
-<!ENTITY RFC3552 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
-<!ENTITY I-D.narten-iana-considerations-rfc2434bis SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml">
-]>
+<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -37,7 +30,7 @@
 <?rfc multiple-initials="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="info" docName="draft-ietf-xml2rfc-template-05" ipr="trust200902" obsoletes="" updates="" submissionType="IETF" xml:lang="en" version="3">
-  <!-- xml2rfc v2v3 conversion 2.23.1 -->
+  <!-- xml2rfc v2v3 conversion 2.27.1 -->
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -452,21 +445,7 @@ main(int argc, char *argv[])
       <references>
         <name>Normative References</name>
         <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
-        <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
-          <front>
-            <title>Key words for use in RFCs to Indicate Requirement Levels</title>
-            <seriesInfo name="DOI" value="10.17487/RFC2119"/>
-            <seriesInfo name="RFC" value="2119"/>
-            <seriesInfo name="BCP" value="14"/>
-            <author initials="S." surname="Bradner" fullname="S. Bradner">
-              <organization/>
-            </author>
-            <date year="1997" month="March"/>
-            <abstract>
-              <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized. This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
-            </abstract>
-          </front>
-        </reference>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <reference anchor="min_ref">
           <!-- the following is the minimum to make xml2rfc happy -->
           <front>
@@ -481,54 +460,9 @@ main(int argc, char *argv[])
       <references>
         <name>Informative References</name>
         <!-- Here we use entities that we defined at the beginning. -->
-        <reference anchor="RFC2629" target="https://www.rfc-editor.org/info/rfc2629" xml:base="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
-          <front>
-            <title>Writing I-Ds and RFCs using XML</title>
-            <seriesInfo name="DOI" value="10.17487/RFC2629"/>
-            <seriesInfo name="RFC" value="2629"/>
-            <author initials="M." surname="Rose" fullname="M. Rose">
-              <organization/>
-            </author>
-            <date year="1999" month="June"/>
-            <abstract>
-              <t>This memo presents a technique for using XML (Extensible Markup Language) as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  This memo provides information for the Internet community.</t>
-            </abstract>
-          </front>
-        </reference>
-        <reference anchor="RFC3552" target="https://www.rfc-editor.org/info/rfc3552" xml:base="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
-          <front>
-            <title>Guidelines for Writing RFC Text on Security Considerations</title>
-            <seriesInfo name="DOI" value="10.17487/RFC3552"/>
-            <seriesInfo name="RFC" value="3552"/>
-            <seriesInfo name="BCP" value="72"/>
-            <author initials="E." surname="Rescorla" fullname="E. Rescorla">
-              <organization/>
-            </author>
-            <author initials="B." surname="Korver" fullname="B. Korver">
-              <organization/>
-            </author>
-            <date year="2003" month="July"/>
-            <abstract>
-              <t>All RFCs are required to have a Security Considerations section. Historically, such sections have been relatively weak.  This document provides guidelines to RFC authors on how to write a good Security Considerations section.   This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
-            </abstract>
-          </front>
-        </reference>
-        <reference anchor="I-D.narten-iana-considerations-rfc2434bis" xml:base="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml" target="http://www.ietf.org/internet-drafts/draft-narten-iana-considerations-rfc2434bis-09.txt">
-          <front>
-            <title>Guidelines for Writing an IANA Considerations Section in RFCs</title>
-            <seriesInfo name="Internet-Draft" value="draft-narten-iana-considerations-rfc2434bis-09"/>
-            <author initials="T" surname="Narten" fullname="Thomas  Narten">
-              <organization/>
-            </author>
-            <author initials="H" surname="Alvestrand" fullname="Harald Alvestrand">
-              <organization/>
-            </author>
-            <date month="March" day="26" year="2008"/>
-            <abstract>
-              <t>Many protocols make use of identifiers consisting of constants and other well-known values. Even after a protocol has been defined and deployment has begun, new values may need to be assigned (e.g., for a new option type in DHCP, or a new encryption or authentication transform for IPsec).  To ensure that such quantities have consistent values and interpretations across all implementations, their assignment must be administered by a central authority. For IETF protocols, that role is provided by the Internet Assigned Numbers Authority (IANA).  In order for IANA to manage a given name space prudently, it needs guidelines describing the conditions under which new values can be assigned, or when modifications to existing values can be made. If IANA is expected to play a role in the management of a name space, the IANA must be given clear and concise instructions describing that role.  This document discusses issues that should be considered in formulating a policy for assigning values to a name space and provides guidelines to document authors on the specific text that must be included in documents that place demands on IANA.  This document obsoletes RFC 2434. Contents  Status of this Memo.......................................... 1</t>
-            </abstract>
-          </front>
-        </reference>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-narten-iana-considerations-rfc2434bis-09.xml"/>
         <!-- Reference with query argument -->
         <reference anchor="JUPITER" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-doi/reference.DOI.10.1145/2975159.xml?anchor=JUPITER">
           <front>

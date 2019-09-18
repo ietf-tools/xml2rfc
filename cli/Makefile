@@ -82,15 +82,16 @@ CHECKOUTPUT=	\
 	@echo " Diffing .nroff.txt against regular .txt"
 	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo " Checking v3 validity"
-	@doc=$(basename $@); printf ' '; xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.v2v3.xml
 	@doc=$(basename $@); printf ' '; xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
 
 tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt tests/out/%.exp.xml : tests/input/%.xml install
 	@echo "\n Processing $<"
-	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --base tests/out/ --raw --legacy --text --nroff --html --exp --v2v3 --strict $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --base tests/out/ --raw --legacy --text --nroff --html --exp --strict $<"
 
 tests/out/%.v2v3.xml: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --v2v3 --strict --legacy-date-format $< --out $@"
+	@doc=$(basename $@); printf ' '; xmllint --noout --xinclude --relaxng xml2rfc/data/v3.rng $$doc.xml
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --v2v3 --strict --legacy-date-format --add-xinclude $< --out $@"
 
 tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
@@ -138,6 +139,9 @@ tests/out/%.pdf: tests/input/%.xml install
 %.nroff.txt: %.nroff
 	@echo " Creating $@ from $<"
 	@if [ "$(findstring /rfc,$<)" = "/rfc" ]; then groff -ms -Kascii -Tascii $< | ./fix.pl > $@; else groff -ms -Kascii -Tascii $< | ./fix.pl | sed 1,2d > $@; fi
+
+%.min.js: %.js
+	bin/uglifycall $<
 
 # ----------------------------------------------------------------------
 
@@ -207,8 +211,7 @@ regressiontests: drafttest rfctest
 
 minify: xml2rfc/data/metadata.min.js
 
-%.min.js: %.js
-	bin/uglifycall $<
+
 
 test2:	test
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --utf8 tests/input/rfc6635.xml --legacy --text --out tmp/rfc6635.txt	&& diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt "
