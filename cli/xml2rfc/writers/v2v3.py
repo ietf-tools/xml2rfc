@@ -75,7 +75,8 @@ class V2v3XmlWriter(BaseV3Writer):
                         xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                     nsmap=self.xmlrfc.nsmap,
                                     line=e.sourceline,
-                                    href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.%s.xml"%num)
+                                    href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.%04d.xml"%int(num))
+                        xi.tail = e.tail
                         i = p.index(e)
                         p.remove(e)
                         p.insert(i, xi)
@@ -85,10 +86,17 @@ class V2v3XmlWriter(BaseV3Writer):
                     name = si.get('value', '')
                     if name:
                         tag = name[len('draft-'):] if name.startswith('draft-') else name
-                        xi = self.element('{http://www.w3.org/2001/XInclude}include',
-                                    nsmap=self.xmlrfc.nsmap,
-                                    line=e.sourceline,
-                                    href="https://xml2rfc.tools.ietf.org/publicrfc/bibxml3/reference.I-D.%s.xml"%tag)
+                        if re.search(r'-\d\d$', tag):
+                            xi = self.element('{http://www.w3.org/2001/XInclude}include',
+                                        nsmap=self.xmlrfc.nsmap,
+                                        line=e.sourceline,
+                                        href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-%s.xml"%tag)
+                        else:
+                            xi = self.element('{http://www.w3.org/2001/XInclude}include',
+                                        nsmap=self.xmlrfc.nsmap,
+                                        line=e.sourceline,
+                                        href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.%s.xml"%tag)
+                        xi.tail = e.tail
                         i = p.index(e)
                         p.remove(e)
                         p.insert(i, xi)
@@ -113,6 +121,7 @@ class V2v3XmlWriter(BaseV3Writer):
         text = lxml.etree.tostring(self.root.getroottree(), 
                                        xml_declaration=True, 
                                        encoding='utf-8',
+                                       doctype='<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">',
                                        pretty_print=True)
         file.write(text.decode('utf-8'))
 
@@ -369,6 +378,7 @@ class V2v3XmlWriter(BaseV3Writer):
                     v = 'true'
                 rfc_element.set(a, v)
                 self.replace(e, None, 'Moved %s PI to <rfc %s="%s"' % (k, a, v))
+                break
         else:
             self.replace(e, None, 'Removed %s PI"' % (k,))
 
