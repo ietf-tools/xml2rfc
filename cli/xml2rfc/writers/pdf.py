@@ -62,11 +62,9 @@ class PdfWriter(BaseV3Writer):
             self.tree = tree
             self.root = self.tree.getroot()
 
-        if not os.path.exists("rfc-local.css"):
-            local_css = self.root.find('./')
-
         self.options.no_css = True
         self.options.image_svg = True
+        self.options.pdf = True
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
 
