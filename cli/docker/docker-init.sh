@@ -57,7 +57,7 @@ chmod -R g+w   /usr/local/lib/		# so we can patch libs if needed
 chmod g+rw /dev/pts/0                   # to make /usr/bin/pinentry work
 
 echo "Checking for local font directory"
-LOCAL_FONTS="/home/$USER/$CWD/.fonts"
+LOCAL_FONTS="/home/$USER/.fonts/opentype/noto/"
 [ -d $LOCAL_FONTS ] || echo "
  *** Missing font directory: $LOCAL_FONTS ***
 "
@@ -66,7 +66,7 @@ FONT_COUNT=1605
 echo "Checking for local fonts"
 local_fonts="$(ls $LOCAL_FONTS | grep '\.[to]tf' | wc -l)"
 [ $local_fonts = $FONT_COUNT ] || echo "
- *** Missing local fonts: Expected $FONT_COUNT, found $found_fonts ***
+ *** Missing local fonts: Expected $FONT_COUNT, found $local_fonts ***
 "
 
 # Check that local fonts are linked to fontconfig dir
