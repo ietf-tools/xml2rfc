@@ -528,7 +528,9 @@ class HtmlWriter(BaseV3Writer):
             pass
         else:
             add.style(head, None, css, type="text/css")
-        add.link(head, None, href="rfc-local.css", rel="stylesheet", type="text/css")
+
+        if not (self.options.pdf and not os.path.exists('rfc-local.css')):
+            add.link(head, None, href="rfc-local.css", rel="stylesheet", type="text/css")
 
     # 6.3.7.  Links
     # 
