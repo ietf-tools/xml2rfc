@@ -1,3 +1,31 @@
+xml2rfc (2.30.0) ietf; urgency=medium
+
+  * Added logging configuration for weasyprint.  This controls the logging
+    level based on the --quiet and --verbose flags, and should make
+    weasyprint logging ouput more consistent across systems.
+
+  * Weasyprint reports ERROR if a CSS <link> URL isn't available, so we
+    won't insert a <link> for "rfc-local.css" when generating PDF if the
+    file doesn't exist.
+
+  * Tweaked the Makefile to use --add-include in some cases, for regression 
+    testing.
+
+  * Corrected the <xi:include> links produced during v2v3 conversion with
+    the --add-xinclude switch, 
+
+  * Changed the code to not retain <!ENTITY> declarations after v2v3
+    conversion.
+
+  * Changed BaseV3Writer.die() to raise an exception, rather than exit on 
+    the spot, in order to do the right thing when called as a library.
+
+  * Tweaked the command-line messages when a fatal error is raised in a 
+    writer.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Sep 2019 04:48:21 -0700
+
+
 xml2rfc (2.29.1) ietf; urgency=medium
 
   * Fixed an issue with pagination that could occur if a table (or other 
