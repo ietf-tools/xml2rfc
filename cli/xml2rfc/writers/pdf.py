@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function, division
 
 import datetime
 import io
+import logging
 import os
 
 import warnings
@@ -42,9 +43,14 @@ class PdfWriter(BaseV3Writer):
             self.err(None, "Cannot run PDF formatter: %s" % import_error)
             return
 
-        if options.verbose:
-            import logging
-            weasyprint.logger.LOGGER.setLevel(logging.DEBUG)
+        logging.basicConfig(level=logging.INFO)
+        wplogger = logging.getLogger('weasyprint')
+        if   self.options.quiet:
+            wplogger.setLevel(logging.CRITICAL)
+        elif self.options.verbose:
+            wplogger.setLevel(logging.WARNING)
+        else:
+            wplogger.setLevel(logging.ERROR)
 
     def pdf(self):
         if not weasyprint:
@@ -55,6 +61,9 @@ class PdfWriter(BaseV3Writer):
             tree = prep.prep()
             self.tree = tree
             self.root = self.tree.getroot()
+
+        if not os.path.exists("rfc-local.css"):
+            local_css = self.root.find('./')
 
         self.options.no_css = True
         self.options.image_svg = True
