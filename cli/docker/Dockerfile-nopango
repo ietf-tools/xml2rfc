@@ -22,9 +22,6 @@
 FROM debian:stretch
 LABEL maintainer="Henrik Levkowetz <henrik@levkowetz.com>"
 
-# Default django runserver port
-EXPOSE	8000
-
 # Run apt-get noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
