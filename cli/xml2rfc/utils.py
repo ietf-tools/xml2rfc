@@ -156,7 +156,25 @@ class TextWrapper(textwrap.TextWrapper):
         return wrapped
 
     def fill(self, *args, **kwargs):
-        return "\n".join(self.wrap(*args, **kwargs)).replace(u'\u00A0', ' ')
+        kwargs.pop('fill', None)
+        return "\n".join(self.wrap(*args, **kwargs))
+
+
+class TextSplitter(textwrap.TextWrapper):
+    """ Subclass that overrides a few things in the standard implementation """
+    def __init__(self, **kwargs):
+        textwrap.TextWrapper.__init__(self, **kwargs)
+
+        # Override wrapping regex, preserve '/' before linebreak
+        self.wordsep_re = re.compile(
+            u'('
+            u'[ \t\n\r\f\v]+|'                                  # any ASCII whitespace
+            u'[^\\s-]*\\w+/(?=[A-Za-z]\\w*)|'                   # forward-slash separated words
+            u'\u200b|'                                          # &zwsp; zero-width space is breakable space
+            u'''(?<=[\\w\\!"'\\&\\.\\,\\?])-{2,}(?=\\w))'''     # em-dash
+            u'(?![\u00A0|\u2060|\uE060])')                      # UNLESS &nbsp; or &wj; 
+
+        self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
 
 def justify_inline(left_str, center_str, right_str, width=72):

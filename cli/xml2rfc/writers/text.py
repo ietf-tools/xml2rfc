@@ -31,7 +31,7 @@ from xml2rfc.util.date import extract_date, get_expiry_date, format_date
 from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_author_name_parts, short_org_name_set
 
 from xml2rfc.util.num import ol_style_formatter, num_width
-from xml2rfc.util.unicode import expand_unicode_element
+from xml2rfc.util.unicode import expand_unicode_element, textwidth
 from xml2rfc.util.postal import get_normalized_address_info, format_address
 from xml2rfc.utils import justify_inline
 
@@ -62,7 +62,8 @@ class Block(object):
         self.beg  = beg                 # beginning line of block
         self.end  = end                 # ending line of block
 
-wrapper = utils.TextWrapper(width=72, break_on_hyphens=False)
+wrapper = utils.TextWrapper(width=72)
+splitter = utils.TextSplitter(width=67)
 seen = set()
 
 base_joiners = {
@@ -3481,7 +3482,12 @@ class TextWriter(BaseV3Writer):
         def rreplace(s, old, new, max):
             lst = s.rsplit(old, max)
             return new.join(lst)
-        text = fill(self.inner_text_renderer(e), width=width, **kwargs)
+        text = self.inner_text_renderer(e)
+        if kwargs.pop('fill', True):
+            text = fill(text, width=width, **kwargs)
+        else:
+            if isinstance(text, six.binary_type):
+                text = text.decode('utf-8')
         lines = mklines(text, e)
         return lines
 
@@ -3582,6 +3588,8 @@ class TextWriter(BaseV3Writer):
                 rows += extrarows
             return rows, cols
 
+
+
         def justify(cell, line):
             align = cell.element.get('align')
             width = cell.colwidth - cell.padding
@@ -3595,7 +3603,7 @@ class TextWriter(BaseV3Writer):
                 text = text + ' ' 
             if cell.padding > 0:
                 text = ' ' + text
-            return text
+             return text
 
         def border(c, d):
             border = {
@@ -3654,11 +3662,11 @@ class TextWriter(BaseV3Writer):
                     cell = cells[i][j]
                     cell.colspan = intattr(c, 'colspan')
                     cell.rowspan = intattr(c, 'rowspan')
-                    cell.text, cell.foldable = self.text_or_block_renderer(c, width, **kwargs) or ('', True)
+                    cell.text, cell.foldable = self.text_or_block_renderer(c, width, fill=False, **kwargs) or ('', True)
                     cell.text = mktext(cell.text)
                     if cell.foldable:
                         cell.text = cell.text.strip()
-                        cell.minwidth = max([0]+[ len(word) for word in cell.text.split() ]) if cell.text else 0
+                        cell.minwidth = max([0]+[ len(word) for word in splitter._split(cell.text) ]) if cell.text else 0
                     else:
                         cell.minwidth = max([0]+[ len(line) for line in cell.text.splitlines() ])
                     cell.type = p.tag
@@ -3727,7 +3735,7 @@ class TextWriter(BaseV3Writer):
                 cell = cells[i][j]
                 if cell.text:
                     if cell.foldable:
-                        cell.wrapped = fill(cell.text, width=cell.colwidth, fix_sentence_endings=False).splitlines()
+                        cell.wrapped = fill(cell.text, width=cell.colwidth, fix_sentence_endings=True).splitlines()
                     else:
                         cell.wrapped = cell.text.splitlines()
 
@@ -3747,7 +3755,7 @@ class TextWriter(BaseV3Writer):
                         # this is simplified, and doesn't always account for the
                         # extra line from the missing border line in a rowspan cell:
                         if cell.text:
-                            cell.wrapped = fill(cell.text, width=w, fix_sentence_endings=False).splitlines()
+                            cell.wrapped = fill(cell.text, width=w, fix_sentence_endings=True).splitlines()
                             cell.height = len(cell.wrapped)
                             if maxrows < cell.height and cell.height > 1:
                                 maxrows = cell.height
@@ -3761,7 +3769,7 @@ class TextWriter(BaseV3Writer):
                 r = cell.rowspan
                 h = cell.height
                 for l in range(1, excess+1):
-                    lines = fill(cell.text, width=w+l, fix_sentence_endings=False).splitlines()
+                    lines = fill(cell.text, width=w+l, fix_sentence_endings=True).splitlines()
                     if len(lines) < h:
                         cell.height = lines
                         excess -= l
