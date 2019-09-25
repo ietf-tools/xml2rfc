@@ -1,3 +1,31 @@
+xml2rfc (2.31.0) ietf; urgency=medium
+
+  This release adds a feature to help with conditional line breaking
+  inside table cells, and tweaks the layout of text in cells slightly.  It
+  also fixes an incorrect line-break point and second-line indentation for
+  long section titles in the v3 text formatter.  From the commit log:
+
+  * Fixed an issue with leading and trailing space padding in table cells, 
+    and refined it to consider the alignment setting.
+
+  * Modified the text formatter to accept &zwsp; as a potential line-break 
+    point.
+
+  * Included zwsp in allowed special characters (in addition to nbsp, nbhy, 
+    word-joiner and line-separator).
+
+  * Fixed the line-breaking and second-line indentation of section titles 
+    in v3 text output.
+
+  * The start of an emacs nXML mode schema which explicitly mentions 
+    xinclud in a couple of places.
+
+  * Removed code left in pdf.py by mistake, and set options.pdf=True when 
+    in the PdfWriter.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  25 Sep 2019 13:38:34 -0700
+
+
 xml2rfc (2.30.0) ietf; urgency=medium
 
   * Added logging configuration for weasyprint.  This controls the logging
