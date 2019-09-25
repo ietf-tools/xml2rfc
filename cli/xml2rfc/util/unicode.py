@@ -140,6 +140,10 @@ def isascii(u):
     else:
         return True
 
+def textwidth(u):
+    "Length of string, disregarding zero-width code points"
+    return len(re.sub('[\u200B\u200C\u2060\uE060]', '', u))
+
 def downcode_punctuation(str):
     return downcode(str, replacements=punctuation)
 

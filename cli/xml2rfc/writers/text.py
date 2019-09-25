@@ -3592,18 +3592,25 @@ class TextWriter(BaseV3Writer):
 
         def justify(cell, line):
             align = cell.element.get('align')
-            width = cell.colwidth - cell.padding
+            padding = cell.colwidth - textwidth(line)
+            width = cell.colwidth - min(2, padding)
             if   align == 'left':
                 text = line.ljust(width)
             elif align == 'center':
                 text = line.center(width)
             elif align == 'right':
                 text = line.rjust(width)
-            if cell.padding > 1:
-                text = text + ' ' 
-            if cell.padding > 0:
-                text = ' ' + text
-             return text
+            if   align == 'right':
+                if padding > 1:
+                    text = text + ' ' 
+                if padding > 0:
+                    text = ' ' + text
+            else:
+                if padding > 1:
+                    text = ' ' + text
+                if padding > 0:
+                    text = text + ' ' 
+            return text
 
         def border(c, d):
             border = {
