@@ -2069,7 +2069,7 @@ class TextWriter(BaseV3Writer):
     #    o  <xref> elements (Section 2.66)
     def render_name(self, e, width, **kwargs):
         hang=kwargs['joiners'][e.tag].hang
-        return fill(self.inner_text_renderer(e).strip(), width=width-hang, hang=hang)
+        return fill(self.inner_text_renderer(e).strip(), width=width, hang=hang)
 
     # 2.33.  <note>
     # 
@@ -3103,9 +3103,9 @@ class TextWriter(BaseV3Writer):
             text = pn.split('-',1)[1].replace('-', ' ').title() +'.'
             if text.startswith('Appendix'):
                 text = text.replace('.', ' ', 1)
-        kwargs['joiners'].update({
-            'name':     Joiner('', '  ', '', 0, 0),
-        })
+            kwargs['joiners'].update({
+                'name':     Joiner('', '  ', '', len(text)+2, 0),
+            })
         lines = []
         name = e.find('name')
         if name != None:
