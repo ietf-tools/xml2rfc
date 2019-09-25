@@ -129,7 +129,7 @@ def isascii(u):
         return True
     if isinstance(u, six.text_type):
         t = u+''
-        for ch in [ '\u00a0', '\u2011', '\u2028', '\u2060', ]:
+        for ch in [ '\u00a0', '\u200B', '\u2011', '\u2028', '\u2060', ]:
             if ch in t:
                 t = t.replace(ch, ' ')
         try:
