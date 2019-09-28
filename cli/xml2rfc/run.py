@@ -114,7 +114,7 @@ def main():
     plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
                             help='Remove XML processing instructions')
     plain_options.add_option('-q', '--quiet', action='store_true',
-                            help='dont print anything')
+                            help="don't print anything")
     plain_options.add_option('-u', '--utf8', action='store_true',
                             help='generate utf8 output')
     plain_options.add_option('-v', '--verbose', action='store_true',
