@@ -1565,7 +1565,10 @@ class PrepToolWriter(BaseV3Writer):
             if relative is None:
                 for s in t.xpath('.//seriesInfo'):
                     if s.get('name') in ['RFC', 'Internet-Draft']:
-                        relative = '#section-%s' % section
+                        if section[0].isdigit():
+                            relative = '#section-%s' % section
+                        else:
+                            relative = '#appendix-%s' % section                            
                         break
                 if not relative:
                     self.err(e, 'Cannot build a href for <%s target="%s"> with a section= attribute without also having a relative= attribute.' % (e.tag, e.get('target')))
