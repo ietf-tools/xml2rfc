@@ -71,9 +71,6 @@ class TextWrapper(textwrap.TextWrapper):
         # Start of next sentence regex
         self.sentence_start_re = re.compile("^[\"'([]*[A-Z]")
 
-        self.break_on_hyphens = True
-
-
     def _fix_sentence_endings(self, chunks):
         """_fix_sentence_endings(chunks : [string])
 
@@ -101,6 +98,18 @@ class TextWrapper(textwrap.TextWrapper):
         """ Mirrored implementation of wrap which replaces characters properly
             and also lets you easily specify indentation on the fly
         """
+        # Handle U+2028 LINE SEPARATOR by recursing
+        if '\u2028' in text:
+            parts = text.split('\u2028')
+            wrapped = []
+            for part in parts:
+                part = part.lstrip()
+                wrapped += self.wrap(part, initial=initial, subsequent_indent=subsequent_indent,
+                                    width=width, fix_doublespace=fix_doublespace,
+                                    fix_sentence_endings=fix_sentence_endings,
+                                    drop_whitespace=drop_whitespace)
+            return wrapped
+
         # Set indentation
         _width = self.width
         if width != None:
@@ -113,8 +122,9 @@ class TextWrapper(textwrap.TextWrapper):
         self.fix_sentence_endings = fix_sentence_endings
         self.drop_whitespace = drop_whitespace
 
-        # Original implementation
+        # --- Original implementation ----------------------------------
         text = self._munge_whitespace(text)
+        # --- End original implementation ------------------------------
 
         # Maybe remove double (and more) spaces, except when they might be between sentences
         if fix_doublespace:
@@ -125,7 +135,11 @@ class TextWrapper(textwrap.TextWrapper):
         text = re.sub("(Section|Appendix|Figure|Table) ", u"\\1\u00A0", text)
 
         # Replace some characters after splitting has occured
-        parts = self._split(text)
+        # --- Original implementation ----------------------------------
+        chunks = self._split(text)
+        # --- End original implementation ------------------------------
+
+        parts = chunks
         chunks = []
         max_word_len = self.width - len(self.subsequent_indent)
         for chunk in parts:
@@ -146,10 +160,12 @@ class TextWrapper(textwrap.TextWrapper):
             else:
                 chunks += [ chunk2 ]
         
-        # Original implementation
+        # --- Original implementation ----------------------------------
         if self.fix_sentence_endings:
             self._fix_sentence_endings(chunks)
         wrapped = self._wrap_chunks(chunks)
+        # --- End original implementation ------------------------------
+
         self.width = _width
         for i, chunk in enumerate(wrapped):
             wrapped[i] = chunk.replace(u'\uE060', '')
@@ -171,6 +187,7 @@ class TextSplitter(textwrap.TextWrapper):
             u'[ \t\n\r\f\v]+|'                                  # any ASCII whitespace
             u'[^\\s-]*\\w+/(?=[A-Za-z]\\w*)|'                   # forward-slash separated words
             u'\u200b|'                                          # &zwsp; zero-width space is breakable space
+            u'\u2028|'                                          # &br; unicode 'line separator'
             u'''(?<=[\\w\\!"'\\&\\.\\,\\?])-{2,}(?=\\w))'''     # em-dash
             u'(?![\u00A0|\u2060|\uE060])')                      # UNLESS &nbsp; or &wj; 
 

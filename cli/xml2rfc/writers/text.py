@@ -110,7 +110,6 @@ def fill(text, **kwargs):
     if keep:
         text = utils.urlkeep(text, max=kwargs['width'])
     result = wrapper.fill(text, initial=initial, subsequent_indent=subsequent_indent, **kwargs)
-    result = result.replace('\u2028','\n')
     return result
 
 def center(text, width, **kwargs):
