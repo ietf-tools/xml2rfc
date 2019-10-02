@@ -2797,10 +2797,12 @@ class HtmlWriter(BaseV3Writer):
             if x.text and x.text.strip() and '\u2028' in x.text:
                 parts = x.text.split('\u2028')
                 x.text = parts[0]
+                i = 0
                 for t in parts[1:]:
                     br = build.br()
                     br.tail = t
-                    x.append( br )
+                    x.insert(i, br)
+                    i += 1
             if x.tail and x.tail.strip() and '\u2028' in x.tail:
                 p = x.getparent()
                 i = p.index(x)+1
@@ -2809,7 +2811,7 @@ class HtmlWriter(BaseV3Writer):
                 for t in parts[1:]:
                     br = build.br()
                     br.tail = t
-                    p.insert(br, i)
+                    p.insert(i, br)
                     i += 1
         return h
 
