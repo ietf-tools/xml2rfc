@@ -952,7 +952,7 @@ class PrepToolWriter(BaseV3Writer):
         old_bp = e.find('boilerplate')
         new_bp = self.element('boilerplate')
         if old_bp != None:
-            if not self.liberal and not self.prepped:
+            if not self.rfcnum or (not self.liberal and not self.prepped):
                 children = old_bp.getchildren()
                 if len(children):
                     self.warn(old_bp, "Expected no <boilerplate> element, but found one.  Replacing the content with new boilerplate")
@@ -1049,7 +1049,7 @@ class PrepToolWriter(BaseV3Writer):
             if not day:
                 day = self.date.day
             exp = datetime.date(year=year, month=month, day=day) + datetime.timedelta(days=185)
-            format_dict['expiration_date'] = format_date(exp.year, exp.month, exp.day)
+            format_dict['expiration_date'] = format_date(exp.year, exp.month, exp.day, legacy=self.options.legacy_date_format)
             for para in boilerplate_draft_status_of_memo:
                 para = para.format(**format_dict).strip()
                 t = etree.fromstring(para)
