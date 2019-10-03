@@ -807,12 +807,14 @@ class TextWriter(BaseV3Writer):
     #    Document-wide unique identifier for this aside.
     def render_aside(self, e, width, **kwargs):
         kwargs['joiners'].update({ 't':       Joiner('', '\n\n', '', 0, 0), })
-        text, plain = self.text_or_block_renderer(e, width-6, **kwargs)
+        prefix = '   |  '
+        width -= len(prefix)
+        text, plain = self.text_or_block_renderer(e, width, **kwargs)
         if plain:
-            text = fill(text, width=width-6, **kwargs)
+            text = fill(text, width=width, **kwargs)
         lines = mklines(text, e)
         for i, l in enumerate(lines):
-            lines[i].text = '   |  '+l.text
+            lines[i].text = prefix + l.text
         lines = lindent(lines, indent=kwargs.get('indent', 0))
         return lines
 
