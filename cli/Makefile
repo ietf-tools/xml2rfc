@@ -95,7 +95,8 @@ tests/out/%.v2v3.xml: tests/input/%.xml install
 
 tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
-	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external --legacy-date-format $@" 2>/dev/null
+	@echo " Checking generation of .html from prepped .xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external --legacy-date-format $@" 2> /dev/null || { err=$?; echo "Error output when generating .html from prepped .xml"; exit $err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
 
 # These contains index sections, which renders with different whitespace from
