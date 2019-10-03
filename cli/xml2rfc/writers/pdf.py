@@ -130,7 +130,7 @@ page_css_template = """
   }}
   @page {{
     size: A4;
-    font-size: 12px;
+    font-size: 12px; /* needed for the page header and footer text */
 
     border-top: solid 1px #ccc;
     padding-top: 18px;
