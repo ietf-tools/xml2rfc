@@ -952,12 +952,15 @@ class PrepToolWriter(BaseV3Writer):
         old_bp = e.find('boilerplate')
         new_bp = self.element('boilerplate')
         if old_bp != None:
-            if not self.rfcnum or (not self.liberal and not self.prepped):
+            if not self.liberal and not self.prepped:
                 children = old_bp.getchildren()
                 if len(children):
                     self.warn(old_bp, "Expected no <boilerplate> element, but found one.  Replacing the content with new boilerplate")
                     for c in children:
                         old_bp.remove(c)
+            elif not self.rfcnumber:
+                for c in old_bp.getchildren():
+                    old_bp.remove(c)
         else:
             e.append(new_bp)
 
@@ -991,7 +994,7 @@ class PrepToolWriter(BaseV3Writer):
     #    element, to determine which boilerplate from [RFC7841] to include, as
     #    described in Appendix A of [RFC7991].
     def boilerplate_insert_status_of_memo(self, e, p):
-        if self.prepped:
+        if self.prepped and self.rfcnumber:
             return
         if self.root.get('ipr') == 'none':
             return
@@ -1064,7 +1067,7 @@ class PrepToolWriter(BaseV3Writer):
     #    which version of the Trust Legal Provisions (TLP) to use, as
     #    described in A.1 of [RFC7991].
     def boilerplate_insert_copyright_notice(self, e, p):
-        if self.prepped:
+        if self.prepped and self.rfcnumber:
             return
         ipr = self.root.get('ipr', '').lower()
         if ipr == 'none':
@@ -1858,7 +1861,7 @@ class PrepToolWriter(BaseV3Writer):
     # 5.4.2.4  "Table of Contents" Insertion
     # 5.4.2.4  "Table of Contents" Insertion
     def boilerplate_insert_table_of_contents(self, e, p):
-        if self.prepped:
+        if self.prepped and self.rfcnumber:
             return
         def toc_entry_t(s):
             name = s.find('./name')
@@ -1946,8 +1949,6 @@ class PrepToolWriter(BaseV3Writer):
 
     #
     def back_insert_index(self, e, p):
-        if self.prepped:
-            return
         oldix = self.root.find('./back/section/t[@anchor="rfc.index.index"]')
         if oldix != None:
             self.warn(e, "Found an existing Index section, not inserting another one")
