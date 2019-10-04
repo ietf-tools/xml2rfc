@@ -10,7 +10,7 @@
 <?rfc autobreaks="yes"?>
 <?rfc docmapping="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" number="6787" category="std" consensus="yes" docName="draft-ietf-speechsc-mrcpv2" ipr="pre5378Trust200902" submissionType="IETF" obsoletes="" updates="" xml:lang="en" version="3">
-  <!-- xml2rfc v2v3 conversion 2.27.1 -->
+  <!-- xml2rfc v2v3 conversion 2.31.0 -->
   <link href="https://datatracker.ietf.org/doc/draft-ietf-speechsc-mrcpv2" rel="prev"/>
   <?v3xml2rfc silence="The 'docName' attribute of the .rfc/. element should have a revision number" ?>
   <front>
@@ -1304,7 +1304,7 @@ generic-method      =    "SET-PARAMS"
           <t>If error 403, 404, or 409 is returned, the response MUST include
           the bad or unsupported header fields and their values exactly as
           they were sent from the client. Session parameters modified using
-          SET‑PARAMS do not override parameters explicitly specified on
+          SET&nbhy;PARAMS do not override parameters explicitly specified on
           individual requests or requests that are IN-PROGRESS.</t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 C->S:  MRCP/2.0 ... SET-PARAMS 543256
@@ -2144,7 +2144,7 @@ kill-on-barge-in      =   "Kill-On-Barge-In" ":" BOOLEAN CRLF
           source. This source could be a synthesizer resource or signal
           detector resource and MAY be either local or distributed. If this
           header field is not specified in a SPEAK request or explicitly set
-          by a SET‑PARAMS, the default value for this header field is
+          by a SET&nbhy;PARAMS, the default value for this header field is
           "true".</t>
           <t>If the recognizer or signal detector resource is on the same
           server as the synthesizer and both are part of the same session, the
@@ -2715,7 +2715,7 @@ S->C: MRCP/2.0 ... SPEAK-COMPLETE 543257 COMPLETE
         Active-Request-Id-List header field is sent in the STOP request, the
         server terminates all outstanding SPEAK requests.</t>
         <t>If a STOP request successfully terminated one or more PENDING or
-        IN‑PROGRESS SPEAK requests, then the response MUST contain an
+        IN&nbhy;PROGRESS SPEAK requests, then the response MUST contain an
         Active-Request-Id-List header field enumerating the SPEAK request-ids
         that were terminated. Otherwise, there is no Active-Request-Id-List
         header field in the response. No SPEAK-COMPLETE events are sent for
@@ -3394,7 +3394,7 @@ enrollment-header    =  num-min-consistent-pronunciations
                      /  abort-phrase-enrollment
 ]]></artwork>
         <t>For enrollment-specific header fields that can appear as part of
-        SET‑PARAMS or GET-PARAMS methods, the following general rule applies:
+        SET&nbhy;PARAMS or GET-PARAMS methods, the following general rule applies:
         the START-PHRASE-ENROLLMENT method MUST be invoked before these header
         fields may be set through the SET-PARAMS method or retrieved through
         the GET-PARAMS method.</t>
@@ -3728,7 +3728,7 @@ completion-reason        =  "Completion-Reason" ":"
           contain a message body containing the recognizer context data and a
           Content-ID matching this header field value. This Content-ID MUST
           match the Content-ID that came with the context data during the
-          GET‑PARAMS operation.</t>
+          GET&nbhy;PARAMS operation.</t>
           <t>An implementation choosing to use this mechanism to hand off
           recognizer context data between servers MUST distinguish its
           implementation-specific block of data by using an IANA-registered
@@ -3827,7 +3827,7 @@ dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":"
           <t>This header field specifies the terminating timeout to use when
           recognizing DTMF input. The DTMF-Term-Timeout applies only when no
           additional input is allowed by the grammar; otherwise, the
-          DTMF‑Interdigit‑Timeout applies. The value is in milliseconds. The
+          DTMF&nbhy;Interdigit&nbhy;Timeout applies. The value is in milliseconds. The
           value for this header field ranges from 0 to an implementation-specific maximum value. The default value is 10 seconds. This header
           field MAY occur in RECOGNIZE, SET-PARAMS, or GET-PARAMS.</t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -4064,7 +4064,7 @@ early-no-match  = "Early-No-Match" ":" BOOLEAN CRLF
         <section numbered="true" toc="default">
           <name>Num-Min-Consistent-Pronunciations</name>
           <t>This header field MAY be specified in a START-PHRASE-ENROLLMENT,
-          SET‑PARAMS, or GET-PARAMS method and is used to specify the minimum
+          SET&nbhy;PARAMS, or GET-PARAMS method and is used to specify the minimum
           number of consistent pronunciations that must be obtained to voice
           enroll a new phrase. The minimum value is 1. The default value is
           implementation specific and MAY be greater than 1.</t>
@@ -4478,7 +4478,7 @@ Content-Length:...
           vendor-specific data MUST send it in the message body as a typed
           entity with the same Content-ID that it received from the
           GET-PARAMS. The Content-ID MUST also be sent in the
-          Recognizer-Context-Block header field of the SET‑PARAMS message.</t>
+          Recognizer-Context-Block header field of the SET&nbhy;PARAMS message.</t>
           <t>Each speech recognition implementation choosing to use this
           mechanism to hand off recognizer context data among servers MUST
           distinguish its implementation-specific block of data from other
@@ -4850,7 +4850,7 @@ Content-Length:...
       <section anchor="sec.enrollmentResults" numbered="true" toc="default">
         <name>Enrollment Results</name>
         <t>All enrollment elements are contained within a single
-        &lt;enrollment‑result&gt; element under &lt;result&gt;. The elements
+        &lt;enrollment&nbhy;result&gt; element under &lt;result&gt;. The elements
         are described below and have the schema defined in <xref target="sec.enrollmentResultsSchema" format="default"/>. The following elements
         are defined:</t>
         <ol spacing="normal" type="1">
@@ -5162,7 +5162,7 @@ Content-Length:...
         through the 'session' URI scheme (see <xref target="sec.sessionURIScheme" format="default"/>).</t>
         <t>If the resource was able to successfully start the recognition, the
         server MUST return a success status-code and a request-state of
-        IN‑PROGRESS. This means that the recognizer is active and that the
+        IN&nbhy;PROGRESS. This means that the recognizer is active and that the
         client MUST be prepared to receive further events with this
         request-id.</t>
         <t>If the resource was able to queue the request, the server MUST
@@ -5985,7 +5985,7 @@ recorder-header      =  sensitivity-level
           recorder can support a variable level of sound sensitivity. The
           Sensitivity-Level header field is a float value between 0.0 and 1.0
           and allows the client to set the sensitivity level for the recorder.
-          This header field MAY occur in RECORD, SET-PARAMS, or GET‑PARAMS. A
+          This header field MAY occur in RECORD, SET-PARAMS, or GET&nbhy;PARAMS. A
           higher value for this header field means higher sensitivity. The
           default value for this header field is implementation specific.</t>
           <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -6461,7 +6461,7 @@ S->C:  MRCP/2.0 ... START-OF-INPUT 543259 IN-PROGRESS
       be later used for verification, identification, or training. Access to
       the buffer is limited to one operation at time. Hence, when the resource
       is doing read, write, or delete operations, such as a RECOGNIZE with
-      ver‑buffer‑utterance turned on, another operation involving the buffer
+      ver&nbhy;buffer&nbhy;utterance turned on, another operation involving the buffer
       fails with a status-code of 402. The verification buffer can be cleared
       by a CLEAR-BUFFER request from the client and is freed when the verifier
       resource is deallocated or the session with the server terminates.</t>
@@ -6581,7 +6581,7 @@ verifier-method          =  "START-SESSION"
         <t>There are no dedicated methods for collecting buffered audio data.
         This is accomplished by calling VERIFY, RECOGNIZE, or RECORD as
         appropriate for the resource, with the header field
-        Ver‑Buffer‑Utterance. Then, when the following method is called,
+        Ver&nbhy;Buffer&nbhy;Utterance. Then, when the following method is called,
         verification is performed using the set of buffered audio. </t>
         <ol spacing="normal" type="1">
           <li>VERIFY-FROM-BUFFER</li>
@@ -7294,7 +7294,7 @@ start-input-timers       =  "Start-Input-Timers" ":"
         "verify".</t>
         <t>Before a verification/identification session is started, the client
         may only request that VERIFY-ROLLBACK and generic SET-PARAMS and
-        GET‑PARAMS operations be performed on the verifier resource. The
+        GET&nbhy;PARAMS operations be performed on the verifier resource. The
         server MUST return status-code 402 "Method not valid in this state"
         for all other verification operations.</t>
         <t>A verifier resource MUST NOT have more than a single session active
@@ -7449,18 +7449,18 @@ S->C:  MRCP/2.0 ... 543260 200 IN-PROGRESS
         is shared with write access from other input resources on the same
         session. Hence, it is considered to be in use if there is a read or
         write operation such as a RECORD or RECOGNIZE with the
-        Ver‑Buffer‑Utterance header field set to "true" on a resource that
+        Ver&nbhy;Buffer&nbhy;Utterance header field set to "true" on a resource that
         shares this buffer. Note that if a RECORD or RECOGNIZE method returns
         with a failure cause code, the VERIFY-FROM-BUFFER request waiting to
         process that buffer MUST also fail with a Completion-Cause of 005
-        (buffer‑empty).</t>
+        (buffer&nbhy;empty).</t>
         <t>The following example illustrates the usage of some buffering
         methods. In this scenario, the client first performed a live
         verification, but the utterance had been rejected. In the meantime,
         the utterance is also saved to the audio buffer. Then, another
         voiceprint is used to do verification against the audio buffer and the
         utterance is accepted. For the example, we assume both
-        Num‑Min‑Verification‑Phrases and Num‑Max‑Verification‑Phrases are
+        Num&nbhy;Min&nbhy;Verification&nbhy;Phrases and Num&nbhy;Max&nbhy;Verification&nbhy;Phrases are
         1.</t>
         <figure>
           <name>VERIFY-FROM-BUFFER Example</name>
@@ -7600,7 +7600,7 @@ S->C:  MRCP/2.0 ... 314165 200 COMPLETE
       <section numbered="true" toc="default">
         <name>STOP</name>
         <t>The STOP method from the client to the server tells the verifier
-        resource to stop the VERIFY or VERIFY‑FROM‑BUFFER request if one is
+        resource to stop the VERIFY or VERIFY&nbhy;FROM&nbhy;BUFFER request if one is
         active. If such a request is active and the STOP request successfully
         terminated it, then the response header section contains an
         Active-Request-Id-List header field containing the request-id of the
@@ -8247,7 +8247,7 @@ reference to the definition of the parameter, preferably an RFC. The registry is
             <dd>There is no single initial octet
               sequence that is always present for NLSML files.</dd>
             <dt>Person &amp; email address to contact for further information:</dt>
-            <dd>Sarvi Shanmugham, sarvi@cisco.com</dd>
+            <dd>Sarvi&nbsp;Shanmugham, sarvi@cisco.com</dd>
             <dt>Intended usage:</dt>
             <dd>This media type is expected to be
               used only in conjunction with MRCPv2.</dd>
@@ -8358,7 +8358,7 @@ This specification currently only defines a
             <dt>Magic number(s):</dt>
             <dd>none</dd>
             <dt>Person &amp; email address to contact for further information:</dt>
-            <dd>Sarvi Shanmugham, sarvi@cisco.com</dd>
+            <dd>Sarvi&nbsp;Shanmugham, sarvi@cisco.com</dd>
             <dt>Intended usage:</dt>
             <dd>This media type is expected to be
               used only in conjunction with MRCPv2.</dd>

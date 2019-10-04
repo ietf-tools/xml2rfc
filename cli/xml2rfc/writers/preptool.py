@@ -31,7 +31,7 @@ elif six.PY3:
 from lxml import etree
 
 
-from xml2rfc import strings
+from xml2rfc import strings, log
 from xml2rfc.boilerplate_id_guidelines import boilerplate_draft_status_of_memo
 from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.boilerplate_tlp import boilerplate_tlp
@@ -341,6 +341,8 @@ class PrepToolWriter(BaseV3Writer):
             for s in selectors:
                 if selector_visits[s] == 0:
                     self.note(None, "Selector '%s' has not matched" % (s))
+
+        log.note(" Completed preptool run")
 
         if self.errors:
             self.log("Not creating output file due to errors (see above)")
