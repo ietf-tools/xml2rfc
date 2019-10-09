@@ -407,7 +407,7 @@ class HtmlWriter(BaseV3Writer):
     #    placed inside an HTML <title> element in the header.
 
         title = x.find('./front/title')
-        text = title.text
+        text = ' '.join(title.itertext())
         if self.options.rfc:
             text = ("RFC %s: " % self.root.get('number')) + text
         add.title(head, None, text)
@@ -2419,7 +2419,7 @@ class HtmlWriter(BaseV3Writer):
     #    <span class="refTitle">"Tags for Identifying Languages"</span>
     def render_title(self, h, x):
         pp = x.getparent().getparent()
-        title = x.text
+        title = '\u2028'.join(x.itertext())
         if pp.get("quoteTitle") == 'true':
             title = '"%s"' % title
         ascii = x.get('ascii')

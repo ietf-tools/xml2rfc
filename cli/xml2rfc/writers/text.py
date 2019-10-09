@@ -1083,7 +1083,7 @@ class TextWriter(BaseV3Writer):
     #    This element appears as a child element of <td> (Section 2.56) and
     #    <th> (Section 2.58).
     def render_br(self, e, width, **kwargs):
-        return '\u2028' + e.tail.strip()
+        return '\u2028' + e.tail
 
     # 2.13.  <city>
     # 
@@ -2458,7 +2458,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    o  <tt> elements (Section 2.62)
     def render_refcontent(self, e, width, **kwargs):
-        text = fill(self.inner_text_renderer(e), width=width, **kwargs)
+        text = self.inner_text_renderer(e)
         return text
 
     # 2.40.  <reference>
@@ -4128,7 +4128,7 @@ class TextWriter(BaseV3Writer):
     #    Content model: only text content.
     def render_title(self, e, width, **kwargs):
         r = e.getparent().getparent()   # <reference>
-        title = e.text.strip()
+        title = '\u2028'.join(e.itertext()).strip()
         quote_title = r.get('quoteTitle')
         if quote_title == 'true':
             title = '"%s"' % title
@@ -4136,7 +4136,7 @@ class TextWriter(BaseV3Writer):
 
     def render_title_front(self, e, width, **kwargs):
         pp = e.getparent().getparent()
-        title = e.text.strip()
+        title = '\u2028'.join(e.itertext()).strip()
         title = fill(title, width=width, **kwargs)
         title = center(title, width)
         if self.options.rfc:
