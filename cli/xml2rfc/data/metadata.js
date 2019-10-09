@@ -35,7 +35,6 @@ async function addMetadata() {
     }
 
   // Insert the external metadata block
-  // [TODO: make this more sophisticated and linkify the values]
     try {
 
         var jsonfile;
@@ -129,10 +128,18 @@ async function addMetadata() {
                         metadata[key][i] = String(metadata[key][i]);
                         var see_also_str = metadata[key][i].slice(0,3);
                         var see_also_num = metadata[key][i].slice(3).replace(/^0+/,''); 
-                        if (seeAcounter < seeAlen){ 
-                            see_also_string = see_also_string + '<a href=\'' + base_url + '/' + see_also_str.toLowerCase() + '/'.concat(see_also_num.toLowierCase()) + '\'>'+ see_also_str + ' ' +see_also_num + '</a>' + ', ';
+                        if (seeAcounter < seeAlen){
+                            if (see_also_str != 'RFC') { 
+                                 see_also_string = see_also_string + '<a href=\'' + base_url + '/' + 'info' + '/' + see_also_str.toLowerCase().concat(see_also_num.toLowerCase()) + '\'>'+ see_also_str + ' ' +see_also_num + '</a>' + ', ';
+                            } else {
+                                 see_also_string = see_also_string + '<a href=\'' + base_url + '/' + 'info' + '/' + see_also_str.toLowerCase().concat(see_also_num.toLowerCase()) + '\'>'+ see_also_num + '</a>' + ', ';
+                            }
                         }else {
-                            see_also_string = see_also_string + '<a href=\'' + base_url + '/' + see_also_str.toLowerCase() + '/'.concat(see_also_num.toLowerCase()) + '\'>'+ see_also_str + ' ' +see_also_num + '</a>';
+                            if (see_also_str != 'RFC') { 
+                                see_also_string = see_also_string + '<a href=\'' + base_url + '/' + 'info' + '/' + see_also_str.toLowerCase().concat(see_also_num.toLowerCase()) + '\'>'+ see_also_str + ' ' +see_also_num + '</a>';
+                            }else {
+                                see_also_string = see_also_string + '<a href=\'' + base_url + '/' + 'info' + '/' + see_also_str.toLowerCase().concat(see_also_num.toLowerCase()) + '\'>'+ see_also_num + '</a>';
+                            }
                         }
                         seeAcounter++;
                     }
@@ -142,10 +149,10 @@ async function addMetadata() {
             else if (key == 'errata_url'){
                 var errata_string=""; 
                 if (metadata[key]){
-                    errata_string = errata_string + '<a href=\'' +metadata[key] + '\'>' + 'Errata exist' + '</a>' + ', ' + '<a href=\'' + datatracker_base + '/' + doc_id + '\'>' + 'Datatracker' + '</a>' + ', ' + '<a href=\'' + ipr_base + '/?' + doc_id_str + '='+ doc_id_num + '&submit='+ doc_id_str +'\'>' + 'IPR' +'</a>' + ', ' + '<a href=\'' + info_page + '/' + doc_id + '\'>' + 'Info page' + '</a>';
+                    errata_string = errata_string + '<a href=\'' +metadata[key] + '\'>' + 'Errata exist' + '</a>' + ' | ' + '<a href=\'' + datatracker_base + '/' + doc_id + '\'>' + 'Datatracker' + '</a>' + '| ' + '<a href=\'' + ipr_base + '/?' + doc_id_str + '='+ doc_id_num + '&submit='+ doc_id_str +'\'>' + 'IPR' +'</a>' + ' | ' + '<a href=\'' + info_page + '/' + doc_id + '\'>' + 'Info page' + '</a>';
                 } 
                 else {
-                    errata_string = '<a href=\'' + datatracker_base + '/' + doc_id + '\'>' + 'Datatracker' + '</a>' + ', ' + '<a href=\'' + ipr_base + '/?' + doc_id_str + '='+ doc_id_num + '&submit='+ doc_id_str +'\'>' + 'IPR' +'</a>' + ', ' + '<a href=\'' + info_page + '/' + doc_id + '\'>' + 'Info page' + '</a>';
+                    errata_string = '<a href=\'' + datatracker_base + '/' + doc_id + '\'>' + 'Datatracker' + '</a>' + ' | ' + '<a href=\'' + ipr_base + '/?' + doc_id_str + '='+ doc_id_num + '&submit='+ doc_id_str +'\'>' + 'IPR' +'</a>' + ' | ' + '<a href=\'' + info_page + '/' + doc_id + '\'>' + 'Info page' + '</a>';
 
                 }
                 metadata[key] = errata_string;

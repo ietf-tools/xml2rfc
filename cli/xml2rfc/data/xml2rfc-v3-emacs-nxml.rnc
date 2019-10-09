@@ -76,7 +76,7 @@
        attribute xml:lang { text }?,
        attribute abbrev { text }?,
        attribute ascii { text }?,
-       text
+       ( text | br )+
      }
 
    author =
@@ -373,6 +373,7 @@
        attribute keepWithPrevious { "false" | "true" }?,
        (text
         | bcp14
+        | br
         | cref
         | em
         | eref
@@ -409,6 +410,7 @@
        ((artset | artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
+           | br
            | cref
            | em
            | eref
@@ -474,6 +476,7 @@
        ((artset | artwork | blockquote | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
+           | br
            | cref
            | em
            | eref
@@ -509,6 +512,7 @@
        attribute pn { xsd:ID }?,
        (text
         | bcp14
+        | br
         | cref
         | em
         | eref
@@ -530,6 +534,7 @@
        ((artset | artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
+           | br
            | cref
            | em
            | eref
@@ -612,6 +617,7 @@
        attribute xml:lang { text }?,
        (text
         | bcp14
+        | br
         | cref
         | em
         | eref
@@ -629,6 +635,7 @@
        attribute xml:lang { text }?,
        (text
         | bcp14
+        | br
         | cref
         | em
         | eref
@@ -646,6 +653,7 @@
        attribute xml:lang { text }?,
        (text
         | bcp14
+        | br
         | cref
         | eref
         | iref
@@ -663,6 +671,7 @@
        attribute xml:lang { text }?,
        (text
         | bcp14
+        | br
         | cref
         | em
         | eref
@@ -679,6 +688,7 @@
        attribute xml:lang { text }?,
        (text
         | bcp14
+        | br
         | cref
         | em
         | eref
@@ -751,6 +761,7 @@
        attribute xml:lang { text }?,
        (text
         | bcp14
+        | br
         | cref
         | em
         | eref
@@ -854,6 +865,7 @@
        ((artset | artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
+           | br
            | cref
            | em
            | eref
@@ -879,6 +891,7 @@
        ((artset | artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
+           | br
            | cref
            | em
            | eref
@@ -940,6 +953,13 @@
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        text
+     }
+
+   br =
+     element br {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       empty
      }
 
    back =
@@ -1029,6 +1049,7 @@
        attribute xml:lang { text }?,
        (text
         | bcp14
+        | br
         | cref
         | em
         | eref
