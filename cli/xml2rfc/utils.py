@@ -315,6 +315,8 @@ def safeTagSlashedWords(tree):
         slashList[element] = re.sub(u'/', u'\uE060/\uE060', element)
         
     for element in tree.iter():
+        if element.tag == 'artwork':
+            continue
         if element.text:
             element.text = _replace_slashed_words(element.text, slashList)
         if element.tail:
