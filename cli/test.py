@@ -461,7 +461,11 @@ def pdfwriter(path):
     return writer
 
 elements_writer = pdfwriter('tests/input/elements.xml')
-elements_pdfdoc = elements_writer.pdf() # has side effects on .root
+try:
+    elements_pdfdoc = elements_writer.pdf() # has side effects on .root
+except Exception as e:
+    print(e)
+    raise
 elements_root   = elements_writer.root
 elements_pdfxml = xmldoc(None, bytes=elements_pdfdoc)
 
