@@ -381,7 +381,7 @@ class CachingResolver(lxml.etree.Resolver):
                 exc = e
                 xml2rfc.log.note('  retrying %s (%s)' % (url, e.args[0].args[0]))
         else:
-            xml2rfc.log.err('Failure fetching URL %s (%s)' % (url, exc.args[0].args[0]))
+            xml2rfc.log.error('Failure fetching URL %s (%s)' % (url, exc.args[0].args[0]))
         for rr in r.history + [r, ]:
             xml2rfc.log.note(' ... %s %s' % (rr.status_code, rr.url))
         if r.status_code == 200:
