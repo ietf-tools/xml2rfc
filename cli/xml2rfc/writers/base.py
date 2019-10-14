@@ -9,7 +9,6 @@ import textwrap
 import lxml
 import os
 import re
-import six
 import xml2rfc.log
 import xml2rfc.util
 import xml2rfc.utils
@@ -1674,8 +1673,6 @@ class BaseV3Writer(object):
 #             debug.show('len(missing_handlers)')
 
     def log(self, msg):
-        if isinstance(msg, six.text_type):
-            msg = msg.encode('utf-8')
         xml2rfc.log.write(msg)
 
     def msg(self, e, label, text):
