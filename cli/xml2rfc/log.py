@@ -25,8 +25,8 @@ def write_on_line(*args):
 
 def write(*args):
     """ Prints a message to write_out """
-    write_err.write(' '.join(args))
-    write_err.write('\n')
+    write_err.write(b' '.join(args))
+    write_err.write(b'\n')
 
 def note(*args):
     if verbose and not quiet:
