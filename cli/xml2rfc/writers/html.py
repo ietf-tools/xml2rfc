@@ -880,9 +880,9 @@ class HtmlWriter(BaseV3Writer):
             except ValueError as e:
                 self.err(x, "Error when calculating SVG size: %s" % e)
             imgw = 660 if self.options.image_svg else 724
-            if imgw < svgw:
-                svg.set('width', str(svgw/svgw*imgw))
-                svg.set('height', str(svgh/svgw*imgw))
+            if imgw < svgw and svg.get('width') == None:
+                # maybe issue a warning here?
+                pass
             #
             if self.options.image_svg:
                 data = build_dataurl('image/svg+xml', lxml.etree.tostring(svg))
