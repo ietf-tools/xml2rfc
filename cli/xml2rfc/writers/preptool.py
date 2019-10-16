@@ -200,6 +200,7 @@ class PrepToolWriter(BaseV3Writer):
             '/rfc;check_attribute_values()',
             '.;check_attribute_values()',       # 
             '.;check_ascii_text()',
+            '.;normalize_text_items()',
             './/bcp14;check_key_words()',
             './/*[@anchor]',                    # 5.1.5.  Check "anchor"
             '.;insert_version()',               # 5.2.1.  "version" Insertion
@@ -544,11 +545,29 @@ class PrepToolWriter(BaseV3Writer):
                     self.err(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
                     c.tail = downcode(c.tail)
 
+    def normalize_text_items(self, e, p):
+        """
+        Normalize the text content of tags expected to hold a word, name,
+        or similar, in order to get rid of newlines, double spaces etc.
+        inserted just for editing convenience.
+        """
+        tags = [ 'area', 'bcp14', 'cityarea', 'code', 'country', 'date', 'email', 'extaddr',
+                      'keyword', 'organization', 'phone', 'pobox', 'postalLine', 'sortingcode',
+                      'street', 'uri', 'workgroup', 'region', 'title', ]
+        for c in self.root.iter(tags):
+            if c.text:
+                t = c.text
+                t = re.sub(r'\s', ' ', t)                   # convert \n\t etc. to space (not &nbsp; etc., though)
+                t = re.sub(r'\.   +', '.  ', t)             # normalize period followed by more than 2 spaces
+                t = re.sub(r'([^.])  +', r'\1 ', t)         # normalize non-period followed by more than one space
+                t = t.strip()                               # strip leading and trailing spaces
+                c.text = t
+                
     def bcp14_check_key_words(self, e, p):
         # according to RFC 2119 and 8174
         permitted_words = [ "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
             "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", "OPTIONAL", ]
-        text = re.sub('(\s+|\u00a0)', ' ', e.text, re.UNICODE).strip()
+        text = re.sub('(\s|\u00a0)+', ' ', e.text, flags=re.UNICODE).strip()
         if not text in permitted_words:
             self.warn(e, "Expected one of the permitted words or phrases from RFC 2119 and RFC 8174 in <bcp14/>, "
                          "but found '%s'." % (etree.tostring(e).strip()))

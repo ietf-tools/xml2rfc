@@ -10,8 +10,8 @@ import six
 import unicodedata
 
 try:
-    import debug
-    debug.debug = True
+    from xml2rfc import debug
+    assert debug
 except ImportError:
     pass
 
@@ -46,6 +46,8 @@ for t in bare_unicode_tags:
     assert t in unicode_content_tags
 
 def expand_unicode_element(e, bare=False):
+    if not e.text:
+        return ''
     ascii = e.get('ascii')
     format = e.get('format', 'lit-name-num')
     size = len(e.text)
