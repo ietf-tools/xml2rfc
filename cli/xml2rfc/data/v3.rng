@@ -222,9 +222,7 @@
       </optional>
       <optional>
         <attribute name="role">
-          <choice>
-            <value>editor</value>
-          </choice>
+          <value>editor</value>
         </attribute>
       </optional>
       <optional>
@@ -303,42 +301,19 @@
         <zeroOrMore>
           <choice>
             <ref name="city"/>
+            <ref name="cityarea"/>
             <ref name="code"/>
             <ref name="country"/>
+            <ref name="extaddr"/>
+            <ref name="pobox"/>
             <ref name="region"/>
+            <ref name="sortingcode"/>
             <ref name="street"/>
           </choice>
         </zeroOrMore>
         <oneOrMore>
           <ref name="postalLine"/>
         </oneOrMore>
-        <interleave>
-          <optional>
-            <ref name="city"/>
-          </optional>
-          <optional>
-            <ref name="cityarea"/>
-          </optional>
-          <optional>
-            <ref name="code"/>
-          </optional>
-          <ref name="country"/>
-          <zeroOrMore>
-            <ref name="extaddr"/>
-          </zeroOrMore>
-          <optional>
-            <ref name="pobox"/>
-          </optional>
-          <optional>
-            <ref name="region"/>
-          </optional>
-          <optional>
-            <ref name="sortingcode"/>
-          </optional>
-          <zeroOrMore>
-            <ref name="street"/>
-          </zeroOrMore>
-        </interleave>
       </choice>
     </element>
   </define>
@@ -1032,7 +1007,7 @@
           </attribute>
         </optional>
         <optional>
-           <attribute name="indent"/>
+          <attribute name="indent"/>
         </optional>
         <optional>
           <attribute name="pn">
