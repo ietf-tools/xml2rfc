@@ -3589,8 +3589,6 @@ class TextWriter(BaseV3Writer):
                 rows += extrarows
             return rows, cols
 
-
-
         def justify(cell, line):
             align = cell.element.get('align')
             padding = cell.colwidth - textwidth(line)
@@ -3658,8 +3656,12 @@ class TextWriter(BaseV3Writer):
             if (prev.tag, p.tag) in [('thead', 'tbody'), ('tbody', 'tfoot'),]:
                 ii = i-1
                 for j in range(len(cells[ii])):
-                    k, l = cells[ii][j].origin
-                    cells[k][l].bot = '='
+                    if hasattr(cells[ii][j], 'origin'):
+                        k, l = cells[ii][j].origin
+                        cells[k][l].bot = '='
+                    else:
+                        self.die(p, "Inconsistent table width: At least one, but not all rows of this table have a width of %s" % len(cells[ii]))
+                    
             for r in list(p.iterchildren('tr')):
                 j = 0
                 for c in r.iterchildren('td', 'th'):
