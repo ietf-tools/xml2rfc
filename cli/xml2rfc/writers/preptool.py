@@ -557,7 +557,7 @@ class PrepToolWriter(BaseV3Writer):
         for c in self.root.iter(tags):
             if c.text:
                 t = c.text
-                t = re.sub(r'\s', ' ', t)                   # convert \n\t etc. to space (not &nbsp; etc., though)
+                t = re.sub(r'[ \t\n\r\f\v]', ' ', t)        # convert \n\t etc. to space (not &nbsp; etc., though)
                 t = re.sub(r'\.   +', '.  ', t)             # normalize period followed by more than 2 spaces
                 t = re.sub(r'([^.])  +', r'\1 ', t)         # normalize non-period followed by more than one space
                 t = t.strip()                               # strip leading and trailing spaces
