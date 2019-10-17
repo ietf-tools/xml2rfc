@@ -501,9 +501,39 @@ will be rendered as ::
    The "Δ" character (U+0394).
 
 
+Notes
+=====
 
+Unicode code points with special significance to xml2rfc
+--------------------------------------------------------
 
+The code in various places give special consideration to the code points
+with these alternative names, defined in the rfc2629-xhtml.ent file which
+is part of the distribution::
 
+ <!ENTITY nbsp    "&#160;"><!-- U+00A0 NO-BREAK SPACE      -->
+ <!ENTITY zwsp   "&#8203;"><!-- U+200B ZERO WIDTH SPACE    -->
+ <!ENTITY nbhy   "&#8209;"><!-- U+2011 NON BREAKING HYPHEN -->
+ <!ENTITY br     "&#8232;"><!-- U+2028 LINE SEPARATOR      -->
+ <!ENTITY wj     "&#8288;"><!-- U+2060 WORD JOINER         -->
+
+If any of these entity references are used in an input file, they are
+converted to unicode code points during parsing, for later consideration by
+the various formatters.  Some of these (like U+2028) are always consumed by
+the formatter and never visible in the end result.  Others are permitted to
+emerge in HTML output, but not in other formats.
+
+V2v3 conversion and entity references
+-------------------------------------
+
+Now, given that the entity references mentioned above are converted to code
+points on parsing, they won't be visible as entity references after v2v3
+conversion.  The RPC has found this a bit problematic, as their editor only
+shows a placeholder square for all of them.  Even if the v2 input received by
+the RPC from an author containes '&nbsp;' they would not see '&nbsp;' after
+v2v3 conversion.  For this reason, there is a step to convert these 5 code
+points back to the entity references listed above before writing out a v2v3
+conversion result to file.
 
 --------------------------------------------------------------------------------
 
