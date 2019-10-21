@@ -233,6 +233,7 @@ class PrepToolWriter(BaseV3Writer):
             './/references;sort()',             # 5.4.5.  <reference> Sorting
             './/references;add_derived_anchor()',
             './/references;check_usage()',
+            './/*;insert_attribute_defaults()',  # 5.2.6.  Attribute Default Value Insertion
                                                 # 5.4.6.  "pn" Numbering
             './/boilerplate//section;add_number()',
             './front//abstract;add_number()',

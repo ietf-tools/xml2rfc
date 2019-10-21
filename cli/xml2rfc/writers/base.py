@@ -1656,6 +1656,7 @@ class BaseV3Writer(object):
         self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
         self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
         self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//referencegroup') ))
+        self.attribute_defaults = self.get_all_attribute_defaults()
         #
         self.errors = []
 #         if options.debug:
@@ -1749,6 +1750,14 @@ class BaseV3Writer(object):
         msg = self.msg(e, 'Error:', text)
         self.errors.append(msg)
         raise RfcWriterError(msg)
+
+    def get_all_attribute_defaults(self):
+        defaults = {}
+        elements = self.schema.xpath("/x:grammar/x:define/x:element", namespaces=namespaces)
+        for tag in [ e.get('name') for e in elements ]:
+            attr = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:attribute" % tag, namespaces=namespaces)
+            defaults[tag] = dict( (a.get('name'), a.get("{%s}defaultValue"%namespaces['a'], None)) for a in attr )
+        return defaults
 
     # methods operating on the xml tree
 

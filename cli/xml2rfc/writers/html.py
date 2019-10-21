@@ -1410,10 +1410,16 @@ class HtmlWriter(BaseV3Writer):
     #    <a href="https://..." class="eref">the text</a>
     def render_eref(self, h, x):
         target = x.get('target')
+        brackets = x.get('brackets', self.attribute_defaults[x.tag]['brackets'])
         if x.text:
             hh = add.a(h, x, href=target)            
         else:
-            hh = add.span(h, x, build.a(target, href=target))
+            if   brackets == 'none':
+                hh = add.span(h, x, build.a(target, href=target))
+            elif brackets == 'angle':
+                hh = add.span(h, x, '<', build.a(target, href=target), '>')
+            else:
+                self.warn(x, 'Unexpected attribute value in <eref>: brackets="%s"' % brackets)
         return hh
 
     # 9.25.  <figure>

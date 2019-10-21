@@ -1488,10 +1488,16 @@ class TextWriter(BaseV3Writer):
     #    current document.
     def render_eref(self, e, width, **kwargs):
         target = e.get('target', '')
+        brackets = e.get('brackets', self.attribute_defaults[e.tag]['brackets'])
         if not target:
             self.warn(e, "Expected the 'target' attribute to have a value, but found %s" % (etree.tostring(e), ))
-        if e.text and target:
-            target = "(%s)" % target
+        if   brackets == 'none':
+            if e.text and target:
+                target = "(%s)" % target
+        elif brackets == 'angle':
+            target = "<%s>" % target                
+        else:
+            self.warn(e, 'Unexpected attribute value in <eref>: brackets="%s"' % brackets)
         text = ' '.join([ t for t in [e.text, target] if t ])
         text += e.tail or ''
         return text
