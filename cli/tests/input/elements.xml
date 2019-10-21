@@ -3,7 +3,10 @@
 <rfc submissionType='independent' ipr="trust200902" docName="elements-00" category="info" obsoletes="1234,5678,9012,3456,7890" xmlns:xi="http://www.w3.org/2001/XInclude" version="3">
    <?v3xml2rfc silence="Found non-ascii characters outside of" ?>
    <?v3xml2rfc silence="Unused reference: There seems to be no reference to .*" ?>
-   <?v3xml2rfc silence="Expected <xref format="none"> to have text content, but found none." ?>
+   <?v3xml2rfc silence="Expected &lt;xref format="none"&gt; to have text content, but found none." ?>
+   <?v3xml2rfc silence="Found SVG with width or height specified" ?>
+   <?v3xml2rfc silence=".*[Pp]ostal address" ?>
+   <?v3xml2rfc silence="The document date .*? is more than 3 days away from today's date" ?>
    <front>
       <title abbrev="Xml2rfc Vocabulary V3 Elements">Xml2rfc Vocabulary V3 Elements&br;Combined Test File</title>
       <author fullname="An Author">
@@ -31,7 +34,6 @@
       </author>
       <author asciiFullname="Hanako Tanaka" fullname="田中花子 様">
          <address>
-            <?v3xml2rfc silence=".*[Pp]ostal address" ?>
             <postal>
                <extaddr ascii="3-kai B-goshitsu">3階B号室</extaddr>
                <street ascii="4-3-2 Hakusan, Bunkyo-ku">文京区 白山4丁目3番2号</street>
@@ -52,7 +54,6 @@
             </postal>
          </address>
       </author>
-      <?v3xml2rfc silence="The document date .*? is more than 3 days away from today's date" ?>
       <date year="2018" month="July" day="12"></date>
       <workgroup/>
    </front>
@@ -797,6 +798,15 @@ the Cherokee block look similar to the ASCII characters "STPETER".]]></artwork>
                </section>
             </section>
          </section>
+      </section>
+      <section>
+         <name>Eref brackets</name>
+         <ul>
+            <li><eref target="https://www.ietf.org"/></li>
+            <li><eref target="https://www.ietf.org">IETF</eref></li>
+            <li><eref target="https://www.ietf.org" brackets="angle"/></li>
+            <li><eref target="https://www.ietf.org" brackets="angle">IETF</eref></li>
+         </ul>
       </section>
    </middle>
    <back>
