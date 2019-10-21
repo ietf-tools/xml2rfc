@@ -171,6 +171,7 @@ class PrepToolWriter(BaseV3Writer):
             return self.errors
 
         # remove the index, which should not be part of the prepped output
+        self.remove_pis()
         self.remove_index()
 
         # Use lxml's built-in serialization
@@ -264,11 +265,11 @@ class PrepToolWriter(BaseV3Writer):
             '.;attribute_removal()',            # 5.6.5.  "xml:base" and "originalSrc" Removal
             '.;validate_after()',               # 5.6.6.  Compliance Check
             '.;insert_scripts()',               # 5.7.1.  "scripts" Insertion
-            '.;final_pi_removal()',
+            #'.;final_pi_removal()',            # Done in write().  Keep PIs when prep() is called interally
             '.;pretty_print_prep()',            # 5.7.2.  Pretty-Format
         ]
         # Setup
-        selector_visits = dict( (s, 0) for s in selectors)        
+        selector_visits = dict( (s, 0) for s in selectors)
 
         ## From RFC7998:
         ##
@@ -457,6 +458,8 @@ class PrepToolWriter(BaseV3Writer):
             ('iref',    'subitem'),
         }
         for c in e.iter():
+            if c.tag == etree.PI:
+                continue
             for a in c.attrib:
                 v = c.get(a)
                 if not (c.tag, a) in unicode_attributes:
@@ -2228,6 +2231,15 @@ class PrepToolWriter(BaseV3Writer):
     # 
     #    Pretty-format the XML output.  (Note: there are many tools that do an
     #    adequate job.)
+
+    # ------------------------------------------------------------------------
+
+    # Other post-processing
+
+    def remove_pis(self):
+        self.keep_pis = []
+        for i in self.root.xpath('.//processing-instruction()'):
+            self.processing_instruction_removal(i, i.getparent())
 
     def remove_index(self):
         index_index = self.root.find('./back/section/t[@anchor="rfc.index.index"]')
