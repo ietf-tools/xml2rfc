@@ -1326,8 +1326,6 @@ class TextWriter(BaseV3Writer):
     #    o  "compact"
     def render_dl(self, e, width, **kwargs):
         newline = e.get('newline') == 'true'
-        djoin  = '\n' if newline else '  '
-        #
         compact = e.get('spacing') == 'compact'
         tjoin  = '\n' if compact else '\n\n'
         #
@@ -1351,17 +1349,28 @@ class TextWriter(BaseV3Writer):
 #                     indent = 3
         else:
             indent = int(indent)
+        nljoin = Joiner('', '\n', '', indent, 0)
+        spjoin = Joiner('', '  ', '', indent, 0)
+        ddjoin  = nljoin if newline else spjoin
         set_joiners(kwargs, {
             None:       Joiner('', tjoin, '', 0, 0),
             'dt':       Joiner('', tjoin, '', 0, 0),
-            'dd':       Joiner('', djoin, '', indent, 0),
+            'dd':       ddjoin,
         })
         # rendering
         lines = []
         text = ''
         prev = None
         for c in e.getchildren():
-            text = self.tjoin(text, c, width, prev=prev, newline=newline, **kwargs)
+            if (not newline and c.tag == 'dd' and c.text.strip()
+                and (width - len('  ') - len(text)) < len(c.text.split(None, 1)[0]) ):
+
+                kwargs['joiners']['dd'] = nljoin
+                nl = True
+            else:
+                kwargs['joiners']['dd'] = ddjoin
+                nl = newline
+            text = self.tjoin(text, c, width, prev=prev, newline=nl, **kwargs)
             if c.tag == 'dd':
                 if lines:
                     for i in range(tjoin.count('\n')-1):
