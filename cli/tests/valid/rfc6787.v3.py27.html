@@ -21,7 +21,7 @@
       established above, allowing the client to control the media processing
       resources on the speech resource server. 
     ' name="description">
-<meta content="xml2rfc 2.32.0" name="generator">
+<meta content="xml2rfc 2.33.0" name="generator">
 <meta content="mrcp, speechsc, asr, tts, speech services, speech recognition, speech synthesis, nlsml, speaker authentication, speaker verification, speaker identification" name="keyword">
 <meta content="6787" name="rfc.number">
 <link href="tests/input/rfc6787.xml" type="application/rfc+xml" rel="alternate">
@@ -1142,37 +1142,37 @@
             the speech processing server that can be controlled through 
             MRCPv2.<a href="#section-2.1-1.2" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-2.1-1.3">MRCP Server</dt>
+<dt id="section-2.1-1.3">MRCP Server</dt>
           <dd style="margin-left: 7.5em" id="section-2.1-1.4">
 Aggregate of one or more "Media Resource" entities on
                 a server, exposed through MRCPv2.  Often, 'server' in 
                 this document refers to an MRCP server.<a href="#section-2.1-1.4" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-2.1-1.5">MRCP Client</dt>
+<dt id="section-2.1-1.5">MRCP Client</dt>
           <dd style="margin-left: 7.5em" id="section-2.1-1.6">An entity
             controlling one or more Media Resources through MRCPv2
             ("Client" for short).<a href="#section-2.1-1.6" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-2.1-1.7">DTMF</dt>
+<dt id="section-2.1-1.7">DTMF</dt>
           <dd style="margin-left: 7.5em" id="section-2.1-1.8">Dual-Tone
             Multi-Frequency; a method of transmitting key presses in-band,
             either as actual tones (<span>[<a href="#Q.23" class="xref">Q.23</a>]</span>) or as
             named tone events (<span><a href="#RFC4733" class="xref">RFC 4733</a> [<a href="#RFC4733" class="xref">RFC4733</a>]</span>).<a href="#section-2.1-1.8" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-2.1-1.9">Endpointing</dt>
+<dt id="section-2.1-1.9">Endpointing</dt>
           <dd style="margin-left: 7.5em" id="section-2.1-1.10">The process of
             automatically detecting the beginning and end of speech in an
             audio stream. This is critical both for speech recognition and for
             automated recording as one would find in voice mail systems.<a href="#section-2.1-1.10" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-2.1-1.11">Hotword Mode</dt>
+<dt id="section-2.1-1.11">Hotword Mode</dt>
           <dd style="margin-left: 7.5em" id="section-2.1-1.12">A mode of
             speech recognition where a stream of utterances is evaluated for
             match against a small set of command words. This is generally
             employed either to trigger some action or to control the
             subsequent grammar to be used for further recognition.<a href="#section-2.1-1.12" class="pilcrow">¶</a>
 </dd>
-        </dl>
+</dl>
 </section>
 <section id="section-2.2">
         <h3 id="name-state-machine-diagrams">
@@ -1291,13 +1291,13 @@ Aggregate of one or more "Media Resource" entities on
             support the SSML tags &lt;speak&gt;, &lt;audio&gt;, &lt;say-as&gt;,
             and &lt;mark&gt;.<a href="#section-3.1-2.2" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-3.1-2.3">Speech Synthesizer</dt>
+<dt id="section-3.1-2.3">Speech Synthesizer</dt>
           <dd style="margin-left: 7.5em" id="section-3.1-2.4">A
 full-capability speech synthesis resource that can render speech
             from text. Such a synthesizer MUST have full <span><a href="#W3C.REC-speech-synthesis-20040907" class="xref">SSML</a> [<a href="#W3C.REC-speech-synthesis-20040907" class="xref">W3C.REC-speech-synthesis-20040907</a>]</span>
             support.<a href="#section-3.1-2.4" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-3.1-2.5">Recorder</dt>
+<dt id="section-3.1-2.5">Recorder</dt>
           <dd style="margin-left: 7.5em" id="section-3.1-2.6">A resource capable
             of recording audio and providing a URI pointer to the recording. A
             recorder MUST provide endpointing capabilities for suppressing
@@ -1306,14 +1306,14 @@ full-capability speech synthesis resource that can render speech
             is done, the recorder MUST maintain timing metadata to indicate
             the actual timestamps of the recorded media.<a href="#section-3.1-2.6" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-3.1-2.7">DTMF Recognizer</dt>
+<dt id="section-3.1-2.7">DTMF Recognizer</dt>
           <dd style="margin-left: 7.5em" id="section-3.1-2.8">A
             recognizer resource capable of extracting and interpreting <span><a href="#Q.23" class="xref"> Dual-Tone Multi-Frequency (DTMF)</a> [<a href="#Q.23" class="xref">Q.23</a>]</span> digits in a
             media stream and matching them against a supplied digit grammar. It
             could also do a semantic interpretation based on semantic tags in
             the grammar.<a href="#section-3.1-2.8" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-3.1-2.9">Speech Recognizer</dt>
+<dt id="section-3.1-2.9">Speech Recognizer</dt>
           <dd style="margin-left: 7.5em" id="section-3.1-2.10">A full
             speech recognition resource that is capable of receiving a media
             stream containing audio and interpreting it to recognition
@@ -1324,7 +1324,7 @@ full-capability speech synthesis resource that can render speech
             the client can enroll and create new personal grammars for use in
             future recognition operations.<a href="#section-3.1-2.10" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-3.1-2.11">Speaker Verifier</dt>
+<dt id="section-3.1-2.11">Speaker Verifier</dt>
           <dd style="margin-left: 7.5em" id="section-3.1-2.12">A resource
             capable of verifying the authenticity of a claimed identity by
             matching a media stream containing spoken input to a pre-existing
@@ -1332,7 +1332,7 @@ full-capability speech synthesis resource that can render speech
             against more than one voiceprint, also called multi-verification
             or speaker identification.<a href="#section-3.1-2.12" class="pilcrow">¶</a>
 </dd>
-        </dl>
+</dl>
 </section>
 </div>
 <section id="section-3.2">
@@ -2880,14 +2880,14 @@ delta-seconds       = 1*19DIGIT
               included, the client is not willing to accept a response based
               on stale data.<a href="#section-6.2.13-5.2" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-6.2.13-5.3">min-fresh</dt>
+<dt id="section-6.2.13-5.3">min-fresh</dt>
             <dd style="margin-left: 7.5em" id="section-6.2.13-5.4">Indicates that the client is willing to
               accept a server response with cached data whose expiration is no
               less than its current age plus the specified time in seconds. If
               the server's cache time-to-live exceeds the client-supplied
               min-fresh value, the server MUST NOT utilize cached content.<a href="#section-6.2.13-5.4" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-6.2.13-5.5">max-stale</dt>
+<dt id="section-6.2.13-5.5">max-stale</dt>
             <dd style="margin-left: 7.5em" id="section-6.2.13-5.6">Indicates that the client is willing to
               allow a server to utilize cached data that has exceeded its
               expiration time. If "max-stale" is assigned a value, then the
@@ -2897,7 +2897,7 @@ delta-seconds       = 1*19DIGIT
               the client is willing to allow the server to use stale data of
               any age.<a href="#section-6.2.13-5.6" class="pilcrow">¶</a>
 </dd>
-          </dl>
+</dl>
 <p id="section-6.2.13-6">If the server cache is requested to use stale response/data
           without validation, it MAY do so only if this does not conflict with
           any "MUST"-level requirements concerning cache validation (e.g., a
@@ -4625,7 +4625,7 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543261 COMPLETE
           no-match status if the input fails to match or the method times
           out.<a href="#section-9-7.2" class="pilcrow">¶</a>
 </dd>
-        <dt id="section-9-7.3">Hotword Mode Recognition</dt>
+<dt id="section-9-7.3">Hotword Mode Recognition</dt>
         <dd id="section-9-7.4">Hotword mode is where the
           recognizer looks for a match against specific speech grammar or DTMF
           sequence and ignores speech or DTMF that does not match. The
@@ -4633,7 +4633,7 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543261 COMPLETE
           the client cancels the request, or if there is a non-input or
           recognition timeout.<a href="#section-9-7.4" class="pilcrow">¶</a>
 </dd>
-        <dt id="section-9-7.5">Voice Enrolled Grammars</dt>
+<dt id="section-9-7.5">Voice Enrolled Grammars</dt>
         <dd id="section-9-7.6">A recognizer resource MAY
           optionally support Voice Enrolled Grammars. With this functionality,
           enrollment is performed using a person's voice. For example, a list
@@ -4641,14 +4641,14 @@ S-&gt;C: MRCP/2.0 ... SPEAK-COMPLETE 543261 COMPLETE
           names using the caller's voice. This technique is sometimes also
           called speaker-dependent recognition.<a href="#section-9-7.6" class="pilcrow">¶</a>
 </dd>
-        <dt id="section-9-7.7">Interpretation</dt>
+<dt id="section-9-7.7">Interpretation</dt>
         <dd id="section-9-7.8">A recognizer resource MAY be employed
           strictly for its natural language interpretation capabilities by
           supplying it with a text string as input instead of speech. In this
           mode, the resource takes text as input and produces an
           "interpretation" of the input according to the supplied grammar.<a href="#section-9-7.8" class="pilcrow">¶</a>
 </dd>
-      </dl>
+</dl>
 <p id="section-9-8">Voice enrollment has the concept of an enrollment session. A session
       to add a new phrase to a personal grammar involves the initial
       enrollment followed by a repeat of enough utterances before committing
@@ -6996,15 +6996,15 @@ The Recognition-Timeout MUST be started when the recognition
         complete with a Completion-Cause code of "no-match-maxtime". The
         recognizer MAY return results for the partially matched grammar.<a href="#section-9.9-16.5.2.2" class="pilcrow">¶</a>
 </dd>
-              <dt id="section-9.9-16.5.2.3">5.2.</dt>
+<dt id="section-9.9-16.5.2.3">5.2.</dt>
               <dd id="section-9.9-16.5.2.4">If there was a full-match, the recognizer MUST complete with a
         Completion-Cause code of "success-maxtime".<a href="#section-9.9-16.5.2.4" class="pilcrow">¶</a>
 </dd>
-              <dt id="section-9.9-16.5.2.5">5.3.</dt>
+<dt id="section-9.9-16.5.2.5">5.3.</dt>
               <dd id="section-9.9-16.5.2.6">If there was a no match, the recognizer MUST complete with a
         Completion-Cause code of "no-match-maxtime".<a href="#section-9.9-16.5.2.6" class="pilcrow">¶</a>
 </dd>
-            </dl>
+</dl>
 </li>
         </ol>
 <p id="section-9.9-17">For recognition in hotword mode:<a href="#section-9.9-17" class="pilcrow">¶</a></p>
@@ -10387,20 +10387,20 @@ reference to the definition of the parameter, preferably an RFC. The registry is
             <dt id="section-13.2.1-2.1">To:</dt>
             <dd id="section-13.2.1-2.2">ietf-types@iana.org<a href="#section-13.2.1-2.2" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.3">Subject:</dt>
+<dt id="section-13.2.1-2.3">Subject:</dt>
             <dd id="section-13.2.1-2.4">Registration of media type
               application/nlsml+xml<a href="#section-13.2.1-2.4" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.5">MIME media type name:</dt>
+<dt id="section-13.2.1-2.5">MIME media type name:</dt>
             <dd id="section-13.2.1-2.6">application<a href="#section-13.2.1-2.6" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.7">MIME subtype name:</dt>
+<dt id="section-13.2.1-2.7">MIME subtype name:</dt>
             <dd id="section-13.2.1-2.8">nlsml+xml<a href="#section-13.2.1-2.8" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.9">Required parameters:</dt>
+<dt id="section-13.2.1-2.9">Required parameters:</dt>
             <dd id="section-13.2.1-2.10">none<a href="#section-13.2.1-2.10" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.11">Optional parameters:</dt>
+<dt id="section-13.2.1-2.11">Optional parameters:</dt>
             <dd id="section-13.2.1-2.12">
               <dl class="dlParallel" id="section-13.2.1-2.12.1">
                 <dt id="section-13.2.1-2.12.1.1">charset:</dt>
@@ -10408,14 +10408,14 @@ reference to the definition of the parameter, preferably an RFC. The registry is
                   in <span><a href="#RFC3023" class="xref">RFC 3023</a> [<a href="#RFC3023" class="xref">RFC3023</a>]</span> also apply to the
                   application/nlsml+xml media type.<a href="#section-13.2.1-2.12.1.2" class="pilcrow">¶</a>
 </dd>
-              </dl>
+</dl>
 </dd>
-            <dt id="section-13.2.1-2.13">Encoding considerations:</dt>
+<dt id="section-13.2.1-2.13">Encoding considerations:</dt>
             <dd id="section-13.2.1-2.14">All of the considerations
               described in RFC 3023 also apply to the 'application/nlsml+xml'
               media type.<a href="#section-13.2.1-2.14" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.15">Security considerations:</dt>
+<dt id="section-13.2.1-2.15">Security considerations:</dt>
             <dd id="section-13.2.1-2.16">As with HTML, NLSML
               documents contain links to other data stores (grammars, verifier
               resources, etc.). Unlike HTML, however, the data stores are not
@@ -10425,7 +10425,7 @@ reference to the definition of the parameter, preferably an RFC. The registry is
               has all of the security considerations described in RFC
               3023.<a href="#section-13.2.1-2.16" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.17">Interoperability considerations:</dt>
+<dt id="section-13.2.1-2.17">Interoperability considerations:</dt>
             <dd id="section-13.2.1-2.18">Although an NLSML
               document is itself a complete XML document, for a fuller
               interpretation of the content a receiver of an NLSML document
@@ -10434,28 +10434,28 @@ reference to the definition of the parameter, preferably an RFC. The registry is
               resources could result in different behavior by the ultimate
               consumer of the data.<a href="#section-13.2.1-2.18" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.19">Published specification:</dt>
+<dt id="section-13.2.1-2.19">Published specification:</dt>
             <dd id="section-13.2.1-2.20">RFC 6787<a href="#section-13.2.1-2.20" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.21">Applications that use this media type:</dt>
+<dt id="section-13.2.1-2.21">Applications that use this media type:</dt>
             <dd id="section-13.2.1-2.22">MRCPv2
               clients and servers<a href="#section-13.2.1-2.22" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.23">Additional information:</dt>
+<dt id="section-13.2.1-2.23">Additional information:</dt>
             <dd id="section-13.2.1-2.24">none<a href="#section-13.2.1-2.24" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.25">Magic number(s):</dt>
+<dt id="section-13.2.1-2.25">Magic number(s):</dt>
             <dd id="section-13.2.1-2.26">There is no single initial octet
               sequence that is always present for NLSML files.<a href="#section-13.2.1-2.26" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.27">Person &amp; email address to contact for further information:</dt>
+<dt id="section-13.2.1-2.27">Person &amp; email address to contact for further information:</dt>
             <dd id="section-13.2.1-2.28">Sarvi Shanmugham, sarvi@cisco.com<a href="#section-13.2.1-2.28" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.2.1-2.29">Intended usage:</dt>
+<dt id="section-13.2.1-2.29">Intended usage:</dt>
             <dd id="section-13.2.1-2.30">This media type is expected to be
               used only in conjunction with MRCPv2.<a href="#section-13.2.1-2.30" class="pilcrow">¶</a>
 </dd>
-          </dl>
+</dl>
 </section>
 </section>
 <section id="section-13.3">
@@ -10468,16 +10468,16 @@ reference to the definition of the parameter, preferably an RFC. The registry is
           <dt id="section-13.3-2.1">XML element type:</dt>
           <dd id="section-13.3-2.2">schema<a href="#section-13.3-2.2" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.3-2.3">URI:</dt>
+<dt id="section-13.3-2.3">URI:</dt>
           <dd id="section-13.3-2.4">urn:ietf:params:xml:schema:nlsml<a href="#section-13.3-2.4" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.3-2.5">Registrant Contact:</dt>
+<dt id="section-13.3-2.5">Registrant Contact:</dt>
           <dd id="section-13.3-2.6">IESG<a href="#section-13.3-2.6" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.3-2.7">XML:</dt>
+<dt id="section-13.3-2.7">XML:</dt>
           <dd id="section-13.3-2.8">See <a href="#sec.schema.NLSML" class="xref">Section 16.1</a>.<a href="#section-13.3-2.8" class="pilcrow">¶</a>
 </dd>
-        </dl>
+</dl>
 </section>
 <section id="section-13.4">
         <h3 id="name-mrcpv2-xml-namespace-regist">
@@ -10489,16 +10489,16 @@ reference to the definition of the parameter, preferably an RFC. The registry is
           <dt id="section-13.4-2.1">XML element type:</dt>
           <dd id="section-13.4-2.2">ns<a href="#section-13.4-2.2" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.4-2.3">URI:</dt>
+<dt id="section-13.4-2.3">URI:</dt>
           <dd id="section-13.4-2.4">urn:ietf:params:xml:ns:mrcpv2<a href="#section-13.4-2.4" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.4-2.5">Registrant Contact:</dt>
+<dt id="section-13.4-2.5">Registrant Contact:</dt>
           <dd id="section-13.4-2.6">IESG<a href="#section-13.4-2.6" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.4-2.7">XML:</dt>
+<dt id="section-13.4-2.7">XML:</dt>
           <dd id="section-13.4-2.8">RFC 6787<a href="#section-13.4-2.8" class="pilcrow">¶</a>
 </dd>
-        </dl>
+</dl>
 </section>
 <div id="sec.text-media-registrations">
 <section id="section-13.5">
@@ -10517,40 +10517,40 @@ reference to the definition of the parameter, preferably an RFC. The registry is
             <dt id="section-13.5.1-1.1">To:</dt>
             <dd id="section-13.5.1-1.2">ietf-types@iana.org<a href="#section-13.5.1-1.2" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.3">Subject:</dt>
+<dt id="section-13.5.1-1.3">Subject:</dt>
             <dd id="section-13.5.1-1.4">Registration of media type
               text/grammar-ref-list<a href="#section-13.5.1-1.4" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.5">MIME media type name:</dt>
+<dt id="section-13.5.1-1.5">MIME media type name:</dt>
             <dd id="section-13.5.1-1.6">text<a href="#section-13.5.1-1.6" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.7">MIME subtype name:</dt>
+<dt id="section-13.5.1-1.7">MIME subtype name:</dt>
             <dd id="section-13.5.1-1.8">text/grammar-ref-list<a href="#section-13.5.1-1.8" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.9">Required parameters:</dt>
+<dt id="section-13.5.1-1.9">Required parameters:</dt>
             <dd id="section-13.5.1-1.10">none<a href="#section-13.5.1-1.10" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.11">Optional parameters:</dt>
+<dt id="section-13.5.1-1.11">Optional parameters:</dt>
             <dd id="section-13.5.1-1.12">none<a href="#section-13.5.1-1.12" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.13">Encoding considerations:</dt>
+<dt id="section-13.5.1-1.13">Encoding considerations:</dt>
             <dd id="section-13.5.1-1.14">Depending on the transfer
               protocol, a transfer encoding may be necessary to deal with very
               long lines.<a href="#section-13.5.1-1.14" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.15">Security considerations:</dt>
+<dt id="section-13.5.1-1.15">Security considerations:</dt>
             <dd id="section-13.5.1-1.16">This media type contains
               URIs that may represent references to external resources. As
               these resources are assumed to be speech recognition grammars,
               similar considerations as for the media types 'application/srgs'
               and 'application/srgs+xml' apply.<a href="#section-13.5.1-1.16" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.17">Interoperability considerations:</dt>
+<dt id="section-13.5.1-1.17">Interoperability considerations:</dt>
             <dd id="section-13.5.1-1.18">'&gt;' must be
               percent encoded in URIs according to <span><a href="#RFC3986" class="xref">RFC
               3986</a> [<a href="#RFC3986" class="xref">RFC3986</a>]</span>.<a href="#section-13.5.1-1.18" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.19">Published specification:</dt>
+<dt id="section-13.5.1-1.19">Published specification:</dt>
             <dd id="section-13.5.1-1.20">
               <p id="section-13.5.1-1.20.1">The RECOGNIZE method of
               the MRCP protocol performs a recognition operation that matches
@@ -10583,24 +10583,24 @@ This specification currently only defines a
 </pre><a href="#section-13.5.1-1.20.4" class="pilcrow">¶</a>
 </div>
 </dd>
-            <dt id="section-13.5.1-1.21">Applications that use this media type:</dt>
+<dt id="section-13.5.1-1.21">Applications that use this media type:</dt>
             <dd id="section-13.5.1-1.22">MRCPv2
               clients and servers<a href="#section-13.5.1-1.22" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.23">Additional information:</dt>
+<dt id="section-13.5.1-1.23">Additional information:</dt>
             <dd id="section-13.5.1-1.24">none<a href="#section-13.5.1-1.24" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.25">Magic number(s):</dt>
+<dt id="section-13.5.1-1.25">Magic number(s):</dt>
             <dd id="section-13.5.1-1.26">none<a href="#section-13.5.1-1.26" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.27">Person &amp; email address to contact for further information:</dt>
+<dt id="section-13.5.1-1.27">Person &amp; email address to contact for further information:</dt>
             <dd id="section-13.5.1-1.28">Sarvi Shanmugham, sarvi@cisco.com<a href="#section-13.5.1-1.28" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.5.1-1.29">Intended usage:</dt>
+<dt id="section-13.5.1-1.29">Intended usage:</dt>
             <dd id="section-13.5.1-1.30">This media type is expected to be
               used only in conjunction with MRCPv2.<a href="#section-13.5.1-1.30" class="pilcrow">¶</a>
 </dd>
-          </dl>
+</dl>
 </section>
 </div>
 </section>
@@ -10616,15 +10616,15 @@ This specification currently only defines a
           <dt id="section-13.6-2.1">URI scheme name:</dt>
           <dd id="section-13.6-2.2">session<a href="#section-13.6-2.2" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.3">Status:</dt>
+<dt id="section-13.6-2.3">Status:</dt>
           <dd id="section-13.6-2.4">Permanent<a href="#section-13.6-2.4" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.5">URI scheme syntax:</dt>
+<dt id="section-13.6-2.5">URI scheme syntax:</dt>
           <dd id="section-13.6-2.6">The syntax of this scheme is
             identical to that defined for the "cid" scheme in Section 2 of
             <span><a href="#RFC2392" class="xref">RFC 2392</a> [<a href="#RFC2392" class="xref">RFC2392</a>]</span>.<a href="#section-13.6-2.6" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.7">URI scheme semantics:</dt>
+<dt id="section-13.6-2.7">URI scheme semantics:</dt>
           <dd id="section-13.6-2.8">The URI is intended to
             identify a data resource previously given to the network computing
             resource. The purpose of this scheme is to permit access to the
@@ -10637,15 +10637,15 @@ This specification currently only defines a
             used elsewhere. The scheme SHOULD NOT be used for open Internet
             protocols.<a href="#section-13.6-2.8" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.9">Encoding considerations:</dt>
+<dt id="section-13.6-2.9">Encoding considerations:</dt>
           <dd id="section-13.6-2.10">There are no other encoding
             considerations for the 'session' URIs not described in <span><a href="#RFC3986" class="xref">RFC 3986</a> [<a href="#RFC3986" class="xref">RFC3986</a>]</span><a href="#section-13.6-2.10" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.11">Applications/protocols that use this URI scheme name:</dt>
+<dt id="section-13.6-2.11">Applications/protocols that use this URI scheme name:</dt>
           <dd id="section-13.6-2.12">This
             scheme name is used by MRCPv2 clients and servers.<a href="#section-13.6-2.12" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.13">Interoperability considerations:</dt>
+<dt id="section-13.6-2.13">Interoperability considerations:</dt>
           <dd id="section-13.6-2.14">Note that none of
             the resources are accessible after the MCRPv2 session ends, hence
             the name of the scheme. For clients who establish one MRCPv2
@@ -10655,7 +10655,7 @@ This specification currently only defines a
             lose access to resources established in the earlier
             session(s).<a href="#section-13.6-2.14" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.15">Security considerations:</dt>
+<dt id="section-13.6-2.15">Security considerations:</dt>
           <dd id="section-13.6-2.16">Generic security
             considerations for URIs described in <span><a href="#RFC3986" class="xref">RFC
             3986</a> [<a href="#RFC3986" class="xref">RFC3986</a>]</span> apply to this scheme as well. The URIs defined here
@@ -10666,17 +10666,17 @@ This specification currently only defines a
             for each URI, the only additional security issues are those of the
             types of media referred to by the URI.<a href="#section-13.6-2.16" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.17">Contact:</dt>
+<dt id="section-13.6-2.17">Contact:</dt>
           <dd id="section-13.6-2.18">Sarvi Shanmugham, sarvi@cisco.com<a href="#section-13.6-2.18" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.19">Author/Change controller:</dt>
+<dt id="section-13.6-2.19">Author/Change controller:</dt>
           <dd id="section-13.6-2.20">IESG, iesg@ietf.org<a href="#section-13.6-2.20" class="pilcrow">¶</a>
 </dd>
-          <dt id="section-13.6-2.21">References:</dt>
+<dt id="section-13.6-2.21">References:</dt>
           <dd id="section-13.6-2.22">This specification, particularly
             Sections <a href="#sec.Content-ID" class="xref">6.2.7</a>, <a href="#sec.lexiconData" class="xref">8.5.2</a>, <a href="#sec.grammarData" class="xref">9.5.1</a>, and <a href="#sec.methodRecognize" class="xref">9.9</a>.<a href="#section-13.6-2.22" class="pilcrow">¶</a>
 </dd>
-        </dl>
+</dl>
 </section>
 </div>
 <section id="section-13.7">
@@ -10695,23 +10695,23 @@ This specification currently only defines a
             <dd id="section-13.7.1-2.2">Sarvi
               Shanmugham, sarvi@cisco.com, +1.408.902.3875<a href="#section-13.7.1-2.2" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-2.3">Name being registered (as it will appear in SDP):</dt>
+<dt id="section-13.7.1-2.3">Name being registered (as it will appear in SDP):</dt>
             <dd id="section-13.7.1-2.4">TCP/MRCPv2<a href="#section-13.7.1-2.4" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-2.5">Long-form name in English:</dt>
+<dt id="section-13.7.1-2.5">Long-form name in English:</dt>
             <dd id="section-13.7.1-2.6">MCRPv2 over TCP<a href="#section-13.7.1-2.6" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-2.7">Type of name:</dt>
+<dt id="section-13.7.1-2.7">Type of name:</dt>
             <dd id="section-13.7.1-2.8">proto<a href="#section-13.7.1-2.8" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-2.9">Explanation of name:</dt>
+<dt id="section-13.7.1-2.9">Explanation of name:</dt>
             <dd id="section-13.7.1-2.10">This name represents the
               MCRPv2 protocol carried over TCP.<a href="#section-13.7.1-2.10" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-2.11">Reference to specification of name:</dt>
+<dt id="section-13.7.1-2.11">Reference to specification of name:</dt>
             <dd id="section-13.7.1-2.12">RFC 6787<a href="#section-13.7.1-2.12" class="pilcrow">¶</a>
 </dd>
-          </dl>
+</dl>
 <p id="section-13.7.1-3"><a href="#section-13.7.1-3" class="pilcrow">¶</a></p>
 <p id="section-13.7.1-4">"TCP/TLS/MRCPv2" value of the "proto" parameter<a href="#section-13.7.1-4" class="pilcrow">¶</a></p>
 <dl class="dlParallel" id="section-13.7.1-5">
@@ -10719,24 +10719,24 @@ This specification currently only defines a
             <dd id="section-13.7.1-5.2">Sarvi
               Shanmugham, sarvi@cisco.com, +1.408.902.3875<a href="#section-13.7.1-5.2" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-5.3">Name being registered (as it will appear in SDP):</dt>
+<dt id="section-13.7.1-5.3">Name being registered (as it will appear in SDP):</dt>
             <dd id="section-13.7.1-5.4">TCP/TLS/MRCPv2<a href="#section-13.7.1-5.4" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-5.5">Long-form name in English:</dt>
+<dt id="section-13.7.1-5.5">Long-form name in English:</dt>
             <dd id="section-13.7.1-5.6">MCRPv2 over TLS over
               TCP<a href="#section-13.7.1-5.6" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-5.7">Type of name:</dt>
+<dt id="section-13.7.1-5.7">Type of name:</dt>
             <dd id="section-13.7.1-5.8">proto<a href="#section-13.7.1-5.8" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-5.9">Explanation of name:</dt>
+<dt id="section-13.7.1-5.9">Explanation of name:</dt>
             <dd id="section-13.7.1-5.10">This name represents the
               MCRPv2 protocol carried over TLS over TCP.<a href="#section-13.7.1-5.10" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.1-5.11">Reference to specification of name:</dt>
+<dt id="section-13.7.1-5.11">Reference to specification of name:</dt>
             <dd id="section-13.7.1-5.12">RFC 6787<a href="#section-13.7.1-5.12" class="pilcrow">¶</a>
 </dd>
-          </dl>
+</dl>
 </section>
 <section id="section-13.7.2">
           <h4 id="name-sub-registry-att-field-medi">
@@ -10748,29 +10748,29 @@ This specification currently only defines a
             <dd id="section-13.7.2-2.2">Sarvi
               Shanmugham, sarvi@cisco.com, +1.408.902.3875<a href="#section-13.7.2-2.2" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-2.3">Attribute name (as it will appear in SDP):</dt>
+<dt id="section-13.7.2-2.3">Attribute name (as it will appear in SDP):</dt>
             <dd id="section-13.7.2-2.4">resource<a href="#section-13.7.2-2.4" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-2.5">Long-form attribute name in English:</dt>
+<dt id="section-13.7.2-2.5">Long-form attribute name in English:</dt>
             <dd id="section-13.7.2-2.6">MRCPv2
               resource type<a href="#section-13.7.2-2.6" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-2.7">Type of attribute:</dt>
+<dt id="section-13.7.2-2.7">Type of attribute:</dt>
             <dd id="section-13.7.2-2.8">media-level<a href="#section-13.7.2-2.8" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-2.9">Subject to charset attribute?</dt>
+<dt id="section-13.7.2-2.9">Subject to charset attribute?</dt>
             <dd id="section-13.7.2-2.10">no<a href="#section-13.7.2-2.10" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-2.11">Explanation of attribute:</dt>
+<dt id="section-13.7.2-2.11">Explanation of attribute:</dt>
             <dd id="section-13.7.2-2.12">See <a href="#sec.resourceControl" class="xref">Section 4.2</a> of RFC 6787 for description
               and examples.<a href="#section-13.7.2-2.12" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-2.13">Specification of appropriate attribute values:</dt>
+<dt id="section-13.7.2-2.13">Specification of appropriate attribute values:</dt>
             <dd id="section-13.7.2-2.14">See
               section <a href="#sec.registration.resources" class="xref">Section 13.1.1</a> of
               RFC 6787.<a href="#section-13.7.2-2.14" class="pilcrow">¶</a>
 </dd>
-          </dl>
+</dl>
 <p id="section-13.7.2-3"><a href="#section-13.7.2-3" class="pilcrow">¶</a></p>
 <p id="section-13.7.2-4">"channel" value of the "att-field" parameter<a href="#section-13.7.2-4" class="pilcrow">¶</a></p>
 <dl class="dlParallel" id="section-13.7.2-5">
@@ -10778,29 +10778,29 @@ This specification currently only defines a
             <dd id="section-13.7.2-5.2">Sarvi
               Shanmugham, sarvi@cisco.com, +1.408.902.3875<a href="#section-13.7.2-5.2" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-5.3">Attribute name (as it will appear in SDP):</dt>
+<dt id="section-13.7.2-5.3">Attribute name (as it will appear in SDP):</dt>
             <dd id="section-13.7.2-5.4">channel<a href="#section-13.7.2-5.4" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-5.5">Long-form attribute name in English:</dt>
+<dt id="section-13.7.2-5.5">Long-form attribute name in English:</dt>
             <dd id="section-13.7.2-5.6">MRCPv2
               resource channel identifier<a href="#section-13.7.2-5.6" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-5.7">Type of attribute:</dt>
+<dt id="section-13.7.2-5.7">Type of attribute:</dt>
             <dd id="section-13.7.2-5.8">media-level<a href="#section-13.7.2-5.8" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-5.9">Subject to charset attribute?</dt>
+<dt id="section-13.7.2-5.9">Subject to charset attribute?</dt>
             <dd id="section-13.7.2-5.10">no<a href="#section-13.7.2-5.10" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-5.11">Explanation of attribute:</dt>
+<dt id="section-13.7.2-5.11">Explanation of attribute:</dt>
             <dd id="section-13.7.2-5.12">See <a href="#sec.resourceControl" class="xref">Section 4.2</a> of RFC 6787 for description
               and examples.<a href="#section-13.7.2-5.12" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-5.13">Specification of appropriate attribute values:</dt>
+<dt id="section-13.7.2-5.13">Specification of appropriate attribute values:</dt>
             <dd id="section-13.7.2-5.14">See
               <a href="#sec.resourceControl" class="xref">Section 4.2</a> and the "channel-id"
               ABNF production rules of RFC 6787.<a href="#section-13.7.2-5.14" class="pilcrow">¶</a>
 </dd>
-          </dl>
+</dl>
 <p id="section-13.7.2-6"><a href="#section-13.7.2-6" class="pilcrow">¶</a></p>
 <div id="cmid">
 <p id="section-13.7.2-7">"cmid" value of the "att-field" parameter<a href="#section-13.7.2-7" class="pilcrow">¶</a></p>
@@ -10810,29 +10810,29 @@ This specification currently only defines a
             <dd id="section-13.7.2-8.2">Sarvi
               Shanmugham, sarvi@cisco.com, +1.408.902.3875<a href="#section-13.7.2-8.2" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-8.3">Attribute name (as it will appear in SDP):</dt>
+<dt id="section-13.7.2-8.3">Attribute name (as it will appear in SDP):</dt>
             <dd id="section-13.7.2-8.4">cmid<a href="#section-13.7.2-8.4" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-8.5">Long-form attribute name in English:</dt>
+<dt id="section-13.7.2-8.5">Long-form attribute name in English:</dt>
             <dd id="section-13.7.2-8.6">MRCPv2
               resource channel media identifier<a href="#section-13.7.2-8.6" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-8.7">Type of attribute:</dt>
+<dt id="section-13.7.2-8.7">Type of attribute:</dt>
             <dd id="section-13.7.2-8.8">media-level<a href="#section-13.7.2-8.8" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-8.9">Subject to charset attribute?</dt>
+<dt id="section-13.7.2-8.9">Subject to charset attribute?</dt>
             <dd id="section-13.7.2-8.10">no<a href="#section-13.7.2-8.10" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-8.11">Explanation of attribute:</dt>
+<dt id="section-13.7.2-8.11">Explanation of attribute:</dt>
             <dd id="section-13.7.2-8.12">See <a href="#sec.mediaStreams" class="xref">Section 4.4</a> of RFC 6787 for description and
               examples.<a href="#section-13.7.2-8.12" class="pilcrow">¶</a>
 </dd>
-            <dt id="section-13.7.2-8.13">Specification of appropriate attribute values:</dt>
+<dt id="section-13.7.2-8.13">Specification of appropriate attribute values:</dt>
             <dd id="section-13.7.2-8.14">See
               <a href="#sec.mediaStreams" class="xref">Section 4.4</a> and the "cmid-attribute"
               ABNF production rules of RFC 6787.<a href="#section-13.7.2-8.14" class="pilcrow">¶</a>
 </dd>
-          </dl>
+</dl>
 <p id="section-13.7.2-9"><a href="#section-13.7.2-9" class="pilcrow">¶</a></p>
 </section>
 </section>
