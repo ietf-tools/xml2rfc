@@ -636,7 +636,7 @@ def hastext(e):
     return items
 
 def is_htmlblock(h):
-    return h.tag in set([ 'address', 'article', 'aside', 'blockquote', 'div', 'dl', 'figure',
+    return h.tag in set([ 'address', 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'figure',
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'nav', 'ol', 'p', 'pre', 'script', 'section',
         'table', 'ul', ])
 
