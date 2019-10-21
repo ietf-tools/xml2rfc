@@ -1699,7 +1699,12 @@ class TextWriter(BaseV3Writer):
                 #    Request for Comments:  <RFC number>  This indicates the RFC number,
                 #       assigned by the RFC Editor upon publication of the document.  This
                 #       element is unchanged.
-                left.append("Request for Comments: %s" % self.options.rfc)
+                for item in front.iter('seriesInfo'):
+                    name  = item.get('name') 
+                    value = item.get('value')
+                    if name == 'RFC':
+                        name = 'Request for Comments'
+                    left.append("%s: %s" % (name, value))
                 #    <subseries ID> <subseries number>  Some document categories are also
                 #       labeled as a subseries of RFCs.  These elements appear as
                 #       appropriate for such categories, indicating the subseries and the
@@ -1730,6 +1735,7 @@ class TextWriter(BaseV3Writer):
                 updates = self.root.get('updates')
                 if updates:
                     left += wrap('Updates: ', normalize(updates))
+                
                 #    Category: <category>  This indicates the initial RFC document
                 #       category of the publication.  These are defined in [RFC2026].
                 #       Currently, this is always one of: Standards Track, Best Current
