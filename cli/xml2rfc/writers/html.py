@@ -863,6 +863,8 @@ class HtmlWriter(BaseV3Writer):
             vbox = svg.get('viewBox')
             svgw = maybefloat(svg.get('width'))
             svgh = maybefloat(svg.get('height'))
+            if svgw or svgh:
+                self.warn(x, "Found SVG with width or height specified, which will make the artwork not scale.  Specify a viewBox only to let the artwork scale.")
             try:
                 if vbox:
                     xo,yo,w,h = re.split(',? +', vbox.strip('()'))
