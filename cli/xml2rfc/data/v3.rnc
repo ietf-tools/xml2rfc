@@ -61,7 +61,8 @@
        keyword*,
        abstract?,
        note*,
-       boilerplate?
+       boilerplate?,
+       toc?
      }
 
    title =
@@ -283,6 +284,13 @@
 
    boilerplate =
      element boilerplate {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       section+
+     }
+
+   toc =
+     element toc {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        section+

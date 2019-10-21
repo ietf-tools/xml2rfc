@@ -1600,7 +1600,7 @@ class HtmlWriter(BaseV3Writer):
             for a in authors:
                 self.render(dd, a)
 
-            for c in x.iterchildren('title', 'abstract', 'note', 'boilerplate'):
+            for c in x.iterchildren('title', 'abstract', 'note', 'boilerplate', 'toc'):
                 self.render(h, c)
 
         elif self.part == 'references':
@@ -2448,6 +2448,9 @@ class HtmlWriter(BaseV3Writer):
             h1 = build.h1(title, id='title')
             h.append(h1)
             return h1
+
+    # <toc>
+    render_toc = skip_renderer
 
     # 9.61.  <tr>
     # 

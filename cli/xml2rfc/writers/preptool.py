@@ -222,6 +222,7 @@ class PrepToolWriter(BaseV3Writer):
             './/*[@keepWithPrevious="true"]',   # 5.3.4.  "keepWithPrevious" Conversion
             '.;fill_in_expires_date()',         # 5.4.1.  "expiresDate" Insertion
             './front;insert_boilerplate()',     # 5.4.2.  <boilerplate> Insertion
+            './front;insert_toc()',
             '.;check_series_and_submission_type()', # 5.4.2.1.  Compare <rfc> "submissionType" and <seriesInfo> "stream"
             './/boilerplate;insert_status_of_memo()',  # 5.4.2.2.  "Status of this Memo" Insertion
             './/boilerplate;insert_copyright_notice()', # 5.4.2.3.  "Copyright Notice" Insertion
@@ -256,7 +257,7 @@ class PrepToolWriter(BaseV3Writer):
             #
             './back;insert_index()',
             './back;insert_author_address()',
-            './/boilerplate;insert_table_of_contents()',
+            './/toc;insert_table_of_contents()',
             './/*[@removeInRFC="true"]',        # 5.6.1.  <note> Removal
             './/cref;removal()',                # 5.6.2.  <cref> Removal
                                                 # 5.6.3.  <link> Processing
@@ -988,6 +989,22 @@ class PrepToolWriter(BaseV3Writer):
                     old_bp.remove(c)
         else:
             e.append(new_bp)
+
+    def front_insert_toc(self, e, p):
+        old_toc = e.find('toc')
+        new_toc = self.element('toc')
+        if old_toc != None:
+            if not self.liberal and not self.prepped:
+                children = old_toc.getchildren()
+                if len(children):
+                    self.warn(old_toc, "Expected no <toc> element, but found one.  Replacing the content with new toc")
+                    for c in children:
+                        old_toc.remove(c)
+            elif not self.rfcnumber:
+                for c in old_toc.getchildren():
+                    old_toc.remove(c)
+        else:
+            e.append(new_toc)
 
     # 5.4.2.1.  Compare <rfc> "submissionType" and <seriesInfo> "stream"
     # 
@@ -1885,7 +1902,7 @@ class PrepToolWriter(BaseV3Writer):
     #
     # 5.4.2.4  "Table of Contents" Insertion
     # 5.4.2.4  "Table of Contents" Insertion
-    def boilerplate_insert_table_of_contents(self, e, p):
+    def toc_insert_table_of_contents(self, e, p):
         if self.prepped and self.rfcnumber:
             return
         def toc_entry_t(s):

@@ -275,7 +275,7 @@ class TextWriter(BaseV3Writer):
         return res
 
     def add_pageno_placeholders(self):
-        toc = self.root.find('./front/boilerplate/section[@anchor="toc"]')
+        toc = self.root.find('./front/toc/section')
         for e in toc.xpath('.//xref[2]'):
             e.set('pageno', '0000')
 
@@ -378,7 +378,7 @@ class TextWriter(BaseV3Writer):
     def update_toc(self, lines):
         if self.root.get('tocInclude') != 'true':
             return lines
-        toc = self.root.find('./front/boilerplate/section[@anchor="toc"]')
+        toc = self.root.find('./front/toc/section')
         in_toc = False
         toc_start = None
         toc_end = None
@@ -4200,6 +4200,18 @@ class TextWriter(BaseV3Writer):
     #    Document-wide unique identifier for the row.
     render_tr = null_renderer           # handled in build_table
 
+    # <toc>
+    def render_toc(self, e, width, **kwargs):
+        lines = []
+        for c in e.getchildren():
+            numbered = c.get('numbered')
+            if not numbered == 'false':
+                self.err(c, "Expected toc section to have numbered='false', but found '%s'" % (numbered, ))
+            keep_url = True if self.options.rfc else False
+            lines = self.ljoin(lines, c, width, keep_url=keep_url, **kwargs)
+        return lines
+
+
     # 2.62.  <tt>
     # 
     #    Causes the text to be displayed in a constant-width font.  This
@@ -4548,6 +4560,7 @@ class TextWriter(BaseV3Writer):
         'th',
         'thead',
         'title',
+        'toc',
         'tr',
         'tt',
         'ul',
