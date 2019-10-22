@@ -887,6 +887,8 @@ class HtmlWriter(BaseV3Writer):
                 pass
             #
             if self.options.image_svg:
+                if not svg.get('width'):
+                    svg.set('width', "%s"%svgw) # Needed by the PDF renderer for proper scaling
                 data = build_dataurl('image/svg+xml', lxml.etree.tostring(svg))
                 add.img(div, None, src=data, alt=x.get('alt'))
             else:
@@ -1713,7 +1715,7 @@ class HtmlWriter(BaseV3Writer):
                     number = number.replace('.', ' ', 1).title()
                 elif re.search('^[a-z]', number):
                     number = number.title()
-                a_number = build.a(number, '\u00a0', href='#%s'%pn, classes='section-number selfRef')
+                a_number = build.a(number, ' ', href='#%s'%pn, classes='section-number selfRef')
                 h.append( a_number)
             a_title = build.a(href='#%s'%x.get('slugifiedName'), classes='section-name selfRef')
             self.inline_text_renderer(a_title, x)
