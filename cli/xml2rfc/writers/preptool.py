@@ -340,7 +340,6 @@ class PrepToolWriter(BaseV3Writer):
             else:
                 self.warn(None, "No handler %s() found" % (func_name, ))
 
-
         if self.options.debug:
             for s in selectors:
                 if selector_visits[s] == 0:
@@ -975,6 +974,9 @@ class PrepToolWriter(BaseV3Writer):
     #    remove the existing children.
     # 
     def front_insert_boilerplate(self, e, p):
+        if self.root.get('ipr') == 'none':
+            # no boilerplate
+            return
         old_bp = e.find('boilerplate')
         new_bp = self.element('boilerplate')
         if old_bp != None:
