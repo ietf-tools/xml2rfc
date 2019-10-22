@@ -4366,7 +4366,8 @@ class TextWriter(BaseV3Writer):
     def render_xref(self, e, width, **kwargs):
         target = e.get('target')
         section = e.get('section')
-        reftext   = e.get('derivedContent')
+        reftext = e.get('derivedContent')
+        exptext = ("%s " % e.text.strip()) if (e.text and e.text.strip()) else ''
         if reftext is None:
             self.die(e, "Found an <xref> without derivedContent: %s" % (etree.tostring(e),))
         #
@@ -4390,12 +4391,13 @@ class TextWriter(BaseV3Writer):
         else:
             label = 'Section' if section[0].isdigit() else 'Appendix'
             sform  = e.get('sectionFormat')
+            
             if   sform == 'of':
-                text = '%s %s of [%s]' % (label, section, reftext)
+                text = '%s %s of %s[%s]' % (label, section, exptext, reftext)
             elif sform == 'comma':
-                text = '[%s], %s %s' % (reftext, label, section)
+                text = '%s[%s], %s %s' % (exptext, reftext, label, section)
             elif sform == 'parens':
-                text = '[%s] (%s %s)' % (reftext, label, section)
+                text = '%s[%s] (%s %s)' % (exptext, reftext, label, section)
             elif sform == 'bare':
                 etext = e.text and e.text.strip()
                 if etext and etext != section:

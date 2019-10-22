@@ -2677,6 +2677,7 @@ class HtmlWriter(BaseV3Writer):
             label = 'Section' if section[0].isdigit() else 'Appendix'
             link    = x.get('derivedLink')
             format  = x.get('sectionFormat')
+            exptext = ("%s " % x.text.strip()) if (x.text and x.text.strip()) else ''
             # 9.44.1.  displayFormat='of'
             # 
             #    The output is an <a class='relref'> HTML tag, with contents of
@@ -2700,7 +2701,7 @@ class HtmlWriter(BaseV3Writer):
             if format == 'of':
                 span = add.span(h, None,
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
-                    ' of [',
+                    ' of %s[' % exptext,
                     build.a(reftext, href='#%s'%target, classes='xref'),
                     ']',
                 )
@@ -2727,7 +2728,7 @@ class HtmlWriter(BaseV3Writer):
             #    for an overview.
             elif format == 'comma':
                 span = add.span(h, None,
-                    '[',
+                    '%s[' % exptext,
                     build.a(reftext, href='#%s'%target, classes='xref'),
                     '], ',
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
@@ -2762,7 +2763,7 @@ class HtmlWriter(BaseV3Writer):
             #    2.3</a>) for an overview.
             elif format == 'parens':
                 span = add.span(h, None,
-                    '[',
+                    '%s[' % exptext,
                     build.a(reftext, href='#%s'%target, classes='xref'),
                     '] (',
                     build.a('%s %s'%(label, section), href=link, classes='relref'),

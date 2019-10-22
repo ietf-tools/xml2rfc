@@ -1635,8 +1635,6 @@ class PrepToolWriter(BaseV3Writer):
                     self.err(e, "Cannot build a href for <reference anchor='%s'> without having a target= attribute giving the URL." % (t.get('anchor'), ))
                 link = urljoin(url, relative, allow_fragments=True)
                 e.set('derivedLink', link)
-            if e.text:
-                content = e.text.strip()
             attr = e.get('derivedContent')
             if attr and attr != content:
                 self.err(e, "When processing <xref>, found derivedContent='%s' when trying to set it to '%s'" % (attr, content))
