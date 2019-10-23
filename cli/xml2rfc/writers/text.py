@@ -941,10 +941,14 @@ class TextWriter(BaseV3Writer):
             name = '%s (%s)' % (name, aname)
         #
         o = e.find('./organization')
-        if o != None and o.get('showOnFrontPage') == 'true':
-            organization = self.render_front_organization(o, **kwargs)
+        
+        if o != None:
+            if o.get('showOnFrontPage') == 'true':
+                organization = self.render_front_organization(o, **kwargs)
+            else:
+                organization = None
         else:
-            organization = None
+            organization = ''
         #
         if organization and not name:
             name = organization
@@ -1820,15 +1824,18 @@ class TextWriter(BaseV3Writer):
             authors = front.xpath('./author')
             for a in authors:
                 this = auth(*self.render_author_front(a, **kwargs))
-                if right and this.name and this.org and this.org == prev.org:
+                if right and this.name and this.org!='' and this.org == prev.org:
                     right[-1] = this.name
-                    right.append(this.org)
+                    right.append(this.org or '')
                 else:
                     if this.name:
                         right.append(this.name)
-                    if this.org:
+                    if this.org!=None:
                         right.append(this.org)
                 prev = this
+            # We don't need show a trailing blank line if the last author has a blank organization
+            if prev.org == '':
+                right = right[:-1]
             right.append(self.render_date(front.find('./date'), width, **kwargs))
             return right
         #
