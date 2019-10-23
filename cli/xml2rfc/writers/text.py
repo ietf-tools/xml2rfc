@@ -1834,7 +1834,7 @@ class TextWriter(BaseV3Writer):
                         right.append(this.org)
                 prev = this
             # We don't need show a trailing blank line if the last author has a blank organization
-            if prev.org == '':
+            if not prev.org:
                 right = right[:-1]
             right.append(self.render_date(front.find('./date'), width, **kwargs))
             return right
