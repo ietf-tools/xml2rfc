@@ -1,3 +1,53 @@
+xml2rfc (2.34.0) ietf; urgency=medium
+
+  * Made preptool reference sorting honour the sortRefs <rfc> attribute
+    when symRefs is true.
+
+  * Fixed an issue with v2v3 conversion of PIs to <xml> attributes, where 
+    PIs occuring before <rfc> would not be processed.
+
+  * Fixed the v3 text output for authors with no organization to output 
+    blank lines, as for v2.
+
+  * Changed the rendering of <xref> with section reference and text 
+    content, based on input from the RPC.
+
+  * Fixed an issue with &nbsp; in section headers not being handled
+    properly by PDF viewers, by using plain space instead of non-breaking
+    space.
+
+  * Fixed an issue with sizing of SVG artwork in PDF renderings.
+
+  * Fixed a validation problem for an empty boilerplate element for ipr='none'.
+
+  * Added a <toc> entry in <rfc><front>, and moved table of contents XML 
+    from <boilerplate> to <toc>.
+
+  * Fixed an issue with the use of seriesInfo for top first page of v3
+    text output.
+
+  * Added support for a new attribute 'brackets { "none" | "angle" }? for
+    <eref>, on request from the RPC.
+
+  * Changed the rendering of <dt><dd> so as to insert a newline if the <dt> 
+    entry extends too close to the right-hand margin.
+
+  * Tweaked the removal of PIs during the preptool phase to occur before
+    writing prepped content out to file, rather than earlier, in order to
+    preserve PIs when prep() is used by xml2rfc internally.
+
+  * Added a warning for SVG content that won't scale.
+
+  * Added 'dd' to is_htmlblock().  One effect of this is to let <dd> to 
+    be link targets for <xref> when generating HTML output.
+
+  * Changed the schema for <postal> to a workable but less precise 
+    expression because the RFC7991bis generation scripts don't support the RNG 
+    <interleave> construct.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  23 Oct 2019 08:52:03 -0700
+
+
 xml2rfc (2.33.0) ietf; urgency=medium
 
   * Added an error message for a case that would otherwise break text table 
