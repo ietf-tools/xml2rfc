@@ -1264,7 +1264,7 @@ class PrepToolWriter(BaseV3Writer):
     #    the rules for lexical sorting are.  The authors of this document
     #    acknowledge that getting consensus on this will be a difficult task.
     def references_sort(self, e, p):
-        sort_refs = self.root.get('sortRefs', 'true') == 'true'
+        sort_refs = (self.root.get('sortRefs', 'true') == 'true') and (self.root.get('symRefs', 'true') == 'true')
         if sort_refs:
             children = e.xpath('./reference') + e.xpath('./referencegroup')
             children.sort(key=lambda x: self.refname_mapping[x.get('anchor')].upper() )
