@@ -1378,6 +1378,7 @@ class PrepToolWriter(BaseV3Writer):
                 return '.'.join([ str(n) for n in num ])
             #
             para_tags = ['artset', 'artwork', 'aside', 'blockquote', 'list', 'dl', 'dd', 'ol', 'ul', 'dt', 'li', 'sourcecode', 't', 'figure', 'table', ]
+            bloc_tags = ['thead', 'tbody', 'tfoot', 'tr', 'td', ]
             sect_tags = ['abstract', 'note', 'section', 'references' ]
             skip_tags = ['reference', ]
             if s.tag in sect_tags:
@@ -1395,6 +1396,8 @@ class PrepToolWriter(BaseV3Writer):
                     num[-1] += 1
                     if c.tag not in ['figure', 'table']:
                         c.set('pn', prefix+num2str(num))
+                elif c.tag in bloc_tags:
+                    num[-1] += 1
                 if c.tag in sect_tags:
                     child(c, num)
                 elif c.tag in skip_tags:
