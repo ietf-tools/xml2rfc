@@ -721,6 +721,9 @@ class PrepToolWriter(BaseV3Writer):
             else:
                 self.die(e, "Did not expect a prepTime= attribute for <rfc>, but found '%s'" % (e.get('prepTime')))
         else:
+            pn = e.xpath('.//*[@pn]')
+            if pn and not self.liberal:
+                self.die(e, "Inconsistent input.  Found pn numbers but no prepTime.  Cannot continue.")
             e.set('prepTime', datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'))
 
     # 5.2.5.  <ol> Group "start" Insertion
