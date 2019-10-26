@@ -500,7 +500,7 @@ class PrepToolWriter(BaseV3Writer):
         consensus_default = rfc_defaults['consensus']
         if stream == 'IRTF' and workgroup == None:
             if consensus:
-                self.err(self.root, "Expected no consensus setting for IRTF stream and no workgroup, but found '%'.  Ignoring it." % consensus)
+                self.err(self.root, "Expected no consensus setting for IRTF stream and no workgroup, but found '%s'.  Ignoring it." % consensus)
             consensus = 'n/a'
         elif stream == 'independent':
             if consensus:
