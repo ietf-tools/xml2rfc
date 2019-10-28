@@ -535,7 +535,7 @@ class PrepToolWriter(BaseV3Writer):
                     self.die(c, "Found non-ascii content in a document with xml encoding declared as %s" % self.tree.docinfo.encoding)
                 show = c.text.encode('ascii', errors='replace')
                 if c.tag in unicode_content_tags:
-                    if not c.get('ascii') and not c.tag in bare_unicode_tags:
+                    if not c.get('ascii') and not c.tag in bare_unicode_tags and not is_script(c.text, 'Latin'):
                         self.err(c, 'Found non-ascii content without matching ascii attribute in <%s>: %s' % (c.tag, show))
                 else:
                     self.err(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
