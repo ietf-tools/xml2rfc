@@ -33,7 +33,7 @@ except ImportError:
 from xml2rfc import log, strings
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.uniscripts import is_script
-from xml2rfc.util.date import extract_date, format_date, format_date_iso, get_expiry_date
+from xml2rfc.util.date import extract_date, augment_date, format_date, format_date_iso, get_expiry_date
 from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
                                 ref_author_name_first, ref_author_name_last, 
                                 short_author_name_set, full_author_name_set,
@@ -1311,9 +1311,13 @@ class HtmlWriter(BaseV3Writer):
     #    <time datetime="2014-10" class="published">October 2014</time>
     def render_date(self, h, x):
         have_date = x.get('day') or x.get('month') or x.get('year')
-        parts = extract_date(x, self.options.date)
-        text = format_date(*parts, legacy=self.options.legacy_date_format)
-        datetime = format_date_iso(*parts) if have_date else x.text
+        year, month, day = extract_date(x, self.options.date)
+        p = x.getparent()
+        if p==None or p.getparent().tag != 'reference':
+            # don't touch the given date if we're rendering a reference
+            year, month, day = augment_date(year, month, day, self.options.date)
+        text = format_date(year, month, day, legacy=self.options.legacy_date_format)
+        datetime = format_date_iso(year, month, day) if have_date else x.text
         if x.text and have_date:
             text = "%s (%s)" % (x.text, text)
         elif x.text:

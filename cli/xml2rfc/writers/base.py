@@ -21,7 +21,7 @@ except ImportError:
     pass
 
 from xml2rfc import strings, log
-from xml2rfc.util.date import extract_date, format_date, get_expiry_date
+from xml2rfc.util.date import extract_date, augment_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
 from xml2rfc.util.unicode import punctuation, unicode_replacements, unicode_content_tags, downcode
 from xml2rfc.utils import namespaces, find_duplicate_ids
@@ -1805,8 +1805,9 @@ class BaseV3Writer(object):
 
     def page_top_right(self):
         date = self.root.find('./front/date')
-        parts = extract_date(date, self.options.date)
-        text = format_date(parts[0], parts[1], None, legacy=True)
+        year, month, day = extract_date(date, self.options.date)
+        year, month, day = augment_date(year, month, day, self.options.date)
+        text = format_date(year, month, None, legacy=True)
         return text
 
     def page_bottom_left(self):

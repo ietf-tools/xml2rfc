@@ -24,16 +24,14 @@ def normalize_month(month):
 def extract_date(e, today):
     day = e.get('day')
     month = e.get('month')
-    year = e.get('year', str(today.year))
+    year = e.get('year')
     #
-    if not year.isdigit():
-        xml2rfc.log.warn("Expected a numeric year, but found '%s'" % year)
-        year = today.year
-    year = int(year)
-    if not month:
-        if year == today.year:
-            month = today.month
-    else:
+    if year:
+        if not year.isdigit():
+            xml2rfc.log.warn("Expected a numeric year, but found '%s'" % year)
+            year = today.year
+        year = int(year)
+    if month:
         if not month.isdigit():
             month = normalize_month(month)
         month = int(month)
@@ -43,6 +41,15 @@ def extract_date(e, today):
             day = today.day
         day = int(day)
     return year, month, day
+
+def augment_date(year, month, day, today):
+    if not year:
+        year = today.year
+    if not month:
+        if year == today.year:
+            month = today.month
+    return year, month, day
+
 
 def format_date_iso(year, month, day):
     if   year and month and day:
@@ -62,15 +69,16 @@ def format_date(year, month, day, legacy=False):
                 date = '%s %s %s' % (day, month, year)
         else:
             date = '%s %s' % (month, year)
-    else:
+    elif year:
         date = '%s' % year
+    else:
+        date = ''
     return date
 
 
 def get_expiry_date(tree, today):
     year, month, day = extract_date(tree.find('./front/date'), today)
-    if not day:
-        day = today.day
+    year, month, day = augment_date(year, month, day, today)
     exp = datetime.date(year=year, month=month, day=day) + datetime.timedelta(days=185)
     return exp
     

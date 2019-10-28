@@ -37,7 +37,7 @@ from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.boilerplate_tlp import boilerplate_tlp
 from xml2rfc.scripts import get_scripts
 from xml2rfc.uniscripts import is_script
-from xml2rfc.util.date import extract_date, format_date, normalize_month
+from xml2rfc.util.date import extract_date, augment_date, format_date, normalize_month
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import unicode_content_tags, bare_unicode_tags, expand_unicode_element, isascii, downcode
@@ -1096,8 +1096,7 @@ class PrepToolWriter(BaseV3Writer):
 
         else:
             year, month, day = extract_date(self.root.find('./front/date'), self.date)
-            if not day:
-                day = self.date.day
+            year, month, day = augment_date(year, month, day, self.date)
             exp = datetime.date(year=year, month=month, day=day) + datetime.timedelta(days=185)
             format_dict['expiration_date'] = format_date(exp.year, exp.month, exp.day, legacy=self.options.legacy_date_format)
             for para in boilerplate_draft_status_of_memo:

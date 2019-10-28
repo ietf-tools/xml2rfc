@@ -27,7 +27,7 @@ from xml2rfc import log, strings
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc import utils
 from xml2rfc.uniscripts import is_script
-from xml2rfc.util.date import extract_date, get_expiry_date, format_date
+from xml2rfc.util.date import extract_date, augment_date, get_expiry_date, format_date
 from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_author_name_parts, short_org_name_set
 
 from xml2rfc.util.num import ol_style_formatter, num_width
@@ -434,6 +434,9 @@ class TextWriter(BaseV3Writer):
         if text:
             if '\n' in j.join:
                 text += j.join + itext
+            elif j.join.strip() and not itext.strip():
+                # don't use non-empty joiners with empty content
+                pass
             else:
                 text += j.join + itext.lstrip()
         else:
@@ -1217,6 +1220,10 @@ class TextWriter(BaseV3Writer):
         #if pp.tag == 'rfc':
         have_date = e.get('day') or e.get('month') or e.get('year')
         year, month, day = extract_date(e, self.date)
+        p = e.getparent()
+        if p==None or p.getparent().tag != 'reference':
+            # don't touch the given date if we're rendering a reference
+            year, month, day = augment_date(year, month, day, self.date)
         date = format_date(year, month, day, self.options.legacy_date_format)
         if e.text and have_date:
             date = "%s (%s)" % (e.text, date)
