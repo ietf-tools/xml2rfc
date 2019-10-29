@@ -239,6 +239,11 @@ class TextWriter(BaseV3Writer):
                     sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)).encode('utf8'))
                 else:
                     sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)).encode('utf8'))
+        for i, l in enumerate(lines):
+            length = len(l.text)
+            if length > 72:
+                self.warn(l.elem, "Too long line found (L%s), %s characters longer than 72 characters: \n%s" %(i+1, length-72, l.text))
+                
         text = ('\n'.join( l.text for l in lines )).rstrip() + '\n'
         # Replace some code points whose utility has ended
         text = text.replace(u'\u00A0', u' ')
