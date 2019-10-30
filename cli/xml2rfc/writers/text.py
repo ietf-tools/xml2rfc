@@ -457,7 +457,7 @@ class TextWriter(BaseV3Writer):
         assert not lines or isinstance(lines[0], Line)
         joiners = kwargs['joiners']
         j = joiners[e.tag] if e.tag in joiners else joiners[None]
-        width -= j.indent + j.hang
+        width -= j.indent
         if width < minwidth(lines):
             self.die(e, "Trying to render text in a too narrow column: width: %s, text: '%s'" % (width, mktext(lines)))
         kwargs['hang'] = j.hang
