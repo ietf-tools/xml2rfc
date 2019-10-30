@@ -1851,6 +1851,12 @@ class PrepToolWriter(BaseV3Writer):
                 if src and not data:
                     self.warn(e, "No image data found in source %s" % src)
 
+            if awtype == 'ascii-art' and '\t' in e.text:
+                for i, line in enumerate(e.text.splitlines()):
+                    if '\t' in line:
+                        self.warn(e, "Found tab on line %d of <artwork>: \n   %s" % (i+1, line))
+                e.text = e.text.expandtabs()
+
     # 5.5.2.  <sourcecode> Processing
 
     def element_sourcecode(self, e, p):
@@ -1906,6 +1912,12 @@ class PrepToolWriter(BaseV3Writer):
                 e.text = data
                 del e.attrib['src']
 
+        if '\t' in e.text:
+            for i, line in enumerate(e.text.splitlines()):
+                if '\t' in line:
+                    self.warn(e, "Found tab on line %d of <sourcecode>: \n   %s" % (i+1, line))
+            e.text = e.text.expandtabs()
+        
     #
     # 5.4.2.4  "Table of Contents" Insertion
     # 5.4.2.4  "Table of Contents" Insertion
