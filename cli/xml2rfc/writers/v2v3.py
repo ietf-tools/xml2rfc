@@ -385,6 +385,8 @@ class V2v3XmlWriter(BaseV3Writer):
                 v = e.get(k)
                 if v == 'yes':
                     v = 'true'
+                elif v == 'no':
+                    v = 'false'
                 rfc_element.set(a, v)
                 self.replace(e, None, 'Moved %s PI to <rfc %s="%s"' % (k, a, v))
                 break
