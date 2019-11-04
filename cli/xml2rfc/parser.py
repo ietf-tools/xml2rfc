@@ -549,8 +549,6 @@ class XmlRfcParser:
                     self.rfc_number = element.attrib.get("number", None)
                     self.format_version = element.attrib.get("version", None)
                     break
-        except lxml.etree.XMLSyntaxError as e:
-            pass # (we'll catch this later)
         except ValueError as e:
             if e.message=="I/O operation on closed file":
                 pass
