@@ -1378,7 +1378,7 @@ class TextWriter(BaseV3Writer):
         text = ''
         prev = None
         for c in e.getchildren():
-            if (not newline and c.tag == 'dd' and c.text.strip()
+            if (not newline and c.tag == 'dd' and c.text and c.text.strip()
                 and (width - len('  ') - len(text)) < len(c.text.split(None, 1)[0]) ):
 
                 kwargs['joiners']['dd'] = nljoin
