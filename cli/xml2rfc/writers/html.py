@@ -1099,27 +1099,29 @@ class HtmlWriter(BaseV3Writer):
     #    <span class="refAuthor">N. Brownlee</span>
         elif self.part == 'references':
             prev  = x.getprevious()
+            prev_name = ref_author_name_first(prev)[0] if prev.tag == 'author' else ''
             next  = x.getnext()
             role = short_author_role(x)
-            if   prev == None or prev.tag != 'author':
+            if   prev == None or prev.tag != 'author' or prev_name == '':
                 # single autor or the first author in a list
                 name, ascii = ref_author_name_first(x)
                 span = wrap_ascii('span', '', name, ascii, role, classes='refAuthor')
-            elif prev != None and prev.tag == 'author' and next != None and next.tag == 'author':
+            elif prev != None and prev.tag == 'author' and prev_name and next != None and next.tag == 'author':
                 # not first and not last author in a list
                 name, ascii = ref_author_name_first(x)
                 span = wrap_ascii('span', ', ', name, ascii, role, classes='refAuthor')
-            elif prev != None and prev.tag == 'author' and prev.getprevious() != None and prev.getprevious().tag == 'author':
+            elif prev != None and prev.tag == 'author' and prev_name and prev.getprevious() != None and prev.getprevious().tag == 'author':
                 # last author in a list of authors
                 name, ascii = ref_author_name_last(x)
                 span = wrap_ascii('span', ', and ', name, ascii, role, classes='refAuthor')
-            elif prev != None and prev.tag == 'author':
+            elif prev != None and prev.tag == 'author' and prev_name:
                 # second author of two
                 name, ascii = ref_author_name_last(x)
                 span = wrap_ascii('span', ' and ', name, ascii, role, classes='refAuthor')
             else:
                 self.err(x, "Internal error, unexpected state when rendering authors.")
-            h.append(span)
+            if ''.join(span.itertext()).strip():
+                h.append(span)
             return span
 
         else:
