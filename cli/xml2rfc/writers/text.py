@@ -1598,9 +1598,10 @@ class TextWriter(BaseV3Writer):
     #    Deprecated.
     def render_figure(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            'name':     Joiner('', ': ', '', 0, 0),
-            'artset':   Joiner('', '', '', 0, 0),
-            'artwork':  Joiner('', '', '', 0, 0),
+            'name':         Joiner('', ': ', '', 0, 0),
+            'artset':       Joiner('', '', '', 0, 0),
+            'artwork':      Joiner('', '', '', 0, 0),
+            'sourcecode':   Joiner('', '', '', 0, 0),
         })
         #
         pn = e.get('pn')

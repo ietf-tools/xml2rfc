@@ -1201,7 +1201,7 @@ class PrepToolWriter(BaseV3Writer):
         if not e.get('target'):
             for c in e.xpath('.//seriesInfo'):
                 series_name = c.get('name')
-                if series_name in ['RFC', 'DOI', 'Internet-Draft']:
+                if series_name in target_pattern.keys():
                     series_value=c.get('value')
                     if series_value:
                         e.set('target', target_pattern[series_name].format(value=series_value))
