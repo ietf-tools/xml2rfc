@@ -2303,7 +2303,8 @@ class HtmlWriter(BaseV3Writer):
         pre = add.pre(div, None, x.text, classes=classes)
         if mark:
             text = pre.text
-            text = (' file "%s"\n%s' % (file, text)) if text else '\n%s' % text
+            if file:
+                text = (' file "%s"\n%s' % (file, text)) if text else '\n%s' % text
             text = "<CODE BEGINS>%s\n<CODE ENDS>" % text
             pre.text = text
         self.maybe_add_pilcrow(div)
