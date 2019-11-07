@@ -3139,6 +3139,7 @@ class TextWriter(BaseV3Writer):
             'section':  Joiner('', '\n\n', '', 0, 0),
             'artset':   Joiner('', '\n\n', '', 0, 0),
             'artwork':  Joiner('', '\n\n', '', 3, 0),
+            'sourcecode':  Joiner('', '\n\n', '', 3, 0),
         })
         text = ''
         pn = e.get('pn', 'unknown-unknown')
@@ -3377,9 +3378,14 @@ class TextWriter(BaseV3Writer):
         if markers == 'true':
             text = '<CODE BEGINS>'
             file = e.get('name')
+            marker_lines = [ Line(text, e) ]
             if file:
-                text += ' file "%s"' % file
-            lines = [ Line(text, e) ] + lines + [ Line('<CODE ENDS>', e) ]
+                filetext = 'file "%s"' % file
+                if len(filetext) > (width - len(text)):
+                    marker_lines += [ Line('  ' + filetext, e) ]
+                else:
+                    marker_lines = [ Line(text + ' ' + filetext, e) ]
+            lines = marker_lines + lines + [ Line('<CODE ENDS>', e) ]
         return lines
 
 
