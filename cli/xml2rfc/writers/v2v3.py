@@ -377,7 +377,7 @@ class V2v3XmlWriter(BaseV3Writer):
         pi_name = {
             'sortrefs': 'sortRefs',
             'symrefs':  'symRefs',
-            'docdepth': 'tocDepth',
+            'tocdepth': 'tocDepth',
             'toc':      'tocInclude',
         }
         for k, a in pi_name.items():
