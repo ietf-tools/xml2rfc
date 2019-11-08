@@ -202,8 +202,11 @@ def _format_address_line(line_format, address, rules):
         for code, field_name in address_field_mapping.items()}
 
     fields = re.split('(%.)', line_format)
-    fields = [replacements.get(f, f) for f in fields]
-    return ''.join(fields).strip()
+    has_content = any([ replacements.get(f) for f in fields if (f.startswith('%') and f!= '%%') ])
+    if not has_content:
+        return ''
+    values = [replacements.get(f, f) for f in fields]
+    return ''.join(values).strip()
 
 def get_address_format_rules(address, latin=False):
     rules = i18naddress.get_validation_rules(address)
