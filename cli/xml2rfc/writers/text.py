@@ -33,7 +33,7 @@ from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_
 from xml2rfc.util.num import ol_style_formatter, num_width
 from xml2rfc.util.unicode import expand_unicode_element, textwidth
 from xml2rfc.util.postal import get_normalized_address_info, format_address
-from xml2rfc.utils import justify_inline
+from xml2rfc.utils import justify_inline, clean_text
 
 
 IndexItem   = namedtuple('indexitem', ['item', 'subitem', 'anchor', 'page', ])
@@ -4178,7 +4178,7 @@ class TextWriter(BaseV3Writer):
     #    Content model: only text content.
     def render_title(self, e, width, **kwargs):
         r = e.getparent().getparent()   # <reference>
-        title = '\u2028'.join(e.itertext()).strip()
+        title = clean_text(' '.join(e.itertext()).strip())
         quote_title = r.get('quoteTitle')
         if quote_title == 'true':
             title = '"%s"' % title

@@ -162,6 +162,7 @@ def downcode(str, replacements=None):
         '\u200B'                     # zero-width space
         '\u2011'                     # non-breaking hyphen
         '\u2028'                     # line separator
+        '\uE060'                     # word joiner
 
     """
     if not replacements:

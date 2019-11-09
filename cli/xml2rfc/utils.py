@@ -635,6 +635,16 @@ def hastext(e):
     items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
     return items
 
+def clean_text(s):
+    """Replace internal use code points and various other special code points with plain equivalents"""
+    # spaces
+    s = re.sub(r'[\u00a0\u2028]', ' ', s)
+    # hyphens
+    s = s.replace(r'\u2011', '-')
+    # zero-width
+    s = re.sub(r'[\u200B\u2060\ue060]', '', s)
+    return s
+
 def is_htmlblock(h):
     return h.tag in set([ 'address', 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'figure',
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'nav', 'ol', 'p', 'pre', 'script', 'section',

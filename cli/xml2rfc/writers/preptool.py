@@ -41,7 +41,7 @@ from xml2rfc.util.date import extract_date, augment_date, format_date, normalize
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import unicode_content_tags, bare_unicode_tags, expand_unicode_element, isascii, downcode
-from xml2rfc.utils import build_dataurl, namespaces, sdict
+from xml2rfc.utils import build_dataurl, namespaces, sdict, clean_text
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.v2v3 import slugify
 
@@ -1586,10 +1586,10 @@ class PrepToolWriter(BaseV3Writer):
                 title = t.find('./front/title')
                 if title is None:
                     self.err(t, "Expected a <title> element when processing <xref> to <%s>, but found none" % (t.tag, ))
-                content = title.text
+                content = clean_text(title.text)
             elif t.tag == 'name' or t.find('./name') != None:
                 name = t if t.tag == 'name' else t.find('./name')
-                content = ' '.join(list(name.itertext()))
+                content = clean_text(' '.join(list(name.itertext())))
             else:
                 content = target
         elif format == 'none':
@@ -1949,7 +1949,7 @@ class PrepToolWriter(BaseV3Writer):
             t.append(xref)
             # <xref> can only contain text, not markup. so we need to reduce
             # the name content to plain text:
-            text = ''.join(name.itertext()).strip()
+            text = clean_text(''.join(name.itertext()).strip())
             if text:
                 slug = name.get('slugifiedName')
                 if not slug:

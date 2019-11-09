@@ -41,7 +41,7 @@ from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
 from xml2rfc.util.postal import ( get_normalized_address_info, address_hcard_properties,
                                 enhance_address_format, address_field_mapping, )
 from xml2rfc.util.unicode import expand_unicode_element
-from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids, build_dataurl, sdict
+from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids, build_dataurl, sdict, clean_text
 
 #from xml2rfc import utils
 
@@ -407,7 +407,7 @@ class HtmlWriter(BaseV3Writer):
     #    placed inside an HTML <title> element in the header.
 
         title = x.find('./front/title')
-        text = ' '.join(title.itertext())
+        text = clean_text(' '.join(title.itertext()))
         if self.options.rfc:
             text = ("RFC %s: " % self.root.get('number')) + text
         add.title(head, None, text)
@@ -2446,7 +2446,7 @@ class HtmlWriter(BaseV3Writer):
         #
         if self.part == 'references':
             if title:
-                span = wrap_ascii('span', '', title, ascii, '', classes='refTitle')
+                span = wrap_ascii('span', '', clean_text(title), ascii, '', classes='refTitle')
                 h.append(span)
                 return span
         else:
