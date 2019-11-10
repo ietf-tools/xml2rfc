@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8'?>  <!-- -*- indent-with-tabs: 0 -*- -->
 <!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
 <rfc submissionType='independent' ipr="trust200902" docName="elements-00"
            category="info" obsoletes="1234,5678,9012,3456,7890"
@@ -833,6 +833,36 @@ from the Cherokee block look similar to the ASCII characters
             <li><eref target="https://www.ietf.org" brackets="angle"/></li>
             <li><eref target="https://www.ietf.org" brackets="angle">IETF</eref></li>
          </ul>
+      </section>
+      <section>
+         <name>Sourcecode indentation</name>
+         <t>Source code as-is:</t>
+         <sourcecode>
+while true ; do
+    case "$1" in
+        -h| --help)     usage; exit;;   # Show this help
+        -v| --verbose)  VERBOSE=1;;     # Be more talkative
+        -V| --version)  version; exit;; # Show program version
+        --)             shift; break;;
+    esac
+    shift
+done
+         </sourcecode>
+         <t>Source code within a figure:</t>
+         <figure>
+            <name>Sourcecode within figure</name>
+            <sourcecode>
+for opt, value in opts:
+    if   opt in ["-h", "--help"]: # Output this help, then exit
+        print __doc__ % locals()
+        sys.exit(1)
+    elif opt in ["-v", "--version"]: # Output version information
+        print program, version
+        sys.exit(0)
+    elif opt in ["-V", "--verbose"]: # Output version information
+        opt_verbose = True
+            </sourcecode>
+         </figure>
       </section>
    </middle>
    <back>

@@ -76,15 +76,16 @@ Table of Contents
      11.1.  Section level h3 . . . . . . . . . . . . . . . . . . . .  17
        11.1.1.  Section level h4 . . . . . . . . . . . . . . . . . .  17
    12. Eref brackets . . . . . . . . . . . . . . . . . . . . . . . .  18
-   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
-     13.1.  Normative References . . . . . . . . . . . . . . . . . .  18
-     13.2.  Informative References . . . . . . . . . . . . . . . . .  18
-       13.2.1.  CMS References . . . . . . . . . . . . . . . . . . .  18
-       13.2.2.  ESS References . . . . . . . . . . . . . . . . . . .  19
-       13.2.3.  MIME-SPEC References . . . . . . . . . . . . . . . .  19
-       13.2.4.  Other References . . . . . . . . . . . . . . . . . .  20
-   Appendix A.  Some Back Matter . . . . . . . . . . . . . . . . . .  20
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20
+   13. Sourcecode indentation  . . . . . . . . . . . . . . . . . . .  18
+   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     14.1.  Normative References . . . . . . . . . . . . . . . . . .  19
+     14.2.  Informative References . . . . . . . . . . . . . . . . .  19
+       14.2.1.  CMS References . . . . . . . . . . . . . . . . . . .  19
+       14.2.2.  ESS References . . . . . . . . . . . . . . . . . . .  19
+       14.2.3.  MIME-SPEC References . . . . . . . . . . . . . . . .  19
+       14.2.4.  Other References . . . . . . . . . . . . . . . . . .  20
+   Appendix A.  Some Back Matter . . . . . . . . . . . . . . . . . .  21
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  21
 
 1.  RFC 2119 key words
 
@@ -98,14 +99,13 @@ Table of Contents
 
    This section contains a bunch of citations, in order to test citation
    formats and also in order to refer to each of the entries in the
-   Section 13.
+   Section 14.
 
    Citations of References:
 
    *  Text and format="default": Text [RFC7997]
 
-   *  Text and format="title": Text [Ambiguity of Uppercase vs Lowercase
-      in RFC 2119 Key Words]
+
 
 
 
@@ -113,6 +113,9 @@ Author, et al.           Expires 13 January 2019                [Page 2]
 
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
+
+   *  Text and format="title": Text [Ambiguity of Uppercase vs Lowercase
+      in RFC 2119 Key Words]
 
    *  Text and format="counter": Not supported
 
@@ -160,15 +163,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
    *  Format="title": Unordered list with sub-elements
 
-   *  Format="counter": 3
-
-
 
 
 Author, et al.           Expires 13 January 2019                [Page 3]
 
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
+
+   *  Format="counter": 3
 
    *  Format="none":
 
@@ -215,8 +217,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       element dt.
                       Element dd.  Indent 16.  Nisi mihi Phaedrum,
                       inquam, tu mentitum aut Zenonem misisti.
-
-
 
 
 
@@ -344,8 +344,8 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
            iustitia iudicandum est, quae non modo non impediri rationem
            amicitiae, si summum bonum diceret, primum in eo essent.
 
-                         # Ordered list, third bullet, sixth element
-                         A = 1;
+                        # Ordered list, third bullet, sixth element
+                        A = 1;
 
        *  Ordered list, third bullet, seventh element: Unordered list,
           element li.  Text only.
@@ -972,9 +972,45 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
    *  IETF <https://www.ietf.org>
 
-13.  References
+13.  Sourcecode indentation
 
-13.1.  Normative References
+   Source code as-is:
+
+   while true ; do
+       case "$1" in
+           -h| --help)     usage; exit;;   # Show this help
+           -v| --verbose)  VERBOSE=1;;     # Be more talkative
+           -V| --version)  version; exit;; # Show program version
+           --)             shift; break;;
+       esac
+       shift
+   done
+
+   Source code within a figure:
+
+   for opt, value in opts:
+       if   opt in ["-h", "--help"]: # Output this help, then exit
+           print __doc__ % locals()
+           sys.exit(1)
+       elif opt in ["-v", "--version"]: # Output version information
+           print program, version
+           sys.exit(0)
+       elif opt in ["-V", "--verbose"]: # Output version information
+           opt_verbose = True
+
+                     Figure 4: Sourcecode within figure
+
+14.  References
+
+
+
+
+Author, et al.           Expires 13 January 2019               [Page 18]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
+14.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -989,9 +1025,9 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-13.2.  Informative References
+14.2.  Informative References
 
-13.2.1.  CMS References
+14.2.1.  CMS References
 
    [I-D.levkowetz-xml2rfc-v3-implementation-notes]
               Levkowetz, H., "Implementation notes for RFC7991, "The
@@ -1002,14 +1038,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
    [RFC5083]  Housley, R., "Cryptographic Message Syntax (CMS)
               Authenticated-Enveloped-Data Content Type", RFC 5083,
-
-
-
-Author, et al.           Expires 13 January 2019               [Page 18]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
               DOI 10.17487/RFC5083, November 2007,
               <https://www.rfc-editor.org/info/rfc5083>.
 
@@ -1017,7 +1045,7 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
               RFC 5652, DOI 10.17487/RFC5652, September 2009,
               <https://www.rfc-editor.org/info/rfc5652>.
 
-13.2.2.  ESS References
+14.2.2.  ESS References
 
    [RFC2634]  Hoffman, P., Ed., "Enhanced Security Services for S/MIME",
               RFC 2634, DOI 10.17487/RFC2634, June 1999,
@@ -1028,7 +1056,15 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
               DOI 10.17487/RFC5035, August 2007,
               <https://www.rfc-editor.org/info/rfc5035>.
 
-13.2.3.  MIME-SPEC References
+14.2.3.  MIME-SPEC References
+
+
+
+
+Author, et al.           Expires 13 January 2019               [Page 19]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
    [RFC2045]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
               Extensions (MIME) Part One: Format of Internet Message
@@ -1057,19 +1093,10 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
    [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
               Specifications and Registration Procedures", BCP 13,
-
-
-
-
-Author, et al.           Expires 13 January 2019               [Page 19]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
               RFC 6838, DOI 10.17487/RFC6838, January 2013,
               <https://www.rfc-editor.org/info/rfc6838>.
 
-13.2.4.  Other References
+14.2.4.  Other References
 
    [DATE-RANGE]
               Moe, J., "Document with date range", 2002-2003.
@@ -1082,6 +1109,18 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    [RFC0952]  Harrenstien, K., Stahl, M., and E. Feinler, "DoD Internet
               host table specification", RFC 952, DOI 10.17487/RFC0952,
               October 1985, <https://www.rfc-editor.org/info/rfc952>.
+
+
+
+
+
+
+
+
+Author, et al.           Expires 13 January 2019               [Page 20]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
 Appendix A.  Some Back Matter
 
@@ -1114,14 +1153,6 @@ Authors' Addresses
    田中花子 様
    日本
    〒112-0001
-
-
-
-Author, et al.           Expires 13 January 2019               [Page 20]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
    東京都
    文京区 白山4丁目3番2号
    3階B号室
@@ -1137,37 +1168,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Rue de Bruxelles 61
    5000 Namur
    Belgium
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -64,13 +64,14 @@ Table of Contents
      11.1.  Section level h3
        11.1.1.  Section level h4
    12. Eref brackets
-   13. References
-     13.1.  Normative References
-     13.2.  Informative References
-       13.2.1.  CMS References
-       13.2.2.  ESS References
-       13.2.3.  MIME-SPEC References
-       13.2.4.  Other References
+   13. Sourcecode indentation
+   14. References
+     14.1.  Normative References
+     14.2.  Informative References
+       14.2.1.  CMS References
+       14.2.2.  ESS References
+       14.2.3.  MIME-SPEC References
+       14.2.4.  Other References
    Appendix A.  Some Back Matter
    Authors' Addresses
 
@@ -86,7 +87,7 @@ Table of Contents
 
    This section contains a bunch of citations, in order to test citation
    formats and also in order to refer to each of the entries in the
-   Section 13.
+   Section 14.
 
    Citations of References:
 
@@ -292,8 +293,8 @@ Table of Contents
            iustitia iudicandum est, quae non modo non impediri rationem
            amicitiae, si summum bonum diceret, primum in eo essent.
 
-                         # Ordered list, third bullet, sixth element
-                         A = 1;
+                        # Ordered list, third bullet, sixth element
+                        A = 1;
 
        *  Ordered list, third bullet, seventh element: Unordered list,
           element li.  Text only.
@@ -815,9 +816,37 @@ Table of Contents
 
    *  IETF <https://www.ietf.org>
 
-13.  References
+13.  Sourcecode indentation
 
-13.1.  Normative References
+   Source code as-is:
+
+   while true ; do
+       case "$1" in
+           -h| --help)     usage; exit;;   # Show this help
+           -v| --verbose)  VERBOSE=1;;     # Be more talkative
+           -V| --version)  version; exit;; # Show program version
+           --)             shift; break;;
+       esac
+       shift
+   done
+
+   Source code within a figure:
+
+   for opt, value in opts:
+       if   opt in ["-h", "--help"]: # Output this help, then exit
+           print __doc__ % locals()
+           sys.exit(1)
+       elif opt in ["-v", "--version"]: # Output version information
+           print program, version
+           sys.exit(0)
+       elif opt in ["-V", "--verbose"]: # Output version information
+           opt_verbose = True
+
+                     Figure 4: Sourcecode within figure
+
+14.  References
+
+14.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -832,9 +861,9 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-13.2.  Informative References
+14.2.  Informative References
 
-13.2.1.  CMS References
+14.2.1.  CMS References
 
    [I-D.levkowetz-xml2rfc-v3-implementation-notes]
               Levkowetz, H., "Implementation notes for RFC7991, "The
@@ -852,7 +881,7 @@ Table of Contents
               RFC 5652, DOI 10.17487/RFC5652, September 2009,
               <https://www.rfc-editor.org/info/rfc5652>.
 
-13.2.2.  ESS References
+14.2.2.  ESS References
 
    [RFC2634]  Hoffman, P., Ed., "Enhanced Security Services for S/MIME",
               RFC 2634, DOI 10.17487/RFC2634, June 1999,
@@ -863,7 +892,7 @@ Table of Contents
               DOI 10.17487/RFC5035, August 2007,
               <https://www.rfc-editor.org/info/rfc5035>.
 
-13.2.3.  MIME-SPEC References
+14.2.3.  MIME-SPEC References
 
    [RFC2045]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
               Extensions (MIME) Part One: Format of Internet Message
@@ -895,7 +924,7 @@ Table of Contents
               RFC 6838, DOI 10.17487/RFC6838, January 2013,
               <https://www.rfc-editor.org/info/rfc6838>.
 
-13.2.4.  Other References
+14.2.4.  Other References
 
    [DATE-RANGE]
               Moe, J., "Document with date range", 2002-2003.
