@@ -45,6 +45,7 @@ from xml2rfc.utils import build_dataurl, namespaces, sdict, clean_text
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.v2v3 import slugify
 
+
 pnprefix = {
     # tag: prefix
     'abstract':     'section',
@@ -1589,7 +1590,7 @@ class PrepToolWriter(BaseV3Writer):
                 content = clean_text(title.text)
             elif t.tag == 'name' or t.find('./name') != None:
                 name = t if t.tag == 'name' else t.find('./name')
-                content = clean_text(' '.join(list(name.itertext())))
+                content = clean_text(''.join(list(name.itertext())))
             else:
                 content = target
         elif format == 'none':
@@ -1922,6 +1923,35 @@ class PrepToolWriter(BaseV3Writer):
     def toc_insert_table_of_contents(self, e, p):
         if self.prepped and self.rfcnumber:
             return
+        def copy_reduce(e):
+            """
+            <xref> content may not contain all elements permitted in <name>,
+            so we need to reduce any child elements of <name> which are not
+            permitted in <xref> to plain text.
+            """
+            ee = copy.deepcopy(e)
+            for c in ee.iterdescendants():
+                if not c.tag in self.xref_tags:
+                    # bcp14 cref eref iref xref
+                    # The following is simplified.  both <xref> and <eref> could do with more
+                    # sophisticated rendering.
+                    prev = c.getprevious()
+                    if prev != None:
+                        if   c.tag == 'xref' and not c.text:
+                            prev.tail = (prev.tail or '') + c.get('derivedContent', '') + (c.tail or '')
+                        elif c.tag == 'eref' and not c.text:
+                            prev.tail = (prev.tail or '') + c.get('target', '') + (c.tail or '')
+                        else:                    
+                            prev.tail = (prev.tail or '') + (c.text or '') + (c.tail or '')
+                    else:
+                        prnt = c.getparent()
+                        if c.tag == 'xref' and not c.text:
+                            prnt.text = (prnt.text or '') + c.get('derivedContent', '') + (c.tail or '')
+                        else:                    
+                            prnt.text = (prnt.text or '') + (c.text or '') + (c.tail or '')
+                    c.getparent().remove(c)
+            return ee
+            
         def toc_entry_t(s):
             name = s.find('./name')
             if name is None:
@@ -1956,8 +1986,10 @@ class PrepToolWriter(BaseV3Writer):
                     self.warn(name, "Internal error: missing slugifiedName for %s" % (etree.tostring(name)))
                     slug = slugify_name('name-'+text)
                     name.set('slugifiedName', slug)
-                xref = self.element('xref', target=slug, format='title', derivedContent=text)
-                xref.text = text
+                xref = self.element('xref', target=slug, format='title', derivedContent='')
+                cc = copy_reduce(name)
+                xref.text = cc.text
+                xref.extend(cc.getchildren())
                 t.append(xref)
             return t
         def toc_entries(e):

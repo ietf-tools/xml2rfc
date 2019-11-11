@@ -2653,6 +2653,7 @@ class HtmlWriter(BaseV3Writer):
         #sformat  = x.get('sectionFormat')
         reftext = x.get('derivedContent', '')
         in_name = len(list(x.iterancestors('name'))) > 0
+        content = ''.join(x.itertext()).strip()
         if reftext is None:
             self.die(x, "Found an <%s> without derivedContent: %s" % (x.tag, lxml.etree.tostring(x),))
         if not (section or relative):
@@ -2663,19 +2664,24 @@ class HtmlWriter(BaseV3Writer):
                 if reftext:
                     a = build.a(reftext, href='#%s'%target, classes='xref')
                     if target in self.refname_mapping:
-                        if x.text and x.text.strip() and x.text.strip() != reftext:
-                            aa = build.a(x.text, href='#%s'%target, classes='xref')
+                        if content and clean_text(x.text) != reftext:
+                            aa = build.a(href='#%s'%target, classes='xref')
+                            self.inline_text_renderer(aa, x)
+                            aa.tail = None
                             hh = build.span(aa, ' [', a, ']')
                         else:
                             hh = build.span('[', a, ']')
                     else:
-                        if x.text and x.text.strip() and x.text.strip() != reftext:
-                            aa = build.a(x.text, href='#%s'%target, classes='xref')
+                        if content and clean_text(x.text) != reftext:
+                            aa = build.a(href='#%s'%target, classes='xref')
+                            self.inline_text_renderer(aa, x)
+                            aa.tail = None
                             hh = build.span(aa, ' (', a, ')')
                         else:
                             hh = a
                 else:
-                    a = build.a(x.text or '', href='#%s'%target, classes='xref')
+                    a = build.a(href='#%s'%target, classes='xref')
+                    self.inline_text_renderer(a, x)
                     hh = a
             hh.tail = x.tail
             h.append(hh)

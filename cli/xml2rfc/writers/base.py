@@ -1628,11 +1628,20 @@ def get_inline_tags():
                 tags.add(name)
     return tags
 
+def get_xref_tags():
+    "Get tags that can occur as direct children of <xref>"
+    tags = set()
+    refs = v3_schema.xpath("/x:grammar/x:define/x:element[@name='xref']//x:ref", namespaces=namespaces)
+    tags = set([ c.get('name') for c in refs ])
+    return tags
+
+
 meta_tags   = get_meta_tags() - deprecated_element_tags
 text_tags   = get_text_tags() - deprecated_element_tags
 inline_tags = get_inline_tags() - deprecated_element_tags
 block_tags  = get_element_tags() - text_tags - deprecated_element_tags
 mixed_tags  = get_text_or_block_tags() - deprecated_element_tags
+xref_tags   = get_xref_tags()
 
 # --------------------------------------------------------------------------------------------------
 
@@ -1653,6 +1662,7 @@ class BaseV3Writer(object):
         self.text_tags = set(text_tags)
         self.inline_tags = set(inline_tags)
         self.mixed_tags = set(mixed_tags)
+        self.xref_tags = set(xref_tags)
         self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
         self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
         self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//referencegroup') ))

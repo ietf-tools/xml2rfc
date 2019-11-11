@@ -1039,7 +1039,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    Content model: only text content.
     def render_bcp14(self, e, width, **kwargs):
-        return e.text + (e.tail or '') # This will be more refined in the html renderer
+        return (e.text or '') + (e.tail or '')
 
     # 2.10.  <blockquote>
     # 
@@ -4394,27 +4394,31 @@ class TextWriter(BaseV3Writer):
         target = e.get('target')
         section = e.get('section')
         reftext = e.get('derivedContent')
-        exptext = ("%s " % e.text.strip()) if (e.text and e.text.strip()) else ''
+        exptext = self.inner_text_renderer(e, width, **kwargs)
+        if exptext:
+            # for later string formatting convenience, a trailing space if any text:
+            exptext += ' '              
+        content = ''.join(e.itertext()).strip()
         if reftext is None:
             self.die(e, "Found an <xref> without derivedContent: %s" % (etree.tostring(e),))
         #
         if not section:
             if reftext:
                 if target in self.refname_mapping:
-                    if e.text and e.text.strip() and e.text.strip() != reftext:
-                        text = "%s [%s]" % (e.text, reftext)
+                    if content and content != reftext:
+                        text = "%s[%s]" % (exptext, reftext)
                     else:
                         text = "[%s]" % reftext
                 else:
-                    if e.text and e.text.strip() and e.text.strip() != reftext:
-                        text = "%s (%s)" % (e.text, reftext)
+                    if content and content != reftext:
+                        text = "%s(%s)" % (exptext, reftext)
                     else:
                         text = "%s" % reftext
-                pageno = e.get('pageno')
-                if pageno and pageno.isdigit():
-                    text += '\u2026' '%04d' % int(pageno)
             else:
-                text = e.text or ''
+                text = exptext.strip()
+            pageno = e.get('pageno')
+            if pageno and pageno.isdigit():
+                text += '\u2026' '%04d' % int(pageno)
         else:
             label = 'Section' if section[0].isdigit() else 'Appendix'
             sform  = e.get('sectionFormat')
@@ -4426,9 +4430,8 @@ class TextWriter(BaseV3Writer):
             elif sform == 'parens':
                 text = '%s[%s] (%s %s)' % (exptext, reftext, label, section)
             elif sform == 'bare':
-                etext = e.text and e.text.strip()
-                if etext and etext != section:
-                    text = '%s (%s)' % (section, etext)
+                if exptext and exptext != section:
+                    text = '%s (%s)' % (section, exptext.strip())
                 else:
                     text = '%s' % (section, )
             else:
