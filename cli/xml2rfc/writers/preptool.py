@@ -50,6 +50,7 @@ pnprefix = {
     # tag: prefix
     'abstract':     'section',
     'boilerplate':  'section',
+    'toc':          'section',
     'figure':       'figure',
     'iref':         'iref',
     'note':         'section',
@@ -110,6 +111,7 @@ class PrepToolWriter(BaseV3Writer):
         self.attribute_defaults = {}
         # 
         self.boilerplate_section_number = 0
+        self.toc_section_number = 0
         self.note_number = 0
         self.middle_section_number = [0, ]
         self.table_number = 0
@@ -1315,6 +1317,10 @@ class PrepToolWriter(BaseV3Writer):
         self.boilerplate_section_number += 1
         e.set('pn', '%s-boilerplate.%s' % (pnprefix[e.tag], self.boilerplate_section_number, ))
 
+    def toc_section_add_number(self, e, p):
+        self.toc_section_number += 1
+        e.set('pn', '%s-toc.%s' % (pnprefix[e.tag], self.toc_section_number, ))
+
     def front_abstract_add_number(self, e, p):
         e.set('pn', '%s-abstract' % pnprefix[e.tag])
 
@@ -2035,7 +2041,7 @@ class PrepToolWriter(BaseV3Writer):
                 ul.append(s)
             e.append(toc)
             #
-            self.boilerplate_section_add_number(toc, e)
+            self.toc_section_add_number(toc, e)
             self.paragraph_add_numbers(toc, e)
 
     #
