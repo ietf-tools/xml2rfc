@@ -1,3 +1,70 @@
+xml2rfc (2.35.0) ietf; urgency=medium
+
+  * Changed the pn numbers for ToC entries to use 'section-toc.1-...' 
+    instead of 'section-boilerplate.3-...'.
+
+  * Fixed schema and code so as to correctly show <name> entries with 
+    superscript (and more) in the ToC.
+
+  * Added code to clean out instances of &nbsp; and other special 
+    characters when rendering ToC, title, xref and reference.
+
+  * Eliminated postal address lines with only template content, i.e., no
+    <postal> content, from output renderings.
+
+  * Fixed a typo in the v2v3 converter which caused conversion of the 
+    tocdepth PI to fail.
+
+  * Added handling of <sourcecode> name attributes which were too long to
+    fit on the same line as the <CODE BEGINS> marker, and added a specific
+    indentation setting for <sourcecode> within <section>, to avoid
+    extra indentation.
+
+  * For source code with markers and file name, only emit file name if 
+    actually set.  Fixes an issue with the HTML renderer.
+
+  * Added the same in-figure indent for sourcecode as for artwork, to avoid 
+    extra indentation.
+
+  * Removed an extraneous leading comma in reference rendering for 
+    references without author information.
+
+  * Added CSS for bottom margin after <sourcecode> rendering in print.
+
+  * Added a missing conversion of attribute value 'no' to 'false' in the 
+    v2v3 converter.
+
+  * Tweaked the text width when folding hang text.
+
+  * Changed the location and method of checking and catching non-ascii 
+    characters in XML input declared with encoding='us-ascii'.
+
+  * Added warnings for tabs in artwork and sourcecode.
+
+  * Added a warning for long lines in v3 text ouput.
+
+  * Added a new metadata.js file from the RPC, with copyright and license 
+    information and a code tweak.
+
+  * Refactored extract_date() into one extraction function and one 
+    augmentation function, in order to render references with missing date info 
+    correctly.  Also updated renderers to handle this case appropriately.
+
+  * Fixed an inconsistency in requiring the ascii attribute for Latin
+    script non-ascii names.
+
+  * Corrected a buggy format string.  Fixes issue #449.
+
+  * Added an error if pn numbers are present in a file which is not marked 
+    with prepTime.
+
+  * Corrected the indentation for <t> in table cells.
+
+  * Fixed an issue with duplicate pn numbers for <t> in table cells.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  12 Nov 2019 05:40:23 -0800
+
+
 xml2rfc (2.34.0) ietf; urgency=medium
 
   * Made preptool reference sorting honour the sortRefs <rfc> attribute
