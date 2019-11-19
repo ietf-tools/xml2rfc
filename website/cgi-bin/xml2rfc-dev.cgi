@@ -279,31 +279,31 @@ given ($inputtype) {
 
 given ($mode) {
     when("txt") {
-	my $tmpout = callXml2rfc("txt", "text", $format);
+	my $tmpout = callXml2rfc("txt", "--text", $format);
 	$curfile = $tmpout;
     }
     when("unpg") {
-	my $tmpout = callXml2rfc("txt", "raw");
+	my $tmpout = callXml2rfc("txt", "--raw");
 	$curfile = $tmpout;
     }
     when("nr") {
-	my $tmpout = callXml2rfc("nr", "nroff");
+	my $tmpout = callXml2rfc("nr", "--nroff");
 	$curfile = $tmpout;
     }
     when("xml") {
-	my $tmpout = callXml2rfc("xml", "exp");
+	my $tmpout = callXml2rfc("xml", "--exp");
 	$curfile = $tmpout;
     }
     when("v3xml") {
-	my $tmpout = callXml2rfc("xml", "v2v3");
+	my $tmpout = callXml2rfc("xml", "--v2v3 --add-xinclude");
 	$curfile = $tmpout;
     }
     when("html") {
-	my $tmpout = callXml2rfc("html", "html", $format);
+	my $tmpout = callXml2rfc("html", "--html", $format);
 	$curfile = $tmpout;
     }
     when("htmlxslt") {
-	my $TMP1 = callXml2rfc("xml", "exp");
+	my $TMP1 = callXml2rfc("xml", "--exp");
 	if (($format eq "epub") || ($format eq "mobi")) {
 	    $curfile = $TMP1;
 	} else {
@@ -314,7 +314,7 @@ given ($mode) {
 	}
     }
     when("htmlrfcmarkup") {
-	my $TMP1 = callXml2rfc("txt", "text");
+	my $TMP1 = callXml2rfc("txt", "--text");
 	my $TMP2 = getTempFileWithSuffix("html");
 	($ret, $out, $err) = runCommand("env - /home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup 'staticpath=http://tools.ietf.org/html/&url=file://$TMP1' > $TMP2", $TMP1, $TMP2, "Generating $expandedModes{$mode}");
 	userError("Unable to Validate File", $err) if ($err =~ /Error/);
@@ -539,7 +539,7 @@ sub callXml2rfc {
     my $format = shift;
     my $tmpout = getTempFileWithSuffix($suffix);
     my $legacyOrV3 = ($format =~ /^v3/) ? "--v3" : "--legacy";
-    my ($ret, $out, $err) = runCommand("etc/xml2rfc2 $legacyOrV3 --$xml2rfcMode --out=$tmpout $curfile", $curfile, $tmpout, "Expanding internal references and generating $expandedModes{$mode}");
+    my ($ret, $out, $err) = runCommand("etc/xml2rfc2 $legacyOrV3 $xml2rfcMode --out=$tmpout $curfile", $curfile, $tmpout, "Expanding internal references and generating $expandedModes{$mode}");
     $curfile = $tmpout;
     print "xml2rfc ret=$ret\n" if $debug;
     print "out='$out'\n" if $debug;
