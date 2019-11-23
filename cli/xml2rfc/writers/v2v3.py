@@ -275,6 +275,7 @@ class V2v3XmlWriter(BaseV3Writer):
                                             # 2.5.8.  "width" Attribute
                                             # 2.5.9.  "xml:space" Attribute
             './/back',
+            './/code',
             # We need to process preamble and postamble before figure,
             # because artwork or sourcecode within a figure could later be
             # promoted and the figure discarded.
@@ -494,6 +495,12 @@ class V2v3XmlWriter(BaseV3Writer):
             for r in references:
                 refs.append(r)          # moves r
 
+
+    def element_code(self, e, p):
+        if re.search(r'^[A-Z][A-Z]?-', e.text):
+            cc, num = e.text.split('-', 1)
+            if cc in ['AX', 'CH', 'FI', 'HR', 'FL', 'LT', 'L', 'MC', 'MD', 'SE', 'SI', ]:
+                e.text = num
 
     # 2.25.  <figure>
     # 
