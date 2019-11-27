@@ -497,7 +497,7 @@ class V2v3XmlWriter(BaseV3Writer):
 
 
     def element_code(self, e, p):
-        if re.search(r'^[A-Z][A-Z]?-', e.text):
+        if e.text and re.search(r'^[A-Z][A-Z]?-', e.text):
             cc, num = e.text.split('-', 1)
             if cc in ['AX', 'CH', 'FI', 'HR', 'FL', 'LT', 'L', 'MC', 'MD', 'SE', 'SI', ]:
                 e.text = num
