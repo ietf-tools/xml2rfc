@@ -490,7 +490,7 @@ class TextWriter(BaseV3Writer):
             # period
             initials = initials.strip()
             initials += '.' if not initials.endswith('.') else ''
-            initials = re.sub('([^.]) ', '\g<1>. ', initials)
+            initials = re.sub('([^.]) ', r'\g<1>. ', initials)
         return initials
 
     # --- fallback rendering functions ------------------------------------------
