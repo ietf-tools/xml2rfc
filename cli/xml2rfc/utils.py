@@ -618,8 +618,7 @@ def sdict(d):
 
 def isempty(e):
     "Return True if e has no children and no text content"
-    return not ((len(e) and any([ not isinstance(c, _Comment) for c in e.iterchildren() ]))
-                or (e.text and e.text.strip()) or (e.tail and e.tail.strip()))
+    return not (len(e) or (e.text and e.text.strip()) or (e.tail and e.tail.strip()))
 
 def isblock(e):
     "Return True if e is a block level element"
