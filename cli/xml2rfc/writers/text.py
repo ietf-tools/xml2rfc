@@ -32,7 +32,7 @@ from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_
 
 from xml2rfc.util.num import ol_style_formatter, num_width
 from xml2rfc.util.unicode import expand_unicode_element, textwidth
-from xml2rfc.util.postal import get_normalized_address_info, format_address
+from xml2rfc.util.postal import get_normalized_address_info, get_address_format_rules, address_field_mapping
 from xml2rfc.utils import justify_inline, clean_text
 
 
@@ -213,6 +213,41 @@ def expand_ellipsis(text, width):
         elip = (' .'*40)[-lack:]
         text = head + elip + tail
     return text
+
+# ------------------------------------------------------------------------------
+# Address formatting functions, based on i18naddress functions, but rewritten to
+# suit the text output format.
+
+def _format_address_line(line_format, address, rules):
+    def _get_field(name):
+        value = address.get(name, '')
+        if name == 'name':
+            role = address.get('role', '')
+            if role:
+                value += ' (%s)' % role
+        return value
+
+    replacements = {
+        '%%%s' % code: _get_field(field_name)
+        for code, field_name in address_field_mapping.items()}
+
+    fields = re.split('(%.)', line_format)
+    has_content = any([ replacements.get(f) for f in fields if (f.startswith('%') and f!= '%%') ])
+    if not has_content:
+        return ''
+    values = [replacements.get(f, f) for f in fields]
+    return ''.join(values).strip().lstrip(', ')
+
+def format_address(address, latin=False, normalize=False):
+    def hasword(line):
+        return re.search(r'\w', line, re.U) != None
+    address_format, rules = get_address_format_rules(address, latin, normalize)
+    address_line_formats = address_format.split('%n')
+    address_lines = [
+        _format_address_line(lf, address, rules)
+        for lf in address_line_formats]
+    address_lines = filter(hasword, address_lines)
+    return '\n'.join(address_lines)
 
 class TextWriter(BaseV3Writer):
 
@@ -2401,6 +2436,8 @@ class TextWriter(BaseV3Writer):
                 adr[k] = '\n'.join(adr[k])
         set_joiners(kwargs, { None: Joiner('', '\n', '', 0, 0), })
         if adr:
+            if all(is_script(v, 'Latin') for v in adr.values() if v):
+                latin = True
             try:
                 text = format_address(adr, latin=latin)
                 text = text.strip()+'\n\n'

@@ -89,7 +89,7 @@ def get_iso_country_info(e):
         pass
     return country_info
 
-def get_normalized_address_info(writer, x, latin=True):
+def get_normalized_address_info(writer, x, latin=False):
     author = x.getparent().getparent()
     name = full_author_ascii_name(author) if latin else full_author_name(author)
     role = author.get('role')
@@ -188,43 +188,18 @@ def get_normalized_address_info(writer, x, latin=True):
 
 # These are copied from i18address in order to remove uppercasing
 
-def _format_address_line(line_format, address, rules):
-    def _get_field(name):
-        value = address.get(name, '')
-        if name == 'name':
-            role = address.get('role', '')
-            if role:
-                value += ' (%s)' % role
-        return value
 
-    replacements = {
-        '%%%s' % code: _get_field(field_name)
-        for code, field_name in address_field_mapping.items()}
-
-    fields = re.split('(%.)', line_format)
-    has_content = any([ replacements.get(f) for f in fields if (f.startswith('%') and f!= '%%') ])
-    if not has_content:
-        return ''
-    values = [replacements.get(f, f) for f in fields]
-    return ''.join(values).strip()
-
-def get_address_format_rules(address, latin=False):
+def get_address_format_rules(address, latin=False, normalize=False):
     rules = i18naddress.get_validation_rules(address)
-    address_format = (
-        rules.address_latin_format if latin else rules.address_format)
+    address_format = rules.address_latin_format if latin else rules.address_format
+    if rules.address_latin_format != rules.address_format:
+        # don't normalize the line order if the country provides
+        # a latin-specific address format
+        normalize = False
     address_format = enhance_address_format(address, address_format)
+    if normalize:
+        address_format = normalize_address_format(address_format)
     return address_format, rules
-
-def format_address(address, latin=False):
-    def hasword(line):
-        return re.search(r'\w', line, re.U) != None
-    address_format, rules = get_address_format_rules(address, latin)
-    address_line_formats = address_format.split('%n')
-    address_lines = [
-        _format_address_line(lf, address, rules)
-        for lf in address_line_formats]
-    address_lines = filter(hasword, address_lines)
-    return '\n'.join(address_lines)
 
 def enhance_address_format(rules, address_format):
     #     'A': 'street_address'
@@ -261,3 +236,36 @@ def enhance_address_format(rules, address_format):
     return address_format
 
     
+def normalize_address_format(address_format):
+    #     'N': 'name'
+    #     'O': 'company_name'
+    #     'E': 'extended_address'
+    #     'A': 'street_address'
+    #     'X': 'sorting_code'
+    #     'D': 'city_area'
+    #     'C': 'city'
+    #     'Z': 'postal_code'
+    #     'S': 'country_area'
+    #     'Y': 'country_name '
+    old = address_format
+    normalized_order = list("NOEAXDCZSY")
+    lines = address_format.split('%n')
+    norm = []
+    # iterate through the desired field order, but don't mess with the address
+    # element order within a line:
+    for code in normalized_order:
+        code = '%'+code
+        found = None
+        for i, line in enumerate(lines):
+            if code in line:
+                norm.append(line)
+                found = i
+                break
+        if found:
+            del lines[found]
+    address_format = '%n'.join(norm)
+    new = address_format
+    if old != new:
+        debug.show('old')
+        debug.show('new')
+    return address_format

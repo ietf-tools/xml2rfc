@@ -3,7 +3,6 @@
 from __future__ import unicode_literals, print_function, division
 
 import datetime
-import i18naddress
 import lxml
 import os
 import re
@@ -39,7 +38,7 @@ from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
                                 short_author_name_set, full_author_name_set,
                                 short_org_name_set, full_org_name, )
 from xml2rfc.util.postal import ( get_normalized_address_info, address_hcard_properties,
-                                enhance_address_format, address_field_mapping, )
+                                get_address_format_rules, address_field_mapping, )
 from xml2rfc.util.unicode import expand_unicode_element
 from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids, build_dataurl, sdict, clean_text
 
@@ -171,16 +170,13 @@ def _format_address_line(line_format, address, rules):
     fields = [ f for n in field_entries for f in replacements.get(n, n) ]
     return fields
 
-def format_address(address, latin=False):
+def format_address(address, latin=False, normalize=False):
     def hasword(item):
         if item is None:
             return False
         line = ''.join(list(item.itertext()))
         return re.search(r'\w', line, re.U) != None
-    rules = i18naddress.get_validation_rules(address)
-    address_format = (
-        rules.address_latin_format if latin else rules.address_format)
-    address_format = enhance_address_format(address, address_format)
+    address_format, rules = get_address_format_rules(address, latin, normalize)
     address_line_formats = address_format.split('%n')
     address_lines = [
         build.div(*_format_address_line(lf, address, rules), dir='auto')
@@ -1912,8 +1908,11 @@ class HtmlWriter(BaseV3Writer):
         latin = h.get('class') == 'ascii'
         adr = get_normalized_address_info(self, x, latin=latin)
         if adr:
+            if all(is_script(v, 'Latin') for v in adr.values() if v):
+                latin = True
             align = 'left' if latin else get_bidi_alignment(adr)
-            for item in format_address(adr, latin=latin):
+            normalize = latin and x.get('asciiOrder') == 'normalized'
+            for item in format_address(adr, latin=latin, normalize=normalize):
                 item.set('class', align)
                 h.append(item)
         else:
