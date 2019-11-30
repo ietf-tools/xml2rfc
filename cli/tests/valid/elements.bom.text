@@ -77,15 +77,16 @@ Table of Contents
        11.1.1.  Section level h4 . . . . . . . . . . . . . . . . . .  17
    12. Eref brackets . . . . . . . . . . . . . . . . . . . . . . . .  18
    13. Sourcecode indentation  . . . . . . . . . . . . . . . . . . .  18
-   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
-     14.1.  Normative References . . . . . . . . . . . . . . . . . .  19
-     14.2.  Informative References . . . . . . . . . . . . . . . . .  19
-       14.2.1.  CMS References . . . . . . . . . . . . . . . . . . .  19
-       14.2.2.  ESS References . . . . . . . . . . . . . . . . . . .  19
-       14.2.3.  MIME-SPEC References . . . . . . . . . . . . . . . .  19
-       14.2.4.  Other References . . . . . . . . . . . . . . . . . .  20
+   14. Tables inside lists . . . . . . . . . . . . . . . . . . . . .  19
+   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  19
+     15.1.  Normative References . . . . . . . . . . . . . . . . . .  19
+     15.2.  Informative References . . . . . . . . . . . . . . . . .  20
+       15.2.1.  CMS References . . . . . . . . . . . . . . . . . . .  20
+       15.2.2.  ESS References . . . . . . . . . . . . . . . . . . .  20
+       15.2.3.  MIME-SPEC References . . . . . . . . . . . . . . . .  20
+       15.2.4.  Other References . . . . . . . . . . . . . . . . . .  21
    Appendix A.  Some Back Matter . . . . . . . . . . . . . . . . . .  21
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  21
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
 
 1.  RFC 2119 key words
 
@@ -99,12 +100,11 @@ Table of Contents
 
    This section contains a bunch of citations, in order to test citation
    formats and also in order to refer to each of the entries in the
-   Section 14.
+   Section 15.
 
    Citations of References:
 
    *  Text and format="default": Text [RFC7997]
-
 
 
 
@@ -1000,7 +1000,7 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
                      Figure 4: Sourcecode within figure
 
-14.  References
+
 
 
 
@@ -1010,12 +1010,61 @@ Author, et al.           Expires 13 January 2019               [Page 18]
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
 
-14.1.  Normative References
+14.  Tables inside lists
+
+   Step 1:  (This example is excerpted from pre-RFC8677)
+
+            At nSFF1, the following nNLM is assumed:
+
+               +-----+-----+-------------------+--------------------+
+               | SPI | SI  | Next Hop(s)       | Transport          |
+               |     |     |                   | Encapsulation (TE) |
+               +=====+=====+===================+====================+
+               | 10  | 255 | 192.0.2.1         | VXLAN-gpe          |
+               +-----+-----+-------------------+--------------------+
+               | 10  | 254 | 198.51.100.10     | GRE                |
+               +-----+-----+-------------------+--------------------+
+               | 10  | 253 | www.example.com   | HTTP               |
+               +-----+-----+-------------------+--------------------+
+               | 10  | 252 | www.example2.com  | HTTP               |
+               +-----+-----+-------------------+--------------------+
+               | 40  | 251 | 198.51.100.15     | GRE                |
+               +-----+-----+-------------------+--------------------+
+               | 50  | 200 | 01:23:45:67:89:ab | Ethernet           |
+               +-----+-----+-------------------+--------------------+
+               | 15  | 212 | Null (end of      | None               |
+               |     |     | path)             |                    |
+               +-----+-----+-------------------+--------------------+
+
+                               Table 5: nNLM at nSFF1
+
+   This is an arbitrary term:
+      And this is some text with a table.
+
+                       +---------+---------+---------+
+                       | Cell A1 | Cell A2 | Cell A3 |
+                       +---------+---------+---------+
+                       | Cell B1 | Cell B2 | Cell B3 |
+                       +---------+---------+---------+
+
+                                   Table 6
+
+15.  References
+
+15.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+
+
+
+Author, et al.           Expires 13 January 2019               [Page 19]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
    [RFC7997]  Flanagan, H., Ed., "The Use of Non-ASCII Characters in
               RFCs", IAB, RFC 7997, DOI 10.17487/RFC7997, December 2016,
@@ -1025,9 +1074,9 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-14.2.  Informative References
+15.2.  Informative References
 
-14.2.1.  CMS References
+15.2.1.  CMS References
 
    [I-D.levkowetz-xml2rfc-v3-implementation-notes]
               Levkowetz, H., "Implementation notes for RFC7991, "The
@@ -1045,7 +1094,7 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
               RFC 5652, DOI 10.17487/RFC5652, September 2009,
               <https://www.rfc-editor.org/info/rfc5652>.
 
-14.2.2.  ESS References
+15.2.2.  ESS References
 
    [RFC2634]  Hoffman, P., Ed., "Enhanced Security Services for S/MIME",
               RFC 2634, DOI 10.17487/RFC2634, June 1999,
@@ -1056,15 +1105,7 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
               DOI 10.17487/RFC5035, August 2007,
               <https://www.rfc-editor.org/info/rfc5035>.
 
-14.2.3.  MIME-SPEC References
-
-
-
-
-Author, et al.           Expires 13 January 2019               [Page 19]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
+15.2.3.  MIME-SPEC References
 
    [RFC2045]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
               Extensions (MIME) Part One: Format of Internet Message
@@ -1073,6 +1114,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
    [RFC2046]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
               Extensions (MIME) Part Two: Media Types", RFC 2046,
+
+
+
+Author, et al.           Expires 13 January 2019               [Page 20]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
               DOI 10.17487/RFC2046, November 1996,
               <https://www.rfc-editor.org/info/rfc2046>.
 
@@ -1096,7 +1145,7 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
               RFC 6838, DOI 10.17487/RFC6838, January 2013,
               <https://www.rfc-editor.org/info/rfc6838>.
 
-14.2.4.  Other References
+15.2.4.  Other References
 
    [DATE-RANGE]
               Moe, J., "Document with date range", 2002-2003.
@@ -1110,18 +1159,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
               host table specification", RFC 952, DOI 10.17487/RFC0952,
               October 1985, <https://www.rfc-editor.org/info/rfc952>.
 
-
-
-
-
-
-
-
-Author, et al.           Expires 13 January 2019               [Page 20]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
 Appendix A.  Some Back Matter
 
    Fusce viverra ipsum tempor finibus pharetra.  Vestibulum fermentum
@@ -1131,6 +1168,15 @@ Appendix A.  Some Back Matter
    ut sapien venenatis maximus.  Morbi ut faucibus nunc, vitae pretium
    lorem.  Aliquam sit amet tortor ut turpis dapibus ullamcorper.  Proin
    at ligula nec magna molestie eleifend.
+
+
+
+
+
+Author, et al.           Expires 13 January 2019               [Page 21]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
 Authors' Addresses
 
@@ -1169,54 +1215,8 @@ Authors' Addresses
    Bon Aventure
    Université de Namur
    Rue de Bruxelles 61
-
-
-
-
-Author, et al.           Expires 13 January 2019               [Page 21]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
    5000 Namur
    Belgium
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

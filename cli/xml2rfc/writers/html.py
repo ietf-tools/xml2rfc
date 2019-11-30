@@ -519,7 +519,7 @@ class HtmlWriter(BaseV3Writer):
             cssout = os.path.join(os.path.dirname(self.filename), 'xml2rfc.css')
             with open(cssout, 'w', encoding='utf-8') as f:
                 f.write(css)
-            add.link(head, None, href="xml2rfc.css", rel="stylesheet", type="text/css")
+            add.link(head, None, href="xml2rfc.css", type="text/css", rel="stylesheet")
         elif self.options.no_css:
             pass
         else:

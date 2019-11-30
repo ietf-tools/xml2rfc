@@ -49,6 +49,7 @@
       <author fullname="No Org" initials="N" surname="Org">
          <address>
             <postal>
+               <!-- ASCII content for a country with non-ASCII script -->
                <region >Tokyo</region>
                <code>112-0001</code>
                <country >Japan</country>
@@ -868,6 +869,92 @@ for opt, value in opts:
         opt_verbose = True
             </sourcecode>
          </figure>
+      </section>
+      <section>
+         <name>Tables inside lists</name>
+         <ol spacing="normal" type="Step %d:" group="steps" indent="9">
+            <li anchor="step1">
+               <t>(This example is excerpted from pre-RFC8677)</t>
+               <t>
+                  At nSFF1, the following nNLM is assumed:
+               </t>
+               <table anchor="fig-sfc-6"> 
+                  <name>nNLM at nSFF1</name>
+                  <thead>
+                     <tr>
+                        <th>SPI</th>   
+                        <th>SI</th>
+                        <th>Next Hop(s)</th>
+                        <th>Transport Encapsulation (TE)</th>
+                     </tr>
+                  </thead>
+                  <tbody>         
+                     <tr>
+                        <td>10</td>
+                        <td>255</td>
+                        <td>192.0.2.1</td>
+                        <td>VXLAN-gpe</td>
+                     </tr>
+                     <tr>
+                        <td>10</td>
+                        <td>254</td>
+                        <td>198.51.100.10</td>
+                        <td>GRE</td>
+                     </tr>
+                     <tr>
+                        <td>10</td>
+                        <td>253</td>
+                        <td>www.example.com</td>
+                        <td>HTTP</td>
+                     </tr>
+                     <tr>
+                        <td>10</td>
+                        <td>252</td>
+                        <td>www.example2.com</td>
+                        <td>HTTP</td>
+                     </tr>
+                     <tr>
+                        <td>40</td>
+                        <td>251</td>
+                        <td>198.51.100.15</td>
+                        <td>GRE</td>
+                     </tr>
+                     <tr>
+                        <td>50</td>
+                        <td>200</td>
+                        <td>01:23:45:67:89:ab </td>
+                        <td>Ethernet</td>
+                     </tr>
+                     <tr>
+                        <td>15</td>
+                        <td>212</td>
+                        <td>Null (end of path)</td>
+                        <td>None</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </li>
+         </ol>
+         <dl newline="true">
+            <dt>This is an arbitrary term:</dt>
+            <dd>
+               <t>And this is some text with a table.</t>
+               <table>
+                  <tbody>
+                     <tr>
+                        <td>Cell A1</td>
+                        <td>Cell A2</td>
+                        <td>Cell A3</td>
+                     </tr>
+                     <tr>
+                        <td>Cell B1</td>
+                        <td>Cell B2</td>
+                        <td>Cell B3</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </dd>
+         </dl>
       </section>
    </middle>
    <back>
