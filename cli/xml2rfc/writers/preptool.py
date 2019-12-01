@@ -745,7 +745,7 @@ class PrepToolWriter(BaseV3Writer):
             e.set('start', str(start))
         else:
             self.ol_counts[group] = int(start)
-        self.ol_counts[group] += len(e)
+        self.ol_counts[group] += len(list(e.iterchildren('li')))
 
     # 5.2.6.  Attribute Default Value Insertion
     # 
