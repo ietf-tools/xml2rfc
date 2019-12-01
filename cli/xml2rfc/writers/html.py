@@ -166,8 +166,22 @@ def _format_address_line(line_format, address, rules):
         '%%%s' % code: _get_field(field_name)
         for code, field_name in address_field_mapping.items()}
 
-    field_entries = re.split('(%.)', line_format)
-    fields = [ f for n in field_entries for f in replacements.get(n, n) ]
+    field_codes = re.split('(%.)', line_format)
+    field_entries = [ f for n in field_codes for f in replacements.get(n, n) ]
+    fields = []
+    for f in field_entries:
+        if isinstance(f, type('')):
+            if not fields:
+                continue
+            else:
+                fields.append(f)
+        elif isinstance(f, lxml.html.HtmlElement):
+            if not f.text:
+                continue
+            else:
+                fields.append(f)
+        else:
+            self.err(e, "Unexpected address element field type: %s" % (type(f), ))
     return fields
 
 def format_address(address, latin=False, normalize=False):
