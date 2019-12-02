@@ -1,3 +1,32 @@
+xml2rfc (2.36.0) ietf; urgency=medium
+
+  * Improved support for internal xref to <li>, giving 'Section X,
+    Paragraph Y, Item Z'.  Tweaked the output for xrefs to <li> with
+    format='counter' to not include trailing period.
+
+  * Stripped away some cases of leading punctuation on incomplete postal 
+    address lines.
+
+  * Fixed an issue with multi-part <ol> lists with the same group setting.
+
+  * Added support for tables in list items, on request from the RPC, in 
+    order to match the needs of a couple of recent RFCs-to-be.
+
+  * Improved output format handling of postal addresses for countries with
+    non-latin scripts where the XML address content is ASCII, rather than
+    the expected native script.
+
+  * Fixed the isempty() utility function to correctly return False for 
+    elements containing comments with trailing text.  Fixes issue #455.
+
+  * Added some cases of normalization of postal code during v2v3 conversion.
+
+  * Added bottom margin space for artwork in print output, to match that
+    for sourcecode.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  02 Dec 2019 08:20:00 -0800
+
+
 xml2rfc (2.35.0) ietf; urgency=medium
 
   * Changed the pn numbers for ToC entries to use 'section-toc.1-...' 
