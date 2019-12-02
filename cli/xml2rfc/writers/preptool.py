@@ -1558,7 +1558,7 @@ class PrepToolWriter(BaseV3Writer):
                 parent = t.getparent()
                 if not parent.tag == 'ol':
                     self.die(e, "Using <xref> format='counter' with a <%s><%s> target is not supported" %(parent.tag, t.tag, ))
-                content = t.get('derivedCounter')
+                content = t.get('derivedCounter').rstrip('.')
             elif t.tag == 'reference':
                 content = e.get('section')
             else:
@@ -1566,9 +1566,13 @@ class PrepToolWriter(BaseV3Writer):
         elif format == 'default':
             if   t.tag in [ 'reference', 'referencegroup' ]:
                 content = '%s' % self.refname_mapping[t.get('anchor')]
-            elif t.tag in [ 't', 'ul', 'ol', ]:
+            elif t.tag in [ 't', 'ul', 'ol', 'dl', ]:
                 type, num, para = pn.split('-', 2)
                 content = "%s %s, Paragraph %s" % (type.capitalize(), num.title(), para)
+            elif t.tag in [ 'li', ]:
+                type, num, para = pn.split('-', 2)
+                para, item = para.split('.', 1)
+                content = "%s %s, Paragraph %s, Item %s" % (type.capitalize(), num.title(), para, item)
             elif t.tag == 'u':
                 try:
                     content = expand_unicode_element(t, bare=True)
