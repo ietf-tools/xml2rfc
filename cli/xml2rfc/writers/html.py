@@ -180,8 +180,6 @@ def _format_address_line(line_format, address, rules):
                 continue
             else:
                 fields.append(f)
-        else:
-            self.err(e, "Unexpected address element field type: %s" % (type(f), ))
     return fields
 
 def format_address(address, latin=False, normalize=False):
