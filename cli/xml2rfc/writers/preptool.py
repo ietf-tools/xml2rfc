@@ -195,6 +195,7 @@ class PrepToolWriter(BaseV3Writer):
         ## with the selector and the annotation separated by a semicolon (;).
         ## Everything from the semicolon to the end of the string is stripped
         ## before the selector is used.
+
         selectors = [
             './/keyword',                       # 2.28.   Keyword
                                                 # 5.1.1.  XInclude Processing
@@ -221,6 +222,7 @@ class PrepToolWriter(BaseV3Writer):
             './front/date',                     # 5.3.1.  "month" Attribute
             './/*[@ascii]',                     # 5.3.2.  ASCII Attribute Processing
             './front/author',
+            './/contact',
             './/*[@title]',                     # 5.3.3.  "title" Conversion
             './/*[@keepWithPrevious="true"]',   # 5.3.4.  "keepWithPrevious" Conversion
             '.;fill_in_expires_date()',         # 5.4.1.  "expiresDate" Insertion
@@ -449,11 +451,14 @@ class PrepToolWriter(BaseV3Writer):
                     self.err(self.root, 'Expected <%s> attribute "%s" to be an integer, but found "%s"' % (c.tag, a, i))
 
 
-        # Attribute values should not contain unicode
+        # Attribute values should not contain unicode, with some exceptions
         unicode_attributes = {
             ('author', 'fullname'),
             ('author', 'surname'),
             ('author', 'initials'),
+            ('contact', 'fullname'),
+            ('contact', 'surname'),
+            ('contact', 'initials'),
         }
         # Attributes that may have leading or trailing space
         space_attributes = {
@@ -905,6 +910,8 @@ class PrepToolWriter(BaseV3Writer):
                 if e.get(a).strip() == e.get(aa).strip():
                     del e.attrib[aa]
                     self.warn(e, "Removed a redundant %s= attribute from <%s>" % (aa, e.tag))
+
+    element_contact = element_front_author
 
     # 5.3.3.  "title" Conversion
     # 
@@ -1578,7 +1585,7 @@ class PrepToolWriter(BaseV3Writer):
                     content = expand_unicode_element(t, bare=True)
                 except (RuntimeError, ValueError) as exc:
                     self.err(t, '%s' % exc)
-            elif t.tag == 'author':
+            elif t.tag in ['author', 'contact']:
                 content = full_author_name_expansion(t)
             else:
                 type, num = split_pn(t, pn)
@@ -1591,7 +1598,7 @@ class PrepToolWriter(BaseV3Writer):
                 else:
                     content = "%s %s" % (type.capitalize(), num)
         elif format == 'title':
-            if t.tag in ['u', 'author', ]:
+            if t.tag in ['u', 'author', 'contact', ]:
                 self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
             elif t.tag == 'reference':
                 title = t.find('./front/title')

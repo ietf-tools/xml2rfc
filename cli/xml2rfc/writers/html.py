@@ -81,9 +81,6 @@ def wrap_ascii(tag, conj, name, ascii, role='', classes=None):
         e = build(tag, conj, name, *role, classes=classes)
     return e
 
-#def wrap_ascii_div(
-
-
 class ClassElementMaker(ElementMaker):
 
     def __call__(self, tag, *children, **attrib):
@@ -428,9 +425,8 @@ class HtmlWriter(BaseV3Writer):
     #       "asciiFullname"s of all of the <author>s from the <front> of the
     #       XML source
         for a in x.xpath('./front/author'):
-            if not a.get('role') == 'contributor':
-                name = full_author_name_expansion(a) or full_org_name(a)
-                add.meta(head, None, name='author', content=name )
+            name = full_author_name_expansion(a) or full_org_name(a)
+            add.meta(head, None, name='author', content=name )
 
     #    o  description - the <abstract> from the XML source
 
@@ -962,6 +958,7 @@ class HtmlWriter(BaseV3Writer):
     def render_author(self, h, x):
         if len(x)==0 and len(x.attrib)==0:
             return None
+        p = x.getparent()
 
     # 9.7.1.  Authors in Document Information
     # 
@@ -1016,6 +1013,14 @@ class HtmlWriter(BaseV3Writer):
                     div.append(wrap_ascii('div', '', org, ascii, None, classes='org'))
             return div
 
+    # New handling for inline <contact>
+        elif p.tag == 't':
+            name, ascii = full_author_name_set(x)
+            span = wrap_ascii('span', '', name, ascii, '', classes='contact-name')
+            span.tail = x.tail
+            h.append(span)
+            return span
+
     # 9.7.2.  Authors of This Document
     # 
     #    As seen in the Authors' Addresses section, at the end of the HTML,
@@ -1069,7 +1074,7 @@ class HtmlWriter(BaseV3Writer):
     #        </div>
     #      </div>
     #    </address>
-        elif self.part == 'back':
+        elif self.part == 'back' or p.tag == 'section':
             # ascii will be set only if name has codepoints not in the Latin script blocks
             name, ascii  = full_author_name_set(x)
             #
@@ -1134,6 +1139,8 @@ class HtmlWriter(BaseV3Writer):
 
         else:
             self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
+
+    render_contact = render_author
 
     # 9.8.  <back>
     # 

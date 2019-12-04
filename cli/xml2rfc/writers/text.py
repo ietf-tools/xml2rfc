@@ -30,6 +30,7 @@ from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, get_expiry_date, format_date
 from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_author_name_parts, short_org_name_set
 
+from xml2rfc.util.name import full_author_name_set
 from xml2rfc.util.num import ol_style_formatter, num_width
 from xml2rfc.util.unicode import expand_unicode_element, textwidth
 from xml2rfc.util.postal import get_normalized_address_info, get_address_format_rules, address_field_mapping
@@ -52,6 +53,12 @@ def blankline():
     return [ Line('', None) ]
 def pagefeed():
     return [ Line('\f', None) ]
+def striplines(lines):
+    while lines and lines[0].text.strip() == '':
+        lines = lines[1:]
+    while lines and lines[-1].text.strip() == '':
+        lines = lines[:-1]
+    return lines
 
 class Block(object):
     " Used to hold line block information needed for pagination."
@@ -938,7 +945,6 @@ class TextWriter(BaseV3Writer):
         set_joiners(kwargs, {
             None:       Joiner('', '\n', '', 0, 0),  # default 
         })
-        #text = self.render_author_name(e, width, **kwargs)
         lines = []
         address = e.find('./address')
         if address is None:
@@ -948,10 +954,21 @@ class TextWriter(BaseV3Writer):
         if postal is None:
             # We render author name as part of postal, so make sure it's there
             address.insert(0, etree.Element('postal'))
-        for c in e.iterchildren('address'):
-            lines = self.ljoin(lines, c, width, **kwargs)
-        while lines and lines[-1].text.strip() == '':
-            lines = lines[:-1]
+        # ascii will be set only if name has codepoints not in the Latin script blocks
+        name, ascii  = full_author_name_set(e)
+        if ascii:
+            for c in e.iterchildren('address'):
+                lines = self.ljoin(lines, c, width, latin=False, **kwargs)
+                lines = striplines(lines)
+                lines += blankline()
+                lines += lindent([ Line( 'Additional contact information:', address) ])
+                lines += blankline()
+                lines += lindent(self.ljoin([], c, width, latin=True, **kwargs))
+                lines = striplines(lines)
+        else:
+            for c in e.iterchildren('address'):
+                lines = self.ljoin(lines, c, width, latin=False, **kwargs)
+                lines = striplines(lines)
         lines += blankline()
         return lines
 
@@ -976,6 +993,19 @@ class TextWriter(BaseV3Writer):
         else:
             text = ''
         return text
+
+    def render_contact(self, e, width, **kwargs):
+        p = e.getparent()
+        if   p.tag == 't':
+            name, ascii = full_author_name_set(e)
+            if ascii:
+                return "%s (%s)" % (name, ascii)
+            else:
+                return name
+        elif p.tag == 'section':
+            return self.render_author(e, width, **kwargs)
+        else:
+            return self.null_renderer(e, width, **kwargs)
 
     def render_author_front(self, e, **kwargs):
         name = short_author_name(e)
@@ -1480,6 +1510,7 @@ class TextWriter(BaseV3Writer):
     #    The ASCII equivalent of the author's email address.  This is only
     #    used if the email address has any internationalized components.
     def render_email(self, e, width, **kwargs):
+        kwargs.pop('latin', False)
         text = ''
         if e.text:
             text = fill("Email: %s"%e.text, width=width, **kwargs)
@@ -2396,6 +2427,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    Content model: only text content.
     def render_phone(self, e, width, **kwargs):
+        kwargs.pop('latin', False)
         text = fill("Phone: %s"%e.text, width=width, **kwargs) if e.text else ''
         return text
 
@@ -4387,6 +4419,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    Content model: only text content.
     def render_uri(self, e, width, **kwargs):
+        kwargs.pop('latin', False)
         text = fill("URI:\u00a0\u00a0 %s"%e.text, width=width, **kwargs) if e.text else ''
         return text
 

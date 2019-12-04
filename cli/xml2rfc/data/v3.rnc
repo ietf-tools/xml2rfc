@@ -90,6 +90,21 @@
        address?
      }
 
+   contact =
+     element contact {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute anchor { xsd:ID }?,
+       attribute initials { text }?,
+       attribute asciiInitials { text }?,
+       attribute surname { text }?,
+       attribute asciiSurname { text }?,
+       attribute fullname { text }?,
+       attribute asciiFullname { text }?,
+       organization?,
+       address?
+     }
+
    organization =
      element organization {
        attribute xml:base { text }?,
@@ -322,6 +337,7 @@
         | aside
 	| author
         | blockquote
+        | contact
         | dl
         | figure
         | iref
@@ -366,6 +382,7 @@
        attribute keepWithPrevious { "false" | "true" }?,
        (text
         | bcp14
+        | contact
         | cref
         | em
         | eref

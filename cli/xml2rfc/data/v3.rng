@@ -239,6 +239,45 @@
       </optional>
     </element>
   </define>
+  <define name="contact">
+    <element name="contact">
+      <optional>
+        <attribute name="xml:base"/>
+      </optional>
+      <optional>
+        <attribute name="xml:lang"/>
+      </optional>
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="initials"/>
+      </optional>
+      <optional>
+        <attribute name="asciiInitials"/>
+      </optional>
+      <optional>
+        <attribute name="surname"/>
+      </optional>
+      <optional>
+        <attribute name="asciiSurname"/>
+      </optional>
+      <optional>
+        <attribute name="fullname"/>
+      </optional>
+      <optional>
+        <attribute name="asciiFullname"/>
+      </optional>
+      <optional>
+        <ref name="organization"/>
+      </optional>
+      <optional>
+        <ref name="address"/>
+      </optional>
+    </element>
+  </define>
   <define name="organization">
     <element name="organization">
       <optional>
@@ -720,6 +759,7 @@
           <ref name="aside"/>
           <ref name="author"/>
           <ref name="blockquote"/>
+          <ref name="contact"/>
           <ref name="dl"/>
           <ref name="figure"/>
           <ref name="iref"/>
@@ -808,6 +848,7 @@
         <choice>
           <text/>
           <ref name="bcp14"/>
+          <ref name="contact"/>
           <ref name="cref"/>
           <ref name="em"/>
           <ref name="eref"/>
