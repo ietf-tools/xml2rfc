@@ -1867,12 +1867,14 @@ class BaseV3Writer(object):
                         e.tail.encode('ascii')
                     except UnicodeEncodeError:
                         e.tail = downcode(e.tail, replacements=replacements)
-            if e.tag != 'author':
-                for key in e.attrib.keys():
-                    try:
-                        e.get(key).encode('ascii')
-                    except UnicodeEncodeError:
-                        e.set(key, downcode(e.get(key), replacements=replacements))
+
+    def downcode_attributes(self, replacements=unicode_replacements):
+        for e in self.tree.iter():
+            for key in e.attrib.keys():
+                try:
+                    e.get(key).encode('ascii')
+                except UnicodeEncodeError:
+                    e.set(key, downcode(e.get(key), replacements=replacements))
 
     def pretty_print_prep(self, e, p):
         ind = self.options.indent
