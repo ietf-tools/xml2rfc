@@ -58,7 +58,7 @@ install:
 	python setup.py --quiet install
 	rm -rf xml2rfc.egg-info/
 
-test:	install flaketest pytests
+test:	install flaketest xml2rfc/data/v3.rng pytests
 
 flaketest:
 	pyflakes xml2rfc
@@ -77,6 +77,9 @@ CHECKOUTPUT=	\
 # ----------------------------------------------------------------------
 #
 # Generic rules
+
+%.rng: %.rnc
+	trang $< $@
 
 %.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test %.prepped.xml.test
 	@echo " Diffing .nroff.txt against regular .txt"
