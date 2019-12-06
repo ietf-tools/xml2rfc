@@ -23,8 +23,8 @@ except ImportError:
     pass
 
 
-from xml2rfc import log, strings
-from xml2rfc.writers.base import default_options, BaseV3Writer
+from xml2rfc import strings
+from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc import utils
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, get_expiry_date, format_date
@@ -296,8 +296,7 @@ class TextWriter(BaseV3Writer):
         assert text == text.replace(u'\uE060', u'')
 
         if self.errors:
-            log.write("Not creating output file due to errors (see above)")
-            return
+            raise RfcWriterError("Not creating output file due to errors (see above)")
 
         encoding = 'utf-8-sig' if self.options.bom else 'utf-8'
         with open(filename, 'w', encoding=encoding) as file:
@@ -958,16 +957,16 @@ class TextWriter(BaseV3Writer):
         name, ascii  = full_author_name_set(e)
         if ascii:
             for c in e.iterchildren('address'):
-                lines = self.ljoin(lines, c, width, latin=False, **kwargs)
+                lines = self.ljoin(lines, c, width, latin=True, **kwargs)
                 lines = striplines(lines)
                 lines += blankline()
-                lines += lindent([ Line( 'Additional contact information:', address) ])
+                lines += [ Line( 'Additional contact information:', address) ]
                 lines += blankline()
-                lines += lindent(self.ljoin([], c, width, latin=True, **kwargs))
+                lines += lindent(self.ljoin([], c, width, latin=False, **kwargs))
                 lines = striplines(lines)
         else:
             for c in e.iterchildren('address'):
-                lines = self.ljoin(lines, c, width, latin=False, **kwargs)
+                lines = self.ljoin(lines, c, width, **kwargs)
                 lines = striplines(lines)
         lines += blankline()
         return lines
@@ -1510,10 +1509,8 @@ class TextWriter(BaseV3Writer):
     #    The ASCII equivalent of the author's email address.  This is only
     #    used if the email address has any internationalized components.
     def render_email(self, e, width, **kwargs):
-        kwargs.pop('latin', False)
-        text = ''
-        if e.text:
-            text = fill("Email: %s"%e.text, width=width, **kwargs)
+        latin = kwargs.pop('latin', None)
+        text = fill("Email: %s"%e.text, width=width, **kwargs) if e.text and latin!=False else ''
         return text
 
     # 2.24.  <eref>
@@ -2427,8 +2424,8 @@ class TextWriter(BaseV3Writer):
     # 
     #    Content model: only text content.
     def render_phone(self, e, width, **kwargs):
-        kwargs.pop('latin', False)
-        text = fill("Phone: %s"%e.text, width=width, **kwargs) if e.text else ''
+        latin = kwargs.pop('latin', None)
+        text = fill("Phone: %s"%e.text, width=width, **kwargs) if e.text and latin!=False else ''
         return text
 
     # 2.37.  <postal>
@@ -4419,8 +4416,8 @@ class TextWriter(BaseV3Writer):
     # 
     #    Content model: only text content.
     def render_uri(self, e, width, **kwargs):
-        kwargs.pop('latin', False)
-        text = fill("URI:\u00a0\u00a0 %s"%e.text, width=width, **kwargs) if e.text else ''
+        latin = kwargs.pop('latin', None)
+        text = fill("URI:\u00a0\u00a0 %s"%e.text, width=width, **kwargs) if e.text and latin!=False else ''
         return text
 
     # 2.65.  <workgroup>
