@@ -42,7 +42,7 @@ from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import unicode_content_tags, bare_unicode_tags, expand_unicode_element, isascii, downcode
 from xml2rfc.utils import build_dataurl, namespaces, sdict, clean_text
-from xml2rfc.writers.base import default_options, BaseV3Writer
+from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc.writers.v2v3 import slugify
 
 
@@ -170,8 +170,7 @@ class PrepToolWriter(BaseV3Writer):
             self.log(' Prepping %s' % self.xmlrfc.source)
         self.prep()
         if self.errors:
-            self.log("Not creating output file due to errors (see above)")
-            return self.errors
+            raise RfcWriterError("Not creating output file due to errors (see above)")
 
         # remove the index, which should not be part of the prepped output
         self.remove_pis()
@@ -353,8 +352,7 @@ class PrepToolWriter(BaseV3Writer):
         log.note(" Completed preptool run")
 
         if self.errors:
-            self.log("Not creating output file due to errors (see above)")
-            return None
+            raise RfcWriterError("Not creating output file due to errors (see above)")
 
         return self.tree
 

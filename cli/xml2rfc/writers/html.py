@@ -30,7 +30,7 @@ except ImportError:
     pass
 
 from xml2rfc import log, strings
-from xml2rfc.writers.base import default_options, BaseV3Writer
+from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, format_date, format_date_iso, get_expiry_date
 from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
@@ -263,8 +263,7 @@ class HtmlWriter(BaseV3Writer):
             self.warn(self.root[-1], 'Duplicate %s="%s" found in generated HTML.' % (attr, id, ))
 
         if self.errors:
-            log.write("Not creating output file due to errors (see above)")
-            return
+            raise RfcWriterError("Not creating output file due to errors (see above)")
 
         # Use lxml's built-in serialization
         with open(filename, 'w', encoding='utf-8') as file:
