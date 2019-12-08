@@ -1236,7 +1236,9 @@ class TextWriter(BaseV3Writer):
         display = e.get('display') == 'true'
         source = e.get('source')
         if display:
-            return mktext(self.quote_renderer(e, width, '//', source, None, **kwargs))
+            text = mktext(self.quote_renderer(e, width, '//', source, None, **kwargs))
+            text = '\u2028' + text.replace('\n', '\u2028\n')
+            return text
         else:
             return None
 
