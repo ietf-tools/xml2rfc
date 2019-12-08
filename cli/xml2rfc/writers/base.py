@@ -1247,8 +1247,11 @@ class BaseRfcWriter:
                 ref_counter += 1
                 title = ref.find("front/title")
                 if title != None:
-                    self._indexRef(ref_counter, title=title.text, anchor=ref.attrib["anchor"])
-
+                    if 'anchor' in ref.attrib:
+                        self._indexRef(ref_counter, title=title.text, anchor=ref.attrib["anchor"])
+                    else:
+                        raise RfcWriterError("Reference is missing an anchor: %s" % lxml.etree.tostring(ref))
+                        
         # Appendix sections
         back = self.r.find('back')
         if back is not None:
