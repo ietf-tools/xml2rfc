@@ -104,10 +104,13 @@ class TextWrapper(textwrap.TextWrapper):
             wrapped = []
             for part in parts:
                 part = part.lstrip()
-                wrapped += self.wrap(part, initial=initial, subsequent_indent=subsequent_indent,
+                if part:
+                    wrapped += self.wrap(part, initial=initial, subsequent_indent=subsequent_indent,
                                     width=width, fix_doublespace=fix_doublespace,
                                     fix_sentence_endings=fix_sentence_endings,
-                                    drop_whitespace=drop_whitespace)
+                                    drop_whitespace=drop_whitespace) 
+                else:
+                    wrapped.append(part)
             return wrapped
 
         # Set indentation

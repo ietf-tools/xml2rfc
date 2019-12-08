@@ -3791,7 +3791,7 @@ class TextWriter(BaseV3Writer):
                         cell.text = cell.text.strip()
                         cell.minwidth = max([0]+[ len(word) for word in splitter._split(cell.text) ]) if cell.text else 0
                     else:
-                        cell.minwidth = max([0]+[ len(line) for line in cell.text.splitlines() ])
+                        cell.minwidth = max([0]+[ len(word) for line in cell.text.splitlines() for word in splitter._split(line) ])
                     cell.type = p.tag
                     cell.top = '-'
                     cell.bot = '-'
@@ -3870,15 +3870,16 @@ class TextWriter(BaseV3Writer):
             for i in range(rows):
                 for j in range(cols):
                     cell = cells[i][j]
-                    if not cell.foldable:
-                        continue
                     if cell.origin == (i,j):
                         w = sum([ cells[i][k].colwidth for k in range(j, j+cell.colspan)])+ cell.colspan-1 - cell.padding
                         r = cell.rowspan
                         # this is simplified, and doesn't always account for the
                         # extra line from the missing border line in a rowspan cell:
                         if cell.text:
-                            cell.wrapped = fill(cell.text, width=w, fix_sentence_endings=True).splitlines()
+                            if cell.foldable:
+                                cell.wrapped = fill(cell.text, width=w, fix_sentence_endings=True).splitlines()
+                            else:
+                                cell.wrapped = [ l.text for l in self.text_or_block_renderer(cell.element, width=w, fill=True, **kwargs)[0] ]
                             cell.height = len(cell.wrapped)
                             if maxrows < cell.height and cell.height > 1:
                                 maxrows = cell.height
