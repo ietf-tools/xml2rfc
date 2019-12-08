@@ -1413,6 +1413,9 @@ class HtmlWriter(BaseV3Writer):
     #      <a class="email" href="mailto:joe@example.com">joe@example.com</a>
     #    </div>
     def render_email(self, h, x):
+        latin = True if h.get('class') == 'ascii' else ( False if h.get('class') == 'non-ascii' else None )
+        if latin == False:
+            return None
         value = x.text.strip()
         cls = 'email'
         div = add.div(h, None,
