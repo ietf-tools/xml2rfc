@@ -1,3 +1,49 @@
+xml2rfc (2.37.0) ietf; urgency=medium
+
+  * Added a new element <contact> with the same attributes and child
+    elements as <author>, except for @role.  As a child element of
+    <section> it will create a name and address block, as for authors in
+    the Authors' Addresses section; as a child of <t> it will create an
+    inline name entry, similar to <author> in citations.
+
+  * Changed the handling of block elements within table cells to re-wrap
+    for better column fit.  Fixes issue #454.
+
+  * Added an error for references without anchor (in v2; in v3 this will
+    be caught by the schema validation step).  Fixes issue #412.
+
+  * Changed error handling in a couple of places so as to result in
+    non-zero command-line exit values on errors.  Fixes issue #464.
+
+  * Tweaked the <cref> text renderer to not apply <t> paragraph filling to
+    the <cref> content.  Fixes an issue raised by resnick@episteme.net.
+
+  * Changed layout of multiple instances of <extaddr> and <street> to show
+    on separate lines instead of one line, comma-separated.  Changed one
+    notice message to warning.
+
+  * Added an option to silence warnings and notices starting with given
+    strings.
+
+  * Changed the HTML renderer to not emit email information in both
+    primary and alternative author address blocks.
+
+  * Added a test case using the new <contact> element, and added a couple
+    of email addresses for increased coverage of email address placement
+    when non-ascii address information is present.
+
+  * Updated the handling of non-latin address information in the text
+    format to follow RFC7997 and the HTML output more closely.
+
+  * Added generation of v3.rng from v3.rnc to the Makefile, and fixed a
+    schema error in the .rng file
+
+  * Changed the default content downcoding done for things like 'smart
+    quotes' to only apply to text content, not to XML element attributes.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  10 Dec 2019 08:56:57 -0800
+
+
 xml2rfc (2.36.0) ietf; urgency=medium
 
   * Improved support for internal xref to <li>, giving 'Section X,
