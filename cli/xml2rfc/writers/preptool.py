@@ -655,7 +655,7 @@ class PrepToolWriter(BaseV3Writer):
                     else:
                         self.die(e, "Expected a <seriesInfo> element giving the RFC number in --rfc mode, but found none")
                 rfc_number = self.root.get('number')
-                if rfc_number and rfcinfo and rfc_number != rfcinfo.get('value'):
+                if rfc_number and rfcinfo!=None and rfc_number != rfcinfo.get('value'):
                     self.die(e, 'Mismatch between <rfc number="%s" ...> and <seriesInfo name="RFC" value="%s">' % (rfc_number, rfcinfo.get('value')))
                 if not self.rfcnumber.isdigit():
                     self.die(rfcinfo, "Expected a numeric RFC number, but found '%s'" % (self.rfcnumber, ))
