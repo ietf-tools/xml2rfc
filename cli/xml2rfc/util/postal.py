@@ -161,7 +161,7 @@ def get_normalized_address_info(writer, x, latin=False):
                 adr['sorting_code'] = value
     for a in adr:
         if isinstance(adr[a], list):
-            adr[a] = ', '.join(adr[a])
+            adr[a] = '\u2028'.join(adr[a])
     if country_info:
         # Address validation
         address_format, rules = get_address_format_rules(adr, latin)
@@ -171,7 +171,7 @@ def get_normalized_address_info(writer, x, latin=False):
         for e in adr:
             if adr[e] and not (e in parts or e in ['name', 'role', 'company_name', 'country_code', ]):
                 list_parts = True
-                writer.note(x, "Postal address part filled in, but not used: %s: %s" % (address_field_elements[e], adr[e]))
+                writer.warn(x, "Postal address part filled in, but not used: %s: %s" % (address_field_elements[e], adr[e]))
         try:
             i18naddress.normalize_address(adr)
         except i18naddress.InvalidAddress as e:
@@ -179,7 +179,7 @@ def get_normalized_address_info(writer, x, latin=False):
             writer.note(x, "Postal address check failed for author %s." % full_author_name(author, latin))
             for item in e.errors:
                 if adr[item]:
-                    writer.note(x, "  Postal address has unexpected address field or field value: %s: %s" % (address_field_elements[item], (adr[item])), label='')
+                    writer.note(x, "  Postal address has an unexpected address field or field value: %s: %s" % (address_field_elements[item], (adr[item])), label='')
                 else:
                     writer.note(x, "  Postal address is missing an address element: %s" % (address_field_elements[item], ), label='')
         if list_parts:
