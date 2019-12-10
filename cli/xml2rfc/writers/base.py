@@ -26,6 +26,10 @@ from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_ex
 from xml2rfc.util.unicode import punctuation, unicode_replacements, unicode_content_tags, downcode
 from xml2rfc.utils import namespaces, find_duplicate_ids
 
+default_silenced_messages = [
+    ".*[Pp]ostal address",
+]
+
 default_options = Values(defaults={
         'accept_prepped': None,
         'add_xinclude': None,
@@ -71,6 +75,7 @@ default_options = Values(defaults={
         'rfc': None,
         'rfc_base_url': 'https://www.rfc-editor.org/rfc/',
         'rfc_reference_base_url': 'https://rfc-editor.org/rfc/',
+        'silence': default_silenced_messages,
         'strict': False,
         'text': True,
         'utf8': False,
@@ -1728,7 +1733,7 @@ class BaseV3Writer(object):
     def silenced(self, e, text):
         text = text.strip()
         pis = self.get_relevant_pis(e)
-        silenced = filter(None, [ pi.get('silence') for pi in pis ])
+        silenced = filter(None, self.options.silence[:] + [ pi.get('silence') for pi in pis ])
         for s in silenced:
             for label in ['Note: ', 'Warning: ']:
                 if s.startswith(label):
@@ -1747,9 +1752,9 @@ class BaseV3Writer(object):
             if not self.silenced(e, text):
                 self.log(self.msg(e, label, text))
 
-    def warn(self, e, text):
-        if not self.silenced(e, text):
-            self.log(self.msg(e, 'Warning:', text))
+    def warn(self, e, text, label='Warning:'):
+        if self.options.verbose or not self.silenced(e, text):
+            self.log(self.msg(e, label, text))
 
     def err(self, e, text, trace=False):
         msg = self.msg(e, 'Error:', text)

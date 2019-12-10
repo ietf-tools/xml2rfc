@@ -111,10 +111,12 @@ def main():
                             help='don\'t use the network to resolve references')
     plain_options.add_option('-O', '--no-org-info', dest='first_page_author_org', action='store_false', default=True,
                             help='don\'t show author orgainzation info on page one (legacy only)')
-    plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
-                            help='Remove XML processing instructions')
     plain_options.add_option('-q', '--quiet', action='store_true',
                             help="don't print anything")
+    plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
+                            help='Remove XML processing instructions')
+    plain_options.add_option('-s', '--silence', action='append', type="string", 
+                            help="Silence any warning beginning with the given string")
     plain_options.add_option('-u', '--utf8', action='store_true',
                             help='generate utf8 output')
     plain_options.add_option('-v', '--verbose', action='store_true',
@@ -375,6 +377,9 @@ def main():
     if options.id_reference_base_url:
         if not options.id_reference_base_url.endswith('/'):
             options.id_reference_base_url += '/'
+
+    if not options.silence:
+        options.silence = xml2rfc.writers.base.default_options.silence
 
     # ------------------------------------------------------------------
 
