@@ -998,9 +998,10 @@ class TextWriter(BaseV3Writer):
         if   p.tag == 't':
             name, ascii = full_author_name_set(e)
             if ascii:
-                return "%s (%s)" % (name, ascii)
+                contact = "%s (%s)" % (name, ascii)
             else:
-                return name
+                contact = name
+            return contact + (e.tail or '')
         elif p.tag == 'section':
             return self.render_author(e, width, **kwargs)
         else:
@@ -1159,7 +1160,7 @@ class TextWriter(BaseV3Writer):
     #    This element appears as a child element of <td> (Section 2.56) and
     #    <th> (Section 2.58).
     def render_br(self, e, width, **kwargs):
-        return '\u2028' + e.tail
+        return '\u2028' + (e.tail or '')
 
     # 2.13.  <city>
     # 
