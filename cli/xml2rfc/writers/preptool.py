@@ -40,7 +40,8 @@ from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, format_date, normalize_month
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
-from xml2rfc.util.unicode import unicode_content_tags, bare_unicode_tags, expand_unicode_element, isascii, downcode
+from xml2rfc.util.unicode import ( unicode_content_tags, unicode_attributes, bare_unicode_tags,
+    expand_unicode_element, isascii, downcode, )
 from xml2rfc.utils import build_dataurl, namespaces, sdict, clean_text
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc.writers.v2v3 import slugify
@@ -449,15 +450,6 @@ class PrepToolWriter(BaseV3Writer):
                     self.err(self.root, 'Expected <%s> attribute "%s" to be an integer, but found "%s"' % (c.tag, a, i))
 
 
-        # Attribute values should not contain unicode, with some exceptions
-        unicode_attributes = {
-            ('author', 'fullname'),
-            ('author', 'surname'),
-            ('author', 'initials'),
-            ('contact', 'fullname'),
-            ('contact', 'surname'),
-            ('contact', 'initials'),
-        }
         # Attributes that may have leading or trailing space
         space_attributes = {
             ('u',       'format'),
