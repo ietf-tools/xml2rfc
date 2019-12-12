@@ -1,3 +1,23 @@
+xml2rfc (2.37.1) ietf; urgency=medium
+
+  * Fixed a bug in the text formatter pagination code where it incorrectly 
+    tried to annotate Comment and PI nodes with page number information.
+
+  * Updated the v2v3 converter to do essentially what it did before v2.37
+    with respect to unicode downcoding, but with more explicit calls.
+
+  * Added a base writer method to downcode reference punctuation.
+
+  * Moved the list of (tag, attr) combinations that permit unicode values 
+    into util.unicode.  Rewrote docwncode_punctuation() to only touch 
+    punctuation.
+
+  * Restored lost trailing text after <contact> in <t> context for text 
+    output.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  12 Dec 2019 05:16:50 -0800
+
+
 xml2rfc (2.37.0) ietf; urgency=medium
 
   * Added a new element <contact> with the same attributes and child
@@ -40,6 +60,7 @@ xml2rfc (2.37.0) ietf; urgency=medium
 
   * Changed the default content downcoding done for things like 'smart
     quotes' to only apply to text content, not to XML element attributes.
+
 
  -- Henrik Levkowetz <henrik@levkowetz.com>  10 Dec 2019 08:56:57 -0800
 
