@@ -23,7 +23,8 @@ except ImportError:
 from xml2rfc import strings, log
 from xml2rfc.util.date import extract_date, augment_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
-from xml2rfc.util.unicode import punctuation, unicode_replacements, unicode_content_tags, downcode
+from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_content_tags,
+    unicode_attributes, downcode, downcode_punctuation)
 from xml2rfc.utils import namespaces, find_duplicate_ids
 
 default_silenced_messages = [
@@ -1853,6 +1854,7 @@ class BaseV3Writer(object):
 
     def downcode_punctuation(self):
         self.downcode(replacements=punctuation)
+        self.downcode_reference_punctuation()
 
     def downcode(self, replacements=unicode_replacements):
         """
@@ -1879,10 +1881,20 @@ class BaseV3Writer(object):
     def downcode_attributes(self, replacements=unicode_replacements):
         for e in self.tree.iter():
             for key in e.attrib.keys():
-                try:
-                    e.get(key).encode('ascii')
-                except UnicodeEncodeError:
-                    e.set(key, downcode(e.get(key), replacements=replacements))
+                if not (e.tag, key) in unicode_attributes:
+                    try:
+                        e.get(key).encode('ascii')
+                    except UnicodeEncodeError:
+                        e.set(key, downcode(e.get(key), replacements=replacements))
+
+    def downcode_reference_punctuation(self):
+        for r in self.tree.xpath('.//references'):
+            for e in r.iter():
+                for key in e.attrib.keys():
+                    try:
+                        e.get(key).encode('ascii')
+                    except UnicodeEncodeError:
+                        e.set(key, downcode_punctuation(e.get(key)))
 
     def pretty_print_prep(self, e, p):
         ind = self.options.indent
