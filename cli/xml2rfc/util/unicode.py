@@ -35,6 +35,19 @@ unicode_content_tags = set([
     'u',
 ])
 
+# Attribute values should not contain unicode, with some exceptions
+unicode_attributes = {
+    ('author', 'fullname'),
+    ('author', 'surname'),
+    ('author', 'initials'),
+    ('contact', 'fullname'),
+    ('contact', 'surname'),
+    ('contact', 'initials'),
+    ('organization', 'abbrev'),
+    ('seriesInfo', 'name'),
+    ('seriesInfo', 'value'),
+}
+
 # These unicode tags don't require an ascii attribute
 bare_unicode_tags = set([
     'artwork',
@@ -147,9 +160,13 @@ def textwidth(u):
     return len(re.sub('[\u200B\u200C\u2060\uE060]', '', u))
 
 def downcode_punctuation(str):
-    return downcode(str, replacements=punctuation)
+    while True:
+        match = re.search(punctuation_re, str)
+        if not match:
+            return str
+        str = re.sub(match.group(1), punctuation[match.group(1)], str)
 
-def downcode(str, replacements=None):
+def downcode(str, replacements=None, use_charrefs=True):
     """
 
     Replaces Unicode characters that we do not use internally with selected
@@ -172,8 +189,8 @@ def downcode(str, replacements=None):
         match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\u2028\uE060\r\n])', str)
         if not match:
             return str
-        if match.group(1) in unicode_replacements:
-            str = re.sub(match.group(1), unicode_replacements[match.group(1)], str)
+        if match.group(1) in replacements:
+            str = re.sub(match.group(1), replacements[match.group(1)], str)
         else:
             entity = match.group(1).encode('ascii', 'xmlcharrefreplace').decode('ascii')
             str = re.sub(match.group(1), entity, str)
@@ -208,6 +225,7 @@ punctuation = {
 punctuation.update(unicode_space_replacements)
 punctuation.update(unicode_dash_replacements)
 punctuation.update(unicode_quote_replacements)
+punctuation_re = re.compile(r'[%s]'%''.join(list(punctuation.keys())))
 
 unicode_replacements = {
     # Unicode code points corresponding to (x)html entities, also in
