@@ -408,7 +408,7 @@ class TextWriter(BaseV3Writer):
             # make note of each line's page
             for i in range(pagestart, len(paginated)):
                 paginated[i].page = page
-                if paginated[i].elem != None:
+                if paginated[i].elem != None and not isinstance(paginated[i].elem, (etree._ProcessingInstruction, etree._Comment)):
                     paginated[i].elem.page = page
             # Set the next page start
             start_lineno = break_lineno
