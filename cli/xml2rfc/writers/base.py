@@ -23,7 +23,7 @@ except ImportError:
 from xml2rfc import strings, log
 from xml2rfc.util.date import extract_date, augment_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
-from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_content_tags,
+from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_content_tags, bare_unicode_tags,
     unicode_attributes, downcode, downcode_punctuation)
 from xml2rfc.utils import namespaces, find_duplicate_ids
 
@@ -1867,6 +1867,13 @@ class BaseV3Writer(object):
         for e in self.tree.iter():
             if e.text:
                 if not e.tag in unicode_content_tags:
+                    try:
+                        e.text.encode('ascii')
+                    except UnicodeEncodeError:
+                        e.text = downcode(e.text, replacements=replacements)
+                elif e.tag in bare_unicode_tags:
+                    pass
+                elif not e.get('ascii'):
                     try:
                         e.text.encode('ascii')
                     except UnicodeEncodeError:

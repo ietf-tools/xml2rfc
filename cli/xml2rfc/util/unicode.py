@@ -164,7 +164,7 @@ def downcode_punctuation(str):
         match = re.search(punctuation_re, str)
         if not match:
             return str
-        str = re.sub(match.group(1), punctuation[match.group(1)], str)
+        str = re.sub(match.group(0), punctuation[match.group(0)], str)
 
 def downcode(str, replacements=None, use_charrefs=True):
     """
@@ -186,11 +186,13 @@ def downcode(str, replacements=None, use_charrefs=True):
         replacements = unicode_replacements
 
     while True:
-        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\u2028\uE060\r\n])', str)
+        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\u2028\uE060\r\n\t])', str)
         if not match:
             return str
-        if match.group(1) in replacements:
+        if   match.group(1) in replacements:
             str = re.sub(match.group(1), replacements[match.group(1)], str)
+        elif match.group(1) in controlchars:
+            str = re.sub(match.group(1), controlchars[match.group(1)], str)
         else:
             entity = match.group(1).encode('ascii', 'xmlcharrefreplace').decode('ascii')
             str = re.sub(match.group(1), entity, str)
@@ -205,6 +207,7 @@ unicode_dash_replacements = {
     u'\u002d': '-',
     u'\u2010': '-',
     u'\u2013': '-',
+    u'\u2014': '-',
     u'\u2212': '-',
 }
 
@@ -397,3 +400,5 @@ unicode_replacements = {
     u'\u2010': '-',
 }
 
+controlchars = dict( (six.text_type(chr(i)), ' ') for i in range(0, 32) if not i in [ 9, 10, 13 ] )
+    
