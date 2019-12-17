@@ -1196,7 +1196,7 @@ class PrepToolWriter(BaseV3Writer):
         # tools.ietf.org has code to deal with draft urls (text, html, and pdf) lacking
         # extension, but others may not.  www.ietf.org/archive/id/ only has .txt versions:
         if urlparse(self.options.id_base_url).netloc != 'tools.ietf.org':
-            target_pattern["Internet-Draft"] = os.path.join(self.options.id_base_url,  '{value}.txt'),
+            target_pattern["Internet-Draft"] = os.path.join(self.options.id_base_url,  '{value}.txt')
 
         if not e.get('target'):
             for c in e.xpath('.//seriesInfo'):
@@ -1619,7 +1619,7 @@ class PrepToolWriter(BaseV3Writer):
             e.set('derivedContent', content)
         else:
             if relative != None and section is None:
-                self.err("Cannot render an <%s> with a relative= attribute without also having a section= attribute." % (e.tag))
+                self.err(e, "Cannot render an <%s> with a relative= attribute without also having a section= attribute." % (e.tag))
             if t.tag != 'reference':
                 self.err(e, "Expected the target of an <%s> with a section= attribute to be a <reference>, found <%s>" % (e.tag, t.tag, ))
             if relative is None:
