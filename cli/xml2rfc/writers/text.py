@@ -4491,7 +4491,7 @@ class TextWriter(BaseV3Writer):
             if pageno and pageno.isdigit():
                 text += '\u2026' '%04d' % int(pageno)
         else:
-            label = 'Section' if section[0].isdigit() else 'Appendix'
+            label = 'Section' if section[0].isdigit() else 'Appendix' if re.search(r'^[A-Z](\.|$)', section) else 'Part'
             sform  = e.get('sectionFormat')
             
             if   sform == 'of':

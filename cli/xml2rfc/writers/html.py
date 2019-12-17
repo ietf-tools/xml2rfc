@@ -2707,7 +2707,7 @@ class HtmlWriter(BaseV3Writer):
             h.append(hh)
             return hh
         else:
-            label = 'Section' if section[0].isdigit() else 'Appendix'
+            label = 'Section' if section[0].isdigit() else 'Appendix' if re.search(r'^[A-Z](\.|$)', section) else 'Part'
             link    = x.get('derivedLink')
             format  = x.get('sectionFormat')
             exptext = ("%s " % x.text.strip()) if (x.text and x.text.strip()) else ''
