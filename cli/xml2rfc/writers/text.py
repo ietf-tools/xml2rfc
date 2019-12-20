@@ -4484,7 +4484,7 @@ class TextWriter(BaseV3Writer):
                     if content and content != reftext:
                         text = "%s(%s)" % (exptext, reftext)
                     else:
-                        text = "%s" % reftext
+                        text = "%s" % (exptext or reftext)
             else:
                 text = exptext.strip()
             pageno = e.get('pageno')
