@@ -335,9 +335,15 @@ class HtmlWriter(BaseV3Writer):
         return div
 
     def inline_text_renderer(self, h, x):
-        h.text = x.text
-        for c in x.getchildren():
-            self.render(h, c)
+        h.text = x.text.lstrip() if x.text else ''
+        children = list(x.getchildren())
+        if children:
+            for c in children:
+                self.render(h, c)
+            last = h[-1]
+            last.tail = last.tail.rstrip() if last.tail else ''
+        else:
+            h.text = h.text.rstrip()
         h.tail = x.tail
 
     def null_renderer(self, h, x):

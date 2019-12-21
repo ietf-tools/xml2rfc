@@ -645,7 +645,7 @@ def clean_text(s):
     s = s.replace(r'\u2011', '-')
     # zero-width
     s = re.sub(r'[\u200B\u2060\ue060]', '', s)
-    return s
+    return s.strip()
 
 def is_htmlblock(h):
     return h.tag in set([ 'address', 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'figure',

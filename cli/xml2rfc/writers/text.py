@@ -4464,12 +4464,12 @@ class TextWriter(BaseV3Writer):
     def render_xref(self, e, width, **kwargs):
         target = e.get('target')
         section = e.get('section')
-        reftext = e.get('derivedContent')
+        reftext = e.get('derivedContent').strip()
         exptext = self.inner_text_renderer(e, width, **kwargs)
         if exptext:
             # for later string formatting convenience, a trailing space if any text:
             exptext += ' '              
-        content = ''.join(e.itertext()).strip()
+        content = clean_text(''.join(list(e.itertext())))
         if reftext is None:
             self.die(e, "Found an <xref> without derivedContent: %s" % (etree.tostring(e),))
         #

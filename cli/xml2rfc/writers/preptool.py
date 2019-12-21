@@ -1986,7 +1986,7 @@ class PrepToolWriter(BaseV3Writer):
             t.append(xref)
             # <xref> can only contain text, not markup. so we need to reduce
             # the name content to plain text:
-            text = clean_text(''.join(name.itertext()).strip())
+            text = clean_text(''.join(name.itertext()))
             if text:
                 slug = name.get('slugifiedName')
                 if not slug:
