@@ -1803,11 +1803,14 @@ class TextWriter(BaseV3Writer):
                 #       RFCs, each of which will bear the same STD number.  This element
                 #       is unchanged.
                 category = self.root.get('category', '')
-                series_no = self.root.get('seriesNo')
-                if category and category in strings.series_name and series_no:
-                    left.append('%s: %s' % (strings.series_name[category], series_no))
-                else:
-                    pass
+                #
+                ## The following code duplicates series info also generated from <seriesInfo>
+                ## entries.  Commented out.
+                #series_no = self.root.get('seriesNo')
+                #if category and category in strings.series_name and series_no:
+                #    left.append('%s: %s' % (strings.series_name[category], series_no))
+                #else:
+                #    pass
                 #    [<RFC relation>:<RFC number[s]>]  Some relations between RFCs in the
                 #       series are explicitly noted in the RFC header.  For example, a new
                 #       RFC may update one or more earlier RFCs.  Currently two
@@ -1849,11 +1852,14 @@ class TextWriter(BaseV3Writer):
                 left.append('Internet-Draft')
                 #
                 category = self.root.get('category', '')
-                series_no = self.root.get('seriesNo')
-                if category and series_no and category in strings.series_name:
-                    left.append('%s: %s (if approved)' % (strings.series_name[category], series_no))
-                else:
-                    pass
+                #
+                ## The following code duplicates series info also generated from <seriesInfo>
+                ## entries.  Commented out.
+                #series_no = self.root.get('seriesNo')
+                #if category and series_no and category in strings.series_name:
+                #    left.append('%s: %s (if approved)' % (strings.series_name[category], series_no))
+                #else:
+                #    pass
                 #
                 obsoletes = self.root.get('obsoletes')
                 if obsoletes:
