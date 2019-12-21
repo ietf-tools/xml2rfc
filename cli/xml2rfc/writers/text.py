@@ -1738,15 +1738,18 @@ class TextWriter(BaseV3Writer):
                 lines.append(l+' '*w+r)
             return '\n'.join(lines).rstrip()+'\n'
         #
-        def wrap(label, items, suffix=''):
-            wrapper = textwrap.TextWrapper(width=48, subsequent_indent=' '*len(label))
+        def wrap(label, items, left, right, suffix=''):
             line = '%s%s%s' % (label, items, suffix)
+            ll = len(left)
+            lr = len(right)
+            width = 48 if ll > lr else min(48, 72-3-len(right[ll]))
+            wrapper = textwrap.TextWrapper(width=width, subsequent_indent=' '*len(label))
             return wrapper.wrap(line)
         #
         def normalize(t):
             return re.sub(r',\s*', ', ', t).strip(', ')
 
-        def get_left(front):
+        def get_left(front, right):
             "Get front page top left column"
             #left_parts = ['source', 'seriesInfo', 'obsoletes', 'updates', 'category', 'issn', 'expires', ]
             left = []
@@ -1814,10 +1817,10 @@ class TextWriter(BaseV3Writer):
                 #       may appear in future RFCs.
                 obsoletes = self.root.get('obsoletes')
                 if obsoletes:
-                    left += wrap('Obsoletes: ', normalize(obsoletes))
+                    left += wrap('Obsoletes: ', normalize(obsoletes), left, right)
                 updates = self.root.get('updates')
                 if updates:
-                    left += wrap('Updates: ', normalize(updates))
+                    left += wrap('Updates: ', normalize(updates), left, right)
                 
                 #    Category: <category>  This indicates the initial RFC document
                 #       category of the publication.  These are defined in [RFC2026].
@@ -1854,10 +1857,10 @@ class TextWriter(BaseV3Writer):
                 #
                 obsoletes = self.root.get('obsoletes')
                 if obsoletes:
-                    left += wrap('Obsoletes: ', normalize(obsoletes), ' (if approved)')
+                    left += wrap('Obsoletes: ', normalize(obsoletes), left, right, suffix=' (if approved)')
                 updates = self.root.get('updates')
                 if updates:
-                    left += wrap('Updates: ', normalize(updates), ' (if approved)')
+                    left += wrap('Updates: ', normalize(updates), left, right, suffix=' (if approved)')
                 #
                 if category:
                     if category in strings.category_name:
@@ -1918,8 +1921,9 @@ class TextWriter(BaseV3Writer):
             right.append(self.render_date(front.find('./date'), width, **kwargs))
             return right
         #
-        left  = get_left(e)
-        right = get_right(e)
+        # get right first, in order to limit the width of left lines as needed
+        right = get_right(e)            
+        left  = get_left(e, right)
         #
         first_page_header = join_cols(left, right)
         first_page_header += '\n\n'
