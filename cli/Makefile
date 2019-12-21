@@ -1,3 +1,4 @@
+
 # -*- indent-with-tabs: 1 
 # Simple makefile which mostly encapsulates setup.py invocations.  Useful as
 # much as documentation as it is for invocation.
@@ -96,11 +97,14 @@ tests/out/%.v2v3.xml: tests/input/%.xml install
 	@doc=$(basename $@); printf ' '; xmllint --noout --xinclude --relaxng xml2rfc/data/v3.rng $$doc.xml
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --v2v3 --strict --legacy-date-format --add-xinclude $< --out $@"
 
-tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html install
+tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%.text install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
 	@echo " Checking generation of .html from prepped .xml"
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
+	@echo " Checking generation of .text from prepped .xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $(basename $@).text --text --no-pagination --external --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (2)"; exit 1; }
 
 # These contains index sections, which renders with different whitespace from
 # prepped source than directly.  Don't compare html from prepped with master
