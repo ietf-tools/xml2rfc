@@ -1,3 +1,32 @@
+xml2rfc (2.37.3) ietf; urgency=medium
+
+  * Undid margin-left: 0 for <dd> from the original supplied CSS, which
+    caused nested lists to not have any distinction between levels.  Fixes
+    issue #458.
+
+  * Tweaked the margin of block elements within <aside>.  Fixes issue #469.
+
+  * Added <dt> and <li> to list of block elements.  Fixes issue #453.
+
+  * Treated pilcrows on sourcecode within figure the same way as artwork
+    within figure (don't add a pilcrow, since the figure title already
+    provides an anchor).  Fixes issue #475.
+
+  * Don't use both @seriesNo and <seriesInfo> to emit series number.  Fixes 
+    issue #477.
+
+  * Added code to adapt the line break position for long Updates: and 
+    Obsoletes: entries for long right-column entries.  Fixes issue #472.
+
+  * Added normalization before the comparison that determines if <xref> 
+    text content is different from derivedContent or not, and should be emitted 
+    in addition to the derivedContent.  Fixes issue #466.
+
+  * Fixed a case where simple derivedContent was used instead of fully 
+    rendered explicit <xref> text content where available.  Fixes issue #474.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  22 Dec 2019 10:02:59 -0800
+
 xml2rfc (2.37.2) ietf; urgency=medium
 
   * Refined the non-ascii punctuation (smart-quotes, etc.) downcoding, and 
