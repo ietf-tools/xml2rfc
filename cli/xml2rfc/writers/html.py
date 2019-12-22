@@ -2333,7 +2333,8 @@ class HtmlWriter(BaseV3Writer):
                 text = (' file "%s"\n%s' % (file, text)) if text else '\n%s' % text
             text = "<CODE BEGINS>%s\n<CODE ENDS>" % text
             pre.text = text
-        self.maybe_add_pilcrow(div)
+        if x.getparent().tag != 'figure':
+            self.maybe_add_pilcrow(div)
         return div
 
 
