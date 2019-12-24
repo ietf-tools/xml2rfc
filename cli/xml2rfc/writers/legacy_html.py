@@ -9,8 +9,12 @@ import os.path
 import string
 import sys
 import datetime
-import cgi
 import calendar
+
+try:
+    from html import escape
+except ImportError:
+    from cgi import escape
 
 try:
     from xml2rfc import debug
@@ -827,13 +831,13 @@ class HtmlRfcWriter(BaseRfcWriter):
                  'background':      background_image,
 
                  # HTML-escaped values
-                 'docName':         cgi.escape(docName, quote=True),
-                 'docDate':         cgi.escape(docDate, quote=True),
-                 'description':     cgi.escape(description, quote=True),
-                 'generator':       cgi.escape(generator, quote=True),
-                 'authors':         cgi.escape(authors, quote=True),
-                 'keywords':        cgi.escape(', '.join(keyword_list), quote=True),
-                 'title':           cgi.escape(title),
+                 'docName':         escape(docName, quote=True),
+                 'docDate':         escape(docDate, quote=True),
+                 'description':     escape(description, quote=True),
+                 'generator':       escape(generator, quote=True),
+                 'authors':         escape(authors, quote=True),
+                 'keywords':        escape(', '.join(keyword_list), quote=True),
+                 'title':           escape(title, quote=False),
                  
                  # Replace buffers
                  'front':           ''.join(self.buffers['front']),
