@@ -57,6 +57,7 @@ country_alias = {
     "UK": "United Kingdom",
     "Republic of Korea": "Korea, Republic of",
     "South Korea": "Korea, Republic of",
+    "P.R. China": "China",
 }
 
 def get_iso_country_info(e):
@@ -68,7 +69,7 @@ def get_iso_country_info(e):
         name = e.text.strip()
     else:
         return None
-    # Special case, this is used bu unknown to pycountry
+    # Special case, this is used but unknown to pycountry
     if name in country_alias:
         name = country_alias[name]
     try:
