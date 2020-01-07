@@ -3883,20 +3883,24 @@ class TextWriter(BaseV3Writer):
             for i in range(rows):
                 for j in range(cols):
                     cell = cells[i][j]
-                    if cell.origin == (i,j):
-                        w = sum([ cells[i][k].colwidth for k in range(j, j+cell.colspan)])+ cell.colspan-1 - cell.padding
-                        r = cell.rowspan
-                        # this is simplified, and doesn't always account for the
-                        # extra line from the missing border line in a rowspan cell:
-                        if cell.text:
-                            if cell.foldable:
-                                cell.wrapped = fill(cell.text, width=w, fix_sentence_endings=True).splitlines()
-                            else:
-                                cell.wrapped = [ l.text for l in self.text_or_block_renderer(cell.element, width=w, fill=True, **kwargs)[0] ]
-                            cell.height = len(cell.wrapped)
-                            if maxrows < cell.height and cell.height > 1:
-                                maxrows = cell.height
-                                maxpos = (i, j)
+                    if hasattr(cell, 'origin'):
+                        if cell.origin == (i,j):
+                            w = sum([ cells[i][k].colwidth for k in range(j, j+cell.colspan)])+ cell.colspan-1 - cell.padding
+                            r = cell.rowspan
+                            # this is simplified, and doesn't always account for the
+                            # extra line from the missing border line in a rowspan cell:
+                            if cell.text:
+                                if cell.foldable:
+                                    cell.wrapped = fill(cell.text, width=w, fix_sentence_endings=True).splitlines()
+                                else:
+                                    cell.wrapped = [ l.text for l in self.text_or_block_renderer(cell.element, width=w, fill=True, **kwargs)[0] ]
+                                cell.height = len(cell.wrapped)
+                                if maxrows < cell.height and cell.height > 1:
+                                    maxrows = cell.height
+                                    maxpos = (i, j)
+                    else:
+                        self.die(e, "Inconsistent table width: Found different row lengths in this table")
+
             # calculate a better width for the cell with the largest number
             # of text rows
             if maxpos != (None, None):
