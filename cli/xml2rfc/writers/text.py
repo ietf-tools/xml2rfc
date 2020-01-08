@@ -1001,6 +1001,8 @@ class TextWriter(BaseV3Writer):
                 contact = "%s (%s)" % (name, ascii)
             else:
                 contact = name
+            # Avoid sentence end space doubling
+            contact = contact.replace('. ', '.\u00a0')
             return contact + (e.tail or '')
         elif p.tag == 'section':
             return self.render_author(e, width, **kwargs)
