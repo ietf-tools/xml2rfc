@@ -74,13 +74,14 @@ def short_author_ascii_name(a):
 
 def short_author_name_set(a):
     name = short_author_name(a)
+    ascii = None
     if name:
         if is_script(name, 'Latin'):
             ascii = None
         else:
             ascii = short_author_ascii_name(a)
-    if name == ascii:
-        ascii = None
+        if name == ascii:
+            ascii = None
     return name, ascii
 
 def ref_author_name_first(a):
