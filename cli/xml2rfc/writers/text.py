@@ -4017,7 +4017,11 @@ class TextWriter(BaseV3Writer):
             title = self.tjoin(title, name, width, **kwargs)
         lines = self.build_table(e, width, **kwargs)
         table_width = min([ width, max( len(l.text) for l in lines ) ])
-        title = '\n'+center(title, table_width).rstrip()        
+        min_title_width = min([ 26, len(title) ])
+        if table_width < min_title_width:
+            table_width = min_title_width
+            lines = align(lines, 'center', table_width)
+        title = '\n'+center(title, table_width).rstrip()
         lines += mklines(title, e)
         lines = align(lines, e.get('align', 'center'), width)
         return lines
