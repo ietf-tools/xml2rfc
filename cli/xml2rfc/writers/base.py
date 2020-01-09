@@ -28,7 +28,7 @@ from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_co
 from xml2rfc.utils import namespaces, find_duplicate_ids
 
 default_silenced_messages = [
-    ".*[Pp]ostal address",
+#    ".*[Pp]ostal address",
 ]
 
 default_options = Values(defaults={
