@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import io
 import os
@@ -19,6 +19,7 @@ import json
 import lxml.etree
 import optparse
 import os
+import pycountry
 import xml2rfc
 
 try:
@@ -44,6 +45,28 @@ def print_pi_help(self, opt, value, parser):
             print('    %-20s  "%s"' % (k,v))
         else:
             print('    %-20s  %s' % (k,v))
+    sys.exit()
+
+
+def print_country_help(self, opt, value, parser):
+    from xml2rfc.util.postal import country_alias
+    country_ids = {}
+    for c in list(pycountry.countries):
+        key = c.alpha_2
+        country_ids[key] = []
+        for a in ['alpha_2', 'alpha_3', 'name', 'official_name', ]:
+            if hasattr(c, a):
+                v = getattr(c, a)
+                if not v in country_ids[key]:
+                    country_ids[key].append(v)
+    for k, v in country_alias.items():
+        c = pycountry.countries.lookup(v)
+        if not k in country_ids[c.alpha_2]:
+            country_ids[c.alpha_2].append(k)
+    ids = country_ids.values()
+    ids.sort()
+    print('Known country codes and country names for use with <country>:\n')
+    print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])).encode('utf-8'))
     sys.exit()
 
 def extract_anchor_info(xml):
@@ -103,8 +126,10 @@ def main():
                             help='purge the cache and exit')
     plain_options.add_option(      '--debug', action='store_true',
                             help='Show debugging output')
-    plain_options.add_option('-H', '--pi-help', action='callback', callback=print_pi_help,
+    plain_options.add_option('--pi-help', action='callback', callback=print_pi_help,
                             help='show the names and default values of PIs')
+    plain_options.add_option('--country-help', action='callback', callback=print_country_help,
+                            help='show the recognized <country> strings')
     plain_options.add_option('-n', '--no-dtd', action='store_true',
                             help='disable DTD validation step')
     plain_options.add_option('-N', '--no-network', action='store_true', default=False,

@@ -57,7 +57,13 @@ country_alias = {
     "UK": "United Kingdom",
     "Republic of Korea": "Korea, Republic of",
     "South Korea": "Korea, Republic of",
+    "North Korea": "Democratic People's Republic of Korea",
     "P.R. China": "China",
+    "Åland": "Åland Islands",
+    # Reordering of comma-separated name components:
+    "The Democratic Republic of the Congo": "Congo, The Democratic Republic of the",
+    "State of Palestine": "Palestine, State of",
+    "U.S. Virgin Islands": "Virgin Islands, U.S.",
 }
 
 def get_iso_country_info(e):
@@ -86,7 +92,11 @@ def get_iso_country_info(e):
                 country_info = pycountry.countries.get(name=name.title())
             country_info.alpha_2 = country_info.alpha2
     except LookupError:
-        xml2rfc.log.note("Country lookup failed for %s" % (lxml.etree.tostring(e), ))
+        estr = lxml.etree.tostring(e).replace(' xmlns:xi="http://www.w3.org/2001/XInclude"', '').strip()
+        if e.tag == 'country':
+            xml2rfc.log.warn("Country lookup failed for %s.  Use --country-help to show recognized country names and codes" % (estr, ))
+        else:
+            xml2rfc.log.note("Country lookup failed for %s.  Use --country-help to show recognized country names and codes" % (estr, ))
         pass
     return country_info
 
@@ -101,10 +111,11 @@ def get_normalized_address_info(writer, x, latin=False):
         country_info = get_iso_country_info(country_element)
     if not country_info:
         for c in x.getchildren():
-            country_info = get_iso_country_info(c)
-            if country_info:
-                country_element = c
-                break
+            if c.tag == "postalLine":
+                country_info = get_iso_country_info(c)
+                if country_info:
+                    country_element = c
+                    break
     if country_info:
         country_name = get_value(country_element, latin=latin)
         if country_name in ['US', 'USA']:
