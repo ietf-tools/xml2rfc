@@ -1972,7 +1972,7 @@ class TextWriter(BaseV3Writer):
     def render_iref(self, e, width, **kwargs):
         p = e.getparent()
         self.index_items.append(IndexItem(e.get('item'), e.get('subitem'), p.get('pn'), None))
-        return e.tail
+        return '' if p.tag in ['section', 'figure', 'table', ]  else e.tail
 
     # 2.27.1.  "item" Attribute (Mandatory)
     # 
@@ -3217,6 +3217,7 @@ class TextWriter(BaseV3Writer):
             None:       Joiner('', '\n\n', '', 3, 0), # default
             't':        Joiner('', '\n\n', '', 3, 0),
             'name':     Joiner('', '  ',   '', 0, 0),
+            'iref':     Joiner('', '  ',   '', 0, 0),
             'section':  Joiner('', '\n\n', '', 0, 0),
             'artset':   Joiner('', '\n\n', '', 0, 0),
             'artwork':  Joiner('', '\n\n', '', 3, 0),
