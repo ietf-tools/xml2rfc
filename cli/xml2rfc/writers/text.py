@@ -1972,7 +1972,7 @@ class TextWriter(BaseV3Writer):
     def render_iref(self, e, width, **kwargs):
         p = e.getparent()
         self.index_items.append(IndexItem(e.get('item'), e.get('subitem'), p.get('pn'), None))
-        return ''
+        return e.tail
 
     # 2.27.1.  "item" Attribute (Mandatory)
     # 
