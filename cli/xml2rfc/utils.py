@@ -625,7 +625,8 @@ def isempty(e):
 
 def isblock(e):
     "Return True if e is a block level element"
-    return e.tag in [ 'artset', 'artwork', 'dl', 'figure', 'ol', 'sourcecode', 't', 'table', 'ul', 'blockquote', ]
+    from xml2rfc.writers.base import block_tags
+    return e.tag in block_tags
 
 def iscomment(e):
     "Return True if e is a comment"
