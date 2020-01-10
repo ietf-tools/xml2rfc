@@ -1648,7 +1648,7 @@ def get_xref_tags():
 meta_tags   = get_meta_tags() - deprecated_element_tags
 text_tags   = get_text_tags() - deprecated_element_tags
 inline_tags = get_inline_tags() - deprecated_element_tags
-block_tags  = get_element_tags() - text_tags - deprecated_element_tags
+block_tags  = get_element_tags() - inline_tags - deprecated_element_tags
 mixed_tags  = get_text_or_block_tags() - deprecated_element_tags
 xref_tags   = get_xref_tags()
 
