@@ -563,7 +563,7 @@ class XmlRfcParser:
                                       no_network=self.no_network,
                                       remove_comments=remove_comments,
                                       remove_pis=remove_pis,
-                                      remove_blank_text=True,
+                                      remove_blank_text=False,
                                       resolve_entities=True,
                                       strip_cdata=strip_cdata)
 
@@ -619,7 +619,7 @@ class XmlRfcParser:
                                                       no_network=False,
                                                       remove_comments=remove_comments,
                                                       remove_pis=remove_pis,
-                                                      remove_blank_text=True,
+                                                      remove_blank_text=False,
                                                       resolve_entities=True,
                                                       strip_cdata=strip_cdata)
                         parser.set_element_class_lookup(element_lookup)
