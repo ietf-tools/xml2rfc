@@ -743,7 +743,7 @@ class TextWriter(BaseV3Writer):
                     % ( e.get('type', '(unknown type)'),
                         e.get('originalSrc') or e.get('src') or 'No external link available, see %s.html for artwork.'%self.root.get('docName')))
         msg  = fill(msg, width=width, **kwargs)
-        text = (e.text and e.text.expandtabs()) or msg
+        text = (e.text.strip() and e.text.expandtabs()) or msg
         text = text.strip('\n')
         text = '\n'.join( [ l.rstrip() for l in text.splitlines() ] )
         lines = [ Line(t, e) for t in text.splitlines() ]
