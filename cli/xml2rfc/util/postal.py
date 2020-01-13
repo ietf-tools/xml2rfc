@@ -92,7 +92,7 @@ def get_iso_country_info(e):
                 country_info = pycountry.countries.get(name=name.title())
             country_info.alpha_2 = country_info.alpha2
     except LookupError:
-        estr = lxml.etree.tostring(e).replace(' xmlns:xi="http://www.w3.org/2001/XInclude"', '').strip()
+        estr = lxml.etree.tostring(e).replace(b' xmlns:xi="http://www.w3.org/2001/XInclude"', b'').strip().decode('utf-8')
         if e.tag == 'country':
             xml2rfc.log.warn("Country lookup failed for %s.  Use --country-help to show recognized country names and codes" % (estr, ))
         else:
