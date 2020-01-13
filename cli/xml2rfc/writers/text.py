@@ -4485,6 +4485,7 @@ class TextWriter(BaseV3Writer):
     def render_xref(self, e, width, **kwargs):
         target = e.get('target')
         section = e.get('section')
+        format = e.get('format')
         reftext = e.get('derivedContent').strip()
         exptext = self.inner_text_renderer(e, width, **kwargs)
         if exptext:
@@ -4496,7 +4497,7 @@ class TextWriter(BaseV3Writer):
         #
         if not section:
             if reftext:
-                if target in self.refname_mapping:
+                if target in self.refname_mapping and format != 'title':
                     if content and content != reftext:
                         text = "%s[%s]" % (exptext, reftext)
                     else:

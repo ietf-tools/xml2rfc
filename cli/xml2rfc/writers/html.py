@@ -2674,7 +2674,7 @@ class HtmlWriter(BaseV3Writer):
         # possible attributes:
         target  = x.get('target')
         #pageno  = x.get('pageno')
-        #format  = x.get('format')
+        format  = x.get('format')
         section = x.get('section')
         relative= x.get('relative')
         #sformat  = x.get('sectionFormat')
@@ -2690,7 +2690,7 @@ class HtmlWriter(BaseV3Writer):
             else:
                 if reftext:
                     a = build.a(reftext, href='#%s'%target, classes='xref')
-                    if target in self.refname_mapping:
+                    if target in self.refname_mapping and format != 'title':
                         if content and clean_text(x.text) != reftext:
                             aa = build.a(href='#%s'%target, classes='xref')
                             self.inline_text_renderer(aa, x)
