@@ -1612,11 +1612,13 @@ class PrepToolWriter(BaseV3Writer):
         section = e.get('section')
         relative = e.get('relative')
         t, content = self.build_derived_content(e)
+        is_toc = p.get('pn', '').startswith('section-toc')
         if not (section or relative):
             attr = e.get('derivedContent')
             if self.options.verbose and attr and attr != content:
                 self.err(e, "When processing <xref>, found derivedContent='%s' when trying to set it to '%s'" % (attr, content))
-            e.set('derivedContent', content)
+            if not is_toc:
+                e.set('derivedContent', content)
         else:
             if relative != None and section is None:
                 self.err(e, "Cannot render an <%s> with a relative= attribute without also having a section= attribute." % (e.tag))
