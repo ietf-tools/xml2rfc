@@ -1,3 +1,64 @@
+xml2rfc (2.38.0) ietf; urgency=medium
+
+  * Tweaked the preptool handling of <xref> in <toc>.  Further addresses
+    issue #466, fixing an issue that could occur if a section used for
+    instance <sub> or <sup>.
+
+  * Fixed an off-by-one error in list indexing during text wrapping of
+    first page header content.  Fixes issue #483.
+
+  * Tweaked the output for <xref format='title'> when refering to Reference 
+    entries.
+
+  * Fixed a Py2/Py3 code compatibility issue
+
+  * Tweaked the handling of <artwork type='ascii-art'> to insert '(Artwork 
+    only available as ...)' text also for text content which is only whitespace.
+
+  * Changed utils.isblock() to use a list of element tags derived from the 
+    schema instead of a static list, to avoid discrepancies between schema
+    and code.
+
+  * Changed the parser's handling of inter-element blank text to keep instead 
+    of remove, in order to not drop intentional blank space between for 
+    instance <xref> instances.
+
+  * Reverted the silencing of warnings related to postal address input.  
+    Addresses issue #437.
+
+  * Added code to deal better with <iref> as a direct child of <section>.  
+    Fixes issue #479.
+
+  * Fixed a bug where text after <iref> was lost by the text formatter.  
+    Fixes issue #480
+
+  * Added an option to list recognised country names for use with 
+    <country>, and changed the note() emitted for unrecognized countries to a 
+    warning.  Added some new alternative country strings.
+
+  * Updated test masters
+
+  * Fixed a problem with <author> entries with only <organization> 
+    information.  Fixes issue #424.
+
+  * Added a minimum width setting for tables, in order to avoid table 
+    captions rendering in very narrow space when the table itself is narrow.  
+    Fixes issue #482.
+
+  * Avoid double space after initial when <contact> is rendered inline.  
+    Fixes issue #478.
+
+  * Added code to recognise another case of inconsistent table row cell 
+    counts and report the issue.
+
+  * Added 'P.R. China' as a recognized country name.
+
+  * From Python 3.2 and later, cgi.encode() is deprecated.  Changed to use
+    html.encode() instead.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  14 Jan 2020 10:34:43 -0800
+
+
 xml2rfc (2.37.3) ietf; urgency=medium
 
   * Undid margin-left: 0 for <dd> from the original supplied CSS, which
