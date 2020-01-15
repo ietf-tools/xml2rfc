@@ -1910,11 +1910,11 @@ class TextWriter(BaseV3Writer):
             #    force an unacceptable reordering of author names.
             right = []
             auth = namedtuple('author', ['name', 'org'])
-            prev = auth(None, None)
+            prev = auth(None, '')
             authors = front.xpath('./author')
             for a in authors:
                 this = auth(*self.render_author_front(a, **kwargs))
-                if right and this.name and this.org!='' and this.org == prev.org:
+                if right and this.name and this.org and this.org == prev.org:
                     right[-1] = this.name
                     right.append(this.org or '')
                 else:
@@ -1924,7 +1924,7 @@ class TextWriter(BaseV3Writer):
                         right.append(this.org)
                 prev = this
             # We don't need show a trailing blank line if the last author has a blank organization
-            if not prev.org:
+            if prev.org == '':
                 right = right[:-1]
             right.append(self.render_date(front.find('./date'), width, **kwargs))
             return right
