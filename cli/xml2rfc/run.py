@@ -185,8 +185,10 @@ def main():
                            ' spacing, but omit headers and footers from the paginated format')
     textoptions.add_option('--legacy-list-symbols', default=False, action='store_true',
                            help='use the legacy list bullet symbols, rather than the new ones.')
-    textoptions.add_option('--legacy-date-format', default=False, action='store_true',
+    textoptions.add_option('--legacy-date-format', default=False, action='store_true', # XXX change to True in version 3.x
                            help='use the legacy date format, rather than the new one.')
+    textoptions.add_option('--no-legacy-date-format', dest='legacy_date_format', action='store_false',
+                           help="don't use the legacy date format.")
     textoptions.add_option('--list-symbols', metavar='4*CHAR',
                            help='use the characters given as list bullet symbols.')
     textoptions.add_option('--bom', '--BOM', action='store_true', default=False,
@@ -200,6 +202,12 @@ def main():
                            help='Use the given CSS file instead of the builtin')
     htmloptions.add_option('--external-css', action='store_true', default=False,
                            help='place css in external files')
+    htmloptions.add_option('--no-external-css', dest='external_css', action='store_false',
+                           help='place css in external files')
+    htmloptions.add_option('--external-js', action='store_true', default=True, # XXX change to False in version 3.x
+                           help='place js in external files')
+    htmloptions.add_option('--no-external-js', dest='external_js', action='store_false',
+                           help='place js in external files')
     htmloptions.add_option('--rfc-base-url', default="https://www.rfc-editor.org/rfc/",
                            help='Base URL for RFC links')
     htmloptions.add_option('--id-base-url', default="https://tools.ietf.org/html/",

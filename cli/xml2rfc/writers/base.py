@@ -46,6 +46,7 @@ default_options = Values(defaults={
         'dtd': None,
         'expand': False,
         'external_css': False,
+        'external_js': True,            # Change to False in 3.x
         'filename': None,
         'first_page_author_org': True,
         'html': False,
@@ -56,7 +57,7 @@ default_options = Values(defaults={
         'indent': 2,
         'info': False,
         'legacy': True,
-        'legacy_date_format': False,
+        'legacy_date_format': False,    # Change to True in 3.x
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
         'metadata_js_url': 'metadata.min.js',
