@@ -216,7 +216,8 @@ class HtmlWriter(BaseV3Writer):
         self.anchor_tags = self.get_tags_with_anchor()
         self.duplicate_html_ids = set()
         self.filename = None
-
+        self.refname_mapping = self.get_refname_mapping()
+            
     def get_tags_with_anchor(self):
         anchor_nodes = self.schema.xpath("//x:define/x:element//x:attribute[@name='anchor']", namespaces=namespaces)
         element_nodes = set()
@@ -2013,13 +2014,11 @@ class HtmlWriter(BaseV3Writer):
             div = add.div(h, x, classes='refInstance')
             outer = div
             inner = div
-        elif p.tag != 'referencegroup':
+        else:
             dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
             dd = add.dd(h, None)
             outer = dt, dd
             inner = dd
-        else:
-            self.err(x, "Did not expect to be asked to render <%s> while in <%s>" % (x.tag, x.getparent().tag))
         # Deal with parts in the correct order
         for c in x.iterdescendants('author'):
             self.render(inner, c)

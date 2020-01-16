@@ -292,11 +292,9 @@ class PrepToolWriter(BaseV3Writer):
         except etree.XIncludeError as e:
             self.die(None, "XInclude processing failed: %s" % e)
 
-        # Set up reference mapping for later use.
-        # The setup done in BaseV3Writer is not complete, as it didn't cover
-        # any references pulled in by the XInclude we just did.
-        self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in (self.root.xpath('.//reference') + self.root.xpath('.//referencegroup')) ))
-        self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
+        # Set up reference mapping for later use.  Done here, and not earlier,
+        # to capture any references pulled in by the XInclude we just did.
+        self.refname_mapping = self.get_refname_mapping()
 
         # Check for duplicate <displayreference> 'to' values:
         seen = {}

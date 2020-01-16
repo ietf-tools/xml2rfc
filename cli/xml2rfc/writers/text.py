@@ -261,6 +261,7 @@ class TextWriter(BaseV3Writer):
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
         super(TextWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         self.options.min_section_start_lines = 5
+        self.refname_mapping = self.get_refname_mapping()
 
     def write(self, filename):
         """Write the document to a file """
@@ -2630,8 +2631,11 @@ class TextWriter(BaseV3Writer):
     def render_reference(self, e, width, **kwargs):
         # rendering order: authors, title, seriesInfo, date, target, annotation
         p = e.getparent()
-        label = self.refname_mapping[e.get('anchor')]
-        label = ('[%s]' % label).ljust(11)
+        if p.tag == 'referencegroup':
+            label = ''
+        else:
+            label = self.refname_mapping[e.get('anchor')]
+            label = ('[%s]' % label).ljust(11)
         # ensure the desired ordering
         elements = []
         for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date',):
@@ -2661,9 +2665,7 @@ class TextWriter(BaseV3Writer):
         text = fill(text, width=width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip()
 
         text = indent(text, 11, 0)
-        if p.tag == 'referencegroup':
-            label = ''
-        else:
+        if p.tag != 'referencegroup':
             if len(label.strip()) > 10:
                 label += '\n'
             else:

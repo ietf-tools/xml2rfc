@@ -1673,10 +1673,8 @@ class BaseV3Writer(object):
         self.inline_tags = set(inline_tags)
         self.mixed_tags = set(mixed_tags)
         self.xref_tags = set(xref_tags)
-        self.refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//reference') )
-        self.refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
-        self.refname_mapping.update(dict( (e.get('anchor'), e.get('anchor')) for e in self.root.xpath('.//referencegroup') ))
         self.attribute_defaults = self.get_all_attribute_defaults()
+        #
         #
         self.errors = []
 #         if options.debug:
@@ -1770,6 +1768,15 @@ class BaseV3Writer(object):
         msg = self.msg(e, 'Error:', text)
         self.errors.append(msg)
         raise RfcWriterError(msg)
+
+    def get_refname_mapping(self):
+        reflist = self.root.xpath('.//references/reference|.//references/referencegroup')
+        if self.root.get('symRefs', 'true') == 'true':
+            refname_mapping = dict( (e.get('anchor'), e.get('anchor')) for e in reflist )
+        else:
+            refname_mapping = (dict( (e.get('anchor'), str(i+1)) for i,e in enumerate(reflist) ))
+        refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
+        return refname_mapping
 
     def get_all_attribute_defaults(self):
         defaults = {}
