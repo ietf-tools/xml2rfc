@@ -54,6 +54,7 @@ RUN apt-get install -qy \
 	gcc \
 	gnupg2 \
 	groff \
+        html2text \
 	host \
 	ipython \
 	less \
@@ -140,39 +141,51 @@ RUN pip install dict2xml pypdf2 'weasyprint<=0.42.3' 'pycairo>=1.18'
 
 # Python 3.5
 WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.5.7/Python-3.5.7.tar.xz
-RUN tar xJf Python-3.5.7.tar.xz
-RUN rm Python-3.5.7.tar.xz
-WORKDIR /usr/src/Python-3.5.7/
+RUN wget -q https://www.python.org/ftp/python/3.5.9/Python-3.5.9.tar.xz
+RUN tar xJf Python-3.5.9.tar.xz
+RUN rm Python-3.5.9.tar.xz
+WORKDIR /usr/src/Python-3.5.9/
 RUN ./configure
 RUN make
 RUN make altinstall
 WORKDIR /usr/src
-RUN rm -rf /usr/src/Python-3.5.7/
+RUN rm -rf /usr/src/Python-3.5.9/
 
 # Python 3.6
 WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tar.xz
-RUN tar xJf Python-3.6.9.tar.xz
-RUN rm Python-3.6.9.tar.xz
-WORKDIR /usr/src/Python-3.6.9/
+RUN wget -q https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz
+RUN tar xJf Python-3.6.10.tar.xz
+RUN rm Python-3.6.10.tar.xz
+WORKDIR /usr/src/Python-3.6.10/
 RUN ./configure
 RUN make
 RUN make altinstall
 WORKDIR /usr/src
-RUN rm -rf /usr/src/Python-3.6.9/
+RUN rm -rf /usr/src/Python-3.6.10/
 
 # Python 3.7
 WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tar.xz
-RUN tar xJf Python-3.7.4.tar.xz
-RUN rm Python-3.7.4.tar.xz
-WORKDIR /usr/src/Python-3.7.4/
+RUN wget -q https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz
+RUN tar xJf Python-3.7.6.tar.xz
+RUN rm Python-3.7.6.tar.xz
+WORKDIR /usr/src/Python-3.7.6/
 RUN ./configure
 RUN make
 RUN make altinstall
 WORKDIR /usr/src/
-RUN rm -rf /usr/src/Python-3.7.4/
+RUN rm -rf /usr/src/Python-3.7.6/
+
+# Python 3.8
+WORKDIR /usr/src
+RUN wget -q https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz
+RUN tar xJf Python-3.8.1.tar.xz
+RUN rm Python-3.8.1.tar.xz
+WORKDIR /usr/src/Python-3.8.1/
+RUN ./configure
+RUN make
+RUN make altinstall
+WORKDIR /usr/src/
+RUN rm -rf /usr/src/Python-3.8.1/
 
 ENV DDIR="/usr/local/share/xml2rfc"
 RUN mkdir -p $DDIR
