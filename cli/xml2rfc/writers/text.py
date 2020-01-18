@@ -2759,8 +2759,11 @@ class TextWriter(BaseV3Writer):
         })
         lines = []
         if e.find('name') != None:
-            pn = e.get('pn')
-            text = pn.split('-',1)[1].replace('-', ' ').title() +'.'
+            if self.check_refs_numbered():
+                pn = e.get('pn')
+                text = pn.split('-',1)[1].replace('-', ' ').title() +'.'
+            else:
+                text = ''
             lines += mklines(self.tjoin(text, e[0], width, **kwargs), e)
         for c in e[1:]:
             lines = self.ljoin(lines, c, width, **kwargs)

@@ -198,6 +198,7 @@ class PrepToolWriter(BaseV3Writer):
 
         selectors = [
             './/keyword',                       # 2.28.   Keyword
+            '.;check_unnumbered_sections()',    # 2.46.2  "numbered" Attribute
                                                 # 5.1.1.  XInclude Processing
                                                 # 5.1.2.  DTD Removal
             '//processing-instruction();removal()',       # 5.1.3.  Processing Instruction Removal
@@ -373,6 +374,32 @@ class PrepToolWriter(BaseV3Writer):
 #         if ',' in e.text or ' ' in e.text:
 #             self.warn(e, "Expected a single keyword in the <keyword/> element, but found '%s'" % (e.text, ))
         pass
+
+    # ----------------------------------------------------------------
+    # 2.46.2.  "numbered" Attribute
+    # 
+    #    If set to "false", the formatter is requested to not display a
+    #    section number.  The prep tool will verify that such a section is not
+    #    followed by a numbered section in this part of the document and will
+    #    verify that the section is a top-level section.
+    def check_unnumbered_sections(self, e, p):
+        def check_child_sections(e, unnumbered_parent=None):
+            unnumbered_seen = None
+            for s in e.iterchildren('section'):
+                numbered = s.get('numbered', 'true')
+                if   numbered == 'false':
+                    unnumbered_seen = s
+                elif unnumbered_parent != None:
+                    self.err(s, "Did not expect a numbered section under an unnumbered parent section (seen on line %s)" % unnumbered_parent.sourceline)
+                elif numbered == 'true':
+                    if unnumbered_seen != None:
+                        self.err(s, "Did not expect a numbered section after an unnumbered section (seen on line %s)" % unnumbered_seen.sourceline)
+                check_child_sections(s, unnumbered_parent=(s if numbered=='false' else None))
+        # 
+        for tag in ['front', 'middle', 'back' ]:
+            e = self.root.find(tag)
+            if e != None:
+                check_child_sections(e)
 
     # ----------------------------------------------------------------
 
@@ -1963,7 +1990,7 @@ class PrepToolWriter(BaseV3Writer):
             name = s.find('./name')
             if name is None:
                 self.die(s, "No name entry found for section, can't continue: %s" % (etree.tostring(s)))
-            numbered = s.get('numbered')=='true' or s.tag=='references'
+            numbered = s.get('numbered')=='true' or (self.check_refs_numbered() if s.tag == 'references' else False)
             if not s.get('pn'):
                 self.warn(s, "Expected a pn number, found none in <%s>" % (s.tag, ))
             num = s.get('pn','unknown-unknown').split('-', 1)[1].replace('-', ' ').title() if numbered else ''

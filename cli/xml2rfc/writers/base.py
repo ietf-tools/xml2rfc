@@ -1786,6 +1786,14 @@ class BaseV3Writer(object):
             defaults[tag] = dict( (a.get('name'), a.get("{%s}defaultValue"%namespaces['a'], None)) for a in attr )
         return defaults
 
+    def check_refs_numbered(self):
+        # see if references should be numbered.  This is True unless the last
+        # top-level section of <middle/> had numbered='false'.
+        if not hasattr(self, '_refs_numbered'):
+            last_middle_section = ([None, ] + list(self.root.find('middle').iterchildren('section')))[-1]
+            self._refs_numbered = last_middle_section.get('numbered', 'true') == 'true'
+        return self._refs_numbered
+
     # methods operating on the xml tree
 
     def get_element_from_id(self, id):
