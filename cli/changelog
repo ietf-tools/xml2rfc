@@ -1,3 +1,29 @@
+xml2rfc (2.38.1) ietf; urgency=medium
+
+  * Added a preptool check for numbered sections occurring after or under
+    unnumbered sections, and changed the code for Reference sections to
+    not emit section numbers if the previous section was unnumbered.  
+    Fixes issue #433
+
+  * Refactored the code for reference anchor to display string mapping,
+    locating it in a base class method.  Updated it to honour the symRefs
+    setting.  Fixes issue #476.
+
+  * Added installation of Python 3.8 to Dockerfile, and updated the minor
+    version numbers for the other Python installation stanzas.
+
+  * Fixed a problem rendering multiple authors with organization 
+    showOnFrontPage='false'.  Further addresses issue #483.
+
+  * Added a switch --no-external-js, and some other --no-* switches to 
+    invert boolean settings.  Fixes issue #486.
+
+  * Added an early return from cache() when repeated attempts to fetch an 
+    URL fails.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  20 Jan 2020 07:30:55 -0800
+
+
 xml2rfc (2.38.0) ietf; urgency=medium
 
   * Tweaked the preptool handling of <xref> in <toc>.  Further addresses
