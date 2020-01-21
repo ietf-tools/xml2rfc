@@ -37,7 +37,7 @@ from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.boilerplate_tlp import boilerplate_tlp
 from xml2rfc.scripts import get_scripts
 from xml2rfc.uniscripts import is_script
-from xml2rfc.util.date import extract_date, augment_date, format_date, normalize_month
+from xml2rfc.util.date import get_expiry_date, format_date, normalize_month
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import ( unicode_content_tags, unicode_attributes, bare_unicode_tags,
@@ -1118,9 +1118,7 @@ class PrepToolWriter(BaseV3Writer):
                     self.die(self.root, 'Unexpected attribute combination(%s): <rfc submissionType="%s" category="%s" consensus="%s">' % (exception, stream, category, consensus))
 
         else:
-            year, month, day = extract_date(self.root.find('./front/date'), self.date)
-            year, month, day = augment_date(year, month, day, self.date)
-            exp = datetime.date(year=year, month=month, day=day) + datetime.timedelta(days=185)
+            exp = get_expiry_date(self.tree, self.date)
             format_dict['expiration_date'] = format_date(exp.year, exp.month, exp.day, legacy=self.options.legacy_date_format)
             for para in boilerplate_draft_status_of_memo:
                 para = para.format(**format_dict).strip()
