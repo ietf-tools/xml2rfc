@@ -276,6 +276,7 @@ class V2v3XmlWriter(BaseV3Writer):
                                             # 2.5.9.  "xml:space" Attribute
             './/back',
             './/code',
+            './/date',
             # We need to process preamble and postamble before figure,
             # because artwork or sourcecode within a figure could later be
             # promoted and the figure discarded.
@@ -501,6 +502,12 @@ class V2v3XmlWriter(BaseV3Writer):
             cc, num = e.text.split('-', 1)
             if cc in ['AX', 'CH', 'FI', 'HR', 'FL', 'LT', 'L', 'MC', 'MD', 'SE', 'SI', ]:
                 e.text = num
+
+    def element_date(self, e, p):
+        year = e.get('year')
+        if year and not year.isdigit():
+            del e.attrib['year']
+            e.text = year
 
     # 2.25.  <figure>
     # 
