@@ -510,7 +510,10 @@ class XmlRfcParser:
         # xml root element in lxml: Insert it before we parse:
         text = self.text
         if add_xmlns and not self.nsmap[b'xi'] in text:
-            text = text.replace(b'<rfc ', b'<rfc xmlns:%s="%s" ' % (b'xi', self.nsmap[b'xi']), 1)
+            if re.search(b"""<rfc[^>]*(?P<xi>xmlns:xi=['"][^'"]+['"])""", text):
+                xml2rfc.log.error('Namespace prefix "xi" is defined, but not as the XInclude namespace "%s".' % self.nsmap[b'xi'])
+            else:
+                text = text.replace(b'<rfc ', b'<rfc xmlns:%s="%s" ' % (b'xi', self.nsmap[b'xi']), 1)
 
         # Get an iterating parser object
         file = six.BytesIO(text)
