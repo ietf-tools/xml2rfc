@@ -29,6 +29,17 @@ except ImportError:
     pass
 
 
+def get_missing_pdf_libs():
+    missing = ""
+    if not xml2rfc.HAVE_WEASYPRINT:
+        missing += "\nCould not import weasyprint"
+    if not xml2rfc.HAVE_PYCAIRO:
+        missing += "\nCould not import pycairo"
+    if not xml2rfc.HAVE_CAIRO:
+        missing += "\nCould not find the cairo lib"
+    if not xml2rfc.HAVE_PANGO:
+        missing += "\nCould not find the pango lib"
+    return missing
 
 def display_version(self, opt, value, parser):
     print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
@@ -67,6 +78,55 @@ def print_country_help(self, opt, value, parser):
     ids.sort()
     print('Known country codes and country names for use with <country>:\n')
     print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])).encode('utf-8'))
+    sys.exit()
+
+def get_pdf_help(missing_libs=""):
+    pdf_requirements_info = """
+    In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
+    depends on external libaries that must be installed as native packages.
+
+    1. First, install the Cairo, Pango, and GDK-PixBuf library files on your
+    system.  See installation instructions on the WeasyPrint Docs:
+    
+        https://weasyprint.readthedocs.io/en/stable/install.html
+
+    (Python 3 is not needed if your system Python is 2.7, though).
+
+
+    2. Next, install the pycairo and weasyprint python modules using pip.
+    Depending on your system, you may need to use 'sudo' or install in
+    user-specific directories, using the --user switch.  On OS X in
+    particular, you may also need to install a newer version of setuptools
+    using --user before weasyprint can be installed.  If you install with 
+    the --user switch, you may need to also set PYTHONPATH, e.g.,
+    
+        PYTHONPATH=/Users/username/Library/Python/2.7/lib/python/site-packages
+
+    for Python 2.7.
+
+    The basic pip commands (modify as needed according to the text above)
+    are:
+
+        pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
+
+
+    3. Finally, install the full Noto Font package:
+
+       * Download the full font file from:
+         https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
+         or follow the 'DOWNLOAD ALL FONTS' link on this page:
+         https://www.google.com/get/noto/
+
+       * Follow the installation instructions at
+         https://www.google.com/get/noto/help/install/
+    
+    With these libraries, modules, and fonts installed and available to
+    xml2rfc, the --pdf switch will be enabled.
+    """
+    return pdf_requirements_info + missing_libs
+
+def print_pdf_help(self, opt, value, parser):
+    print(get_pdf_help())
     sys.exit()
 
 def extract_anchor_info(xml):
@@ -121,15 +181,17 @@ def main():
     optionparser.add_option_group(formatgroup)
 
 
-    plain_options = optparse.OptionGroup(optionparser, 'Plain Options')
+    plain_options = optparse.OptionGroup(optionparser, 'Generic Options')
     plain_options.add_option('-C', '--clear-cache', action='store_true', default=False,
                             help='purge the cache and exit')
     plain_options.add_option(      '--debug', action='store_true',
                             help='Show debugging output')
-    plain_options.add_option('--pi-help', action='callback', callback=print_pi_help,
-                            help='show the names and default values of PIs')
     plain_options.add_option('--country-help', action='callback', callback=print_country_help,
                             help='show the recognized <country> strings')
+    plain_options.add_option('--pdf-help', action='callback', callback=print_pdf_help,
+                            help='show pdf generation requirements')
+    plain_options.add_option('--pi-help', action='callback', callback=print_pi_help,
+                            help='show the names and default values of PIs')
     plain_options.add_option('-n', '--no-dtd', action='store_true',
                             help='disable DTD validation step')
     plain_options.add_option('-N', '--no-network', action='store_true', default=False,
@@ -140,8 +202,6 @@ def main():
                             help="don't print anything")
     plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
                             help='Remove XML processing instructions')
-    plain_options.add_option('-s', '--silence', action='append', type="string", 
-                            help="Silence any warning beginning with the given string")
     plain_options.add_option('-u', '--utf8', action='store_true',
                             help='generate utf8 output')
     plain_options.add_option('-v', '--verbose', action='store_true',
@@ -151,7 +211,7 @@ def main():
     optionparser.add_option_group(plain_options)
 
 
-    value_options = optparse.OptionGroup(optionparser, 'Other Options')
+    value_options = optparse.OptionGroup(optionparser, 'Generic Options with Values')
     value_options.add_option('-b', '--basename', dest='basename', metavar='NAME',
                             help='specify the base name for output files')
     value_options.add_option('-c', '--cache', dest='cache',
@@ -168,6 +228,8 @@ def main():
                             help='specify an explicit output filename')
     value_options.add_option('-p', '--path', dest='output_path', metavar='PATH',
                             help='specify the directory path for output files')
+    value_options.add_option('-s', '--silence', action='append', type="string", 
+                            help="Silence any warning beginning with the given string")
     optionparser.add_option_group(value_options)
 
     formatoptions = optparse.OptionGroup(optionparser, 'Format Options')
@@ -286,65 +348,14 @@ def main():
         optionparser.print_help()
         sys.exit(2)
 
-    install_info = """
-    Cannot generate PDF due to missing external libraries.
+    if options.pdf:
+        header = """    Cannot generate PDF due to missing external libraries.
     ------------------------------------------------------
-    
-    In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
-    depends on external libaries that must be installed as native packages.
-
-    1. First, install the Cairo, Pango, and GDK-PixBuf library files on your
-    system.  See installation instructions on the WeasyPrint Docs:
-    
-        https://weasyprint.readthedocs.io/en/stable/install.html
-
-    (Python 3 is not needed if your system Python is 2.7, though).
-
-
-    2. Next, install the pycairo and weasyprint python modules using pip.
-    Depending on your system, you may need to use 'sudo' or install in
-    user-specific directories, using the --user switch.  On OS X in
-    particular, you may also need to install a newer version of setuptools
-    using --user before weasyprint can be installed.  If you install with 
-    the --user switch, you may need to also set PYTHONPATH, e.g.,
-    
-        PYTHONPATH=/Users/username/Library/Python/2.7/lib/python/site-packages
-
-    for Python 2.7.
-
-    The basic pip commands (modify as needed according to the text above)
-    are:
-
-        pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
-
-
-    3. Finally, install the full Noto Font package:
-
-       * Download the full font file from:
-         https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
-         or follow the 'DOWNLOAD ALL FONTS' link on this page:
-         https://www.google.com/get/noto/
-
-       * Follow the installation instructions at
-         https://www.google.com/get/noto/help/install/
-    
-    With these libraries, modules, and fonts installed and available to
-    xml2rfc, the --pdf switch will be enabled.
     """
-
-    missing = ""
-    if options.pdf and not xml2rfc.HAVE_WEASYPRINT:
-        missing += "\nCould not import weasyprint"
-    if options.pdf and not xml2rfc.HAVE_PYCAIRO:
-        missing += "\nCould not import pycairo"
-    if options.pdf and not xml2rfc.HAVE_CAIRO:
-        missing += "\nCould not find the cairo lib"
-    if options.pdf and not xml2rfc.HAVE_PANGO:
-        missing += "\nCould not find the pango lib"
-
-    if missing:
-        install_info += missing + '\n'
-        sys.exit(install_info)
+        missing_libs = get_missing_pdf_libs()
+        if missing_libs:
+            pdf_requirements_info = get_pdf_help(missing_libs)
+            sys.exit(header+pdf_requirements_info)
 
     source = args[0]
     if not os.path.exists(source):
