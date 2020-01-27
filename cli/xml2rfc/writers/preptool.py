@@ -1585,7 +1585,8 @@ class PrepToolWriter(BaseV3Writer):
                 content = num
         elif format == 'default':
             if   t.tag in [ 'reference', 'referencegroup' ]:
-                content = '%s' % self.refname_mapping[t.get('anchor')]
+                anchor = t.get('anchor')
+                content = '%s' % self.refname_mapping[anchor] if anchor in self.refname_mapping else anchor
             elif t.tag in [ 't', 'ul', 'ol', 'dl', ]:
                 type, num, para = pn.split('-', 2)
                 content = "%s %s, Paragraph %s" % (type.capitalize(), num.title(), para)
