@@ -232,7 +232,7 @@ def main():
                             help="Silence any warning beginning with the given string")
     optionparser.add_option_group(value_options)
 
-    formatoptions = optparse.OptionGroup(optionparser, 'Format Options')
+    formatoptions = optparse.OptionGroup(optionparser, 'Generic Format Options')
     formatoptions.add_option('--v3', dest='legacy', action='store_false',
                            help='with --text and --html: use the v3 formatter, rather than the legacy one.')
     formatoptions.add_option('--legacy', default=True, action='store_true',
