@@ -4010,7 +4010,10 @@ class TextWriter(BaseV3Writer):
     def render_table(self, e, width, **kwargs):
         kwargs['joiners'].update({
             'name':     Joiner('', ': ', '', 0, 0),
+            'dl':       Joiner('', '\n\n', '', 0, 0),
+            'ol':       Joiner('', '\n\n', '', 0, 0),
             't':        Joiner('', '\n\n', '', 0, 0),
+            'ul':       Joiner('', '\n\n', '', 0, 0),
         })
         #
         pn = e.get('pn')
