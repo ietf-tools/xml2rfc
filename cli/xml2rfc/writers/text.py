@@ -1745,7 +1745,7 @@ class TextWriter(BaseV3Writer):
             line = '%s%s%s' % (label, items, suffix)
             ll = len(left)
             lr = len(right)
-            width = 48 if ll > lr else min(48, 72-3-len(right[ll-1]))
+            width = 48 if ll >= lr else min(48, 72-3-len(right[ll]))
             wrapper = textwrap.TextWrapper(width=width, subsequent_indent=' '*len(label))
             return wrapper.wrap(line)
         #
