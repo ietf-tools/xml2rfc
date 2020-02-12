@@ -55,6 +55,11 @@ bare_unicode_tags = set([
     'u',
     ])
 
+bare_latin_tags = set([
+    'organization',
+    ])
+
+
 for t in bare_unicode_tags:
     assert t in unicode_content_tags
 

@@ -21,10 +21,11 @@ except ImportError:
     pass
 
 from xml2rfc import strings, log
+from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
 from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_content_tags, bare_unicode_tags,
-    unicode_attributes, downcode, downcode_punctuation)
+    bare_latin_tags, unicode_attributes, downcode, downcode_punctuation)
 from xml2rfc.utils import namespaces, find_duplicate_ids
 
 default_silenced_messages = [
@@ -1888,6 +1889,8 @@ class BaseV3Writer(object):
                     except UnicodeEncodeError:
                         e.text = downcode(e.text, replacements=replacements)
                 elif e.tag in bare_unicode_tags:
+                    pass
+                elif e.tag in bare_latin_tags and is_script(e.text, 'Latin'):
                     pass
                 elif not e.get('ascii'):
                     try:
