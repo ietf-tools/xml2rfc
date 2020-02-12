@@ -2011,6 +2011,12 @@ class BaseV3Writer(object):
                     path = getattr(error, 'path', '')
                     msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, path)
                     self.log(msg)
+                    if error.message.startswith("Did not expect text"):
+                        items = self.tree.xpath(error.path + '/text()')
+                        for item in items:
+                            if item.strip():
+                                self.log("  Unexpected text:\n    %s" % item.strip())
+
             else:
                 log.warn('\nInvalid document: %s' % (e,))
             if warn:
