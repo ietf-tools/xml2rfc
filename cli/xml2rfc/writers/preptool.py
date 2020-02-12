@@ -189,6 +189,19 @@ class PrepToolWriter(BaseV3Writer):
         if not self.options.quiet:
             self.log(' Created file %s' % filename)
 
+    def normalize_whitespace(self, e):
+        lines = e.text.split('\n')
+        for i, line in enumerate(lines):
+            # This strips unnecessary whitespace, and also works around an issue in
+            # WeasyPrint where trailing whitespace in artwork can trigger something
+            # akin to line wrapping even if rendered in <pre>: 
+            line = line.rstrip()
+            if '\t' in line:
+                self.warn(e, "Found tab on line %d of <%s>: \n   %s" % (e.tag, i+1, line))
+                line = line.expandtabs()                    
+            lines[i] = line
+        e.text = '\n'.join(lines)
+
     def prep(self):
 
         ## Selector notation: Some selectors below have a handler annotation,
@@ -1883,11 +1896,8 @@ class PrepToolWriter(BaseV3Writer):
                 if src and not data:
                     self.warn(e, "No image data found in source %s" % src)
 
-            if awtype == 'ascii-art' and '\t' in e.text:
-                for i, line in enumerate(e.text.splitlines()):
-                    if '\t' in line:
-                        self.warn(e, "Found tab on line %d of <artwork>: \n   %s" % (i+1, line))
-                e.text = e.text.expandtabs()
+            if awtype == 'ascii-art':
+                self.normalize_whitespace(e)
 
     # 5.5.2.  <sourcecode> Processing
 
@@ -1944,11 +1954,7 @@ class PrepToolWriter(BaseV3Writer):
                 e.text = data
                 del e.attrib['src']
 
-        if '\t' in e.text:
-            for i, line in enumerate(e.text.splitlines()):
-                if '\t' in line:
-                    self.warn(e, "Found tab on line %d of <sourcecode>: \n   %s" % (i+1, line))
-            e.text = e.text.expandtabs()
+        self.normalize_whitespace(e)
         
     #
     # 5.4.2.4  "Table of Contents" Insertion
