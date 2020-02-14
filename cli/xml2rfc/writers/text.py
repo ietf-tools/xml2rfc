@@ -85,7 +85,7 @@ def set_joiners(kwargs, update):
 
 def indent(text, indent=3, hang=0):
     lines = []
-    for l in text.splitlines():
+    for l in text.split('\n'):
         if l.strip():
             if lines:
                 lines.append(' '*(indent+hang) + l)
@@ -123,7 +123,7 @@ def center(text, width, **kwargs):
     "Fold and center the given text"
     # avoid centered text extending all the way to the margins
     kwargs['width'] = width-4
-    lines = text.splitlines()
+    lines = text.split('\n')
     if max([ len(l) for l in lines ]+[0]) > width:
         # need to reflow
         lines = wrapper.wrap(text, **kwargs)
@@ -215,7 +215,7 @@ def expand_ellipsis(text, width):
         head += ' '
         if tail != '0000':
             tail = '%4s' % tail.lstrip('0')     # strip leading zeros
-        last = head.splitlines()[-1]
+        last = head.split('\n')[-1]
         lack = width - (len(last) + len(tail))
         elip = (' .'*40)[-lack:]
         text = head + elip + tail
@@ -270,6 +270,7 @@ class TextWriter(BaseV3Writer):
         if self.options.pagination:
             self.add_pageno_placeholders()
         lines = self.render(self.root, width=72, joiners=joiners)
+
         if self.options.pagination:
             lines = findblocks(lines)
             lines = self.paginate(lines)
@@ -288,6 +289,7 @@ class TextWriter(BaseV3Writer):
                 self.warn(l.elem, "Too long line found (L%s), %s characters longer than 72 characters: \n%s" %(i+1, length-72, l.text))
                 
         text = ('\n'.join( l.text for l in lines )).rstrip() + '\n'
+
         # Replace some code points whose utility has ended
         text = text.replace(u'\u00A0', u' ')
         text = text.replace(u'\u2011', u'-')
@@ -746,7 +748,7 @@ class TextWriter(BaseV3Writer):
         msg  = fill(msg, width=width, **kwargs)
         text = (e.text.strip() and e.text.expandtabs()) or msg
         text = text.strip('\n')
-        text = '\n'.join( [ l.rstrip() for l in text.splitlines() ] )
+        text = '\n'.join( [ l.rstrip() for l in text.split('\n') ] )
         lines = [ Line(t, e) for t in text.splitlines() ]
         lines = align(lines, e.get('align', 'left'), width)
         return lines 
@@ -2973,6 +2975,8 @@ class TextWriter(BaseV3Writer):
         self.part = e.tag
         lines = []
         for c in e.getchildren():
+            if c.tag in (etree.PI, etree.Comment):
+                continue
             self.part = c.tag
             lines = self.ljoin(lines, c, width, **kwargs)
         return lines
