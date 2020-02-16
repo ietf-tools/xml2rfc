@@ -813,7 +813,10 @@ class HtmlWriter(BaseV3Writer):
                 self.err(x, 'Expected ascii-art artwork for <artwork type="%s">, but found %s...' % (x.get('type',''), lxml.etree.tostring(x)[:128]))
                 return None
             else:
-                pre = build.pre(x.text.expandtabs())
+                text = x.text + ''.join([ c.tail for c in x.getchildren() ])
+                text = text.expandtabs()
+                text = '\n'.join( [ l.rstrip() for l in text.split('\n') ] )
+                pre = build.pre(text)
                 classes = 'artwork art-text align%s' % align.capitalize()
                 if type and type != 'text':
                     classes += ' art-%s' % type

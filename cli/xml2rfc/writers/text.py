@@ -746,9 +746,15 @@ class TextWriter(BaseV3Writer):
                     % ( e.get('type', '(unknown type)'),
                         e.get('originalSrc') or e.get('src') or 'No external link available, see %s.html for artwork.'%self.root.get('docName')))
         msg  = fill(msg, width=width, **kwargs)
-        text = (e.text.strip() and e.text.expandtabs()) or msg
+#        text = (e.text.strip() and e.text.expandtabs()) or msg
+#         text = text.strip('\n')
+#         text = '\n'.join( [ l.rstrip() for l in text.split('\n') ] )
+        # We need this in order to deal with xml comments inside artwork:
+        text = e.text + ''.join([ c.tail for c in e.getchildren() ])
         text = text.strip('\n')
+        text = (text.strip() and text.expandtabs()) or msg
         text = '\n'.join( [ l.rstrip() for l in text.split('\n') ] )
+        #
         lines = [ Line(t, e) for t in text.splitlines() ]
         lines = align(lines, e.get('align', 'left'), width)
         return lines 
