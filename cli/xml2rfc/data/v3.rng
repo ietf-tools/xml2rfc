@@ -192,7 +192,12 @@
       <optional>
         <attribute name="ascii"/>
       </optional>
-      <text/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="br"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="author">
@@ -793,6 +798,7 @@
         <choice>
           <text/>
           <ref name="bcp14"/>
+          <ref name="br"/>
           <ref name="cref"/>
           <ref name="em"/>
           <ref name="eref"/>
@@ -805,6 +811,17 @@
           <ref name="xref"/>
         </choice>
       </zeroOrMore>
+    </element>
+  </define>
+  <define name="br">
+    <element name="br">
+      <optional>
+        <attribute name="xml:base"/>
+      </optional>
+      <optional>
+        <attribute name="xml:lang"/>
+      </optional>
+      <empty/>
     </element>
   </define>
   <define name="t">
@@ -848,6 +865,7 @@
         <choice>
           <text/>
           <ref name="bcp14"/>
+          <ref name="br"/>
           <ref name="contact"/>
           <ref name="cref"/>
           <ref name="em"/>
@@ -941,6 +959,7 @@
           <choice>
             <text/>
             <ref name="bcp14"/>
+            <ref name="br"/>
             <ref name="cref"/>
             <ref name="em"/>
             <ref name="eref"/>
@@ -1117,6 +1136,7 @@
           <choice>
             <text/>
             <ref name="bcp14"/>
+            <ref name="br"/>
             <ref name="cref"/>
             <ref name="em"/>
             <ref name="eref"/>
@@ -1198,6 +1218,7 @@
         <choice>
           <text/>
           <ref name="bcp14"/>
+          <ref name="br"/>
           <ref name="cref"/>
           <ref name="em"/>
           <ref name="eref"/>
@@ -1248,6 +1269,7 @@
           <choice>
             <text/>
             <ref name="bcp14"/>
+            <ref name="br"/>
             <ref name="cref"/>
             <ref name="em"/>
             <ref name="eref"/>
@@ -1436,6 +1458,7 @@
       <zeroOrMore>
         <choice>
           <text/>
+          <ref name="br"/>
           <ref name="em"/>
           <ref name="eref"/>
           <ref name="relref"/>
@@ -1460,6 +1483,7 @@
         <choice>
           <text/>
           <ref name="bcp14"/>
+          <ref name="br"/>
           <ref name="cref"/>
           <ref name="em"/>
           <ref name="eref"/>
@@ -1485,6 +1509,7 @@
         <choice>
           <text/>
           <ref name="bcp14"/>
+          <ref name="br"/>
           <ref name="cref"/>
           <ref name="em"/>
           <ref name="eref"/>
@@ -1510,6 +1535,7 @@
         <choice>
           <text/>
           <ref name="bcp14"/>
+          <ref name="br"/>
           <ref name="cref"/>
           <ref name="eref"/>
           <ref name="iref"/>
@@ -1997,6 +2023,7 @@
           <choice>
             <text/>
             <ref name="bcp14"/>
+            <ref name="br"/>
             <ref name="cref"/>
             <ref name="em"/>
             <ref name="eref"/>
@@ -2058,6 +2085,7 @@
           <choice>
             <text/>
             <ref name="bcp14"/>
+            <ref name="br"/>
             <ref name="cref"/>
             <ref name="em"/>
             <ref name="eref"/>
