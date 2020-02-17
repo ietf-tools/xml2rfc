@@ -1805,7 +1805,8 @@ class HtmlWriter(BaseV3Writer):
             ol = add.dl(h, x, classes='olPercent')
         else:
             attrib = sdict(dict( (k,v) for (k,v) in x.attrib.items() if k in ['start', 'type', ] ))
-            ol = add.ol(h, x, classes=x.get('spacing'), **attrib)
+            classes= ' '.join(filter(None, [ x.get('spacing'), 'type-%s' % attrib.get('type', '1') ]))
+            ol = add.ol(h, x, classes=classes, **attrib)
         for c in x.getchildren():
             self.render(ol, c)
         return ol
