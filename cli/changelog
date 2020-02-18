@@ -1,3 +1,41 @@
+xml2rfc (2.40.0) ietf; urgency=medium
+
+  * Worked around weasyprint's failure to honour <ol> type attributes by 
+    using the appropriate CSS list-style-type to control the list style.  Fixes 
+    issue #489.
+
+  * Added <br/> to the v3 grammar.  Fixes issue #492.
+
+  * Fixed an issue where comments inside ascii-art artwork would cause 
+    following artwork not to be rendered.
+
+  * Fixed an issue where use of .splitlines() instead of .split('\n') 
+    caused unexpected removal of blank lines at the beginning or end of artwork.
+
+  * Allowed Latin script content in <organization> without requiring an ascii 
+    attribute, to match the treatment of author and contact names.  Fixes issue 
+    #493
+
+  * Added additional error information when text content is found where 
+    the schema does not allow it.
+
+  * Fixed an issue where trailing whitespace in artwork can trigger bad
+    rendering, by removing whitespace at the end of lines in <artwork> and
+    <sourcecode>.  Fixes issue #490
+
+  * Changed the plain text URL for the trust license-info in TLP 
+    boilerplate to an <eref> also for IAB documents.  Fixes issue #456.
+
+  * Removed indentation from lists rendered in table cells.
+
+  * Fixed an incorrect attribute grouping in the v3 schema
+
+  * Fixed two off-by-one errors in the calculation of the length of 
+    Updates/Obsoletes lists.  Addresses issue #472
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Feb 2020 13:37:07 -0800
+
+
 xml2rfc (2.39.0) ietf; urgency=medium
 
 
