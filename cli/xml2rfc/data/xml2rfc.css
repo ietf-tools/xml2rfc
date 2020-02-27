@@ -1029,7 +1029,7 @@ ol.type-A { list-style-type: upper-alpha; }
 ol.type-i { list-style-type: lower-roman; }
 ol.type-I { list-style-type: lower-roman; }
 /* Apply the print table and row borders in general, on request from the RPC,
-and increase the contrast between border and odd line background sligthtly */
+and increase the contrast between border and odd row background sligthtly */
 table {
   border: 1px solid #ddd;
 }
@@ -1038,4 +1038,9 @@ td {
 }
 tr:nth-child(2n+1) > td {
   background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
 }
