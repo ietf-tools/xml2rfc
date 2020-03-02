@@ -74,10 +74,13 @@ def print_country_help(self, opt, value, parser):
         c = pycountry.countries.lookup(v)
         if not k in country_ids[c.alpha_2]:
             country_ids[c.alpha_2].append(k)
-    ids = country_ids.values()
+    ids = list(country_ids.values())
     ids.sort()
     print('Known country codes and country names for use with <country>:\n')
-    print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])).encode('utf-8'))
+    if six.PY3:
+        print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])))
+    else:
+        print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])).encode('utf-8'))
     sys.exit()
 
 def get_pdf_help(missing_libs=""):
