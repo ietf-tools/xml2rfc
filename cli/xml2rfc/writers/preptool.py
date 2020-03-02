@@ -197,7 +197,7 @@ class PrepToolWriter(BaseV3Writer):
             # akin to line wrapping even if rendered in <pre>: 
             line = line.rstrip()
             if '\t' in line:
-                self.warn(e, "Found tab on line %d of <%s>: \n   %s" % (e.tag, i+1, line))
+                self.warn(e, "Found tab on line %d of <%s>: \n   %s" % (i+1, e.tag, line))
                 line = line.expandtabs()                    
             lines[i] = line
         e.text = '\n'.join(lines)
