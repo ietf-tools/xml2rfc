@@ -57,6 +57,16 @@ bare_unicode_tags = set([
 
 bare_latin_tags = set([
     'organization',
+    'city',
+    'cityarea',
+    'code',
+    'country',
+    'extaddr',
+    'pobox',
+    'region',
+    'sortingcode',
+    'street',
+    'postalLine',
     ])
 
 
