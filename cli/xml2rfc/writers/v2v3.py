@@ -655,7 +655,7 @@ class V2v3XmlWriter(BaseV3Writer):
         front = e.find('./front')
         title = e.find('./front/title')
         i = front.index(title) + 1 if title!=None else 0
-        series = front.xpath('seriesInfo')
+        series = front.xpath('seriesInfo') if front!=None else []
         if 'category' in e.attrib and 'seriesNo' in e.attrib:
             attr = {
                 'name': e.get('category'),
