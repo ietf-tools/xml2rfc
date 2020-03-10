@@ -1981,7 +1981,7 @@ class TextWriter(BaseV3Writer):
     def render_iref(self, e, width, **kwargs):
         p = e.getparent()
         self.index_items.append(IndexItem(e.get('item'), e.get('subitem'), p.get('pn'), None))
-        return '' if p.tag in ['section', 'figure', 'table', ]  else e.tail
+        return '' if p.tag in ['section', 'figure', 'table', ]  else e.tail or ''
 
     # 2.27.1.  "item" Attribute (Mandatory)
     # 
