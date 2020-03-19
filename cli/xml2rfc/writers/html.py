@@ -867,9 +867,10 @@ class HtmlWriter(BaseV3Writer):
                     svg = None
             else:
                 svg = x.find('svg:svg', namespaces=namespaces)
-                svgfile = "inline:%s ..." % lxml.etree.tostring(svg)[:31]
+                if svg != None:
+                    svgfile = "inline:%s ..." % lxml.etree.tostring(svg)[:31]
             if svg == None:
-                self.err(x, 'Expected <svg> content inside <artwork type="svg">, but did not find it:\n   %s ...' % (lxml.etree.tostring(x)[:256], ))
+                self.err(x, 'Expected <artwork> with type="svg" to have an <svg> child element, but did not find it:\n   %s ...' % (lxml.etree.tostring(x)[:256], ))
                 return None
             # For w3.org validator compatibility
             if svg.get('attribute', None):

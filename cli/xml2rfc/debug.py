@@ -133,7 +133,10 @@ def show(name):
         frame = inspect.stack()[1][0]
         value = eval(name, frame.f_globals, frame.f_locals)
         indent = ' ' * (_report_indent[0])
-        sys.stderr.write((u"%s%s: '%s'\n" % (indent, name, value)).encode('utf8'))
+        if sys.version_info.major == 2:
+            sys.stderr.write((u"%s%s: '%s'\n" % (indent, name, value)).encode('utf8'))
+        else:
+            sys.stderr.write((u"%s%s: '%s'\n" % (indent, name, value)))
 
 def log(name):
     if debug:
