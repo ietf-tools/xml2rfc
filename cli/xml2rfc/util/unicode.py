@@ -30,6 +30,7 @@ unicode_content_tags = set([
     'refcontent',
     'region',
     'sortingcode',
+    'sourcecode',
     'street',
     'title',
     'u',
@@ -52,6 +53,7 @@ unicode_attributes = {
 bare_unicode_tags = set([
     'artwork',
     'refcontent',
+    'sourcecode',
     'u',
     ])
 
