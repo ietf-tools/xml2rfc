@@ -238,7 +238,7 @@ def main():
     formatoptions = optparse.OptionGroup(optionparser, 'Generic Format Options')
     formatoptions.add_option('--v3', dest='legacy', action='store_false',
                            help='with --text and --html: use the v3 formatter, rather than the legacy one.')
-    formatoptions.add_option('--legacy', default=True, action='store_true',
+    formatoptions.add_option('--legacy', '--v2', default=True, action='store_true',
                            help='with --text and --html: use the legacy text formatter, rather than the v3 one.')
     formatoptions.add_option('--id-is-work-in-progress', default=True, action='store_true',
                            help='in references, refer to Internet-Drafts as "Work in Progress".')
