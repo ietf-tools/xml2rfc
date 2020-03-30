@@ -1041,3 +1041,16 @@ tr:nth-child(2n+1) > td {
   page-break-after: avoid;
   break-after: avoid-page;
 }
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  page-break-inside: auto;
+  orphpans: 6;
+  widows: 6;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl > dt {
+  page-break-after: avoid;
+}
+dl > dd {
+  page-break-before: avoid;
+}
