@@ -3854,12 +3854,11 @@ class TextWriter(BaseV3Writer):
             for i in range(rows):
                 cell = cells[i][j]
                 if cell.minwidth:
-                    w = cell.minwidth // cell.colspan
-                    if w > colmax:
-                        colmax = w
+                    cw = cell.minwidth // cell.colspan
+                    if cw > colmax:
+                        colmax = cw
             for i in range(rows):
                 cells[i][j].colwidth = colmax
-        del w
         #show(cells, 'colwidth', 'after adjusted cell widths')
 
 
