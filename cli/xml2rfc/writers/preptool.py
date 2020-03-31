@@ -2135,7 +2135,8 @@ class PrepToolWriter(BaseV3Writer):
             t = self.element('t')
             t.text = '\n'+' '*16
             for i in sub_entries:
-                t.append(mkxref(self, i.sub, target=i.anchor, format='counter', derivedContent=i.sub))
+                if i.anchor:
+                    t.append(mkxref(self, i.sub, target=i.anchor, format='counter', derivedContent=i.sub))
             return li
         if self.index_entries and self.root.get('indexInclude') == 'true':
             index = self.element('section', numbered='false', toc='exclude')
