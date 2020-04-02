@@ -1,3 +1,29 @@
+xml2rfc (2.42.0) ietf; urgency=medium
+
+  * Changed the minimum whitespace distance between Updates/Obsoletes/etc. 
+    and Author/Organization in the document header in text rendering back to 
+    the value used in the v2 renderer (4 spaces) instead of the value used 
+    recently (3 spaces).
+
+  * Added a guard against trying to normalize whitespace text that is None.
+
+  * Added a guard against trying to create <iref> entries for reference
+    content, avoiding a later exception.  Fixes issue #501.
+
+  * Changed the approach to avoiding page breaks inside artwork etc., and 
+    added styling to prevent page breaks between <dt> and <dd> in a <dl>.  
+    Fixes issues #461, #463, and #491
+
+  * Did a variable name change and removed a 'del', to deal with a
+    pyflakes issue under 2.7.  Fixes issue #504.
+
+  * Added missing keepWithNext support for PDF output.
+
+  * Added a --v2 switch with the same meaning as --legacy.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  02 Apr 2020 11:25:57 -0700
+
+
 xml2rfc (2.41.0) ietf; urgency=medium
 
   * Added <sourcecode> to the tags that may have bare unicode content.  
