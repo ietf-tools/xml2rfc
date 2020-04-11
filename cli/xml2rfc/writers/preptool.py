@@ -77,8 +77,8 @@ seen_slugs = set([])
 
 def slugify_name(name):
     name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode('ascii')
-    slug = re.sub('[^\w\s/-]', '', name).strip().lower()
-    slug = re.sub('[-\s/]+', '-', slug)
+    slug = re.sub(r'[^\w\s/-]', '', name).strip().lower()
+    slug = re.sub(r'[-\s/]+', '-', slug)
     # limit slug length
     n = 32
     m = 2
@@ -453,7 +453,7 @@ class PrepToolWriter(BaseV3Writer):
         if doc_name and doc_name.strip():
             if '.' in doc_name:
                 self.warn(e, "The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
-            if not re.search('-\d\d$', doc_name):
+            if not re.search(r'-\d\d$', doc_name):
                 self.warn(e, "The 'docName' attribute of the <rfc/> element should have a revision number as the last component: docName=\"draft-foo-bar-02\".")
         elif not self.options.rfc:
             self.warn(e, "Expected a 'docName' attribute in the <rfc/> element, but found none.")
@@ -605,7 +605,7 @@ class PrepToolWriter(BaseV3Writer):
         # according to RFC 2119 and 8174
         permitted_words = [ "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
             "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", "OPTIONAL", ]
-        text = re.sub('(\s|\u00a0)+', ' ', e.text, flags=re.UNICODE).strip()
+        text = re.sub(r'(\s|\u00a0)+', ' ', e.text, flags=re.UNICODE).strip()
         if not text in permitted_words:
             self.warn(e, "Expected one of the permitted words or phrases from RFC 2119 and RFC 8174 in <bcp14/>, "
                          "but found '%s'." % (etree.tostring(e).strip()))
@@ -1962,6 +1962,8 @@ class PrepToolWriter(BaseV3Writer):
     def toc_insert_table_of_contents(self, e, p):
         if self.prepped and self.rfcnumber:
             return
+        self.keep_toc_lines = 3
+        # Number of lines to keep as a block at the start of the ToC
         def copy_reduce(e):
             """
             <xref> content may not contain all elements permitted in <name>,
@@ -2008,7 +2010,11 @@ class PrepToolWriter(BaseV3Writer):
             else:
                 num_format = 'counter'
             #
-            t = self.element('t', keepWithNext='true')
+            if self.keep_toc_lines > 0:
+                t = self.element('t', keepWithNext='true')
+                self.keep_toc_lines -= 1
+            else:
+                t = self.element('t')
             pn = s.get('pn')
             if not pn:
                 self.die(s, "No no pn entry found for section, can't continue: %s" % (etree.tostring(s)))
