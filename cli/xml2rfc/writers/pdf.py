@@ -111,22 +111,23 @@ class PdfWriter(BaseV3Writer):
     def get_serif_fonts(self):
         fonts = set()
         scripts = self.root.get('scripts').split(',')
-        noto_serif = "'Noto Serif'"
+        noto_serif = "Noto Serif"
         for script in scripts:
             family = get_noto_serif_family_for_script(script)
-            fonts.add("'%s'" % family)
+            fonts.add("%s" % family)
             if fontconfig:
                 available = fontconfig.query(family=family)
                 if not available:
                     self.warn(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
         fonts -= set([ noto_serif, ])
         fonts = [ noto_serif, ] + list(fonts)
+        self.note(None, "Found installed font: %s" % ', '.join(fonts))
         return fonts
 
 page_css_template = """
 @media print {{
   body {{
-    font-family: {fonts}, 'Times New Roman', Times, serif;
+    font-family: {fonts};
     width: 100%;
   }}
   @page {{
