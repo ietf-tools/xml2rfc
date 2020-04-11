@@ -893,6 +893,7 @@ class V2v3XmlWriter(BaseV3Writer):
     #    and <texttable> (Section 3.8).
     def element_postamble(self, e, p):
         e = self.replace(e, 't')
+        e.set('keepWithPrevious', 'true')
         self.move_after(e, p)
 
     # 3.6.  <preamble>
@@ -904,6 +905,7 @@ class V2v3XmlWriter(BaseV3Writer):
     #    and <texttable> (Section 3.8).
     def element_preamble(self, e, p):
         e = self.replace(e, 't')
+        e.set('keepWithNext', 'true')
         s = p.getprevious()
         if not s is None:
             self.move_after(e, s)
