@@ -67,6 +67,7 @@ default_options = Values(defaults={
         'no_network': False,
         'nroff': False,
         'omit_headers': None,
+        'orphans': 2,
         'output_filename': None,
         'output_path': None,
         'pagination': True,
@@ -86,6 +87,7 @@ default_options = Values(defaults={
         'version': False,
         'v2v3': False,
         'vocabulary': 'v2',
+        'widows': 2,
     })
 
 class _RfcItem:
