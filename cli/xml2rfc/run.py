@@ -314,6 +314,9 @@ def main():
         if not key in default_options.__dict__:
             sys.stderr.write("  Option missing from base.default_options: %s\n" % key)
             sys.exit(2)
+    for key in default_options.__dict__:
+        if not key in options.__dict__:
+            setattr(options, key, getattr(default_options, key))
 
     # Show version information, then exit
     if options.version:
