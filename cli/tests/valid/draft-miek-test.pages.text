@@ -83,7 +83,7 @@ Table of Contents
      7.6.  References  . . . . . . . . . . . . . . . . . . . . . . .  11
        7.6.1.  External  . . . . . . . . . . . . . . . . . . . . . .  11
        7.6.2.  Internal  . . . . . . . . . . . . . . . . . . . . . .  11
-     7.7.  Spanx Styles  . . . . . . . . . . . . . . . . . . . . . .  11
+     7.7.  Spanx Styles  . . . . . . . . . . . . . . . . . . . . . .  12
      7.8.  Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  12
        7.8.1.  References  . . . . . . . . . . . . . . . . . . . . .  12
      7.9.  Indexes . . . . . . . . . . . . . . . . . . . . . . . . .  13
@@ -552,7 +552,7 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    So the first artwork with a caption will get "fig:a-minimal-" as a
    reference.  See for instance Figure 2.
 
-   This anchoring is completely handled from within the "xslt".  Note
+
 
 
 
@@ -562,6 +562,7 @@ Gieben                    Expires July 5, 2013                 [Page 10]
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
 
+   This anchoring is completely handled from within the "xslt".  Note
    that duplicate anchors are an XML validation error which will make
    "xml2rfc" fail.
 
@@ -606,10 +607,9 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    For referencing figures/artworks see Section 7.4.  For referencing
    tables see Section 7.8.
 
-7.7.  Spanx Styles
 
-   The verb style can be selected with back-tics: "`text`" Converts to:
-   "<spanx style="verb"> ..."
+
+
 
 
 
@@ -617,6 +617,11 @@ Gieben                    Expires July 5, 2013                 [Page 11]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+7.7.  Spanx Styles
+
+   The verb style can be selected with back-tics: "`text`" Converts to:
+   "<spanx style="verb"> ..."
 
    And the emphasis style with asterisks: "*text*" or underscores:
    "_text_" Converts to: "<spanx style="emph"> ..."
@@ -660,11 +665,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    So the first table with a caption will get "tab-a-caption-" for
    reference use.  See for instance
 
-   This anchoring is completely handled from within the "xslt".  Note
-   that duplicate anchors are an XML validation error which will make
-   "xml2rfc" fail.
-
-
 
 
 
@@ -673,6 +673,10 @@ Gieben                    Expires July 5, 2013                 [Page 12]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   This anchoring is completely handled from within the "xslt".  Note
+   that duplicate anchors are an XML validation error which will make
+   "xml2rfc" fail.
 
 7.9.  Indexes
 
@@ -719,16 +723,15 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
    <rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02">
 
-   The Makefile will pick this up automatically and make a symbolic
-   link:
-
-
 
 
 Gieben                    Expires July 5, 2013                 [Page 13]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   The Makefile will pick this up automatically and make a symbolic
+   link:
 
    draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
 
@@ -774,9 +777,6 @@ Appendix A.  Tests
 
    This appendix consists out of a few tests that should all render to
    proper "xml2rfc" XML.
-
-
-
 
 
 

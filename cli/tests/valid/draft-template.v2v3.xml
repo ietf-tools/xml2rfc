@@ -30,7 +30,7 @@
 <?rfc multiple-initials="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="info" docName="draft-ietf-xml2rfc-template-05" ipr="trust200902" obsoletes="" updates="" submissionType="IETF" xml:lang="en" tocInclude="true" tocDepth="4" symRefs="true" sortRefs="true" version="3">
-  <!-- xml2rfc v2v3 conversion 2.37.2 -->
+  <!-- xml2rfc v2v3 conversion 2.41.0 -->
   <?v3xml2rfc silence=".*[Pp]ostal address" ?>
   <?v3xml2rfc silence="The document date .*? is more than 3 days away from today's date" ?>
   <?v3xml2rfc silence="Found SVG with width or height specified" ?>
@@ -135,7 +135,7 @@
       <name>Figures</name>
       <t>Figures should not exceed 69 characters wide to allow for the indent
       of sections.</t>
-      <t>Preamble text - can be omitted or empty.</t>
+      <t keepWithNext="true">Preamble text - can be omitted or empty.</t>
       <figure anchor="xml_happy">
         <artset>
           <artwork align="left" src="ietf.svg" name="" type="svg" alt=""/>
@@ -146,7 +146,7 @@
             ]]></artwork>
         </artset>
       </figure>
-      <t>Cross-references allowed in pre- and postamble. <xref target="min_ref" format="default"/>.</t>
+      <t keepWithPrevious="true">Cross-references allowed in pre- and postamble. <xref target="min_ref" format="default"/>.</t>
       <t>The CDATA means you don't need to escape meta-characters (especially
       &lt;&nbsp;(&amp;lt;) and &amp;&nbsp;(&amp;amp;)) but is not essential.
       Figures may also have a title attribute but it won't be displayed unless
@@ -166,7 +166,7 @@
       <section numbered="true" toc="default">
         <name>Tables</name>
         <t>.. are very similar to figures:</t>
-        <t>Tables use ttcol to define column headers and widths.
+        <t keepWithNext="true">Tables use ttcol to define column headers and widths.
           Every cell then has a "c" element for its content.</t>
         <table anchor="table_example" align="center">
           <name>A Very Simple Table</name>
@@ -191,7 +191,7 @@
             </tr>
           </tbody>
         </table>
-        <t>which is a very simple example.</t>
+        <t keepWithPrevious="true">which is a very simple example.</t>
       </section>
     </section>
     <section anchor="nested_lists" numbered="true" toc="default">
@@ -378,7 +378,7 @@
     </section>
     <section anchor="codeExample" numbered="true" toc="default">
       <name>Example of Code or MIB Module To Be Extracted</name>
-      <t>The &lt;artwork&gt; element has a number of extra attributes
+      <t keepWithNext="true">The &lt;artwork&gt; element has a number of extra attributes
         that can be used to substitute a more aesthetically pleasing rendition
         into HTML output while continuing to use the ASCII art version in the
         text and nroff outputs (see the xml2rfc README for details). It also

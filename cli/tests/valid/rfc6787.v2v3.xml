@@ -10,7 +10,7 @@
 <?rfc autobreaks="yes"?>
 <?rfc docmapping="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" number="6787" category="std" consensus="yes" docName="draft-ietf-speechsc-mrcpv2" ipr="pre5378Trust200902" submissionType="IETF" obsoletes="" updates="" xml:lang="en" tocInclude="true" sortRefs="true" symRefs="true" version="3">
-  <!-- xml2rfc v2v3 conversion 2.37.2 -->
+  <!-- xml2rfc v2v3 conversion 2.41.0 -->
   <link href="https://datatracker.ietf.org/doc/draft-ietf-speechsc-mrcpv2" rel="prev"/>
   <?v3xml2rfc silence="The document date" ?>
   <?v3xml2rfc silence="The 'docName' attribute of the .rfc/. element should have a revision number" ?>
@@ -328,7 +328,7 @@ full-capability speech synthesis resource that can render speech
         <name>Server and Resource Addressing</name>
         <t>The MRCPv2 server is a generic SIP server, and is thus addressed by
         a SIP URI (<xref target="RFC3261" format="default">RFC 3261</xref>).</t>
-        <t>For example:</t>
+        <t keepWithNext="true">For example:</t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
      sip:mrcpv2@example.net   or
      sips:mrcpv2@example.net
@@ -518,7 +518,7 @@ full-capability speech synthesis resource that can render speech
         mresources@example.com. The SIP routing machinery in the domain
         locates the actual server, mresources@server.example.com, which gets
         returned in the 200 OK. Note that "cmid" is defined in <xref target="sec.mediaStreams" format="default"/>.</t>
-        <t>This example exchange adds a resource control channel for
+        <t keepWithNext="true">This example exchange adds a resource control channel for
           a synthesizer. Since a synthesizer also generates an audio stream,
           this interaction also creates a receive-only <xref target="RFC3550" format="default">Real-Time Protocol (RTP)</xref> media session for
           the server to send audio to. The SIP dialog with the media
@@ -592,7 +592,7 @@ C->S:  ACK sip:mresources@server.example.com SIP/2.0
        Content-Length:0
 ]]></artwork>
         </figure>
-        <t>This example exchange continues from the previous figure
+        <t keepWithNext="true">This example exchange continues from the previous figure
           and allocates an additional resource control channel for a
           recognizer. Since a recognizer would need to receive an audio stream
           for recognition, this interaction also updates the audio stream to
@@ -680,7 +680,7 @@ C->S:  ACK sip:mresources@server.example.com SIP/2.0
        Content-Length:0
 ]]></artwork>
         </figure>
-        <t>This example exchange continues from the previous figure
+        <t keepWithNext="true">This example exchange continues from the previous figure
           and deallocates the recognizer channel. Since a recognizer no
           longer needs to receive an audio stream, this interaction also
           updates the RTP media session to recvonly.</t>
@@ -1940,7 +1940,7 @@ Content-Length:...
       resource type identifier as its value.</t>
       <t>The SDP description MUST also contain "m=" lines describing the audio
       capabilities and the coders the server supports.</t>
-      <t>In this example, the client uses the SIP OPTIONS method to
+      <t keepWithNext="true">In this example, the client uses the SIP OPTIONS method to
         query the capabilities of the MRCPv2 server.</t>
       <figure>
         <name>Using SIP OPTIONS for MRCPv2 Server Capability Discovery</name>
