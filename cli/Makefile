@@ -1,5 +1,4 @@
-
-# -*- indent-with-tabs: 1 
+# -*- indent-with-tabs: 1 -*-
 # Simple makefile which mostly encapsulates setup.py invocations.  Useful as
 # much as documentation as it is for invocation.
 
@@ -15,6 +14,8 @@
 # the content.  Generating PDF files for each input file and just making
 # binary comparisons is prone to false negatives, so in general there's no
 # PDF file generation below.
+
+SHELL := /bin/bash
 
 export PYTHONHASHSEED = 0
 
@@ -50,6 +51,8 @@ drafttests    = $(addprefix tests/out/, $(drafttest))
 pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
 
 
+tests: minify test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest wiptest
+
 env/bin/python:
 	echo "Install virtualenv in $$PWD/env/ in order to run tests locally."
 
@@ -71,7 +74,7 @@ pytests:
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
 	for type in .raw.txt .txt .nroff .html .exp.xml .v2v3.xml .prepped.xml ; do					\
-	  diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read -p "Copy [y/n]? " REPLY; if [ "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
+	  diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
 	done ; if [ $$type = ascii ]; then echo "Diff nroff output with xml2rfc output:";\
 	diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
 
@@ -89,7 +92,7 @@ CHECKOUTPUT=	\
 	@doc=$(basename $@); printf ' '; xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
 
 tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt tests/out/%.exp.xml : tests/input/%.xml install
-	@echo "\n Processing $<"
+	@echo -e "\n Processing $<"
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --base tests/out/ --raw --legacy --text --nroff --html --exp --strict $<"
 
 tests/out/%.v2v3.xml: tests/input/%.xml install
@@ -142,7 +145,7 @@ tests/out/%.pdf: tests/input/%.xml install
 
 %.test: %
 	@echo " Diffing $< against master"
-	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (2)"; read -p "Copy [y/n]? " REPLY; if [ "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (2)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.nroff.txt: %.nroff
 	@echo " Creating $@ from $<"
@@ -164,7 +167,7 @@ miektest: cleantmp install
 	doc=draft-miek-test ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 cachetest: cleantmp install
-	@echo "\n Clearing cache ..."
+	@echo -e "\n Clearing cache ..."
 	@PS4=" " /bin/bash -cx "xml2rfc --cache .cache --clear-cache"
 	@echo " Filling cache ..."
 	@PS4=" " /bin/bash -cx "xml2rfc --cache .cache tests/input/rfc6787.xml --base tmp/ --raw"
@@ -211,7 +214,10 @@ cleantmp:
 	@[ -d tests/out ] && rm -f tests/out/* && cp xml2rfc/templates/rfc2629* tests/out/
 
 
-tests: minify test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest wiptest
+yes:
+	$(eval READARGS=-t1)
+
+yestests: yes tests
 
 noflakestests: install pytests regressiontests
 
