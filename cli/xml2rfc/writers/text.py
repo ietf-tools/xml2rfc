@@ -193,7 +193,7 @@ def findblocks(lines):
                 block.end = n
         elif l.elem != elem:
             elem = l.elem
-            if elem.tag not in ['t', 'dl', 'ol', 'figure', 'table', ]:
+            if elem.tag not in ['t', 'dl', 'figure', 'ol', 'table', 'ul', ]:
                 keep = False
             if not keep:
                 block = Block(elem, prev, beg=n)
@@ -202,7 +202,9 @@ def findblocks(lines):
                     if not prev.end:
                         prev.end = n
                 prev = block
-            keep = l.elem.get('keepWithNext') == 'true' or l.elem.tag == 'section'
+            keep = (l.elem.get('keepWithNext') == 'true'
+                    or (l.elem.getnext()!=None and l.elem.getnext().get('keepWithPrevious') == 'true')
+                    or l.elem.tag == 'section')
             l.block = block
         else:
             l.block = block
@@ -382,23 +384,27 @@ class TextWriter(BaseV3Writer):
                     olen = break_target - block.beg # number of lines left at the end of this page
                     wlen = block.end - break_target # number of lines at the start of next page
                     blen = block.end - block.beg    # complete block length
-                    if lines[block.beg].elem.tag == 'section':
+                    elem = lines[block.beg].elem
+                    if elem.tag == 'section':
                         tcount = 0
                         for r in range(block.beg, break_target):
                             if lines[r].elem!=None and lines[r].elem.tag != 'section':
                                 tcount += 1
-                        if wlen == 1 or tcount < self.options.min_section_start_lines:
+                        if wlen == 1 or tcount <= self.options.min_section_start_lines:
                             adj = break_lineno - block.beg
                             pad += adj
                             break_lineno -= adj
-                    elif lines[block.beg].elem.tag in ['artset', 'artwork', 'figure', 'sourcecode', 'table', ]:
-                        if blen < 48 or olen < self.options.min_section_start_lines:
+                    elif elem.tag in ['artset', 'artwork', 'figure', 'sourcecode', 'table', ]:
+                        if blen < 48 or olen <= self.options.min_section_start_lines:
                             adj = break_lineno - block.beg
                             pad += adj
                             break_lineno -= adj
-                    elif (olen == 1 or wlen == 1) and blen != 1:
-                        break_lineno -= 1
-                        pad += 1
+                        else:
+                            pass
+                    elif ( (olen in range(1, self.options.orphans+1) and blen > olen)
+                        or (wlen in range(1, self.options.widows+1) and blen > wlen)):
+                        break_lineno -= olen
+                        pad += olen
                     else:
                         pass
             # Transfer lines to next page
