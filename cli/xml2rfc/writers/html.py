@@ -113,7 +113,10 @@ class ExtendingElementMaker(ClassElementMaker):
                 elem.set('id', sn)
             elif an != None:
                 elem.set('id', an)
-            kn = precursor.get('keepWithNext')
+            kp = precursor.get('keepWithPrevious', '')
+            if kp:
+                elem.set('class', ' '.join(s for s in [elem.get('class', ''), 'keepWithPrevious'] if s ))
+            kn = precursor.get('keepWithNext', '')
             if kn:
                 elem.set('class', ' '.join(s for s in [elem.get('class', ''), 'keepWithNext'] if s ))
             if not elem.text or elem.text.strip() == '':
