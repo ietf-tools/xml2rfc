@@ -1041,11 +1041,16 @@ tr:nth-child(2n+1) > td {
   page-break-after: avoid;
   break-after: avoid-page;
 }
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  page-break-before: avoid;
+  break-before: avoid-page;
+}
 /* Change the approach to avoiding breaks inside artwork etc. */
 figure, pre, table, .artwork, .sourcecode  {
-  page-break-inside: auto;
-  orphpans: 6;
-  widows: 6;
+  page-break-before: avoid;
+  page-break-inside: avoid;
+  page-break-after: auto;
 }
 /* Avoid breaks between <dt> and <dd> */
 dl > dt {
@@ -1053,4 +1058,10 @@ dl > dt {
 }
 dl > dd {
   page-break-before: avoid;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    page-break-before: auto;
+  }
 }
