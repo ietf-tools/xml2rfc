@@ -1038,30 +1038,42 @@ tr:nth-child(2n+1) > td {
 }
 /* Add support for keepWithNext */
 .keepWithNext {
-  page-break-after: avoid;
+  break-after: avoid-page;
   break-after: avoid-page;
 }
 /* Add support for keepWithPrevious */
 .keepWithPrevious {
-  page-break-before: avoid;
   break-before: avoid-page;
 }
 /* Change the approach to avoiding breaks inside artwork etc. */
 figure, pre, table, .artwork, .sourcecode  {
-  page-break-before: avoid;
-  page-break-inside: avoid;
-  page-break-after: auto;
+  break-before: avoid-page;
+  break-after: auto;
 }
 /* Avoid breaks between <dt> and <dd> */
-dl > dt {
-  page-break-after: avoid;
+dl {
+  break-inside: auto;
 }
-dl > dd {
-  page-break-before: avoid;
+dt {
+  break-before: auto;
+  break-inside: avoid-page;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-inside: avoid-page;
+  break-after: auto;
+}
+dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
 }
 /* Undo break-before ToC */
 @media print {
   #toc {
-    page-break-before: auto;
+    break-before: auto;
   }
 }

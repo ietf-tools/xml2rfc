@@ -1365,6 +1365,9 @@ class HtmlWriter(BaseV3Writer):
         for c in x.getchildren():
             self.render(dd, c)
         self.maybe_add_pilcrow(dd)
+        # workaround for weasyprint's unwillingness to break between <dd> and
+        # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
+        add.dd(h, None, classes="break")
         return dd
 
     # 9.19.  <displayreference>
@@ -2017,6 +2020,9 @@ class HtmlWriter(BaseV3Writer):
         else:
             dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
             dd = add.dd(h, None)
+            # workaround for weasyprint's unwillingness to break between <dd> and
+            # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
+            add.dd(h, None, classes="break")
             outer = dt, dd
             inner = dd
         # Deal with parts in the correct order
