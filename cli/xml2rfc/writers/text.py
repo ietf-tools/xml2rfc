@@ -248,8 +248,8 @@ def _format_address_line(line_format, address, rules):
     return ''.join(values).strip().lstrip(', ')
 
 def format_address(address, latin=False, normalize=False):
-    def hasword(line):
-        return re.search(r'\w', line, re.U) != None
+    def hasword(item):
+        return re.search(r'\w', item, re.U) != None
     address_format, rules = get_address_format_rules(address, latin, normalize)
     address_line_formats = address_format.split('%n')
     address_lines = [

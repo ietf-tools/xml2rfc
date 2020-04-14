@@ -142,48 +142,37 @@ mdash   = '\u2014'
 def _format_address_line(line_format, address, rules):
     def _get_field(name):
         field = []
-        values = address.get(name, '')
-        if isinstance(values, list):
-            values = [ v for v in values if v ]
-        if values:
-            if isinstance(values, list):
-                for value in values[:-1]:
-                    field.append(build.div(value, classes=address_hcard_properties[name]))
-                field.append(build.span(values[-1], classes=address_hcard_properties[name]))
-            else:
-                span = None
-                if name == 'name':
-                    role = address.get('role', '')
-                    if role:
-                        span = build.span(values,
-                            ' (',
-                            build.span(role, classes='role'),
-                            ')',
-                            classes=address_hcard_properties[name])
-                if span == None:
-                    span = build.span(values, classes=address_hcard_properties[name])
-                field.append(span)
+        value = address.get(name, '')
+        if value:
+            span = None
+            if name == 'name':
+                role = address.get('role', '')
+                if role:
+                    span = build.span(value,
+                        ' (',
+                        build.span(role, classes='role'),
+                        ')',
+                        classes=address_hcard_properties[name])
+            if span == None:
+                span = build.span(value, classes=address_hcard_properties[name])
+            field.append(span)
         return field
 
     replacements = {
         '%%%s' % code: _get_field(field_name)
         for code, field_name in address_field_mapping.items()}
 
-    field_codes = re.split('(%.)', line_format)
-    field_entries = [ f for n in field_codes for f in replacements.get(n, n) ]
-    fields = []
-    for f in field_entries:
-        if isinstance(f, type('')):
-            if not fields:
-                continue
-            else:
-                fields.append(f)
-        elif isinstance(f, lxml.html.HtmlElement):
-            if not f.text:
-                continue
-            else:
-                fields.append(f)
-    return fields
+    fields = re.split('(%.)', line_format)
+    has_content = any([ replacements.get(f) for f in fields if (f.startswith('%') and f!= '%%') ])
+    if not has_content:
+        return ''
+    values = [ f for n in fields for f in replacements.get(n, n) ]
+    # strip left comma and space
+    for i in range(len(values)):
+        if values[i] not in [' ', ',']:
+            break
+    values = values[i:]
+    return values
 
 def format_address(address, latin=False, normalize=False):
     def hasword(item):
