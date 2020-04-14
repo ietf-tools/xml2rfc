@@ -1,3 +1,44 @@
+xml2rfc (2.43.0) ietf; urgency=medium
+
+  * Added a workaround for weasyprint's extreme unwillingness to break 
+    between <dd> and <dt>, which looks like a bug.  Fixes issue #514.
+
+  * Fixed a discrepancy in address handling between text and html output.  
+    Fixes issue #509
+
+  * Added more flexible text formatter handling of orphans and widows, and
+    changed the default orphans/widows setting to 2 (matching the default
+    CSS setting).
+
+  * Changed the CSS to not page break before the ToC, support
+    keepWithPrevious, and deal better with how some artwork, figures and
+    tables break across pages. Fixes issue #511.
+
+  * Changed the keepWithNext handling for the generated ToC to group the
+    first 3 lines together, to avoid one-line orphans when page-breaking
+    the ToC.  Also fixed some pyflakes issues with regex strings.
+
+  * Added text formatter support for 'keepWithPrevious', even if the
+    preptool generally converts 'keepWithPrevious' to 'keepWithNext' on
+    the previous element.
+
+  * Added setting '.keepWithPrevious' on html elements when set on the
+    precursor xml element.
+
+  * Added v2v3 converter code to set 'keepWithNext' and 'keepWithPrevious'
+    when converting <preamble> and <postamble> elements to <t> elements,
+    to keep the grouping.
+
+  * Added code to the command-line runner to set some option default values
+    that don't have matchinb command-line switches.
+
+  * Added default settings for orphans and widows during text rendering.
+
+  * Reduced the CSS font-family for body to only Noto Serif.  Addresses
+    issue #500.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  14 Apr 2020 07:00:32 -0700
+
 xml2rfc (2.42.0) ietf; urgency=medium
 
   * Changed the minimum whitespace distance between Updates/Obsoletes/etc. 
