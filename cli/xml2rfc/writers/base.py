@@ -13,6 +13,8 @@ import re
 import xml2rfc.log
 import xml2rfc.util
 import xml2rfc.utils
+
+from lxml import etree
 from optparse import Values
 
 try:
@@ -27,7 +29,7 @@ from xml2rfc.util.date import extract_date, augment_date, format_date, get_expir
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
 from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_content_tags, bare_unicode_tags,
     bare_latin_tags, unicode_attributes, downcode, downcode_punctuation)
-from xml2rfc.utils import namespaces, find_duplicate_ids
+from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
 
 default_silenced_messages = [
 #    ".*[Pp]ostal address",
@@ -1774,6 +1776,36 @@ class BaseV3Writer(object):
         self.errors.append(msg)
         raise RfcWriterError(msg)
 
+    def xinclude(self):
+        ## From RFC7998:
+        ##
+        # 5.1.1.  XInclude Processing
+        # 
+        #    Process all <x:include> elements.  Note: XML <x:include> elements may
+        #    include more <x:include> elements (with relative references resolved
+        #    against the base URI potentially modified by a previously inserted
+        #    xml:base attribute).  The tool may be configurable with a limit on
+        #    the depth of recursion.
+        try:
+            self.tree.xinclude()
+        except etree.XIncludeError as e:
+            self.die(None, "XInclude processing failed: %s" % e)
+
+    def remove_dtd(self):
+        # 
+        # 5.1.2.  DTD Removal
+        # 
+        #    Fully process any Document Type Definitions (DTDs) in the input
+        #    document, then remove the DTD.  At a minimum, this entails processing
+        #    the entity references and includes for external files.
+
+        ## Entities has been resolved as part of the initial parsing.  Remove
+        ## docinfo and PIs outside the <rfc/> element by copying the root
+        ## element and creating a new tree.
+        root = copy.deepcopy(self.root)
+        self.tree = root.getroottree()
+        self.root = root
+
     def get_refname_mapping(self):
         reflist = self.root.xpath('.//references/reference|.//references/referencegroup')
         if self.root.get('symRefs', 'true') == 'true':
@@ -1782,6 +1814,53 @@ class BaseV3Writer(object):
             refname_mapping = (dict( (e.get('anchor'), str(i+1)) for i,e in enumerate(reflist) ))
         refname_mapping.update(dict( (e.get('target'), e.get('to')) for e in self.root.xpath('.//displayreference') ))
         return refname_mapping
+
+    def dispatch(self, selectors):
+        """
+        Process selectors, extracting an XPath selector and generating a method name
+        from each entry in self.selectors, and calling the method with all elements
+        matching the XPath expression, in order to process self.tree.
+        """
+        # Setup
+        selector_visits = dict( (s, 0) for s in selectors)
+        # Check for duplicate <displayreference> 'to' values:
+        seen = {}
+        for e in self.root.xpath('.//displayreference'):
+            to = e.get('to')
+            if to in set(seen.keys()):
+                self.die(e, 'Found duplicate displayreference value: "%s" has already been used in %s' % (to, etree.tostring(seen[to]).strip()))
+            else:
+                seen[to] = e
+        del seen
+        ## Do remaining processing by xpath selectors (listed above)
+        for s in selectors:
+            slug = slugify(s.replace('self::', '').replace(' or ','_').replace(';','_'))
+            if '@' in s:
+                func_name = 'attribute_%s' % slug
+            elif "()" in s:
+                func_name = slug
+            else:
+                if not slug:
+                    slug = 'rfc'
+                func_name = 'element_%s' % slug
+            # get rid of selector annotation
+            ss = s.split(';')[0]
+            func = getattr(self, func_name, None)
+            if func:
+                if self.options.debug:
+                    self.note(None, "Calling %s()" % func_name)
+                for e in self.tree.xpath(ss):
+                    func(e, e.getparent())
+                    selector_visits[s] += 1
+            else:
+                self.warn(None, "No handler %s() found" % (func_name, ))
+        if self.options.debug:
+            for s in selectors:
+                if selector_visits[s] == 0:
+                    self.note(None, "Selector '%s' has not matched" % (s))
+        if self.errors:
+            raise RfcWriterError("Not creating output file due to errors (see above)")
+        return self.tree
 
     def get_all_attribute_defaults(self):
         defaults = {}

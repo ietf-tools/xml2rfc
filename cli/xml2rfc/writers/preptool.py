@@ -44,7 +44,6 @@ from xml2rfc.util.unicode import ( unicode_content_tags, unicode_attributes, bar
     expand_unicode_element, isascii, downcode, )
 from xml2rfc.utils import build_dataurl, namespaces, sdict, clean_text
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
-from xml2rfc.writers.v2v3 import slugify
 
 
 pnprefix = {
@@ -203,171 +202,99 @@ class PrepToolWriter(BaseV3Writer):
         e.text = '\n'.join(lines)
 
     def prep(self):
-
-        ## Selector notation: Some selectors below have a handler annotation,
-        ## with the selector and the annotation separated by a semicolon (;).
-        ## Everything from the semicolon to the end of the string is stripped
-        ## before the selector is used.
-
-        selectors = [
-            './/keyword',                       # 2.28.   Keyword
-            '.;check_unnumbered_sections()',    # 2.46.2  "numbered" Attribute
-                                                # 5.1.1.  XInclude Processing
-                                                # 5.1.2.  DTD Removal
-            '//processing-instruction();removal()',       # 5.1.3.  Processing Instruction Removal
-            '.;validate_before()',              # 5.1.4.  Validity Check
-            '/rfc;check_attribute_values()',
-            '.;check_attribute_values()',       # 
-            '.;check_ascii_text()',
-            '.;normalize_text_items()',
-            './/bcp14;check_key_words()',
-            './/*[@anchor]',                    # 5.1.5.  Check "anchor"
-            '.;insert_version()',               # 5.2.1.  "version" Insertion
-            './front;insert_series_info()',     # 5.2.2.  "seriesInfo" Insertion
-            './front;insert_date())',           # 5.2.3.  <date> Insertion
-            '.;insert_preptime()',              # 5.2.4.  "prepTime" Insertion
-            './/ol[@group]',                    # 5.2.5.  <ol> Group "start" Insertion
-            '//*;insert_attribute_defaults()',  # 5.2.6.  Attribute Default Value Insertion
-            './/relref;to_xref()',
-            './/section',                       # 5.2.7.  Section "toc" attribute
-            './/note[@removeInRFC="true"]',     # 5.2.8.  "removeInRFC" Warning Paragraph
-            './/section[@removeInRFC="true"]',     
-            '//*[@*="yes" or @*="no"]',         #         convert old attribute false/true
-            './front/date',                     # 5.3.1.  "month" Attribute
-            './/*[@ascii]',                     # 5.3.2.  ASCII Attribute Processing
-            './front/author',
-            './/contact',
-            './/*[@title]',                     # 5.3.3.  "title" Conversion
-            './/*[@keepWithPrevious="true"]',   # 5.3.4.  "keepWithPrevious" Conversion
-            '.;fill_in_expires_date()',         # 5.4.1.  "expiresDate" Insertion
-            './front;insert_boilerplate()',     # 5.4.2.  <boilerplate> Insertion
-            './front;insert_toc()',
-            '.;check_series_and_submission_type()', # 5.4.2.1.  Compare <rfc> "submissionType" and <seriesInfo> "stream"
-            './/boilerplate;insert_status_of_memo()',  # 5.4.2.2.  "Status of this Memo" Insertion
-            './/boilerplate;insert_copyright_notice()', # 5.4.2.3.  "Copyright Notice" Insertion
-            './/boilerplate//section',          # 5.2.7.  Section "toc" attribute
-            './/reference;insert_target()',     # 5.4.3.  <reference> "target" Insertion
-            './/reference;insert_work_in_progress()',
-            './/reference;sort_series_info()',  #         <reference> sort <seriesInfo>
-            './/name;insert_slugified_name()',  # 5.4.4.  <name> Slugification
-            './/references;sort()',             # 5.4.5.  <reference> Sorting
-            './/references;add_derived_anchor()',
-            './/references;check_usage()',
-            './/*;insert_attribute_defaults()',  # 5.2.6.  Attribute Default Value Insertion
-                                                # 5.4.6.  "pn" Numbering
-            './/boilerplate//section;add_number()',
-            './front//abstract;add_number()',
-            './/front//note;add_number()',
-            './/middle//section;add_number()',
-            './/table;add_number()',
-            './/figure;add_number()',
-            './/references;add_number()',
-            './/back//section;add_number()',
-            '.;paragraph_add_numbers()',
-            './/iref;add_number()',             # 5.4.7.  <iref> Numbering
-            './/u;add_number()',
-            './/ol;add_counter()',
-            './/xref',                          # 5.4.8.  <xref> Processing
-            # Relref processing be handled under .//xref:
-                                                # 5.4.9.  <relref> Processing
-            './/artset',                        #         <artwork> Processing
-            './/artwork',                       # 5.5.1.  <artwork> Processing
-            './/sourcecode',                    # 5.5.2.  <sourcecode> Processing
-            #
-            './back;insert_index()',
-            './back;insert_author_address()',
-            './/toc;insert_table_of_contents()',
-            './/*[@removeInRFC="true"]',        # 5.6.1.  <note> Removal
-            './/cref;removal()',                # 5.6.2.  <cref> Removal
-                                                # 5.6.3.  <link> Processing
-            './/link[@rel="alternate"];removal()',
-            '.;check_links_required()',
-            './/comment();removal()',           # 5.6.4.  XML Comment Removal
-            '.;attribute_removal()',            # 5.6.5.  "xml:base" and "originalSrc" Removal
-            '.;validate_after()',               # 5.6.6.  Compliance Check
-            '.;insert_scripts()',               # 5.7.1.  "scripts" Insertion
-            #'.;final_pi_removal()',            # Done in write().  Keep PIs when prep() is called interally
-            '.;pretty_print_prep()',            # 5.7.2.  Pretty-Format
-        ]
-        # Setup
-        selector_visits = dict( (s, 0) for s in selectors)
-
-        ## From RFC7998:
-        ##
-        # 5.1.1.  XInclude Processing
-        # 
-        #    Process all <x:include> elements.  Note: XML <x:include> elements may
-        #    include more <x:include> elements (with relative references resolved
-        #    against the base URI potentially modified by a previously inserted
-        #    xml:base attribute).  The tool may be configurable with a limit on
-        #    the depth of recursion.
-        try:
-            self.tree.xinclude()
-        except etree.XIncludeError as e:
-            self.die(None, "XInclude processing failed: %s" % e)
-
+        self.xinclude()
         # Set up reference mapping for later use.  Done here, and not earlier,
         # to capture any references pulled in by the XInclude we just did.
         self.refname_mapping = self.get_refname_mapping()
-
-        # Check for duplicate <displayreference> 'to' values:
-        seen = {}
-        for e in self.root.xpath('.//displayreference'):
-            to = e.get('to')
-            if to in set(seen.keys()):
-                self.die(e, 'Found duplicate displayreference value: "%s" has already been used in %s' % (to, etree.tostring(seen[to]).strip()))
-            else:
-                seen[to] = e
-        del seen
-
-        # 
-        # 5.1.2.  DTD Removal
-        # 
-        #    Fully process any Document Type Definitions (DTDs) in the input
-        #    document, then remove the DTD.  At a minimum, this entails processing
-        #    the entity references and includes for external files.
-
-        ## Entities has been resolved as part of the initial parsing.  Remove
-        ## docinfo and PIs outside the <rfc/> element by copying the root
-        ## element and creating a new tree.
-        root = copy.deepcopy(self.root)
-        self.tree = root.getroottree()
-        self.root = root
-
-        ## Do remaining processing by xpath selectors (listed above)
-        for s in selectors:
-            slug = slugify(s.replace('self::', '').replace(' or ','_').replace(';','_'))
-            if '@' in s:
-                func_name = 'attribute_%s' % slug
-            elif "()" in s:
-                func_name = slug
-            else:
-                if not slug:
-                    slug = 'rfc'
-                func_name = 'element_%s' % slug
-            # get rid of selector annotation
-            ss = s.split(';')[0]
-            func = getattr(self, func_name, None)
-            if func:
-                if self.options.debug:
-                    self.note(None, "Calling %s()" % func_name)
-                for e in self.tree.xpath(ss):
-                    func(e, e.getparent())
-                    selector_visits[s] += 1
-            else:
-                self.warn(None, "No handler %s() found" % (func_name, ))
-
-        if self.options.debug:
-            for s in selectors:
-                if selector_visits[s] == 0:
-                    self.note(None, "Selector '%s' has not matched" % (s))
-
-        log.note(" Completed preptool run")
-
-        if self.errors:
-            raise RfcWriterError("Not creating output file due to errors (see above)")
-
-        return self.tree
+        self.remove_dtd()
+        tree = self.dispatch(self.selectors)
+        log.note(" Completed preptool run")        
+        return tree
+        
+    ## Selector notation: Some selectors below have a handler annotation,
+    ## with the selector and the annotation separated by a semicolon (;).
+    ## Everything from the semicolon to the end of the string is stripped
+    ## before the selector is used as an XPath selector.
+    selectors = [
+        './/keyword',                       # 2.28.   Keyword
+        '.;check_unnumbered_sections()',    # 2.46.2  "numbered" Attribute
+                                            # 5.1.1.  XInclude Processing
+                                            # 5.1.2.  DTD Removal
+        '//processing-instruction();removal()',       # 5.1.3.  Processing Instruction Removal
+        '.;validate_before()',              # 5.1.4.  Validity Check
+        '/rfc;check_attribute_values()',
+        '.;check_attribute_values()',       # 
+        '.;check_ascii_text()',
+        '.;normalize_text_items()',
+        './/bcp14;check_key_words()',
+        './/*[@anchor]',                    # 5.1.5.  Check "anchor"
+        '.;insert_version()',               # 5.2.1.  "version" Insertion
+        './front;insert_series_info()',     # 5.2.2.  "seriesInfo" Insertion
+        './front;insert_date())',           # 5.2.3.  <date> Insertion
+        '.;insert_preptime()',              # 5.2.4.  "prepTime" Insertion
+        './/ol[@group]',                    # 5.2.5.  <ol> Group "start" Insertion
+        '//*;insert_attribute_defaults()',  # 5.2.6.  Attribute Default Value Insertion
+        './/relref;to_xref()',
+        './/section',                       # 5.2.7.  Section "toc" attribute
+        './/note[@removeInRFC="true"]',     # 5.2.8.  "removeInRFC" Warning Paragraph
+        './/section[@removeInRFC="true"]',     
+        '//*[@*="yes" or @*="no"]',         #         convert old attribute false/true
+        './front/date',                     # 5.3.1.  "month" Attribute
+        './/*[@ascii]',                     # 5.3.2.  ASCII Attribute Processing
+        './front/author',
+        './/contact',
+        './/*[@title]',                     # 5.3.3.  "title" Conversion
+        './/*[@keepWithPrevious="true"]',   # 5.3.4.  "keepWithPrevious" Conversion
+        '.;fill_in_expires_date()',         # 5.4.1.  "expiresDate" Insertion
+        './front;insert_boilerplate()',     # 5.4.2.  <boilerplate> Insertion
+        './front;insert_toc()',
+        '.;check_series_and_submission_type()', # 5.4.2.1.  Compare <rfc> "submissionType" and <seriesInfo> "stream"
+        './/boilerplate;insert_status_of_memo()',  # 5.4.2.2.  "Status of this Memo" Insertion
+        './/boilerplate;insert_copyright_notice()', # 5.4.2.3.  "Copyright Notice" Insertion
+        './/boilerplate//section',          # 5.2.7.  Section "toc" attribute
+        './/reference;insert_target()',     # 5.4.3.  <reference> "target" Insertion
+        './/reference;insert_work_in_progress()',
+        './/reference;sort_series_info()',  #         <reference> sort <seriesInfo>
+        './/name;insert_slugified_name()',  # 5.4.4.  <name> Slugification
+        './/references;sort()',             # 5.4.5.  <reference> Sorting
+        './/references;add_derived_anchor()',
+        './/references;check_usage()',
+        './/*;insert_attribute_defaults()',  # 5.2.6.  Attribute Default Value Insertion
+                                            # 5.4.6.  "pn" Numbering
+        './/boilerplate//section;add_number()',
+        './front//abstract;add_number()',
+        './/front//note;add_number()',
+        './/middle//section;add_number()',
+        './/table;add_number()',
+        './/figure;add_number()',
+        './/references;add_number()',
+        './/back//section;add_number()',
+        '.;paragraph_add_numbers()',
+        './/iref;add_number()',             # 5.4.7.  <iref> Numbering
+        './/u;add_number()',
+        './/ol;add_counter()',
+        './/xref',                          # 5.4.8.  <xref> Processing
+        # Relref processing be handled under .//xref:
+                                            # 5.4.9.  <relref> Processing
+        './/artset',                        #         <artwork> Processing
+        './/artwork',                       # 5.5.1.  <artwork> Processing
+        './/sourcecode',                    # 5.5.2.  <sourcecode> Processing
+        #
+        './back;insert_index()',
+        './back;insert_author_address()',
+        './/toc;insert_table_of_contents()',
+        './/*[@removeInRFC="true"]',        # 5.6.1.  <note> Removal
+        './/cref;removal()',                # 5.6.2.  <cref> Removal
+                                            # 5.6.3.  <link> Processing
+        './/link[@rel="alternate"];removal()',
+        '.;check_links_required()',
+        './/comment();removal()',           # 5.6.4.  XML Comment Removal
+        '.;attribute_removal()',            # 5.6.5.  "xml:base" and "originalSrc" Removal
+        '.;validate_after()',               # 5.6.6.  Compliance Check
+        '.;insert_scripts()',               # 5.7.1.  "scripts" Insertion
+        #'.;final_pi_removal()',            # Done in write().  Keep PIs when prep() is called interally
+        '.;pretty_print_prep()',            # 5.7.2.  Pretty-Format
+    ]
 
     # ----------------------------------------------------------------
     # 2.28.  <keyword>

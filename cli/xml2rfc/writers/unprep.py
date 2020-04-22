@@ -4,7 +4,6 @@ from __future__ import unicode_literals, print_function
 
 import copy
 import datetime
-import inspect
 
 from codecs import open
 
@@ -20,7 +19,6 @@ from lxml import etree
 from xml2rfc import log
 from xml2rfc.utils import namespaces, sdict
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
-from xml2rfc.writers.v2v3 import slugify
 
 
 class UnPrepWriter(BaseV3Writer):
@@ -107,106 +105,27 @@ class UnPrepWriter(BaseV3Writer):
         ## with the selector and the annotation separated by a semicolon (;).
         ## Everything from the semicolon to the end of the string is stripped
         ## before the selector is used.
-
-        selectors = [
-            '.;validate_before()',
-            '/rfc[@prepTime]',
-            './/ol[@group]',
-            './front/boilerplate',
-            './front/toc',
-            './/name[@slugifiedName]',
-            './/*;remove_attribute_defaults()',
-            './/*[@pn]',
-            './/xref',
-            './back/section/t[@anchor="rfc.index.index"]',
-            './back/section[@anchor="authors-addresses"]',
-            './/section[@toc]',
-            './/*[@removeInRFC="true"]',
-#            '.;validate_after()',
-            '.;pretty_print_prep()',
-        ]
-        # Setup
-        selector_visits = dict( (s, 0) for s in selectors)
-
-        ## From RFC7998:
-        ##
-        # 5.1.1.  XInclude Processing
-        # 
-        #    Process all <x:include> elements.  Note: XML <x:include> elements may
-        #    include more <x:include> elements (with relative references resolved
-        #    against the base URI potentially modified by a previously inserted
-        #    xml:base attribute).  The tool may be configurable with a limit on
-        #    the depth of recursion.
-        try:
-            self.tree.xinclude()
-        except etree.XIncludeError as e:
-            self.die(None, "XInclude processing failed: %s" % e)
-
-        # Set up reference mapping for later use.  Done here, and not earlier,
-        # to capture any references pulled in by the XInclude we just did.
-        self.refname_mapping = self.get_refname_mapping()
-
-        # Check for duplicate <displayreference> 'to' values:
-        seen = {}
-        for e in self.root.xpath('.//displayreference'):
-            to = e.get('to')
-            if to in set(seen.keys()):
-                self.die(e, 'Found duplicate displayreference value: "%s" has already been used in %s' % (to, etree.tostring(seen[to]).strip()))
-            else:
-                seen[to] = e
-        del seen
-
-        ## Do remaining processing by xpath selectors (listed above)
-        funcs = set([])
-        for s in selectors:
-            slug = slugify(s.replace('self::', '').replace(' or ','_').replace(';','_'))
-            if '@' in s:
-                func_name = 'attribute_%s' % slug
-            elif "()" in s:
-                func_name = slug
-            else:
-                if not slug:
-                    slug = 'rfc'
-                func_name = 'element_%s' % slug
-            # get rid of selector annotation
-            ss = s.split(';')[0]
-            func = getattr(self, func_name, None)
-            if func:
-                for e in self.tree.xpath(ss):
-                    func(e, e.getparent())
-                    selector_visits[s] += 1
-                funcs.add(func_name)
-            else:
-                self.warn(None, "No handler %s() found" % (func_name, ))
-                selector_visits[s] = None
-
-        if self.options.debug:
-            for s in selectors:
-                if selector_visits[s] == 0:
-                    self.note(None, "Selector '%s' has not matched" % (s))
-
-            methods = inspect.getmembers(self, predicate=inspect.ismethod)
-            ignored = set([ '__init__', 'get_attribute_names', 'get_attribute_defaults', 'validate', 'write',
-                            'unprep', 'remove_element', ])
-            ignored |= set( n for (n, m) in inspect.getmembers(BaseV3Writer, predicate=inspect.ismethod) )
-            methods = [ (n, m) for (n, m) in methods if not n in ignored ]
-            for (n, m) in methods:
-                if not n in funcs:
-                    self.warn(None, "Method '%s()' has not been used" % n)
-
+        tree = self.dispatch(self.selectors)
         log.note(" Completed unprep run")
+        return tree
 
-        if self.errors:
-            raise RfcWriterError("Not creating output file due to errors (see above)")
-
-        return self.tree
-
-    def validate_before(self, e, p):
-        version = self.root.get('version', '3')
-        if version not in ['3', ]:
-            self.die(self.root, 'Expected <rfc> version="3", but found "%s"' % version)
-        if not self.validate('before'):
-            self.note(None, "Schema validation failed for input document")
+    selectors = [
+        '.;validate_before()',
+        '/rfc[@prepTime]',
+        './/ol[@group]',
+        './front/boilerplate',
+        './front/toc',
+        './/name[@slugifiedName]',
+        './/*;remove_attribute_defaults()',
+        './/*[@pn]',
+        './/xref',
+        './back/section/t[@anchor="rfc.index.index"]',
+        './back/section[@anchor="authors-addresses"]',
+        './/section[@toc]',
+        './/*[@removeInRFC="true"]',
+#            '.;validate_after()',
+        '.;pretty_print_prep()',
+    ]
 
     def attribute_rfc_preptime(self, e, p):
         del e.attrib['prepTime']
@@ -269,28 +188,3 @@ class UnPrepWriter(BaseV3Writer):
         if e.get('derivedLink'):
             del e.attrib['derivedLink']
 
-    def validate_after(self, e, p):
-        # XXX: There is an issue with exponential increase in validation time
-        # as a function of the number of attributes on the root element, on
-        # the order of minutes for the full set of possble attribute values.
-        # See https://bugzilla.gnome.org/show_bug.cgi?id=133736 .  In our
-        # schema, there is no dependency in the underlying schema on the root
-        # element attributes.  In order to avoid very long validation times, we
-        # strip the root attributes before validation, and put them back
-        # afterwards.  
-        for k in e.keys():
-            if not e.get(k):
-                del e.attrib[k]
-        attrib = copy.deepcopy(e.attrib) 
-        for k in attrib.keys():
-            del e.attrib[k]
-        #
-        if not self.validate('after', warn=True):
-            self.note(None, "Schema validation failed for input document")
-        else:
-            self.root.set('version', '3')
-        #
-        keys = list(attrib.keys())
-        keys.sort()
-        for k in keys:
-            e.set(k, attrib[k])
