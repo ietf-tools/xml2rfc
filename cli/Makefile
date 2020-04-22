@@ -85,15 +85,17 @@ CHECKOUTPUT=	\
 %.rng: %.rnc
 	trang $< $@
 
-%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test %.prepped.xml.test
+%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test %.prepped.xml.test %.plain.text
 	@echo " Diffing .nroff.txt against regular .txt"
 	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo " Checking v3 validity"
 	@doc=$(basename $@); printf ' '; xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
+	@echo " Diffing .plain.text against regular .text"
+	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.plain.text $$doc.text || { echo 'Diff failed for $$doc.plain.text output'; exit 1; }
 
-tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt tests/out/%.exp.xml : tests/input/%.xml install
+tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt : tests/input/%.xml install
 	@echo -e "\n Processing $<"
-	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --base tests/out/ --raw --legacy --text --nroff --html --exp --strict $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --base tests/out/ --raw --legacy --text --nroff --html --strict $<"
 
 tests/out/%.v2v3.xml: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --v2v3 --strict --legacy-date-format $< --out $@"
@@ -107,7 +109,7 @@ tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
 	@echo " Checking generation of .text from prepped .xml"
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $(basename $@).text --text --no-pagination --external-css --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
-	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (2)"; exit 1; }
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (3)"; exit 1; }
 
 # These contains index sections, which renders with different whitespace from
 # prepped source than directly.  Don't compare html from prepped with master
@@ -135,7 +137,14 @@ tests/out/%.v3.$(py).html: tests/input/%.xml install
 tests/out/%.pdf: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --pdf --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
 
-.PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt 
+tests/out/%.plain.xml: tests/valid/%.prepped.xml install
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --unprep --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
+
+tests/out/%.plain.text: tests/out/%.plain.xml install
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@"
+
+tests/out/%.exp.xml: tests/input/%.xml install
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --exp $<"
 
 %.prepped.xml: %.v2v3.xml
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
@@ -143,16 +152,18 @@ tests/out/%.pdf: tests/input/%.xml install
 %.v2v3.text: %.v2v3.xml
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --utf8 --out $@ --text --v3 $<"
 
-%.test: %
-	@echo " Diffing $< against master"
-	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (2)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
-
 %.nroff.txt: %.nroff
 	@echo " Creating $@ from $<"
 	@if [ "$(findstring /rfc,$<)" = "/rfc" ]; then groff -ms -Kascii -Tascii $< | ./fix.pl > $@; else groff -ms -Kascii -Tascii $< | ./fix.pl | sed 1,2d > $@; fi
 
+%.test: %
+	@echo " Diffing $< against master"
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
+
 %.min.js: %.js
 	bin/uglifycall $<
+
+.PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt tests/out/%.plain.txt
 
 # ----------------------------------------------------------------------
 
