@@ -16,7 +16,7 @@ from lxml.etree import Element, Comment, CDATA
 import xml2rfc
 from xml2rfc import log
 from xml2rfc.util.unicode import unicode_content_tags, unicode_replacements, isascii
-from xml2rfc.utils import hastext, isempty, sdict
+from xml2rfc.utils import hastext, isempty, sdict, slugify
 from xml2rfc.writers.base import default_options, BaseV3Writer
 
 
@@ -25,13 +25,6 @@ try:
     assert debug
 except ImportError:
     pass
-
-def slugify(s):
-    s = s.strip().lower()
-    s = re.sub(r'[^\w\s/|@=-]', '', s)
-    s = re.sub(r'[-_\s/|@=]+', '_', s)
-    s = s.strip('_')
-    return s
 
 def idref(s):
     s = re.sub(r'^[^A-Za-z_]', '_', s)

@@ -653,3 +653,9 @@ def is_htmlblock(h):
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'nav', 'ol', 'p', 'pre', 'script', 'section',
         'table', 'ul', ])
 
+def slugify(s):
+    s = s.strip().lower()
+    s = re.sub(r'[^\w\s/|@=-]', '', s)
+    s = re.sub(r'[-_\s/|@=]+', '_', s)
+    s = s.strip('_')
+    return s
