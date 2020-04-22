@@ -4,6 +4,7 @@
 
 import calendar
 import codecs
+import copy
 import datetime
 import textwrap
 import lxml
@@ -82,6 +83,7 @@ default_options = Values(defaults={
         'silence': default_silenced_messages,
         'strict': False,
         'text': True,
+        'unprep': False,
         'utf8': False,
         'verbose': False,
         'version': False,
@@ -2030,6 +2032,39 @@ class BaseV3Writer(object):
             else:
                 self.die(self.root, 'Invalid document%s.' % (when, ))
 
+    def validate_before(self, e, p):
+        version = self.root.get('version', '3')
+        if version not in ['3', ]:
+            self.die(self.root, 'Expected <rfc> version="3", but found "%s"' % version)
+        if not self.validate('before'):
+            self.note(None, "Schema validation failed for input document")
+
+    def validate_after(self, e, p):
+        # XXX: There is an issue with exponential increase in validation time
+        # as a function of the number of attributes on the root element, on
+        # the order of minutes for the full set of possble attribute values.
+        # See https://bugzilla.gnome.org/show_bug.cgi?id=133736 .  In our
+        # schema, there is no dependency in the underlying schema on the root
+        # element attributes.  In order to avoid very long validation times, we
+        # strip the root attributes before validation, and put them back
+        # afterwards.  
+        for k in e.keys():
+            if not e.get(k):
+                del e.attrib[k]
+        attrib = copy.deepcopy(e.attrib) 
+        for k in attrib.keys():
+            del e.attrib[k]
+        #
+        if not self.validate('after', warn=True):
+            self.note(None, "Schema validation failed for input document")
+        else:
+            self.root.set('version', '3')
+        #
+        keys = list(attrib.keys())
+        keys.sort()
+        for k in keys:
+            e.set(k, attrib[k])
+
     def remove(self, p, e):
         # Element.remove(child) removes both the child and its tail, so in
         # order not to loose text when removing comments or other elements,
@@ -2041,3 +2076,4 @@ class BaseV3Writer(object):
             else:
                 p.text = (p.text or '') + e.tail
         p.remove(e)
+

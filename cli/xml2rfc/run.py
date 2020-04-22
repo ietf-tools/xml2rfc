@@ -179,6 +179,8 @@ def main():
                            help='convert vocabulary version 2 XML to version 3')
     formatgroup.add_option('', '--preptool', action='store_true',
                            help='run preptool on the input')
+    formatgroup.add_option('', '--unprep', action='store_true',
+                           help='reduce prepped xml to unprepped')
     formatgroup.add_option('', '--info', action='store_true',
                            help='generate a JSON file with anchor to section lookup information')
     optionparser.add_option_group(formatgroup)
@@ -390,7 +392,7 @@ def main():
             options.output_path = options.basename
             options.basename = None
     #
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, options.pdf ] if o])
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, options.pdf, options.unprep ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot use an explicit output filename when generating more than one format, '
                  'use --path instead.')
@@ -623,6 +625,16 @@ def main():
             xmlrfc.tree = v2v3.convert2to3()
             preptool = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date)
             preptool.write(filename)
+            options.output_filename = None
+
+        if options.unprep:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True, add_xmlns=True)
+            filename = options.output_filename
+            if not filename:
+                filename = basename.replace('.prepped','') + '.plain.xml'
+                options.output_filename = filename
+            unprep = xml2rfc.UnPrepWriter(xmlrfc, options=options, date=options.date)
+            unprep.write(filename)
             options.output_filename = None
 
         if options.text and not options.legacy:

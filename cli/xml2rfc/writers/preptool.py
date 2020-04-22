@@ -441,12 +441,8 @@ class PrepToolWriter(BaseV3Writer):
     #    Check the input against the RELAX NG (RNG) in [RFC7991].  If the
     #    input is not valid, give an error.
 
-    def validate_before(self, e, p):
-        version = self.root.get('version', '3')
-        if version not in ['3', ]:
-            self.die(self.root, 'Expected <rfc> version="3", but found "%s"' % version)
-        if not self.validate('before'):
-            self.note(None, "Schema validation failed for input document")
+    # implemented in parent class: validate_before(self, e, p):
+
 
     def rfc_check_attribute_values(self, e,  p):
         doc_name = e.get('docName')
@@ -2300,32 +2296,8 @@ class PrepToolWriter(BaseV3Writer):
     #    If in RFC production mode, ensure that the result is in full
     #    compliance to the v3 schema, without any deprecated elements or
     #    attributes and give an error if any issues are found.
-    def validate_after(self, e, p):
-        # XXX: There is an issue with exponential increase in validation time
-        # as a function of the number of attributes on the root element, on
-        # the order of minutes for the full set of possble attribute values.
-        # See https://bugzilla.gnome.org/show_bug.cgi?id=133736 .  In our
-        # schema, there is no dependency in the underlying schema on the root
-        # element attributes.  In order to avoid very long validation times, we
-        # strip the root attributes before validation, and put them back
-        # afterwards.  
-        for k in e.keys():
-            if not e.get(k):
-                del e.attrib[k]
-        attrib = copy.deepcopy(e.attrib) 
-        for k in attrib.keys():
-            del e.attrib[k]
-        #
-        if not self.validate('after', warn=True):
-            self.note(None, "Schema validation failed for input document")
-        else:
-            self.root.set('version', '3')
-        #
-        keys = list(attrib.keys())
-        keys.sort()
-        for k in keys:
-            e.set(k, attrib[k])
 
+    # implemented in parent class: validate_after(self, e, p):
 
     # 5.7.  Finalization
     # 
