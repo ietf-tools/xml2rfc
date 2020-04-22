@@ -112,7 +112,7 @@ ol_style_formatter = {
     'i':    lambda n: tuple([int2roman(n)]),
     'I':    lambda n: tuple([int2roman(n).upper()]),
     'o':    lambda n: tuple(['%o'%n]),
-    'O':    lambda n: tuple(['%O'%n]),
+    'O':    lambda n: tuple([('%o'%n).upper()]),
     'x':    lambda n: tuple(['%x'%n]),
     'X':    lambda n: tuple(['%X'%n]),
 }
