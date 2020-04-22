@@ -19,20 +19,26 @@
 # but the database has *not* been loaded with a dump, and supporting files (drafts, charters, etc.)
 # have *not* been downloaded.
 
-FROM debian:stretch
+FROM dyne/devuan:ascii
 LABEL maintainer="Henrik Levkowetz <henrik@levkowetz.com>"
 
 # Run apt-get noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
+ENV DEVUAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get install -qy apt-transport-https
 
-# Use backports, updates, and security updates; over https if possible
-RUN echo "deb https://deb.debian.org/debian stretch main contrib non-free"  > /etc/apt/sources.list
-RUN echo "deb https://deb.debian.org/debian stretch-backports main contrib non-free"  >> /etc/apt/sources.list
-RUN echo "deb https://deb.debian.org/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list
-RUN echo "deb http://security.debian.org/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list
+# Remove some excludes for the docker image
+RUN sed -i -e '/^path-exclude=.*\/groff/d' \
+           -e '/^path-exclude=.*\/locale/d' \
+           -e '/^path-exclude=.*\/man/d' /etc/dpkg/dpkg.cfg.d/docker-excludes
+
+# Use backports, updates, and security updates
+RUN echo "deb http://deb.devuan.org/merged ascii main contrib non-free"  > /etc/apt/sources.list
+RUN echo "deb http://deb.devuan.org/merged ascii-security main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://deb.devuan.org/merged ascii-updates main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://deb.devuan.org/merged ascii-backports main contrib non-free" >> /etc/apt/sources.list
 
 # Install needed packages
 #
@@ -109,15 +115,9 @@ RUN apt-get install -qy \
 	zile \
 	zlib1g-dev
 
-# Install SystemV init
-RUN apt-get install -qy sysvinit-core \
-    && cp /usr/share/sysvinit/inittab /etc/inittab
-
-RUN apt-get install -qy sysvinit-utils
-
-# Get rid of systemd
-RUN apt-get remove --yes --purge --auto-remove systemd \
-    && echo 'Package: *systemd*\nPin: release *\nPin-Priority: -1\n' > /etc/apt/preferences.d/systemd
+# Get rid of installation files we don't need in the image, to reduce size
+RUN du -sm /var/lib/apt/lists/
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable some common locales
 RUN sed -i -e 's/^. en_US/en_US/' -e 's/^. en_GB/en_GB/' -e 's/^. en_IE/en_IE/' /etc/locale.gen
@@ -134,22 +134,22 @@ RUN pip install certifi
 RUN pip install virtualenv
 RUN pip install tox
 # testing prerequisites
-RUN pip install dict2xml pypdf2 'weasyprint<=0.42.3' 'pycairo>=1.18'
+RUN pip install dict2xml==1.6 pypdf2 'weasyprint<=0.42.3' 'pycairo>=1.18'
 
 # Additional python versions.  Python 3.5 is part of the distribution,
 # 3.6 and 3.7 not available through apt.
 
 # Python 3.5
-WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.5.9/Python-3.5.9.tar.xz
-RUN tar xJf Python-3.5.9.tar.xz
-RUN rm Python-3.5.9.tar.xz
-WORKDIR /usr/src/Python-3.5.9/
-RUN ./configure
-RUN make
-RUN make altinstall
-WORKDIR /usr/src
-RUN rm -rf /usr/src/Python-3.5.9/
+# WORKDIR /usr/src
+# RUN wget -q https://www.python.org/ftp/python/3.5.9/Python-3.5.9.tar.xz
+# RUN tar xJf Python-3.5.9.tar.xz
+# RUN rm Python-3.5.9.tar.xz
+# WORKDIR /usr/src/Python-3.5.9/
+# RUN ./configure
+# RUN make
+# RUN make altinstall
+# WORKDIR /usr/src
+# RUN rm -rf /usr/src/Python-3.5.9/
 
 # Python 3.6
 WORKDIR /usr/src

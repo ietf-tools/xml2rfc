@@ -73,6 +73,7 @@ local_fonts="$(ls $LOCAL_FONTS | grep '\.[to]tf' | wc -l)"
 found_fonts="$(ls /usr/share/fonts/truetype/noto/ | grep '\.[to]tf' | wc -l)"
 [ $found_fonts = $local_fonts ] || {
   echo "Linking in Noto fonts"
+  mkdir -p /usr/share/fonts/truetype/noto/
   ln -sf $LOCAL_FONTS/*.[to]tf /usr/share/fonts/truetype/noto/
 }
 
