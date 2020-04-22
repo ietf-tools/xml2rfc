@@ -1,3 +1,26 @@
+xml2rfc (2.44.0) ietf; urgency=medium
+
+  * Added an '--unprep' switch and formatter to undo changes made by
+    '--prep' which make a file unsuitable for continued editing.  This
+    will help the RPC when the .xml file received from draft authors for
+    an upcoming RFC is in 'prepped' format.
+
+  * Updated the v3 --expand formatter to expand external sourcecode and 
+    artwork, in addition to handling XIncludes.  This should make it
+    possible to produce single consolidated .xml files without using
+    the --prep workaround.
+
+  * Did some refactoring, moving the dispatch method that calls processing 
+    methods based on XPath expressions, and some other generic methods, into 
+    the V3 formatter base class.
+
+  * Moved slugify() function, used in several writers, from v2v3 to 
+    utils.py.
+
+  * Did a minor CSS tweak to improve orphan/widow handling of <dl> elements.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  22 Apr 2020 14:49:39 -0700
+
 xml2rfc (2.43.0) ietf; urgency=medium
 
   * Added a workaround for weasyprint's extreme unwillingness to break 
