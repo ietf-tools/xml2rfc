@@ -1294,7 +1294,7 @@ class TextWriter(BaseV3Writer):
             text = '\u2028' + mktextblock(self.quote_renderer(e, width, '//', source, None, **kwargs))
             return text
         else:
-            return None
+            return ''
 
     # 2.17.  <date>
     # 
