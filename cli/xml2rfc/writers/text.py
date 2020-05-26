@@ -38,7 +38,14 @@ from xml2rfc.utils import justify_inline, clean_text
 
 
 IndexItem   = namedtuple('indexitem', ['item', 'subitem', 'anchor', 'page', ])
-Joiner      = namedtuple('joiner', ['init', 'join', 'first', 'indent', 'hang', ])
+Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', ])
+# Joiner parts:
+#   join    string used to join a rendered element to preceding text or lines
+#   indent  indentation of rendered element
+#   hang    additional indentation of second and follwoing lines
+#   overlap Join the last preceding and the first new line on one line, rather
+#           than simply appending new lines (when processing lines)
+
 # We don't use namedtuple for Line, because the resulting objects would be immutable:
 class Line(object):
     def __init__(self, text, elem):
@@ -47,6 +54,8 @@ class Line(object):
         self.elem = elem
         self.page = None
         self.block = None
+        self.keep = False               # keep this line with the previous one
+
 # a couple of factory functions.  We may modify the resulting lines later,
 # which is why we can't just use static instances.
 def blankline():
@@ -54,9 +63,9 @@ def blankline():
 def pagefeed():
     return [ Line('\f', None) ]
 def striplines(lines):
-    while lines and lines[0].text.strip() == '':
+    while lines and lines[0].text.strip(stripspace) == '':
         lines = lines[1:]
-    while lines and lines[-1].text.strip() == '':
+    while lines and lines[-1].text.strip(stripspace) == '':
         lines = lines[:-1]
     return lines
 
@@ -73,10 +82,15 @@ wrapper = utils.TextWrapper(width=72)
 splitter = utils.TextSplitter(width=67)
 seen = set()
 
+# This is not a complete list of whitespace characters, and isn't intended to be.  It's
+# intended to be whitespace characters commonly occuring in XML input text which should be
+# ignored at the beginning and end of text blocks:
+stripspace = " \t\n\r\f\v"
+
 base_joiners = {
-            None:           Joiner('', '\n\n', '', 0, 0),
-            etree.Comment:  Joiner('', '', '', 0, 0),
-            etree.PI:       Joiner('', '', '', 0, 0),
+            None:           Joiner('\n\n', 0, 0, False),
+            etree.Comment:  Joiner('', 0, 0, False),
+            etree.PI:       Joiner('', 0, 0, False),
         }
 
 def set_joiners(kwargs, update):
@@ -85,8 +99,9 @@ def set_joiners(kwargs, update):
 
 def indent(text, indent=3, hang=0):
     lines = []
+    text = text.replace('\u2028', '\n')
     for l in text.split('\n'):
-        if l.strip():
+        if l.strip(stripspace):
             if lines:
                 lines.append(' '*(indent+hang) + l)
             else:
@@ -97,7 +112,7 @@ def indent(text, indent=3, hang=0):
 
 def lindent(lines, indent=3, hang=0):
     for i, l in enumerate(lines):
-        if l.text.strip():
+        if l.text.strip(stripspace):
             if i == 0:
                 lines[i].text = ' '*(indent+hang) + l.text
             else:
@@ -123,12 +138,13 @@ def center(text, width, **kwargs):
     "Fold and center the given text"
     # avoid centered text extending all the way to the margins
     kwargs['width'] = width-4
+    text = text.replace('\u2028', '\n')
     lines = text.split('\n')
     if max([ len(l) for l in lines ]+[0]) > width:
         # need to reflow
         lines = wrapper.wrap(text, **kwargs)
     for i, l in enumerate(lines):
-        lines[i] = l.center(width).rstrip()
+        lines[i] = l.center(width).rstrip(stripspace)
     text = '\n'.join(lines).replace('\u00A0', ' ')
     return text
 
@@ -144,11 +160,11 @@ def align(lines, how, width):
     shift = width - w
     if how == 'center':
         for i, l in enumerate(lines):
-            if l.text.strip():
+            if l.text.strip(stripspace):
                 lines[i].text = ' '*(shift//2)+l.text
     elif how == 'right':
         for i, l in enumerate(lines):
-            if l.text.strip():
+            if l.text.strip(stripspace):
                 lines[i].text = ' '*(shift)+l.text
     else:
         # XXX TODO: Raise execption, catch in TextWriter, and emit error
@@ -157,10 +173,18 @@ def align(lines, how, width):
 
 def mklines(arg, e):
     if isinstance(arg, six.text_type):
+        # \u2028 and \u2029 are eliminated here, through splitlines()
         lines = [ Line(t, e) for t in arg.splitlines() ]
     else:
         lines = arg
     return lines
+
+def mktextblock(arg):
+    if isinstance(arg, six.text_type):
+        text = arg
+    else:
+        text = '\u2028'.join([ l.text for l in arg ])
+    return text
 
 def mktext(arg):
     if isinstance(arg, six.text_type):
@@ -175,9 +199,9 @@ def minwidth(arg):
     return min([ len(w) for w in words ]+[0])
 
 def stripl(l):
-    while l and l[0].text.strip() == '':
+    while l and l[0].text.strip(stripspace) == '':
         del l[0]
-    while l and l[-1].text.strip() == '':
+    while l and l[-1].text.strip(stripspace) == '':
         del l[-1]
     return l
 
@@ -193,8 +217,8 @@ def findblocks(lines):
                 block.end = n
         elif l.elem != elem:
             elem = l.elem
-            if elem.tag not in ['t', 'dl', 'figure', 'ol', 'table', 'ul', ]:
-                keep = False
+            if elem.tag not in ['t', 'dl', 'dt', 'figure', 'ol', 'table', 'ul', ]:
+                keep = l.keep
             if not keep:
                 block = Block(elem, prev, beg=n)
                 if prev!=None:
@@ -202,9 +226,9 @@ def findblocks(lines):
                     if not prev.end:
                         prev.end = n
                 prev = block
-            keep = (l.elem.get('keepWithNext') == 'true'
-                    or (l.elem.getnext()!=None and l.elem.getnext().get('keepWithPrevious') == 'true')
-                    or l.elem.tag == 'section')
+            keep = (elem.get('keepWithNext') == 'true'
+                    or (elem.getnext()!=None and elem.getnext().get('keepWithPrevious') == 'true')
+                    or elem.tag == 'section')
             l.block = block
         else:
             l.block = block
@@ -245,7 +269,7 @@ def _format_address_line(line_format, address, rules):
     if not has_content:
         return ''
     values = [replacements.get(f, f) for f in fields]
-    return ''.join(values).strip().lstrip(', ')
+    return ''.join(values).strip(stripspace).lstrip(', ')
 
 def format_address(address, latin=False, normalize=False):
     def hasword(item):
@@ -282,15 +306,21 @@ class TextWriter(BaseV3Writer):
                 tag  = l.elem.tag  if l.elem!=None else '-'
                 page = l.elem.page if l.elem!=None else '-'
                 if l.block:
-                    sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)).encode('utf8'))
+                    if six.PY2:
+                        sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)).encode('utf8'))
+                    else:
+                        sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)))
                 else:
-                    sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)).encode('utf8'))
+                    if six.PY2:
+                        sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)).encode('utf8'))
+                    else:
+                        sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)))
         for i, l in enumerate(lines):
             length = len(l.text)
             if length > 72:
                 self.warn(l.elem, "Too long line found (L%s), %s characters longer than 72 characters: \n%s" %(i+1, length-72, l.text))
                 
-        text = ('\n'.join( l.text for l in lines )).rstrip() + '\n'
+        text = ('\n'.join( l.text for l in lines )).rstrip(stripspace) + '\n'
 
         # Replace some code points whose utility has ended
         text = text.replace(u'\u00A0', u' ')
@@ -312,7 +342,7 @@ class TextWriter(BaseV3Writer):
 
     def render(self, e, width, **kw):
         if e.tag in (etree.PI, etree.Comment):
-            return e.tail.lstrip() if (e.tail and e.tail.strip()) else ''
+            return e.tail.lstrip(stripspace) if (e.tail and e.tail.strip(stripspace)) else ''
         kwargs = copy.deepcopy(kw)
         func_name = "render_%s" % (e.tag.lower(),)
         func = getattr(self, func_name, self.default_renderer)
@@ -422,7 +452,7 @@ class TextWriter(BaseV3Writer):
             # Set the next page start
             start_lineno = break_lineno
             # discard blank lines at the top of the next page, if any
-            while start_lineno < textlen and lines[start_lineno].text.strip() == '':
+            while start_lineno < textlen and lines[start_lineno].text.strip(stripspace) == '':
                 start_lineno += 1
             # advance page end to the next potential page break
             break_target = start_lineno + 48
@@ -489,13 +519,13 @@ class TextWriter(BaseV3Writer):
         if text:
             if '\n' in j.join:
                 text += j.join + itext
-            elif j.join.strip() and not itext.strip():
+            elif j.join.strip(stripspace) and not itext.strip(stripspace):
                 # don't use non-empty joiners with empty content
                 pass
             else:
-                text += j.join + itext.lstrip()
+                text += j.join + itext.lstrip(stripspace)
         else:
-            text  = j.init + itext
+            text  = itext
         return text
 
     def ljoin(self, lines, e, width, **kwargs):
@@ -515,7 +545,13 @@ class TextWriter(BaseV3Writer):
         if lines:
             for i in range(j.join.count('\n')-1):
                 lines += blankline()
-        lines += lindent(res, j.indent, j.hang)
+        nlines = lindent(res, j.indent, j.hang)
+        if j.overlap and nlines:
+            firstline = nlines[0]
+            nlines = nlines[1:]
+            if firstline.text.strip(stripspace):
+                lines[-1].text += j.join + firstline.text.lstrip(stripspace)
+        lines += nlines
         return lines
 
 
@@ -538,7 +574,7 @@ class TextWriter(BaseV3Writer):
         if len(initials_list) > 0:
             # preserve spacing, but make sure all parts have a trailing
             # period
-            initials = initials.strip()
+            initials = initials.strip(stripspace)
             initials += '.' if not initials.endswith('.') else ''
             initials = re.sub('([^.]) ', r'\g<1>. ', initials)
         return initials
@@ -573,7 +609,7 @@ class TextWriter(BaseV3Writer):
             except TypeError:
                 debug.show('c')
                 raise
-        return text.strip()
+        return text.strip(stripspace)
     
 #     def text_renderer(self, e, width, **kwargs):
 #         text = self.inner_text_renderer(e, **kwargs)
@@ -588,7 +624,8 @@ class TextWriter(BaseV3Writer):
         if utils.hastext(e):
             e = copy.deepcopy(e)
             e.tag = 't'
-            return mktext(self.ljoin([], e, width, **kwargs)), True
+            text = mktext(self.ljoin([], e, width, **kwargs))
+            return text, True
         else:
             lines = []
             for c in e.getchildren():
@@ -598,8 +635,8 @@ class TextWriter(BaseV3Writer):
 
     def quote_renderer(self, e, width, prefix, by, cite, **kwargs):
         set_joiners(kwargs, {
-            None:      Joiner('', '\n', '', 0, 0),
-            't':       Joiner('', '\n\n', '', 0, 0),
+            None:      Joiner('\n', 0, 0, False),
+            't':       Joiner('\n\n', 0, 0, False),
         })
         width = width if width else 69
         text, plain = self.text_or_block_renderer(e, width-3, **kwargs)
@@ -636,7 +673,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    Document-wide unique identifier for the Abstract.
     def render_abstract(self, e, width, **kwargs):
-        kwargs['joiners'].update({ None:       Joiner('', '\n\n', '', 3, 0), })
+        kwargs['joiners'].update({ None:       Joiner('\n\n', 3, 0, False), })
         lines = [ Line("Abstract", e) ]
         for c in e.getchildren():
             lines = self.ljoin(lines, c, width, **kwargs)
@@ -649,7 +686,7 @@ class TextWriter(BaseV3Writer):
     #    This element appears as a child element of <author> (Section 2.7).
     def render_address(self, e, width, **kwargs):
         set_joiners(kwargs, {
-            None:       Joiner('', '\n', '', 0, 0),
+            None:       Joiner('\n', 0, 0, False),
         })
         lines = []
         for c in e.getchildren():
@@ -741,7 +778,7 @@ class TextWriter(BaseV3Writer):
                 return lines
         else:
             a = e[0]
-            if e.text and e.text.strip():
+            if e.text and e.text.strip(stripspace):
                 lines = self.ljoin(lines, a, width, **kwargs)
             else:
                 self.err(a, "Expected ascii-art text, but found none.")
@@ -752,14 +789,14 @@ class TextWriter(BaseV3Writer):
                     % ( e.get('type', '(unknown type)'),
                         e.get('originalSrc') or e.get('src') or 'No external link available, see %s.html for artwork.'%self.root.get('docName')))
         msg  = fill(msg, width=width, **kwargs)
-#        text = (e.text.strip() and e.text.expandtabs()) or msg
+#        text = (e.text.strip(stripspace) and e.text.expandtabs()) or msg
 #         text = text.strip('\n')
-#         text = '\n'.join( [ l.rstrip() for l in text.split('\n') ] )
+#         text = '\n'.join( [ l.rstrip(stripspace) for l in text.split('\n') ] )
         # We need this in order to deal with xml comments inside artwork:
         text = e.text + ''.join([ c.tail for c in e.getchildren() ])
         text = text.strip('\n')
-        text = (text.strip() and text.expandtabs()) or msg
-        text = '\n'.join( [ l.rstrip() for l in text.split('\n') ] )
+        text = (text.strip(stripspace) and text.expandtabs()) or msg
+        text = '\n'.join( [ l.rstrip(stripspace) for l in text.split('\n') ] )
         #
         lines = [ Line(t, e) for t in text.splitlines() ]
         lines = align(lines, e.get('align', 'left'), width)
@@ -870,7 +907,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    Document-wide unique identifier for this aside.
     def render_aside(self, e, width, **kwargs):
-        kwargs['joiners'].update({ 't':       Joiner('', '\n\n', '', 0, 0), })
+        kwargs['joiners'].update({ 't':       Joiner('\n\n', 0, 0, False), })
         prefix = '   |  '
         width -= len(prefix)
         text, plain = self.text_or_block_renderer(e, width, **kwargs)
@@ -957,7 +994,7 @@ class TextWriter(BaseV3Writer):
         Render one author entry for the Authors' Addresses section.
         """
         set_joiners(kwargs, {
-            None:       Joiner('', '\n', '', 0, 0),  # default 
+            None:       Joiner('\n', 0, 0, False),  # default 
         })
         lines = []
         address = e.find('./address')
@@ -1078,7 +1115,7 @@ class TextWriter(BaseV3Writer):
                     buf.append(', Ed.')
             elif organization is not None and organization.text:
                 # Use organization instead of name
-                buf.append(organization.text.strip())
+                buf.append(organization.text.strip(stripspace))
             else:
                 continue
             if len(authors) == 2 and i == 0:
@@ -1254,8 +1291,7 @@ class TextWriter(BaseV3Writer):
         display = e.get('display') == 'true'
         source = e.get('source')
         if display:
-            text = mktext(self.quote_renderer(e, width, '//', source, None, **kwargs))
-            text = '\u2028' + text.replace('\n', '\u2028\n')
+            text = '\u2028' + mktextblock(self.quote_renderer(e, width, '//', source, None, **kwargs))
             return text
         else:
             return None
@@ -1333,18 +1369,13 @@ class TextWriter(BaseV3Writer):
     # 
     #    Document-wide unique identifier for this definition.
     def render_dd(self, e, width, **kwargs):
-        dt = kwargs.pop('prev')
-        newline = kwargs.pop('newline')
-        term = self.render_dt(dt, width, **kwargs)
-        term_width = max( len(l) for l in term.splitlines() ) + len(kwargs['joiners']['dd'].join)
-        ind = term_width - kwargs['joiners']['dd'].indent
-        kwargs['first'] = 0 if newline else ind
-        text, foldable = self.text_or_block_renderer(e, width, **kwargs)
-        if foldable:
-            text = text.lstrip()
-        else:
-            text = mktext(text)
-        return text
+        dtwidth = kwargs.pop('dtwidth')
+        j = kwargs['joiners']['dd']
+        kwargs['first'] = dtwidth + len(j.join) - j.indent if j.overlap else 0
+        r, foldable = self.text_or_block_renderer(e, width, **kwargs)
+        lines = mklines(r, e) if foldable else r
+        lines[0].keep = True            # keep first line of dd with preceding dt
+        return lines
 
     # 2.19.  <displayreference>
     # 
@@ -1449,36 +1480,30 @@ class TextWriter(BaseV3Writer):
 #                     indent = 3
         else:
             indent = int(indent)
-        nljoin = Joiner('', '\n', '', indent, 0)
-        spjoin = Joiner('', '  ', '', indent, 0)
+        nljoin = Joiner('\n', indent, 0, False)
+        spjoin = Joiner('  ', indent, 0, True)
         ddjoin  = nljoin if newline else spjoin
         set_joiners(kwargs, {
-            None:       Joiner('', tjoin, '', 0, 0),
-            'dt':       Joiner('', tjoin, '', 0, 0),
+            None:       Joiner(tjoin, 0, 0, False),
+            'dt':       Joiner(tjoin, 0, 0, False),
             'dd':       ddjoin,
         })
         # rendering
         lines = []
         text = ''
-        prev = None
+        dtwidth = indent
         for c in e.getchildren():
-            if (not newline and c.tag == 'dd' and c.text and c.text.strip()
+            if (not newline and c.tag == 'dd' and c.text and c.text.strip(stripspace)
                 and (width - len('  ') - len(text)) < len(c.text.split(None, 1)[0]) ):
-
+                # Add a newline if first word of dd text won't fit to the right of dt
                 kwargs['joiners']['dd'] = nljoin
-                nl = True
             else:
                 kwargs['joiners']['dd'] = ddjoin
-                nl = newline
-            text = self.tjoin(text, c, width, prev=prev, newline=nl, **kwargs)
-            if c.tag == 'dd':
-                if lines:
-                    for i in range(tjoin.count('\n')-1):
-                        lines += blankline()
-                lines += mklines(text, prev)
-                text = ''
+            #
+            lines = self.ljoin(lines, c, width, dtwidth=dtwidth, **kwargs)
+            #
             if c.tag == 'dt':
-                prev = c
+                dtwidth = len(lines[-1].text)
         return lines
 
 
@@ -1492,13 +1517,13 @@ class TextWriter(BaseV3Writer):
     # 
     #    Document-wide unique identifier for this term.
     def render_dt(self, e, width, **kwargs):
-        kwargs.pop('newline', False)
+        kwargs.pop('dtwidth')        
         indent = kwargs['joiners']['dd'].indent
         join   = len(kwargs['joiners']['dd'].join)
         text = fill(self.inner_text_renderer(e), width=width-3, **kwargs)
         if len(text) < indent:
             text = text+' '*max(0, indent-join-len(text))
-        return text
+        return mklines(text, e)
 
 
     # 2.22.  <em>
@@ -1681,10 +1706,10 @@ class TextWriter(BaseV3Writer):
     #    Deprecated.
     def render_figure(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            'name':         Joiner('', ': ', '', 0, 0),
-            'artset':       Joiner('', '', '', 0, 0),
-            'artwork':      Joiner('', '', '', 0, 0),
-            'sourcecode':   Joiner('', '', '', 0, 0),
+            'name':         Joiner(': ', 0, 0, False),
+            'artset':       Joiner('', 0, 0, False),
+            'artwork':      Joiner('', 0, 0, False),
+            'sourcecode':   Joiner('', 0, 0, False),
         })
         #
         pn = e.get('pn')
@@ -1698,7 +1723,7 @@ class TextWriter(BaseV3Writer):
         lines = []
         for c in children:
             lines = self.ljoin(lines, c, width, **kwargs)
-        title = '\n'+center(title, width).rstrip()
+        title = '\n'+center(title, width).rstrip(stripspace)
         lines += mklines(title, e)
         return lines
 
@@ -1753,7 +1778,7 @@ class TextWriter(BaseV3Writer):
                 #assert displength(l)+displength(r)<70
                 w = 72-displength(l)-displength(r)
                 lines.append(l+' '*w+r)
-            return '\n'.join(lines).rstrip()+'\n'
+            return '\n'.join(lines).rstrip(stripspace)+'\n'
         #
         def wrap(label, items, left, right, suffix=''):
             line = '%s%s%s' % (label, items, suffix)
@@ -1861,9 +1886,9 @@ class TextWriter(BaseV3Writer):
                 # Internet-Draft
                 found = False
                 for group in front.xpath('./workgroup'):
-                    if group.text and group.text.strip():
+                    if group.text and group.text.strip(stripspace):
                         found = True
-                        left.append(group.text.strip())
+                        left.append(group.text.strip(stripspace))
                 if not found:
                     left.append('Network Working Group')
                 left.append('Internet-Draft')
@@ -2091,9 +2116,9 @@ class TextWriter(BaseV3Writer):
         if isinstance(tt, list):
             lines = stripl(tt)
             if lines and lines[0].elem.tag not in ['artwork', 'figure', 'sourcecode', 'li', ]:
-                lines[0].text = text + lines[0].text.lstrip()
+                lines[0].text = text + lines[0].text.lstrip(stripspace)
         else:
-            text += tt.lstrip()
+            text += tt.lstrip(stripspace)
             lines = mklines(text, e)
         if self.options.pagination:
             for i, l in enumerate(lines):
@@ -2205,7 +2230,7 @@ class TextWriter(BaseV3Writer):
     #    o  <xref> elements (Section 2.66)
     def render_name(self, e, width, **kwargs):
         hang=kwargs['joiners'][e.tag].hang
-        return fill(self.inner_text_renderer(e).strip(), width=width, hang=hang)
+        return fill(self.inner_text_renderer(e).strip(stripspace), width=width, hang=hang)
 
     # 2.33.  <note>
     # 
@@ -2236,8 +2261,8 @@ class TextWriter(BaseV3Writer):
     def render_note(self, e, width, **kwargs):
         kwargs['joiners'].update(
             {
-                None:       Joiner('', '\n\n', '', 3, 0),
-                'name':     Joiner('', ': ', '', 0, 0),
+                None:       Joiner('\n\n', 3, 0, False),
+                'name':     Joiner(': ', 0, 0, False),
             }
         )
         lines = []
@@ -2392,9 +2417,9 @@ class TextWriter(BaseV3Writer):
         indent = int( e.get('indent') or indent )
         e._padding = indent
         kwargs['joiners'].update({
-            None:   Joiner('', ljoin, '', indent, 0),
-            'li':   Joiner('', ljoin, '', 0, 0),
-            't':    Joiner('', ljoin, '', indent, 0),
+            None:   Joiner(ljoin, indent, 0, False),
+            'li':   Joiner(ljoin, 0, 0, False),
+            't':    Joiner(ljoin, indent, 0, False),
         })
         # rendering
         lines = []
@@ -2426,18 +2451,18 @@ class TextWriter(BaseV3Writer):
         author = e.getparent()
         org, ascii = short_org_name_set(author)
         if ascii:
-            org += ' (%s)' % ascii.strip()
+            org += ' (%s)' % ascii.strip(stripspace)
         return org
 
     def render_organization(self, e, width, **kwargs):
         text = ''
         if e != None:
             org = e.text or ''
-            org = org.strip()
+            org = org.strip(stripspace)
             if org and not is_script(org, 'Latin'):
                 ascii = e.get('ascii')
                 if ascii and ascii != org:
-                    org += ' (%s)' % ascii.strip()
+                    org += ' (%s)' % ascii.strip(stripspace)
             text = fill(org, width=width, **kwargs)
         return text
 
@@ -2493,13 +2518,13 @@ class TextWriter(BaseV3Writer):
         for k in adr:
             if isinstance(adr[k], list):
                 adr[k] = '\n'.join(adr[k])
-        set_joiners(kwargs, { None: Joiner('', '\n', '', 0, 0), })
+        set_joiners(kwargs, { None: Joiner('\n', 0, 0, False), })
         if adr:
             if all(is_script(v, 'Latin') for v in adr.values() if v):
                 latin = True
             try:
                 text = format_address(adr, latin=latin)
-                text = text.strip()+'\n\n'
+                text = text.strip(stripspace)+'\n\n'
                 return mklines(text, e)
             except:
                 debug.pprint('adr')
@@ -2665,8 +2690,8 @@ class TextWriter(BaseV3Writer):
                 url.text = '<%s>' % target
                 elements.append(url)
         set_joiners(kwargs, {
-            None:           Joiner('', ', ', '', 0, 0),
-            'annotation':   Joiner('', '  ', '', 0, 0),
+            None:           Joiner(', ', 0, 0, False),
+            'annotation':   Joiner('  ', 0, 0, False),
         })
         width = width-11
         text = self.render_authors(e, width, **kwargs)
@@ -2676,14 +2701,14 @@ class TextWriter(BaseV3Writer):
         for ctag in ('annotation', ):
             for c in e.iterdescendants(ctag):
                 text = self.tjoin(text, c, width, **kwargs)
-        text = fill(text, width=width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip()
-
+        text = fill(text, width=width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip(stripspace)
+        
         text = indent(text, 11, 0)
         if p.tag != 'referencegroup':
-            if len(label.strip()) > 10:
+            if len(label.strip(stripspace)) > 10:
                 label += '\n'
             else:
-                text = text.lstrip()
+                text = text.lstrip(stripspace)
         text = label + text
         lines = mklines(text, e)
         return lines
@@ -2712,8 +2737,8 @@ class TextWriter(BaseV3Writer):
     #    entry.
     def render_referencegroup(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            'reference':    Joiner('', '\n\n', '', 0, 0),
-            't':            Joiner('', '\n\n', '', 11, 0),
+            'reference':    Joiner('\n\n', 0, 0, False),
+            't':            Joiner('\n\n', 11, 0, False),
         })
         label = self.refname_mapping[e.get('anchor')]
         label = ('[%s]' % label).ljust(11)
@@ -2725,10 +2750,10 @@ class TextWriter(BaseV3Writer):
             t = self.element('t')
             t.text = '<%s>' % target
             lines = self.ljoin(lines, t, width, **kwargs)
-        if len(label.strip()) > 10:
+        if len(label.strip(stripspace)) > 10:
             lines = [ Line(label, e) ] + lines
         else:
-            lines[0].text = label + lines[0].text.lstrip()
+            lines[0].text = label + lines[0].text.lstrip(stripspace)
         return lines
 
     # 2.42.  <references>
@@ -2766,10 +2791,10 @@ class TextWriter(BaseV3Writer):
     def render_references(self, e, width, **kwargs):
         self.part = e.tag
         kwargs['joiners'].update({
-            None:           Joiner('', '\n\n', '', 3, 0),
-            'name':         Joiner('', '  '  , '', 0, 0),
-            'reference':    Joiner('', '\n\n', '', 3, 0),
-            'references':   Joiner('', '\n\n', '', 0, 0),
+            None:           Joiner('\n\n', 3, 0, False),
+            'name':         Joiner('  '  , 0, 0, False),
+            'reference':    Joiner('\n\n', 3, 0, False),
+            'references':   Joiner('\n\n', 0, 0, False),
         })
         lines = []
         if e.find('name') != None:
@@ -3235,14 +3260,14 @@ class TextWriter(BaseV3Writer):
     #    o  "default" (default)
     def render_section(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            None:       Joiner('', '\n\n', '', 3, 0), # default
-            't':        Joiner('', '\n\n', '', 3, 0),
-            'name':     Joiner('', '  ',   '', 0, 0),
-            'iref':     Joiner('', '  ',   '', 0, 0),
-            'section':  Joiner('', '\n\n', '', 0, 0),
-            'artset':   Joiner('', '\n\n', '', 0, 0),
-            'artwork':  Joiner('', '\n\n', '', 3, 0),
-            'sourcecode':  Joiner('', '\n\n', '', 3, 0),
+            None:       Joiner('\n\n', 3, 0, False), # default
+            't':        Joiner('\n\n', 3, 0, False),
+            'name':     Joiner('  ', 0, 0, False),
+            'iref':     Joiner('  ', 0, 0, False),
+            'section':  Joiner('\n\n', 0, 0, False),
+            'artset':   Joiner('\n\n', 0, 0, False),
+            'artwork':  Joiner('\n\n', 3, 0, False),
+            'sourcecode':  Joiner('\n\n', 3, 0, False),
         })
         text = ''
         pn = e.get('pn', 'unknown-unknown')
@@ -3251,7 +3276,7 @@ class TextWriter(BaseV3Writer):
             if text.startswith('Appendix'):
                 text = text.replace('.', ' ', 1)
             kwargs['joiners'].update({
-                'name':     Joiner('', '  ', '', len(text)+2, 0),
+                'name':     Joiner('  ', len(text)+2, 0, False),
             })
         lines = []
         name = e.find('name')
@@ -3636,10 +3661,11 @@ class TextWriter(BaseV3Writer):
         text = self.inner_text_renderer(e)
         if kwargs.pop('fill', True):
             text = fill(text, width=width, **kwargs)
+            lines = mklines(text, e)
         else:
             if isinstance(text, six.binary_type):
                 text = text.decode('utf-8')
-        lines = mklines(text, e)
+            lines = [ Line(text, e) ]
         return lines
 
 
@@ -3696,7 +3722,7 @@ class TextWriter(BaseV3Writer):
             debug.say('%s %s:' % (attr, note))
             for i in range(len(cells)):
                 row = [ (c.type[1], getattr(c, attr)) if attr else c for c in cells[i] ]
-                debug.say(str(row))
+                debug.say(str(row).replace('\u2028', '\u00a4'))
 
         def array(rows, cols, init):
             a = []
@@ -3823,9 +3849,9 @@ class TextWriter(BaseV3Writer):
                     cell.colspan = intattr(c, 'colspan')
                     cell.rowspan = intattr(c, 'rowspan')
                     cell.text, cell.foldable = self.text_or_block_renderer(c, width, fill=False, **kwargs) or ('', True)
-                    cell.text = mktext(cell.text)
+                    cell.text = mktextblock(cell.text)
                     if cell.foldable:
-                        cell.text = cell.text.strip()
+                        cell.text = cell.text.strip(stripspace)
                         cell.minwidth = max([0]+[ len(word) for word in splitter._split(cell.text) ]) if cell.text else 0
                     else:
                         cell.minwidth = max([0]+[ len(word) for line in cell.text.splitlines() for word in splitter._split(line) ])
@@ -4024,11 +4050,11 @@ class TextWriter(BaseV3Writer):
 
     def render_table(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            'name':     Joiner('', ': ', '', 0, 0),
-            'dl':       Joiner('', '\n\n', '', 0, 0),
-            'ol':       Joiner('', '\n\n', '', 0, 0),
-            't':        Joiner('', '\n\n', '', 0, 0),
-            'ul':       Joiner('', '\n\n', '', 0, 0),
+            'name':     Joiner(': ', 0, 0, False),
+            'dl':       Joiner('\n\n', 0, 0, False),
+            'ol':       Joiner('\n\n', 0, 0, False),
+            't':        Joiner('\n\n', 0, 0, False),
+            'ul':       Joiner('\n\n', 0, 0, False),
         })
         #
         pn = e.get('pn')
@@ -4045,7 +4071,7 @@ class TextWriter(BaseV3Writer):
         if table_width < min_title_width:
             table_width = min_title_width
             lines = align(lines, 'center', table_width)
-        title = '\n'+center(title, table_width).rstrip()
+        title = '\n'+center(title, table_width).rstrip(stripspace)
         lines += mklines(title, e)
         lines = align(lines, e.get('align', 'center'), width)
         return lines
@@ -4292,7 +4318,7 @@ class TextWriter(BaseV3Writer):
     #    Content model: only text content.
     def render_title(self, e, width, **kwargs):
         r = e.getparent().getparent()   # <reference>
-        title = clean_text(' '.join(e.itertext()).strip())
+        title = clean_text(' '.join(e.itertext()).strip(stripspace))
         quote_title = r.get('quoteTitle')
         if quote_title == 'true':
             title = '"%s"' % title
@@ -4300,7 +4326,7 @@ class TextWriter(BaseV3Writer):
 
     def render_title_front(self, e, width, **kwargs):
         pp = e.getparent().getparent()
-        title = '\u2028'.join(e.itertext()).strip()
+        title = '\u2028'.join(e.itertext()).strip(stripspace)
         title = fill(title, width=width, **kwargs)
         title = center(title, width)
         if self.options.rfc:
@@ -4309,7 +4335,7 @@ class TextWriter(BaseV3Writer):
             if pp.tag == 'rfc':
                 doc_name = self.root.get('docName')
                 if doc_name:
-                    title += '\n'+doc_name.strip().center(width).rstrip()
+                    title += '\n'+doc_name.strip(stripspace).center(width).rstrip(stripspace)
             return title
 
     # 2.60.1.  "abbrev" Attribute
@@ -4420,7 +4446,7 @@ class TextWriter(BaseV3Writer):
         #
         indent = len(e._symbol)+2
         if e._bare:
-            first = mktext(self.render(e[-1], width, **kwargs))
+            first = mktextblock(self.render(e[-1], width, **kwargs))
             if first:
                 indent = min(8, len(first.split()[0])+2)
         padding = indent
@@ -4428,9 +4454,9 @@ class TextWriter(BaseV3Writer):
         hang = max(padding, indent) - indent
         #
         kwargs['joiners'].update({
-            None:   Joiner('', ljoin, '', indent, 0),
-            'li':   Joiner('', ljoin, '', 0, 0),
-            't':    Joiner('', ljoin, '', indent, hang),
+            None:   Joiner(ljoin, indent, 0, False),
+            'li':   Joiner(ljoin, 0, 0, False),
+            't':    Joiner(ljoin, indent, hang, False),
         })
         # rendering
         lines = []
@@ -4509,7 +4535,7 @@ class TextWriter(BaseV3Writer):
         target = e.get('target')
         section = e.get('section')
         format = e.get('format')
-        reftext = e.get('derivedContent').strip()
+        reftext = e.get('derivedContent').strip(stripspace)
         exptext = self.inner_text_renderer(e, width, **kwargs)
         if exptext:
             # for later string formatting convenience, a trailing space if any text:
@@ -4531,7 +4557,7 @@ class TextWriter(BaseV3Writer):
                     else:
                         text = "%s" % (exptext or reftext)
             else:
-                text = exptext.strip()
+                text = exptext.strip(stripspace)
             pageno = e.get('pageno')
             if pageno and pageno.isdigit():
                 text += '\u2026' '%04d' % int(pageno)
@@ -4547,7 +4573,7 @@ class TextWriter(BaseV3Writer):
                 text = '%s[%s] (%s %s)' % (exptext, reftext, label, section)
             elif sform == 'bare':
                 if exptext and exptext != section:
-                    text = '%s (%s)' % (section, exptext.strip())
+                    text = '%s (%s)' % (section, exptext.strip(stripspace))
                 else:
                     text = '%s' % (section, )
             else:
