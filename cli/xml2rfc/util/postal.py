@@ -213,7 +213,7 @@ def get_address_format_rules(address, latin=False, normalize=False):
         address_format = normalize_address_format(address_format)
     return address_format, rules
 
-def enhance_address_format(rules, address_format):
+def enhance_address_format(adr, address_format):
     #     'A': 'street_address'
     #     'C': 'city'
     #     'D': 'city_area'
@@ -243,8 +243,9 @@ def enhance_address_format(rules, address_format):
     address_format = re.sub(r'%([A-Z])%([A-Z])', r'%\1 %\2', address_format)
     address_format = re.sub(r'%([A-Z])%([A-Z])', r'%\1 %\2', address_format)
     # country-specific fixes, if any
-    #if rules['country_code'] == 'SE':
-    #    pass
+    if adr['country_code'] == 'SE':
+        if not adr['postal_code']:
+            address_format = re.sub(r'SE-%Z ', r'', address_format)            
     return address_format
 
     
