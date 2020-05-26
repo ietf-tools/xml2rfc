@@ -76,6 +76,8 @@ class PdfWriter(BaseV3Writer):
 
         # fonts and page info
         fonts = self.get_serif_fonts()
+        # Check that we also have mono fonts
+        self.get_mono_fonts()
         page_info = {
             'top-left': self.page_top_left(),
             'top-center': self.page_top_center(),
@@ -118,11 +120,23 @@ class PdfWriter(BaseV3Writer):
             if fontconfig:
                 available = fontconfig.query(family=family)
                 if not available:
-                    self.warn(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
+                    self.err(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
         fonts -= set([ noto_serif, ])
         fonts = [ noto_serif, ] + list(fonts)
         self.note(None, "Found installed font: %s" % ', '.join(fonts))
         return fonts
+
+    def get_mono_fonts(self):
+        fonts = set()
+        family = "Roboto Mono"
+        if fontconfig:
+            available = fontconfig.query(family=family)
+            if not available:
+                self.err(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
+        fonts = [ family, ]
+        self.note(None, "Found installed font: %s" % ', '.join(fonts))
+        return fonts
+
 
 page_css_template = """
 @media print {{
@@ -133,6 +147,7 @@ page_css_template = """
   @page {{
     size: A4;
     font-size: 12px; /* needed for the page header and footer text */
+    font-family: {fonts};
 
     border-top: solid 1px #ccc;
     padding-top: 18px;
