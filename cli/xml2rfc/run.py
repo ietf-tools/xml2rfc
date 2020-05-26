@@ -113,7 +113,7 @@ def get_pdf_help(missing_libs=""):
         pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
 
 
-    3. Finally, install the full Noto Font package:
+    3. Finally, install the full Noto Font and Roboto Mono packages:
 
        * Download the full font file from:
          https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
@@ -122,6 +122,10 @@ def get_pdf_help(missing_libs=""):
 
        * Follow the installation instructions at
          https://www.google.com/get/noto/help/install/
+
+       * Go to https://fonts.google.com/specimen/Roboto+Mono, and download the
+         font.  Follow the installation instructions above, as applied to this
+         download.
     
     With these libraries, modules, and fonts installed and available to
     xml2rfc, the --pdf switch will be enabled.
