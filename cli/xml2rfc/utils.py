@@ -111,6 +111,7 @@ class TextWrapper(textwrap.TextWrapper):
                                     drop_whitespace=drop_whitespace) 
                 else:
                     wrapped.append(part)
+                initial = ''
             return wrapped
 
         # Set indentation
@@ -176,7 +177,7 @@ class TextWrapper(textwrap.TextWrapper):
 
     def fill(self, *args, **kwargs):
         kwargs.pop('fill', None)
-        return "\n".join(self.wrap(*args, **kwargs))
+        return "\u2028".join(self.wrap(*args, **kwargs))
 
 
 class TextSplitter(textwrap.TextWrapper):
