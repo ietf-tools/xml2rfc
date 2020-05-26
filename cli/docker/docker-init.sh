@@ -56,26 +56,31 @@ chmod -R g+w   /usr/local/lib/		# so we can patch libs if needed
 
 chmod g+rw /dev/pts/0                   # to make /usr/bin/pinentry work
 
-echo "Checking for local font directory"
-LOCAL_FONTS="/home/$USER/.fonts/opentype/noto/"
-[ -d $LOCAL_FONTS ] || echo "
- *** Missing font directory: $LOCAL_FONTS ***
-"
+for font in noto roboto; do
+        echo "Checking for local $font font directory"
+        LOCAL_FONTS="/home/$USER/.fonts/opentype/$font/"
+        [ -d $LOCAL_FONTS ] || echo "
+         *** Missing font directory: $LOCAL_FONTS ***
+        "
 
-FONT_COUNT=1605
-echo "Checking for local fonts"
-local_fonts="$(ls $LOCAL_FONTS | grep '\.[to]tf' | wc -l)"
+        echo "Checking for local $font fonts"
+        local_fonts="$(ls $LOCAL_FONTS | grep '\.[to]tf' | wc -l)"
+
+        # Check that local fonts are linked to fontconfig dir
+        found_fonts="$(ls /usr/share/fonts/truetype/$font/ | grep '\.[to]tf' | wc -l)"
+        [ $found_fonts = $local_fonts ] || {
+          echo "Linking in $font fonts"
+          mkdir -p /usr/share/fonts/truetype/$font/
+          ln -sf $LOCAL_FONTS/*.[to]tf /usr/share/fonts/truetype/$font/
+        }
+done
+
+FONT_COUNT=1615
+local_fonts="$(ls /home/$USER/.fonts/opentype/*/ | grep '\.[to]tf' | wc -l)"
 [ $local_fonts = $FONT_COUNT ] || echo "
  *** Missing local fonts: Expected $FONT_COUNT, found $local_fonts ***
 "
 
-# Check that local fonts are linked to fontconfig dir
-found_fonts="$(ls /usr/share/fonts/truetype/noto/ | grep '\.[to]tf' | wc -l)"
-[ $found_fonts = $local_fonts ] || {
-  echo "Linking in Noto fonts"
-  mkdir -p /usr/share/fonts/truetype/noto/
-  ln -sf $LOCAL_FONTS/*.[to]tf /usr/share/fonts/truetype/noto/
-}
 
 cd "/home/$USER/$CWD" || cd "/home/$USER/"
 
