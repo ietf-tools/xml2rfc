@@ -1,3 +1,32 @@
+xml2rfc (2.45.0) ietf; urgency=medium
+
+  * Fixed the html rendering of <cref> with display=false.
+    Fixes issue #516.
+
+  * Fixed the text rendering of <cref> with display=false.
+    Fixes issue #515.
+
+  * Fixed an error in postal address rendering for Sweden.
+    Fixes issue #520.
+
+  * Changed the internals of the text formatter to retain <br> information 
+    for longer internally, in order to make <br> have effect in for instance 
+    <dd> and <td> element text.  Fixes issues #508 and #513.
+
+  * Fixed erroneous indentation of first line of second and following 
+    paragraphs of multi-paragraph <dd> elements, and changed code to retain 
+    <br> in filled text.
+
+  * Added a font-family setting for @page in PDF mode, and added code to 
+    warn about missing Roboto Mono fonts if the python-fontconfig package
+    is available
+
+  * Added instructions for RobotoMono to the installation help for the 
+    --pdf switch.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  27 May 2020 04:08:18 -0700
+
+
 xml2rfc (2.44.0) ietf; urgency=medium
 
   * Added an '--unprep' switch and formatter to undo changes made by
