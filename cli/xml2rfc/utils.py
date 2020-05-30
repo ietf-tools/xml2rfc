@@ -183,17 +183,29 @@ class TextWrapper(textwrap.TextWrapper):
 class TextSplitter(textwrap.TextWrapper):
     """ Subclass that overrides a few things in the standard implementation """
     def __init__(self, **kwargs):
+        hyphen_split = kwargs.pop('hyphen_split', False)
         textwrap.TextWrapper.__init__(self, **kwargs)
 
         # Override wrapping regex, preserve '/' before linebreak
-        self.wordsep_re = re.compile(
-            u'('
-            u'[ \t\n\r\f\v]+|'                                  # any ASCII whitespace
-            u'[^\\s-]*\\w+/(?=[A-Za-z]\\w*)|'                   # forward-slash separated words
-            u'\u200b|'                                          # &zwsp; zero-width space is breakable space
-            u'\u2028|'                                          # &br; unicode 'line separator'
-            u'''(?<=[\\w\\!"'\\&\\.\\,\\?])-{2,}(?=\\w))'''     # em-dash
-            u'(?![\u00A0|\u2060|\uE060])')                      # UNLESS &nbsp; or &wj; 
+        if hyphen_split:
+            self.wordsep_re = re.compile(
+                u'('
+                u'[ \t\n\r\f\v]+|'                                  # any ASCII whitespace
+                u'[^\\s-]*\\w+/(?=[A-Za-z]\\w*)|'                   # forward-slash separated words
+                u'\u200b|'                                          # &zwsp; zero-width space is breakable space
+                u'\u2028|'                                          # &br; unicode 'line separator'
+                u'[^\\s-]*\\w+[^0-9\\s]-(?=\\w+)|'                  # hyphenated words
+                u'''(?<=[\\w\\!"'\\&\\.\\,\\?])-{2,}(?=\\w))'''     # em-dash
+                u'(?![\u00A0|\u2060|\uE060])')                      # UNLESS &nbsp; or &wj; 
+        else:
+            self.wordsep_re = re.compile(
+                u'('
+                u'[ \t\n\r\f\v]+|'                                  # any ASCII whitespace
+                u'[^\\s-]*\\w+/(?=[A-Za-z]\\w*)|'                   # forward-slash separated words
+                u'\u200b|'                                          # &zwsp; zero-width space is breakable space
+                u'\u2028|'                                          # &br; unicode 'line separator'
+                u'''(?<=[\\w\\!"'\\&\\.\\,\\?])-{2,}(?=\\w))'''     # em-dash
+                u'(?![\u00A0|\u2060|\uE060])')                      # UNLESS &nbsp; or &wj; 
 
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
