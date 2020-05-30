@@ -356,11 +356,12 @@ class HtmlWriter(BaseV3Writer):
                     e.text = e.text.rstrip()
                 else:
                     pass
-                p = build.a(pilcrow, classes='pilcrow', href='#%s'%id)
-                if first:
-                    e.insert(0, p)
-                else:
-                    e.append(p)
+                if ''.join(list(e.itertext())):
+                    p = build.a(pilcrow, classes='pilcrow', href='#%s'%id)
+                    if first:
+                        e.insert(0, p)
+                    else:
+                        e.append(p)
             else:
                 self.warn(e, 'Tried to add a pilcrow to <%s>, but found no "id" attribute' % e.tag)
 
