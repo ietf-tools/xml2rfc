@@ -1,3 +1,23 @@
+xml2rfc (2.45.1) ietf; urgency=medium
+
+  * Changed the handling of hyphens in table cells, so as to introduce line 
+    breaks on hyphens if necessary to keep a table from becoming too wide (but 
+    not otherwise).  The --table-hyphen-breaks switch can be used to permit 
+    line breaks on hyphens in table cells also for tables that would not 
+    otherwise become too wide.
+
+  * Added a switch --table-hyphen-breaks that will make the text renderer 
+    more eager to break on hyphens in table cells.
+
+  * Using a pilcrow on an otherwise empty element added unwanted vertical
+    space in the HTML output; avoid this.  Related to issue #508.
+
+  * Added a parameter to TextSplitter to control whether text is split on 
+    hyphens or not.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  30 May 2020 04:55:22 -0700
+
+
 xml2rfc (2.45.0) ietf; urgency=medium
 
   * Fixed the html rendering of <cref> with display=false.
