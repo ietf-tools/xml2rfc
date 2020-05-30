@@ -266,6 +266,8 @@ def main():
                            help='Add a BOM (unicode byte order mark) to the start of text files')
     textoptions.add_option('-P', '--no-pagination', dest='pagination', action='store_false', default=True,
                             help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated.')
+    textoptions.add_option('--table-hyphen-breaks', action='store_true', default=False,
+                            help='More easily do line breaks after hyphens in table cells to give a more compact table.')
     optionparser.add_option_group(textoptions)
 
     htmloptions = optparse.OptionGroup(optionparser, 'Html Format Options')

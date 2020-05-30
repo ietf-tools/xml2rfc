@@ -84,6 +84,7 @@ default_options = Values(defaults={
         'rfc_reference_base_url': 'https://rfc-editor.org/rfc/',
         'silence': default_silenced_messages,
         'strict': False,
+        'table_hyphen_breaks': False,
         'text': True,
         'unprep': False,
         'utf8': False,
