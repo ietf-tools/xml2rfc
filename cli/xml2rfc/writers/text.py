@@ -632,6 +632,7 @@ class TextWriter(BaseV3Writer):
                 lines = self.ljoin(lines, c, width, **kwargs)
                 kwargs.pop('first', None)
             return lines, False
+            
 
     def quote_renderer(self, e, width, prefix, by, cite, **kwargs):
         set_joiners(kwargs, {
@@ -3818,6 +3819,43 @@ class TextWriter(BaseV3Writer):
                     line = part
             return Line(line, table(e))
 
+        def find_minwidths(e, cells, hyphen_split=False):
+            """
+            Find the minimum column widths of regular cells
+            """
+            i = 0
+            splitter = utils.TextSplitter(width=67, hyphen_split=hyphen_split)
+            for p in e.iterchildren(['thead', 'tbody', 'tfoot']):
+                for r in list(p.iterchildren('tr')):
+                    j = 0
+                    for c in r.iterchildren('td', 'th'):
+                        # skip over cells belonging to an earlier row or column
+                        while j < len(cells[i]) and cells[i][j].element != c:
+                            j += 1
+                        #
+                        cell = cells[i][j]
+                        if cell.foldable:
+                            cell.text = cell.text.strip(stripspace)
+                            cell.minwidth = max([0]+[ len(word) for word in splitter._split(cell.text) ]) if cell.text else 0
+                        else:
+                            cell.minwidth = max([0]+[ len(word) for line in cell.text.splitlines() for word in splitter._split(line) ])
+                    i += 1
+
+        def set_colwidths(cells, rows, cols):
+            """
+            Compute the adjusted cell widths; the same for all rows of each column
+            """
+            for j in range(cols):
+                colmax = 0
+                for i in range(rows):
+                    cell = cells[i][j]
+                    if cell.minwidth:
+                        cw = cell.minwidth // cell.colspan
+                        if cw > colmax:
+                            colmax = cw
+                for i in range(rows):
+                    cells[i][j].colwidth = colmax
+
         # ----------------------------------------------------------------------
         rows, cols = get_dimensions(e)
         cells = array(rows, cols, Cell)
@@ -3848,7 +3886,10 @@ class TextWriter(BaseV3Writer):
                     cell = cells[i][j]
                     cell.colspan = intattr(c, 'colspan')
                     cell.rowspan = intattr(c, 'rowspan')
-                    cell.text, cell.foldable = self.text_or_block_renderer(c, width, fill=False, **kwargs) or ('', True)
+                    if len(c) == 1 and c[0].tag == 't':
+                        cell.text, cell.foldable = self.text_or_block_renderer(c[0], width, fill=False, **kwargs) or ('', True)
+                    else:
+                        cell.text, cell.foldable = self.text_or_block_renderer(c, width, fill=False, **kwargs) or ('', True)
                     cell.text = mktextblock(cell.text)
                     if cell.foldable:
                         cell.text = cell.text.strip(stripspace)
@@ -3865,34 +3906,24 @@ class TextWriter(BaseV3Writer):
                 i += 1
             prev = p
 
-                
         #show(cells, 'origin')
 
         # ----------------------------------------------------------------------
         # Find the minimum column widths of regular cells, and total width
         # per row.
-        totwidth  = []
-        for i in range(cols):
-            totwidth.append(sum([ c.minwidth for c in cells[0] if c.minwidth ])+cols+1)
-            if totwidth[i] > width:
-                self.warn(r, "Total width of this table row exceeds available width (%s): %s" % (width, etree.tostring(r)))
+        find_minwidths(e, cells, hyphen_split=self.options.table_hyphen_breaks)
         #show(cells, 'minwidth')
         #debug.pprint('totwidth')
 
         # ----------------------------------------------------------------------
         # Compute the adjusted cell widths; the same for all rows of each column
-        for j in range(cols):
-            colmax = 0
-            for i in range(rows):
-                cell = cells[i][j]
-                if cell.minwidth:
-                    cw = cell.minwidth // cell.colspan
-                    if cw > colmax:
-                        colmax = cw
-            for i in range(rows):
-                cells[i][j].colwidth = colmax
-        #show(cells, 'colwidth', 'after adjusted cell widths')
-
+        set_colwidths(cells, rows, cols)
+        reqwidth = sum([ c.colwidth for c in cells[0] ]) + cols + 1
+        if reqwidth > width:
+            # Try again, splitting cell content on hyphens this time
+            find_minwidths(e, cells, hyphen_split=True)
+            set_colwidths(cells, rows, cols)
+        #show(cells, 'colwidth', 'after aligned cell widths')
 
         # ----------------------------------------------------------------------
         # Add padding if possible. Pad widest first.
@@ -3902,7 +3933,7 @@ class TextWriter(BaseV3Writer):
         excess = width - reqwidth
         #
         if excess > 0:
-            widths = [ (c.colwidth, i) for i, c in enumerate(cells[0]) ]
+            widths = [ (c.colwidth, ic) for ic, c in enumerate(cells[0]) ]
             widths.sort()
             widths.reverse()
             for j in [ k for w, k in widths ]:
