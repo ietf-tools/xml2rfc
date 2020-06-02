@@ -2528,11 +2528,9 @@ class HtmlWriter(BaseV3Writer):
         else:
             hh = ul
         h.append(hh)
-        if x.get('empty')=='true':
-            if not 'ulEmpty' in classes:
-                if classes:
-                    classes += ' '
-                classes += 'ulEmpty' 
+        classes = ' '.join( list(
+                set( classes.split() ) |
+                set( filter(None, [ 'ulEmpty' if x.get('empty')=='true' else None, x.get('spacing'), ]))))
         if classes:
             ul.set('class', classes)
         for c in x.getchildren():
