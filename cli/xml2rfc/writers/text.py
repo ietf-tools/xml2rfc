@@ -1375,7 +1375,8 @@ class TextWriter(BaseV3Writer):
         kwargs['first'] = dtwidth + len(j.join) - j.indent if j.overlap else 0
         r, foldable = self.text_or_block_renderer(e, width, **kwargs)
         lines = mklines(r, e) if foldable else r
-        lines[0].keep = True            # keep first line of dd with preceding dt
+        if lines:
+            lines[0].keep = True            # keep first line of dd with preceding dt
         return lines
 
     # 2.19.  <displayreference>
