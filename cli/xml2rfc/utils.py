@@ -645,10 +645,10 @@ def iscomment(e):
     "Return True if e is a comment"
     return isinstance(e, _Comment)
 
-def hastext(e):
+def hastext(e, ignore=[]):
     "Return a list of text-level immediate children"
     head = [ e.text ] if e.text and e.text.strip() else []
-    items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
+    items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c) or (c.tag in ignore))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
     return items
 
 def clean_text(s):

@@ -622,9 +622,9 @@ class TextWriter(BaseV3Writer):
         # separately.  Return text and whether this was plain text.
         kwargs = copy.deepcopy(kw)
         if utils.hastext(e):
-            e = copy.deepcopy(e)
-            e.tag = 't'
+            _tag = e.tag; e.tag = 't'
             text = mktext(self.ljoin([], e, width, **kwargs))
+            e.tag = _tag
             return text, True
         else:
             lines = []
@@ -4417,7 +4417,12 @@ class TextWriter(BaseV3Writer):
     #    element can be combined with other character formatting elements, and
     #    the formatting will be additive.
     def render_tt(self, e, width, **kwargs):
-        text = '"%s"' % self.inner_text_renderer(e)
+        p = e.getparent()
+        render_plain = list(p.iterancestors('table')) and not utils.hastext(p, ignore=['tt'])
+        if render_plain:
+            text = '%s' % self.inner_text_renderer(e)
+        else:
+            text = '"%s"' % self.inner_text_renderer(e)
         text += e.tail or ''
         return text
 
