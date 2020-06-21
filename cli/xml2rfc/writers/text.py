@@ -3705,7 +3705,24 @@ class TextWriter(BaseV3Writer):
     # 
     #    Document-wide unique identifier for this table.
     def build_table(self, e, width, **kwargs):
-
+        # variations on border characters for table styles
+        style = self.options.table_borders
+        bchar_sets = {
+                'full': { '=': '=',
+                          '-': '-',
+                          '+': '+',
+                          '|': '|',},
+                'light':{ '=': '-',
+                          '-': None,
+                          '+': '+',
+                          '|': '|',},
+                'min':  { '=': '-',
+                          '-': None,
+                          '+': ' ',
+                          '|': ' ',},
+            }
+        bchar_sets['minimal'] = bchar_sets['min']
+        bchar = bchar_sets[style]
         class Cell(object):
             type    = b'None'
             text    = None
@@ -3718,6 +3735,8 @@ class TextWriter(BaseV3Writer):
             element = None
             padding = 0
             foldable= True
+            top     = ''
+            bot     = ''
 
         def show(cells, attr='', note=''):
             debug.say('')
@@ -3789,7 +3808,7 @@ class TextWriter(BaseV3Writer):
                     text = text + ' ' 
             return text
 
-        def border(c, d):
+        def merge_border(c, d):
             border = {
                 '=': { '=':'=', '-':'=', '+':'+', },
                 '-': { '=':'=', '-':'-', '+':'+', },
@@ -3800,7 +3819,7 @@ class TextWriter(BaseV3Writer):
                 return border[c][d]
             return c
 
-        def build_line(cells, i, cols, last=False):
+        def build_line(cells, i, cols, next=True):
             def table(e):
                 return list(e.iterancestors('table'))[0]
             line = ''
@@ -3812,10 +3831,13 @@ class TextWriter(BaseV3Writer):
                     continue
                 cell = cells[k][l]
                 part = cell.wrapped[cell.m]
-                if not last:
+                if next:
                     cell.m += 1
                 if line:
-                    line = line[:-1] + border(line[-1], part[0]) + part[1:]
+                    if bchar['|']:
+                        line = line[:-1] + merge_border(line[-1], part[0]) + part[1:]
+                    else:
+                        line = line + part
                 else:
                     line = part
             return Line(line, table(e))
@@ -3865,18 +3887,7 @@ class TextWriter(BaseV3Writer):
         # Iterate through tr and th/td elements, and annotate the cells array
         # with rowspan, colspan, and owning element and its origin
         i = 0
-        prev = e
         for p in e.iterchildren(['thead', 'tbody', 'tfoot']):
-            # On transition from between header/body/footer, use '=' lines
-            if (prev.tag, p.tag) in [('thead', 'tbody'), ('tbody', 'tfoot'),]:
-                ii = i-1
-                for j in range(len(cells[ii])):
-                    if hasattr(cells[ii][j], 'origin'):
-                        k, l = cells[ii][j].origin
-                        cells[k][l].bot = '='
-                    else:
-                        self.die(p, "Inconsistent table width: At least one, but not all rows of this table have a width of %s" % len(cells[ii]))
-                    
             for r in list(p.iterchildren('tr')):
                 j = 0
                 for c in r.iterchildren('td', 'th'):
@@ -3898,15 +3909,29 @@ class TextWriter(BaseV3Writer):
                     else:
                         cell.minwidth = max([0]+[ len(word) for line in cell.text.splitlines() for word in splitter._split(line) ])
                     cell.type = p.tag
-                    cell.top = '-'
-                    cell.bot = '-'
+                    if c.tag == 'th':
+                        cell.top = bchar['=']
+                        cell.bot = bchar['=']
+                    else:
+                        cell.top = bchar['-'] if not cell.top else cell.top
+                        cell.bot = bchar['-'] if not cell.bot else cell.bot
                     for k in range(i, i+cell.rowspan):
                         for l in range(j, j+cell.colspan):
                             cells[k][l].element = c
                             cells[k][l].origin  = (i, j)
                 i += 1
-            prev = p
-
+        # Ensure we have top and bottom borders
+        for j in range(len(cells[0])):
+            if hasattr(cells[0][j], 'origin'):
+                k, l = cells[0][j].origin
+                if not cells[k][l].top:
+                    cells[k][l].top = bchar['=']
+        for j in range(len(cells[-1])):
+            if hasattr(cells[-1][j], 'origin'):
+                k, l = cells[-1][j].origin
+                if not cells[k][l].bot:
+                    cells[k][l].bot = bchar['=']
+            del k, l
         #show(cells, 'origin')
 
         # ----------------------------------------------------------------------
@@ -3928,7 +3953,7 @@ class TextWriter(BaseV3Writer):
 
         # ----------------------------------------------------------------------
         # Add padding if possible. Pad widest first.
-        reqwidth = sum([ c.colwidth for c in cells[0] ]) + cols + 1
+        reqwidth = sum([ c.colwidth for c in cells[0] ]) + (cols + 1)*len(bchar['|'])
         if reqwidth > width:
             self.warn(e, "Total table width (%s) exceeds available width (%s)" % (reqwidth, width))
         excess = width - reqwidth
@@ -4054,30 +4079,40 @@ class TextWriter(BaseV3Writer):
 
         # ----------------------------------------------------------------------
         # Add cell borders
+        x = bchar['+']
+        l = bchar['|']
         for i in range(rows):
             for j in range(cols):
                 cell = cells[i][j]
                 if cell.origin == (i, j):
                     wrapped = (cell.wrapped + ['']*cell.height)[:cell.height]
-                    lines = (  [ '+' + cell.top*cell.colwidth + '+' ]
-                             + [ '|' + justify(cell, line) + '|' for line in wrapped ]
-                             + [ '+' + cell.bot*cell.colwidth + '+' ] )
+                    lines = (  ([ x + cell.top*cell.colwidth + x ] if cell.top else [])
+                             + ([ l + justify(cell, line) + l for line in wrapped ])
+                             + ([ x + cell.bot*cell.colwidth + x ] if cell.bot else []) )
                     cell.wrapped = lines
 
         #show(cells, 'lines', 'before assembly')
         # ----------------------------------------------------------------------
         # Emit combined cell content, line by line
         lines = []
-        last = build_line(cells, 0, cols, last=True)
+        prev_bottom_border_line = None
         for i in range(rows):
-            for n in range(cells[i][0].lines+1):
-                lines.append(build_line(cells, i, cols))
-                if last:
+            # For each table row, render the top cell border (if any) and content.  The bottom
+            # border will be merged with the next row's top border when processing that row.
+            has_top_border = any( c.top for c in cells[i] if c.wrapped)
+            has_bot_border = any( c.bot for c in cells[i] if c.wrapped)
+            for n in range(min(len(c.wrapped) for c in cells[i] if c.wrapped)-int(has_bot_border) ):
+                line = build_line(cells, i, cols)
+                lines.append(line)
+                if prev_bottom_border_line and has_top_border:
                     line = lines[-1]
-                    lines[-1] = Line(''.join(border(last.text[c], line.text[c]) for c in range(len(line.text))), line.elem)
-                    last = None
-            last = build_line(cells, i, cols, last=True)
-        lines.append(last)
+                    lines[-1] = Line(''.join(merge_border(prev_bottom_border_line.text[c], line.text[c]) for c in range(len(line.text))), line.elem)
+                prev_bottom_border_line = None
+            # Get the next line, which will contain the bottom border for completed cells,
+            # without incrementing the line count (we might have rowspan cells which might
+            # not have been completely consumed yet):
+            prev_bottom_border_line = build_line(cells, i, cols, next=False) if has_bot_border else None
+        lines.append(prev_bottom_border_line)
         return lines
 
     def render_table(self, e, width, **kwargs):
