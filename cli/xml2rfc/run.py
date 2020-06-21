@@ -268,6 +268,8 @@ def main():
                             help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated.')
     textoptions.add_option('--table-hyphen-breaks', action='store_true', default=False,
                             help='More easily do line breaks after hyphens in table cells to give a more compact table.')
+    textoptions.add_option('--table-borders', default='full', choices=['full', 'light', 'minimal', 'min', ],
+                            help='The style of table borders to use; one of full/light/minimal; default: %default')
     optionparser.add_option_group(textoptions)
 
     htmloptions = optparse.OptionGroup(optionparser, 'Html Format Options')

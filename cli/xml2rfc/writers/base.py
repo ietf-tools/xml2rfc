@@ -85,6 +85,7 @@ default_options = Values(defaults={
         'silence': default_silenced_messages,
         'strict': False,
         'table_hyphen_breaks': False,
+        'table_borders': 'full',
         'text': True,
         'unprep': False,
         'utf8': False,
