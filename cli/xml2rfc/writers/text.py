@@ -38,13 +38,16 @@ from xml2rfc.utils import justify_inline, clean_text
 
 
 IndexItem   = namedtuple('indexitem', ['item', 'subitem', 'anchor', 'page', ])
-Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', ])
+Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'outdent'])
 # Joiner parts:
 #   join    string used to join a rendered element to preceding text or lines
 #   indent  indentation of rendered element
 #   hang    additional indentation of second and follwoing lines
 #   overlap Join the last preceding and the first new line on one line, rather
-#           than simply appending new lines (when processing lines)
+#           than simply appending new lines (when processing lines).
+#           Used to handle <dl newline="false"/"true">
+#   outdent If necessary to fit content within width, use a smaller indent than
+#           indicated, in ljoin().  Used for <artwork>.
 
 # We don't use namedtuple for Line, because the resulting objects would be immutable:
 class Line(object):
@@ -88,9 +91,9 @@ seen = set()
 stripspace = " \t\n\r\f\v"
 
 base_joiners = {
-            None:           Joiner('\n\n', 0, 0, False),
-            etree.Comment:  Joiner('', 0, 0, False),
-            etree.PI:       Joiner('', 0, 0, False),
+            None:           Joiner('\n\n', 0, 0, False, False),
+            etree.Comment:  Joiner('', 0, 0, False, False),
+            etree.PI:       Joiner('', 0, 0, False, False),
         }
 
 def set_joiners(kwargs, update):
@@ -538,14 +541,17 @@ class TextWriter(BaseV3Writer):
         joiners = kwargs['joiners']
         j = joiners[e.tag] if e.tag in joiners else joiners[None]
         width -= j.indent
-        if width < minwidth(lines):
-            self.die(e, "Trying to render text in a too narrow column: width: %s, text: '%s'" % (width, mktext(lines)))
         kwargs['hang'] = j.hang
         res = mklines(self.render(e, width, **kwargs), e)
         if lines:
             for i in range(j.join.count('\n')-1):
                 lines += blankline()
-        nlines = lindent(res, j.indent, j.hang)
+        reswidth = max(len(l.text) for l in res) if res else 0
+        indent = j.indent
+        if j.outdent and reswidth > width:
+            indent -= min(indent, reswidth-width)
+            self.warn(e, "%s too wide, reducing indentation from %s to %s" % (e.tag.capitalize(), j.indent, indent))
+        nlines = lindent(res, indent, j.hang)
         if j.overlap and nlines:
             firstline = nlines[0]
             nlines = nlines[1:]
@@ -636,8 +642,8 @@ class TextWriter(BaseV3Writer):
 
     def quote_renderer(self, e, width, prefix, by, cite, **kwargs):
         set_joiners(kwargs, {
-            None:      Joiner('\n', 0, 0, False),
-            't':       Joiner('\n\n', 0, 0, False),
+            None:      Joiner('\n', 0, 0, False, False),
+            't':       Joiner('\n\n', 0, 0, False, False),
         })
         width = width if width else 69
         text, plain = self.text_or_block_renderer(e, width-3, **kwargs)
@@ -674,7 +680,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    Document-wide unique identifier for the Abstract.
     def render_abstract(self, e, width, **kwargs):
-        kwargs['joiners'].update({ None:       Joiner('\n\n', 3, 0, False), })
+        kwargs['joiners'].update({ None:       Joiner('\n\n', 3, 0, False, False), })
         lines = [ Line("Abstract", e) ]
         for c in e.getchildren():
             lines = self.ljoin(lines, c, width, **kwargs)
@@ -687,7 +693,7 @@ class TextWriter(BaseV3Writer):
     #    This element appears as a child element of <author> (Section 2.7).
     def render_address(self, e, width, **kwargs):
         set_joiners(kwargs, {
-            None:       Joiner('\n', 0, 0, False),
+            None:       Joiner('\n', 0, 0, False, False),
         })
         lines = []
         for c in e.getchildren():
@@ -908,7 +914,7 @@ class TextWriter(BaseV3Writer):
     # 
     #    Document-wide unique identifier for this aside.
     def render_aside(self, e, width, **kwargs):
-        kwargs['joiners'].update({ 't':       Joiner('\n\n', 0, 0, False), })
+        kwargs['joiners'].update({ 't':       Joiner('\n\n', 0, 0, False, False), })
         prefix = '   |  '
         width -= len(prefix)
         text, plain = self.text_or_block_renderer(e, width, **kwargs)
@@ -995,7 +1001,7 @@ class TextWriter(BaseV3Writer):
         Render one author entry for the Authors' Addresses section.
         """
         set_joiners(kwargs, {
-            None:       Joiner('\n', 0, 0, False),  # default 
+            None:       Joiner('\n', 0, 0, False, False),  # default 
         })
         lines = []
         address = e.find('./address')
@@ -1482,12 +1488,12 @@ class TextWriter(BaseV3Writer):
 #                     indent = 3
         else:
             indent = int(indent)
-        nljoin = Joiner('\n', indent, 0, False)
-        spjoin = Joiner('  ', indent, 0, True)
+        nljoin = Joiner('\n', indent, 0, False, False)
+        spjoin = Joiner('  ', indent, 0, True, False)
         ddjoin  = nljoin if newline else spjoin
         set_joiners(kwargs, {
-            None:       Joiner(tjoin, 0, 0, False),
-            'dt':       Joiner(tjoin, 0, 0, False),
+            None:       Joiner(tjoin, 0, 0, False, False),
+            'dt':       Joiner(tjoin, 0, 0, False, False),
             'dd':       ddjoin,
         })
         # rendering
@@ -1708,10 +1714,10 @@ class TextWriter(BaseV3Writer):
     #    Deprecated.
     def render_figure(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            'name':         Joiner(': ', 0, 0, False),
-            'artset':       Joiner('', 0, 0, False),
-            'artwork':      Joiner('', 0, 0, False),
-            'sourcecode':   Joiner('', 0, 0, False),
+            'name':         Joiner(': ', 0, 0, False, False),
+            'artset':       Joiner('', 0, 0, False, False),
+            'artwork':      Joiner('', 0, 0, False, False),
+            'sourcecode':   Joiner('', 0, 0, False, False),
         })
         #
         pn = e.get('pn')
@@ -2263,8 +2269,8 @@ class TextWriter(BaseV3Writer):
     def render_note(self, e, width, **kwargs):
         kwargs['joiners'].update(
             {
-                None:       Joiner('\n\n', 3, 0, False),
-                'name':     Joiner(': ', 0, 0, False),
+                None:       Joiner('\n\n', 3, 0, False, False),
+                'name':     Joiner(': ', 0, 0, False, False),
             }
         )
         lines = []
@@ -2419,9 +2425,9 @@ class TextWriter(BaseV3Writer):
         indent = int( e.get('indent') or indent )
         e._padding = indent
         kwargs['joiners'].update({
-            None:   Joiner(ljoin, indent, 0, False),
-            'li':   Joiner(ljoin, 0, 0, False),
-            't':    Joiner(ljoin, indent, 0, False),
+            None:   Joiner(ljoin, indent, 0, False, False),
+            'li':   Joiner(ljoin, 0, 0, False, False),
+            't':    Joiner(ljoin, indent, 0, False, False),
         })
         # rendering
         lines = []
@@ -2520,7 +2526,7 @@ class TextWriter(BaseV3Writer):
         for k in adr:
             if isinstance(adr[k], list):
                 adr[k] = '\n'.join(adr[k])
-        set_joiners(kwargs, { None: Joiner('\n', 0, 0, False), })
+        set_joiners(kwargs, { None: Joiner('\n', 0, 0, False, False), })
         if adr:
             if all(is_script(v, 'Latin') for v in adr.values() if v):
                 latin = True
@@ -2692,8 +2698,8 @@ class TextWriter(BaseV3Writer):
                 url.text = '<%s>' % target
                 elements.append(url)
         set_joiners(kwargs, {
-            None:           Joiner(', ', 0, 0, False),
-            'annotation':   Joiner('  ', 0, 0, False),
+            None:           Joiner(', ', 0, 0, False, False),
+            'annotation':   Joiner('  ', 0, 0, False, False),
         })
         width = width-11
         text = self.render_authors(e, width, **kwargs)
@@ -2739,8 +2745,8 @@ class TextWriter(BaseV3Writer):
     #    entry.
     def render_referencegroup(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            'reference':    Joiner('\n\n', 0, 0, False),
-            't':            Joiner('\n\n', 11, 0, False),
+            'reference':    Joiner('\n\n', 0, 0, False, False),
+            't':            Joiner('\n\n', 11, 0, False, False),
         })
         label = self.refname_mapping[e.get('anchor')]
         label = ('[%s]' % label).ljust(11)
@@ -2793,10 +2799,10 @@ class TextWriter(BaseV3Writer):
     def render_references(self, e, width, **kwargs):
         self.part = e.tag
         kwargs['joiners'].update({
-            None:           Joiner('\n\n', 3, 0, False),
-            'name':         Joiner('  '  , 0, 0, False),
-            'reference':    Joiner('\n\n', 3, 0, False),
-            'references':   Joiner('\n\n', 0, 0, False),
+            None:           Joiner('\n\n', 3, 0, False, False),
+            'name':         Joiner('  '  , 0, 0, False, False),
+            'reference':    Joiner('\n\n', 3, 0, False, False),
+            'references':   Joiner('\n\n', 0, 0, False, False),
         })
         lines = []
         if e.find('name') != None:
@@ -3262,14 +3268,14 @@ class TextWriter(BaseV3Writer):
     #    o  "default" (default)
     def render_section(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            None:       Joiner('\n\n', 3, 0, False), # default
-            't':        Joiner('\n\n', 3, 0, False),
-            'name':     Joiner('  ', 0, 0, False),
-            'iref':     Joiner('  ', 0, 0, False),
-            'section':  Joiner('\n\n', 0, 0, False),
-            'artset':   Joiner('\n\n', 0, 0, False),
-            'artwork':  Joiner('\n\n', 3, 0, False),
-            'sourcecode':  Joiner('\n\n', 3, 0, False),
+            None:       Joiner('\n\n', 3, 0, False, False), # default
+            't':        Joiner('\n\n', 3, 0, False, False),
+            'name':     Joiner('  ', 0, 0, False, False),
+            'iref':     Joiner('  ', 0, 0, False, False),
+            'section':  Joiner('\n\n', 0, 0, False, False),
+            'artset':   Joiner('\n\n', 0, 0, False, False),
+            'artwork':  Joiner('\n\n', 3, 0, False, True),
+            'sourcecode':  Joiner('\n\n', 3, 0, False, False),
         })
         text = ''
         pn = e.get('pn', 'unknown-unknown')
@@ -3278,7 +3284,7 @@ class TextWriter(BaseV3Writer):
             if text.startswith('Appendix'):
                 text = text.replace('.', ' ', 1)
             kwargs['joiners'].update({
-                'name':     Joiner('  ', len(text)+2, 0, False),
+                'name':     Joiner('  ', len(text)+2, 0, False, False),
             })
         lines = []
         name = e.find('name')
@@ -4117,11 +4123,11 @@ class TextWriter(BaseV3Writer):
 
     def render_table(self, e, width, **kwargs):
         kwargs['joiners'].update({
-            'name':     Joiner(': ', 0, 0, False),
-            'dl':       Joiner('\n\n', 0, 0, False),
-            'ol':       Joiner('\n\n', 0, 0, False),
-            't':        Joiner('\n\n', 0, 0, False),
-            'ul':       Joiner('\n\n', 0, 0, False),
+            'name':     Joiner(': ', 0, 0, False, False),
+            'dl':       Joiner('\n\n', 0, 0, False, False),
+            'ol':       Joiner('\n\n', 0, 0, False, False),
+            't':        Joiner('\n\n', 0, 0, False, False),
+            'ul':       Joiner('\n\n', 0, 0, False, False),
         })
         #
         pn = e.get('pn')
@@ -4526,9 +4532,9 @@ class TextWriter(BaseV3Writer):
         hang = max(padding, indent) - indent
         #
         kwargs['joiners'].update({
-            None:   Joiner(ljoin, indent, 0, False),
-            'li':   Joiner(ljoin, 0, 0, False),
-            't':    Joiner(ljoin, indent, hang, False),
+            None:   Joiner(ljoin, indent, 0, False, False),
+            'li':   Joiner(ljoin, 0, 0, False, False),
+            't':    Joiner(ljoin, indent, hang, False, False),
         })
         # rendering
         lines = []
