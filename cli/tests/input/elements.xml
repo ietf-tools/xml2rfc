@@ -529,7 +529,7 @@ Definition list, third bullet, fourth element:
          <table align="left">
            <name>Aligned left</name>
            <tbody>
-              <tr><td>One</td><td>Two</td></tr>
+              <tr><th>One</th><th>Two</th></tr>
               <tr><td>Alpha</td><td>Beta</td></tr>
            </tbody>
          </table>
@@ -537,7 +537,7 @@ Definition list, third bullet, fourth element:
          <table align="center">
            <name>Aligned center</name>
            <tbody>
-              <tr><td>One</td><td>Two</td></tr>
+              <tr><th>One</th><th>Two</th></tr>
               <tr><td>Alpha</td><td>Beta</td></tr>
            </tbody>
          </table>
@@ -545,7 +545,7 @@ Definition list, third bullet, fourth element:
          <table align="right">
            <name>Aligned right</name>
            <tbody>
-              <tr><td>One</td><td>Two</td></tr>
+              <tr><th>One</th><th>Two</th></tr>
               <tr><td>Alpha</td><td>Beta</td></tr>
            </tbody>
          </table>
@@ -985,21 +985,58 @@ for opt, value in opts:
             <dd>
                <t>And this is some text with a table.</t>
                <table>
+                  <thead>
+                     <tr>
+                        <th>Head 1</th>
+                        <th>Head 2</th>
+                        <th><tt>Head 3</tt></th>
+                     </tr>
+                  </thead>
                   <tbody>
                      <tr>
                         <td>Cell A1</td>
                         <td>Cell A2</td>
-                        <td>Cell A3</td>
+                        <td><tt>Cell A3</tt></td>
                      </tr>
                      <tr>
                         <td>Cell B1</td>
                         <td>Cell B2</td>
-                        <td>Cell B3</td>
+                        <td><tt>Cell B3</tt></td>
+                     </tr>
+                     <tr>
+                        <td>Cell C1</td>
+                        <td>Cell C2</td>
+                        <td><tt>Cell C3</tt></td>
+                     </tr>
+                  </tbody>
+                  <tbody>
+                     <tr>
+                        <th>Head 10</th>
+                        <th>Head 20</th>
+                        <th><tt>Head 30</tt></th>
+                     </tr>
+                     <tr>
+                        <td>Cell A10</td>
+                        <td>Cell A20</td>
+                        <td><tt>Cell A30</tt></td>
+                     </tr>
+                     <tr>
+                        <td>Cell B10</td>
+                        <td>Cell B20</td>
+                        <td><tt>Cell B30</tt></td>
                      </tr>
                   </tbody>
                </table>
             </dd>
          </dl>
+      </section>
+      <section>
+         <name>Wide artwork</name>
+         <?v3xml2rfc silence="Artwork too wide, reducing indentation" ?>
+         <artwork>
+0        1         2         3         4         5         6         7
+123456789012345678901234567890123456789012345678901234567890123456789012
+         </artwork>
       </section>
       <section numbered="false">
          <name>Unnumbered section</name>
