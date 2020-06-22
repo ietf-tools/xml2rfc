@@ -1679,7 +1679,12 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <li id="s-2-7">Item <a href="#s-2-7" class="pilcrow">&para;</a></li>
     def render_li_ul(self, h, x):
-        li = add.li(h, x, classes=h.get('class'))
+        indent = x.getparent().get('indent')
+        style = None
+        if indent and int(indent)>2:
+            em=(int(indent)-2)*0.5
+            style = 'margin-left: %.1fem; text-indent: -%.1fem;' % (em, em)
+        li = add.li(h, x, classes=h.get('class'), style=style)
         for c in x.getchildren():
             self.render(li, c)
         self.maybe_add_pilcrow(li)
@@ -1850,7 +1855,10 @@ class HtmlWriter(BaseV3Writer):
     #    </ol>
     def render_li_ol(self, h, x):
         indent = x.getparent().get('indent')
-        style = 'margin-left: %.1fem' % ((int(indent)-2)*0.5) if indent and int(indent)>2 else None
+        style = None
+        if indent and int(indent)>2:
+            em=(int(indent)-2)*0.5
+            style = 'margin-left: %.1fem; text-indent: -%.1fem;' % (em, em)
         li = add.li(h, x, style=style)
         for c in x.getchildren():
             self.render(li, c)
