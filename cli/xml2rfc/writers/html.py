@@ -107,8 +107,16 @@ class ExtendingElementMaker(ClassElementMaker):
             an = precursor.get('anchor')
             if   pn != None:
                 elem.set('id', pn)
-                if an != None and is_block:
-                    child = wrap(elem, 'div', id=an)
+                if an != None:
+                    if is_block:
+                        child = wrap(elem, 'div', id=an)
+                    else:
+                        # cannot wrap a non-block in <div>, so we invert the
+                        # wrapping by swapping the tags:
+                        child = wrap(elem, 'div', id=pn)
+                        elem.tag = child.tag
+                        child.tag = tag
+                        elem.set('id', an)
             elif sn != None:
                 elem.set('id', sn)
             elif an != None:
