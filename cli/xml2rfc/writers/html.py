@@ -1445,14 +1445,15 @@ class HtmlWriter(BaseV3Writer):
         latin = True if h.get('class') == 'ascii' else ( False if h.get('class') == 'non-ascii' else None )
         if latin == False:
             return None
-        value = x.text.strip()
-        cls = 'email'
-        div = add.div(h, None,
-                    build.span("Email:"), '\n',
-                    build.a(value, href='mailto:%s'%value, classes=cls),
-                    classes=cls,
-                )
-        return div
+        value = x.text.strip() if x.text else ''
+        if value:
+            cls = 'email'
+            div = add.div(h, None,
+                        build.span("Email:"), '\n',
+                        build.a(value, href='mailto:%s'%value, classes=cls),
+                        classes=cls,
+                    )
+            return div
 
     # 
     # 9.24.  <eref>
@@ -1912,14 +1913,15 @@ class HtmlWriter(BaseV3Writer):
         # will be skipped.  The 
         if not x.text:
             return None
-        value = x.text.strip()
-        cls = 'tel'
-        div = add.div(h, None,
-                    build.span("Phone:"), '\n',
-                    build.a(value, href='tel:%s'%value, classes=cls),
-                    classes=cls,
-                )
-        return div
+        value = x.text.strip() if x.text else ''
+        if value:
+            cls = 'tel'
+            div = add.div(h, None,
+                        build.span("Phone:"), '\n',
+                        build.a(value, href='tel:%s'%value, classes=cls),
+                        classes=cls,
+                    )
+            return div
 
     # 9.37.  <postal>
     # 
@@ -2676,14 +2678,15 @@ class HtmlWriter(BaseV3Writer):
     def render_uri(self, h, x):
         if not x.text:
             return None
-        value = x.text.strip()
-        cls = 'url'
-        div = add.div(h, None,
-                    build.span("URI:"), '\n',
-                    build.a(value, href=value, classes=cls),
-                    classes=cls,
-                )
-        return div
+        value = x.text.strip() if x.text else ''
+        if value:
+            cls = 'url'
+            div = add.div(h, None,
+                        build.span("URI:"), '\n',
+                        build.a(value, href=value, classes=cls),
+                        classes=cls,
+                    )
+            return div
 
     # 9.65.  <workgroup>
     # 
