@@ -1823,6 +1823,7 @@ class HtmlWriter(BaseV3Writer):
     def render_ol(self, h, x):
         type = x.get('type')
         if len(type) > 1 and '%' in type:
+            add.span(h, None, classes='break')
             ol = add.dl(h, x, classes='olPercent')
         else:
             attrib = sdict(dict( (k,v) for (k,v) in x.attrib.items() if k in ['start', 'type', ] ))
