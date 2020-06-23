@@ -1,3 +1,62 @@
+xml2rfc (2.46.0) ietf; urgency=medium
+
+  * Added <dd class='break'/> and <span class='break'/> entries in
+    additional places, as a workaround for WeasyPrint's eagerness to break
+    between <dt> and <dd>.  Fixes issue #529.
+
+  * Tweaked the rendering of <tt> inside table cells in text mode to not 
+    use double quotes to distinguish the <tt> content from surrounding text 
+    when the only cell content is the <tt> element.
+
+  * Modified the text rendering of table cells.  <thead> and <tfoot> now 
+    implies no special rendering (earlier, they caused a change in table border 
+    on transition) while <th> now always renders with distinct borders compared 
+    with <td>.  Also added 'light', and 'minimal' table renderings, with 
+    different table border settings when compared to the previous rendering, 
+    which now is available as 'full'.  The 'light' rendering is closer to the 
+    v2 formatter table rendering, but does not permit table cells with colspan 
+    or rowspan different from 1 to be properly distinguished.  The changes in 
+    <th> rendering fixes issue #527.
+
+  * Added a --table-borders option with possible values 'full', 'light', 
+    'minimal', to control the table rendering of the text renderer.  The 
+    current default value is 'full', but 'light' is closer to the v2 text 
+    renderer's output.
+
+  * Added a new internal join/indent setting to the Joiner nametuple to
+    control outdenting.  Used the outdenting setting to enable outdenting
+    for artwork wider than 69 characters in the v3 text renderer.  Fixes
+    issue #518.
+
+  * Added missing support for @indent for <ul> in the HTML renderer, and 
+    tweaked the same for <ol>.  Fixes issue #528.
+
+  * Corrected is_htmlblock() to not count <dt>, <dd>, and <li> as block 
+    elements as they cannot be wrapped in <div>.
+
+  * Updated and refined the div-wrapping used to introduce additional IDs
+    to deal better with anchors on <dt>, <dd>, and <li>.  Fixes issue #530.
+
+  * Made the CSS setting of background colour on <tt> and <code> more 
+    selective in order not to interfere with background colour in tables, for 
+    instance.
+
+  * Removed CSS that made URLs in references not break across lines -- the 
+    drawbacks turn out to be more of a bother than the original reason not to 
+    let these wrap.
+
+  * Did some HTML cleanup to make the w3.org validator happy.
+
+  * Fixed a few places in the HTML renderer where an empty tag could cause 
+    an exception.
+
+  * Added test cases for empty and double email addresses, and added
+    support for multiple email addresses within an author's address block.
+    Fixes issue #522.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  23 Jun 2020 10:28:56 -0700
+
+
 xml2rfc (2.45.3) ietf; urgency=medium
 
   * Fixed an issue with rendering empty <dd/> elements.
