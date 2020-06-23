@@ -537,7 +537,7 @@ class HtmlWriter(BaseV3Writer):
             cssout = os.path.join(os.path.dirname(self.filename), 'xml2rfc.css')
             with open(cssout, 'w', encoding='utf-8') as f:
                 f.write(css)
-            add.link(head, None, href="xml2rfc.css", type="text/css", rel="stylesheet")
+            add.link(head, None, href="xml2rfc.css", rel="stylesheet")
         elif self.options.no_css:
             pass
         else:
@@ -1351,7 +1351,7 @@ class HtmlWriter(BaseV3Writer):
             # don't touch the given date if we're rendering a reference
             year, month, day = augment_date(year, month, day, self.options.date)
         text = format_date(year, month, day, legacy=self.options.legacy_date_format)
-        datetime = format_date_iso(year, month, day) if have_date else x.text
+        datetime = format_date_iso(year, month, day) if have_date else None
         if x.text and have_date:
             text = "%s (%s)" % (x.text, text)
         elif x.text:
@@ -1359,9 +1359,14 @@ class HtmlWriter(BaseV3Writer):
         else:
             # text = text
             pass
-        time = add.time(h, x, text, datetime=datetime)
-        if x.getparent() == self.root.find('front'):
-            time.set('class', 'published')
+        if datetime:
+            time = add.time(h, x, text, datetime=datetime)
+            if x.getparent() == self.root.find('front'):
+                time.set('class', 'published')
+            elif list(x.iterancestors('reference')):
+                time.set('class', 'refDate')
+        else:
+            time = add.span(h, x, text)
         return time
 
     # 9.18.  <dd>
@@ -1376,6 +1381,7 @@ class HtmlWriter(BaseV3Writer):
         self.maybe_add_pilcrow(dd)
         # workaround for weasyprint's unwillingness to break between <dd> and
         # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
+        add.dd(h, None, classes='break')
         return dd
 
     # 9.19.  <displayreference>
@@ -1404,6 +1410,9 @@ class HtmlWriter(BaseV3Writer):
         if   spacing == 'compact':
             classes.append('dlCompact')
         classes = ' '.join(classes)
+        # workaround for weasyprint's unwillingness to break between <dd> and
+        # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
+        add.span(h, None, classes='break')
         dl = add.dl(h, x, classes=classes)
         for c in x.getchildren():
             self.render(dl, c)
@@ -1412,11 +1421,7 @@ class HtmlWriter(BaseV3Writer):
     # 9.21.  <dt>
     # 
     #    This element is directly rendered as its HTML counterpart.
-    def render_dt(self, h, x):
-        # workaround for weasyprint's unwillingness to break between <dd> and
-        # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
-        add.dd(h, None, classes='break')
-        return self.default_renderer(h, x)
+    render_dt = default_renderer
 
     # 
     # 9.22.  <em>
@@ -1818,7 +1823,6 @@ class HtmlWriter(BaseV3Writer):
     def render_ol(self, h, x):
         type = x.get('type')
         if len(type) > 1 and '%' in type:
-
             ol = add.dl(h, x, classes='olPercent')
         else:
             attrib = sdict(dict( (k,v) for (k,v) in x.attrib.items() if k in ['start', 'type', ] ))
@@ -1841,13 +1845,13 @@ class HtmlWriter(BaseV3Writer):
     #    </dl>
     def render_li_dl(self, h, x):
         label = x.get('derivedCounter')
-        # workaround for weasyprint's unwillingness to break between <dd> and
-        # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
-        add.dd(h, None, classes='break')
         dt = add.dt(h, None, label)
         indent = x.getparent().get('indent')
         style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent else None
         dd = add.dd(h, x, style=style)
+        # workaround for weasyprint's unwillingness to break between <dd> and
+        # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
+        add.dd(h, None, classes='break')
         for c in x.getchildren():
             self.render(dd, c)
         self.maybe_add_pilcrow(dd)
@@ -2042,11 +2046,11 @@ class HtmlWriter(BaseV3Writer):
             outer = div
             inner = div
         else:
+            dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
+            dd = add.dd(h, None)
             # workaround for weasyprint's unwillingness to break between <dd> and
             # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
             add.dd(h, None, classes='break')
-            dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
-            dd = add.dd(h, None)
             outer = dt, dd
             inner = dd
         # Deal with parts in the correct order
@@ -2094,11 +2098,11 @@ class HtmlWriter(BaseV3Writer):
     #      ...
     #    </dd>
     def render_referencegroup(self, h, x):
+        dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
+        dd = add.dd(h, None)
         # workaround for weasyprint's unwillingness to break between <dd> and
         # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
         add.dd(h, None, classes='break')
-        dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
-        dd = add.dd(h, None)
         for c in x.getchildren():
             self.render(dd, c)
         target = x.get('target')
