@@ -1448,11 +1448,18 @@ class HtmlWriter(BaseV3Writer):
         value = x.text.strip() if x.text else ''
         if value:
             cls = 'email'
-            div = add.div(h, None,
-                        build.span("Email:"), '\n',
-                        build.a(value, href='mailto:%s'%value, classes=cls),
-                        classes=cls,
-                    )
+            prev = x.getprevious()
+            if prev!=None and prev.tag==x.tag:
+                div = h[-1]
+                sib = div[-1]
+                sib.tail = sib.tail+', ' if sib.tail else ', '
+                div.append(build.a(value, href='mailto:%s'%value, classes=cls))
+            else:
+                div = add.div(h, None,
+                            build.span("Email:"), '\n',
+                            build.a(value, href='mailto:%s'%value, classes=cls),
+                            classes=cls,
+                        )
             return div
 
     # 

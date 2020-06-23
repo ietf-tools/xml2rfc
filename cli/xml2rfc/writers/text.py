@@ -45,7 +45,7 @@ Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'outden
 #   hang    additional indentation of second and follwoing lines
 #   overlap Join the last preceding and the first new line on one line, rather
 #           than simply appending new lines (when processing lines).
-#           Used to handle <dl newline="false"/"true">
+#           Used to handle <dl newline="false"/"true"> and multiple emails
 #   outdent If necessary to fit content within width, use a smaller indent than
 #           indicated, in ljoin().  Used for <artwork>.
 
@@ -694,6 +694,7 @@ class TextWriter(BaseV3Writer):
     def render_address(self, e, width, **kwargs):
         set_joiners(kwargs, {
             None:       Joiner('\n', 0, 0, False, False),
+            'email':    Joiner('', 0, 0, True, False),
         })
         lines = []
         for c in e.getchildren():
@@ -1563,7 +1564,11 @@ class TextWriter(BaseV3Writer):
     #    used if the email address has any internationalized components.
     def render_email(self, e, width, **kwargs):
         latin = kwargs.pop('latin', None)
-        text = fill("Email: %s"%e.text, width=width, **kwargs) if e.text and latin!=False else ''
+        prev = e.getprevious()
+        if prev!=None and prev.tag==e.tag:
+            text = fill(", %s"%e.text, width=width, **kwargs) if e.text and latin!=False else ''
+        else:
+            text = '\n'+fill("Email: %s"%e.text, width=width, **kwargs) if e.text and latin!=False else ''
         return text
 
     # 2.24.  <eref>
