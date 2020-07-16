@@ -25,7 +25,7 @@ except ImportError:
     from urlparse import urlparse, urljoin, urlsplit
 
 try:
-    import debug
+    from xml2rfc import debug
     assert debug
 except ImportError:
     pass
@@ -199,8 +199,12 @@ class CachingResolver(lxml.etree.Resolver):
         original = request  # Used for the error message only
         result = None  # Our proper path
         if request.endswith('.dtd') or request.endswith('.ent'):
-            if os.path.isabs(request) or urlparse(request).netloc:
-                # Absolute request, return as-is
+            if os.path.isabs(request) and os.path.exists(request):
+                # Absolute request, return as-is if it exists
+                attempts.append(request)
+                result = request
+            elif urlparse(request).netloc:
+                # Network request, return as-is
                 attempts.append(request)
                 result = request
             else:
@@ -319,9 +323,9 @@ class CachingResolver(lxml.etree.Resolver):
         # Verify the result -- either raise exception or return it
         if not result or (not os.path.exists(result) and not urlparse(original).netloc):
             if os.path.isabs(original):
-                xml2rfc.log.warn('A reference was requested with an absolute path, but not found '
-                    'in that location.  Removing the path component will cause xml2rfc to look for'
-                    'the file automatically in standard locations.')
+                xml2rfc.log.warn('A reference was requested with an absolute path: "%s", but not found '
+                    'in that location.  Removing the path component will cause xml2rfc to look for '
+                    'the file automatically in standard locations.' % original)
             # Couldn't resolve.  Throw an exception
             error = XmlRfcError('Unable to resolve external request: '
                                       + '"' + original + '"', line_no=line_no, filename=self.source)
@@ -477,7 +481,7 @@ class XmlRfcParser:
         if not library_dirs:
             library_dirs = os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc')
         self.library_dirs = []
-        srcdir = os.path.abspath(os.path.dirname(self.source))
+        srcdir = os.path.abspath(os.path.dirname(self.source)) if source else ''
         for raw_dir in re.split(':|;', library_dirs) + [ srcdir ]:
             # Convert empty directory to source dir
             if raw_dir == '': 
@@ -517,6 +521,7 @@ class XmlRfcParser:
 
         # Get an iterating parser object
         file = six.BytesIO(text)
+        file.name = self.source
         context = lxml.etree.iterparse(file,
                                       dtd_validation=False,
                                       load_dtd=True,
@@ -594,6 +599,7 @@ class XmlRfcParser:
 
         # Parse the XML file into a tree and create an rfc instance
         file = six.BytesIO(text)
+        file.name = self.source
         tree = lxml.etree.parse(file, parser)
         xmlrfc = XmlRfc(tree, self.default_dtd_path, nsmap=self.nsmap)
         xmlrfc.source = self.source
