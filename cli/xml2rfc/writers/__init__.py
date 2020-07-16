@@ -13,10 +13,12 @@ from xml2rfc.writers.html import HtmlWriter
 from xml2rfc.writers.expand import ExpandV3XmlWriter
 from xml2rfc.writers.pdf import PdfWriter
 from xml2rfc.writers.unprep import UnPrepWriter
+from xml2rfc.writers.doc import DocWriter
 
 # This defines what 'from xml2rfc.writers import *' actually imports:
 __all__ = ['BaseRfcWriter', 'RawTextRfcWriter', 'PaginatedTextRfcWriter',
            'HtmlRfcWriter', 'NroffRfcWriter', 'ExpandedXmlWriter',
            'RfcWriterError', 'V2v3XmlWriter', 'PrepToolWriter', 'TextWriter',
            'HtmlWriter', 'PdfWriter', 'ExpandV3XmlWriter', 'UnPrepWriter', 
+           'DocWriter',
        ]
