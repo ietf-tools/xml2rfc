@@ -46,6 +46,8 @@ default_options = Values(defaults={
         'date': datetime.date.today(),
         'datestring': None,
         'debug': False,
+        'docfile': False,
+        'doc_template': None,
         'doi_base_url': 'https://doi.org/',
         'dtd': None,
         'expand': False,
@@ -64,6 +66,7 @@ default_options = Values(defaults={
         'legacy_date_format': False,    # Change to True in 3.x
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
+        'manpage': False,
         'metadata_js_url': 'metadata.min.js',
         'no_css': False,
         'no_dtd': None,
@@ -86,6 +89,7 @@ default_options = Values(defaults={
         'strict': False,
         'table_hyphen_breaks': False,
         'table_borders': 'full',
+        'template_dir': 'templates',
         'text': True,
         'unprep': False,
         'utf8': False,
@@ -1583,12 +1587,37 @@ deprecated_element_tags = set([
     'list',
     'postamble',
     'preamble',
+    'relref',
     'spanx',
     'texttable',
     'ttcol',
     'vspace',
 ])
 
+deprecated_attributes = [
+    # element, attrbute
+    ('artwork', 'height'),
+    ('artwork', 'width'),
+    ('artwork', 'xml:space'),
+    ('figure', 'align'),
+    ('figure', 'alt'),
+    ('figure', 'height'),
+    ('figure', 'src'),
+    ('figure', 'suppress-title'),
+    ('figure', 'title'),
+    ('figure', 'width'),
+    ('note', 'title'),
+    ('references', 'title'),
+    ('section', 'title'),
+    ('seriesInfo', 'status'),
+    ('seriesInfo', 'stream'),
+    ('t', 'hangText'),
+    ('texttable', 'title'),
+    ('xref', 'pageno'),
+]
+
+
+v3_rnc_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rnc')
 v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
 v3_schema = lxml.etree.ElementTree(file=v3_rng_file)
 
@@ -1655,10 +1684,11 @@ def get_xref_tags():
     return tags
 
 
+element_tags= get_element_tags()
 meta_tags   = get_meta_tags() - deprecated_element_tags
 text_tags   = get_text_tags() - deprecated_element_tags
 inline_tags = get_inline_tags() - deprecated_element_tags
-block_tags  = get_element_tags() - inline_tags - deprecated_element_tags
+block_tags  = element_tags - inline_tags - deprecated_element_tags
 mixed_tags  = get_text_or_block_tags() - deprecated_element_tags
 xref_tags   = get_xref_tags()
 
@@ -1667,14 +1697,16 @@ xref_tags   = get_xref_tags()
 class BaseV3Writer(object):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
-        global v3_rng_file, v3_schema
+        global v3_rnc_file, v3_rng_file, v3_schema
         self.xmlrfc = xmlrfc
         self.tree = xmlrfc.tree if xmlrfc else None
         self.root = self.tree.getroot() if xmlrfc else None
         self.options = options
         self.date = date
-        self.rng_file = v3_rng_file
-        self.v3_rng = None
+        self.v3_rnc_file = v3_rnc_file
+        self.v3_rng_file = v3_rng_file
+        self.v3_rng = lxml.etree.RelaxNG(file=self.v3_rng_file)
+        self.v3_schema = v3_schema
         self.schema = v3_schema
         self.index_items = []
         self.meta_tags = set(meta_tags)
@@ -2081,9 +2113,6 @@ class BaseV3Writer(object):
             self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
 
         try:
-            if not self.v3_rng:
-                self.v3_rng = lxml.etree.RelaxNG(file=self.rng_file)
-                
             self.v3_rng.assertValid(self.tree)
             return True
         except Exception as e:
