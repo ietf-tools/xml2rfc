@@ -148,7 +148,10 @@ def extract_anchor_info(xml):
             info['sections'][anchor] = label.replace('section-','')
     return info
 
+optionparser = None
+
 def main():
+    global optionparser
     # Populate options
     formatter = optparse.IndentedHelpFormatter(max_help_position=40)
     optionparser = optparse.OptionParser(usage='xml2rfc SOURCE [OPTIONS] '
@@ -156,29 +159,48 @@ def main():
                                         'draft.xml -o Draft-1.0 --text --html',
                                         formatter=formatter)
 
-    formatgroup = optparse.OptionGroup(optionparser, 'Formats',
-                                       'Any or all of the following '
+    help_options = optparse.OptionGroup(optionparser, 'Documentation options',
+                    'Some options to generate built-in documentation.')
+    help_options.add_option('', '--docfile', action='store_true',
+                           help='generate a documentation XML file ready for formatting')
+    help_options.add_option('', '--manpage', action='store_true',
+                           help='show paged text documentation')
+    help_options.add_option('--country-help', action='callback', callback=print_country_help,
+                            help='show the recognized <country> strings')
+    help_options.add_option('--pdf-help', action='callback', callback=print_pdf_help,
+                            help='show pdf generation requirements')
+    help_options.add_option('--pi-help', action='callback', callback=print_pi_help,
+                            help='show the names and default values of PIs')
+    help_options.add_option('--template-dir', 
+                            help='directory to pull the doc.xml and doc.yaml templates from.  '
+                                 'The default is the "templates" directory of the xml2rfc package')
+    help_options.add_option('-V', '--version', action='store_true', 
+                            help='display the version number and exit')
+    optionparser.add_option_group(help_options)
+
+    formatgroup = optparse.OptionGroup(optionparser, 'Format selection',
+                                       'One or more of the following '
                                        'output formats may be specified. '
                                        'The default is --text. '
                                        'The destination filename will be based '
                                        'on the input filename, unless an '
                                        'argument is given to --basename.')
     formatgroup.add_option('', '--text', action='store_true',
-                           help='outputs to a text file with proper page breaks')
+                           help='outputs formatted text to file, with proper page breaks')
     formatgroup.add_option('', '--html', action='store_true',
-                           help='outputs to an html file')
+                           help='outputs formatted HTML to file')
     formatgroup.add_option('', '--nroff', action='store_true',
-                           help='outputs to an nroff file')
+                           help='outputs formatted nroff to file (only v2 input)')
     if xml2rfc.HAVE_CAIRO and xml2rfc.HAVE_PANGO:
         formatgroup.add_option('', '--pdf', action='store_true',
-                               help='outputs to a pdf file')
+                               help='outputs formatted PDF to file')
     else:
         formatgroup.add_option('', '--pdf', action='store_true',
                                help='(unavailable due to missing external library)')
     formatgroup.add_option('', '--raw', action='store_true',
-                           help='outputs to a text file, unpaginated')
+                           help='outputs formatted text to file, unpaginated (only v2 input)')
     formatgroup.add_option('', '--expand', action='store_true',
-                           help='outputs to an XML file with all references expanded')
+                           help='outputs XML to file with all references expanded')
     formatgroup.add_option('', '--v2v3', action='store_true',
                            help='convert vocabulary version 2 XML to version 3')
     formatgroup.add_option('', '--preptool', action='store_true',
@@ -195,12 +217,6 @@ def main():
                             help='purge the cache and exit')
     plain_options.add_option(      '--debug', action='store_true',
                             help='Show debugging output')
-    plain_options.add_option('--country-help', action='callback', callback=print_country_help,
-                            help='show the recognized <country> strings')
-    plain_options.add_option('--pdf-help', action='callback', callback=print_pdf_help,
-                            help='show pdf generation requirements')
-    plain_options.add_option('--pi-help', action='callback', callback=print_pi_help,
-                            help='show the names and default values of PIs')
     plain_options.add_option('-n', '--no-dtd', action='store_true',
                             help='disable DTD validation step')
     plain_options.add_option('-N', '--no-network', action='store_true', default=False,
@@ -208,46 +224,44 @@ def main():
     plain_options.add_option('-O', '--no-org-info', dest='first_page_author_org', action='store_false', default=True,
                             help='don\'t show author orgainzation info on page one (legacy only)')
     plain_options.add_option('-q', '--quiet', action='store_true',
-                            help="don't print anything")
+                            help="don't print anything while working")
     plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
                             help='Remove XML processing instructions')
     plain_options.add_option('-u', '--utf8', action='store_true',
                             help='generate utf8 output')
     plain_options.add_option('-v', '--verbose', action='store_true',
                             help='print extra information')
-    plain_options.add_option('-V', '--version', action='store_true', 
-                            help='display the version number and exit')
     optionparser.add_option_group(plain_options)
 
 
     value_options = optparse.OptionGroup(optionparser, 'Generic Options with Values')
     value_options.add_option('-b', '--basename', dest='basename', metavar='NAME',
                             help='specify the base name for output files')
-    value_options.add_option('-c', '--cache', dest='cache',
+    value_options.add_option('-c', '--cache', dest='cache', metavar='PATH',
                             help='specify a primary cache directory to write to; default: try [ %s ]'%', '.join(xml2rfc.CACHES) )
-    value_options.add_option('-d', '--dtd', dest='dtd', help='specify an alternate dtd file')
+    value_options.add_option('-d', '--dtd', dest='dtd', metavar='DTDFILE', help='specify an alternate dtd file')
     value_options.add_option('-D', '--date', dest='datestring', metavar='DATE',
                             default=datetime.datetime.today().strftime("%Y-%m-%d"),
                             help='run as if the date is DATE (format: yyyy-mm-dd)')
     value_options.add_option('-f', '--filename', dest='filename', metavar='FILE',
-                            help='Deprecated.  The same as -o.')
-    value_options.add_option('-i', '--indent', type=int, default=2, 
+                            help='Deprecated.  The same as -o')
+    value_options.add_option('-i', '--indent', type=int, default=2, metavar='INDENT',
                             help='With some v3 formatters: Indentation to use when pretty-printing XML')
     value_options.add_option('-o', '--out', dest='output_filename', metavar='FILE',
                             help='specify an explicit output filename')
     value_options.add_option('-p', '--path', dest='output_path', metavar='PATH',
                             help='specify the directory path for output files')
-    value_options.add_option('-s', '--silence', action='append', type="string", 
+    value_options.add_option('-s', '--silence', action='append', type="string", metavar='STRING',
                             help="Silence any warning beginning with the given string")
     optionparser.add_option_group(value_options)
 
     formatoptions = optparse.OptionGroup(optionparser, 'Generic Format Options')
     formatoptions.add_option('--v3', dest='legacy', action='store_false',
-                           help='with --text and --html: use the v3 formatter, rather than the legacy one.')
+                           help='with --text and --html: use the v3 formatter, rather than the legacy one')
     formatoptions.add_option('--legacy', '--v2', default=True, action='store_true',
-                           help='with --text and --html: use the legacy text formatter, rather than the v3 one.')
+                           help='with --text and --html: use the legacy text formatter, rather than the v3 one')
     formatoptions.add_option('--id-is-work-in-progress', default=True, action='store_true',
-                           help='in references, refer to Internet-Drafts as "Work in Progress".')
+                           help='in references, refer to Internet-Drafts as "Work in Progress"')
     optionparser.add_option_group(formatoptions)
 
     textoptions = optparse.OptionGroup(optionparser, 'Text Format Options')
@@ -255,19 +269,19 @@ def main():
                            help='calculate page breaks, and emit form feeds and page top'
                            ' spacing, but omit headers and footers from the paginated format')
     textoptions.add_option('--legacy-list-symbols', default=False, action='store_true',
-                           help='use the legacy list bullet symbols, rather than the new ones.')
+                           help='use the legacy list bullet symbols, rather than the new ones')
     textoptions.add_option('--legacy-date-format', default=False, action='store_true', # XXX change to True in version 3.x
-                           help='use the legacy date format, rather than the new one.')
+                           help='use the legacy date format, rather than the new one')
     textoptions.add_option('--no-legacy-date-format', dest='legacy_date_format', action='store_false',
-                           help="don't use the legacy date format.")
+                           help="don't use the legacy date format")
     textoptions.add_option('--list-symbols', metavar='4*CHAR',
-                           help='use the characters given as list bullet symbols.')
+                           help='use the characters given as list bullet symbols')
     textoptions.add_option('--bom', '--BOM', action='store_true', default=False,
                            help='Add a BOM (unicode byte order mark) to the start of text files')
     textoptions.add_option('-P', '--no-pagination', dest='pagination', action='store_false', default=True,
-                            help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated.')
+                            help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated')
     textoptions.add_option('--table-hyphen-breaks', action='store_true', default=False,
-                            help='More easily do line breaks after hyphens in table cells to give a more compact table.')
+                            help='More easily do line breaks after hyphens in table cells to give a more compact table')
     textoptions.add_option('--table-borders', default='full', choices=['full', 'light', 'minimal', 'min', ],
                             help='The style of table borders to use; one of full/light/minimal; default: %default')
     optionparser.add_option_group(textoptions)
@@ -355,6 +369,26 @@ def main():
                 pass
         sys.exit(0)
 
+    if (options.docfile or options.manpage) and not options.list_symbols:
+        options.list_symbols = default_options.list_symbols
+
+    if not options.silence:
+        options.silence = default_options.silence
+
+    if options.docfile:
+        filename = options.output_filename
+        if not filename:
+            filename = 'xml2rfc-doc-%s.xml' % xml2rfc.__version__
+            options.output_filename = filename
+        writer = xml2rfc.DocWriter(None, options=options, date=options.date)
+        writer.write(filename)
+        sys.exit()
+
+    if options.manpage:
+        writer = xml2rfc.DocWriter(None, options=options, date=options.date)
+        writer.manpage()
+        sys.exit()
+
     # Clear cache and exit if requested
     if options.clear_cache:
         xml2rfc.parser.XmlRfcParser('').delete_cache(path=options.cache)
@@ -438,9 +472,6 @@ def main():
         if not options.id_reference_base_url.endswith('/'):
             options.id_reference_base_url += '/'
 
-    if not options.silence:
-        options.silence = xml2rfc.writers.base.default_options.silence
-
     # ------------------------------------------------------------------
 
     # Setup warnings module
@@ -451,7 +482,7 @@ def main():
     # Parse the document into an xmlrfc tree instance
     parser = xml2rfc.XmlRfcParser(source,
                                   options=options,
-                                  templates_path=globals().get('_TEMPLATESPATH', None),
+                                  templates_path=options.template_dir,
                               )
     try:
         xmlrfc = parser.parse(remove_pis=options.remove_pis, normalize=True)
@@ -560,7 +591,7 @@ def main():
             htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
                                                options=options,
                                                date=options.date,
-                                               templates_dir=globals().get('_TEMPLATESPATH', None))
+                                               templates_dir=options.template_dir or None)
             htmlwriter.write(filename)
             options.output_filename = None
 
@@ -710,6 +741,7 @@ def main():
                         json.dump(info, fp, indent=2, ensure_ascii=False)
                 if not options.quiet:
                     xml2rfc.log.write('Created file', filename)
+
 
     except xml2rfc.RfcWriterError as e:
         xml2rfc.log.write(e.msg)
