@@ -37,8 +37,8 @@
           <choice>
             <value>no</value>
             <value>yes</value>
-            <value>false</value>
             <value>true</value>
+            <value>false</value>
           </choice>
         </attribute>
       </optional>
@@ -690,9 +690,9 @@
       <optional>
         <attribute name="xml:lang"/>
       </optional>
-      <oneOrMore>
+      <zeroOrMore>
         <ref name="section"/>
-      </oneOrMore>
+      </zeroOrMore>
     </element>
   </define>
   <define name="middle">
@@ -848,16 +848,16 @@
       <optional>
         <attribute name="keepWithNext" a:defaultValue="false">
           <choice>
-            <value>false</value>
             <value>true</value>
+            <value>false</value>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="keepWithPrevious" a:defaultValue="false">
           <choice>
-            <value>false</value>
             <value>true</value>
+            <value>false</value>
           </choice>
         </attribute>
       </optional>
@@ -1070,15 +1070,15 @@
       <optional>
         <attribute name="empty" a:defaultValue="false">
           <choice>
-            <value>false</value>
             <value>true</value>
+            <value>false</value>
           </choice>
         </attribute>
         <optional>
           <attribute name="bare" a:defaultValue="false">
             <choice>
-              <value>false</value>
               <value>true</value>
+              <value>false</value>
             </choice>
           </attribute>
         </optional>
@@ -1177,8 +1177,8 @@
       <optional>
         <attribute name="newline" a:defaultValue="false">
           <choice>
-            <value>false</value>
             <value>true</value>
+            <value>false</value>
           </choice>
         </attribute>
       </optional>
@@ -2494,9 +2494,6 @@
       </zeroOrMore>
     </element>
   </define>
-  <start combine="choice">
-    <ref name="rfc"/>
-  </start>
   <define name="u">
     <element name="u">
       <optional>
@@ -2518,4 +2515,7 @@
       <text/>
     </element>
   </define>
+  <start combine="choice">
+    <ref name="rfc"/>
+  </start>
 </grammar>

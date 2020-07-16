@@ -9,7 +9,9 @@
        attribute number { text }?,
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
-       attribute category { "std" | "bcp" | "exp" | "info" | "historic" }?,
+       attribute category { 
+         "std" | "bcp" | "exp" | "info" | "historic" 
+       }?,
        attribute mode { text }?,
        [ a:defaultValue = "false" ]
        attribute consensus { "no" | "yes" | "false" | "true" }?,
@@ -132,7 +134,8 @@
      element postal {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-       ((city | cityarea | code | country | extaddr | pobox | region | sortingcode | street)* 
+       (( city | cityarea | code | country | extaddr | pobox | region
+          | sortingcode | street)* 
         | postalLine+)
      }
 
@@ -308,7 +311,7 @@
      element toc {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-       section+
+       section*
      }
 
    middle =
@@ -335,7 +338,7 @@
        (artset
         | artwork
         | aside
-	| author
+        | author
         | blockquote
         | contact
         | dl
@@ -385,9 +388,9 @@
        attribute pn { xsd:ID }?,
        attribute hangText { text }?,
        [ a:defaultValue = "false" ]
-       attribute keepWithNext { "false" | "true" }?,
+       attribute keepWithNext { "true" | "false" }?,
        [ a:defaultValue = "false" ]
-       attribute keepWithPrevious { "false" | "true" }?,
+       attribute keepWithPrevious { "true" | "false" }?,
        (text
         | bcp14
         | br
@@ -476,9 +479,9 @@
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
        ([ a:defaultValue = "false" ]
-        attribute empty { "false" | "true"},
-	[ a:defaultValue = "false" ]
-        attribute bare { "false" | "true"}?)?,
+        attribute empty { "true" | "false" },
+        [ a:defaultValue = "false" ]
+        attribute bare { "true" | "false" }?)?,
         attribute indent { text }?,
         attribute pn { xsd:ID }?,
        li+
@@ -491,7 +494,16 @@
        attribute anchor { xsd:ID }?,
        attribute derivedCounter { text }?,
        attribute pn { xsd:ID }?,
-       ((artset | artwork | blockquote | dl | figure | ol | sourcecode | t | table | ul)+
+       (( artset
+          | artwork
+          | blockquote
+          | dl
+          | figure
+          | ol
+          | sourcecode
+          | t
+          | table
+          | ul)+
         | (text
            | bcp14
            | br
@@ -516,7 +528,7 @@
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
        [ a:defaultValue = "false" ]
-       attribute newline { "false" | "true" }?,
+       attribute newline { "true" | "false" }?,
        attribute indent { text }?,
        attribute pn { xsd:ID }?,
        (dt, dd)+
@@ -549,7 +561,15 @@
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { xsd:ID }?,
-       ((artset | artwork | dl | figure | ol | sourcecode | t | table | ul)+
+       (( artset
+          | artwork
+          | dl
+          | figure
+          | ol
+          | sourcecode
+          | t
+          | table
+          | ul)+
         | (text
            | bcp14
            | br
@@ -581,7 +601,7 @@
        attribute section { text }?,
        attribute relative { text }?,
        attribute derivedLink { text }?,
-       ( text | em | strong | sub | sup | tt )*
+       (text | em | strong | sub | sup | tt)*
      }
 
    relref =
@@ -628,7 +648,16 @@
        attribute source { text }?,
        [ a:defaultValue = "true" ]
        attribute display { "true" | "false" }?,
-       (text | br | em | eref | relref | strong | sub | sup | tt | xref)*
+       (text
+        | br
+        | em
+        | eref
+        | relref 
+        | strong
+        | sub
+        | sup
+        | tt
+        | xref)*
      }
 
    tt =
@@ -1017,7 +1046,7 @@
 
    stream = 
      element stream {
-       ( "IETF" | "IAB" | "IRTF" | "independent" )?       
+       ( "IETF" | "IAB" | "IRTF" | "independent" )?
    }
 
    referencegroup =
@@ -1079,7 +1108,6 @@
        attribute xml:lang { text }?,
        (text | bcp14 | em | strong | sub | sup | tt)*
      }
-   start |= rfc
 
    u = 
      element u {
@@ -1090,3 +1118,5 @@
        attribute pn { xsd:ID }?,
        text
      }
+
+   start |= rfc
