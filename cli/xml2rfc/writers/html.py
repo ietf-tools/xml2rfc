@@ -1589,72 +1589,80 @@ class HtmlWriter(BaseV3Writer):
             # First page, top, internal document information
             dl = build.dl(id='identifiers')
             h.append( build.div(dl, classes='document-information', id="internal-metadata" ))
-            if self.options.rfc:
-                # Stream
-                stream = self.root.get('submissionType')
-                entry(dl, 'Stream', strings.stream_name[stream])
-                # Series info
-                for series in x.xpath('./seriesInfo'):
-                    self.render_seriesinfo(dl, series)
-                for section in ['obsoletes', 'updates']:
-                    items = self.root.get(section)
-                    if items:
-                        alist = []
-                        for num in filter(None, items.split(',')):
-                            num = num.strip()
-                            if alist:
-                                alist[-1].tail = ', '
-                            a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%num), classes='eref')
-                            a.tail = ' '
-                            alist.append(a)
-                        entry(dl, section.title(), *alist)
-
-                category = self.root.get('category', '')
-                if category:
-                    entry(dl, 'Category', strings.category_name[category])
-                # Publication date
-                entry(dl, 'Published', self.render_date(None, x.find('date')))
-                # ISSN
-                entry(dl, 'ISSN', '2070-1721')
-
-            else:
-                # Workgroup
-                found = False
+            ipr = self.root.get('ipr')
+            if ipr in ['', 'none']:
+                # Empty IPR -- not an I*TF document; abbreviated top
                 for wg in x.xpath('./workgroup'):
                     if wg.text and wg.text.strip():
                         entry(dl, 'Workgroup', wg.text.strip())
                         found = True
-                if not found:
-                    entry(dl, 'Workgroup', 'Network Working Group')
-                # Internet-Draft
-                for series in x.xpath('./seriesInfo'):
-                    entry(dl, series.get('name'), series.get('value'))
-                # Obsoletes and Updates
-                for section in ['obsoletes', 'updates']:
-                    items = self.root.get(section)
-                    if items:
-                        alist = []
-                        for num in filter(None, items.split(',')):
-                            num = num.strip()
-                            if alist:
-                                alist[-1].tail = ', '
-                            a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%num), classes='eref')
-                            alist.append(a)
-                        entry(dl, section.title(), *alist)
-                        a.tail = ' (if approved)'
-                # Publication date
-                entry(dl, 'Published', self.render_date(None, x.find('date')))
-                # Intended category
-                category = self.root.get('category', '')
-                if category:
-                    entry(dl, 'Intended Status', strings.category_name[category])
-                # Expiry date
-                if self.root.get('ipr') != 'none':
-                    exp = get_expiry_date(self.root, self.date)
-                    expdate = build.date(year=str(exp.year), month=str(exp.month))
-                    if exp.day:
-                        expdate.set('day', str(exp.day))
-                    entry(dl, 'Expires', self.render_date(None, expdate))
+            else:
+                if self.options.rfc:
+                    # Stream
+                    stream = self.root.get('submissionType')
+                    entry(dl, 'Stream', strings.stream_name[stream])
+                    # Series info
+                    for series in x.xpath('./seriesInfo'):
+                        self.render_seriesinfo(dl, series)
+                    for section in ['obsoletes', 'updates']:
+                        items = self.root.get(section)
+                        if items:
+                            alist = []
+                            for num in filter(None, items.split(',')):
+                                num = num.strip()
+                                if alist:
+                                    alist[-1].tail = ', '
+                                a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%num), classes='eref')
+                                a.tail = ' '
+                                alist.append(a)
+                            entry(dl, section.title(), *alist)
+
+                    category = self.root.get('category', '')
+                    if category:
+                        entry(dl, 'Category', strings.category_name[category])
+                    # Publication date
+                    entry(dl, 'Published', self.render_date(None, x.find('date')))
+                    # ISSN
+                    entry(dl, 'ISSN', '2070-1721')
+
+                else:
+                    # Workgroup
+                    found = False
+                    for wg in x.xpath('./workgroup'):
+                        if wg.text and wg.text.strip():
+                            entry(dl, 'Workgroup', wg.text.strip())
+                            found = True
+                    if not found:
+                        entry(dl, 'Workgroup', 'Network Working Group')
+                    # Internet-Draft
+                    for series in x.xpath('./seriesInfo'):
+                        entry(dl, series.get('name'), series.get('value'))
+                    # Obsoletes and Updates
+                    for section in ['obsoletes', 'updates']:
+                        items = self.root.get(section)
+                        if items:
+                            alist = []
+                            for num in filter(None, items.split(',')):
+                                num = num.strip()
+                                if alist:
+                                    alist[-1].tail = ', '
+                                a = build.a(num, href=os.path.join(self.options.rfc_base_url, 'rfc%s'%num), classes='eref')
+                                alist.append(a)
+                            entry(dl, section.title(), *alist)
+                            a.tail = ' (if approved)'
+                    # Publication date
+                    entry(dl, 'Published', self.render_date(None, x.find('date')))
+                    # Intended category
+                    category = self.root.get('category', '')
+                    if category:
+                        entry(dl, 'Intended Status', strings.category_name[category])
+                    # Expiry date
+                    if self.root.get('ipr') != 'none':
+                        exp = get_expiry_date(self.root, self.date)
+                        expdate = build.date(year=str(exp.year), month=str(exp.month))
+                        if exp.day:
+                            expdate.set('day', str(exp.day))
+                        entry(dl, 'Expires', self.render_date(None, expdate))
 
             authors = x.xpath('./author')
             dl.append( build.dt('Authors:' if len(authors)>1 else 'Author:', classes='label-authors' ))
@@ -2917,105 +2925,3 @@ class HtmlWriter(BaseV3Writer):
                     i += 1
         return h
 
-    # --- class variables ------------------------------------------------------
-
-    element_tags = [
-        'abstract',
-        'address',
-        'annotation',
-        'artset',
-        'artwork',
-        'aside',
-        'author',
-        'back',
-        'bcp14',
-        'blockquote',
-        'boilerplate',
-        'br',
-        'city',
-        'code',
-        'country',
-        'cref',
-        'date',
-        'dd',
-        'displayreference',
-        'dl',
-        'dt',
-        'em',
-        'email',
-        'eref',
-        'figure',
-        'front',
-        'iref',
-        'li',
-        'link',
-        'middle',
-        'name',
-        'note',
-        'ol',
-        'organization',
-        'phone',
-        'postal',
-        'postalLine',
-        'refcontent',
-        'reference',
-        'referencegroup',
-        'references',
-        'region',
-        'relref',
-        'rfc',
-        'section',
-        'seriesInfo',
-        'sourcecode',
-        'street',
-        'strong',
-        'sub',
-        'sup',
-        't',
-        'table',
-        'tbody',
-        'td',
-        'tfoot',
-        'th',
-        'thead',
-        'title',
-        'tr',
-        'tt',
-        'ul',
-        'uri',
-        'xref',
-    ]
-    deprecated_element_tags = [
-        'list',
-        'spanx',
-        'vspace',
-        'c',
-        'texttable',
-        'ttcol',
-        'facsimile',
-        'format',
-        'preamble',
-        'postamble',
-    ]
-    unused_front_element_renderers = [
-        'area',
-        'keyword',
-        'workgroup',
-    ]
-    all_element_tags = element_tags + deprecated_element_tags + unused_front_element_renderers
-    deprecated_attributes = [
-        # element, attrbute
-        ('figure', 'align'),
-        ('section', 'title'),
-        ('note', 'title'),
-        ('figure', 'title'),
-        ('references', 'title'),
-        ('texttable', 'title'),
-        ('figure', 'src'),
-        ('artwork', 'xml:space'),
-        ('artwork', 'height'),
-        ('artwork', 'width'),
-        ('figure', 'height'),
-        ('figure', 'width'),
-        ('xref', 'pageno'),
-    ]

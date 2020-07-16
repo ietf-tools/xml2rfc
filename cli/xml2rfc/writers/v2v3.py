@@ -10,7 +10,6 @@ import traceback as tb
 
 from collections import OrderedDict
 from io import open
-from lxml import etree
 from lxml.etree import Element, Comment, CDATA
 
 import xml2rfc
@@ -52,8 +51,6 @@ class V2v3XmlWriter(BaseV3Writer):
         self.tree = xmlrfc.tree
         self.root = self.tree.getroot()
         self.options = options
-        self.v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
-        self.schema = etree.ElementTree(file=self.v3_rng_file)
 
     def validate(self):
         return super(V2v3XmlWriter, self).validate(when='when running v2v3 conversion', warn=True)
@@ -282,6 +279,7 @@ class V2v3XmlWriter(BaseV3Writer):
                                             # 2.25.5.  "src" Attribute
                                             # 2.25.6.  "suppress-title" Attribute
                                             # 2.25.8.  "width" Attribute
+            './/relref',                    # Deprecated after 7991
             './/reference',                 #        <reference>
             '.',                            # 2.45.  <rfc>
                                             # 2.45.1.  "category" Attribute
@@ -603,12 +601,11 @@ class V2v3XmlWriter(BaseV3Writer):
                 e.insert(0, c)
         stripattr(e, ['title', ])
 
-    def element_reference(self, e, p):
-        if 'quote-title' in e.attrib:
-            v = 'true' if e.get('quote-title') in ['true', 'yes'] else 'false'
-            if v != 'true':             # no need to set default value
-                e.set('quoteTitle', v)
-        stripattr(e, ['quote-title'])
+    def element_relref(self, e, p):
+        if 'displayFormat' in e.attrib:
+            e.attrib['sectionFormat'] = e.attrib['displayFormat']
+            del e.attrib['displayFormat']
+        e.tag = 'xref'
 
     # 2.45.  <rfc>
     # 

@@ -32,8 +32,6 @@ class UnPrepWriter(BaseV3Writer):
         self.liberal = liberal if liberal != None else options.accept_prepped
         self.keep_pis = keep_pis
         #
-        self.v3_rng = etree.RelaxNG(file=self.rng_file)
-        #
         self.ol_counts = {}
         self.attribute_defaults = {}
         # 

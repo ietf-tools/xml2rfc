@@ -105,8 +105,6 @@ class PrepToolWriter(BaseV3Writer):
         self.liberal = liberal if liberal != None else options.accept_prepped
         self.keep_pis = keep_pis
         #
-        self.v3_rng = etree.RelaxNG(file=self.rng_file)
-        #
         self.ol_counts = {}
         self.attribute_defaults = {}
         # 
@@ -373,13 +371,15 @@ class PrepToolWriter(BaseV3Writer):
 
     def rfc_check_attribute_values(self, e,  p):
         doc_name = e.get('docName')
-        if doc_name and doc_name.strip():
-            if '.' in doc_name:
-                self.warn(e, "The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
-            if not re.search(r'-\d\d$', doc_name):
-                self.warn(e, "The 'docName' attribute of the <rfc/> element should have a revision number as the last component: docName=\"draft-foo-bar-02\".")
-        elif not self.options.rfc:
-            self.warn(e, "Expected a 'docName' attribute in the <rfc/> element, but found none.")
+        if self.root.get('ipr') == '':
+            # If the <rfc> ipr attribute is blank, it's a non-I*TF document
+            if doc_name and doc_name.strip():
+                if '.' in doc_name:
+                    self.warn(e, "The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
+                if not re.search(r'-\d\d$', doc_name):
+                    self.warn(e, "The 'docName' attribute of the <rfc/> element should have a revision number as the last component: docName=\"draft-foo-bar-02\".")
+            elif not self.options.rfc:
+                self.warn(e, "Expected a 'docName' attribute in the <rfc/> element, but found none.")
 
     def check_attribute_values(self, e, p):
         # attribute names
