@@ -291,47 +291,56 @@ class TextWriter(BaseV3Writer):
         super(TextWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         self.options.min_section_start_lines = 5
         self.refname_mapping = self.get_refname_mapping()
+        self.rendered = None
+
+    def process(self):
+        if not self.rendered:
+            joiners = base_joiners
+            if self.options.pagination:
+                self.add_pageno_placeholders()
+            lines = self.render(self.root, width=72, joiners=joiners)
+
+            if self.options.pagination:
+                lines = findblocks(lines)
+                lines = self.paginate(lines)
+                lines = self.update_toc(lines)
+            if self.options.debug:
+                for i, l in enumerate(lines):
+                    tag  = l.elem.tag  if l.elem!=None else '-'
+                    page = l.elem.page if l.elem!=None else '-'
+                    if l.block:
+                        if six.PY2:
+                            sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)).encode('utf8'))
+                        else:
+                            sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)))
+                    else:
+                        if six.PY2:
+                            sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)).encode('utf8'))
+                        else:
+                            sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)))
+            for i, l in enumerate(lines):
+                length = len(l.text)
+                if length > 72:
+                    self.warn(l.elem, "Too long line found (L%s), %s characters longer than 72 characters: \n%s" %(i+1, length-72, l.text))
+
+            text = ('\n'.join( l.text for l in lines )).rstrip(stripspace) + '\n'
+
+            # Replace some code points whose utility has ended
+            text = text.replace(u'\u00A0', u' ')
+            text = text.replace(u'\u2011', u'-')
+            text = text.replace(u'\u200B', u'')
+            text = text.replace(u'\u2060', u'')
+            assert text == text.replace(u'\u2028', u' ')
+            assert text == text.replace(u'\uE060', u'')
+
+            self.rendered = text
+
+        return self.rendered
 
     def write(self, filename):
         """Write the document to a file """
 
-        joiners = base_joiners
-        if self.options.pagination:
-            self.add_pageno_placeholders()
-        lines = self.render(self.root, width=72, joiners=joiners)
-
-        if self.options.pagination:
-            lines = findblocks(lines)
-            lines = self.paginate(lines)
-            lines = self.update_toc(lines)
-        if self.options.debug:
-            for i, l in enumerate(lines):
-                tag  = l.elem.tag  if l.elem!=None else '-'
-                page = l.elem.page if l.elem!=None else '-'
-                if l.block:
-                    if six.PY2:
-                        sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)).encode('utf8'))
-                    else:
-                        sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)))
-                else:
-                    if six.PY2:
-                        sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)).encode('utf8'))
-                    else:
-                        sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)))
-        for i, l in enumerate(lines):
-            length = len(l.text)
-            if length > 72:
-                self.warn(l.elem, "Too long line found (L%s), %s characters longer than 72 characters: \n%s" %(i+1, length-72, l.text))
-                
-        text = ('\n'.join( l.text for l in lines )).rstrip(stripspace) + '\n'
-
-        # Replace some code points whose utility has ended
-        text = text.replace(u'\u00A0', u' ')
-        text = text.replace(u'\u2011', u'-')
-        text = text.replace(u'\u200B', u'')
-        text = text.replace(u'\u2060', u'')
-        assert text == text.replace(u'\u2028', u' ')
-        assert text == text.replace(u'\uE060', u'')
+        text = self.process()
 
         if self.errors:
             raise RfcWriterError("Not creating output file due to errors (see above)")
@@ -1809,6 +1818,10 @@ class TextWriter(BaseV3Writer):
             #left_parts = ['source', 'seriesInfo', 'obsoletes', 'updates', 'category', 'issn', 'expires', ]
             left = []
             if self.root.get('ipr') == 'none':
+                for group in front.xpath('./workgroup'):
+                    if group.text and group.text.strip(stripspace):
+                        found = True
+                        left.append(group.text.strip(stripspace))
                 return left
             if self.options.rfc:
                 # 
