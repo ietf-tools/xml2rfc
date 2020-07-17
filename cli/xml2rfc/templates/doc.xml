@@ -91,7 +91,7 @@
             {% endif %}
           {% elif item is mapping %}
           <dl newline="true">
-            {% for key, value in item.items() %}
+            {% for key, value in item|dictsort(case_sensitive=True) %}
               <dt>{{ key }}</dt>
               <dd>
                 {% if value is string %}
