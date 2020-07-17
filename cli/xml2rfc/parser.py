@@ -52,7 +52,7 @@ class XmlRfcError(Exception):
 class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
     def __init__(self, cache_path=None, library_dirs=None, source=None,
-                 templates_path='templates', verbose=None, quiet=None,
+                 templates_path=base.default_options.template_dir, verbose=None, quiet=None,
                  no_network=None, network_locs= [
                      'https://xml2rfc.ietf.org/public/rfc/',
                      'https://xml2rfc.tools.ietf.org/public/rfc/',
@@ -442,7 +442,7 @@ class XmlRfcParser:
 
     """ XML parser container with callbacks to construct an RFC tree """
     def __init__(self, source, verbose=None, quiet=None, options=base.default_options,
-                 cache_path=None, templates_path=None, library_dirs=None, add_xmlns=False,
+                 cache_path=None, templates_path=base.default_options.template_dir, library_dirs=None, add_xmlns=False,
                  no_network=None, network_locs=[
                      'https://xml2rfc.ietf.org/public/rfc/',
                      'https://xml2rfc.tools.ietf.org/public/rfc/',
@@ -463,9 +463,8 @@ class XmlRfcParser:
                 self.text = f.read()
 
         # Initialize templates directory
-        self.templates_path = templates_path or \
-                              os.path.join(os.path.dirname(xml2rfc.__file__),
-                                           'templates')
+        self.templates_path = templates_path
+
         if options and options.vocabulary == 'v2':
             self.default_dtd_path = os.path.join(self.templates_path, 'rfc2629.dtd')
         else:
