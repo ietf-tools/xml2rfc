@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta content="Cherokee,Common,Greek,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>Xml2rfc Vocabulary Version 3 Schema xml2rfc release 2.46.0</title>
+<title>Xml2rfc Vocabulary Version 3 Schema xml2rfc release 2.46.1dev0</title>
 <meta content="xml2rfc(1)" name="author">
 <meta content="
        
 
             This document provides information about the XML schema
-            implemented in this release of xml2rfc (2.46.0), and the
+            implemented in this release of xml2rfc (2.46.1dev0), and the
             individual elements of that schema.  The document is generated from
             the RNG schema file that is part of the xml2rfc distribution, so
             schema information in this document should always be in sync with
@@ -26,8 +26,8 @@
 
        
     " name="description">
-<meta content="xml2rfc 2.46.0" name="generator">
-<meta content="xml2rfc-docs-2.46.0" name="ietf.draft">
+<meta content="xml2rfc 2.46.1dev0" name="generator">
+<meta content="xml2rfc-docs-2.46.1dev0" name="ietf.draft">
 <link href="tests/out/docfile.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
@@ -1169,13 +1169,13 @@ dl > dd > dl {
 </dd>
 </dl>
 </div>
-<h1 id="title">Xml2rfc Vocabulary Version 3 Schema<br>xml2rfc release 2.46.0</h1>
+<h1 id="title">Xml2rfc Vocabulary Version 3 Schema<br>xml2rfc release 2.46.1dev0</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">
 
             This document provides information about the XML schema
-            implemented in this release of xml2rfc (2.46.0), and the
+            implemented in this release of xml2rfc (2.46.1dev0), and the
             individual elements of that schema.  The document is generated from
             the RNG schema file that is part of the xml2rfc distribution, so
             schema information in this document should always be in sync with
@@ -1510,7 +1510,7 @@ dl > dd > dl {
             have been marked with '(New)' in this document.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">
 
-            This documentation applies to xml2rfc version 2.46.0.<a href="#section-1-4" class="pilcrow">¶</a></p>
+            This documentation applies to xml2rfc version 2.46.1dev0.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 <section id="section-2">
       <h2 id="name-schema-version-3-elements">
@@ -2260,16 +2260,16 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
 <p id="section-2.20-1">
               Provides information about the publication date.  This element is used for two cases: the boilerplate of the document being produced, and inside bibliographic references that use the &lt;front&gt; element.<a href="#section-2.20-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlNewline" id="section-2.20-2">
-          <dt id="section-2.20-2.1">Boilerplate for Internet-Drafts and RFCs:</dt>
+          <dt id="section-2.20-2.1">Bibliographic references:</dt>
           <dd id="section-2.20-2.2">
-            <p id="section-2.20-2.2.1">This element defines the date of publication for the current document (Internet-Draft or RFC).  When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <span>[<a href="#IDGUIDE" class="xref">IDGUIDE</a>]</span>).  When one or more of "year", "month", or "day" are left out, the prep tool will attempt to use the current system date if the attributes that are present are consistent with that date.<a href="#section-2.20-2.2.1" class="pilcrow">¶</a></p>
-<p id="section-2.20-2.2.2">In dates in &lt;rfc&gt; elements, the month must be a number or a month in English.  The prep tool will silently change text month names to numbers.  Similarly, the year must be a four-digit number.<a href="#section-2.20-2.2.2" class="pilcrow">¶</a></p>
-<p id="section-2.20-2.2.3">When the prep tool is used to create Internet-Drafts, it will warn if the draft has a &lt;date&gt; element in the boilerplate for itself that is more than 3 days away from today.  To avoid this problem, authors might simply not include a &lt;date&gt; element in the boilerplate.<a href="#section-2.20-2.2.3" class="pilcrow">¶</a></p>
+            <p id="section-2.20-2.2.1">(New) In order to be able to specify fuzzy dates, such as "2002-2003", "Second quarter 2010", etc., the date element is now permitted to have text content in addition to the "year", "month", and "day" attributes.  If there is only text content, it will be rendered as is.  If there is both text content and date components, both will be rendered, with the expanded date components in parentheses.<a href="#section-2.20-2.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-2.20-2.3">Bibliographic references:</dt>
+<dt id="section-2.20-2.3">Boilerplate for Internet-Drafts and RFCs:</dt>
           <dd id="section-2.20-2.4">
-            <p id="section-2.20-2.4.1">(New) In order to be able to specify fuzzy dates, such as "2002-2003", "Second quarter 2010", etc., the date element is now permitted to have text content in addition to the "year", "month", and "day" attributes.  If there is only text content, it will be rendered as is.  If there is both text content and date components, both will be rendered, with the expanded date components in parentheses.<a href="#section-2.20-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-2.20-2.4.1">This element defines the date of publication for the current document (Internet-Draft or RFC).  When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <span>[<a href="#IDGUIDE" class="xref">IDGUIDE</a>]</span>).  When one or more of "year", "month", or "day" are left out, the prep tool will attempt to use the current system date if the attributes that are present are consistent with that date.<a href="#section-2.20-2.4.1" class="pilcrow">¶</a></p>
+<p id="section-2.20-2.4.2">In dates in &lt;rfc&gt; elements, the month must be a number or a month in English.  The prep tool will silently change text month names to numbers.  Similarly, the year must be a four-digit number.<a href="#section-2.20-2.4.2" class="pilcrow">¶</a></p>
+<p id="section-2.20-2.4.3">When the prep tool is used to create Internet-Drafts, it will warn if the draft has a &lt;date&gt; element in the boilerplate for itself that is more than 3 days away from today.  To avoid this problem, authors might simply not include a &lt;date&gt; element in the boilerplate.<a href="#section-2.20-2.4.3" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -3007,70 +3007,88 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
             <dd id="section-2.38.6-3.2">
                    Lowercase letters (a, b, c, ...)<a href="#section-2.38.6-3.2" class="pilcrow">¶</a>
 </dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-3.3">A</dt>
-            <dd id="section-2.38.6-3.4">
-                   Uppercase letters (A, B, C, ...)<a href="#section-2.38.6-3.4" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-3.5">1</dt>
-            <dd id="section-2.38.6-3.6">
-                   Decimal numbers (1, 2, 3, ...)<a href="#section-2.38.6-3.6" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-3.7">i</dt>
-            <dd id="section-2.38.6-3.8">
-                   Lowercase Roman numerals (i, ii, iii, ...)<a href="#section-2.38.6-3.8" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-3.9">I</dt>
-            <dd id="section-2.38.6-3.10">
-                   Uppercase Roman numerals (I, II, III, ...)<a href="#section-2.38.6-3.10" class="pilcrow">¶</a>
+          <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-4">
+            <dt id="section-2.38.6-4.1">A</dt>
+            <dd id="section-2.38.6-4.2">
+                   Uppercase letters (A, B, C, ...)<a href="#section-2.38.6-4.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-2.38.6-4">
-              For types "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then "ab"/"AB", and so on.<a href="#section-2.38.6-4" class="pilcrow">¶</a></p>
-<p id="section-2.38.6-5">
-              If the length of the type value is greater than 1, the value must contain a percent-encoded indicator and other text.  The value is a free-form text that allows counter values to be inserted using a "percent-letter" format.  For instance, "[REQ%d]" generates labels of the form "[REQ1]", where "%d" inserts the item number as a decimal number.<a href="#section-2.38.6-5" class="pilcrow">¶</a></p>
-<p id="section-2.38.6-6">
-              The following formats are supported:<a href="#section-2.38.6-6" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-5">
+            <dt id="section-2.38.6-5.1">1</dt>
+            <dd id="section-2.38.6-5.2">
+                   Decimal numbers (1, 2, 3, ...)<a href="#section-2.38.6-5.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-6">
+            <dt id="section-2.38.6-6.1">i</dt>
+            <dd id="section-2.38.6-6.2">
+                   Lowercase Roman numerals (i, ii, iii, ...)<a href="#section-2.38.6-6.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
 <span class="break"></span><dl class="dlNewline" id="section-2.38.6-7">
-            <dt id="section-2.38.6-7.1">%c</dt>
+            <dt id="section-2.38.6-7.1">I</dt>
             <dd id="section-2.38.6-7.2">
-                   Lowercase letters (a, b, c, ...)<a href="#section-2.38.6-7.2" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-7.3">%C</dt>
-            <dd id="section-2.38.6-7.4">
-                   Uppercase letters (A, B, C, ...)<a href="#section-2.38.6-7.4" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-7.5">%d</dt>
-            <dd id="section-2.38.6-7.6">
-                   Decimal numbers (1, 2, 3, ...)<a href="#section-2.38.6-7.6" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-7.7">%i</dt>
-            <dd id="section-2.38.6-7.8">
-                   Lowercase Roman numerals (i, ii, iii, ...)<a href="#section-2.38.6-7.8" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-7.9">%I</dt>
-            <dd id="section-2.38.6-7.10">
-                   Uppercase Roman numerals (I, II, III, ...)<a href="#section-2.38.6-7.10" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.38.6-7.11">%%</dt>
-            <dd id="section-2.38.6-7.12">
-                   Represents a percent sign<a href="#section-2.38.6-7.12" class="pilcrow">¶</a>
+                   Uppercase Roman numerals (I, II, III, ...)<a href="#section-2.38.6-7.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 </dl>
 <p id="section-2.38.6-8">
-              Other formats are reserved for future use.  Only one percent encoding other than "%%" is allowed in a type string.<a href="#section-2.38.6-8" class="pilcrow">¶</a></p>
+              For types "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then "ab"/"AB", and so on.<a href="#section-2.38.6-8" class="pilcrow">¶</a></p>
 <p id="section-2.38.6-9">
-              It is an error for the type string to be empty.  For bulleted lists, use the &lt;ul&gt; element.  For lists that have neither bullets nor numbers, use the &lt;ul&gt; element with the 'empty="true"' attribute.<a href="#section-2.38.6-9" class="pilcrow">¶</a></p>
+              If the length of the type value is greater than 1, the value must contain a percent-encoded indicator and other text.  The value is a free-form text that allows counter values to be inserted using a "percent-letter" format.  For instance, "[REQ%d]" generates labels of the form "[REQ1]", where "%d" inserts the item number as a decimal number.<a href="#section-2.38.6-9" class="pilcrow">¶</a></p>
+<p id="section-2.38.6-10">
+              The following formats are supported:<a href="#section-2.38.6-10" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-11">
+            <dt id="section-2.38.6-11.1">%c</dt>
+            <dd id="section-2.38.6-11.2">
+                   Lowercase letters (a, b, c, ...)<a href="#section-2.38.6-11.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-12">
+            <dt id="section-2.38.6-12.1">%C</dt>
+            <dd id="section-2.38.6-12.2">
+                   Uppercase letters (A, B, C, ...)<a href="#section-2.38.6-12.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-13">
+            <dt id="section-2.38.6-13.1">%d</dt>
+            <dd id="section-2.38.6-13.2">
+                   Decimal numbers (1, 2, 3, ...)<a href="#section-2.38.6-13.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-14">
+            <dt id="section-2.38.6-14.1">%i</dt>
+            <dd id="section-2.38.6-14.2">
+                   Lowercase Roman numerals (i, ii, iii, ...)<a href="#section-2.38.6-14.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-15">
+            <dt id="section-2.38.6-15.1">%I</dt>
+            <dd id="section-2.38.6-15.2">
+                   Uppercase Roman numerals (I, II, III, ...)<a href="#section-2.38.6-15.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-16">
+            <dt id="section-2.38.6-16.1">%%</dt>
+            <dd id="section-2.38.6-16.2">
+                   Represents a percent sign<a href="#section-2.38.6-16.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-2.38.6-17">
+              Other formats are reserved for future use.  Only one percent encoding other than "%%" is allowed in a type string.<a href="#section-2.38.6-17" class="pilcrow">¶</a></p>
+<p id="section-2.38.6-18">
+              It is an error for the type string to be empty.  For bulleted lists, use the &lt;ul&gt; element.  For lists that have neither bullets nor numbers, use the &lt;ul&gt; element with the 'empty="true"' attribute.<a href="#section-2.38.6-18" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4501,14 +4519,14 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
 <p id="section-2.70.3-4">
               A combination of up to 3 of the following keywords may be used, separated by dashes: "num", "lit", "name", "ascii", "char".  The keywords are expanded as follows and combined, with the second and third enclosed in parentheses if present:<a href="#section-2.70.3-4" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlNewline" id="section-2.70.3-5">
-            <dt id="section-2.70.3-5.1">num</dt>
+            <dt id="section-2.70.3-5.1">ascii</dt>
             <dd id="section-2.70.3-5.2">
-                   The numeric value(s) of the element text, in U+1234 notation<a href="#section-2.70.3-5.2" class="pilcrow">¶</a>
+                   The value of the 'ascii' attribute on the &lt;u&gt; element<a href="#section-2.70.3-5.2" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-2.70.3-5.3">name</dt>
+<dt id="section-2.70.3-5.3">char</dt>
             <dd id="section-2.70.3-5.4">
-                   The Unicode name(s) of the element text<a href="#section-2.70.3-5.4" class="pilcrow">¶</a>
+                   The literal element text, without quotes<a href="#section-2.70.3-5.4" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
 <dt id="section-2.70.3-5.5">lit</dt>
@@ -4516,14 +4534,14 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
                    The literal element text, enclosed in quotes<a href="#section-2.70.3-5.6" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-2.70.3-5.7">char</dt>
+<dt id="section-2.70.3-5.7">name</dt>
             <dd id="section-2.70.3-5.8">
-                   The literal element text, without quotes<a href="#section-2.70.3-5.8" class="pilcrow">¶</a>
+                   The Unicode name(s) of the element text<a href="#section-2.70.3-5.8" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-2.70.3-5.9">ascii</dt>
+<dt id="section-2.70.3-5.9">num</dt>
             <dd id="section-2.70.3-5.10">
-                   The value of the 'ascii' attribute on the &lt;u&gt; element<a href="#section-2.70.3-5.10" class="pilcrow">¶</a>
+                   The numeric value(s) of the element text, in U+1234 notation<a href="#section-2.70.3-5.10" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 </dl>
@@ -6992,7 +7010,7 @@ start |= rfc
 <p id="section-appendix.b-1">
 
             The following variables are available for use in an xml2rfc
-            manpage Jinja2 template, as of xml2rfc version 2.46.0:<a href="#section-appendix.b-1" class="pilcrow">¶</a></p>
+            manpage Jinja2 template, as of xml2rfc version 2.46.1dev0:<a href="#section-appendix.b-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlNewline" id="section-appendix.b-2">
         <dt id="section-appendix.b-2.1">{{ descriptions }}:</dt>
         <dd id="section-appendix.b-2.2">The descriptions read from the <code>doc.yaml</code> file<a href="#section-appendix.b-2.2" class="pilcrow">¶</a>

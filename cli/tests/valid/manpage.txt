@@ -3,18 +3,18 @@ xml2rfc(1)                                                    xml2rfc(1)
 
 
                   Xml2rfc Vocabulary Version 3 Schema
-                         xml2rfc release 2.46.0
-                          xml2rfc-docs-2.46.0
+                       xml2rfc release 2.46.1dev0
+                        xml2rfc-docs-2.46.1dev0
 
 Abstract
 
    This document provides information about the XML schema implemented
-   in this release of xml2rfc (2.46.0), and the individual elements of
-   that schema.  The document is generated from the RNG schema file that
-   is part of the xml2rfc distribution, so schema information in this
-   document should always be in sync with the schema in actual use.  The
-   textual descriptions depend on manual updates in order to follow the
-   schema.
+   in this release of xml2rfc (2.46.1dev0), and the individual elements
+   of that schema.  The document is generated from the RNG schema file
+   that is part of the xml2rfc distribution, so schema information in
+   this document should always be in sync with the schema in actual use.
+   The textual descriptions depend on manual updates in order to follow
+   the schema.
 
    For an introduction to the v3 schema, with suggestions on how to
    transition from v2, see [INTRO-TO-V3].
@@ -50,7 +50,7 @@ Table of Contents
    publication of the original schema version 3 specification,
    [RFC7991], have been marked with '(New)' in this document.
 
-   This documentation applies to xml2rfc version 2.46.0.
+   This documentation applies to xml2rfc version 2.46.1dev0.
 
 2.  Schema Version 3 Elements
 
@@ -582,6 +582,15 @@ Table of Contents
    used for two cases: the boilerplate of the document being produced,
    and inside bibliographic references that use the <front> element.
 
+   Bibliographic references:
+      (New) In order to be able to specify fuzzy dates, such as
+      "2002-2003", "Second quarter 2010", etc., the date element is now
+      permitted to have text content in addition to the "year", "month",
+      and "day" attributes.  If there is only text content, it will be
+      rendered as is.  If there is both text content and date
+      components, both will be rendered, with the expanded date
+      components in parentheses.
+
    Boilerplate for Internet-Drafts and RFCs:
       This element defines the date of publication for the current
       document (Internet-Draft or RFC).  When producing Internet-Drafts,
@@ -600,15 +609,6 @@ Table of Contents
       that is more than 3 days away from today.  To avoid this problem,
       authors might simply not include a <date> element in the
       boilerplate.
-
-   Bibliographic references:
-      (New) In order to be able to specify fuzzy dates, such as
-      "2002-2003", "Second quarter 2010", etc., the date element is now
-      permitted to have text content in addition to the "year", "month",
-      and "day" attributes.  If there is only text content, it will be
-      rendered as is.  If there is both text content and date
-      components, both will be rendered, with the expanded date
-      components in parentheses.
 
    This element can be a child element of <front>.
 
@@ -2030,20 +2030,20 @@ Table of Contents
    keywords are expanded as follows and combined, with the second and
    third enclosed in parentheses if present:
 
-   num
-      The numeric value(s) of the element text, in U+1234 notation
-
-   name
-      The Unicode name(s) of the element text
-
-   lit
-      The literal element text, enclosed in quotes
+   ascii
+      The value of the 'ascii' attribute on the <u> element
 
    char
       The literal element text, without quotes
 
-   ascii
-      The value of the 'ascii' attribute on the <u> element
+   lit
+      The literal element text, enclosed in quotes
+
+   name
+      The Unicode name(s) of the element text
+
+   num
+      The numeric value(s) of the element text, in U+1234 notation
 
    In order to ensure that no specification mistakes can result for
    rendering methods that cannot render all Unicode code points, "num"
@@ -4067,7 +4067,7 @@ Appendix A.  RELAX NG Schema
 Appendix B.  Templating Variables
 
    The following variables are available for use in an xml2rfc manpage
-   Jinja2 template, as of xml2rfc version 2.46.0:
+   Jinja2 template, as of xml2rfc version 2.46.1dev0:
 
    {{ descriptions }}:
       The descriptions read from the "doc.yaml" file
