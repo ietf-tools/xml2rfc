@@ -89,7 +89,7 @@ default_options = Values(defaults={
         'strict': False,
         'table_hyphen_breaks': False,
         'table_borders': 'full',
-        'template_dir': 'templates',
+        'template_dir': os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates'),
         'text': True,
         'unprep': False,
         'utf8': False,
@@ -1770,6 +1770,11 @@ class BaseV3Writer(object):
                     pis.append(p)
                 p = p.getprevious()
         return pis
+
+    def get_relevant_pi(self, e, name):
+        pis = self.get_relevant_pis(e)
+        pi_list = list(filter(None, [ pi.get(name) for pi in pis ]))
+        return pi_list[-1] if pi_list else None
 
     def silenced(self, e, text):
         text = text.strip()
