@@ -11,7 +11,7 @@ import sys
 import textwrap
 
 from collections import OrderedDict
-from lxml.etree import _Comment
+from lxml.etree import _Comment, _ProcessingInstruction
 
 if six.PY2:
     from urllib import quote
@@ -19,7 +19,7 @@ else:
     from urllib.request import quote
 
 try:
-    import debug
+    from xml2rfc import debug
     assert debug
 except ImportError:
     pass
@@ -642,13 +642,14 @@ def isblock(e):
     return e.tag in block_tags
 
 def iscomment(e):
-    "Return True if e is a comment"
-    return isinstance(e, _Comment)
+    "Return True if e is a comment or PI"
+    return isinstance(e, (_Comment, _ProcessingInstruction))
 
 def hastext(e, ignore=[]):
     "Return a list of text-level immediate children"
     head = [ e.text ] if e.text and e.text.strip() else []
-    items = head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c) or (c.tag in ignore))] + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ]
+    items = ( head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c) or (c.tag in ignore))]
+                   + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ] )
     return items
 
 def clean_text(s):
