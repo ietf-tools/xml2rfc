@@ -241,8 +241,7 @@ def main():
                             help='specify a primary cache directory to write to; default: try [ %s ]'%', '.join(xml2rfc.CACHES) )
     value_options.add_option('-d', '--dtd', dest='dtd', metavar='DTDFILE', help='specify an alternate dtd file')
     value_options.add_option('-D', '--date', dest='datestring', metavar='DATE',
-                            default=datetime.datetime.today().strftime("%Y-%m-%d"),
-                            help='run as if the date is DATE (format: yyyy-mm-dd)')
+                            help="run as if the date is DATE (format: yyyy-mm-dd).  Default: Today's date")
     value_options.add_option('-f', '--filename', dest='filename', metavar='FILE',
                             help='Deprecated.  The same as -o')
     value_options.add_option('-i', '--indent', type=int, default=2, metavar='INDENT',
@@ -283,7 +282,7 @@ def main():
     textoptions.add_option('--table-hyphen-breaks', action='store_true', default=False,
                             help='More easily do line breaks after hyphens in table cells to give a more compact table')
     textoptions.add_option('--table-borders', default='full', choices=['full', 'light', 'minimal', 'min', ],
-                            help='The style of table borders to use; one of full/light/minimal; default: %default')
+                            help='The style of table borders to use for text output; one of full/light/minimal')
     optionparser.add_option_group(textoptions)
 
     htmloptions = optparse.OptionGroup(optionparser, 'Html Format Options')
@@ -458,7 +457,11 @@ def main():
                 print('Cache directory is not writable: %s' % options.cache)
                 sys.exit(1)
     #
-    options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
+    if options.datestring:
+        options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
+    else:
+        options.date = datetime.date.today()
+
     if options.omit_headers and not options.text:
         sys.exit("You can only use --no-headers with paginated text output.")
     #
@@ -480,6 +483,7 @@ def main():
     xml2rfc.log.verbose = options.verbose
 
     # Parse the document into an xmlrfc tree instance
+    options.template_dir = options.template_dir or default_options.template_dir
     parser = xml2rfc.XmlRfcParser(source,
                                   options=options,
                                   templates_path=options.template_dir,
