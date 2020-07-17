@@ -21,7 +21,7 @@
 
             This document provides information about the XML schema
             implemented in this release of xml2rfc ({{version}}), and the
-            individual elements of the schema.  The document is generated from
+            individual elements of that schema.  The document is generated from
             the RNG schema file that is part of the xml2rfc distribution, so
             schema information in this document should always be in sync with
             the schema in actual use.  The textual descriptions depend on
@@ -98,7 +98,11 @@
                    {{value}}
                 {% elif value is sequence %}
                   {% for item in value %}
-                  <t>{{item}}</t>
+                    {% if item.startswith('<') %}
+                      {{item}}
+                    {% else %}
+                      <t>{{item}}</t>
+                    {% endif %}
                   {% endfor %}
                 {% else %}
                   <t>*** Nested YAML mappings are not supported by the builtin doc.xml ***</t>
@@ -260,7 +264,7 @@
             {% for option in group.option_list %}
               <dt><tt>{{option}}</tt>{% if option.metavar %}={{option.metavar}}{% endif %}</dt>
               <dd>
-                 <t>{{ option.help|e|capitalize }}.{% if option.default is string %} Default: {{option.default}}{% endif %}</t>
+                 <t>{{ option.help|e|capfirst }}.{% if option.default is string %} Default: {{option.default}}{% endif %}</t>
                  {{ render_items(descriptions[option.get_opt_string()]) }}
               </dd>
             {% endfor %}
