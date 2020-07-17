@@ -192,7 +192,7 @@ class DocWriter(base.BaseV3Writer):
     def write(self, filename):
         self.process()
 
-        with open(filename, "w") as file:
+        with io.open(filename, "w") as file:
             file.write(self.rendered)
 
         if not self.options.quiet:
