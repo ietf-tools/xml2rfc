@@ -3730,7 +3730,7 @@ class TextWriter(BaseV3Writer):
     #    Document-wide unique identifier for this table.
     def build_table(self, e, width, **kwargs):
         # variations on border characters for table styles
-        style = self.options.table_borders
+        style = self.get_relevant_pi(e, 'table_borders') or self.options.table_borders
         bchar_sets = {
                 'full': { '=': '=',
                           '-': '-',
@@ -4128,9 +4128,14 @@ class TextWriter(BaseV3Writer):
             for n in range(min(len(c.wrapped) for c in cells[i] if c.wrapped)-int(has_bot_border) ):
                 line = build_line(cells, i, cols)
                 lines.append(line)
-                if prev_bottom_border_line and has_top_border:
-                    line = lines[-1]
-                    lines[-1] = Line(''.join(merge_border(prev_bottom_border_line.text[c], line.text[c]) for c in range(len(line.text))), line.elem)
+                if prev_bottom_border_line:
+                    if has_top_border:
+                        line = lines[-1]
+                        lines[-1] = Line(''.join(merge_border(prev_bottom_border_line.text[c], line.text[c]) for c in range(len(line.text))), line.elem)
+                    else:
+                        line = lines[-1]
+                        lines[-1] = prev_bottom_border_line
+                        lines.append(line)
                 prev_bottom_border_line = None
             # Get the next line, which will contain the bottom border for completed cells,
             # without incrementing the line count (we might have rowspan cells which might
