@@ -601,6 +601,13 @@ class V2v3XmlWriter(BaseV3Writer):
                 e.insert(0, c)
         stripattr(e, ['title', ])
 
+    def element_reference(self, e, p):
+        if 'quote-title' in e.attrib:
+            v = 'true' if e.get('quote-title') in ['true', 'yes'] else 'false'
+            if v != 'true':             # no need to set default value
+                e.set('quoteTitle', v)
+        stripattr(e, ['quote-title'])
+
     def element_relref(self, e, p):
         if 'displayFormat' in e.attrib:
             e.attrib['sectionFormat'] = e.attrib['displayFormat']
