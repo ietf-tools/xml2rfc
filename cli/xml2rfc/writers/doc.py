@@ -15,8 +15,12 @@ from xml2rfc import debug, __version__
 from xml2rfc.utils import namespaces
 from xml2rfc.writers import base
 
+debug = debug                           # silence pyflakes
 
 
+def capfirst(value):
+    """Capitalize the first character of the value."""
+    return value and value[0].upper() + value[1:]
 
 class DocWriter(base.BaseV3Writer):
     def __init__(self, xmlrfc, quiet=None, options=base.default_options, date=datetime.date.today()):
@@ -29,6 +33,7 @@ class DocWriter(base.BaseV3Writer):
             trim_blocks=True,
             lstrip_blocks=True,
         )
+        self.jinja.filters['capfirst'] = capfirst
         self.rendered = None
 
     def get_elements(self):
