@@ -1616,7 +1616,9 @@ u[format]:
                      <u format="name-num" anchor="black-chess-king">♚</u>
                      &gt;
                   </td>
-                  <td> <xref target="black-chess-king" format="default"/> </td>
+                  <td>
+                     <xref target="black-chess-king" format="default"/>
+                  </td>
                </tr>
                <tr>
                   <td>9</td>
@@ -1882,6 +1884,78 @@ xref[relative]:
         descriptions of elements, attributes, attribute values, and switches,
         from the same directory as <tt>doc.xml</tt>.
 
+--manpage:
+
+    - Generates on-the-fly paged text documentation for the v3 schema elements
+      and attributes from the v3 RelaxNG schema file which is part of the
+      xml2rfc distribution, and YAML and XML files that provide the text content
+      and formatting.  See the <tt>--docfile</tt> switch.
+
+--silence:
+
+    - "Specifies a string prefix or a regular expression to match against warning
+      messages.  Any warning message that matches is silenced.  Example:"
+
+    - <sourcecode>xml2rfc --silence='The document date' draft-foo-bar.xml</sourcecode>
+
+    - This will not show any message about the document date being too far from
+      the current date.  The option can be repeated with different prefix strings
+      or regular expressions in order to silence multiple warning messages.
+
+    - "Alternatively, instead of indicating this on the command line, an 
+      xml2rfc-specific PI (processing instruction) is available for use in XML input files.
+      This will have the same effect as the example above, except when
+      processing prepped drafts; running the preptool on a file will strip
+      XML PIs before writing the prepped file:"
+
+    - <sourcecode>\<?v3xml2rfc silence="The document date" ?\></sourcecode>
+
+--table-borders:
+
+    - "Examples (these will only render differently in text mode):"
+
+    - '"full":':
+      - <?v3xml2rfc table_borders="full" ?>
+        <table>
+        <thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>
+        <tbody>
+        <tr><td>a   </td><td>b    </td><td>c    </td></tr>
+        <tr><td>aa  </td><td>ba   </td><td>ca   </td></tr>
+        <tr><td>ab  </td><td>bb   </td><td>cb   </td></tr>
+        <tr><th>AA  </th><th>BB   </th><th>CC   </th></tr>
+        <tr><td>aaa </td><td>bba  </td><td>cca  </td></tr>
+        <tr><td>aab </td><td>bbb  </td><td>ccb  </td></tr>
+        </tbody>
+        </table>
+
+    - '"light":':
+      - <?v3xml2rfc table_borders="light" ?>
+        <table>
+        <thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>
+        <tbody>
+        <tr><td>a   </td><td>b    </td><td>c    </td></tr>
+        <tr><td>aa  </td><td>ba   </td><td>ca   </td></tr>
+        <tr><td>ab  </td><td>bb   </td><td>cb   </td></tr>
+        <tr><th>AA  </th><th>BB   </th><th>CC   </th></tr>
+        <tr><td>aaa </td><td>bba  </td><td>cca  </td></tr>
+        <tr><td>aab </td><td>bbb  </td><td>ccb  </td></tr>
+        </tbody>
+        </table>
+
+    - '"minimal":':
+      - <?v3xml2rfc table_borders="minimal" ?>
+        <table>
+        <thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>
+        <tbody>
+        <tr><td>a   </td><td>b    </td><td>c    </td></tr>
+        <tr><td>aa  </td><td>ba   </td><td>ca   </td></tr>
+        <tr><td>ab  </td><td>bb   </td><td>cb   </td></tr>
+        <tr><th>AA  </th><th>BB   </th><th>CC   </th></tr>
+        <tr><td>aaa </td><td>bba  </td><td>cca  </td></tr>
+        <tr><td>aab </td><td>bbb  </td><td>ccb  </td></tr>
+        </tbody>
+        </table>
+
 --template-dir:
 
     - This is used to find the templates used by the <tt>--docfile</tt> and <tt>--manpage</tt>
@@ -1896,9 +1970,6 @@ xref[relative]:
       V3 RelaxNg schema, it should be straightforward.  The templating system
       used is Jinja2; the snippens file is standard YAML.
 
---manpage:
 
-    - Generates on-the-fly paged text documentation for the v3 schema elements
-      and attributes from the v3 RelaxNG schema file which is part of the
-      xml2rfc distribution, and YAML and XML files that provide the text content
-      and formatting.  See the <tt>--docfile</tt> switch.
+
+      
