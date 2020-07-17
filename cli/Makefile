@@ -51,7 +51,7 @@ drafttests    = $(addprefix tests/out/, $(drafttest))
 pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
 
 
-tests: minify test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest wiptest
+tests: minify test flaketest cachetest drafttest rfctest utf8test v3featuretest elementstest bomtest wiptest mantest
 
 env/bin/python:
 	echo "Install virtualenv in $$PWD/env/ in order to run tests locally."
@@ -119,6 +119,15 @@ tests/out/draft-miek-test.prepped.xml: tests/input/draft-miek-test.xml install
 tests/out/draft-v3-features.prepped.xml: tests/input/draft-v3-features.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --prep $<"
 
+tests/out/docfile.xml:
+	@PS4=" " /bin/bash -cx "xml2rfc --doc --out $@"
+
+tests/out/docfile.html: tests/out/docfile.xml
+	@PS4=" " /bin/bash -cx "xml2rfc --html --out $@ $<"
+
+tests/out/manpage.txt:
+	@PS4=" " /bin/bash -cx "xml2rfc --man > $@"
+
 tests/out/%.text: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@"
 
@@ -141,7 +150,7 @@ tests/out/%.plain.xml: tests/valid/%.prepped.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --unprep --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
 
 tests/out/%.plain.text: tests/out/%.plain.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@  --silence='The document date'"
 
 tests/out/%.exp.xml: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --out $@ --exp $<"
@@ -212,11 +221,14 @@ dateshifttest: cleantmp install
 	@PS4=" " /bin/bash -cx "xml2rfc --cache tests/cache --no-network --date 2013-02-01 --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml"
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
-elementstest: tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.$(py).html.test
+elementstest: install tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.$(py).html.test
 
 bomtest: tests/out/elements.bom.text.test
 
 wiptest: tests/out/elements.wip.text.test
+
+mantest: install cleantmp tests/out/manpage.txt.test tests/out/docfile.html.test
+	@fgrep -q '***' tests/out/manpage.txt; res="$$?"; if [ "$$res" = "1" ]; then true; else echo "Missing documentation in manpage"; exit 1; fi
 
 cleantmp:
 	@[ -d tmp ] || mkdir -p tmp
