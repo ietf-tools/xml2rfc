@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function, division
 
 import collections
 import datetime
+import io
 import jinja2
 import lxml
 import os
@@ -118,9 +119,9 @@ class DocWriter(base.BaseV3Writer):
         for dir in self.template_dirs:
             fn = os.path.join(dir, 'doc.yaml')
             if os.path.exists(fn):
-                with open(fn) as file:
+                with io.open(fn) as file:
                     text = file.read()
-                    text = text.replace(r'\<', r'&lt;').replace('\>', r'&gt;').replace('\&', r'&amp;')
+                    text = text.replace(r'\<', r'&lt;').replace(r'\>', r'&gt;').replace(r'\&', r'&amp;')
                     descriptions = yaml.load(text, Loader=yaml.FullLoader)
 
         for n, d in elements.items():
