@@ -252,24 +252,35 @@
       <!-- Options -->
       <section>
          <name>Command-line Options</name>
-         {% for group in options.option_groups %}
+         {% for group in options._action_groups %}
+         {% if group.options %}
          <section>
-            <name>{{group.title}}</name>
+            <name>{{group.title|capfirst}}</name>
             {% if group.description %}
             <t>
                {{group.description|e}}
             </t>
             {% endif %}
             <dl newline="true">
-            {% for option in group.option_list %}
-              <dt><tt>{{option}}</tt>{% if option.metavar %}={{option.metavar}}{% endif %}</dt>
-              <dd>
-                 <t>{{ option.help|e|capfirst }}.{% if option.default is string %} Default: {{option.default}}{% endif %}</t>
-                 {{ render_items(descriptions[option.get_opt_string()]) }}
-              </dd>
+            {% for option in group._actions %}
+              {% if option.container == group %}
+                {% if option.option_strings %}
+                <dt>
+                   {% for o in option.option_strings|reverse %}{% if not loop.first %}, {% endif %}<tt>{{ o }}</tt>{% endfor %}
+                   {% if option.metavar %}={{option.metavar}}{% endif %}
+                </dt>
+                <dd>
+                   <t>{{ option.help|e|capfirst }}.{% if option.default is string and not option.default.startswith("==") %} Default: {{option.default}}{% endif %}</t>
+                   {{ render_items(descriptions[option.option_strings[-1]]) }}
+                </dd>
+                {% else %}
+                <dt><tt>{{ option.dest }}</tt></dt><dd></dd>
+                {% endif %}
+              {% endif %}
             {% endfor %}
             </dl>
          </section>
+         {% endif %}
          {% endfor %}
       </section>
    </middle>

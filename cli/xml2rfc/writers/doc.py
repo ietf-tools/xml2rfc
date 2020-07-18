@@ -116,8 +116,8 @@ class DocWriter(base.BaseV3Writer):
 
         elements = self.get_elements()
 
-        for dir in self.template_dirs:
-            fn = os.path.join(dir, 'doc.yaml')
+        for tdir in self.template_dirs:
+            fn = os.path.join(tdir, 'doc.yaml')
             if os.path.exists(fn):
                 with io.open(fn) as file:
                     text = file.read()
@@ -139,6 +139,10 @@ class DocWriter(base.BaseV3Writer):
 
         for d in element_list:
             d.update(elements[d['tag']])
+
+        for i, group in enumerate(optionparser._action_groups):
+            # Provide a count of options in each group, for the template
+            group.options = len([ o for o in group._actions if o.container==group ])
 
         context = {}
         context['elements'] = element_list

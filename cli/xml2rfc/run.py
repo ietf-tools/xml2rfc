@@ -17,7 +17,7 @@ if script_dir in sys.path:
 import datetime
 import json
 import lxml.etree
-import optparse
+import argparse
 import os
 import pycountry
 import xml2rfc
@@ -41,13 +41,8 @@ def get_missing_pdf_libs():
         missing += "\nCould not find the pango lib"
     return missing
 
-def display_version(self, opt, value, parser):
-    print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
-    debug.dir('parser')
-    sys.exit()
 
-
-def print_pi_help(self, opt, value, parser):
+def print_pi_help(options):
     pis = xml2rfc.parser.XmlRfc(None, None).pis.items()
     pis.sort()
     print("Available processing instructions (PIs), with defaults:\n")
@@ -59,7 +54,7 @@ def print_pi_help(self, opt, value, parser):
     sys.exit()
 
 
-def print_country_help(self, opt, value, parser):
+def print_country_help(options):
     from xml2rfc.util.postal import country_alias
     country_ids = {}
     for c in list(pycountry.countries):
@@ -82,6 +77,7 @@ def print_country_help(self, opt, value, parser):
     else:
         print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])).encode('utf-8'))
     sys.exit()
+
 
 def get_pdf_help(missing_libs=""):
     pdf_requirements_info = """
@@ -132,9 +128,37 @@ def get_pdf_help(missing_libs=""):
     """
     return pdf_requirements_info + missing_libs
 
-def print_pdf_help(self, opt, value, parser):
+
+def print_pdf_help(options):
     print(get_pdf_help())
     sys.exit()
+
+
+def print_version(options):
+    print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
+    if options.verbose:
+        print('  Python %s' % sys.version.split()[0])
+        extras = set(['pycairo', 'weasyprint'])
+        try:
+            import pkg_resources
+            this = pkg_resources.working_set.by_key[xml2rfc.NAME]
+            for p in this.requires():
+                if p.key in extras:
+                    extras -= p.key
+                try:
+                    dist = pkg_resources.get_distribution(p.key)
+                    print('  %s'%dist)
+                except:
+                    pass
+            for key in extras:
+                try:
+                    dist = pkg_resources.get_distribution(key)
+                    print('  %s'%dist)
+                except:
+                    pass
+        except:
+            pass
+
 
 def extract_anchor_info(xml):
     info = {
@@ -153,182 +177,181 @@ optionparser = None
 def main():
     global optionparser
     # Populate options
-    formatter = optparse.IndentedHelpFormatter(max_help_position=40)
-    optionparser = optparse.OptionParser(usage='xml2rfc SOURCE [OPTIONS] '
+    optionparser = argparse.ArgumentParser(usage='xml2rfc [OPTIONS] SOURCE [OPTIONS]'
                                         '...\nExample: xml2rfc '
-                                        'draft.xml -o Draft-1.0 --text --html',
-                                        formatter=formatter)
+                                        'draft.xml -o draft-foo-19 --text --html',
+#                                        formatter=formatter,
+                                        add_help=False,
+                                    )
+ 
+    optionparser.add_argument('source', nargs='?')
 
-    help_options = optparse.OptionGroup(optionparser, 'Documentation options',
+    help_options = optionparser.add_argument_group('Documentation options',
                     'Some options to generate built-in documentation.')
-    help_options.add_option('', '--docfile', action='store_true',
+    help_options.add_argument('-h', '--help', action='help',
+                           help='show a help message and exit')
+    help_options.add_argument('--docfile', action='store_true',
                            help='generate a documentation XML file ready for formatting')
-    help_options.add_option('', '--manpage', action='store_true',
+    help_options.add_argument('--manpage', action='store_true',
                            help='show paged text documentation')
-    help_options.add_option('--country-help', action='callback', callback=print_country_help,
+    help_options.add_argument('--country-help', action="store_true",
                             help='show the recognized <country> strings')
-    help_options.add_option('--pdf-help', action='callback', callback=print_pdf_help,
+    help_options.add_argument('--pdf-help', action="store_true",
                             help='show pdf generation requirements')
-    help_options.add_option('--pi-help', action='callback', callback=print_pi_help,
+    help_options.add_argument('--pi-help', action="store_true",
                             help='show the names and default values of PIs')
-    help_options.add_option('--template-dir', 
+    help_options.add_argument('--template-dir', 
                             help='directory to pull the doc.xml and doc.yaml templates from.  '
                                  'The default is the "templates" directory of the xml2rfc package')
-    help_options.add_option('-V', '--version', action='store_true', 
+    help_options.add_argument('-V', '--version', action='store_true', 
                             help='display the version number and exit')
-    optionparser.add_option_group(help_options)
 
-    formatgroup = optparse.OptionGroup(optionparser, 'Format selection',
+    formatgroup = optionparser.add_argument_group('Format selection',
                                        'One or more of the following '
                                        'output formats may be specified. '
                                        'The default is --text. '
                                        'The destination filename will be based '
                                        'on the input filename, unless an '
                                        'argument is given to --basename.')
-    formatgroup.add_option('', '--text', action='store_true',
+    formatgroup.add_argument('--text', action='store_true',
                            help='outputs formatted text to file, with proper page breaks')
-    formatgroup.add_option('', '--html', action='store_true',
+    formatgroup.add_argument('--html', action='store_true',
                            help='outputs formatted HTML to file')
-    formatgroup.add_option('', '--nroff', action='store_true',
+    formatgroup.add_argument('--nroff', action='store_true',
                            help='outputs formatted nroff to file (only v2 input)')
     if xml2rfc.HAVE_CAIRO and xml2rfc.HAVE_PANGO:
-        formatgroup.add_option('', '--pdf', action='store_true',
+        formatgroup.add_argument('--pdf', action='store_true',
                                help='outputs formatted PDF to file')
     else:
-        formatgroup.add_option('', '--pdf', action='store_true',
+        formatgroup.add_argument('--pdf', action='store_true',
                                help='(unavailable due to missing external library)')
-    formatgroup.add_option('', '--raw', action='store_true',
+    formatgroup.add_argument('--raw', action='store_true',
                            help='outputs formatted text to file, unpaginated (only v2 input)')
-    formatgroup.add_option('', '--expand', action='store_true',
+    formatgroup.add_argument('--expand', action='store_true',
                            help='outputs XML to file with all references expanded')
-    formatgroup.add_option('', '--v2v3', action='store_true',
+    formatgroup.add_argument('--v2v3', action='store_true',
                            help='convert vocabulary version 2 XML to version 3')
-    formatgroup.add_option('', '--preptool', action='store_true',
+    formatgroup.add_argument('--preptool', action='store_true',
                            help='run preptool on the input')
-    formatgroup.add_option('', '--unprep', action='store_true',
+    formatgroup.add_argument('--unprep', action='store_true',
                            help='reduce prepped xml to unprepped')
-    formatgroup.add_option('', '--info', action='store_true',
+    formatgroup.add_argument('--info', action='store_true',
                            help='generate a JSON file with anchor to section lookup information')
-    optionparser.add_option_group(formatgroup)
 
 
-    plain_options = optparse.OptionGroup(optionparser, 'Generic Options')
-    plain_options.add_option('-C', '--clear-cache', action='store_true', default=False,
+    plain_options = optionparser.add_argument_group('Generic Options')
+    plain_options.add_argument('-C', '--clear-cache', action='store_true', default=False,
                             help='purge the cache and exit')
-    plain_options.add_option(      '--debug', action='store_true',
+    plain_options.add_argument(      '--debug', action='store_true',
                             help='Show debugging output')
-    plain_options.add_option('-n', '--no-dtd', action='store_true',
+    plain_options.add_argument('-n', '--no-dtd', action='store_true',
                             help='disable DTD validation step')
-    plain_options.add_option('-N', '--no-network', action='store_true', default=False,
+    plain_options.add_argument('-N', '--no-network', action='store_true', default=False,
                             help='don\'t use the network to resolve references')
-    plain_options.add_option('-O', '--no-org-info', dest='first_page_author_org', action='store_false', default=True,
+    plain_options.add_argument('-O', '--no-org-info', dest='first_page_author_org', action='store_false', default=True,
                             help='don\'t show author orgainzation info on page one (legacy only)')
-    plain_options.add_option('-q', '--quiet', action='store_true',
+    plain_options.add_argument('-q', '--quiet', action='store_true',
                             help="don't print anything while working")
-    plain_options.add_option('-r', '--remove-pis', action='store_true', default=False,
+    plain_options.add_argument('-r', '--remove-pis', action='store_true', default=False,
                             help='Remove XML processing instructions')
-    plain_options.add_option('-u', '--utf8', action='store_true',
+    plain_options.add_argument('-u', '--utf8', action='store_true',
                             help='generate utf8 output')
-    plain_options.add_option('-v', '--verbose', action='store_true',
+    plain_options.add_argument('-v', '--verbose', action='store_true',
                             help='print extra information')
-    optionparser.add_option_group(plain_options)
 
 
-    value_options = optparse.OptionGroup(optionparser, 'Generic Options with Values')
-    value_options.add_option('-b', '--basename', dest='basename', metavar='NAME',
+    value_options = optionparser.add_argument_group('Generic Options with Values')
+    value_options.add_argument('-b', '--basename', dest='basename', metavar='NAME',
                             help='specify the base name for output files')
-    value_options.add_option('-c', '--cache', dest='cache', metavar='PATH',
+    value_options.add_argument('-c', '--cache', dest='cache', metavar='PATH',
                             help='specify a primary cache directory to write to; default: try [ %s ]'%', '.join(xml2rfc.CACHES) )
-    value_options.add_option('-d', '--dtd', dest='dtd', metavar='DTDFILE', help='specify an alternate dtd file')
-    value_options.add_option('-D', '--date', dest='datestring', metavar='DATE',
+    value_options.add_argument('-d', '--dtd', dest='dtd', metavar='DTDFILE', help='specify an alternate dtd file')
+    value_options.add_argument('-D', '--date', dest='datestring', metavar='DATE',
                             help="run as if the date is DATE (format: yyyy-mm-dd).  Default: Today's date")
-    value_options.add_option('-f', '--filename', dest='filename', metavar='FILE',
+    value_options.add_argument('-f', '--filename', dest='filename', metavar='FILE',
                             help='Deprecated.  The same as -o')
-    value_options.add_option('-i', '--indent', type=int, default=2, metavar='INDENT',
+    value_options.add_argument('-i', '--indent', type=int, default=2, metavar='INDENT',
                             help='With some v3 formatters: Indentation to use when pretty-printing XML')
-    value_options.add_option('-o', '--out', dest='output_filename', metavar='FILE',
+    value_options.add_argument('-o', '--out', dest='output_filename', metavar='FILE',
                             help='specify an explicit output filename')
-    value_options.add_option('-p', '--path', dest='output_path', metavar='PATH',
+    value_options.add_argument('-p', '--path', dest='output_path', metavar='PATH',
                             help='specify the directory path for output files')
-    value_options.add_option('-s', '--silence', action='append', type="string", metavar='STRING',
+    value_options.add_argument('-s', '--silence', action='append', type=str, metavar='STRING',
                             help="Silence any warning beginning with the given string")
-    optionparser.add_option_group(value_options)
 
-    formatoptions = optparse.OptionGroup(optionparser, 'Generic Format Options')
-    formatoptions.add_option('--v3', dest='legacy', action='store_false',
+    formatoptions = optionparser.add_argument_group('Generic Format Options')
+    formatoptions.add_argument('--v3', dest='legacy', action='store_false',
                            help='with --text and --html: use the v3 formatter, rather than the legacy one')
-    formatoptions.add_option('--legacy', '--v2', default=True, action='store_true',
+    formatoptions.add_argument('--legacy', '--v2', default=True, action='store_true',
                            help='with --text and --html: use the legacy text formatter, rather than the v3 one')
-    formatoptions.add_option('--id-is-work-in-progress', default=True, action='store_true',
+    formatoptions.add_argument('--id-is-work-in-progress', default=True, action='store_true',
                            help='in references, refer to Internet-Drafts as "Work in Progress"')
-    optionparser.add_option_group(formatoptions)
 
-    textoptions = optparse.OptionGroup(optionparser, 'Text Format Options')
-    textoptions.add_option('--no-headers', dest='omit_headers', action='store_true',
+    textoptions = optionparser.add_argument_group('Text Format Options')
+    textoptions.add_argument('--no-headers', dest='omit_headers', action='store_true',
                            help='calculate page breaks, and emit form feeds and page top'
                            ' spacing, but omit headers and footers from the paginated format')
-    textoptions.add_option('--legacy-list-symbols', default=False, action='store_true',
+    textoptions.add_argument('--legacy-list-symbols', default=False, action='store_true',
                            help='use the legacy list bullet symbols, rather than the new ones')
-    textoptions.add_option('--legacy-date-format', default=False, action='store_true', # XXX change to True in version 3.x
+    textoptions.add_argument('--legacy-date-format', default=False, action='store_true', # XXX change to True in version 3.x
                            help='use the legacy date format, rather than the new one')
-    textoptions.add_option('--no-legacy-date-format', dest='legacy_date_format', action='store_false',
+    textoptions.add_argument('--no-legacy-date-format', dest='legacy_date_format', action='store_false',
                            help="don't use the legacy date format")
-    textoptions.add_option('--list-symbols', metavar='4*CHAR',
+    textoptions.add_argument('--list-symbols', metavar='4*CHAR',
                            help='use the characters given as list bullet symbols')
-    textoptions.add_option('--bom', '--BOM', action='store_true', default=False,
+    textoptions.add_argument('--bom', '--BOM', action='store_true', default=False,
                            help='Add a BOM (unicode byte order mark) to the start of text files')
-    textoptions.add_option('-P', '--no-pagination', dest='pagination', action='store_false', default=True,
+    textoptions.add_argument('-P', '--no-pagination', dest='pagination', action='store_false', default=True,
                             help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated')
-    textoptions.add_option('--table-hyphen-breaks', action='store_true', default=False,
+    textoptions.add_argument('--table-hyphen-breaks', action='store_true', default=False,
                             help='More easily do line breaks after hyphens in table cells to give a more compact table')
-    textoptions.add_option('--table-borders', default='full', choices=['full', 'light', 'minimal', 'min', ],
+    textoptions.add_argument('--table-borders', default='full', choices=['full', 'light', 'minimal', 'min', ],
                             help='The style of table borders to use for text output; one of full/light/minimal')
-    optionparser.add_option_group(textoptions)
 
-    htmloptions = optparse.OptionGroup(optionparser, 'Html Format Options')
-    htmloptions.add_option('--css', default=None,
+    htmloptions = optionparser.add_argument_group('Html Format Options')
+    htmloptions.add_argument('--css', default=None, metavar="FILE",
                            help='Use the given CSS file instead of the builtin')
-    htmloptions.add_option('--external-css', action='store_true', default=False,
+    htmloptions.add_argument('--external-css', action='store_true', default=False,
                            help='place css in external files')
-    htmloptions.add_option('--no-external-css', dest='external_css', action='store_false',
+    htmloptions.add_argument('--no-external-css', dest='external_css', action='store_false',
                            help='place css in external files')
-    htmloptions.add_option('--external-js', action='store_true', default=True, # XXX change to False in version 3.x
+    htmloptions.add_argument('--external-js', action='store_true', default=True, # XXX change to False in version 3.x
                            help='place js in external files')
-    htmloptions.add_option('--no-external-js', dest='external_js', action='store_false',
+    htmloptions.add_argument('--no-external-js', dest='external_js', action='store_false',
                            help='place js in external files')
-    htmloptions.add_option('--rfc-base-url', default="https://www.rfc-editor.org/rfc/",
+    htmloptions.add_argument('--rfc-base-url', default="https://www.rfc-editor.org/rfc/",
                            help='Base URL for RFC links')
-    htmloptions.add_option('--id-base-url', default="https://tools.ietf.org/html/",
+    htmloptions.add_argument('--id-base-url', default="https://tools.ietf.org/html/",
                            help='Base URL for Internet-Draft links')
-    htmloptions.add_option('--rfc-reference-base-url', default="https://rfc-editor.org/rfc/",
+    htmloptions.add_argument('--rfc-reference-base-url', default="https://rfc-editor.org/rfc/",
                            help='Base URL for RFC reference targets, replacing the target="..." value given in the reference entry')
-    htmloptions.add_option('--id-reference-base-url', default="https://tools.ietf.org/html/",
+    htmloptions.add_argument('--id-reference-base-url', default="https://tools.ietf.org/html/",
                            help='Base URL for I-D reference targets')
-    htmloptions.add_option('--metadata-js-url', default="metadata.min.js",
+    htmloptions.add_argument('--metadata-js-url', default="metadata.min.js",
                            help='URL for the metadata script')
-    optionparser.add_option_group(htmloptions)
 
-    v2v3options = optparse.OptionGroup(optionparser, 'V2-V3 Converter Options')
-    v2v3options.add_option('--add-xinclude', action='store_true',
+    v2v3options = optionparser.add_argument_group('V2-V3 Converter Options')
+    v2v3options.add_argument('--add-xinclude', action='store_true',
                            help='replace reference elements with RFC and Internet-Draft'
                            ' seriesInfo with the appropriate XInclude element')
-    v2v3options.add_option('--strict', action='store_true',
+    v2v3options.add_argument('--strict', action='store_true',
                            help='be strict about stripping some deprecated attributes')
-    optionparser.add_option_group(v2v3options)
 
-    preptooloptions = optparse.OptionGroup(optionparser, 'Preptool Options')
-    preptooloptions.add_option('--accept-prepped', action='store_true',
+    preptooloptions = optionparser.add_argument_group('Preptool Options')
+    preptooloptions.add_argument('--accept-prepped', action='store_true',
                            help='accept already prepped input')
-    optionparser.add_option_group(preptooloptions)
 
 
-    # --- Parse and validate arguments ---------------------------------
+    # --- Parse arguments ---------------------------------
 
-    (options, args) = optionparser.parse_args()
+    options = optionparser.parse_args()
+    args = [ options.source ]
     # Some additional values not exposed as options
     options.doi_base_url = "https://doi.org/"
     options.no_css = False
     options.image_svg = False
+
+    # --- Set default values ---------------------------------
 
     # Check that the default_options have values for all options, for people
     # calling xml2rfc library functions, rather than the command-line
@@ -341,32 +364,26 @@ def main():
         if not key in options.__dict__:
             setattr(options, key, getattr(default_options, key))
 
+    # --- Help options ---------------------------------        
+
+    if options.country_help:
+        print_country_help(options)
+        sys.exit()
+
+    if options.pdf_help:
+        print_pdf_help(options)
+        sys.exit()
+
+    if options.pi_help:
+        print_pi_help(options)
+        sys.exit()
+
     # Show version information, then exit
     if options.version:
-        print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
-        if options.verbose:
-            print('  Python %s' % sys.version.split()[0])
-            extras = set(['pycairo', 'weasyprint'])
-            try:
-                import pkg_resources
-                this = pkg_resources.working_set.by_key[xml2rfc.NAME]
-                for p in this.requires():
-                    if p.key in extras:
-                        extras -= p.key
-                    try:
-                        dist = pkg_resources.get_distribution(p.key)
-                        print('  %s'%dist)
-                    except:
-                        pass
-                for key in extras:
-                    try:
-                        dist = pkg_resources.get_distribution(key)
-                        print('  %s'%dist)
-                    except:
-                        pass
-            except:
-                pass
-        sys.exit(0)
+        print_version(options)
+        sys.exit()
+
+    # --- Parse and validate arguments ---------------------------------
 
     if (options.docfile or options.manpage) and not options.list_symbols:
         options.list_symbols = default_options.list_symbols
