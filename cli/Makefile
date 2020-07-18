@@ -122,7 +122,7 @@ tests/out/draft-v3-features.prepped.xml: tests/input/draft-v3-features.xml insta
 tests/out/docfile.xml:
 	@PS4=" " /bin/bash -cx "xml2rfc --doc --out $@"
 
-tests/out/docfile.html: tests/out/docfile.xml
+tests/out/docfile.$(py).html: tests/out/docfile.xml
 	@PS4=" " /bin/bash -cx "xml2rfc --html --out $@ $<"
 
 tests/out/manpage.txt:
@@ -227,7 +227,7 @@ bomtest: tests/out/elements.bom.text.test
 
 wiptest: tests/out/elements.wip.text.test
 
-mantest: install cleantmp tests/out/manpage.txt.test tests/out/docfile.html.test
+mantest: install cleantmp tests/out/manpage.txt.test tests/out/docfile.$(py).html.test
 	@fgrep -q '***' tests/out/manpage.txt; res="$$?"; if [ "$$res" = "1" ]; then true; else echo "Missing documentation in manpage"; exit 1; fi
 
 cleantmp:

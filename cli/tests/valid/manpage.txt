@@ -1,20 +1,20 @@
 xml2rfc(1)                                                    xml2rfc(1)
-                                                            17 July 2020
+                                                            18 July 2020
 
 
                   Xml2rfc Vocabulary Version 3 Schema
-                       xml2rfc release 2.46.1dev0
-                        xml2rfc-docs-2.46.1dev0
+                         xml2rfc release 2.47.0
+                          xml2rfc-docs-2.47.0
 
 Abstract
 
    This document provides information about the XML schema implemented
-   in this release of xml2rfc (2.46.1dev0), and the individual elements
-   of that schema.  The document is generated from the RNG schema file
-   that is part of the xml2rfc distribution, so schema information in
-   this document should always be in sync with the schema in actual use.
-   The textual descriptions depend on manual updates in order to follow
-   the schema.
+   in this release of xml2rfc (2.47.0), and the individual elements of
+   that schema.  The document is generated from the RNG schema file that
+   is part of the xml2rfc distribution, so schema information in this
+   document should always be in sync with the schema in actual use.  The
+   textual descriptions depend on manual updates in order to follow the
+   schema.
 
    For an introduction to the v3 schema, with suggestions on how to
    transition from v2, see [INTRO-TO-V3].
@@ -50,7 +50,7 @@ Table of Contents
    publication of the original schema version 3 specification,
    [RFC7991], have been marked with '(New)' in this document.
 
-   This documentation applies to xml2rfc version 2.46.1dev0.
+   This documentation applies to xml2rfc version 2.47.0.
 
 2.  Schema Version 3 Elements
 
@@ -2525,9 +2525,16 @@ Table of Contents
 
 4.  Command-line Options
 
-4.1.  Documentation options
+4.1.  Positional arguments
+
+   "source"
+
+4.2.  Documentation options
 
    Some options to generate built-in documentation.
+
+   "--help", "-h"
+      Show a help message and exit.
 
    "--docfile"
       Generate a documentation XML file ready for formatting.
@@ -2553,7 +2560,7 @@ Table of Contents
       elements and attributes from the v3 RelaxNG schema file which is
       part of the xml2rfc distribution, and YAML and XML files that
       provide the text content and formatting.  See the "--docfile"
-      switch.
+      switch for more details.
 
    "--country-help"
       Show the recognized <country> strings.
@@ -2581,10 +2588,10 @@ Table of Contents
       schema, it should be straightforward.  The templating system used
       is Jinja2; the snippens file is standard YAML.
 
-   "-V/--version"
+   "--version", "-V"
       Display the version number and exit.
 
-4.2.  Format selection
+4.3.  Format selection
 
    One or more of the following output formats may be specified.  The
    default is --text.  The destination filename will be based on the
@@ -2620,65 +2627,65 @@ Table of Contents
    "--info"
       Generate a JSON file with anchor to section lookup information.
 
-4.3.  Generic Options
+4.4.  Generic Options
 
-   "-C/--clear-cache"
+   "--clear-cache", "-C"
       Purge the cache and exit.
 
    "--debug"
       Show debugging output.
 
-   "-n/--no-dtd"
+   "--no-dtd", "-n"
       Disable DTD validation step.
 
-   "-N/--no-network"
+   "--no-network", "-N"
       Don't use the network to resolve references.
 
-   "-O/--no-org-info"
+   "--no-org-info", "-O"
       Don't show author orgainzation info on page one (legacy only).
 
-   "-q/--quiet"
+   "--quiet", "-q"
       Don't print anything while working.
 
-   "-r/--remove-pis"
+   "--remove-pis", "-r"
       Remove XML processing instructions.
 
-   "-u/--utf8"
+   "--utf8", "-u"
       Generate utf8 output.
 
-   "-v/--verbose"
+   "--verbose", "-v"
       Print extra information.
 
-4.4.  Generic Options with Values
+4.5.  Generic Options with Values
 
-   "-b/--basename"=NAME
+   "--basename", "-b"=NAME
       Specify the base name for output files.
 
-   "-c/--cache"=PATH
+   "--cache", "-c"=PATH
       Specify a primary cache directory to write to; default: try [
       /var/cache/xml2rfc, ~/.cache/xml2rfc ].
 
-   "-d/--dtd"=DTDFILE
+   "--dtd", "-d"=DTDFILE
       Specify an alternate dtd file.
 
-   "-D/--date"=DATE
+   "--date", "-D"=DATE
       Run as if the date is DATE (format: yyyy-mm-dd).  Default: Today's
       date.
 
-   "-f/--filename"=FILE
+   "--filename", "-f"=FILE
       Deprecated.  The same as -o.
 
-   "-i/--indent"=INDENT
+   "--indent", "-i"=INDENT
       With some v3 formatters: Indentation to use when pretty-printing
       XML.
 
-   "-o/--out"=FILE
+   "--out", "-o"=FILE
       Specify an explicit output filename.
 
-   "-p/--path"=PATH
+   "--path", "-p"=PATH
       Specify the directory path for output files.
 
-   "-s/--silence"=STRING
+   "--silence", "-s"=STRING
       Silence any warning beginning with the given string.
 
       Specifies a string prefix or a regular expression to match against
@@ -2700,20 +2707,20 @@ Table of Contents
 
       <?v3xml2rfc silence="The document date" ?>
 
-4.5.  Generic Format Options
+4.6.  Generic Format Options
 
    "--v3"
       With --text and --html: use the v3 formatter, rather than the
       legacy one.
 
-   "--legacy/--v2"
+   "--v2", "--legacy"
       With --text and --html: use the legacy text formatter, rather than
       the v3 one.
 
    "--id-is-work-in-progress"
       In references, refer to Internet-Drafts as "Work in Progress".
 
-4.6.  Text Format Options
+4.7.  Text Format Options
 
    "--no-headers"
       Calculate page breaks, and emit form feeds and page top spacing,
@@ -2731,10 +2738,10 @@ Table of Contents
    "--list-symbols"=4*CHAR
       Use the characters given as list bullet symbols.
 
-   "--bom/--BOM"
+   "--BOM", "--bom"
       Add a BOM (unicode byte order mark) to the start of text files.
 
-   "-P/--no-pagination"
+   "--no-pagination", "-P"
       Don't do pagination of v3 draft text format.  V3 RFC text output
       is never paginated.
 
@@ -2746,7 +2753,7 @@ Table of Contents
       The style of table borders to use for text output; one of
       full/light/minimal.  Default: full
 
-      Examples (these will only render differently in text mode):
+      Examples (these will only have visible differences in text mode):
 
       "full":
                                +=====+=====+=====+
@@ -2799,9 +2806,9 @@ Table of Contents
 
                                      Table 4
 
-4.7.  Html Format Options
+4.8.  Html Format Options
 
-   "--css"
+   "--css"=FILE
       Use the given CSS file instead of the builtin.
 
    "--external-css"
@@ -2835,7 +2842,7 @@ Table of Contents
    "--metadata-js-url"
       URL for the metadata script.  Default: metadata.min.js
 
-4.8.  V2-V3 Converter Options
+4.9.  V2-V3 Converter Options
 
    "--add-xinclude"
       Replace reference elements with RFC and Internet-Draft seriesInfo
@@ -2844,7 +2851,7 @@ Table of Contents
    "--strict"
       Be strict about stripping some deprecated attributes.
 
-4.9.  Preptool Options
+4.10.  Preptool Options
 
    "--accept-prepped"
       Accept already prepped input.
@@ -4067,7 +4074,7 @@ Appendix A.  RELAX NG Schema
 Appendix B.  Templating Variables
 
    The following variables are available for use in an xml2rfc manpage
-   Jinja2 template, as of xml2rfc version 2.46.1dev0:
+   Jinja2 template, as of xml2rfc version 2.47.0:
 
    {{ descriptions }}:
       The descriptions read from the "doc.yaml" file
