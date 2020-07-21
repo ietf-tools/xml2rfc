@@ -244,6 +244,9 @@ manually.
 The new version is also available through SVN checkout, with
   'svn checkout $REPO/tags/${WORK:+$WORK/}$VER'
 
+Documentation for this release is built-in, and also available at:
+  https://xml2rfc.tools.ietf.org/xml2rfc-doc-$VER.html
+
 Regards,
 
 	Henrik
@@ -263,3 +266,4 @@ cat ./mail/release-mail-v$VER.txt | $do mail -s "New xml2rfc release: v$VER" \
 #$do toolsfeed control changelog /www/tools.ietf.org/tools/atomfeed.xml
 $do toolpush /www/tools.ietf.org/tools/atomfeed.xml
 $do toolcmd sudo pip install --upgrade xml2rfc
+$do toolcmd 'xml2rfc --doc --out /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc-$VER.xml; xml2rfc --text --html /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc-$VER.xml; ln -s xml2rfc-doc-$VER.html /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc.html'
