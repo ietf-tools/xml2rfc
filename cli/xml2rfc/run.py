@@ -2,8 +2,14 @@
 
 from __future__ import print_function, unicode_literals
 
+import appdirs
+import configargparse
+import datetime
 import io
+import json
+import lxml.etree
 import os
+import pycountry
 import six
 import sys
 
@@ -14,12 +20,6 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 if script_dir in sys.path:
     sys.path.remove(script_dir)
 
-import datetime
-import json
-import lxml.etree
-import argparse
-import os
-import pycountry
 import xml2rfc
 
 try:
@@ -42,7 +42,7 @@ def get_missing_pdf_libs():
     return missing
 
 
-def print_pi_help(options):
+def print_pi_help(options, parser):
     pis = xml2rfc.parser.XmlRfc(None, None).pis.items()
     pis.sort()
     print("Available processing instructions (PIs), with defaults:\n")
@@ -54,7 +54,7 @@ def print_pi_help(options):
     sys.exit()
 
 
-def print_country_help(options):
+def print_country_help(options, parser):
     from xml2rfc.util.postal import country_alias
     country_ids = {}
     for c in list(pycountry.countries):
@@ -129,12 +129,12 @@ def get_pdf_help(missing_libs=""):
     return pdf_requirements_info + missing_libs
 
 
-def print_pdf_help(options):
+def print_pdf_help(options, parser):
     print(get_pdf_help())
     sys.exit()
 
 
-def print_version(options):
+def print_version(options, parser):
     print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
     if options.verbose:
         print('  Python %s' % sys.version.split()[0])
@@ -160,6 +160,12 @@ def print_version(options):
             pass
 
 
+def print_values(options, parser, config_paths):
+    print("\n"
+          + parser.format_values()
+          + "%s\n  %s" % ('Config file search path:', config_paths))
+    
+
 def extract_anchor_info(xml):
     info = {
         'version': 1,
@@ -177,14 +183,20 @@ optionparser = None
 def main():
     global optionparser
     # Populate options
-    optionparser = argparse.ArgumentParser(usage='xml2rfc [OPTIONS] SOURCE [OPTIONS]'
+    config_paths = ['/etc/xml2rfc.conf', '~/.xml2rfc.conf']
+    user_conf = os.path.join(appdirs.user_config_dir(), 'xml2rfc.conf')
+    if not user_conf in config_paths:
+        config_paths.append(user_conf)
+
+    optionparser = configargparse.ArgumentParser(usage='xml2rfc [OPTIONS] SOURCE [OPTIONS]'
                                         '...\nExample: xml2rfc '
-                                        'draft.xml -o draft-foo-19 --text --html',
-#                                        formatter=formatter,
+                                        'draft.xml -b draft-foo-19 --text --html',
                                         add_help=False,
+                                        add_config_file_help=False,
+                                        default_config_files=config_paths,
                                     )
- 
-    optionparser.add_argument('source', nargs='?')
+    input_options = optionparser.add_argument_group('Positional arguments')
+    input_options.add_argument('source', nargs='?', help="Input XML file to render to one or more of the available formats.")
 
     help_options = optionparser.add_argument_group('Documentation options',
                     'Some options to generate built-in documentation.')
@@ -198,21 +210,21 @@ def main():
                             help='show the recognized <country> strings')
     help_options.add_argument('--pdf-help', action="store_true",
                             help='show pdf generation requirements')
-    help_options.add_argument('--pi-help', action="store_true",
-                            help='show the names and default values of PIs')
+#     help_options.add_argument('--pi-help', action="store_true",
+#                             help='show the names and default values of PIs (for v2)')
     help_options.add_argument('--template-dir', 
                             help='directory to pull the doc.xml and doc.yaml templates from.  '
                                  'The default is the "templates" directory of the xml2rfc package')
+    help_options.add_argument('--values', action='store_true', 
+                            help='show option values and from where they come')
     help_options.add_argument('-V', '--version', action='store_true', 
                             help='display the version number and exit')
 
     formatgroup = optionparser.add_argument_group('Format selection',
-                                       'One or more of the following '
-                                       'output formats may be specified. '
-                                       'The default is --text. '
-                                       'The destination filename will be based '
-                                       'on the input filename, unless an '
-                                       'argument is given to --basename.')
+                            'One or more of the following output formats may be specified. '
+                            'The default is --text. The destination filename will be based '
+                            'on the input filename, unless --out=FILE or --basename=BASE '
+                            'is used.')
     formatgroup.add_argument('--text', action='store_true',
                            help='outputs formatted text to file, with proper page breaks')
     formatgroup.add_argument('--html', action='store_true',
@@ -252,6 +264,8 @@ def main():
                             help='don\'t show author orgainzation info on page one (legacy only)')
     plain_options.add_argument('-q', '--quiet', action='store_true',
                             help="don't print anything while working")
+    plain_options.add_argument('--skip-config-files', action="store_true", default=False,
+                            help='ignore config file settings')
     plain_options.add_argument('-r', '--remove-pis', action='store_true', default=False,
                             help='Remove XML processing instructions')
     plain_options.add_argument('-u', '--utf8', action='store_true',
@@ -265,8 +279,10 @@ def main():
                             help='specify the base name for output files')
     value_options.add_argument('-c', '--cache', dest='cache', metavar='PATH',
                             help='specify a primary cache directory to write to; default: try [ %s ]'%', '.join(xml2rfc.CACHES) )
+    value_options.add_argument(      '--config-file', dest="config_file", metavar='FILE', is_config_file_arg=True,
+                            help='specify a configuration file')
     value_options.add_argument('-d', '--dtd', dest='dtd', metavar='DTDFILE', help='specify an alternate dtd file')
-    value_options.add_argument('-D', '--date', dest='datestring', metavar='DATE',
+    value_options.add_argument('-D', '--date', dest='datestring', metavar='DATE', default=datetime.date.today(),
                             help="run as if the date is DATE (format: yyyy-mm-dd).  Default: Today's date")
     value_options.add_argument('-f', '--filename', dest='filename', metavar='FILE',
                             help='Deprecated.  The same as -o')
@@ -344,7 +360,14 @@ def main():
 
     # --- Parse arguments ---------------------------------
 
+    from xml2rfc.writers.base import default_options    
+
+
     options = optionparser.parse_args()
+    # This is a bit wasteful, but we need to parse options first,
+    # in order to know if we should ignore config files
+    if options.skip_config_files:
+        options = optionparser.parse_args(config_file_contents='')
     args = [ options.source ]
     # Some additional values not exposed as options
     options.doi_base_url = "https://doi.org/"
@@ -355,7 +378,6 @@ def main():
 
     # Check that the default_options have values for all options, for people
     # calling xml2rfc library functions, rather than the command-line
-    from xml2rfc.writers.base import default_options
     for key in options.__dict__:
         if not key in default_options.__dict__:
             sys.stderr.write("  Option missing from base.default_options: %s\n" % key)
@@ -367,20 +389,25 @@ def main():
     # --- Help options ---------------------------------        
 
     if options.country_help:
-        print_country_help(options)
+        print_country_help(options, optionparser)
         sys.exit()
 
     if options.pdf_help:
-        print_pdf_help(options)
+        print_pdf_help(options, optionparser)
         sys.exit()
 
     if options.pi_help:
-        print_pi_help(options)
+        print_pi_help(options, optionparser)
+        sys.exit()
+
+    # Show option values
+    if options.values:
+        print_values(options, optionparser, config_paths)
         sys.exit()
 
     # Show version information, then exit
     if options.version:
-        print_version(options)
+        print_version(options, optionparser)
         sys.exit()
 
     # --- Parse and validate arguments ---------------------------------
@@ -424,6 +451,8 @@ def main():
             sys.exit(header+pdf_requirements_info)
 
     source = args[0]
+    if not source:
+        sys.exit('No source file given')
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)
     # Default (this may change over time):
@@ -475,7 +504,12 @@ def main():
                 sys.exit(1)
     #
     if options.datestring:
-        options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
+        if isinstance(options.datestring, str):
+            options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
+        elif isinstance(options.datestring, datetime.date):
+            options.date = options.datestring
+        else:
+            xml2rfc.log.warn("Unexpected type for options.datestring: %s" % type(options.datestring))
     else:
         options.date = datetime.date.today()
 

@@ -30,9 +30,9 @@ with open(os.path.join(here, 'requirements.txt'), encoding='utf-8') as file:
 
 # Check python versions
 major, minor = sys.version_info[:2] 
-if not ((major == 2 and minor > 6) or (major == 3 and minor >= 5)):
+if not (major == 3 and minor >= 5):
     print("") 
-    print("The xml2rfc installation requires python 2.7 or 3.5+") 
+    print("The xml2rfc installation requires python 3.5+") 
     print("Can't proceed, quitting.") 
     exit() 
 
@@ -81,8 +81,8 @@ Changelog
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.47.0',
-    author='Henrik Levkowetz, Josh Bothun',
+    version='3.0.0',
+    author='Henrik Levkowetz',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
     maintainer_email = "henrik@levkowetz.com",
@@ -119,8 +119,12 @@ setup(
 
     install_requires = requirements,
     tests_require = [
+        'decorator',
         'dict2xml',
+        'pycairo',
         'pypdf2',
+        'tox',
+        'weasyprint',
     ],
 
     zip_safe = False,                   # We're reading templates from a package directory.

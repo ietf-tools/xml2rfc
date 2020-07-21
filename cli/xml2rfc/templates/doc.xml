@@ -4,12 +4,65 @@
            category="info"
            xmlns:xi="http://www.w3.org/2001/XInclude" version="3"
            sortRefs="true" indexInclude="false" tocDepth="{{toc_depth}}" >
-   <?v3xml2rfc silence="Found non-ascii characters outside of" ?>
-   <?v3xml2rfc silence="Unused reference: There seems to be no reference to .*" ?>
-   <?v3xml2rfc silence="Expected &lt;xref format="none"&gt; to have text content, but found none." ?>
-   <?v3xml2rfc silence="Found SVG with width or height specified" ?>
-   <?v3xml2rfc silence=".*[Pp]ostal address" ?>
-   <?v3xml2rfc silence="The document date .*? is more than 3 days away from today's date" ?>
+
+{# <!-- *** Macros *** --> #}
+{# <!-- render_items() --> #}
+{% macro render_items(items) %}
+ {% for item in items %}
+   {{ render_item(item) }}
+ {% endfor %}
+{% endmacro %}
+{% macro render_item(item) %}
+   {% if item is string %}
+     {% if item.startswith('<') %}
+       {{item}}
+     {% else %}
+     <t>
+       {{item}}
+     </t>
+     {% endif %}
+   {% elif item is mapping %}
+   <dl newline="true">
+     {% for key, value in item|dictsort(case_sensitive=True) %}
+       <dt>{{ key }}</dt>
+       <dd>
+         {% if value is string %}
+            {{value}}
+         {% elif value is sequence %}
+           {% for item in value %}
+             {% if item.startswith('<') %}
+               {{item}}
+             {% else %}
+               <t>{{item}}</t>
+             {% endif %}
+           {% endfor %}
+         {% else %}
+           <t>*** Nested YAML mappings are not supported by the builtin doc.xml ***</t>
+         {% endif %}
+       </dd>
+     {% endfor %}
+   </dl>
+   {% elif item is sequence %}
+   <ul spacing="compact">
+     {% for i in item %}
+       <li>{{ i }}</li>
+     {% endfor %}
+   </ul>
+   {% endif %}
+{% endmacro %}
+{# <!-- linkify_rnc() --> #}
+{% macro linkify_rnc(rnc) -%}
+ {% for item in rnc.replace(',', ' , ').split() -%}
+   {%- if item in v3_element_tags -%}
+     &#x0020;<xref target="element-{{item}}" format="none">{{item}}</xref>
+   {%- elif item in ['?', '*', '+', '?,', '*,', '+,', ','] -%}
+     {{item}}
+   {%- else -%}
+     &#x0020;{{item}}
+   {%- endif -%}
+ {%- endfor %}
+{%- endmacro %}
+
    <front>
       <title abbrev="Xml2rfc Vocabulary V3 Schema">Xml2rfc Vocabulary Version 3 Schema<br/>xml2rfc release {{version}}</title>
       <author fullname="xml2rfc(1)">
@@ -17,119 +70,20 @@
       <date/>
       <workgroup>xml2rfc(1)</workgroup>
       <abstract>
-         <t>
-
-            This document provides information about the XML schema
-            implemented in this release of xml2rfc ({{version}}), and the
-            individual elements of that schema.  The document is generated from
-            the RNG schema file that is part of the xml2rfc distribution, so
-            schema information in this document should always be in sync with
-            the schema in actual use.  The textual descriptions depend on
-            manual updates in order to follow the schema.
-
-         </t>
-         <t>
-
-            For an introduction to
-            the v3 schema, with suggestions on how to transition from v2,
-            see <xref target="INTRO-TO-V3"/>.
-
-         </t>
+         {{ render_items(descriptions["Abstract"]) }}
       </abstract>
    </front>
    <middle>
+
+      <!-- Introduction -->
       <section>
          <name>Introduction</name>
+         {{ render_items(descriptions["Introduction"]) }}
          <t>
-
-            Most elements listed in this documentation will have a "Content
-            schema" entry.  This shows the permitted content for the element,
-            expressed in <xref target="RNC">RelaxNG Compact Notation</xref>.
-            For relatively trivial cases such as the ones in this document,
-            the notation is quite straightforward, and resembles simple
-            regular expressions, but with element names as atoms, instead of
-            individual characters as atoms.  A trailing '*' indicates zero or
-            more instances; '+' indicates one or more, '?' indicates zero or
-            one.  '|' separates choices within a parenthesized group, and ','
-            separates entries in a sequence.
-
-         </t>
-         <t>
-
-            Some attributes which are valid according to the schema are not listed
-            in this documentation, mostly because they primarily are used
-            by the preptool, and are not useful to document authors.
-
-         </t>
-         <t>
-
-            Elements and attributes that have been introduced after the publication
-            of the original schema version 3 specification, <xref target="RFC7991"/>,
-            have been marked with '(New)' in this document.
-
-         </t>
-         <t>
-
             This documentation applies to xml2rfc version {{version}}.
-
          </t>
       </section>
-      <!-- render_items() -->
-      {% macro render_items(items) %}
-        {% for item in items %}
-          {{ render_item(item) }}
-        {% endfor %}
-      {% endmacro %}
-      {% macro render_item(item) %}
-          {% if item is string %}
-            {% if item.startswith('<') %}
-              {{item}}
-            {% else %}
-            <t>
-              {{item}}
-            </t>
-            {% endif %}
-          {% elif item is mapping %}
-          <dl newline="true">
-            {% for key, value in item|dictsort(case_sensitive=True) %}
-              <dt>{{ key }}</dt>
-              <dd>
-                {% if value is string %}
-                   {{value}}
-                {% elif value is sequence %}
-                  {% for item in value %}
-                    {% if item.startswith('<') %}
-                      {{item}}
-                    {% else %}
-                      <t>{{item}}</t>
-                    {% endif %}
-                  {% endfor %}
-                {% else %}
-                  <t>*** Nested YAML mappings are not supported by the builtin doc.xml ***</t>
-                {% endif %}
-              </dd>
-            {% endfor %}
-          </dl>
-          {% elif item is sequence %}
-          <ul spacing="compact">
-            {% for i in item %}
-              <li>{{ i }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-      {% endmacro %}
-      <!-- linkify_rnc() -->
-      {% macro linkify_rnc(rnc) -%}
-        {% for item in rnc.replace(',', ' , ').split() -%}
-          {%- if item in v3_element_tags -%}
-            &#x0020;<xref target="element-{{item}}" format="none">{{item}}</xref>
-          {%- elif item in ['?', '*', '+', '?,', '*,', '+,', ','] -%}
-            {{item}}
-          {%- else -%}
-            &#x0020;{{item}}
-          {%- endif -%}
-        {%- endfor %}
-      {%- endmacro %}
+
       <!-- Elements -->
       <section><name>Schema Version 3 Elements</name>
       {% for element in elements %}
@@ -203,6 +157,7 @@
         {% endif %}
       {% endfor %}
       </section>
+
       <!-- Deprecations -->
       <section>
          <name>Deprecated Elements and Attributes</name>
@@ -249,42 +204,10 @@
 
         </section>
       </section>
-      <!-- Options -->
-      <section>
-         <name>Command-line Options</name>
-         {% for group in options._action_groups %}
-         {% if group.options %}
-         <section>
-            <name>{{group.title|capfirst}}</name>
-            {% if group.description %}
-            <t>
-               {{group.description|e}}
-            </t>
-            {% endif %}
-            <dl newline="true">
-            {% for option in group._actions %}
-              {% if option.container == group %}
-                {% if option.option_strings %}
-                <dt>
-                   {% for o in option.option_strings|reverse %}{% if not loop.first %}, {% endif %}<tt>{{ o }}</tt>{% endfor %}
-                   {% if option.metavar %}={{option.metavar}}{% endif %}
-                </dt>
-                <dd>
-                   <t>{{ option.help|e|capfirst }}.{% if option.default is string and not option.default.startswith("==") %} Default: {{option.default}}{% endif %}</t>
-                   {{ render_items(descriptions[option.option_strings[-1]]) }}
-                </dd>
-                {% else %}
-                <dt><tt>{{ option.dest }}</tt></dt><dd></dd>
-                {% endif %}
-              {% endif %}
-            {% endfor %}
-            </dl>
-         </section>
-         {% endif %}
-         {% endfor %}
-      </section>
    </middle>
    <back>
+
+      <!-- References -->
       <references>
          <name>References</name>
          <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
@@ -340,14 +263,61 @@
          <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7998.xml"/>
 
       </references>
+
+      <!-- Schema -->
       <section>
          <name>RELAX NG Schema</name>
          <sourcecode type="relax-ng-compact" markers="true" name="v3.rnc">
 {{schema}}
          </sourcecode>
       </section>
+
+      <!-- Options -->
       <section>
-         <name>Templating Variables</name>
+         <name><tt>xml2rfc</tt> Command-line Options</name>
+         {{ render_items(descriptions["Options"]) }}
+         {% for group in options._action_groups %}
+         {% if group.options %}
+         <section>
+            <name>{{group.title|capfirst}}</name>
+            {% if group.description %}
+            <t>
+               {{group.description|e}}
+               The group has {{group.options}} options.
+            </t>
+            {% endif %}
+            <dl newline="true">
+            {% for option in group._actions %}
+              {% if option.container == group %}
+                {% if option.option_strings %}
+                <dt anchor="option{{option.option_strings[-1]}}">
+                   {% for o in option.option_strings|reverse %}{% if not loop.first %}, {% endif %}<tt>{{ o }}</tt>{% endfor %}
+                   {% if option.metavar %} = {{option.metavar}}{% endif %}
+                </dt>
+                <dd>
+                   <t>{{ option.help|e|capfirst }}.{% if option.default is string and not option.default.startswith("==") %} Default: {{option.default}}{% endif %}</t>
+                   {{ render_items(descriptions[option.option_strings[-1]]) }}
+                </dd>
+                {% else %}
+                <dt><tt>{{ option.dest }}</tt></dt><dd>{{ option.help }}</dd>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            </dl>
+         </section>
+         {% endif %}
+         {% endfor %}
+      </section>
+
+      <!-- Configuration -->
+      <section>
+         <name><tt>xml2rfc</tt> Configuration Files</name>
+         {{ render_items(descriptions["Configuration"]) }}
+      </section>
+
+      <!-- Template variables -->
+      <section>
+         <name><tt>xml2rfc</tt> Documentation Template Variables</name>
          <t>
 
             The following variables are available for use in an xml2rfc

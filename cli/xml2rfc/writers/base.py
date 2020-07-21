@@ -15,7 +15,7 @@ import xml2rfc.util
 import xml2rfc.utils
 
 from lxml import etree
-from optparse import Values
+from argparse import Namespace
 
 try:
     from xml2rfc import debug
@@ -35,7 +35,9 @@ default_silenced_messages = [
 #    ".*[Pp]ostal address",
 ]
 
-default_options = Values(defaults={
+
+default_options = Namespace()
+default_options.__dict__ = {
         'accept_prepped': None,
         'add_xinclude': None,
         'basename': None,
@@ -43,6 +45,7 @@ default_options = Values(defaults={
         'cache': None,
         'clear_cache': False,
         'css': None,
+        'config_file': None,
         'country_help': False,
         'date': datetime.date.today(),
         'datestring': None,
@@ -89,6 +92,7 @@ default_options = Values(defaults={
         'rfc_base_url': 'https://www.rfc-editor.org/rfc/',
         'rfc_reference_base_url': 'https://rfc-editor.org/rfc/',
         'silence': default_silenced_messages,
+        'skip_config_files': False,
         'source': None,
         'strict': False,
         'table_hyphen_breaks': False,
@@ -97,12 +101,13 @@ default_options = Values(defaults={
         'text': True,
         'unprep': False,
         'utf8': False,
+        'values': False,
         'verbose': False,
         'version': False,
         'v2v3': False,
         'vocabulary': 'v2',
         'widows': 2,
-    })
+    }
 
 class _RfcItem:
     """ A unique ID object for an anchored RFC element.

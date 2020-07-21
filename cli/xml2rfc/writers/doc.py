@@ -140,8 +140,18 @@ class DocWriter(base.BaseV3Writer):
         for d in element_list:
             d.update(elements[d['tag']])
 
+        # Here's a silly little dance because configargparse puts config_file 
+        # arguments in 'optional arguments', even if we've put it in another group
+        for a in optionparser._actions:
+            # This depend on at least one generic option with title being listed before '--config-file'
+            if a.container.title == 'Generic Options with Values':
+                genargs_group = a.container
+            if a.container.title == 'optional arguments':
+                a.container = genargs_group
+
+
+        # Provide a count of options in each group, for the template
         for i, group in enumerate(optionparser._action_groups):
-            # Provide a count of options in each group, for the template
             group.options = len([ o for o in group._actions if o.container==group ])
 
         context = {}

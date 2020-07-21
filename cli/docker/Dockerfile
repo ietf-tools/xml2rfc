@@ -19,7 +19,7 @@
 # but the database has *not* been loaded with a dump, and supporting files (drafts, charters, etc.)
 # have *not* been downloaded.
 
-FROM dyne/devuan:ascii
+FROM dyne/devuan:beowulf
 LABEL maintainer="Henrik Levkowetz <henrik@levkowetz.com>"
 
 # Run apt-get noninteractive
@@ -97,7 +97,7 @@ RUN apt-get install -qy \
 	python \
 	python-dev \
 	python-docutils \
-	python2.7 \
+	python3.6 \
 	python3-cffi \
 	python3-dev \
 	python3-pip \
@@ -192,7 +192,7 @@ RUN mkdir -p $DDIR
 WORKDIR $DDIR
 
 COPY requirements.txt ./
-RUN pip --no-cache-dir install -r requirements.txt
+RUN pip --no-cache-dir install -r requirements.txt decorator dict2xml pycairo pypdf2 tox weasyprint
 
 COPY setprompt ./
 
