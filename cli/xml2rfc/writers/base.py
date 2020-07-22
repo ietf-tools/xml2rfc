@@ -66,7 +66,7 @@ default_options.__dict__ = {
         'image_svg': False,
         'indent': 2,
         'info': False,
-        'legacy': True,
+        'legacy': False,
         'legacy_date_format': False,    # Change to True in 3.x
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
@@ -105,6 +105,7 @@ default_options.__dict__ = {
         'verbose': False,
         'version': False,
         'v2v3': False,
+        'v3': True,
         'vocabulary': 'v2',
         'widows': 2,
     }

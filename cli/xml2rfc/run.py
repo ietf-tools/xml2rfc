@@ -296,9 +296,9 @@ def main():
                             help="Silence any warning beginning with the given string")
 
     formatoptions = optionparser.add_argument_group('Generic Format Options')
-    formatoptions.add_argument('--v3', dest='legacy', action='store_false',
+    formatoptions.add_argument('--v3', action='store_true', default=True,
                            help='with --text and --html: use the v3 formatter, rather than the legacy one')
-    formatoptions.add_argument('--legacy', '--v2', default=True, action='store_true',
+    formatoptions.add_argument('--legacy', '--v2', dest='v3', action='store_false',
                            help='with --text and --html: use the legacy text formatter, rather than the v3 one')
     formatoptions.add_argument('--id-is-work-in-progress', default=True, action='store_true',
                            help='in references, refer to Internet-Drafts as "Work in Progress"')
@@ -309,7 +309,7 @@ def main():
                            ' spacing, but omit headers and footers from the paginated format')
     textoptions.add_argument('--legacy-list-symbols', default=False, action='store_true',
                            help='use the legacy list bullet symbols, rather than the new ones')
-    textoptions.add_argument('--legacy-date-format', default=False, action='store_true', # XXX change to True in version 3.x
+    textoptions.add_argument('--legacy-date-format', default=True, action='store_true',
                            help='use the legacy date format, rather than the new one')
     textoptions.add_argument('--no-legacy-date-format', dest='legacy_date_format', action='store_false',
                            help="don't use the legacy date format")
@@ -331,7 +331,7 @@ def main():
                            help='place css in external files')
     htmloptions.add_argument('--no-external-css', dest='external_css', action='store_false',
                            help='place css in external files')
-    htmloptions.add_argument('--external-js', action='store_true', default=True, # XXX change to False in version 3.x
+    htmloptions.add_argument('--external-js', action='store_true', default=False, # XXX change to False in version 3.x
                            help='place js in external files')
     htmloptions.add_argument('--no-external-js', dest='external_js', action='store_false',
                            help='place js in external files')
@@ -455,6 +455,8 @@ def main():
         sys.exit('No source file given')
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)
+    
+    options.legacy = not options.v3
     # Default (this may change over time):
     options.vocabulary = 'v2' if options.legacy else 'v3'
     # Option constraints
