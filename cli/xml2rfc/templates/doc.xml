@@ -293,14 +293,29 @@
             {% for option in group._actions %}
               {% if option.container == group %}
                 {% if option.option_strings %}
+                {% if not option.has_positive %}
                 <dt anchor="option{{option.option_strings[-1]}}">
                    {% for o in option.option_strings|reverse %}{% if not loop.first %}, {% endif %}<tt>{{ o }}</tt>{% endfor %}
                    {% if option.metavar %} = {{option.metavar}}{% endif %}
                 </dt>
                 <dd>
-                   <t>{{ option.help|e|capfirst }}.{% if option.default is string and not option.default.startswith("==") %} Default: {{option.default}}{% endif %}</t>
+                   {% if option.default is string and not option.default.startswith("==") %}
+                   <t><br/>Default value: {{option.default}}</t>
+                   {% elif option.default is boolean() %}
+                   <t><br/>Default value: {{ option.default|lower }}</t>
+                   {% endif %}
+
+                   <t>
+                      {{ option.help|e|capfirst }}.
+                   </t>
+                   {% if option.has_negation %}
+                   <t>
+                      This option can be negated with {{ option.option_strings[-1]|replace('--', '--no-') }}.
+                   </t>
+                   {% endif %}
                    {{ render_items(descriptions[option.option_strings[-1]]) }}
                 </dd>
+                {% endif %}
                 {% else %}
                 <dt><tt>{{ option.dest }}</tt></dt><dd>{{ option.help }}</dd>
                 {% endif %}
