@@ -114,6 +114,7 @@ class DocWriter(base.BaseV3Writer):
 
         template = self.jinja.get_template('doc.xml')
 
+        # --- Element and attribute information for the template context ---
         elements = self.get_elements()
 
         for tdir in self.template_dirs:
@@ -140,31 +141,30 @@ class DocWriter(base.BaseV3Writer):
         for d in element_list:
             d.update(elements[d['tag']])
 
-        # Here's a silly little dance because configargparse puts config_file 
-        # arguments in 'optional arguments', even if we've put it in another group
+        # --- Command-line options information for the template context ---
+
+        # Here's a silly little dance because configargparse puts its 'is_config_file_arg=True'
+        # arguments in 'optional arguments', even if we've explicitly put it in another group
         for a in optionparser._actions:
             # This depend on at least one generic option with title being listed before '--config-file'
             if a.container.title == 'Generic Options with Values':
                 genargs_group = a.container
             if a.container.title == 'optional arguments':
                 a.container = genargs_group
-
+        # Deal with options that has an inverse form
+        option_strings = { a.option_strings[-1]: a for a in optionparser._actions if a.option_strings }
+        for o, a in option_strings.items():
+            try:
+                a.has_negation = o.replace('--', '--no-') in option_strings
+                a.has_positive = '--no-' in o and o.replace('--no-', '--') in option_strings
+            except TypeError:
+                pass
 
         # Provide a count of options in each group, for the template
         for i, group in enumerate(optionparser._action_groups):
             group.options = len([ o for o in group._actions if o.container==group ])
 
-        context = {}
-        context['elements'] = element_list
-        context['element_tags'] = list(base.element_tags)
-        context['options'] = optionparser
-        context['toc_depth'] = getattr(self.options, 'toc_depth', "2")
-        context['v3_element_tags'] = list(base.element_tags-base.deprecated_element_tags)
-        context['version'] =  __version__
-        context['descriptions'] = descriptions
-        with open(self.v3_rnc_file) as file:
-            context['schema'] = ('\n' + file.read()).replace('\n   ', '\n')
-
+        # --- Context variable information for the template context ---
         descriptions['-context-'] = {}
         descriptions['-context-']['descriptions']    = "The descriptions read from the <tt>doc.yaml</tt> file"
         descriptions['-context-']['element_tags']    = "A list of all the element tags in the XML schema"
@@ -176,10 +176,23 @@ class DocWriter(base.BaseV3Writer):
         descriptions['-context-']['v3_element_tags'] = "A list of v3 element tags, excluding deprecated tags"
         descriptions['-context-']['version']         = "The xml2rfc version number"
 
-        # context meta-information
+
+        # --- Set up context ---
+        context = {}
+        context['elements'] = element_list
+        context['element_tags'] = list(base.element_tags)
+        context['options'] = optionparser
+        context['toc_depth'] = getattr(self.options, 'toc_depth', "2")
+        context['v3_element_tags'] = list(base.element_tags-base.deprecated_element_tags)
+        context['version'] =  __version__
+        context['descriptions'] = descriptions
+        with open(self.v3_rnc_file) as file:
+            context['schema'] = ('\n' + file.read()).replace('\n   ', '\n')
+
+        # Context meta-information
         context['context'] = context
 
-
+        # Template rendering, using context
         self.rendered = template.render(context)
 
         return self.rendered
