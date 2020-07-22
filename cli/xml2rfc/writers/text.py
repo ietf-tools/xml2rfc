@@ -3684,6 +3684,9 @@ class TextWriter(BaseV3Writer):
         def rreplace(s, old, new, max):
             lst = s.rsplit(old, max)
             return new.join(lst)
+        indent = e.get('indent', None)
+        if indent:
+            kwargs['indent'] = int(indent)
         text = self.inner_text_renderer(e)
         if kwargs.pop('fill', True):
             text = fill(text, width=width, **kwargs)

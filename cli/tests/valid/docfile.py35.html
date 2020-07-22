@@ -4036,29 +4036,19 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
        Deprecated.  Instead, use &lt;dd&gt; inside of a definition list (&lt;dl&gt;).<a href="#section-2.59.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="attrib-t-keepWithNext">
+<div id="attrib-t-indent">
 <section id="section-2.59.3">
-          <h4 id="name-keepwithnext-attribute">
-<a href="#section-2.59.3" class="section-number selfRef">2.59.3. </a><a href="#name-keepwithnext-attribute" class="section-name selfRef">"keepWithNext" Attribute</a>
+          <h4 id="name-indent-attribute-new-3">
+<a href="#section-2.59.3" class="section-number selfRef">2.59.3. </a><a href="#name-indent-attribute-new-3" class="section-name selfRef">"indent" Attribute (New)</a>
           </h4>
-<span class="break"></span><dl class="dlParallel dlCompact" id="section-2.59.3-1">
-            <dt id="section-2.59.3-1.1">Possible values:</dt>
-            <dd id="section-2.59.3-1.2">( "true" | "false" )<a href="#section-2.59.3-1.2" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-<dt id="section-2.59.3-1.3">Default value:</dt>
-            <dd id="section-2.59.3-1.4">"false"<a href="#section-2.59.3-1.4" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-</dl>
-<p id="section-2.59.3-2">
-       Acts as a hint to the output formatters that do pagination to do a best-effort attempt to keep the paragraph with the next element, whatever that happens to be.  For example, for HTML output <code>@media print</code> CSS might translate this to page-break-after: avoid.  For PDF, the paginator could attempt to keep the paragraph with the next element.  Note: this attribute is strictly a hint and not always actionable.<a href="#section-2.59.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.59.3-1">
+       Indicates the indentation to be used for the rendering of the paragraph of text.  The indentation amount is interpreted as characters when rendering plain-text documents, and en-space units when rendering in formats that have richer typographic support such as HTML or PDF.  One en-space is assumed to be the length of 0.5 em- space in CSS units.<a href="#section-2.59.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="attrib-t-keepWithPrevious">
+<div id="attrib-t-keepWithNext">
 <section id="section-2.59.4">
-          <h4 id="name-keepwithprevious-attribute">
-<a href="#section-2.59.4" class="section-number selfRef">2.59.4. </a><a href="#name-keepwithprevious-attribute" class="section-name selfRef">"keepWithPrevious" Attribute</a>
+          <h4 id="name-keepwithnext-attribute">
+<a href="#section-2.59.4" class="section-number selfRef">2.59.4. </a><a href="#name-keepwithnext-attribute" class="section-name selfRef">"keepWithNext" Attribute</a>
           </h4>
 <span class="break"></span><dl class="dlParallel dlCompact" id="section-2.59.4-1">
             <dt id="section-2.59.4-1.1">Possible values:</dt>
@@ -4071,7 +4061,26 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
           <dd class="break"></dd>
 </dl>
 <p id="section-2.59.4-2">
-       Acts as a hint to the output formatters that do pagination to do a best-effort attempt to keep the paragraph with the previous element, whatever that happens to be.  For example, for HTML output <code>@media print</code> CSS might translate this to page-break-before: avoid.  For PDF, the paginator could attempt to keep the paragraph with the previous element.  Note: this attribute is strictly a hint and not always actionable.<a href="#section-2.59.4-2" class="pilcrow">¶</a></p>
+       Acts as a hint to the output formatters that do pagination to do a best-effort attempt to keep the paragraph with the next element, whatever that happens to be.  For example, for HTML output <code>@media print</code> CSS might translate this to page-break-after: avoid.  For PDF, the paginator could attempt to keep the paragraph with the next element.  Note: this attribute is strictly a hint and not always actionable.<a href="#section-2.59.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="attrib-t-keepWithPrevious">
+<section id="section-2.59.5">
+          <h4 id="name-keepwithprevious-attribute">
+<a href="#section-2.59.5" class="section-number selfRef">2.59.5. </a><a href="#name-keepwithprevious-attribute" class="section-name selfRef">"keepWithPrevious" Attribute</a>
+          </h4>
+<span class="break"></span><dl class="dlParallel dlCompact" id="section-2.59.5-1">
+            <dt id="section-2.59.5-1.1">Possible values:</dt>
+            <dd id="section-2.59.5-1.2">( "true" | "false" )<a href="#section-2.59.5-1.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-2.59.5-1.3">Default value:</dt>
+            <dd id="section-2.59.5-1.4">"false"<a href="#section-2.59.5-1.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-2.59.5-2">
+       Acts as a hint to the output formatters that do pagination to do a best-effort attempt to keep the paragraph with the previous element, whatever that happens to be.  For example, for HTML output <code>@media print</code> CSS might translate this to page-break-before: avoid.  For PDF, the paginator could attempt to keep the paragraph with the previous element.  Note: this attribute is strictly a hint and not always actionable.<a href="#section-2.59.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4870,8 +4879,8 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
 </div>
 <div id="attrib-ul-indent">
 <section id="section-2.71.4">
-          <h4 id="name-indent-attribute-new-3">
-<a href="#section-2.71.4" class="section-number selfRef">2.71.4. </a><a href="#name-indent-attribute-new-3" class="section-name selfRef">"indent" Attribute (New)</a>
+          <h4 id="name-indent-attribute-new-4">
+<a href="#section-2.71.4" class="section-number selfRef">2.71.4. </a><a href="#name-indent-attribute-new-4" class="section-name selfRef">"indent" Attribute (New)</a>
           </h4>
 <p id="section-2.71.4-1">
        The indentation of the list elements relative to the start of the bullet or bullet text.<a href="#section-2.71.4-1" class="pilcrow">¶</a></p>
@@ -5674,6 +5683,7 @@ t =
     attribute anchor { xsd:ID }?,
     attribute pn { xsd:ID }?,
     attribute hangText { text }?,
+    attribute indent= { text }?,
     [ a:defaultValue = "false" ]
     attribute keepWithNext { "true" | "false" }?,
     [ a:defaultValue = "false" ]

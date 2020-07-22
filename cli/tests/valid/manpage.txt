@@ -1749,7 +1749,16 @@ Table of Contents
 
    Deprecated.  Instead, use <dd> inside of a definition list (<dl>).
 
-2.59.3.  "keepWithNext" Attribute
+2.59.3.  "indent" Attribute (New)
+
+   Indicates the indentation to be used for the rendering of the
+   paragraph of text.  The indentation amount is interpreted as
+   characters when rendering plain-text documents, and en-space units
+   when rendering in formats that have richer typographic support such
+   as HTML or PDF.  One en-space is assumed to be the length of 0.5 em-
+   space in CSS units.
+
+2.59.4.  "keepWithNext" Attribute
 
    Possible values:  ( "true" | "false" )
    Default value:  "false"
@@ -1762,7 +1771,7 @@ Table of Contents
    element.  Note: this attribute is strictly a hint and not always
    actionable.
 
-2.59.4.  "keepWithPrevious" Attribute
+2.59.5.  "keepWithPrevious" Attribute
 
    Possible values:  ( "true" | "false" )
    Default value:  "false"
@@ -3005,6 +3014,7 @@ Appendix A.  RELAX NG Schema
        attribute anchor { xsd:ID }?,
        attribute pn { xsd:ID }?,
        attribute hangText { text }?,
+       attribute indent= { text }?,
        [ a:defaultValue = "false" ]
        attribute keepWithNext { "true" | "false" }?,
        [ a:defaultValue = "false" ]

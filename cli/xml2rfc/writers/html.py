@@ -2437,7 +2437,9 @@ class HtmlWriter(BaseV3Writer):
     #    <p id="s-1-1">A paragraph.
     #      <a href="#s-1-1" class="pilcrow">&para;</a></p>
     def render_t(self, h, x):
-        p = add.p(h, x)
+        indent = x.get('indent')
+        style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent else None
+        p = add.p(h, x, style=style)
         for c in x.getchildren():
             self.render(p, c)
         self.maybe_add_pilcrow(p)

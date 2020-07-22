@@ -401,6 +401,7 @@ class PrepToolWriter(BaseV3Writer):
             'dl':       ('indent', ),
             'format':   ('octets', ),
             'ol':       ('indent', ),
+            't':        ('indent', ),
             'ul':       ('indent', ),
         }
         tags = integer_attributes.keys()
