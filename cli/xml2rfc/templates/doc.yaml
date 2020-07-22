@@ -1275,11 +1275,14 @@ t[hangText]:
 
 t[indent]:
 
-    - Indicates any extra indentation to be used for the rendering of the
-      paragraph of text.  The indentation amount is interpreted as characters
-      when rendering plain-text documents, and en-space units when rendering in
+    - Indicates any extra amount of indentation to be used when rendering the paragraph
+      of text.  The indentation amount is interpreted as characters when
+      rendering plain-text documents, and en-space units when rendering in
       formats that have richer typographic support such as HTML or PDF.  One
-      en-space is assumed to be the length of 0.5 em-space in CSS units.
+      en-space is assumed to be the length of 0.5 em-space in CSS units.  Only
+      non-negative integer amounts of indentation are supported, and in the
+      absence of any indent value, rendering is done with no extra indentation,
+      i.e., flush with the current local left margin.
 
 t[keepWithNext]:
 
