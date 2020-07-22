@@ -409,7 +409,7 @@ class PrepToolWriter(BaseV3Writer):
             for a in integer_attributes[c.tag]:
                 i = c.get(a)
                 if i and not i.isdigit():
-                    self.err(self.root, 'Expected <%s> attribute "%s" to be an integer, but found "%s"' % (c.tag, a, i))
+                    self.err(c, 'Expected <%s> attribute "%s" to be a non-negative integer, but found "%s"' % (c.tag, a, i))
 
 
         # Attributes that may have leading or trailing space
