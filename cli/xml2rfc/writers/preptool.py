@@ -408,7 +408,7 @@ class PrepToolWriter(BaseV3Writer):
         for c in e.iter(tags):
             for a in integer_attributes[c.tag]:
                 i = c.get(a)
-                if i and not i.isdigit():
+                if i and not i.isdigit() and not i==self.get_attribute_defaults(c.tag)[a]:
                     self.err(c, 'Expected <%s> attribute "%s" to be a non-negative integer, but found "%s"' % (c.tag, a, i))
 
 
@@ -1920,7 +1920,7 @@ class PrepToolWriter(BaseV3Writer):
         def toc_entry_t(s):
             name = s.find('./name')
             if name is None:
-                self.die(s, "No name entry found for section, can't continue: %s" % (etree.tostring(s)))
+                self.die(s, "No name entry found for section, can't continue")
             numbered = s.get('numbered')=='true' or (self.check_refs_numbered() if s.tag == 'references' else False)
             if not s.get('pn'):
                 self.warn(s, "Expected a pn number, found none in <%s>" % (s.tag, ))

@@ -387,7 +387,8 @@
        attribute anchor { xsd:ID }?,
        attribute pn { xsd:ID }?,
        attribute hangText { text }?,
-       attribute indent= { text }?,
+       [ a:defaultValue = "0" ]
+       attribute indent { text }?,
        [ a:defaultValue = "false" ]
        attribute keepWithNext { "true" | "false" }?,
        [ a:defaultValue = "false" ]
@@ -467,7 +468,8 @@
        attribute group { text }?,
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
-       attribute indent { text }?,
+       [ a:defaultValue = "adaptive" ]
+       attribute indent { text | "adaptive" }?,
        attribute pn { xsd:ID }?,
        li+
      }
@@ -483,6 +485,7 @@
         attribute empty { "true" | "false" },
         [ a:defaultValue = "false" ]
         attribute bare { "true" | "false" }?)?,
+       [ a:defaultValue = "3" ]
         attribute indent { text }?,
         attribute pn { xsd:ID }?,
        li+
@@ -530,6 +533,7 @@
        attribute spacing { "normal" | "compact" }?,
        [ a:defaultValue = "false" ]
        attribute newline { "true" | "false" }?,
+       [ a:defaultValue = "3" ]
        attribute indent { text }?,
        attribute pn { xsd:ID }?,
        (dt, dd)+

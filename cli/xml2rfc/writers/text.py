@@ -1478,26 +1478,7 @@ class TextWriter(BaseV3Writer):
         compact = e.get('spacing') == 'compact'
         tjoin  = '\n' if compact else '\n\n'
         #
-        indent = e.get('indent', None)
-        if indent and not indent.isdigit():
-            self.warn(e, "Expected indent to have a numeric value, found '%s'" % indent)
-            indent = None
-        if indent is None:
-            indent = 3
-# Commented out: code to adapt the indentation to the longest term in the list        
-#             for dt in e.iterchildren('dt'):
-#                 dt._text = self.inner_text_renderer(dt)
-#                 l = len(dt._text)
-#                 if l+2 > indent:
-#                     indent = l+2
-#             if newline:
-#                 if indent > 15:                   # XXX Somewhat arbitrary choice
-#                     indent = 3
-#             else:
-#                 if indent > 24:                   # XXX Somewhat arbitrary choice
-#                     indent = 3
-        else:
-            indent = int(indent)
+        indent = int(e.get('indent'))
         nljoin = Joiner('\n', indent, 0, False, False)
         spjoin = Joiner('  ', indent, 0, True, False)
         ddjoin  = nljoin if newline else spjoin
@@ -2162,7 +2143,8 @@ class TextWriter(BaseV3Writer):
         if p._bare:
             text = ''
         else:
-            text = p._symbol + '  '
+            text = p._symbol
+            text += ' '*(p._padding-len(text))            
         return text
 
     # 2.30.  <link>
@@ -2439,8 +2421,9 @@ class TextWriter(BaseV3Writer):
         compact = e.get('spacing') == 'compact'
         ljoin  = '\n' if compact else '\n\n'
         #
-        indent = len(e._format % (' '*num_width(fchar, len(list(e))))) + len('  ')
-        indent = int( e.get('indent') or indent )
+        adaptive_indent = len(e._format % (' '*num_width(fchar, len(list(e))))) + len('  ')
+        indent_attrib = e.get('indent')
+        indent = int(indent_attrib) if indent_attrib.isdigit() else adaptive_indent
         e._padding = indent
         kwargs['joiners'].update({
             None:   Joiner(ljoin, indent, 0, False, False),
@@ -4556,6 +4539,7 @@ class TextWriter(BaseV3Writer):
         padding = indent
         indent = int( e.get('indent') or indent )
         hang = max(padding, indent) - indent
+        e._padding = indent
         #
         kwargs['joiners'].update({
             None:   Joiner(ljoin, indent, 0, False, False),

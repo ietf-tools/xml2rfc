@@ -113,9 +113,12 @@ class ExtendingElementMaker(ClassElementMaker):
                     else:
                         # cannot wrap a non-block in <div>, so we invert the
                         # wrapping by swapping the tags:
-                        child = wrap(elem, 'div', id=pn)
+                        child = wrap(elem, 'div', id=pn, **attrib)
                         elem.tag = child.tag
                         child.tag = tag
+                        for k in attrib:
+                            if k in elem.attrib:
+                                del elem.attrib[k]
                         elem.set('id', an)
             elif sn != None:
                 elem.set('id', sn)
@@ -1374,7 +1377,7 @@ class HtmlWriter(BaseV3Writer):
     #    This element is directly rendered as its HTML counterpart.
     def render_dd(self, h, x):
         indent = x.getparent().get('indent')
-        style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent else None
+        style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent and indent!="0" else None
         dd = add.dd(h, x, style=style)
         for c in x.getchildren():
             self.render(dd, c)
@@ -1710,9 +1713,9 @@ class HtmlWriter(BaseV3Writer):
     def render_li_ul(self, h, x):
         indent = x.getparent().get('indent')
         style = None
-        if indent and int(indent)>2:
-            em=(int(indent)-2)*0.5
-            style = 'margin-left: %.1fem; text-indent: -%.1fem;' % (em, em)
+        if indent and int(indent)>4:
+            em=(int(indent)-4)*0.5
+            style = 'margin-left: %.1fem;' % em
         li = add.li(h, x, classes=h.get('class'), style=style)
         for c in x.getchildren():
             self.render(li, c)
@@ -1864,7 +1867,9 @@ class HtmlWriter(BaseV3Writer):
         label = x.get('derivedCounter')
         dt = add.dt(h, None, label)
         indent = x.getparent().get('indent')
-        style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent else None
+        style = None
+        if indent and indent.isdigit():
+            style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent and indent!="0" else None
         dd = add.dd(h, x, style=style)
         # workaround for weasyprint's unwillingness to break between <dd> and
         # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
@@ -1885,9 +1890,9 @@ class HtmlWriter(BaseV3Writer):
     def render_li_ol(self, h, x):
         indent = x.getparent().get('indent')
         style = None
-        if indent and int(indent)>2:
-            em=(int(indent)-2)*0.5
-            style = 'margin-left: %.1fem; text-indent: -%.1fem;' % (em, em)
+        if indent and indent.isdigit() and int(indent)>4:
+            em=(int(indent)-4)*0.5
+            style = 'padding-left: %.1fem;' % em
         li = add.li(h, x, style=style)
         for c in x.getchildren():
             self.render(li, c)
@@ -2438,7 +2443,7 @@ class HtmlWriter(BaseV3Writer):
     #      <a href="#s-1-1" class="pilcrow">&para;</a></p>
     def render_t(self, h, x):
         indent = x.get('indent')
-        style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent else None
+        style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent and indent!="0" else None
         p = add.p(h, x, style=style)
         for c in x.getchildren():
             self.render(p, c)
