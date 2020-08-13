@@ -1,5 +1,5 @@
 xml2rfc(1)                                                    xml2rfc(1)
-                                                            21 July 2020
+                                                         August 11, 2020
 
 
                   Xml2rfc Vocabulary Version 3 Schema
@@ -15,9 +15,6 @@ Abstract
    document should always be in sync with the schema in actual use.  The
    textual descriptions depend on manual updates in order to reflect the
    implementation.
-
-   For an introduction to the v3 schema, with suggestions on how to
-   transition from v2, see [INTRO-TO-V3].
 
 Table of Contents
 
@@ -50,6 +47,12 @@ Table of Contents
    Elements and attributes that have been introduced after the
    publication of the original schema version 3 specification,
    [RFC7991], have been marked with '(New)' in this document.
+
+   For an introduction to the v3 schema, with suggestions on how to
+   transition from v2, see [INTRO-TO-V3].
+
+   The latest version of this documentation is available in HTML form at
+   https://xml2rfc.ietf.org/xml2rfc-doc.html.
 
    This documentation applies to xml2rfc version 3.0.0.
 
@@ -689,6 +692,8 @@ Table of Contents
 
 2.23.2.  "indent" Attribute (New)
 
+   Default value:  "3"
+
    Indicates the indentation to be used for the rendering of the second
    and following lines of the item (the first line starts with the term,
    and is not indented).  The indentation amount is interpreted as
@@ -1045,8 +1050,19 @@ Table of Contents
 
 2.38.3.  "indent" Attribute (New)
 
+   Possible values:  ( text | "adaptive" )
+   Default value:  "adaptive"
+
    The indentation of the list elements relative to the start of the
-   bullet or bullet text.
+   bullet or bullet text.  With "indent='adaptive'", the width of the
+   widest list item number will determine the indentation.  With a
+   numeric value, that value will be used to determine the amount of
+   indentation.  The indentation amount is interpreted as characters
+   when rendering plain-text documents, and en-space units when
+   rendering in formats that have richer typographic support such as
+   HTML or PDF.  One en-space is assumed to be the length of 0.5 em-
+   space in CSS units.  Only non-negative integer amounts of indentation
+   are supported.
 
 2.38.4.  "spacing" Attribute
 
@@ -1293,6 +1309,11 @@ Table of Contents
    child element.  In general, the title should be either "Normative
    References" or "Informative References".
 
+   The recommended way to include references to RFCs and Internet-Drafts
+   is to use the standard XML XInclude mechanism.  Here is an example:
+
+    <references> <name>Normative References</name> <!--RTP--> <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3550.xml"/> <!--SIP--> <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3261.xml"/> </references>
+
    This element can be a child element of <back>, and <references>.
 
    Content schema:  name?, ( references+ | ( reference | referencegroup
@@ -1342,7 +1363,7 @@ Table of Contents
 
 2.49.2.  "consensus" Attribute
 
-   Possible values:  ( "no" | "yes" | "true" | "false" )
+   Possible values:  ( "no" | "yes" | "false" | "true" )
    Default value:  "false"
 
    Affects the generated boilerplate.  Note that the values of "no" and
@@ -1429,7 +1450,7 @@ Table of Contents
    Default value:  "true"
 
    Specifies whether or not a formatter is requested to use symbolic
-   references (such as "[RFC2119]").  If the value for this is "false",
+   references (such as "RFC2119").  If the value for this is "false",
    the references come out as numbers (such as "[3]").
 
 2.49.14.  "tocDepth" Attribute
@@ -1751,12 +1772,15 @@ Table of Contents
 
 2.59.3.  "indent" Attribute (New)
 
-   Indicates the indentation to be used for the rendering of the
-   paragraph of text.  The indentation amount is interpreted as
+   Default value:  "0"
+
+   Indicates any extra amount of indentation to be used when rendering
+   the paragraph of text.  The indentation amount is interpreted as
    characters when rendering plain-text documents, and en-space units
    when rendering in formats that have richer typographic support such
    as HTML or PDF.  One en-space is assumed to be the length of 0.5 em-
-   space in CSS units.
+   space in CSS units.  Only non-negative integer amounts of indentation
+   are supported.
 
 2.59.4.  "keepWithNext" Attribute
 
@@ -2298,6 +2322,8 @@ Table of Contents
 
 2.71.4.  "indent" Attribute (New)
 
+   Default value:  "3"
+
    The indentation of the list elements relative to the start of the
    bullet or bullet text.
 
@@ -2536,13 +2562,21 @@ Table of Contents
 
 4.  References
 
+   [BCP14]    Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+              Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, May 2017.
+
+              <https://www.rfc-editor.org/bcp/bcp14.txt>
+
    [IDGUIDE]  Housley, R., "Guidelines to Authors of Internet-Drafts",
               December 2010,
               <https://www.ietf.org/id-info/guidelines.html>.
 
    [INTRO-TO-V3]
-              Levkowetz, H., "Introduction to xml2rfc Version 3", 20
-              February 2019,
+              Levkowetz, H., "Introduction to xml2rfc Version 3",
+              February 20, 2019,
               <https://tools.ietf.org/src/xml2rfc/trunk/cli/doc/
               xml2rfc3.html>.
 
@@ -2553,11 +2587,6 @@ Table of Contents
    [RFC2026]  Bradner, S., "The Internet Standards Process -- Revision
               3", BCP 9, RFC 2026, DOI 10.17487/RFC2026, October 1996,
               <https://www.rfc-editor.org/info/rfc2026>.
-
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC2397]  Masinter, L., "The "data" URL scheme", RFC 2397,
               DOI 10.17487/RFC2397, August 1998,
@@ -3014,7 +3043,8 @@ Appendix A.  RELAX NG Schema
        attribute anchor { xsd:ID }?,
        attribute pn { xsd:ID }?,
        attribute hangText { text }?,
-       attribute indent= { text }?,
+       [ a:defaultValue = "0" ]
+       attribute indent { text }?,
        [ a:defaultValue = "false" ]
        attribute keepWithNext { "true" | "false" }?,
        [ a:defaultValue = "false" ]
@@ -3094,7 +3124,8 @@ Appendix A.  RELAX NG Schema
        attribute group { text }?,
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
-       attribute indent { text }?,
+       [ a:defaultValue = "adaptive" ]
+       attribute indent { text | "adaptive" }?,
        attribute pn { xsd:ID }?,
        li+
      }
@@ -3110,6 +3141,7 @@ Appendix A.  RELAX NG Schema
         attribute empty { "true" | "false" },
         [ a:defaultValue = "false" ]
         attribute bare { "true" | "false" }?)?,
+       [ a:defaultValue = "3" ]
         attribute indent { text }?,
         attribute pn { xsd:ID }?,
        li+
@@ -3157,6 +3189,7 @@ Appendix A.  RELAX NG Schema
        attribute spacing { "normal" | "compact" }?,
        [ a:defaultValue = "false" ]
        attribute newline { "true" | "false" }?,
+       [ a:defaultValue = "3" ]
        attribute indent { text }?,
        attribute pn { xsd:ID }?,
        (dt, dd)+
@@ -3876,16 +3909,13 @@ B.3.  Format selection
    "--info"
       Generate a JSON file with anchor to section lookup information.
 
-B.4.  Generic Options
+B.4.  Generic Switch Options
 
    "--clear-cache", "-C"
       Purge the cache and exit.
 
    "--debug"
       Show debugging output.
-
-   "--no-dtd", "-n"
-      Disable DTD validation step.
 
    "--no-network", "-N"
       Don't use the network to resolve references.
@@ -3932,6 +3962,8 @@ B.5.  Generic Options with Values
 
    "--dtd", "-d" = DTDFILE
       Specify an alternate dtd file.
+
+      This option can be negated with --no-dtd.
 
    "--date", "-D" = DATE
       Run as if the date is DATE (format: yyyy-mm-dd).  Default: Today's
@@ -3997,8 +4029,7 @@ B.7.  Text Format Options
    "--legacy-date-format"
       Use the legacy date format, rather than the new one.
 
-   "--no-legacy-date-format"
-      Don't use the legacy date format.
+      This option can be negated with --no-legacy-date-format.
 
    "--list-symbols" = 4*CHAR
       Use the characters given as list bullet symbols.
@@ -4015,8 +4046,11 @@ B.7.  Text Format Options
       more compact table.
 
    "--table-borders"
+
+      Default value: full
+
       The style of table borders to use for text output; one of
-      full/light/minimal.  Default: full
+      full/light/minimal.
 
       Examples (these will only have visible differences in text mode):
 
@@ -4079,33 +4113,43 @@ B.8.  Html Format Options
    "--external-css"
       Place css in external files.
 
-   "--no-external-css"
-      Place css in external files.
+      This option can be negated with --no-external-css.
 
    "--external-js"
       Place js in external files.
 
-   "--no-external-js"
-      Place js in external files.
+      This option can be negated with --no-external-js.
 
    "--rfc-base-url"
-      Base URL for RFC links.  Default: https://www.rfc-editor.org/rfc/
+
+      Default value: https://www.rfc-editor.org/rfc/
+
+      Base URL for RFC links.
 
    "--id-base-url"
-      Base URL for Internet-Draft links.  Default:
-      https://tools.ietf.org/html/
+
+      Default value: https://tools.ietf.org/html/
+
+      Base URL for Internet-Draft links.
 
    "--rfc-reference-base-url"
+
+      Default value: https://rfc-editor.org/rfc/
+
       Base URL for RFC reference targets, replacing the target="..."
-      value given in the reference entry.  Default: https://rfc-
-      editor.org/rfc/
+      value given in the reference entry.
 
    "--id-reference-base-url"
-      Base URL for I-D reference targets.  Default:
-      https://tools.ietf.org/html/
+
+      Default value: https://tools.ietf.org/html/
+
+      Base URL for I-D reference targets.
 
    "--metadata-js-url"
-      URL for the metadata script.  Default: metadata.min.js
+
+      Default value: metadata.min.js
+
+      URL for the metadata script.
 
 B.9.  V2-V3 Converter Options
 

@@ -10,7 +10,7 @@
 <?rfc autobreaks="yes"?>
 <?rfc docmapping="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" number="6787" category="std" consensus="yes" docName="draft-ietf-speechsc-mrcpv2" ipr="pre5378Trust200902" submissionType="IETF" obsoletes="" updates="" xml:lang="en" tocInclude="true" sortRefs="true" symRefs="true" version="3">
-  <!-- xml2rfc v2v3 conversion 2.41.0 -->
+  <!-- xml2rfc v2v3 conversion 3.0.0 -->
   <link href="https://datatracker.ietf.org/doc/draft-ietf-speechsc-mrcpv2" rel="prev"/>
   <?v3xml2rfc silence="The document date" ?>
   <?v3xml2rfc silence="The 'docName' attribute of the .rfc/. element should have a revision number" ?>
@@ -2774,8 +2774,7 @@ S->C: MRCP/2.0 ... 543259 200 COMPLETE
         <t>This method is useful in two scenarios: 
 
 </t>
-        <ol spacing="normal" type="1">
-          <li>The client has detected DTMF digits in the input media or some
+        <ol spacing="normal" type="1"><li>The client has detected DTMF digits in the input media or some
             other barge-in-able event and wants to communicate that to the
             synthesizer resource.</li>
           <li>The recognizer resource and the synthesizer resource are in
@@ -3198,8 +3197,7 @@ S->C: MRCP/2.0 ... SPEAK-COMPLETE 543261 COMPLETE
       <t>This section applies to the following resource types. 
 
 </t>
-      <ol spacing="normal" type="1">
-        <li>speechrecog</li>
+      <ol spacing="normal" type="1"><li>speechrecog</li>
         <li>dtmfrecog</li>
       </ol>
       <t>The difference between the above two resources is in their level of
@@ -4516,8 +4514,7 @@ Content-Length:...
             multiple interpretations: 
 
             </t>
-            <ol spacing="normal" type="1">
-              <li>The client application might have additional information,
+            <ol spacing="normal" type="1"><li>The client application might have additional information,
                 for example, information from a database, that would allow it
                 to select a preferred interpretation from among the possible
                 interpretations returned from the semantic interpreter.</li>
@@ -4534,8 +4531,7 @@ Content-Length:...
             <t>These are elements and attributes representing additional
             information about the interpretation, over and above the
             interpretation itself. Side information includes: </t>
-            <ol spacing="normal" type="1">
-              <li>Whether an interpretation was achieved (the &lt;nomatch&gt;
+            <ol spacing="normal" type="1"><li>Whether an interpretation was achieved (the &lt;nomatch&gt;
                 element) and the system's confidence in an interpretation (the
                 "confidence" attribute of &lt;interpretation&gt;).</li>
               <li>Alternative interpretations (&lt;interpretation&gt;)</li>
@@ -4560,8 +4556,7 @@ Content-Length:...
         <section numbered="true" toc="default">
           <name>Overview of Recognizer Result Elements and Their Relationships</name>
           <t>The recognizer elements in NLSML fall into two categories: </t>
-          <ol spacing="normal" type="1">
-            <li>description of the input that was processed, and</li>
+          <ol spacing="normal" type="1"><li>description of the input that was processed, and</li>
             <li>description of the meaning which was extracted from the
               input.</li>
           </ol>
@@ -4606,8 +4601,7 @@ Content-Length:...
             result, it can be overridden for individual interpretations at the
             &lt;interpretation&gt; level.</t>
             <t>Attributes: </t>
-            <ol spacing="normal" type="1">
-              <li>grammar: The grammar or recognition rule matched by this
+            <ol spacing="normal" type="1"><li>grammar: The grammar or recognition rule matched by this
                 result. The format of the grammar attribute will match the
                 rule reference semantics defined in the grammar specification.
                 Specifically, the rule reference is in the external XML form
@@ -4637,8 +4631,7 @@ Content-Length:...
             <t>An &lt;interpretation&gt; element contains a single semantic
             interpretation.</t>
             <t>Attributes: </t>
-            <ol spacing="normal" type="1">
-              <li>confidence: A float value from 0.0-1.0 indicating the
+            <ol spacing="normal" type="1"><li>confidence: A float value from 0.0-1.0 indicating the
                 semantic analyzer's confidence in this interpretation. A value
                 of 1.0 indicates maximum confidence. The values are
                 implementation dependent but are intended to align with the
@@ -4687,8 +4680,7 @@ Content-Length:...
             objects created, nor any semantic translation, the instance value
             is the same as the input value.</t>
             <t>Attributes: </t>
-            <ol spacing="normal" type="1">
-              <li>confidence: Each element of the instance MAY have a
+            <ol spacing="normal" type="1"><li>confidence: Each element of the instance MAY have a
                 confidence attribute, defined in the NLSML namespace. The
                 confidence attribute contains a float value in the range from
                 0.0-1.0 reflecting the system's confidence in the analysis of
@@ -4738,8 +4730,7 @@ Content-Length:...
             <t>Attributes: 
 
             </t>
-            <ol spacing="normal" type="1">
-              <li>timestamp-start: The time at which the input began.
+            <ol spacing="normal" type="1"><li>timestamp-start: The time at which the input began.
                 (optional)</li>
               <li>timestamp-end: The time at which the input ended.
                 (optional)</li>
@@ -4758,8 +4749,7 @@ Content-Length:...
             representations default to local time.</t>
             <t>There are three possible formats for the &lt;input&gt; element.
             </t>
-            <ol spacing="normal" type="1">
-              <li>
+            <ol spacing="normal" type="1"><li>
                 <t>The &lt;input&gt; element can contain simple text: </t>
                 <artwork name="" type="" align="left" alt=""><![CDATA[
     <input>onions</input>
@@ -4853,8 +4843,7 @@ Content-Length:...
         &lt;enrollment&nbhy;result&gt; element under &lt;result&gt;. The elements
         are described below and have the schema defined in <xref target="sec.enrollmentResultsSchema" format="default"/>. The following elements
         are defined:</t>
-        <ol spacing="normal" type="1">
-          <li>num-clashes</li>
+        <ol spacing="normal" type="1"><li>num-clashes</li>
           <li>num-good-repetitions</li>
           <li>num-repetitions-still-needed</li>
           <li>consistency-status</li>
@@ -5132,8 +5121,7 @@ Content-Length:...
         application.
 
         </t>
-        <ol spacing="normal" type="1">
-          <li>The grammar MAY be placed directly in the message body as typed
+        <ol spacing="normal" type="1"><li>The grammar MAY be placed directly in the message body as typed
             content. If more than one grammar is included in the body, the
             order of inclusion controls the corresponding precedence for the
             grammars during recognition, with earlier grammars in the body
@@ -5226,8 +5214,7 @@ The Recognition-Timeout MUST be started when the recognition
         the Speech-Complete-Timer is started. If it matches partially with one
         or more of the active grammars, with more speech needed before a full
         match is achieved, then the Speech-Incomplete-Timer is started.</t>
-        <ol spacing="normal" type="1">
-          <li>When the No-Input-Timer expires, the recognizer MUST complete
+        <ol spacing="normal" type="1"><li>When the No-Input-Timer expires, the recognizer MUST complete
         with a Completion-Cause code of "no-input-timeout".</li>
           <li>The recognizer MUST support detecting a no-match condition upon
         detecting end of speech. The recognizer MAY support detecting a
@@ -5266,8 +5253,7 @@ The Recognition-Timeout MUST be started when the recognition
         <t>For recognition in hotword mode:</t>
         <t>Note that for recognition in hotword mode the START-OF-INPUT event is
         not generated when speech or a DTMF digit is detected.</t>
-        <ol spacing="normal" type="1">
-          <li>When the No-Input-Timer expires, the recognizer MUST complete
+        <ol spacing="normal" type="1"><li>When the No-Input-Timer expires, the recognizer MUST complete
         with a Completion-Cause code of "no-input-timeout".</li>
           <li>If at any point a match occurs, the RECOGNIZE MUST complete with
         a Completion-Cause code of "success".</li>
@@ -5896,8 +5882,7 @@ S->C:    MRCP/2.0 ... INTERPRETATION-COMPLETE 543266 200 COMPLETE
       content pointed to by a URI. The main usages of recorders are
 
       </t>
-      <ol spacing="normal" type="1">
-        <li>to capture speech audio that may be submitted for recognition at
+      <ol spacing="normal" type="1"><li>to capture speech audio that may be submitted for recognition at
           a later time, and</li>
         <li>recording voice or video mails.</li>
       </ol>
@@ -6583,19 +6568,16 @@ verifier-method          =  "START-SESSION"
         appropriate for the resource, with the header field
         Ver&nbhy;Buffer&nbhy;Utterance. Then, when the following method is called,
         verification is performed using the set of buffered audio. </t>
-        <ol spacing="normal" type="1">
-          <li>VERIFY-FROM-BUFFER</li>
+        <ol spacing="normal" type="1"><li>VERIFY-FROM-BUFFER</li>
         </ol>
         <t>The following methods are used for verification of live audio
         utterances: </t>
-        <ol spacing="normal" type="1">
-          <li>VERIFY</li>
+        <ol spacing="normal" type="1"><li>VERIFY</li>
           <li>START-INPUT-TIMERS</li>
         </ol>
         <t>The following methods are used for configuring the verifier
         resource and for establishing resource states: </t>
-        <ol spacing="normal" type="1">
-          <li>START-SESSION</li>
+        <ol spacing="normal" type="1"><li>START-SESSION</li>
           <li>END-SESSION</li>
           <li>QUERY-VOICEPRINT</li>
           <li>DELETE-VOICEPRINT</li>
@@ -6605,8 +6587,7 @@ verifier-method          =  "START-SESSION"
         </ol>
         <t>The following method allows the polling of a verification in progress
         for intermediate results. </t>
-        <ol spacing="normal" type="1">
-          <li>GET-INTERMEDIATE-RESULT</li>
+        <ol spacing="normal" type="1"><li>GET-INTERMEDIATE-RESULT</li>
         </ol>
       </section>
       <section numbered="true" toc="default">
@@ -6699,8 +6680,7 @@ vid                          =  1*VCHAR ["." 1*VCHAR]
           caller's response without any participation by the verifier
           resource.</t>
           <t>Once the following conditions have been met: </t>
-          <ol spacing="normal" type="1">
-            <li>the voiceprint identity has been successfully established through
+          <ol spacing="normal" type="1"><li>the voiceprint identity has been successfully established through
               the Voiceprint-Identifier header fields of the START-SESSION
               method, and</li>
             <li>the verification mode has been set to one of "train" or
@@ -7084,8 +7064,7 @@ start-input-timers       =  "Start-Input-Timers" ":"
           &lt;verification-result&gt; element under &lt;result&gt;. The
           elements are described below and have the schema defined in <xref target="sec.enrollmentResultsSchema" format="default"/>. The following elements
           are defined:</t>
-          <ol spacing="normal" type="1">
-            <li>&lt;voiceprint&gt;</li>
+          <ol spacing="normal" type="1"><li>&lt;voiceprint&gt;</li>
             <li>&lt;incremental&gt;</li>
             <li>&lt;cumulative&gt;</li>
             <li>&lt;decision&gt;</li>
@@ -7316,8 +7295,7 @@ S->C:  MRCP/2.0 ... 314161 200 COMPLETE
         <t>The END-SESSION method terminates an ongoing verification session
         and releases the verification voiceprint resources. The session may
         terminate in one of three ways: </t>
-        <ol spacing="normal" type="1">
-          <li>abort - the voiceprint adaptation or creation may be aborted so
+        <ol spacing="normal" type="1"><li>abort - the voiceprint adaptation or creation may be aborted so
             that the voiceprint remains unchanged (or is not created).</li>
           <li>commit - when terminating a voiceprint training session, the
             new voiceprint is committed to the repository.</li>
@@ -7792,8 +7770,7 @@ S->C:  MRCP/2.0 ... 543260 200 COMPLETE
         by SDP within the context of a SIP dialog. In order to ensure secure
         rendezvous between MRCPv2 clients and servers, the following are
         required:</t>
-        <ol spacing="normal" type="1">
-          <li>The SIP implementation in MRCPv2 clients and servers MUST
+        <ol spacing="normal" type="1"><li>The SIP implementation in MRCPv2 clients and servers MUST
             support SIP digest authentication <xref target="RFC3261" format="default"/>
             and SHOULD employ it.</li>
           <li>  The SIP implementation in MRCPv2 clients and servers MUST support
