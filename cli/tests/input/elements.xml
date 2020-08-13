@@ -287,10 +287,10 @@ Unordered list, third bullet, fourth element:
                   </artwork>
                </figure>
                <ol indent="8" type="REQ%d:">
-                  <li anchor="ol-li-item1">Unordered list, third bullet, fifth element: Ordered list, element li.  Text only.</li>
+                  <li anchor="ol-li-item1">Unordered list, third bullet, fifth element: Ordered list, element li.  Text only. Indent="8"</li>
                   <li>
                      <t>
-                        Unordered list, third bullet, fifth element: Ordered list, element t. Nam cum ad me de virtute misisti.  Quae est enim contra Cyrenaicos satis acute, nihil ad iucunde vivendum reperiri posse, quod coniunctione tali sit aptius.  Quae etsi mihi nullo modo nec divelli nec distrahi possint, sic de iustitia iudicandum est, quae non modo non impediri rationem amicitiae, si summum bonum diceret, primum in eo essent.
+                        Unordered list, third bullet, fifth element: Ordered list, element t. Indent="8".  Nam cum ad me de virtute misisti.  Quae est enim contra Cyrenaicos satis acute, nihil ad iucunde vivendum reperiri posse, quod coniunctione tali sit aptius.  Quae etsi mihi nullo modo nec divelli nec distrahi possint, sic de iustitia iudicandum est, quae non modo non impediri rationem amicitiae, si summum bonum diceret, primum in eo essent.
                      </t>
                   </li>
                </ol>
@@ -343,12 +343,12 @@ Unordered list, third bullet, fourth element:
       </section>
       <section>
          <name>Ordered list with sub-elements</name>
-         <ol group="foo">
+         <ol group="foo" indent="6">
             <li>
-               Ordered list, first bullet.
+               Ordered list, first bullet.  Indent="6".
             </li>
             <li>
-               Ordered list, second bullet. Text only. Octavio fuit, cum illam severitatem in eo non arbitrantur. erunt etiam, et ii quidem eruditi Graecis litteris, contemnentes Latinas, qui se plane Graecum dici velit, ut a Scaevola est praetore salutatus Athenis Albucius.  In physicis plurimum posuit. ea scientia et verborum vis et natura orationis et consequentium repugnantiumve ratio potest perspici. 
+               Ordered list, second bullet.  Indent="6".  Text only. Octavio fuit, cum illam severitatem in eo non arbitrantur. erunt etiam, et ii quidem eruditi Graecis litteris, contemnentes Latinas, qui se plane Graecum dici velit, ut a Scaevola est praetore salutatus Athenis Albucius.  In physicis plurimum posuit. ea scientia et verborum vis et natura orationis et consequentium repugnantiumve ratio potest perspici. 
             </li>
             <!-- Comment (child element of <ol> -->
          </ol>
@@ -920,7 +920,7 @@ for opt, value in opts:
          <name>Tables inside lists</name>
          <ol spacing="normal" type="Step %d:" group="steps" indent="9">
             <li anchor="step1">
-               <t>(This example is excerpted from pre-RFC8677)</t>
+               <t>(This example is excerpted from pre-RFC8677)  Indent="9"</t>
                <t>
                   At nSFF1, the following nNLM is assumed:
                </t>
@@ -1050,15 +1050,27 @@ for opt, value in opts:
             commodo mi leo in lorem.
 
          </t>
-         <t indent="3">
+         <t indent="5">
 
-            Indented paragraph.  Aenean ornare elit at urna molestie
+            Indented paragraph.    Indent="5".  Aenean ornare elit at urna molestie
             fermentum. Donec erat purus, vestibulum in venenatis tempor,
             feugiat nec neque. Fusce luctus sem neque, id venenatis turpis
             vulputate nec. Nulla tincidunt pretium ex fringilla posuere. Cras
             quis massa neque.
 
          </t>
+         <ol indent="5">
+            <li> Indent="5". Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Ut pharetra neque vulputate dolor elementum
+            sodales. </li>
+            <li> Item 2 </li>
+         </ol>
+         <ul indent="5">
+            <li> Indent="5".  Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Ut pharetra neque vulputate dolor elementum
+            sodales.  </li>
+            <li> Item 2 </li>
+         </ul>
       </section>
    </middle>
    <back>
