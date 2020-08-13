@@ -56,7 +56,7 @@ default_options.__dict__ = {
         'dtd': None,
         'expand': False,
         'external_css': False,
-        'external_js': True,            # Change to False in 3.x
+        'external_js': False,
         'filename': None,
         'first_page_author_org': True,
         'html': False,
@@ -67,7 +67,7 @@ default_options.__dict__ = {
         'indent': 2,
         'info': False,
         'legacy': False,
-        'legacy_date_format': False,    # Change to True in 3.x
+        'legacy_date_format': True,
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
         'manpage': False,
