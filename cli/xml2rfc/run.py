@@ -251,7 +251,7 @@ def main():
                            help='generate a JSON file with anchor to section lookup information')
 
 
-    plain_options = optionparser.add_argument_group('Generic Options')
+    plain_options = optionparser.add_argument_group('Generic Switch Options')
     plain_options.add_argument('-C', '--clear-cache', action='store_true', default=False,
                             help='purge the cache and exit')
     plain_options.add_argument(      '--debug', action='store_true',
