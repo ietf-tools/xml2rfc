@@ -105,10 +105,10 @@ tests/out/%.v2v3.xml: tests/input/%.xml install
 tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%.text install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $@ --prep $<"
 	@echo " Checking generation of .html from prepped .xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external-css --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
 	@echo " Checking generation of .text from prepped .xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $(basename $@).text --text --no-pagination --external-css --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $(basename $@).text --text --no-pagination --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (3)"; exit 1; }
 
 # These contains index sections, which renders with different whitespace from
@@ -123,7 +123,7 @@ tests/out/docfile.xml:
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --doc --out $@"
 
 tests/out/docfile.$(py).html: tests/out/docfile.xml
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --html --out $@ $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --html --external-css --external-js --out $@ $<"
 
 tests/out/manpage.txt:
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --man > $@"
@@ -141,7 +141,7 @@ tests/out/%.wip.text: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --text --v3 --strict --id-is-work-in-progress $< --out $@"
 
 tests/out/%.v3.$(py).html: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --html --v3 --external-css --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --html --v3 --external-css --external-js --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
 
 tests/out/%.pdf: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --pdf --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
@@ -153,7 +153,7 @@ tests/out/%.plain.text: tests/out/%.plain.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@  --silence='The document date'"
 
 tests/out/%.exp.xml: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $@ --exp $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $@ --exp --legacy $<"
 
 %.prepped.xml: %.v2v3.xml
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $@ --prep $<"
@@ -190,9 +190,9 @@ cachetest: cleantmp install
 	@echo -e "\n Clearing cache ..."
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache .cache --clear-cache"
 	@echo " Filling cache ..."
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache .cache tests/input/rfc6787.xml --base tmp/ --raw"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache .cache tests/input/rfc6787.xml --base tmp/ --raw --legacy"
 	@echo " Running without accessing network ..."
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache .cache tests/input/rfc6787.xml --no-network --base tmp/ --raw"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache .cache tests/input/rfc6787.xml --no-network --base tmp/ --raw --legacy"
 
 
 rfctest: cleantmp env/bin/python install $(rfctests)
@@ -218,7 +218,7 @@ utf8test: cleantmp  env/bin/python install
 v3featuretest: tests/out/draft-v3-features.prepped.xml.test tests/out/draft-v3-features.text.test tests/out/draft-v3-features.v3.$(py).html.test
 
 dateshifttest: cleantmp install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --date 2013-02-01 --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --date 2013-02-01 --legacy --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml"
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
 elementstest: install tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.$(py).html.test
