@@ -1211,8 +1211,9 @@ class PrepToolWriter(BaseV3Writer):
     #    with "n-".
     def name_insert_slugified_name(self, e, p):
         text = ' '.join(list(e.itertext()))
-        slug = slugify_name('name-'+text)
-        e.set('slugifiedName', slug)
+        slug = slugify_name('name-'+text) if text else None
+        if slug:
+            e.set('slugifiedName', slug)
         
     # 
     # 5.4.5.  <reference> Sorting

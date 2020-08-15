@@ -21,7 +21,8 @@ export PYTHONHASHSEED = 0
 
 datetime_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T_ ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]
 version_regex =  [Vv]ersion [23N]\(\.[0-9N]\+\)\+\(\.dev\)\?
-date_regex = ([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]|[0-9]([0-9])? [ADFJMOS][a-u]* [12][0-9]][0-9]][0-9]]$)
+date_regex = ([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]|[0-9]([0-9])? [ADFJMOS][a-u]* [12][0-9][0-9][0-9]$$)
+legacydate_regex = [ADFJMOS][a-u]* [123]*[0-9], [12][0-9][0-9][0-9]$$
 generator_regex = name="generator"
 
 py = $(shell python -c 'import sys; print("py%s%s" %(sys.version_info.major,sys.version_info.minor))')
@@ -167,7 +168,7 @@ tests/out/%.exp.xml: tests/input/%.xml install
 
 %.test: %
 	@echo " Diffing $< against master"
-	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
+	@diff -u -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.min.js: %.js
 	bin/uglifycall $<

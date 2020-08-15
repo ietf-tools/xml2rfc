@@ -1506,17 +1506,20 @@ class HtmlWriter(BaseV3Writer):
     #    </figure>
     def render_figure(self, h, x):
         name = x.find('name')
-        if name != None and name.text:
-            add.span(h, None, id=name.get('slugifiedName'))
+        name_slug = None
+        if name != None:
+            name_slug = name.get('slugifiedName')
+            if name_slug:
+                add.span(h, None, id=name_slug)
         figure = add.figure(h, x)
         for c in x.iterchildren('artset', 'artwork', 'sourcecode'):
             self.render(figure, c)
         pn = x.get('pn')
         caption = add.figcaption(figure, None)
         a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn, classes='selfRef')
-        if name != None and name.text:
+        if name != None and name_slug:
             a.tail = ':\n'
-            a = add.a(caption, None, href='#%s'%name.get('slugifiedName'), classes='selfRef')
+            a = add.a(caption, None, href='#%s'%name_slug, classes='selfRef')
             self.inline_text_renderer(a, name)
         return figure
 
@@ -1773,6 +1776,7 @@ class HtmlWriter(BaseV3Writer):
     def render_name(self, s, x):
         p = x.getparent()
         if   p.tag in [ 'note', 'section', 'references' ]:
+            name_slug = x.get('slugifiedName') or None
             pn = p.get('pn')
             prefix, number = pn.split('-', 1)
             number += '.'
@@ -1782,7 +1786,7 @@ class HtmlWriter(BaseV3Writer):
                 num = number
             level = min([6, len(num.split('.')) ])
             tag = 'h%d' % level
-            h = build(tag, id=x.get('slugifiedName'))
+            h = build(tag, id=name_slug)
             s.append(h)
             #
             numbered = p.get('numbered')=='true' or (self.check_refs_numbered() if p.tag == 'references' else False)
@@ -1793,7 +1797,10 @@ class HtmlWriter(BaseV3Writer):
                     number = number.title()
                 a_number = build.a(number, ' ', href='#%s'%pn, classes='section-number selfRef')
                 h.append( a_number)
-            a_title = build.a(href='#%s'%x.get('slugifiedName'), classes='section-name selfRef')
+            if name_slug:
+                a_title = build.a(href='#%s'%name_slug, classes='section-name selfRef')
+            else:
+                a_title = build.span()
             self.inline_text_renderer(a_title, x)
             h.append(a_title)
             return h
@@ -2456,16 +2463,19 @@ class HtmlWriter(BaseV3Writer):
     #    This element is directly rendered as its HTML counterpart.
     def render_table(self, h, x):
         name = x.find('name')
-        if name != None and name.text:
-            add.span(h, None, id=name.get('slugifiedName'))
+        name_slug = None
+        if name != None:
+            name_slug = name.get('slugifiedName')
+            if  name_slug:
+                add.span(h, None, id=name_slug)
         align = x.get('align')
         table = add.table(h, x, classes=align)
         caption = add.caption(table, None)
         pn = x.get('pn')
         a = add.a(caption, None, pn.replace('-',' ',1).title(), href='#%s'%pn, classes='selfRef')
-        if name != None:
+        if name != None and name_slug:
             a.tail = ':\n'
-            a = add.a(caption, None, href='#%s'%name.get('slugifiedName'), classes='selfRef')
+            a = add.a(caption, None, href='#%s'%name_slug, classes='selfRef')
             self.inline_text_renderer(a, name)
         for c in x.getchildren():
             self.render(table, c)
