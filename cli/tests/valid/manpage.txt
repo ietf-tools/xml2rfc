@@ -1,5 +1,5 @@
 xml2rfc(1)                                                    xml2rfc(1)
-                                                         August 11, 2020
+                                                         August 15, 2020
 
 
                   Xml2rfc Vocabulary Version 3 Schema
@@ -1054,9 +1054,9 @@ Table of Contents
    Default value:  "adaptive"
 
    The indentation of the list elements relative to the start of the
-   bullet or bullet text.  With "indent='adaptive'", the width of the
-   widest list item number will determine the indentation.  With a
-   numeric value, that value will be used to determine the amount of
+   list item number.  With "indent='adaptive'", the width of the widest
+   list item number will determine the indentation.  With a numeric
+   value, that value will be used to determine the amount of
    indentation.  The indentation amount is interpreted as characters
    when rendering plain-text documents, and en-space units when
    rendering in formats that have richer typographic support such as
@@ -1129,15 +1129,47 @@ Table of Contents
    %I
       Uppercase Roman numerals (I, II, III, ...)
 
+   %p
+      The list counter of a list item in a parent list (see more below)
+
    %%
       Represents a percent sign
 
    Other formats are reserved for future use.  Only one percent encoding
-   other than "%%" is allowed in a type string.
+   other than "%%" and "%p" is allowed in a type string.
 
    It is an error for the type string to be empty.  For bulleted lists,
    use the <ul> element.  For lists that have neither bullets nor
    numbers, use the <ul> element with the 'empty="true"' attribute.
+
+   '%p' may be used in nested ordered lists, where it represents the
+   item number of the parent list item.  This lets you say for instance:
+
+   <ol>
+     <li>List item one</li>
+     <li>
+       <t>Nested list:</t>
+       <ol type='%p%d'>
+         <li>Sublist item 2.1</li>
+         <li>Sublist item 2.2</li>
+       </ol>
+     </li>
+   </ol>
+
+   which is rendered as:
+
+   1.  List item one
+
+   2.  Nested list
+
+       2.1  Sublist item 2.1
+
+       2.2  Sublist item 2.2
+
+   Without the '%p' format specifier, you would have to explicitly
+   insert the counter number of the parent item, which could easily
+   result in mismatched numbering if parent list intems were inserted or
+   removed during document editing.
 
 2.39.  <organization>
 

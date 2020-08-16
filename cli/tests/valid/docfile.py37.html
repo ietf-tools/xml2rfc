@@ -1825,7 +1825,7 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
           <dd class="break"></dd>
 </dl>
 <p id="section-2.38.3-2">
-       The indentation of the list elements relative to the start of the bullet or bullet text.  With <code>indent='adaptive'</code>, the width of the widest list item number will determine the indentation.  With a numeric value, that value will be used to determine the amount of indentation. The indentation amount is interpreted as characters when rendering plain-text documents, and en-space units when rendering in formats that have richer typographic support such as HTML or PDF.  One en-space is assumed to be the length of 0.5 em-space in CSS units.  Only non-negative integer amounts of indentation are supported.<a href="#section-2.38.3-2" class="pilcrow">¶</a></p>
+       The indentation of the list elements relative to the start of the list item number.  With <code>indent='adaptive'</code>, the width of the widest list item number will determine the indentation.  With a numeric value, that value will be used to determine the amount of indentation. The indentation amount is interpreted as characters when rendering plain-text documents, and en-space units when rendering in formats that have richer typographic support such as HTML or PDF.  One en-space is assumed to be the length of 0.5 em-space in CSS units.  Only non-negative integer amounts of indentation are supported.<a href="#section-2.38.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="attrib-ol-spacing">
@@ -1952,16 +1952,59 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
           <dd class="break"></dd>
 </dl>
 <span class="break"></span><dl class="dlNewline" id="section-2.38.6-16">
-            <dt id="section-2.38.6-16.1">%%</dt>
+            <dt id="section-2.38.6-16.1">%p</dt>
             <dd style="margin-left: 1.5em" id="section-2.38.6-16.2">
-            Represents a percent sign<a href="#section-2.38.6-16.2" class="pilcrow">¶</a>
+            The list counter of a list item in a parent list (see more below)<a href="#section-2.38.6-16.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-2.38.6-17">
-       Other formats are reserved for future use.  Only one percent encoding other than "%%" is allowed in a type string.<a href="#section-2.38.6-17" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-2.38.6-17">
+            <dt id="section-2.38.6-17.1">%%</dt>
+            <dd style="margin-left: 1.5em" id="section-2.38.6-17.2">
+            Represents a percent sign<a href="#section-2.38.6-17.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
 <p id="section-2.38.6-18">
-       It is an error for the type string to be empty.  For bulleted lists, use the &lt;ul&gt; element.  For lists that have neither bullets nor numbers, use the &lt;ul&gt; element with the 'empty="true"' attribute.<a href="#section-2.38.6-18" class="pilcrow">¶</a></p>
+       Other formats are reserved for future use.  Only one percent encoding other than "%%" and "%p" is allowed in a type string.<a href="#section-2.38.6-18" class="pilcrow">¶</a></p>
+<p id="section-2.38.6-19">
+       It is an error for the type string to be empty.  For bulleted lists, use the &lt;ul&gt; element.  For lists that have neither bullets nor numbers, use the &lt;ul&gt; element with the 'empty="true"' attribute.<a href="#section-2.38.6-19" class="pilcrow">¶</a></p>
+<p id="section-2.38.6-20">
+       '%p' may be used in nested ordered lists, where it represents the item number of the parent list item.  This lets you say for instance:<a href="#section-2.38.6-20" class="pilcrow">¶</a></p>
+<div id="section-2.38.6-21">
+<pre class="sourcecode">
+&lt;ol&gt;
+  &lt;li&gt;List item one&lt;/li&gt;
+  &lt;li&gt;
+    &lt;t&gt;Nested list:&lt;/t&gt;
+    &lt;ol type='%p%d'&gt;
+      &lt;li&gt;Sublist item 2.1&lt;/li&gt;
+      &lt;li&gt;Sublist item 2.2&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</pre><a href="#section-2.38.6-21" class="pilcrow">¶</a>
+</div>
+<p id="section-2.38.6-22">which is rendered as:<a href="#section-2.38.6-22" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.38.6-23">
+  <li id="section-2.38.6-23.1">List item one<a href="#section-2.38.6-23.1" class="pilcrow">¶</a>
+</li>
+            <li id="section-2.38.6-23.2">
+              <p id="section-2.38.6-23.2.1">Nested list<a href="#section-2.38.6-23.2.1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-2.38.6-23.2.2">
+      <dt>2.1</dt>
+<dd id="section-2.38.6-23.2.2.1">Sublist item 2.1<a href="#section-2.38.6-23.2.2.1" class="pilcrow">¶</a>
+</dd>
+                <dd class="break"></dd>
+<dt>2.2</dt>
+<dd id="section-2.38.6-23.2.2.2">Sublist item 2.2<a href="#section-2.38.6-23.2.2.2" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+</dl>
+</li>
+          </ol>
+<p id="section-2.38.6-24">
+       Without the '%p' format specifier, you would have to explicitly insert the counter number of the parent item, which could easily result in mismatched numbering if parent list intems were inserted or removed during document editing.<a href="#section-2.38.6-24" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

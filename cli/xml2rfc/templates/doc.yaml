@@ -791,19 +791,55 @@ ol[type]:
 
     - '%I': Uppercase Roman numerals (I, II, III, ...)
 
+    - '%p': The list counter of a list item in a parent list (see more
+            below)
+
     - '%%': Represents a percent sign
 
     -  Other formats are reserved for future use.  Only one percent encoding
-       other than "%%" is allowed in a type string.
+       other than "%%" and "%p" is allowed in a type string.
 
     -  It is an error for the type string to be empty.  For bulleted lists,
        use the \<ul\> element.  For lists that have neither bullets nor
        numbers, use the \<ul\> element with the 'empty="true"' attribute.
 
+    - "'%p' may be used in nested ordered lists, where it represents the item
+      number of the parent list item.  This lets you say for instance:"
+
+    - |
+      <sourcecode>
+      \<ol\>
+        \<li\>List item one\</li\>
+        \<li\>
+          \<t\>Nested list:\</t\>
+          \<ol type='%p%d'\>
+            \<li\>Sublist item 2.1\</li\>
+            \<li\>Sublist item 2.2\</li\>
+          \</ol\>
+        \</li\>
+      \</ol\>
+      </sourcecode>
+      <t>which is rendered as:</t>
+      <ol>
+        <li>List item one</li>
+        <li>
+          <t>Nested list</t>
+          <ol type='%p%d'>
+            <li>Sublist item 2.1</li>
+            <li>Sublist item 2.2</li>
+          </ol>
+        </li>
+      </ol>
+
+    - Without the '%p' format specifier, you would have to explicitly
+      insert the counter number of the parent item, which could easily
+      result in mismatched numbering if parent list intems were inserted
+      or removed during document editing.
+
 ol[indent]:
 
-    - The indentation of the list elements relative to the start of the bullet
-      or bullet text.  With <tt>indent='adaptive'</tt>, the width of the
+    - The indentation of the list elements relative to the start of the list
+      item number.  With <tt>indent='adaptive'</tt>, the width of the
       widest list item number will determine the indentation.  With a numeric
       value, that value will be used to determine the amount of indentation.
       The indentation amount is interpreted as characters

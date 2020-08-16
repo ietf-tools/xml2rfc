@@ -2401,6 +2401,11 @@ class TextWriter(BaseV3Writer):
         if not type:
             self.warn(e, "Expected the 'type' attribute to have a string value, but found %s" % (etree.tostring(e), ))
             type = '1'
+        if '%p' in type:
+            for p in e.iterancestors('li'):
+                pcounter = p.get('derivedCounter')
+                type = type.replace('%p', pcounter )
+                break
         e._type = type
         if len(type) > 1:
             formspec = re.search('%([cCdiIoOxX])', type)

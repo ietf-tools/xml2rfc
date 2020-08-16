@@ -1412,6 +1412,15 @@ class PrepToolWriter(BaseV3Writer):
             type = '1'
         #
         if len(type) > 1:
+            if '%p' in type:
+                pcounter = None
+                for p in e.iterancestors('li'):
+                    pcounter = p.get('derivedCounter')
+                    if pcounter:
+                        type = type.replace('%p', pcounter )
+                        break
+                if not pcounter:
+                    self.err(e, "Expected an outer list to fetch the '%p' parent counter value from, but found none")
             formspec = re.search('%([cCdiIoOxX])', type)
             if formspec:
                 fchar = formspec.group(1)
