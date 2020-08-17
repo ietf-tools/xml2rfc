@@ -1231,7 +1231,7 @@ proc be_do_get_id {} {
 
     set fd ""
     set code [catch {
-        set httpT [http::geturl http://www.ietf.org/id/1id-abstracts.txt]
+        set httpT [http::geturl https://www.ietf.org/id/1id-abstracts.txt]
         set fd [open $newF { WRONLY CREAT TRUNC }]
         puts -nonewline $fd [set body [http::data $httpT]]
         close $fd
@@ -1561,7 +1561,7 @@ proc be_do_get_w3c {} {
 
     set fd ""
     set code [catch {
-        set httpT [http::geturl http://www.w3.org/2002/01/tr-automation/tr.rdf]
+        set httpT [http::geturl https://www.w3.org/2002/01/tr-automation/tr.rdf]
         set fd [open $newF { WRONLY CREAT TRUNC }]
         puts -nonewline $fd [set body [http::data $httpT]]
         close $fd
@@ -1893,7 +1893,7 @@ proc be_do_get_3gpp {} {
     set fd ""
     set code [catch {
         set httpT [http::geturl \
-                         http://www.3gpp.org/ftp/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt]
+                         https://www.3gpp.org/ftp/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt]
         set fd [open $newF { WRONLY CREAT TRUNC }]
         puts -nonewline $fd [set body [http::data $httpT]]
         close $fd
