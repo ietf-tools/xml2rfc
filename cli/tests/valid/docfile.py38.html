@@ -650,7 +650,7 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
 <p id="section-2.7-2">This element can be a child element of &lt;<a href="#element-section" class="xref">section</a>&gt;.<a href="#section-2.7-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-2.7-3">
           <dt id="section-2.7-3.1">Content schema:</dt>
-          <dd style="margin-left: 1.5em" id="section-2.7-3.2"> ( <a href="#element-artset" class="xref">artset</a> | <a href="#element-artwork" class="xref">artwork</a> | <a href="#element-dl" class="xref">dl</a> | <a href="#element-figure" class="xref">figure</a> | <a href="#element-iref" class="xref">iref</a> | <a href="#element-ol" class="xref">ol</a> | <a href="#element-t" class="xref">t</a> | <a href="#element-table" class="xref">table</a> | <a href="#element-ul" class="xref">ul</a> )*<a href="#section-2.7-3.2" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-2.7-3.2"> ( <a href="#element-artset" class="xref">artset</a> | <a href="#element-artwork" class="xref">artwork</a> | <a href="#element-blockquote" class="xref">blockquote</a> | <a href="#element-dl" class="xref">dl</a> | <a href="#element-figure" class="xref">figure</a> | <a href="#element-iref" class="xref">iref</a> | <a href="#element-ol" class="xref">ol</a> | <a href="#element-t" class="xref">t</a> | <a href="#element-table" class="xref">table</a> | <a href="#element-ul" class="xref">ul</a> )*<a href="#section-2.7-3.2" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -802,7 +802,7 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
         </h3>
 <p id="section-2.11-1">
        Specifies that a block of text is a quotation.<a href="#section-2.11-1" class="pilcrow">¶</a></p>
-<p id="section-2.11-2">This element can be a child element of &lt;<a href="#element-li" class="xref">li</a>&gt;,  and &lt;<a href="#element-section" class="xref">section</a>&gt;.<a href="#section-2.11-2" class="pilcrow">¶</a></p>
+<p id="section-2.11-2">This element can be a child element of &lt;<a href="#element-aside" class="xref">aside</a>&gt;, &lt;<a href="#element-li" class="xref">li</a>&gt;,  and &lt;<a href="#element-section" class="xref">section</a>&gt;.<a href="#section-2.11-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-2.11-3">
           <dt id="section-2.11-3.1">Content schema:</dt>
           <dd style="margin-left: 1.5em" id="section-2.11-3.2"> ( ( <a href="#element-artset" class="xref">artset</a> | <a href="#element-artwork" class="xref">artwork</a> | <a href="#element-dl" class="xref">dl</a> | <a href="#element-figure" class="xref">figure</a> | <a href="#element-ol" class="xref">ol</a> | <a href="#element-sourcecode" class="xref">sourcecode</a> | <a href="#element-t" class="xref">t</a> | <a href="#element-ul" class="xref">ul</a> )+ | ( text | <a href="#element-bcp14" class="xref">bcp14</a> | <a href="#element-br" class="xref">br</a> | <a href="#element-cref" class="xref">cref</a> | <a href="#element-em" class="xref">em</a> | <a href="#element-eref" class="xref">eref</a> | <a href="#element-iref" class="xref">iref</a> | <a href="#element-strong" class="xref">strong</a> | <a href="#element-sub" class="xref">sub</a> | <a href="#element-sup" class="xref">sup</a> | <a href="#element-tt" class="xref">tt</a> | <a href="#element-u" class="xref">u</a> | <a href="#element-xref" class="xref">xref</a> )+ )<a href="#section-2.11-3.2" class="pilcrow">¶</a>
@@ -4686,7 +4686,17 @@ aside =
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { xsd:ID }?,
-    (artset | artwork | dl | figure | iref | ol | t | table | ul)*
+    (artset
+     | artwork
+     | blockquote
+     | dl
+     | figure
+     | iref
+     | ol
+     | t
+     | table
+     | ul)*
+
   }
 
 blockquote =
