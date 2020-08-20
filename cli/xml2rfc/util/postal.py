@@ -183,7 +183,8 @@ def get_normalized_address_info(writer, x, latin=False):
         for e in adr:
             if adr[e] and not (e in parts or e in ['name', 'role', 'company_name', 'country_code', ]):
                 list_parts = True
-                writer.warn(x, "Postal address part filled in, but not used: %s: %s" % (address_field_elements[e], adr[e]))
+                writer.warn(x, "Postal address part filled in, but not used: %s: %s\n"
+                               " Available elements for %s are: %s" % (address_field_elements[e], adr[e], country_info.name, ', '.join(elements)))
         try:
             i18naddress.normalize_address(adr)
         except i18naddress.InvalidAddress as e:
