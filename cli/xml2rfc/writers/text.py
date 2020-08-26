@@ -38,7 +38,7 @@ from xml2rfc.utils import justify_inline, clean_text
 
 
 IndexItem   = namedtuple('indexitem', ['item', 'subitem', 'anchor', 'page', ])
-Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'outdent'])
+Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'do_outdent'])
 # Joiner parts:
 #   join    string used to join a rendered element to preceding text or lines
 #   indent  indentation of rendered element
@@ -557,8 +557,13 @@ class TextWriter(BaseV3Writer):
                 lines += blankline()
         reswidth = max(len(l.text) for l in res) if res else 0
         indent = j.indent
-        if j.outdent and reswidth > width:
-            indent -= min(indent, reswidth-width)
+        residue = 0
+        if (hasattr(e, 'outdent') and e.outdent) or (j.do_outdent and reswidth > width):
+            outdent = e.outdent if e.outdent else reswidth-width
+            residue = max(0, outdent - indent)
+            if residue:
+                e.getparent().outdent = residue
+            indent -= min(indent, outdent)
             self.warn(e, "%s too wide, reducing indentation from %s to %s" % (e.tag.capitalize(), j.indent, indent))
         nlines = lindent(res, indent, j.hang)
         if j.overlap and nlines:
@@ -1711,7 +1716,7 @@ class TextWriter(BaseV3Writer):
         kwargs['joiners'].update({
             'name':         Joiner(': ', 0, 0, False, False),
             'artset':       Joiner('', 0, 0, False, False),
-            'artwork':      Joiner('', 0, 0, False, False),
+            'artwork':      Joiner('', 0, 0, False, True),
             'sourcecode':   Joiner('', 0, 0, False, False),
         })
         #

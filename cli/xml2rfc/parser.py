@@ -426,6 +426,7 @@ class CachingResolver(lxml.etree.Resolver):
 class AnnotatedElement(lxml.etree.ElementBase):
     pis = None
     page = None
+    outdent = 0
     def get(self, key, default=None):
         value = super(AnnotatedElement, self).get(key, default)
         if value == default:
