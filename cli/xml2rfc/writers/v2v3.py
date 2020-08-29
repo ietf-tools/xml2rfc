@@ -65,7 +65,7 @@ class V2v3XmlWriter(BaseV3Writer):
                         xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                     nsmap=self.xmlrfc.nsmap,
                                     line=e.sourceline,
-                                    href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.%04d.xml"%int(num))
+                                    href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.%04d.xml"%int(num))
                         xi.tail = e.tail
                         i = p.index(e)
                         p.remove(e)
@@ -80,12 +80,12 @@ class V2v3XmlWriter(BaseV3Writer):
                             xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                         nsmap=self.xmlrfc.nsmap,
                                         line=e.sourceline,
-                                        href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-%s.xml"%tag)
+                                        href="https://datatracker.ietf.org/doc/bibxml3/draft-%s.xml"%tag)
                         else:
                             xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                         nsmap=self.xmlrfc.nsmap,
                                         line=e.sourceline,
-                                        href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.%s.xml"%tag)
+                                        href="https://datatracker.ietf.org/doc/bibxml3/draft-%s.xml"%tag)
                         xi.tail = e.tail
                         i = p.index(e)
                         p.remove(e)
@@ -93,7 +93,8 @@ class V2v3XmlWriter(BaseV3Writer):
                     else:
                         self.warn(e, 'Invalid value in %s' % lxml.etree.tostring(e))
 #        lxml.etree.cleanup_namespaces(self.root, top_nsmap=self.xmlrfc.nsmap)
-
+                else:
+                    self.note(e, "Not implemented: xi:include handling for %s:%s" % (si.get('name'), si.get('value')))
 
     def post_process_lines(self, lines):
         output = [ line.replace(u'\u00A0', ' ') for line in lines ]
@@ -287,7 +288,8 @@ class V2v3XmlWriter(BaseV3Writer):
                                             # 2.45.3.  "docName" Attribute
                                             # 2.45.7.  "number" Attribute
                                             # 2.45.10.  "seriesNo" Attribute
-            './/seriesInfo',                # 2.47.  <seriesInfo>
+            #Disabled 
+            #'.//seriesInfo',                # 2.47.  <seriesInfo>
             './/t',                         # 2.53.  <t>
                                             # 2.53.2.  "hangText" Attribute
             './/xref',                      # 2.66.  <xref>
