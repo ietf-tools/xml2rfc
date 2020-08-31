@@ -77,10 +77,11 @@ def format_date(year, month, day, legacy=False):
 
 
 def get_expiry_date(tree, today):
+    xml2rfc.debug.mark()
     year, month, day = extract_date(tree.find('./front/date'), today)
     year, month, day = augment_date(year, month, day, today)
     if not day:
-        day = today.day    
+        day = min(today.day, calendar.monthrange(year, month)[1])
     exp = datetime.date(year=year, month=month, day=day) + datetime.timedelta(days=185)
     return exp
     
