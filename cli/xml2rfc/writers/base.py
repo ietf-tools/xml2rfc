@@ -1697,8 +1697,9 @@ def get_xref_tags():
 element_tags= get_element_tags()
 meta_tags   = get_meta_tags() - deprecated_element_tags
 text_tags   = get_text_tags() - deprecated_element_tags
-inline_tags = get_inline_tags() - deprecated_element_tags
-block_tags  = element_tags - inline_tags - deprecated_element_tags
+all_inline_tags = get_inline_tags()
+inline_tags = all_inline_tags - deprecated_element_tags
+block_tags  = element_tags - inline_tags - deprecated_element_tags - set(['t'])
 mixed_tags  = get_text_or_block_tags() - deprecated_element_tags
 xref_tags   = get_xref_tags()
 
@@ -2095,14 +2096,14 @@ class BaseV3Writer(object):
             for c in e:
                 indent(c, i+ind)
             #
-            if e.tag not in inline_tags:# and e.tag not in ['artwork', 'sourcecode', ]:
+            if e.tag not in all_inline_tags:# and e.tag not in ['artwork', 'sourcecode', ]:
                 if e.tail is None or e.tail.strip()=='':
                     if e.getnext() != None:
                         e.tail = '\n'+' '*i
                     else:
                         e.tail = '\n'+' '*(i-ind)
                 else:
-                    self.warn(e, 'Unexpected tail: <%s>%s' % (e.tag, e.tail))
+                    self.warn(e, 'Unexpected text content after block tag: <%s>%s' % (e.tag, e.tail))
             else:
                 if e.tail != None and e.tail.strip()=='' and '\n' in e.tail:
                     if e.getnext() != None:
