@@ -11,7 +11,7 @@ xml2rfc (3.0.0) ietf; urgency=medium
   release, support of Python 2.7, which is past end-of-life, will no longer
   be part of the test suite.
 
-  There are also some other changes.  From the commit log:
+  There are also a number of other changes.  From the commit log:
 
   * Replaced the use of the deprecated optparse module with the newer 
     argparse python module.
@@ -88,7 +88,28 @@ xml2rfc (3.0.0) ietf; urgency=medium
     datatracker.ietf.org/doc/bibxml3/ as the location of draft reference
     entries.
 
- -- Henrik Levkowetz <henrik@levkowetz.com>  30 Aug 2020 19:42:45 +0000
+  * Added a couple of entries to the test suite reference cache.
+
+  * Improved the handling of missing day information for <date> to make sure we 
+    don't pick days outside the acceptable range for the given month and also 
+    pick a reasonable value based on whether the year and month is in the past, 
+    present or future.
+
+  * Improved an error message for a case of disallowed XML text content.  
+    Tweaked the 'block_tags' list.
+
+  * Changed the manpage template to not use comma before 'and' when 
+    rendering a list of 2 elements.
+
+  * Changed the schema to permit <aside> within <dl> on request from the 
+    RPC, with schema change board approval.  Updated renderers, CSS and tests 
+    accordingly.
+
+  * Tweaked the CSS for block elements that are direct first children of 
+    <dd> to render the same way in HTML as in text (i.e., vertically distinct, 
+    not on the same line as <dt>).
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  01 Sep 2020 08:06:27 +0000
 
 
 xml2rfc (2.47.0) ietf; urgency=medium
