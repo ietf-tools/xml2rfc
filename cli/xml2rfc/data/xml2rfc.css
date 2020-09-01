@@ -1109,7 +1109,14 @@ dd > ul, dd > ol, dd > dl,
 dl > dd > dl {
   margin-top: initial;
 }
-/* Asides and blockquotes should be vertically distinct */
-aside, blockquote {
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div:first-child > pre.sourcecode,
+dd > table:first-child,
+dd > ul:first-child {
   clear: left;
 }
