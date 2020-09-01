@@ -147,7 +147,7 @@ tests/out/%.v3.$(py).html: tests/input/%.xml install
 tests/out/%.pdf: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --pdf --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
 
-tests/out/%.plain.xml: tests/valid/%.prepped.xml install
+tests/out/%.plain.xml: tests/out/%.prepped.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --unprep --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
 
 tests/out/%.plain.text: tests/out/%.plain.xml install

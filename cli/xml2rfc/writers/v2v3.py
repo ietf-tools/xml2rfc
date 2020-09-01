@@ -15,7 +15,7 @@ from lxml.etree import Element, Comment, CDATA
 import xml2rfc
 from xml2rfc import log
 from xml2rfc.util.unicode import unicode_content_tags, unicode_replacements, isascii
-from xml2rfc.utils import hastext, isempty, sdict, slugify
+from xml2rfc.utils import hastext, isempty, sdict, slugify, iscomment
 from xml2rfc.writers.base import default_options, BaseV3Writer
 
 
@@ -166,6 +166,7 @@ class V2v3XmlWriter(BaseV3Writer):
             if self.options.verbose:
                 for comment in comments:
                     c = Comment(" v2v3: %s " % comment.strip())
+                    c.tail = ''
                     p.insert(i, c)
                     i += 1
             if not b is None:
@@ -180,11 +181,14 @@ class V2v3XmlWriter(BaseV3Writer):
                     b.append(child)         # moves child from a to b
                 p.replace(a, b)
             else:
-                if a.tail:
-                    if c is None:
-                        p.text = p.text + ' ' + a.tail if p.text else a.tail
-                    else:
-                        c.tail = a.tail
+                if iscomment(a):
+                    a.text = ''
+                for text in [a.text, a.tail]:
+                    if text:
+                        if c is None:
+                            p.text = p.text + text if p.text else text
+                        else:
+                            c.tail += text
                 p.remove(a)
         if b != None and a.sourceline:
             b.sourceline = a.sourceline
@@ -740,6 +744,7 @@ class V2v3XmlWriter(BaseV3Writer):
     # 
     #    This element appears as a child element of <address> (Section 2.2).
     def element_facsimile(self, e, p):
+            e.text = ''
             self.replace(e, None)
 
     # 3.3.  <format>
@@ -952,7 +957,7 @@ class V2v3XmlWriter(BaseV3Writer):
             tag = tags[style]
         else:
             self.warn(e, "Unexpected style in <spanx/>: '%s'" % style)
-            tag = None
+            tag = 'em'
         stripattr(e, ['style', '{http://www.w3.org/XML/1998/namespace}space', ])
         self.replace(e, tag, 'Replaced <spanx style="%s"/> with <%s/>' % (style, tag))
 
