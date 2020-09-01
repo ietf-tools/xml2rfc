@@ -1492,13 +1492,25 @@ class TextWriter(BaseV3Writer):
             'dt':       Joiner(tjoin, 0, 0, False, False),
             'dd':       ddjoin,
         })
+        # child tags which should always render with newline=True
+        newline_tags = set([
+                'artset',
+                'artwork',
+                'aside',
+                'figure',
+                'ol',
+                'sourcecode',
+                'table',
+                'ul',
+            ])
         # rendering
         lines = []
         text = ''
         dtwidth = indent
         for c in e.getchildren():
-            if (not newline and c.tag == 'dd' and c.text and c.text.strip(stripspace)
-                and (width - len('  ') - len(text)) < len(c.text.split(None, 1)[0]) ):
+            if ((not newline and c.tag == 'dd' and c.text and c.text.strip(stripspace)
+                 and (width - len('  ') - len(text)) < len(c.text.split(None, 1)[0]))
+                or (len(c) and c[0].tag in newline_tags)):
                 # Add a newline if first word of dd text won't fit to the right of dt
                 kwargs['joiners']['dd'] = nljoin
             else:

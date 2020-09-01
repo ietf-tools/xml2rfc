@@ -648,6 +648,7 @@ def iscomment(e):
 def hastext(e, ignore=[]):
     "Return a list of text-level immediate children"
     head = [ e.text ] if e.text and e.text.strip() else []
+    ignore = set(ignore + ['t'])
     items = ( head + [ c for c in e.iterchildren() if not (isblock(c) or iscomment(c) or (c.tag in ignore))]
                    + [ c.tail for c in e.iterchildren() if c.tail and c.tail.strip() ] )
     return items
