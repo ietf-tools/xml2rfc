@@ -99,7 +99,7 @@
             <t>This element can be a child element of&nbsp;
                {%- for p in element.parents %}
                  {% if p in v3_element_tags %}
-                   {% if loop.last and not loop.first %} and {% endif %}&lt;<xref target="element-{{p}}" format="none">{{p}}</xref>&gt;{% if not loop.last %}, {% endif %}
+                   {% if loop.last and not loop.first %} and {% endif %}&lt;<xref target="element-{{p}}" format="none">{{p}}</xref>&gt;{% if not loop.last and not loop.length == 2 %}, {% endif %}
                  {% endif %}
              {% endfor %}.
             </t>

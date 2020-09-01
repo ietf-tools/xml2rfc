@@ -1,5 +1,5 @@
 xml2rfc(1)                                                    xml2rfc(1)
-                                                         August 28, 2020
+                                                         August 31, 2020
 
 
                   Xml2rfc Vocabulary Version 3 Schema
@@ -75,7 +75,7 @@ Table of Contents
 
    Provides address information for the author.
 
-   This element can be a child element of <author>, and <contact>.
+   This element can be a child element of <author> and <contact>.
 
    Content schema:  postal?, phone?, email*, uri?
 
@@ -284,7 +284,7 @@ Table of Contents
    This element is a container for content that is semantically less
    important or tangential to the content that surrounds it.
 
-   This element can be a child element of <section>.
+   This element can be a child element of <dd> and <section>.
 
    Content schema:  ( artset | artwork | blockquote | dl | figure |
       iref | ol | t | table | ul )*
@@ -313,7 +313,7 @@ Table of Contents
    Note that this specification does not define a precise meaning for
    the term "editor".
 
-   This element can be a child element of <front>, and <section>.
+   This element can be a child element of <front> and <section>.
 
    Content schema:  organization?, address?
 
@@ -491,7 +491,7 @@ Table of Contents
    specifying any of the "name" attributes, but adding the
    <organization> child element).
 
-   This element can be a child element of <section>, and <t>.
+   This element can be a child element of <section> and <t>.
 
    Content schema:  organization?, address?
 
@@ -636,7 +636,7 @@ Table of Contents
 
    This element can be a child element of <dl>.
 
-   Content schema:  ( ( artset | artwork | dl | figure | ol |
+   Content schema:  ( ( artset | artwork | aside | dl | figure | ol |
       sourcecode | t | table | ul )+ | ( text | bcp14 | br | cref | em |
       eref | iref | strong | sub | sup | tt | u | xref )+ )
 
@@ -863,7 +863,7 @@ Table of Contents
    attribute with the series number; other uses of <front><seriesInfo>
    described in [RFC7991] are deprecated.
 
-   This element can be a child element of <reference>, and <rfc>.
+   This element can be a child element of <reference> and <rfc>.
 
    Content schema:  title, seriesInfo*, author+, date?, area*,
       workgroup*, keyword*, abstract?, note*, boilerplate?, toc?
@@ -927,7 +927,7 @@ Table of Contents
 
    A list element, used in <ol> and <ul>.
 
-   This element can be a child element of <ol>, and <ul>.
+   This element can be a child element of <ol> and <ul>.
 
    Content schema:  ( ( artset | artwork | blockquote | dl | figure |
       ol | sourcecode | t | table | ul )+ | ( text | bcp14 | br | cref |
@@ -1180,7 +1180,7 @@ Table of Contents
    is long, an abbreviated variant can be specified in the "abbrev"
    attribute.
 
-   This element can be a child element of <author>, and <contact>.
+   This element can be a child element of <author> and <contact>.
 
    Content schema:  text
 
@@ -1281,7 +1281,7 @@ Table of Contents
 
    Represents a bibliographic reference.
 
-   This element can be a child element of <referencegroup>, and
+   This element can be a child element of <referencegroup> and
    <references>.
 
    Content schema:  stream?, front, ( annotation | refcontent |
@@ -1354,7 +1354,7 @@ Table of Contents
    "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3261.xml"/>
    </references>
 
-   This element can be a child element of <back>, and <references>.
+   This element can be a child element of <back> and <references>.
 
    Content schema:  name?, ( references+ | ( reference | referencegroup
       )* )
@@ -1599,7 +1599,7 @@ Table of Contents
    both <seriesInfo name="rfc"/> and <seriesInfo name="Internet-Draft"/>
    in the same <front> element.
 
-   This element can be a child element of <front>, and <reference>.
+   This element can be a child element of <front> and <reference>.
 
    Content schema:  empty
 
@@ -3274,6 +3274,7 @@ Appendix A.  RELAX NG Schema
        attribute pn { xsd:ID }?,
        (( artset
           | artwork
+          | aside
           | dl
           | figure
           | ol
