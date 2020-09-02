@@ -299,7 +299,7 @@ def main():
     formatoptions.add_argument('--v3', action='store_true', default=True,
                            help='with --text and --html: use the v3 formatter, rather than the legacy one')
     formatoptions.add_argument('--legacy', '--v2', dest='v3', action='store_false',
-                           help='with --text and --html: use the legacy text formatter, rather than the v3 one')
+                           help='with --text and --html: use the legacy output formatters, rather than the v3 ones')
     formatoptions.add_argument('--id-is-work-in-progress', default=True, action='store_true',
                            help='in references, refer to Internet-Drafts as "Work in Progress"')
 

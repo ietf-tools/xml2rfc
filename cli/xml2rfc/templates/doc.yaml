@@ -2062,6 +2062,19 @@ xref[relative]:
       used is Jinja2; the snippens file is YAML with extra support for some
       escape sequences: '\\ \<' and '\\ \>'."
 
+--v2:
+
+    - Invokes the legacy (schema v2) validator and output formatters, instead
+      of the default schema v3 output formatters.  This can only be used with
+      pure v2 input files.
+
+--v3:
+
+    - This is the default.  With both v2 schema and v3 schema XML input files,
+      use the v3 output formatters.  Input with deprecated v2 elements will be
+      converted to v3 on the fly.  This means some loss of functionality and
+      exact control of the output, due to the intermediary conversion step.
+
 --values:
 
     - "This shows (in order):"
