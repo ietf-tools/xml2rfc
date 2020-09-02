@@ -1,15 +1,15 @@
 xml2rfc (3.0.0) ietf; urgency=medium
 
-  **Transition to the new schema v3 output formatters as default**
+  **Transition to using the new schema v3 output formatters by default**
 
-  This release provides the functionality that the 2.47.0 release had, but is
-  backwards incompatible because the default settings for some switches has
-  changed.  The --legacy switch must now be set explicitly in order to use the
-  old output formatters.  By default, XML input files with schema v2 content
-  will be converted to v3 on the fly and the output formatting of the
-  converted XML will be done with the new schema v3 formatters.  With this
-  release, support of Python 2.7, which is past end-of-life, will no longer
-  be part of the test suite.
+  This release provides the functionality that the 2.47.0 release had (with
+  some enhancements), but is backwards incompatible because the default
+  settings for some switches has changed.  The --legacy switch must now be set
+  explicitly in order to use the old output formatters.  By default, XML input
+  files with schema v2 content will be converted to v3 on the fly and the
+  output formatting of the converted XML will be done with the new schema v3
+  formatters.  With this release, support of Python 2.7, which is past
+  end-of-life, will no longer be part of the test suite.
 
   There are also a number of other changes.  From the commit log:
 
@@ -23,9 +23,9 @@ xml2rfc (3.0.0) ietf; urgency=medium
     documentation URL in the release notes.
 
   * Updated the major revision to 3, given that we no longer support Py27 and
-    have switched default formatters.
+    have switched default output formatters.
 
-  * Changed mkrelease to install using pip3.6 on the tools servers (the 
+  * Changed bin/mkrelease to install using pip3.6 on the tools servers (the 
     default pip might be for Py2.7).
 
   * Added an 'indent' attribute for <t>, in order to support indented
@@ -109,7 +109,7 @@ xml2rfc (3.0.0) ietf; urgency=medium
     <dd> to render the same way in HTML as in text (i.e., vertically distinct, 
     not on the same line as <dt>).
 
- -- Henrik Levkowetz <henrik@levkowetz.com>  01 Sep 2020 08:06:27 +0000
+ -- Henrik Levkowetz <henrik@levkowetz.com>  02 Sep 2020 04:35:24 -0700
 
 
 xml2rfc (2.47.0) ietf; urgency=medium
