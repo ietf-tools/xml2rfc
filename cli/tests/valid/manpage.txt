@@ -1,5 +1,5 @@
 xml2rfc(1)                                                    xml2rfc(1)
-                                                         August 31, 2020
+                                                       September 4, 2020
 
 
                   Xml2rfc Vocabulary Version 3 Schema
@@ -52,7 +52,7 @@ Table of Contents
    transition from v2, see [INTRO-TO-V3].
 
    The latest version of this documentation is available in HTML form at
-   https://xml2rfc.ietf.org/xml2rfc-doc.html.
+   https://xml2rfc.ietf.org/xml2rfc-doc.
 
    This documentation applies to xml2rfc version 3.0.0.
 
@@ -4068,9 +4068,19 @@ B.6.  Generic Format Options
       With --text and --html: use the v3 formatter, rather than the
       legacy one.
 
+      This is the default.  With both v2 schema and v3 schema XML input
+      files, use the v3 output formatters.  Input with deprecated v2
+      elements will be converted to v3 on the fly.  This means some loss
+      of functionality and exact control of the output, due to the
+      intermediary conversion step.
+
    "--v2", "--legacy"
-      With --text and --html: use the legacy text formatter, rather than
-      the v3 one.
+      With --text and --html: use the legacy output formatters, rather
+      than the v3 ones.
+
+      Invokes the legacy (schema v2) validator and output formatters,
+      instead of the default schema v3 output formatters.  This can only
+      be used with pure v2 input files.
 
    "--id-is-work-in-progress"
       In references, refer to Internet-Drafts as "Work in Progress".
