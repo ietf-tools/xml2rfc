@@ -1368,8 +1368,10 @@ class HtmlWriter(BaseV3Writer):
                 time.set('class', 'published')
             elif list(x.iterancestors('reference')):
                 time.set('class', 'refDate')
-        else:
+        elif text:
             time = add.span(h, x, text)
+        else:
+            time = ''
         return time
 
     # 9.18.  <dd>
