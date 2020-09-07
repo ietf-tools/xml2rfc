@@ -86,6 +86,8 @@ class PdfWriter(BaseV3Writer):
             'bottom-center': self.page_bottom_center(),
             'fonts': ', '.join(fonts),
         }
+        for (k,v) in page_info.items():
+            page_info[k] = v.replace("'", r"\'")
         page_css_text = page_css_template.format(**page_info)
         page_css = weasyprint.CSS(string=page_css_text)
 
