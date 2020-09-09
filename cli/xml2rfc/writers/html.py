@@ -946,10 +946,13 @@ class HtmlWriter(BaseV3Writer):
     #      <a class="pilcrow" href="#s-2-58">&para;</a>
     #    </div>
         elif type == 'binary-art':
-            div = add.div(h, x, classes='artwork art-svg')
+            if self.options.rfc:
+                self.err(x, "Found <artwork> with type='binary-art'.  This is not currently supported in RFCs.")
+            else:
+                self.warn(x, "Found <artwork> with type='binary-art'.  Note that this is not currently supported in RFCs.")
+            div = add.div(h, x, classes='artwork art-binary')
             data = x.get('src')
             if data:
-                del div.attrib['src']
                 add.img(div, None, src=data)
             else:
                 self.err(x, 'Expected <img> data given by src="" for <artwork type="binary-art">, but did not find it: %s ...' % (lxml.etree.tostring(x)[:128], ))

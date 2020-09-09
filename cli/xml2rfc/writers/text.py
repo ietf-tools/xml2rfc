@@ -815,7 +815,7 @@ class TextWriter(BaseV3Writer):
 #         text = text.strip('\n')
 #         text = '\n'.join( [ l.rstrip(stripspace) for l in text.split('\n') ] )
         # We need this in order to deal with xml comments inside artwork:
-        text = e.text + ''.join([ c.tail for c in e.getchildren() ])
+        text = (e.text or '') + ''.join([ c.tail for c in e.getchildren() ])
         text = text.strip('\n')
         text = (text.strip(stripspace) and text.expandtabs()) or msg
         text = '\n'.join( [ l.rstrip(stripspace) for l in text.split('\n') ] )

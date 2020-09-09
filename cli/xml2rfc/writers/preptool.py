@@ -38,6 +38,7 @@ from xml2rfc.boilerplate_tlp import boilerplate_tlp
 from xml2rfc.scripts import get_scripts
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import get_expiry_date, format_date, normalize_month
+from xml2rfc.util.mime import get_file_mime_type
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import ( unicode_content_tags, unicode_attributes, bare_unicode_tags,
@@ -1800,7 +1801,12 @@ class PrepToolWriter(BaseV3Writer):
                         src = build_dataurl(mediatype, data)
                         e.set('src', src)
                     elif scheme == 'file':
-                        self.err(e, "Won't guess media-type of file '%s', please use the data: scheme instead." % (src, ))
+                        with open(src[6:], "rb") as f:
+                            data = f.read()
+                        mediatype = get_file_mime_type(src[6:])
+                        src = build_dataurl(mediatype, data)
+                        e.set('src', src)
+                        #self.err(e, "Won't guess media-type of file '%s', please use the data: scheme instead." % (src, ))
 
     #    6.  If an <artwork> element does not have type='svg' or
     #        type='binary-art' and there is an "src" attribute, the data needs
@@ -1820,9 +1826,12 @@ class PrepToolWriter(BaseV3Writer):
     #           the "src" attribute.
                 else:
                     if scheme in ['file', 'http', 'https', 'data']:
-                        with closing(urlopen(src)) as f:
-                            data = f.read()
-                        e.text = data
+                        try:
+                            with closing(urlopen(src)) as f:
+                                data = f.read().decode('utf-8')
+                            e.text = data
+                        except Exception as ex:
+                            self.err(e, "Discarded unexpected <artwork> content with type='%s': '%s'" % (awtype, ex))
                         del e.attrib['src']
                     else:
                         self.err(e, "Unexpected <artwork> src scheme: '%s'" % scheme)
