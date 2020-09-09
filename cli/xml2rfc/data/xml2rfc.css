@@ -1120,3 +1120,7 @@ dd > table:first-child,
 dd > ul:first-child {
   clear: left;
 }
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
