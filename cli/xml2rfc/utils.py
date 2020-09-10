@@ -599,10 +599,10 @@ _slash_replacements = [
             
 def build_dataurl(mime, data, base64enc=False):
     if base64enc:
-        data = quote(base64.b64encode(data))
+        data = quote(base64.b64encode(data), safe='/~')
         url = "data:%s;base64,%s" % (mime, data)
     else:
-        data = quote(data)
+        data = quote(data, safe='/~')
         url = "data:%s,%s" % (mime, data)
     return url
 
