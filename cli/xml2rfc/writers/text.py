@@ -3818,10 +3818,14 @@ class TextWriter(BaseV3Writer):
                 rows += extrarows
             return rows, cols
 
-        def justify(cell, line):
+        def justify(cell, line, minpad):
             align = cell.element.get('align')
-            padding = cell.colwidth - textwidth(line)
-            width = cell.colwidth - min(2, padding)
+            if align == 'center':
+                padding = 0
+                width = cell.colwidth
+            else:
+                padding = cell.colwidth - textwidth(line)
+                width = cell.colwidth - min(2, padding)
             if   align == 'left':
                 text = line.ljust(width)
             elif align == 'center':
@@ -3830,14 +3834,16 @@ class TextWriter(BaseV3Writer):
                 text = line.rjust(width)
             if   align == 'right':
                 if padding > 1:
-                    text = text + ' ' 
+                    text = text + ' ' if minpad > 1 else ' ' + text
                 if padding > 0:
                     text = ' ' + text
-            else:
+            elif align == 'left':
                 if padding > 1:
-                    text = ' ' + text
+                    text = ' ' + text if minpad > 1 else text + ' '
                 if padding > 0:
-                    text = text + ' ' 
+                    text = text + ' '
+            else:
+                pass
             return text
 
         def merge_border(c, d):
@@ -4110,6 +4116,17 @@ class TextWriter(BaseV3Writer):
                     cell.colwidth = sum([ cells[i][n].colwidth for n in range(j, j+cell.colspan)]) + cell.colspan-1
 
         # ----------------------------------------------------------------------
+        # Calculate minimum padding per table column
+        minpad = [width,]*cols
+        for i in range(rows):
+            for j in range(cols):
+                cell = cells[i][j]
+                if cell.origin == (i, j):
+                    padding = min((cell.colwidth - textwidth(line)) for line in cell.wrapped)
+                    if padding < minpad[j]:
+                        minpad[j] = padding
+
+        # ----------------------------------------------------------------------
         # Add cell borders
         x = bchar['+']
         l = bchar['|']
@@ -4119,7 +4136,7 @@ class TextWriter(BaseV3Writer):
                 if cell.origin == (i, j):
                     wrapped = (cell.wrapped + ['']*cell.height)[:cell.height]
                     lines = (  ([ x + cell.top*cell.colwidth + x ] if cell.top else [])
-                             + ([ l + justify(cell, line) + l for line in wrapped ])
+                             + ([ l + justify(cell, line, minpad[j]) + l for line in wrapped ])
                              + ([ x + cell.bot*cell.colwidth + x ] if cell.bot else []) )
                     cell.wrapped = lines
 
