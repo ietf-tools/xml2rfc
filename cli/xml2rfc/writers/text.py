@@ -3897,9 +3897,9 @@ class TextWriter(BaseV3Writer):
                         cell = cells[i][j]
                         if cell.foldable:
                             cell.text = cell.text.strip(stripspace)
-                            cell.minwidth = max([0]+[ len(word) for word in splitter._split(cell.text) ]) if cell.text else 0
+                            cell.minwidth = max([0]+[ len(word.strip(stripspace)) for word in splitter._split(cell.text) ]) if cell.text else 0
                         else:
-                            cell.minwidth = max([0]+[ len(word) for line in cell.text.splitlines() for word in splitter._split(line) ])
+                            cell.minwidth = max([0]+[ len(word.strip(stripspace)) for line in cell.text.splitlines() for word in splitter._split(line) ])
                     i += 1
 
         def set_colwidths(cells, rows, cols):
