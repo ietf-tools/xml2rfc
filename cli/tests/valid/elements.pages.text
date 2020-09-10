@@ -69,29 +69,29 @@ Table of Contents
    7.  Unicode Literals  . . . . . . . . . . . . . . . . . . . . . .  12
      7.1.  Single Characters . . . . . . . . . . . . . . . . . . . .  12
      7.2.  Character Strings . . . . . . . . . . . . . . . . . . . .  14
-   8.  Irregular date specifications . . . . . . . . . . . . . . . .  16
-   9.  Aside, Word Joiner, and Break . . . . . . . . . . . . . . . .  16
+   8.  Irregular date specifications . . . . . . . . . . . . . . . .  17
+   9.  Aside, Word Joiner, and Break . . . . . . . . . . . . . . . .  17
    10. Section title test 1  . . . . . . . . . . . . . . . . . . . .  19
    11. Section level h2  . . . . . . . . . . . . . . . . . . . . . .  19
      11.1.  Section level h3 . . . . . . . . . . . . . . . . . . . .  19
        11.1.1.  Section level h4 . . . . . . . . . . . . . . . . . .  19
-   12. Eref brackets . . . . . . . . . . . . . . . . . . . . . . . .  19
-   13. Sourcecode indentation  . . . . . . . . . . . . . . . . . . .  19
+   12. Eref brackets . . . . . . . . . . . . . . . . . . . . . . . .  20
+   13. Sourcecode indentation  . . . . . . . . . . . . . . . . . . .  20
    14. Tables inside lists . . . . . . . . . . . . . . . . . . . . .  20
    15. Wide artwork  . . . . . . . . . . . . . . . . . . . . . . . .  21
-   16. Sup and sub . . . . . . . . . . . . . . . . . . . . . . . . .  21
-   Unnumbered section  . . . . . . . . . . . . . . . . . . . . . . .  21
+   16. Sup and sub . . . . . . . . . . . . . . . . . . . . . . . . .  22
+   Unnumbered section  . . . . . . . . . . . . . . . . . . . . . . .  22
    References  . . . . . . . . . . . . . . . . . . . . . . . . . . .  22
      Normative References  . . . . . . . . . . . . . . . . . . . . .  22
-     Informative References  . . . . . . . . . . . . . . . . . . . .  22
-       CMS References  . . . . . . . . . . . . . . . . . . . . . . .  22
-       ESS References  . . . . . . . . . . . . . . . . . . . . . . .  22
+     Informative References  . . . . . . . . . . . . . . . . . . . .  23
+       CMS References  . . . . . . . . . . . . . . . . . . . . . . .  23
+       ESS References  . . . . . . . . . . . . . . . . . . . . . . .  23
        MIME-SPEC References  . . . . . . . . . . . . . . . . . . . .  23
-       Other References  . . . . . . . . . . . . . . . . . . . . . .  23
+       Other References  . . . . . . . . . . . . . . . . . . . . . .  24
    Appendix A.  Some Back Matter . . . . . . . . . . . . . . . . . .  24
      A.1.  Contributors  . . . . . . . . . . . . . . . . . . . . . .  24
-     A.2.  Arbitrary^(superscript) in section _title_  . . . . . . .  24
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  24
+     A.2.  Arbitrary^(superscript) in section _title_  . . . . . . .  25
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  25
 
 1.  RFC 2119 key words
 
@@ -626,6 +626,36 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
                                                   Table 4: Aligned right
 
+   A really tight table where left padding cannot be applied as it would
+   throw the left-alignment of the text off.
+
+   +======+===========+======+========+=================+======+=======+
+   |Method|Definition |ptype |property|Value            |Status|Version|
+   +======+===========+======+========+=================+======+=======+
+   |dnswl |RFC 8904   |dns   |zone    |DNSWL publicly   |active|1      |
+   |      |           |      |        |accessible query |      |       |
+   |      |           |      |        |root domain      |      |       |
+   +------+-----------+------+--------+-----------------+------+-------+
+   |dnswl |RFC 8904   |policy|ip      |type A response  |active|1      |
+   |      |           |      |        |received (or a   |      |       |
+   |      |           |      |        |quoted, comma-   |      |       |
+   |      |           |      |        |separated list   |      |       |
+   |      |           |      |        |thereof)         |      |       |
+   +------+-----------+------+--------+-----------------+------+-------+
+   |dnswl |RFC 8904   |policy|txt     |type TXT query   |active|1      |
+   |      |           |      |        |response         |      |       |
+   +------+-----------+------+--------+-----------------+------+-------+
+   |dnswl |RFC 8904   |dns   |sec     |one of "yes" for |active|1      |
+   |      |           |      |        |DNSSEC           |      |       |
+   |      |           |      |        |authenticated    |      |       |
+   |      |           |      |        |data, "no" for   |      |       |
+   |      |           |      |        |not signed, or   |      |       |
+   |      |           |      |        |"na" for not     |      |       |
+   |      |           |      |        |applicable       |      |       |
+   +------+-----------+------+--------+-----------------+------+-------+
+
+                                  Table 5
+
 7.  Unicode Literals
 
 7.1.  Single Characters
@@ -635,6 +665,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
       Use the character
         <u format="num">Δ</u>.
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 12]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
       expands to:
 
@@ -667,13 +705,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
       Use the U+0394 character (GREEK CAPITAL LETTER DELTA).
 
-
-
-Author, et al.          Expires January 13, 2019               [Page 12]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
       *  Tab: U+0009 (U+0009)
 
       *  Char(128): U+0080 (U+0080)
@@ -691,6 +722,13 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       Example XML:
 
       Use the character <u format="num-name-lit">Δ</u>.
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 13]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
       expands to:
 
@@ -722,14 +760,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
       expands to:
 
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 13]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
       Use the "Δ" character (U+0394).
 
 7.2.  Character Strings
@@ -747,6 +777,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       For example, the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2
       U+13AC U+13D2 ("ᏚᎢᎵᎬᎢᎬᏒ") from the Cherokee block look similar to
       the ASCII characters "STPETER".
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 14]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
    Expansion "num-name":
       Example XML:
@@ -774,18 +812,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
       expands to:
 
-
-
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 14]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
       For example, the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2
       U+13AC U+13D2 ("ᏚᎢᎵᎬᎢᎬᏒ", CHEROKEE LETTER DU, CHEROKEE LETTER I,
       CHEROKEE LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I,
@@ -807,6 +833,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       LETTER LI, CHEROKEE LETTER GV, CHEROKEE LETTER I, CHEROKEE LETTER
       GV, CHEROKEE LETTER SV, "ᏚᎢᎵᎬᎢᎬᏒ") from the Cherokee block look
       similar to the ASCII characters "STPETER".
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 15]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
    Expansion "ascii-lit-num":
       Example XML:
@@ -833,15 +867,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
       expands to:
 
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 15]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
       For example, the "ᏚᎢᎵᎬᎢᎬᏒ" characters (CHEROKEE LETTER DU,
       CHEROKEE LETTER I, CHEROKEE LETTER LI, CHEROKEE LETTER GV,
       CHEROKEE LETTER I, CHEROKEE LETTER GV, CHEROKEE LETTER SV, U+13DA
@@ -861,6 +886,17 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       For example, the "ᏚᎢᎵᎬᎢᎬᏒ" characters (U+13DA U+13A2 U+13B5 U+13AC
       U+13A2 U+13AC U+13D2) from the Cherokee block look similar to the
       ASCII characters "STPETER".
+
+
+
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 16]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
 8.  Irregular date specifications
 
@@ -884,19 +920,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Sed vel lacus id mauris dapibus lobortis.  Suspendisse quis
    pellentesque nisl, vitae pulvinar felis.  Ut at hendrerit odio.
    Morbi non sem non ligula posuere ultrices.
-
-
-
-
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 16]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
       |  In dignissim lacus et auctor sagittis.  Integer ex tellus,
       |  mollis vel ultrices sed, porta eget lacus.  Sed sapien leo,
@@ -923,6 +946,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       |  
       |     *  Morbi commodo orci id commodo malesuada.  Nulla maximus
       |        eros dui, eget pellentesque lorem sagittis sed.
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 17]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
       |  
       |     *  Donec at erat ultrices, pellentesque orci ut, fermentum
       |        est.  Sed sed molestie lorem.  Praesent eget sem ut eros
@@ -946,14 +977,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       |  This longer sentence has a word joiner 'wj' in this
       |  double-word.
       |  
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 17]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
       |  This longer longer sentence has no word joiner 'wj' in the
       |  double-word.
       |  
@@ -978,6 +1001,15 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       |  
       |  This longer longer sentence has a 'nbsp' in this double word.
       |  
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 18]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
       |  This longer longer longer sentence has no 'nbsp' in the double
       |  word.
       |  
@@ -998,17 +1030,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
    Definition list with aside in <dd>
          |  This is text in an aside inside a definition list definition
-
-
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 18]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
 10.  Section title test 1
 
@@ -1034,6 +1055,17 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
+
+
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 19]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
 12.  Eref brackets
 
    *  https://www.ietf.org
@@ -1058,14 +1090,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
        shift
    done
 
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 19]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
    Source code within a figure:
 
    for opt, value in opts:
@@ -1085,6 +1109,18 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Step 1:  (This example is excerpted from pre-RFC8677) Indent="9"
 
             At nSFF1, the following nNLM is assumed:
+
+
+
+
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 20]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
                +=====+=====+===================+====================+
                | SPI | SI  | Next Hop(s)       | Transport          |
@@ -1106,21 +1142,10 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
                |     |     | path)             |                    |
                +-----+-----+-------------------+--------------------+
 
-                               Table 5: nNLM at nSFF1
+                               Table 6: nNLM at nSFF1
 
    This is an arbitrary term:
       And this is some text with a table.
-
-
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 20]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
                       +==========+==========+==========+
                       | Head 1   | Head 2   | Head 3   |
@@ -1138,12 +1163,20 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
                       | Cell B10 | Cell B20 | Cell B30 |
                       +----------+----------+----------+
 
-                                   Table 6
+                                   Table 7
 
 15.  Wide artwork
 
 0        1         2         3         4         5         6         7
 123456789012345678901234567890123456789012345678901234567890123456789012
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 21]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
 16.  Sup and sub
 
@@ -1170,14 +1203,6 @@ Unnumbered section
    1.   Indent="5".  Lorem ipsum dolor sit amet, consectetur adipiscing
         elit.  Ut pharetra neque vulputate dolor elementum sodales.
 
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 21]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
    2.   Item 2
 
    *    Indent="5".  Lorem ipsum dolor sit amet, consectetur adipiscing
@@ -1202,6 +1227,13 @@ Normative References
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
+
+
+Author, et al.          Expires January 13, 2019               [Page 22]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
 Informative References
 
 CMS References
@@ -1223,16 +1255,6 @@ CMS References
               <https://www.rfc-editor.org/info/rfc5652>.
 
 ESS References
-
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 22]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
    [RFC2634]  Hoffman, P., Ed., "Enhanced Security Services for S/MIME",
               RFC 2634, DOI 10.17487/RFC2634, June 1999,
@@ -1260,6 +1282,14 @@ MIME-SPEC References
               RFC 2047, DOI 10.17487/RFC2047, November 1996,
               <https://www.rfc-editor.org/info/rfc2047>.
 
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 23]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
    [RFC2049]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
               Extensions (MIME) Part Five: Conformance Criteria and
               Examples", RFC 2049, DOI 10.17487/RFC2049, November 1996,
@@ -1282,13 +1312,6 @@ Other References
 
    [FUZZY-DATE]
               Mae, J., "Document with fuzzy date", Second quarter 2010.
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 23]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
    [NO-DATE]  Mae, N., "Document - with no date", Advances in Cryptology
               - AACC Edition pp. 235-265.
@@ -1313,6 +1336,16 @@ A.1.  Contributors
 
    We'd like to thank these contributors:
 
+
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 24]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
    Roni Even
    Huawei
    David Hamelech 14
@@ -1336,15 +1369,6 @@ A.2.  Arbitrary^(superscript) in section _title_
    Arbitrary text
 
 Authors' Addresses
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 24]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
    An Author
    ElfTools
@@ -1372,6 +1396,12 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       ישראל
 
 
+
+Author, et al.          Expires January 13, 2019               [Page 25]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
    Hanako Tanaka
    3-kai B-goshitsu
    4-3-2 Hakusan, Bunkyo-ku, Tokyo
@@ -1388,18 +1418,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       東京都
       文京区 白山4丁目3番2号
       3階B号室
-
-
-
-
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 25]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
 
    No Org
@@ -1425,24 +1443,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Sevedstorp 125
    Mariannelund
    Sweden
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
