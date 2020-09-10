@@ -67,7 +67,7 @@ default_options.__dict__ = {
         'indent': 2,
         'info': False,
         'legacy': False,
-        'legacy_date_format': True,
+        'legacy_date_format': False,
         'legacy_list_symbols': False,
         'list_symbols': ('*', '-', 'o', '+'),
         'manpage': False,

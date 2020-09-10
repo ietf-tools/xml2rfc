@@ -309,7 +309,7 @@ def main():
                            ' spacing, but omit headers and footers from the paginated format')
     textoptions.add_argument('--legacy-list-symbols', default=False, action='store_true',
                            help='use the legacy list bullet symbols, rather than the new ones')
-    textoptions.add_argument('--legacy-date-format', default=True, action='store_true',
+    textoptions.add_argument('--legacy-date-format', default=False, action='store_true',
                            help='use the legacy date format, rather than the new one')
     textoptions.add_argument('--no-legacy-date-format', dest='legacy_date_format', action='store_false',
                            help="don't use the legacy date format")
