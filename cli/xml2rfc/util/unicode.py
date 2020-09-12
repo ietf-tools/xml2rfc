@@ -47,6 +47,7 @@ unicode_attributes = {
     ('organization', 'abbrev'),
     ('seriesInfo', 'name'),
     ('seriesInfo', 'value'),
+    ('xref', 'derivedContent'),
 }
 
 # These unicode tags don't require an ascii attribute
@@ -68,6 +69,7 @@ bare_latin_tags = set([
     'region',
     'sortingcode',
     'street',
+    'title',
     'postalLine',
     ])
 
