@@ -4673,11 +4673,17 @@ class TextWriter(BaseV3Writer):
         #
         if not section:
             if reftext:
-                if target in self.refname_mapping and format != 'title':
-                    if content and content != reftext:
-                        text = "%s[%s]" % (exptext, reftext)
+                if target in self.refname_mapping:
+                    if format != 'title':
+                        if content and content != reftext:
+                            text = "%s[%s]" % (exptext, reftext)
+                        else:
+                            text = "[%s]" % reftext
                     else:
-                        text = "[%s]" % reftext
+                        if content and content != reftext:
+                            text = '%s["%s"]' % (exptext, reftext)
+                        else:
+                            text = '["%s"]' % reftext
                 else:
                     if content and content != reftext:
                         text = "%s(%s)" % (exptext, reftext)
