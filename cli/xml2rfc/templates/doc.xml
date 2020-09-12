@@ -130,7 +130,12 @@
                 {% if attrib.name == "anchor" %}
                   <t>Document-wide unique identifier for this &lt;{{element.tag}}&gt; element.</t>
                 {% elif attrib.name == "ascii" %}
-                  <t>The ASCII equivalent of the &lt;{{element.tag}}&gt; content.</t>
+                  <t>
+                     The ASCII equivalent of the &lt;{{element.tag}}&gt; content.
+                     {% if element.tag in bare_latin_tags %}
+                     Latin script content is permitted without specifying an ASCII equivalent.
+                     {% endif %}
+                  </t>
                 {% elif attrib.name == "title" %}
                   <t>Deprecated.  Use the &lt;name&gt; element instead.</t>
                 {% elif not attrib.deprecated %}

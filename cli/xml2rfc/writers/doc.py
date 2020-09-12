@@ -15,6 +15,7 @@ import yaml
 from xml2rfc import debug, __version__
 from xml2rfc.utils import namespaces
 from xml2rfc.writers import base
+from xml2rfc import util
 
 debug = debug                           # silence pyflakes
 
@@ -184,6 +185,7 @@ class DocWriter(base.BaseV3Writer):
         context['options'] = optionparser
         context['toc_depth'] = getattr(self.options, 'toc_depth', "2")
         context['v3_element_tags'] = list(base.element_tags-base.deprecated_element_tags)
+        context['bare_latin_tags'] = util.unicode.bare_latin_tags
         context['version'] =  __version__
         context['descriptions'] = descriptions
         with open(self.v3_rnc_file) as file:
