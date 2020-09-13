@@ -4122,7 +4122,7 @@ class TextWriter(BaseV3Writer):
             for j in range(cols):
                 cell = cells[i][j]
                 if cell.origin == (i, j):
-                    padding = min((cell.colwidth - textwidth(line)) for line in cell.wrapped)
+                    padding = min([width] + [(cell.colwidth - textwidth(line)) for line in cell.wrapped])
                     if padding < minpad[j]:
                         minpad[j] = padding
 
