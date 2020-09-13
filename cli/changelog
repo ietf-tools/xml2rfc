@@ -1,3 +1,42 @@
+xml2rfc (3.1.0) ietf; urgency=medium
+
+  * Fixed an issue with an extra comma rendered in HTML for empty date 
+    elements.  Fixes issue #542.
+
+  * Added escaping of quotes in page footer and header components when
+    generating the @page CSS for PDF output, in order to avoid issues
+    when building quoted CSS content strings from the components.  
+    Fixes issue #544.
+
+  * Added a CSS workaround for an unexpected HTML rendering behaviour in 
+    some browsers, where a <dt> following an empty <dd> would be indented.  
+    Fixes issue #545.
+
+  * Improved error messages and the handling of artwork with no "type" 
+    attribute value when "binary-art" would have been correct.
+    Fixes issue #535.
+
+  * Reverted the default value for the --legacy-date-format to false, on 
+    request from the RPC.
+
+  * Fixed table cell padding to not add left paddding for left-aligned 
+    columns if not all lines in the column can be padded in the same manner,
+    and similarly for right-aligned columns.  Fixes issue #543.
+
+  * Tweaked utils.build_dataurl() to give consistent results across Python 
+    versions (tilde was added to the default safe characters in Python 3.7,
+    so the default percentage-escape results of binary content differed if
+    it contained a 0x7e (tilde) character.
+
+  * Fixed a bug in finding the length of the longest word in a table cell, 
+    used to determine minimum cell width for text output.
+
+  * Added a new test case with a tightly constrained table to excercise the 
+    issue in #543.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  12 Sep 2020 11:11:51 +0000
+
+
 xml2rfc (3.0.0) ietf; urgency=medium
 
   **Transition to using the new schema v3 output formatters by default**
