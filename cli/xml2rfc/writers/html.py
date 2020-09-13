@@ -2764,7 +2764,7 @@ class HtmlWriter(BaseV3Writer):
         if not (section or relative):
             # plain xref
             if in_name:
-                hh = build.em(reftext, classes="xref")
+                hh = build.em('[', reftext, ']', classes="xref")
             else:
                 if reftext:
                     a = build.a(reftext, href='#%s'%target, classes='xref')
