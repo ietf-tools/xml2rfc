@@ -1,5 +1,5 @@
 xml2rfc(1)                                                    xml2rfc(1)
-                                                       10 September 2020
+                                                       13 September 2020
 
 
                   Xml2rfc Vocabulary Version 3 Schema
@@ -450,7 +450,10 @@ Table of Contents
 
 2.14.1.  "ascii" Attribute
 
-   The ASCII equivalent of the city name.
+   The ASCII equivalent of the <city> content.  This element may have
+   non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.15.  <cityarea> (New)
 
@@ -465,7 +468,10 @@ Table of Contents
 
 2.15.1.  "ascii" Attribute
 
-   The ASCII equivalent of the city area name.
+   The ASCII equivalent of the <cityarea> content.  This element may
+   have non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.16.  <code>
 
@@ -477,7 +483,10 @@ Table of Contents
 
 2.16.1.  "ascii" Attribute
 
-   The ASCII equivalent of the postal code.
+   The ASCII equivalent of the <code> content.  This element may have
+   non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.17.  <contact> (New)
 
@@ -544,7 +553,10 @@ Table of Contents
 
 2.18.1.  "ascii" Attribute
 
-   The ASCII equivalent of the country name.
+   The ASCII equivalent of the <country> content.  This element may have
+   non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.19.  <cref>
 
@@ -814,7 +826,10 @@ Table of Contents
 
 2.28.1.  "ascii" Attribute
 
-   The ASCII equivalent of the <extaddr> content.
+   The ASCII equivalent of the <extaddr> content.  This element may have
+   non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.29.  <figure>
 
@@ -1190,7 +1205,10 @@ Table of Contents
 
 2.39.2.  "ascii" Attribute
 
-   The ASCII equivalent of the organization's name.
+   The ASCII equivalent of the <organization> content.  This element may
+   have non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.39.3.  "asciiAbbrev" Attribute (New)
 
@@ -1227,7 +1245,10 @@ Table of Contents
 
 2.41.1.  "ascii" Attribute
 
-   The ASCII equivalent of the <pobox> content.
+   The ASCII equivalent of the <pobox> content.  This element may have
+   non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.42.  <postal>
 
@@ -1253,7 +1274,10 @@ Table of Contents
 
 2.43.1.  "ascii" Attribute
 
-   The ASCII equivalent of the text in the address line.
+   The ASCII equivalent of the <postalLine> content.  This element may
+   have non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.44.  <refcontent>
 
@@ -1377,7 +1401,10 @@ Table of Contents
 
 2.48.1.  "ascii" Attribute
 
-   The ASCII equivalent of the region name.
+   The ASCII equivalent of the <region> content.  This element may have
+   non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.49.  <rfc>
 
@@ -1653,7 +1680,10 @@ Table of Contents
 
 2.52.1.  "ascii" Attribute
 
-   ASCII equivalent for sortingcode.
+   The ASCII equivalent of the <sortingcode> content.  This element may
+   have non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.53.  <sourcecode>
 
@@ -1747,7 +1777,10 @@ Table of Contents
 
 2.55.1.  "ascii" Attribute
 
-   The ASCII equivalent of the street address.
+   The ASCII equivalent of the <street> content.  This element may have
+   non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.56.  <strong>
 
@@ -2017,7 +2050,10 @@ Table of Contents
 
 2.66.2.  "ascii" Attribute
 
-   The ASCII equivalent of the title.
+   The ASCII equivalent of the <title> content.  This element may have
+   non-ASCII Latin script content without specifying an ASCII
+   equivalent, but for other non-ASCII content an ASCII equivalent is
+   required.
 
 2.67.  <toc> (New)
 
@@ -2085,7 +2121,8 @@ Table of Contents
 
 2.70.2.  "ascii" Attribute
 
-   The ASCII equivalent of the <u> content.
+   The ASCII equivalent of the content, to be used if the "ascii"
+   keyword is used in the "format" specification.
 
 2.70.3.  "format" Attribute
 
@@ -4261,6 +4298,8 @@ Appendix D.  "xml2rfc" Documentation Template Variables
 
    The following variables are available for use in an xml2rfc manpage
    Jinja2 template, as of xml2rfc version 3.0.0:
+
+   {{ bare_latin_tags }}:
 
    {{ descriptions }}:
       The descriptions read from the "doc.yaml" file
