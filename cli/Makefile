@@ -61,6 +61,7 @@ env/bin/python:
 install:
 	python --version
 	python setup.py --quiet install
+	python configtest.py
 	rm -rf xml2rfc.egg-info/
 
 test:	install flaketest xml2rfc/data/v3.rng pytests
@@ -168,7 +169,7 @@ tests/out/%.exp.xml: tests/input/%.xml install
 
 %.test: %
 	@echo " Diffing $< against master"
-	@diff -u -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
+	diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.min.js: %.js
 	bin/uglifycall $<
