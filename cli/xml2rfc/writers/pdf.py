@@ -80,7 +80,7 @@ class PdfWriter(BaseV3Writer):
         self.get_mono_fonts()
         page_info = {
             'top-left': self.page_top_left(),
-            'top-center': self.page_top_center(),
+            'top-center': self.full_page_top_center(),
             'top-right': self.page_top_right(),
             'bottom-left': self.page_bottom_left(),
             'bottom-center': self.page_bottom_center(),

@@ -1971,8 +1971,15 @@ class BaseV3Writer(object):
         title = self.root.find('./front/title')
         text = title.get('abbrev') or ' '.join(title.itertext())
         if len(text) > 40:
-            self.warn(title, "Expected a title abbreviation of not more than 40 character for the page header, found %s characters" % len(text))
+            self.warn(title, "Expected a title or title abbreviation of not more than 40 character for the page header, found %s characters" % len(text))
         return text[:40]
+
+    def full_page_top_center(self):
+        title = self.root.find('./front/title')
+        text = title.get('abbrev') or ' '.join(title.itertext())
+        if len(text) > 80:
+            self.note(title, "Found a title or title abbreviation of length %s; check that it fits the running page header." % len(text))
+        return text
 
     def page_top_right(self):
         date = self.root.find('./front/date')
