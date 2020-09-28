@@ -1801,12 +1801,7 @@ class PrepToolWriter(BaseV3Writer):
                         src = build_dataurl(mediatype, data)
                         e.set('src', src)
                     elif scheme == 'file':
-                        with open(src[6:], "rb") as f:
-                            data = f.read()
-                        mediatype = get_file_mime_type(src[6:])
-                        src = build_dataurl(mediatype, data)
-                        e.set('src', src)
-                        #self.err(e, "Won't guess media-type of file '%s', please use the data: scheme instead." % (src, ))
+                        self.err(e, "Won't guess media-type of file '%s', please use the data: scheme instead." % (src, ))
 
     #    6.  If an <artwork> element does not have type='svg' or
     #        type='binary-art' and there is an "src" attribute, the data needs
