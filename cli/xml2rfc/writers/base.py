@@ -2156,8 +2156,10 @@ class BaseV3Writer(object):
                     if error.message.startswith("Did not expect text"):
                         items = self.tree.xpath(error.path + '/text()')
                         for item in items:
-                            if item.strip():
-                                self.log("  Unexpected text:\n    %s" % item.strip())
+                            item = item.strip()
+                            if item:
+                                nl = '' if len(item) < 60 else '\n  '
+                                self.log('  Unexpected text:%s "%s"' % (nl, item))
 
             else:
                 log.warn('\nInvalid document: %s' % (e,))
