@@ -465,6 +465,13 @@ class HtmlWriter(BaseV3Writer):
         else:
             add.meta(head, None, name='ietf.draft', content=self.root.get('docName'))
 
+        versions = lxml.etree.Comment(' Generator version information:\n  '
+                +('\n    '.join(['%s %s'%v for v in xml2rfc.get_versions()]) )
+                +'\n'
+            )
+        versions.tail = '\n'
+        head.append(versions)
+
     #    For example:
     # 
     #    <meta name="author" content="Joe Hildebrand">

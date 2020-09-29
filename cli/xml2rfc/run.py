@@ -135,30 +135,11 @@ def print_pdf_help(options, parser):
 
 
 def print_version(options, parser):
-    print('%s %s' % (xml2rfc.NAME, xml2rfc.__version__))
+    versions = xml2rfc.get_versions()
+    print('%s %s' % versions[0])
     if options.verbose:
-        print('  Python %s' % sys.version.split()[0])
-        extras = set(['pycairo', 'weasyprint'])
-        try:
-            import pkg_resources
-            this = pkg_resources.working_set.by_key[xml2rfc.NAME]
-            for p in this.requires():
-                if p.key in extras:
-                    extras -= p.key
-                try:
-                    dist = pkg_resources.get_distribution(p.key)
-                    print('  %s'%dist)
-                except:
-                    pass
-            for key in extras:
-                try:
-                    dist = pkg_resources.get_distribution(key)
-                    print('  %s'%dist)
-                except:
-                    pass
-        except:
-            pass
-
+        for item in versions[1:]:
+            print('  %s %s' % item)
 
 def print_values(options, parser, config_paths):
     print("\n"
