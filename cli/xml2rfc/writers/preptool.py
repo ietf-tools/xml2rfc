@@ -38,7 +38,6 @@ from xml2rfc.boilerplate_tlp import boilerplate_tlp
 from xml2rfc.scripts import get_scripts
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import get_expiry_date, format_date, normalize_month
-from xml2rfc.util.mime import get_file_mime_type
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import ( unicode_content_tags, unicode_attributes, bare_unicode_tags,
