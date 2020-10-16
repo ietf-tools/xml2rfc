@@ -108,7 +108,7 @@ class UnPrepWriter(BaseV3Writer):
         return tree
 
     selectors = [
-        '.;validate_before()',
+#        '.;validate_before()',
         '/rfc[@prepTime]',
         './/ol[@group]',
         './front/boilerplate',
