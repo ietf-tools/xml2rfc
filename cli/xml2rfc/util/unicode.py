@@ -50,6 +50,15 @@ unicode_attributes = {
     ('xref', 'derivedContent'),
 }
 
+latinscript_attributes = {
+    ('author', 'asciiFullname'),
+    ('author', 'asciiSurname'),
+    ('author', 'asciiInitials'),
+    ('contact', 'asciiFullname'),
+    ('contact', 'asciiSurname'),
+    ('contact', 'asciiInitials'),
+}
+
 # These unicode tags don't require an ascii attribute
 bare_unicode_tags = set([
     'artwork',

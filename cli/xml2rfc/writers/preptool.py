@@ -41,7 +41,7 @@ from xml2rfc.util.date import get_expiry_date, format_date, normalize_month
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import ( unicode_content_tags, unicode_attributes, bare_unicode_tags,
-    expand_unicode_element, isascii, downcode, )
+    expand_unicode_element, isascii, downcode, latinscript_attributes)
 from xml2rfc.utils import build_dataurl, namespaces, sdict, clean_text
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 
@@ -60,7 +60,7 @@ pnprefix = {
     'u':            'u',
 }
 
-index_item = namedtuple('index_item', ['item', 'sub', 'anchor', 'page', ])
+index_item = namedtuple('index_item', ['item', 'sub', 'anchor', 'page', 'iref', ])
 
 def uniq(l):
     seen = set()
@@ -424,8 +424,12 @@ class PrepToolWriter(BaseV3Writer):
             for a in c.attrib:
                 v = c.get(a)
                 if not (c.tag, a) in unicode_attributes:
-                    if not isascii(v):
-                        self.err(c, 'Found non-ascii content in <%s> attribute value %s="%s"' % (c.tag, a, v))
+                    if (c.tag, a) in latinscript_attributes:
+                        if not is_script(v, 'Latin'):
+                            self.err(c, 'Found non-Latin-script content in <%s> attribute value %s="%s"' % (c.tag, a, v))
+                    else:
+                        if not isascii(v):
+                            self.err(c, 'Found non-ASCII content in <%s> attribute value %s="%s"' % (c.tag, a, v))
                 if not (c.tag, a) in space_attributes:
                     vv = v.strip()
                     if vv != v:
@@ -1397,7 +1401,10 @@ class PrepToolWriter(BaseV3Writer):
             anchor = p.get('anchor')
             if not anchor:
                 anchor = p.get('pn')
-            self.index_entries.append(index_item(item, sub, anchor, None))
+            if not anchor:
+                self.err(e, "Did not find an anchor to use for <iref item='%s'> in <%s>" % (item, p.tag))
+            else:
+                self.index_entries.append(index_item(item, sub, anchor, None, e))
 
     def ol_add_counter(self, e, p):
         start = e.get('start')
@@ -2060,8 +2067,6 @@ class PrepToolWriter(BaseV3Writer):
                 if i.anchor:
                     xref = mkxref(self, i.item, target=i.anchor, format='none', derivedContent=i.item)
                     t.append(xref)
-                else:
-                    self.err(e, "Did not expect an <iref> here, skipping it")
             subs = [ i.sub for i in item_entries if i.sub ]
             if subs:
                 ul = self.element('ul', empty='true', spacing='compact', bare="true")
