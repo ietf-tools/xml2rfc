@@ -21,9 +21,10 @@ export PYTHONHASHSEED = 0
 
 datetime_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T_ ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]
 version_regex =  [Vv]ersion [23N]\(\.[0-9N]\+\)\+\(\.dev\)\?
-date_regex = ([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]|[0-9]([0-9])? [ADFJMOS][a-u]* [12][0-9][0-9][0-9]$$)
+date_regex = \([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\|([0-9]\([0-9]\)\? \)\?[ADFJMOS][a-u]\* [12][0-9][0-9][0-9]\)
 legacydate_regex = [ADFJMOS][a-u]* [123]*[0-9], [12][0-9][0-9][0-9]$$
 generator_regex = name="generator"
+libversion_regex = \(pyflakes\|PyYAML\|requests\|setuptools\|six\|Weasyprint\) [0-9]\+\(\.[0-9]\+\)*
 
 py = $(shell python -c 'import sys; print("py%s%s" %(sys.version_info.major,sys.version_info.minor))')
 
@@ -76,9 +77,9 @@ pytests:
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
 	for type in .raw.txt .txt .nroff .html .exp.xml .v2v3.xml .prepped.xml ; do					\
-	  diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
+	  diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
 	done ; if [ $$type = ascii ]; then echo "Diff nroff output with xml2rfc output:";\
-	diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
+	diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(date_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
 
 # ----------------------------------------------------------------------
 #
@@ -89,11 +90,11 @@ CHECKOUTPUT=	\
 
 %.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test %.prepped.xml.test %.plain.text
 	@echo " Diffing .nroff.txt against regular .txt"
-	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
+	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)'  -I '$(libversion_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo " Checking v3 validity"
 	@doc=$(basename $@); printf ' '; xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
 	@echo " Diffing .plain.text against regular .text"
-	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' $$doc.plain.text $$doc.text || { echo 'Diff failed for $$doc.plain.text output'; exit 1; }
+	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(date_regex)' $$doc.plain.text $$doc.text || { echo 'Diff failed for $$doc.plain.text output'; exit 1; }
 
 tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt : tests/input/%.xml install
 	@echo -e "\n Processing $<"
@@ -169,7 +170,7 @@ tests/out/%.exp.xml: tests/input/%.xml install
 
 %.test: %
 	@echo " Diffing $< against master"
-	diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
+	diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.min.js: %.js
 	bin/uglifycall $<
