@@ -1483,7 +1483,7 @@ class TextWriter(BaseV3Writer):
         compact = e.get('spacing') == 'compact'
         tjoin  = '\n' if compact else '\n\n'
         #
-        indent = int(e.get('indent'))
+        indent = int(e.get('indent') or '3')
         nljoin = Joiner('\n', indent, 0, False, False)
         spjoin = Joiner('  ', indent, 0, True, False)
         ddjoin  = nljoin if newline else spjoin
@@ -2444,7 +2444,7 @@ class TextWriter(BaseV3Writer):
         ljoin  = '\n' if compact else '\n\n'
         #
         adaptive_indent = len(e._format % (' '*num_width(fchar, len(list(e))))) + len('  ')
-        indent_attrib = e.get('indent')
+        indent_attrib = e.get('indent') or '3'
         indent = int(indent_attrib) if indent_attrib.isdigit() else adaptive_indent
         e._padding = indent
         kwargs['joiners'].update({
@@ -3689,7 +3689,7 @@ class TextWriter(BaseV3Writer):
         def rreplace(s, old, new, max):
             lst = s.rsplit(old, max)
             return new.join(lst)
-        indent = e.get('indent', None)
+        indent = e.get('indent', None) or '0'
         if indent:
             kwargs['indent'] = int(indent)
         text = self.inner_text_renderer(e)

@@ -1388,7 +1388,7 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    This element is directly rendered as its HTML counterpart.
     def render_dd(self, h, x):
-        indent = x.getparent().get('indent')
+        indent = x.getparent().get('indent') or '3'
         style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent and indent!="0" else None
         dd = add.dd(h, x, style=style)
         for c in x.getchildren():
@@ -1726,7 +1726,7 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <li id="s-2-7">Item <a href="#s-2-7" class="pilcrow">&para;</a></li>
     def render_li_ul(self, h, x):
-        indent = x.getparent().get('indent')
+        indent = x.getparent().get('indent') or '3'
         style = None
         if indent and int(indent)>4:
             em=(int(indent)-4)*0.5
@@ -1885,7 +1885,7 @@ class HtmlWriter(BaseV3Writer):
     def render_li_dl(self, h, x):
         label = x.get('derivedCounter')
         dt = add.dt(h, None, label)
-        indent = x.getparent().get('indent')
+        indent = x.getparent().get('indent') or '3'
         style = None
         if indent and indent.isdigit():
             style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent and indent!="0" else None
@@ -1907,7 +1907,7 @@ class HtmlWriter(BaseV3Writer):
     #      <li>Wheels on a big rig</li>
     #    </ol>
     def render_li_ol(self, h, x):
-        indent = x.getparent().get('indent')
+        indent = x.getparent().get('indent') or '3'
         style = None
         if indent and indent.isdigit() and int(indent)>4:
             em=(int(indent)-4)*0.5
@@ -2461,7 +2461,7 @@ class HtmlWriter(BaseV3Writer):
     #    <p id="s-1-1">A paragraph.
     #      <a href="#s-1-1" class="pilcrow">&para;</a></p>
     def render_t(self, h, x):
-        indent = x.get('indent')
+        indent = x.get('indent') or '0'
         style = 'margin-left: %.1fem' % (int(indent)*0.5) if indent and indent!="0" else None
         p = add.p(h, x, style=style)
         for c in x.getchildren():
