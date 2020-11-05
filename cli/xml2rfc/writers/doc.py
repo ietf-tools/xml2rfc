@@ -155,8 +155,11 @@ class DocWriter(base.BaseV3Writer):
         # Deal with options that has an inverse form
         option_strings = { a.option_strings[-1]: a for a in optionparser._actions if a.option_strings }
         for o, a in option_strings.items():
+            a.suppress = "==SUPPRESS==" in a.help
+        option_strings = { k: a for (k, a) in option_strings.items() if not a.suppress }
+        for o, a in option_strings.items():
             try:
-                a.has_negation = o.replace('--', '--no-') in option_strings
+                a.has_negation = o.replace('--', '--no-') in option_strings 
                 a.has_positive = '--no-' in o and o.replace('--no-', '--') in option_strings
             except TypeError:
                 pass
