@@ -298,7 +298,9 @@ def main():
                            help='use the characters given as list bullet symbols')
     textoptions.add_argument('--bom', '--BOM', action='store_true', default=False,
                            help='Add a BOM (unicode byte order mark) to the start of text files')
-    textoptions.add_argument('-P', '--no-pagination', dest='pagination', action='store_false', default=True,
+    textoptions.add_argument('--pagination', dest='pagination', action='store_true', default=None,
+                            help=configargparse.SUPPRESS),
+    textoptions.add_argument('-P', '--no-pagination', dest='pagination', action='store_false', default=None,
                             help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated')
     textoptions.add_argument('--table-hyphen-breaks', action='store_true', default=False,
                             help='More easily do line breaks after hyphens in table cells to give a more compact table')
@@ -326,6 +328,10 @@ def main():
                            help='Base URL for I-D reference targets')
     htmloptions.add_argument('--metadata-js-url', default="metadata.min.js",
                            help='URL for the metadata script')
+    htmloptions.add_argument('--inline-version-info', action='store_true', default=True,
+                           help=configargparse.SUPPRESS),
+    htmloptions.add_argument('--no-inline-version-info', action='store_false', dest="inline_version_info",
+                           help=configargparse.SUPPRESS),
 
     v2v3options = optionparser.add_argument_group('V2-V3 Converter Options')
     v2v3options.add_argument('--add-xinclude', action='store_true',
@@ -540,8 +546,10 @@ def main():
 
     # Remember if we're building an RFC
     options.rfc = xmlrfc.tree.getroot().get('number')
-    if options.rfc:
-        options.pagination = False
+
+    # Use the right pagination default, depending on RFC or not
+    if options.pagination == None:
+        options.pagination = False if options.rfc else True
 
     # Check if we've received a version="3" document, and adjust accordingly
     if xmlrfc.tree.getroot().get('version') == '3':

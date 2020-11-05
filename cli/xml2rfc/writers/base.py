@@ -66,6 +66,7 @@ default_options.__dict__ = {
         'image_svg': False,
         'indent': 2,
         'info': False,
+        'inline_version_info': True,
         'legacy': False,
         'legacy_date_format': False,
         'legacy_list_symbols': False,

@@ -108,7 +108,7 @@ tests/out/%.v2v3.xml: tests/input/%.xml install
 tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%.text install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $@ --prep $<"
 	@echo " Checking generation of .html from prepped .xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $(basename $@).$(py).html --html --external-css --external-js --legacy-date-format --no-inline-version $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
 	@echo " Checking generation of .text from prepped .xml"
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $(basename $@).text --text --no-pagination --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
@@ -126,7 +126,7 @@ tests/out/docfile.xml:
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --doc --out $@"
 
 tests/out/docfile.$(py).html: tests/out/docfile.xml
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --html --external-css --external-js --out $@ $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --html --external-css --external-js --no-inline-version --out $@ $<"
 
 tests/out/manpage.txt:
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --man > $@"
@@ -144,7 +144,7 @@ tests/out/%.wip.text: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --text --v3 --strict --id-is-work-in-progress $< --out $@"
 
 tests/out/%.v3.$(py).html: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --html --v3 --external-css --external-js --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --html --v3 --external-css --external-js --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ --no-inline-version $< --out $@"
 
 tests/out/%.pdf: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --pdf --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://tools.ietf.org/html/ $< --out $@"
@@ -170,7 +170,7 @@ tests/out/%.exp.xml: tests/input/%.xml install
 
 %.test: %
 	@echo " Diffing $< against master"
-	diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
+	@diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.min.js: %.js
 	bin/uglifycall $<
@@ -211,11 +211,11 @@ drafttest: cleantmp env/bin/python install $(drafttests) dateshifttest
 # 	doc=rfc7911 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
 
 unicodetest: cleantmp  env/bin/python install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep tests/input/unicode.xml "
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --base tmp/ --raw --legacy --text --nroff --html --no-inline-version --exp --v2v3 --prep tests/input/unicode.xml "
 	doc=unicode ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 utf8test: cleantmp  env/bin/python install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep -q tests/input/utf8.xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --base tmp/ --raw --legacy --text --nroff --html --no-inline-version --exp --v2v3 --prep -q tests/input/utf8.xml"
 	@doc=utf8 ; postnrofffix="cat" ; type=utf8; $(CHECKOUTPUT)
 
 v3featuretest: tests/out/draft-v3-features.prepped.xml.test tests/out/draft-v3-features.text.test tests/out/draft-v3-features.v3.$(py).html.test
