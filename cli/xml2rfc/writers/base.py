@@ -53,6 +53,7 @@ default_options.__dict__ = {
         'docfile': False,
         'doc_template': None,
         'doi_base_url': 'https://doi.org/',
+        'draft_revisions': False,
         'dtd': None,
         'expand': False,
         'external_css': False,

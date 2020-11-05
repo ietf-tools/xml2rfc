@@ -337,6 +337,8 @@ def main():
     v2v3options.add_argument('--add-xinclude', action='store_true',
                            help='replace reference elements with RFC and Internet-Draft'
                            ' seriesInfo with the appropriate XInclude element')
+    v2v3options.add_argument('--draft-revisions', '--draft-revs', action='store_true', default=False, dest='draft_revisions',
+                           help="Reference explicit draft revisions when inserting XIncludes for draft references")
     v2v3options.add_argument('--strict', action='store_true',
                            help='be strict about stripping some deprecated attributes')
 

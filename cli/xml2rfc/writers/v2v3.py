@@ -76,12 +76,13 @@ class V2v3XmlWriter(BaseV3Writer):
                     name = si.get('value', '')
                     if name:
                         tag = name[len('draft-'):] if name.startswith('draft-') else name
-                        if re.search(r'-\d\d$', tag):
+                        if re.search(r'-\d\d$', tag) and self.options.draft_revisions:
                             xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                         nsmap=self.xmlrfc.nsmap,
                                         line=e.sourceline,
                                         href="https://datatracker.ietf.org/doc/bibxml3/draft-%s.xml"%tag)
                         else:
+                            tag = re.sub(r'-\d\d$', '', tag)
                             xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                         nsmap=self.xmlrfc.nsmap,
                                         line=e.sourceline,
