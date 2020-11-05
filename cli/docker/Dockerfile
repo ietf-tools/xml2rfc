@@ -136,8 +136,7 @@ RUN pip install tox
 # testing prerequisites
 RUN pip install dict2xml==1.6 pypdf2 'weasyprint<=0.42.3' 'pycairo>=1.18'
 
-# Additional python versions.  Python 3.5 is part of the distribution,
-# 3.6 and 3.7 not available through apt.
+# Additional python versions.
 
 # Python 3.5
 # WORKDIR /usr/src
