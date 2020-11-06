@@ -1,3 +1,25 @@
+xml2rfc (3.4.0) ietf; urgency=medium
+
+  * Added handling for 'indent' attributes that have been set to the empty
+    string.  Fixes issue #564.
+
+  * Added some new unlisted switches to make some test cases easier to 
+    maintain.
+
+  * Changed the default handling for draft reference XIncludes to use 
+    revision-agnostic bibxml URLs in v2-to-v3 conversions, and added a switch 
+    to use explicit revisions instead if desired.
+
+  * Tweaked doc.py and doc.xml to suppress mention of switches with 
+    argparse.SUPPRESS help settings, for consistency between --help and --doc 
+    output.
+
+  * Changed the text output for <xref format='title'/> on request from the 
+    RPC.  Fixes issue #563.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  06 Nov 2020 04:54:48 -0800
+
+
 xml2rfc (3.3.0) ietf; urgency=medium
 
   * Removed validation before unprepping in order to be able to process source
