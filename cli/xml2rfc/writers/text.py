@@ -4681,9 +4681,9 @@ class TextWriter(BaseV3Writer):
                             text = "[%s]" % reftext
                     else:
                         if content and content != reftext:
-                            text = '%s["%s"]' % (exptext, reftext)
+                            text = '%s ("%s")' % (exptext, reftext.strip('"'))
                         else:
-                            text = '["%s"]' % reftext
+                            text = '"%s"' % reftext.strip('"')
                 else:
                     if content and content != reftext:
                         text = "%s(%s)" % (exptext, reftext)
