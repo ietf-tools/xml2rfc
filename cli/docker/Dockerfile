@@ -26,19 +26,19 @@ LABEL maintainer="Henrik Levkowetz <henrik@levkowetz.com>"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DEVUAN_FRONTEND=noninteractive
 
-RUN apt-get update
+RUN apt-get update --allow-releaseinfo-change
 RUN apt-get install -qy apt-transport-https
+
+# Use backports, updates, and security updates
+RUN echo "deb http://deb.devuan.org/merged beowulf main contrib non-free"  > /etc/apt/sources.list
+RUN echo "deb http://deb.devuan.org/merged beowulf-security main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://deb.devuan.org/merged beowulf-updates main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://deb.devuan.org/merged beowulf-backports main contrib non-free" >> /etc/apt/sources.list
 
 # Remove some excludes for the docker image
 RUN sed -i -e '/^path-exclude=.*\/groff/d' \
            -e '/^path-exclude=.*\/locale/d' \
            -e '/^path-exclude=.*\/man/d' /etc/dpkg/dpkg.cfg.d/docker-excludes
-
-# Use backports, updates, and security updates
-RUN echo "deb http://deb.devuan.org/merged ascii main contrib non-free"  > /etc/apt/sources.list
-RUN echo "deb http://deb.devuan.org/merged ascii-security main contrib non-free" >> /etc/apt/sources.list
-RUN echo "deb http://deb.devuan.org/merged ascii-updates main contrib non-free" >> /etc/apt/sources.list
-RUN echo "deb http://deb.devuan.org/merged ascii-backports main contrib non-free" >> /etc/apt/sources.list
 
 # Install needed packages
 #
@@ -55,13 +55,11 @@ RUN apt-get install -qy \
 	build-essential \
 	bzip2 \
 	ca-certificates \
-	cloc \
 	colordiff \
 	gcc \
 	gnupg2 \
 	groff \
         html2text \
-	host \
 	ipython \
 	less \
 	libbz2-dev \
@@ -83,7 +81,7 @@ RUN apt-get install -qy \
 	libpangocairo-1.0-0 \
 	libreadline-dev \
 	libsqlite3-dev \
-	libssl1.0-dev \
+	libssl-dev \
 	libxml2-dev \
 	libxml2-utils \
 	libxslt-dev \
@@ -94,17 +92,14 @@ RUN apt-get install -qy \
 	openssh-client \
 	patch \
 	procps \
-	python \
-	python-dev \
-	python-docutils \
+	python3.5 \
 	python3.6 \
+	python3.7 \
 	python3-cffi \
 	python3-dev \
 	python3-pip \
 	python3-setuptools \
 	python3-wheel \
-	python3.5 \
-	realpath \
 	rsync \
 	shared-mime-info \
 	subversion \
@@ -126,16 +121,6 @@ RUN locale-gen
 # Set up root password
 RUN echo "root:root" | chpasswd
 
-# Pip
-ENV PYTHONWARNINGS="ignore:a true SSLContext object,ignore:An HTTPS request has been made"
-WORKDIR /usr/src
-RUN wget -q https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm get-pip.py
-RUN pip install certifi
-RUN pip install virtualenv
-RUN pip install tox
-# testing prerequisites
-RUN pip install dict2xml==1.6 pypdf2 'weasyprint<=0.42.3' 'pycairo>=1.18'
-
 # Additional python versions.
 
 # Python 3.5
@@ -151,28 +136,28 @@ RUN pip install dict2xml==1.6 pypdf2 'weasyprint<=0.42.3' 'pycairo>=1.18'
 # RUN rm -rf /usr/src/Python-3.5.9/
 
 # Python 3.6
-WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz
-RUN tar xJf Python-3.6.10.tar.xz
-RUN rm Python-3.6.10.tar.xz
-WORKDIR /usr/src/Python-3.6.10/
-RUN ./configure
-RUN make
-RUN make altinstall
-WORKDIR /usr/src
-RUN rm -rf /usr/src/Python-3.6.10/
+# WORKDIR /usr/src
+# RUN wget -q https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz
+# RUN tar xJf Python-3.6.10.tar.xz
+# RUN rm Python-3.6.10.tar.xz
+# WORKDIR /usr/src/Python-3.6.10/
+# RUN ./configure
+# RUN make
+# RUN make altinstall
+# WORKDIR /usr/src
+# RUN rm -rf /usr/src/Python-3.6.10/
 
 # Python 3.7
-WORKDIR /usr/src
-RUN wget -q https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz
-RUN tar xJf Python-3.7.6.tar.xz
-RUN rm Python-3.7.6.tar.xz
-WORKDIR /usr/src/Python-3.7.6/
-RUN ./configure
-RUN make
-RUN make altinstall
-WORKDIR /usr/src/
-RUN rm -rf /usr/src/Python-3.7.6/
+# WORKDIR /usr/src
+# RUN wget -q https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz
+# RUN tar xJf Python-3.7.6.tar.xz
+# RUN rm Python-3.7.6.tar.xz
+# WORKDIR /usr/src/Python-3.7.6/
+# RUN ./configure
+# RUN make
+# RUN make altinstall
+# WORKDIR /usr/src/
+# RUN rm -rf /usr/src/Python-3.7.6/
 
 # Python 3.8
 WORKDIR /usr/src
@@ -191,7 +176,7 @@ RUN mkdir -p $DDIR
 WORKDIR $DDIR
 
 COPY requirements.txt ./
-RUN pip --no-cache-dir install -r requirements.txt decorator dict2xml pycairo pypdf2 tox weasyprint
+RUN pip3 --no-cache-dir install -r requirements.txt certifi decorator dict2xml pypdf2 tox weasyprint
 
 COPY setprompt ./
 
