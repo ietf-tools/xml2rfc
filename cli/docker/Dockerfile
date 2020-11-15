@@ -93,8 +93,6 @@ RUN apt-get install -qy \
 	patch \
 	procps \
 	python3.5 \
-	python3.6 \
-	python3.7 \
 	python3-cffi \
 	python3-dev \
 	python3-pip \
@@ -136,28 +134,28 @@ RUN echo "root:root" | chpasswd
 # RUN rm -rf /usr/src/Python-3.5.9/
 
 # Python 3.6
-# WORKDIR /usr/src
-# RUN wget -q https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz
-# RUN tar xJf Python-3.6.10.tar.xz
-# RUN rm Python-3.6.10.tar.xz
-# WORKDIR /usr/src/Python-3.6.10/
-# RUN ./configure
-# RUN make
-# RUN make altinstall
-# WORKDIR /usr/src
-# RUN rm -rf /usr/src/Python-3.6.10/
+WORKDIR /usr/src
+RUN wget -q https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz
+RUN tar xJf Python-3.6.10.tar.xz
+RUN rm Python-3.6.10.tar.xz
+WORKDIR /usr/src/Python-3.6.10/
+RUN ./configure
+RUN make
+RUN make altinstall
+WORKDIR /usr/src
+RUN rm -rf /usr/src/Python-3.6.10/
 
 # Python 3.7
-# WORKDIR /usr/src
-# RUN wget -q https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz
-# RUN tar xJf Python-3.7.6.tar.xz
-# RUN rm Python-3.7.6.tar.xz
-# WORKDIR /usr/src/Python-3.7.6/
-# RUN ./configure
-# RUN make
-# RUN make altinstall
-# WORKDIR /usr/src/
-# RUN rm -rf /usr/src/Python-3.7.6/
+WORKDIR /usr/src
+RUN wget -q https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz
+RUN tar xJf Python-3.7.6.tar.xz
+RUN rm Python-3.7.6.tar.xz
+WORKDIR /usr/src/Python-3.7.6/
+RUN ./configure
+RUN make
+RUN make altinstall
+WORKDIR /usr/src/
+RUN rm -rf /usr/src/Python-3.7.6/
 
 # Python 3.8
 WORKDIR /usr/src
