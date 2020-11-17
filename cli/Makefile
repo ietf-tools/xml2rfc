@@ -21,7 +21,7 @@ export PYTHONHASHSEED = 0
 
 datetime_regex = [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T_ ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]
 version_regex =  [Vv]ersion [23N]\(\.[0-9N]\+\)\+\(\.dev\)\?
-date_regex = \([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\|([0-9]\([0-9]\)\? \)\?[ADFJMOS][a-u]\* [12][0-9][0-9][0-9]\)
+date_regex = \([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\|\([0-9]\([0-9]\)\? \)\?[ADFJMOS][a-u]\* [12][0-9][0-9][0-9]\)
 legacydate_regex = [ADFJMOS][a-u]* [123]*[0-9], [12][0-9][0-9][0-9]$$
 generator_regex = name="generator"
 libversion_regex = \(pyflakes\|PyYAML\|requests\|setuptools\|six\|Weasyprint\) [0-9]\+\(\.[0-9]\+\)*
