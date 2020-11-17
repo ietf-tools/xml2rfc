@@ -4677,21 +4677,26 @@ class TextWriter(BaseV3Writer):
         if not section:
             if reftext:
                 if target in self.refname_mapping:
-                    if format != 'title':
-                        if content and content != reftext:
-                            text = "%s[%s]" % (exptext, reftext)
-                        else:
-                            text = "[%s]" % reftext
-                    else:
-                        if content and content != reftext:
+                    if format == 'none':
+                        text = "%s" % exptext
+                    elif format == 'title':
+                        if content:
                             text = '%s ("%s")' % (exptext, reftext.strip('"'))
                         else:
                             text = '"%s"' % reftext.strip('"')
-                else:
-                    if content and content != reftext:
-                        text = "%s(%s)" % (exptext, reftext)
                     else:
-                        text = "%s" % (exptext or reftext)
+                        if content:
+                            text = "%s[%s]" % (exptext, reftext)
+                        else:
+                            text = "[%s]" % reftext
+                else:
+                    if format == 'none':
+                        text = "%s" % exptext
+                    else:
+                        if content:
+                            text = "%s(%s)" % (exptext, reftext)
+                        else:
+                            text = "%s" % (exptext or reftext)
             else:
                 text = exptext.strip(stripspace)
             pageno = e.get('pageno')

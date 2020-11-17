@@ -2775,23 +2775,29 @@ class HtmlWriter(BaseV3Writer):
                 hh = build.em('[', reftext, ']', classes="xref")
             else:
                 if reftext:
-                    a = build.a(reftext, href='#%s'%target, classes='xref')
-                    if target in self.refname_mapping and format != 'title':
-                        if content and clean_text(x.text) != reftext:
-                            aa = build.a(href='#%s'%target, classes='xref')
-                            self.inline_text_renderer(aa, x)
-                            aa.tail = None
-                            hh = build.span(aa, ' [', a, ']')
-                        else:
-                            hh = build.span('[', a, ']')
+                    if format == 'none':
+                        aa = build.a(href='#%s'%target, classes='xref')
+                        self.inline_text_renderer(aa, x)
+                        aa.tail = None
+                        hh = aa
                     else:
-                        if content and clean_text(x.text) != reftext:
-                            aa = build.a(href='#%s'%target, classes='xref')
-                            self.inline_text_renderer(aa, x)
-                            aa.tail = None
-                            hh = build.span(aa, ' (', a, ')')
+                        a = build.a(reftext, href='#%s'%target, classes='xref')
+                        if target in self.refname_mapping and format != 'title':
+                            if content:
+                                aa = build.a(href='#%s'%target, classes='xref')
+                                self.inline_text_renderer(aa, x)
+                                aa.tail = None
+                                hh = build.span(aa, ' [', a, ']')
+                            else:
+                                hh = build.span('[', a, ']')
                         else:
-                            hh = a
+                            if content:
+                                aa = build.a(href='#%s'%target, classes='xref')
+                                self.inline_text_renderer(aa, x)
+                                aa.tail = None
+                                hh = build.span(aa, ' (', a, ')')
+                            else:
+                                hh = a
                 else:
                     a = build.a(href='#%s'%target, classes='xref')
                     self.inline_text_renderer(a, x)
