@@ -198,6 +198,10 @@ $do svn commit $VERFILE setup.py -m "Set version info to release version $VER be
 note "\nCommitting the changelog..."
 $do svn commit changelog -m "Changelog entry for $VER"
 
+note "\nUpdating manpage and docfiles with the new versions"
+$do tox -- mantest
+$do svn commit -m "Updated manpage.txt and docfiles"
+
 note "\nVerifying there's no uncommitted changes..."
 $do svn st | grep "^[AMGRD] " && die "There seems to be uncommitted changes in this working copy"
 

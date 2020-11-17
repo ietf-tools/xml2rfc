@@ -233,6 +233,8 @@ wiptest: tests/out/elements.wip.text.test
 mantest: install cleantmp tests/out/manpage.txt.test tests/out/docfile.$(py).html.test
 	@fgrep -q '***' tests/out/manpage.txt; res="$$?"; if [ "$$res" = "1" ]; then true; else echo "Missing documentation in manpage"; exit 1; fi
 
+manupdate: yes mantest
+
 cleantmp:
 	@[ -d tmp ] || mkdir -p tmp
 	@[ -d tmp ] && rm -f tmp/*
