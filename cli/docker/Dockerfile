@@ -122,16 +122,16 @@ RUN echo "root:root" | chpasswd
 # Additional python versions.
 
 # Python 3.5
-# WORKDIR /usr/src
-# RUN wget -q https://www.python.org/ftp/python/3.5.9/Python-3.5.9.tar.xz
-# RUN tar xJf Python-3.5.9.tar.xz
-# RUN rm Python-3.5.9.tar.xz
-# WORKDIR /usr/src/Python-3.5.9/
-# RUN ./configure
-# RUN make
-# RUN make altinstall
-# WORKDIR /usr/src
-# RUN rm -rf /usr/src/Python-3.5.9/
+WORKDIR /usr/src
+RUN wget -q https://www.python.org/ftp/python/3.5.9/Python-3.5.9.tar.xz
+RUN tar xJf Python-3.5.9.tar.xz
+RUN rm Python-3.5.9.tar.xz
+WORKDIR /usr/src/Python-3.5.9/
+RUN ./configure
+RUN make
+RUN make altinstall
+WORKDIR /usr/src
+RUN rm -rf /usr/src/Python-3.5.9/
 
 # Python 3.6
 WORKDIR /usr/src
