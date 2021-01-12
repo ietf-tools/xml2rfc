@@ -97,6 +97,16 @@ class reference_printer(object):
 
         return ret
 
+    def update_cache(self, txt):
+        """ update the cache file with the new text """
+        print("updating cache", file=sys.stderr)
+        cf = self.cache_file()
+        try:
+            with open(cf, "w") as fd:
+                fd.write(txt)
+        except Exception as e:
+            print(f"{self.arg0}: Error writing to cache file {cf}: {e}", file=sys.stderr)
+
     def print_reference(self):
         """
         Check the cache for a recent file.
@@ -168,16 +178,6 @@ class doi_reference_printer(reference_printer):
             self.set_reference_info(reference_number, reference_type, f"reference.DOI_{reference_number}.{reference_type}")
             return True
         return False
-
-    def update_cache(self, txt):
-        """ update the cache fille with the new text """
-        print("updating cache", file=sys.stderr)
-        cf = self.cache_file()
-        try:
-            with open(cf, "w") as fd:
-                fd.write(txt)
-        except Exception as e:
-            print(f"{self.arg0}: Error writing to cache file {cf}: {e}", file=sys.stderr)
 
     def generate_reference(self):
         """
