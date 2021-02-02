@@ -58,10 +58,11 @@ test-install: all
 	done
 
 test: index.cgi
-	./nph-index.cgi reference-IANA.ancp.xml
-	./nph-index.cgi reference-IANA.application/samlassertion.xml
-	./nph-index.cgi reference-IANA.application.samlassertion.xml
-	./nph-index.cgi reference-IANA.cbor-tag.xml
+	PATH_INFO=/reference-IANA.ancp.xml ./nph-index.cgi
+	PATH_INFO=/reference-IANA.application/samlassertion.xml ./nph-index.cgi
+	PATH_INFO=/reference-IANA.application.samlassertion.xml ./nph-index.cgi
+	PATH_INFO=/reference-IANA.cbor-tags.xml ./nph-index.cgi
+	PATH_INFO=/reference.IANA.service-names-port-numbers.xml ./nph-index.cgi
 
 clean:
 	rm -f *~ $(DERIVATIVES)

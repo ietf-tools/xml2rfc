@@ -26,7 +26,7 @@ class reference_printer(object):
     Deal with a reference and its cached file.
     """
 
-    def __init__(self, arg0, cachedir, identifier, replacement_anchor):
+    def __init__(self, arg0, cachedir, identifier, replacement_anchor, notfound_message):
         """
         Create a cacheable reference
         """
@@ -35,6 +35,7 @@ class reference_printer(object):
         self.identifier = identifier
         self.replacement_anchor = self.munge_anchor(replacement_anchor)
         self.nph = arg0.endswith("/nph-index.cgi") or arg0 == "nph-index.cgi"
+        self.notfound_message = notfound_message
 
     def munge_anchor(self, anchor):
         """ Make sure that an anchor is "safe" by changing to uppercase and remove non-[A-Z0-9_-]. """
@@ -65,7 +66,7 @@ class reference_printer(object):
             print("HTTP/1.0 404 NOT FOUND")
         print("Content-type: text/plain")
         print("")
-        print(f"invalid {self.identifier} or type")
+        print(self.notfound_message)
 
     def print_text(self, txt):
         """ Print the reference text. """
@@ -155,7 +156,7 @@ class doi_reference_printer(reference_printer):
 
     def __init__(self, arg0, reference, replacement_anchor):
         self.reference = reference
-        super().__init__(arg0, "/var/cache/bibxml-doi", "DOI", replacement_anchor)
+        super().__init__(arg0, "/var/cache/bibxml-doi", "DOI", replacement_anchor, "invalid DOI or extension (Is the extension .xml or .kramdown?)")
 
     def extract_reference_info(self):
         """

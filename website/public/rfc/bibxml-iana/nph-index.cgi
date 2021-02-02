@@ -11,7 +11,7 @@ This program generated IANA references in bibxml format. It uses iana.org to do 
 e.g. http://xml2rfc.ietf.org/public/rfc/bibxml-iana/reference.IANA.service-names-port-numbers.xml
 
 http://xml2rfc.ietf.org/public/rfc/bibxml-iana/reference.IANA.$iana.xml
-http://xml2rfc.ietf.org/public/rfc/bibxml-iana/reference.IANA.$iana.kramdown
+TODO: http://xml2rfc.ietf.org/public/rfc/bibxml-iana/reference.IANA.$iana.kramdown
 """
 
 import sys
@@ -60,13 +60,13 @@ class reference_printer(object):
             return ret
         return None
 
-    def print_not_found(self):
+    def print_not_found(self, error_message):
         """ print a message indicating that the reference was not found """
         if self.nph:
             print("HTTP/1.0 404 NOT FOUND")
         print("Content-type: text/plain")
         print("")
-        print(f"invalid {self.identifier} or type")
+        print(error_message)
 
     def print_text(self, txt):
         """ Print the reference text. """
@@ -117,8 +117,9 @@ class reference_printer(object):
         If no file or regeneration fails:
             print NOT FOUND
         """
-        if not self.extract_reference_info():
-            return self.print_not_found()
+        error_message = self.extract_reference_info()
+        if error_message:
+            return self.print_not_found(error_message)
 
         try:
             cf = self.cache_file()
@@ -137,7 +138,7 @@ class reference_printer(object):
             self.print_text(txt)
 
         else:
-            ntxt = self.generate_reference()
+            ntxt, error_message = self.generate_reference()
             if not ntxt and txt:
                 print("could not regenerate -- using old text", file=sys.stderr)
                 self.print_text(txt)
@@ -146,7 +147,7 @@ class reference_printer(object):
                 self.update_cache(ntxt)
                 self.print_text(ntxt)
             else:
-                self.print_not_found()
+                self.print_not_found(error_message)
 
 class iana_reference_printer(reference_printer):
     """
@@ -168,44 +169,56 @@ class iana_reference_printer(reference_printer):
             self.reference_filename
         Other values may also be extracted.
 
-        :return Return True if values could be extracted.
+        :return Return None if values could be extracted, otherwise return error_message.
         """
-        m = re.match(r'^/?reference.IANA[.]([^/]+)[.](xml|kramdown)$', self.reference)
+        # print(f"self.reference={self.reference}", file=sys.stderr)
+        # m = re.search(r'reference.IANA[.](.+)[.](xml|kramdown)$', self.reference)
+        m = re.search(r'reference.IANA[.](.+)[.](xml)$', self.reference)
         if m:
+            # print("found a match", file=sys.stderr)
             reference_number = m.group(1)
-            reference_type = m.group(2) # reference_type == "xml" or "kramdown"
+            reference_type = m.group(2) # reference_type == "xml" or TODO: "kramdown"
+            # print(f"- {reference_number} {reference_type}", file=sys.stderr)
             self.set_reference_info(reference_number, reference_type, f"reference.IANA_{reference_number}.{reference_type}")
-            return True
-        return False
+            return None
+
+        else:
+            # print("no match", file=sys.stderr)
+            if self.reference.endswith(".xml"):
+                return "does not look like an IANA reference"
+            else:
+                return "does not look like an IANA reference (no .xml extension)"
 
     def generate_reference(self):
         """
-        Generate the text for a reference, in this case by running doilit.
+        Generate the text for a reference, in this case by doing a GET from www.iana.org/assignments.
         """
-        print(f'requests.get(f"http://www.iana.org/assignments/{self.reference_number}/"', file=sys.stderr)
+        # print(f'requests.get(f"http://www.iana.org/assignments/{self.reference_number}/"', file=sys.stderr)
         resp = requests.get(f"http://www.iana.org/assignments/{self.reference_number}/")
         if resp.status_code >= 400:
-            print(f"{self.arg0}:\n{resp.content}", file=sys.stderr)
-            return None
-        
-        m = re.search(r"<title>([^<]*)</title>", resp.content)
-        if not m:
-            print(f"{self.arg0}: NO TITLE:\n{resp.content}", file=sys.stderr)
-            return None
-        
-        title = m.group(1)
-        if re.search(r"page not found", resp.content, re.IGNORE_CASE):
-            print(f"{self.arg0}: title=page not found\n{resp.content}", file=sys.stderr)
-            return None
+            print(f"{self.arg0}: www.iana.org/assignments/{self.reference_number} {resp.status_code}", file=sys.stderr)
+            # print(f"{self.arg0}: www.iana.org/assignments/{self.reference_number} {resp.status_code}\n{resp.content.decode()}", file=sys.stderr)
+            return (None, f"Page not available from IANA: status_code = {resp.status_code}")
 
-        return "\n".join([f"<reference anchor='{self.reference_number.upper()}'",
-                          f" target='http://www.iana.org/assignments/{self.reference_number}'>\n",
-                          "<front>\n",
-                          f"<title>{title}</title>\n",
-                          "<author><organization>IANA</organization></author>\n",
-                          "<date/>\n",
-                          "</front>\n",
-                          "</reference>\n"])
+        text = resp.content.decode()
+        m = re.search(r"<title>([^<]*)</title>", text)
+        if not m:
+            print(f"{self.arg0}: NO TITLE:\n{text}", file=sys.stderr)
+            return (None, "No title found in IANA response")
+
+        title = m.group(1)
+        if re.search(r"page not found", text, re.IGNORECASE):
+            print(f"{self.arg0}: title=page not found\n{text}", file=sys.stderr)
+            return (None, "IANA returned 'page not found'")
+
+        return ("\n".join([f"<reference anchor='{self.reference_number.upper()}'",
+                           f" target='http://www.iana.org/assignments/{self.reference_number}'>",
+                           "<front>",
+                           f"<title>{title}</title>",
+                           "<author><organization>IANA</organization></author>",
+                           "<date/>",
+                           "</front>",
+                           "</reference>"]), None)
 
 def main():
     """
@@ -224,7 +237,7 @@ def main():
     print(f"{sys.argv[0]}: cgi_anchor={cgi_anchor}", file=sys.stderr)
     print(f"{sys.argv[0]}: ref={ref}", file=sys.stderr)
 
-    rp = doi_reference_printer(sys.argv[0], ref, cgi_anchor)
+    rp = iana_reference_printer(sys.argv[0], ref, cgi_anchor)
     rp.print_reference()
 
 if __name__ == '__main__':
