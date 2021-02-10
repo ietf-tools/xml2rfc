@@ -3581,6 +3581,16 @@ class TextWriter(BaseV3Writer):
         return text
 
 
+    @staticmethod
+    def is_simple_expression(expr):
+        """Can this expression be rendered without parentheses?
+
+        Accepts a single alphanumeric string, optionally preceded by a sign character.
+        A non-integer decimal number is accepted as long as it precedes any alphabetic
+        characters.
+        """
+        return re.match(r'^[+-]?\d*\.?[a-zA-Z0-9]*$', expr) is not None
+
     # 2.51.  <sub>
     # 
     #    Causes the text to be displayed as subscript, approximately half a
@@ -3588,7 +3598,11 @@ class TextWriter(BaseV3Writer):
     #    with other character formatting elements, and the formatting will be
     #    additive.
     def render_sub(self, e, width, **kwargs):
-        text = '_(%s)' % self.inner_text_renderer(e)
+        inner = self.inner_text_renderer(e)
+        if self.is_simple_expression(inner):
+            text = '_%s' % inner
+        else:
+            text = '_(%s)' % inner
         text += e.tail or ''
         return text
 
@@ -3600,7 +3614,11 @@ class TextWriter(BaseV3Writer):
     #    with other character formatting elements, and the formatting will be
     #    additive.
     def render_sup(self, e, width, **kwargs):
-        text = '^(%s)' % self.inner_text_renderer(e)
+        inner = self.inner_text_renderer(e)
+        if self.is_simple_expression(inner):
+            text = '^%s' % inner
+        else:
+            text = '^(%s)' % inner
         text += e.tail or ''
         return text
 
