@@ -3583,13 +3583,51 @@ class TextWriter(BaseV3Writer):
 
     @staticmethod
     def is_simple_expression(expr):
-        """Can this expression be rendered without parentheses?
+        """Can this expression be rendered without adding parentheses?
 
-        Accepts a single alphanumeric string, optionally preceded by a sign character.
-        A non-integer decimal number is accepted as long as it precedes any alphabetic
-        characters.
+        Accepts (returns True for) a single alphanumeric string with no whitespace,
+        optionally preceded by a sign character. A non-integer decimal number is
+        accepted as long as it precedes any alphabetic characters. If the expression,
+        excluding an allowed leading sign character, is surrounded by balanced parentheses,
+        True is returned regardless of the contents.
         """
-        return re.match(r'^[+-]?\d*\.?[a-zA-Z0-9]*$', expr) is not None
+        def already_parenthesized(s):
+            """Is the string enclosed in parentheses?
+
+            Only considers parentheses, not other brackets. Good enough to avoid
+            pointlessly doubling the parentheses, not to decide that the expression
+            makes mathematical sense.
+            """
+            if not (len(s) >= 2 and s[0] == '(' and s[-1] == ')'):
+                return False
+            count = 0
+            for c in s[1:-1]:
+                count += 1 if c == '(' else -1 if c == ')' else 0
+                if count < 0:
+                    return False
+            return count == 0
+
+        # Leading sign is allowed, so ignore it for further tests. Accept unicode
+        # sign chars '\u2212' (negative sign), '\u00b1' (plus/minus), '\u2213' (minus/plus),
+        # '\ufe63' (small minus),'\uff0b' (full-width plus), '\uff0d' (full-width minus)
+        if len(expr) > 0 and expr[0] in '+-\u2212\u00b1\u2213\ufe63\uff0b\uff0d':
+            expr = expr[1:]
+
+        # Empty or all-whitespace after removing sign must have parentheses for clarity
+        if len(expr) == 0:
+            return False
+
+        # Avoid (( )) if the entire expression is already in balanced parentheses
+        if already_parenthesized(expr):
+            return True
+
+        # Underscore is a `\w` character, so explicitly reject it
+        if '_' in expr:
+            return False
+
+        # Regex accepts number (with or without decimal point) followed by mixed word characters.
+        # Assumes already removed sign and checked for empty string.
+        return re.match(r'^(?:\d+(?:\.\d+)?)?\w*$', expr) is not None
 
     # 2.51.  <sub>
     # 
