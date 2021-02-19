@@ -1555,6 +1555,8 @@ class PrepToolWriter(BaseV3Writer):
                     self.err(t, '%s' % exc)
             elif t.tag in ['author', 'contact']:
                 content = full_author_name_expansion(t)
+            elif t.tag in ['cref']:
+                content = "Comment %s" % target
             else:
                 type, num = split_pn(t, pn)
                 if num.startswith('appendix'):
