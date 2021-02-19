@@ -66,11 +66,12 @@ def maybefloat(f):
     except (ValueError, TypeError):
         return None
 
-def wrap_ascii(tag, conj, name, ascii, role='', classes=None):
+def wrap_ascii(tag, name, ascii, role='', classes=None):
+    """Build a tag containing a name optionally formatted to show its ascii representation"""
     role = ('','') if role in ['',None] else (', ', role)
     if ascii:
         e = build(tag,
-                build.span(conj, name, classes='non-ascii'),
+                build.span(name, classes='non-ascii'),
                 ' (',
                 build.span(ascii, classes='ascii'),
                 ')',
@@ -78,7 +79,7 @@ def wrap_ascii(tag, conj, name, ascii, role='', classes=None):
                 classes=classes
             )
     else:
-        e = build(tag, conj, name, *role, classes=classes)
+        e = build(tag, name, *role, classes=classes)
     return e
 
 class ClassElementMaker(ElementMaker):
@@ -1036,18 +1037,18 @@ class HtmlWriter(BaseV3Writer):
             if role:
                 role = build.span(role, classes=x.get('role'))
             if name:
-                div.append(wrap_ascii('div', '', name, ascii, role, classes='author-name'))
+                div.append(wrap_ascii('div', name, ascii, role, classes='author-name'))
             o = x.find('organization')
             if o != None and o.get('showOnFrontPage') == 'true':
                 org, ascii  = short_org_name_set(x)
                 if org:
-                    div.append(wrap_ascii('div', '', org, ascii, None, classes='org'))
+                    div.append(wrap_ascii('div', org, ascii, None, classes='org'))
             return div
 
     # New handling for inline <contact>
         elif p.tag == 't':
             name, ascii = full_author_name_set(x)
-            span = wrap_ascii('span', '', name, ascii, '', classes='contact-name')
+            span = wrap_ascii('span', name, ascii, '', classes='contact-name')
             span.tail = x.tail
             h.append(span)
             return span
@@ -1143,27 +1144,55 @@ class HtmlWriter(BaseV3Writer):
     #    <span class="refAuthor">N. Brownlee</span>
         elif self.part == 'references':
             prev  = x.getprevious()
-            prev_name = ref_author_name_first(prev)[0] if prev.tag == 'author' else ''
-            next  = x.getnext()
-            role = short_author_role(x)
-            if   prev == None or prev.tag != 'author' or prev_name == '':
-                # single autor or the first author in a list
-                name, ascii = ref_author_name_first(x)
-                span = wrap_ascii('span', '', name, ascii, role, classes='refAuthor')
-            elif prev != None and prev.tag == 'author' and prev_name and next != None and next.tag == 'author':
-                # not first and not last author in a list
-                name, ascii = ref_author_name_first(x)
-                span = wrap_ascii('span', ', ', name, ascii, role, classes='refAuthor')
-            elif prev != None and prev.tag == 'author' and prev_name and prev.getprevious() != None and prev.getprevious().tag == 'author':
-                # last author in a list of authors
-                name, ascii = ref_author_name_last(x)
-                span = wrap_ascii('span', ', and ', name, ascii, role, classes='refAuthor')
-            elif prev != None and prev.tag == 'author' and prev_name:
-                # second author of two
-                name, ascii = ref_author_name_last(x)
-                span = wrap_ascii('span', ' and ', name, ascii, role, classes='refAuthor')
+            if prev.tag == 'author':
+                prev_name = ref_author_name_first(prev)[0]
             else:
-                self.err(x, "Internal error, unexpected state when rendering authors.")
+                prev = None
+                prev_name = ''
+
+            next  = x.getnext()
+            if next is not None and next.tag == 'author':
+                after_next = next.getnext()
+                if after_next.tag != 'author':
+                    after_next = None
+            else:
+                next = None
+                after_next = None
+
+            role = short_author_role(x)
+
+            # I do not know why "prev_name == ''" is a condition only for prev, but keeping behavior
+            is_first = (prev is None) or (prev_name == '')
+            is_last = next is None
+            is_second_to_last = (not is_last) and (after_next is None)
+
+            # Choose name format.
+            if is_last and not is_first:
+                # This is the last author in a list. Use the "last author" name format.
+                name, ascii = ref_author_name_last(x)
+            else:
+                # All other cases use the "first author" name format.
+                name, ascii = ref_author_name_first(x)
+            # Get a span Element.
+            span = wrap_ascii('span', name, ascii, role, classes='refAuthor')
+
+            # Now determine whether the span should be trailed by a conjunction.
+            tail = span.tail or ''
+            if not is_last:
+                # This is not the last author in the list. A conjunction may be needed.
+                if not is_second_to_last:
+                    # This is not last and not second-to-last, so insert a comma.
+                    tail += ', '
+                else:
+                    # This is the second-to-last author, so 'and' is needed. May also need a comma.
+                    if is_first:
+                        # Both first and second-to-last means only two authors. No comma needed.
+                        tail += ' and '
+                    else:
+                        # There must be at least 3 authors, so include a comma.
+                        tail += ', and '
+            span.tail = tail
+
             if ''.join(span.itertext()).strip():
                 h.append(span)
             return span
@@ -2560,7 +2589,7 @@ class HtmlWriter(BaseV3Writer):
         #
         if self.part == 'references':
             if title:
-                span = wrap_ascii('span', '', clean_text(title), ascii, '', classes='refTitle')
+                span = wrap_ascii('span', clean_text(title), ascii, '', classes='refTitle')
                 h.append(span)
                 return span
         else:
