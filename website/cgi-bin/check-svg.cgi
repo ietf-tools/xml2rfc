@@ -88,7 +88,7 @@ if ($dir =~ /\/cgi-bin$/) {
 my $tmpdir = dirname($inputfn);
 
 # set environment
-$ENV{PATH} = "/usr/bin:/bin";
+$ENV{PATH} = "/usr/bin:/bin:/usr/local/bin";
 $ENV{DOCUMENT_ROOT} = 'web' if !defined($ENV{DOCUMENT_ROOT});
 $ENV{SERVER_ADMIN} = 'tony@att.com';
 # $ENV{HOME} = "/var/tmp";
@@ -188,7 +188,8 @@ exit;
 sub callCheckSvg {
     my $suffix = shift;
     my $tmpout = getTempFileWithSuffix($suffix);
-    my ($ret, $out, $err) = runCommand("etc/check-svg.py -o $tmpout $curfile", $curfile, $tmpout, "Running check-svg");
+    my ($ret, $out, $err) = runCommand("/usr/local/bin/svgcheck -o $tmpout $curfile", $curfile, $tmpout, "Running check-svg");
+    # my ($ret, $out, $err) = runCommand("cp $curfile /tmp/test.svg; etc/check-svg.py -o $tmpout $curfile", $curfile, $tmpout, "Running check-svg");
     $curfile = $tmpout;
     print "check-svg ret=$ret\n" if $debug;
     print "out='$out'\n" if $debug;

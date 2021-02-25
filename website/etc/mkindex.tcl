@@ -146,14 +146,14 @@ foreach file [lsort -dictionary \
         set data [read [set xd [open $file { RDONLY }]]]
         close $xd
     } result]} {
-        puts stderr "$file: $result"
+        puts stderr "$file: reading: $result"
         catch { close $xd }
         continue
     }
 
     set depthX 0
     if {[catch { $parserX parse $data } result]} {
-        puts stderr "$file: $result"
+        puts stderr "$file: parsing: $result"
         continue
     }
     incr filesN

@@ -5,6 +5,8 @@
 ulimit -t 120
 umask 0
 
+export LC_ALL=en_GB.UTF-8
+
 XMLRESOURCE=/home/www/tools.ietf.org/tools/xml2rfc
 
 
@@ -17,4 +19,4 @@ done
 # exec 2>&1
 
 echo Using XML_LIBRARY=$XML_LIBRARY
-/usr/local/bin/xml2rfc --verbose --cache=/tmp "$@"
+/usr/local/bin/xml2rfc --cache=/tmp "$@"
