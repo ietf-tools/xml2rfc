@@ -188,7 +188,7 @@ exit;
 sub callCheckSvg {
     my $suffix = shift;
     my $tmpout = getTempFileWithSuffix($suffix);
-    my ($ret, $out, $err) = runCommand("/usr/local/bin/svgcheck -o $tmpout $curfile", $curfile, $tmpout, "Running check-svg");
+    my ($ret, $out, $err) = runCommand("/usr/local/bin/svgcheck --repair --cache=/tmp/svgcheck -o $tmpout $curfile", $curfile, $tmpout, "Running check-svg");
     # my ($ret, $out, $err) = runCommand("cp $curfile /tmp/test.svg; etc/check-svg.py -o $tmpout $curfile", $curfile, $tmpout, "Running check-svg");
     $curfile = $tmpout;
     print "check-svg ret=$ret\n" if $debug;
