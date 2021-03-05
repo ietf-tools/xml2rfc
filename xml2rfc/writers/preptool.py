@@ -1555,6 +1555,8 @@ class PrepToolWriter(BaseV3Writer):
                     self.err(t, '%s' % exc)
             elif t.tag in ['author', 'contact']:
                 content = full_author_name_expansion(t)
+            elif t.tag in ['abstract']:
+                content = t.tag.capitalize()
             else:
                 type, num = split_pn(t, pn)
                 if num.startswith('appendix'):
@@ -1573,6 +1575,8 @@ class PrepToolWriter(BaseV3Writer):
                 if title is None:
                     self.err(t, "Expected a <title> element when processing <xref> to <%s>, but found none" % (t.tag, ))
                 content = clean_text(title.text)
+            elif t.tag in ['abstract']:
+                content = t.tag.capitalize()
             elif t.tag == 'name' or t.find('./name') != None:
                 name = t if t.tag == 'name' else t.find('./name')
                 content = clean_text(''.join(list(name.itertext())))
