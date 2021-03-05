@@ -4028,7 +4028,6 @@ class TextWriter(BaseV3Writer):
                 k, l = cells[-1][j].origin
                 if not cells[k][l].bot:
                     cells[k][l].bot = bchar['=']
-            del k, l
         #show(cells, 'origin')
 
         # ----------------------------------------------------------------------
