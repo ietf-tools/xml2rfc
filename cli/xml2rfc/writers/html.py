@@ -356,8 +356,14 @@ class HtmlWriter(BaseV3Writer):
     def null_renderer(self, h, x):
         return None
 
+    def contains_pilcrow_in_sub_element(self, e):
+        return( len(e.xpath('.//*[@class="pilcrow"]')) > 0 )
+
+    def part_of_table_of_contents(self, e):
+        return( len(e.xpath('ancestor::*[contains(@class, "toc")]')) > 0 )
+    
     def maybe_add_pilcrow(self, e, first=False):
-        if len(e.xpath('.//*[@class="pilcrow"]')) == 0:
+        if not self.contains_pilcrow_in_sub_element(e) and not self.part_of_table_of_contents(e):
             id = e.get('id')
             if id:
                 if len(e):
