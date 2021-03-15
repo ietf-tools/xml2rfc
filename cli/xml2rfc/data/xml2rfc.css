@@ -1124,3 +1124,11 @@ dd > ul:first-child {
 dt+dd:empty::before{
   content: "\00a0";
 }
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type {
+  margin-bottom: 0;
+}
