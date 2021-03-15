@@ -298,10 +298,10 @@ def main():
                            help='use the characters given as list bullet symbols')
     textoptions.add_argument('--bom', '--BOM', action='store_true', default=False,
                            help='Add a BOM (unicode byte order mark) to the start of text files')
-    textoptions.add_argument('--pagination', dest='pagination', action='store_true', default=None,
-                            help=configargparse.SUPPRESS),
+    textoptions.add_argument('--paginate', '--pagination', dest='pagination', action='store_true', default=None,
+                            help='do pagination')
     textoptions.add_argument('-P', '--no-pagination', dest='pagination', action='store_false', default=None,
-                            help='don\'t do pagination of v3 draft text format.  V3 RFC text output is never paginated')
+                            help='don\'t do pagination of v3 draft text format')
     textoptions.add_argument('--table-hyphen-breaks', action='store_true', default=False,
                             help='More easily do line breaks after hyphens in table cells to give a more compact table')
     textoptions.add_argument('--table-borders', default='full', choices=['full', 'light', 'minimal', 'min', ],

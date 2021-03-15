@@ -314,12 +314,12 @@
                        <t>
                           {{ option.help|e|capfirst }}.
                        </t>
+                       {{ render_items(descriptions[option.option_strings[-1]]) }}
                        {% if option.has_negation %}
                        <t>
                           This option can be negated with {{ option.option_strings[-1]|replace('--', '--no-') }}.
                        </t>
                        {% endif %}
-                       {{ render_items(descriptions[option.option_strings[-1]]) }}
                     </dd>
                     {% endif %}
                   {% else %}
