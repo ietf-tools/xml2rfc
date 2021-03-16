@@ -316,7 +316,7 @@ class V2v3XmlWriter(BaseV3Writer):
             '//processing-instruction()',  # 1.3.2
             # handle mixed block/non-block content surrounding all block nodes
             './/*[self::artwork or self::dl or self::figure or self::ol or self::sourcecode or self::t or self::ul]',
-            './/*[@*="yes" or @*="no"]',      # convert old attribute false/true
+            '//*[@*="yes" or @*="no"]',      # convert old attribute false/true
             '.;pretty_print_prep()',
             '.;wrap_non_ascii()',
         ]
