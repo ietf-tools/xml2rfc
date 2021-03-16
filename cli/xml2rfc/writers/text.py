@@ -4737,9 +4737,9 @@ class TextWriter(BaseV3Writer):
                         text = "%s" % exptext
                     elif format == 'title':
                         if content:
-                            text = '%s ("%s")' % (exptext, reftext.strip('"'))
+                            text = '%s(%s)' % (exptext, reftext)
                         else:
-                            text = '"%s"' % reftext.strip('"')
+                            text = reftext
                     else:
                         if content:
                             text = "%s[%s]" % (exptext, reftext)
