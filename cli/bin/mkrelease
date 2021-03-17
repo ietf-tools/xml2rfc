@@ -136,6 +136,9 @@ elif [ "${DIR%%/*}" = "branch" ]; then
     SRC="branch/${tmp%%/*}"	# keep first subdir under branch/
 fi
 
+by=$(getent passwd $(whoami) | cut -d ':' -f 5 | tr -d ',')
+[ -z "$by" ] && die "Can't determine the real name of the user running this script"
+
 # If a project subdirectory was specified on the command line, then use it
 SRC=$SRC${WORK:+/$WORK}
 
@@ -211,11 +214,11 @@ $do rst2html changelog > /dev/null	# verify that the changelog is valid rst
 note "\nDoing the upload..."
 $do python setup.py sdist upload --sign
 
-note "\nCopying the tarfile to the web directory for xml2rfc"
-$do rsync dist/xml2rfc-$(xml2rfc --version | awk '{print $2}').tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/ || true
-
-note "\nPushing the tarfile to other tools servers"
-$do toolpush /www/tools.ietf.org/tools/xml2rfc2/cli/
+#note "\nCopying the tarfile to the web directory for xml2rfc"
+#$do rsync dist/xml2rfc-$(xml2rfc --version | awk '{print $2}').tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/ || true
+#
+#note "\nPushing the tarfile to other tools servers"
+#$do toolpush /www/tools.ietf.org/tools/xml2rfc2/cli/
 
 note "\nCreating new tag 'tags/${WORK:+$WORK/}$VER' from $SRC"
 $do svn cp $REPO/$SRC $REPO/tags/${WORK:+$WORK/}$VER -m "Creating new tag 'tags/${WORK:+$WORK/}$VER' from $SRC"
@@ -253,7 +256,7 @@ Documentation for this release is built-in, and also available at:
 
 Regards,
 
-	Henrik
+	${by}
 	(via the mkrelease script)
 " > ./mail/release-mail-v$VER.txt
 
@@ -268,6 +271,6 @@ cat ./mail/release-mail-v$VER.txt | $do mail -s "New xml2rfc release: v$VER" \
         xml2rfc@ietf.org xml2rfc-dev@ietf.org -c rfc-markdown@ietf.org
 
 #$do toolsfeed control changelog /www/tools.ietf.org/tools/atomfeed.xml
-$do toolpush /www/tools.ietf.org/tools/atomfeed.xml
-$do toolcmd sudo pip3.6 install --upgrade xml2rfc
-$do toolcmd "xml2rfc --doc --out /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc-$VER.xml; xml2rfc --text --html /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc-$VER.xml; ln -sf xml2rfc-doc-$VER.html /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc.html"
+#$do toolpush /www/tools.ietf.org/tools/atomfeed.xml
+#$do toolcmd sudo pip3.6 install --upgrade xml2rfc
+#$do toolcmd "xml2rfc --doc --out /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc-$VER.xml; xml2rfc --text --html /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc-$VER.xml; ln -sf xml2rfc-doc-$VER.html /www/tools.ietf.org/tools/xml2rfc/htdocs/xml2rfc-doc.html"
