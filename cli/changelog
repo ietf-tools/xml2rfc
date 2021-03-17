@@ -1,3 +1,53 @@
+xml2rfc (3.6.0) ietf; urgency=medium
+
+  ** Add pagination, bugfixes **
+
+  * Merged in [3899] from jennifer@painless-security.com:
+    Prevent crash when column count varies between table rows. Fixes #512.
+
+  * Merged in [3898] from jennifer@painless-security.com:
+    Cite the abstract as 'Abstract' instead of 'Appendix Abstract'. Fixes #429.
+
+  * Merged in [3893] from jennifer@painless-security.com:
+    Modify selector to include rfc element in yes/no to true/false conversion. Fixes #457.
+
+  * Merged in [3892] from jennifer@painless-security.com:
+    Move conjunctions out of author <span> elements in reference citations. Fixes #575.
+
+  * Merged in [3891] from jennifer@painless-security.com:
+    Remove quotes from <xref format='title'> in text writer. Fixes #563.
+
+  * Merged in [3890] from jennifer@painless-security.com:
+    Label xref to a cref with the anchor instead of 'Section X.Y'. Fixes #431.
+
+  * Merged in [3887] and [3889] from jennifer@painless-security.com:
+    Simplify text rendering of super/subscripts. Based on patch submitted 
+    by <martin.thomson@gmail.com> and refinement from subsequent list discussion. Fixes #590.
+
+  * moved away test targets for untested versions of python
+
+  * Merged in [3886] from mark@painless-security.com:
+    Remove pilcrows from tables of contents
+    In addition to searching list item descendants for the existence of previously-added 
+    pilcrows, the code now also searches the list item ancestors for any node that has 
+    the 'toc' class to indicate that it is part of a table of contents.  If either are 
+    found, the pilcrow is not added.
+    Fixes #568.
+
+  * Merged in [3877] and [3878] from henrik@levkowetz.com:
+    Made a --paginate/--pagination switch available, to force pagination for text output.
+
+  * Merged in [3876] from henrik@levkowetz.com:
+    Adjusted li > p margin to fit better with other list spacing, and to not let 
+    the <p> margin spill out from inside a <li>.  FIxes issue #580.
+
+  * Drop python 35 from tests
+
+  * Updated manpage.txt and docfiles
+
+ -- Robert Sparks <rjsparks@nostrum.com>  17 Mar 2021 11:15:50 +0100
+
+
 xml2rfc (3.5.0) ietf; urgency=medium
 
   * Added some missing test cache entries.
