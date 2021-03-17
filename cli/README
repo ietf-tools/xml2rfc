@@ -11,7 +11,8 @@ etc., and transforms it into suitably formatted output.  The input xml file
 should follow the grammars in RFC7749_ (for v2 documents) or RFC7991_ (for 
 v3 documents). Note that the grammar for v3 is still being refined, and 
 changes will eventually be captured in the `bis draft for 7991`_. 
-Changes not yet captured can be seen in the xml2rfc source `v3.rng`_.
+Changes not yet captured can be seen in the xml2rfc source `v3.rng`_,
+or in the `documentation xml2rfc produces`_ with its --doc flag.
 
 **xml2rfc** provides a variety of output formats. See the command line
 help for a full list of formats. It also provides conversion from v2 to
@@ -23,6 +24,7 @@ v3, and can run the preptool_ on its input.
 .. _RFC7991: https://tools.ietf.org/html/rfc7991
 .. _bis draft for 7991: https://tools.ietf.org/html/draft-iab-rfc7991bis
 .. _v3.rng: https://trac.tools.ietf.org/tools/xml2rfc/trac/browser/trunk/cli/xml2rfc/data/v3.rng
+.. _documentation xml2rfc produces: https://xml2rfc.tools.ietf.org/xml2rfc-doc.html
 .. _preptool: https://tools.ietf.org/html/rfc7998
 
 Installation
@@ -43,8 +45,6 @@ system.  See installation instructions on the WeasyPrint Docs:
 
     https://weasyprint.readthedocs.io/en/stable/install.html
 
-(Python 3 is not needed if your system Python is 2.7, though).
-
 (On some OS X systems with System Integrity Protection active, you may
 need to create a symlink from your home directory to the library installation
 directory (often /opt/local/lib):
@@ -62,9 +62,9 @@ particular, you may also need to install a newer version of setuptools
 using --user before weasyprint can be installed.  If you install with 
 the --user switch, you may need to also set PYTHONPATH, e.g.,
 
-    PYTHONPATH=/Users/henrik/Library/Python/2.7/lib/python/site-packages
+    PYTHONPATH=/Users/henrik/Library/Python/3.6/lib/python/site-packages
 
-for Python 2.7.
+for Python 3.6.
 
 The basic pip commands (modify as needed according to the text above)
 are:
