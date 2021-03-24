@@ -2046,7 +2046,7 @@ class PrepToolWriter(BaseV3Writer):
             xref.tail = '\n'+' '*16
             return xref
         def letter_li(letter, letter_entries):
-            anchor = 'rfc.index.%s' % letter
+            anchor = letter_anchor(letter)
             li = self.element('li')
             t = self.element('t', anchor=anchor)
             t.text = '\n'+' '*16
@@ -2092,6 +2092,26 @@ class PrepToolWriter(BaseV3Writer):
                 if i.anchor:
                     t.append(mkxref(self, i.sub, target=i.anchor, format='counter', derivedContent=i.sub))
             return li
+        def index_letter(entry):
+            return entry.item[0].upper()
+        def letter_anchor(letter):
+            """Get an anchor string for a letter
+
+            The anchor must be a valid XML name, restricted to US ASCII A-Z,a-z,0-9,_,-,.,:,
+            with 0-9, ., and - disallowed for leading characters. To guarantee this, even for
+            non-alphanumeric "letters," the letter character is encoded to UTF8 bytes and
+            its decimal representation is used in the anchor string.
+            """
+            return 'rfc.index.u{}'.format(int.from_bytes(letter.encode(), byteorder='big'))
+        def index_sort(letters):
+            """Sort letters for the index
+
+            Sorts symbols ahead of alphanumerics to keep ASCII symbols together.
+            """
+            return sorted(
+                letters,
+                key=lambda letter: (letter.isalnum(), letter)
+            )
         if self.index_entries and self.root.get('indexInclude') == 'true':
             index = self.element('section', numbered='false', toc='exclude')
             name = self.element('name')
@@ -2105,16 +2125,16 @@ class PrepToolWriter(BaseV3Writer):
             # sort the index entries
             self.index_entries.sort(key=lambda i: '%s~%s' % (i.item, i.sub or ''))
             # get the first letters
-            letters = uniq([ i.item[0].upper() for i in self.index_entries ])
+            letters = index_sort(uniq([ index_letter(i) for i in self.index_entries ]))
             # set up the index index
             for letter in letters:
-                xref = mkxref(self, letter, target='rfc.index.%s'%letter, format='none', derivedContent=letter)
+                xref = mkxref(self, letter, target=letter_anchor(letter), format='none', derivedContent=letter)
                 index_index.append(xref)
             # one letter entry per letter
             index_ul = self.element('ul', empty='true', spacing='compact', bare="true")
             index.append(index_ul)
             for letter in letters:
-                letter_entries = [ i for i in self.index_entries if i.item.upper().startswith(letter) ]
+                letter_entries = [ i for i in self.index_entries if index_letter(i) == letter ]
                 index_ul.append(letter_li(letter, letter_entries))
             #
             e.append(index)
