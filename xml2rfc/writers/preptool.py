@@ -170,9 +170,8 @@ class PrepToolWriter(BaseV3Writer):
         if self.errors:
             raise RfcWriterError("Not creating output file due to errors (see above)")
 
-        # remove the index, which should not be part of the prepped output
+        # remove the processing instructions
         self.remove_pis()
-        self.remove_index()
 
         # Use lxml's built-in serialization
         file = open(filename, 'w', encoding='utf-8')
@@ -2113,7 +2112,7 @@ class PrepToolWriter(BaseV3Writer):
                 key=lambda letter: (letter.isalnum(), letter)
             )
         if self.index_entries and self.root.get('indexInclude') == 'true':
-            index = self.element('section', numbered='false', toc='exclude')
+            index = self.element('section', numbered='false', toc='include')
             name = self.element('name')
             name.text = 'Index'
             index.append(name)
@@ -2297,11 +2296,3 @@ class PrepToolWriter(BaseV3Writer):
         self.keep_pis = []
         for i in self.root.xpath('.//processing-instruction()'):
             self.processing_instruction_removal(i, i.getparent())
-
-    def remove_index(self):
-        index_index = self.root.find('./back/section/t[@anchor="rfc.index.index"]')
-        if index_index != None:
-            index = index_index.getparent()
-            assert index.tag == 'section'
-            self.remove(index.getparent(), index)
-        

@@ -114,14 +114,6 @@ tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $(basename $@).text --text --no-pagination --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (3)"; exit 1; }
 
-# These contains index sections, which renders with different whitespace from
-# prepped source than directly.  Don't compare html from prepped with master
-# for these:
-tests/out/draft-miek-test.prepped.xml: tests/input/draft-miek-test.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $@ --prep $<"
-tests/out/draft-v3-features.prepped.xml: tests/input/draft-v3-features.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache tests/cache --no-network --out $@ --prep $<"
-
 tests/out/docfile.xml:
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --doc --out $@"
 
