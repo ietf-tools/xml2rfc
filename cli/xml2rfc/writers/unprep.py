@@ -117,7 +117,7 @@ class UnPrepWriter(BaseV3Writer):
         './/*;remove_attribute_defaults()',
         './/*[@pn]',
         './/xref',
-        './back/section/t[@anchor="rfc.index.index"]',
+        './back/section/t[@anchor="rfc.index.index"]/..',  # remove entire index section
         './back/section[@anchor="authors-addresses"]',
         './/section[@toc]',
         './/*[@removeInRFC="true"]',
