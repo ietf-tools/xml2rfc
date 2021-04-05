@@ -77,7 +77,7 @@ pytests:
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
 	for type in .raw.txt .txt .nroff .html .exp.xml .v2v3.xml .prepped.xml ; do					\
-	  diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
+	  diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(date_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for tmp/$$doc$$type output (1)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 0 -o "$$REPLY" = "y" ]; then cp -v tmp/$$doc$$type tests/valid/; else exit 1; fi; } \
 	done ; if [ $$type = ascii ]; then echo "Diff nroff output with xml2rfc output:";\
 	diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(date_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }; fi
 
@@ -162,7 +162,7 @@ tests/out/%.exp.xml: tests/input/%.xml install
 
 %.test: %
 	@echo " Diffing $< against master"
-	@diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 128 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
+	@diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 0 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.min.js: %.js
 	bin/uglifycall $<
