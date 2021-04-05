@@ -12,7 +12,7 @@ import traceback as tb
 import unicodedata
 
 from codecs import open
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 from contextlib import closing
 
 try:
@@ -205,7 +205,7 @@ class PrepToolWriter(BaseV3Writer):
         self.refname_mapping = self.get_refname_mapping()
         self.remove_dtd()
         tree = self.dispatch(self.selectors)
-        log.note(" Completed preptool run")        
+        log.note(" Completed preptool run")
         return tree
         
     ## Selector notation: Some selectors below have a handler annotation,
@@ -220,7 +220,7 @@ class PrepToolWriter(BaseV3Writer):
         '//processing-instruction();removal()',       # 5.1.3.  Processing Instruction Removal
         '.;validate_before()',              # 5.1.4.  Validity Check
         '/rfc;check_attribute_values()',
-        '.;check_attribute_values()',       # 
+        '.;check_attribute_values()',       #
         '.;check_ascii_text()',
         '.;normalize_text_items()',
         './/bcp14;check_key_words()',
@@ -234,7 +234,7 @@ class PrepToolWriter(BaseV3Writer):
         './/relref;to_xref()',
         './/section',                       # 5.2.7.  Section "toc" attribute
         './/note[@removeInRFC="true"]',     # 5.2.8.  "removeInRFC" Warning Paragraph
-        './/section[@removeInRFC="true"]',     
+        './/section[@removeInRFC="true"]',
         '//*[@*="yes" or @*="no"]',         #         convert old attribute false/true
         './front/date',                     # 5.3.1.  "month" Attribute
         './/*[@ascii]',                     # 5.3.2.  ASCII Attribute Processing
@@ -270,14 +270,14 @@ class PrepToolWriter(BaseV3Writer):
         './/iref;add_number()',             # 5.4.7.  <iref> Numbering
         './/u;add_number()',
         './/ol;add_counter()',
-        './/xref',                          # 5.4.8.  <xref> Processing
-        # Relref processing be handled under .//xref:
-                                            # 5.4.9.  <relref> Processing
         './/artset',                        #         <artwork> Processing
         './/artwork',                       # 5.5.1.  <artwork> Processing
         './/sourcecode',                    # 5.5.2.  <sourcecode> Processing
         #
         './back;insert_index()',
+        './/xref',                          # 5.4.8.  <xref> Processing
+        # Relref processing be handled under .//xref:
+                                            # 5.4.9.  <relref> Processing
         './back;insert_author_address()',
         './/toc;insert_table_of_contents()',
         './/*[@removeInRFC="true"]',        # 5.6.1.  <note> Removal
@@ -2038,61 +2038,128 @@ class PrepToolWriter(BaseV3Writer):
         if oldix != None:
             self.warn(e, "Found an existing Index section, not inserting another one")
             return
+
+        # Helper methods
         def mkxref(self, text, **kwargs):
             kwargs = sdict(kwargs)
             xref = self.element('xref', **kwargs)
-            xref.text = text
-            xref.tail = '\n'+' '*16
+            if text:
+                xref.text = text
             return xref
+
+        def bin_item_entries(item_entries, bin_by='item'):
+            """Bin together item entries with like attributes
+
+            Returns a dict whose keys are items and values are an ordered list of entries.
+            Items with no value for the attr will appear with '' as the key.
+            """
+            binned = defaultdict(lambda: [])  # missing values initialized to empty lists
+            for entry in item_entries:
+                binned[getattr(entry, bin_by) or ''].append(entry)
+            return binned
+
         def letter_li(letter, letter_entries):
+            """Generate <li> element for a letter's entries
+
+            <li>
+              <t><xref>A</xref></t>
+              <ul><li>
+                <dl>
+                  <dt>item 1</dt><dd>[references]</dd>
+                  <dt/><dd> [only if there are subitems]
+                    [contents from sub_dl()]
+                  </dd>
+                  <dt>item 2</dt><dd>[references]</dd>
+                  [...]
+                </dl>
+              </li></ul>
+            </li>
+            """
+            binned_entries = bin_item_entries(letter_entries)
             anchor = letter_anchor(letter)
             li = self.element('li')
-            t = self.element('t', anchor=anchor)
-            t.text = '\n'+' '*16
-            xref = mkxref(self, letter, target=anchor, format='none', derivedContent=letter)
+            t = self.element('t', anchor=anchor, keepWithNext='true')
+            t.text = '\n' + ' ' * 12
+            xref = mkxref(self, letter, target=anchor, format='none')
+            xref.tail = (xref.tail or '') + '\n'
             t.append(xref)
             li.append(t)
             #
-            ul = self.element('ul', empty='true', spacing='compact', bare="true")
+            ul = self.element('ul', empty='true', spacing='compact')
             li.append(ul)
-            items = [ i.item for i in letter_entries ]
-            for item in items:
-                item_entries = [ i for i in letter_entries if i.item==item ]
-                ul.append(item_li(item, item_entries))
+            li2 = self.element('li')
+            ul.append(li2)
+            dl = self.element('dl', spacing='compact')
+            li2.append(dl)
+            # sort entries - py36 does not guarantee order and later versions use LIFO order
+            for item in sorted(binned_entries):
+                regular_entries = []
+                sub_entries = []
+                for i in binned_entries[item]:
+                    if i.sub is None:
+                        regular_entries.append(i)
+                    else:
+                        sub_entries.append(i)
+                # first add the item heading and any regular entries
+                for elt in entry_dt_dd(item, regular_entries, 18):
+                    dl.append(elt)
+                # now add any sub-entries
+                if len(sub_entries) > 0:
+                    dl.append(self.element('dt'))
+                    sub_dd = self.element('dd')
+                    dl.append(sub_dd)
+                    sub_dd.append(sub_dl(sub_entries))
             return li
-        def item_li(item, item_entries):
-            li = self.element('li')
-            t = self.element('t')
-            t.text = item
-            li.append(t)
-            t = self.element('t')
-            t.text = '\n'+' '*16
-            li.append(t)
-            for i in item_entries:
-                if i.anchor:
-                    xref = mkxref(self, i.item, target=i.anchor, format='none', derivedContent=i.item)
-                    t.append(xref)
-            subs = [ i.sub for i in item_entries if i.sub ]
-            if subs:
-                ul = self.element('ul', empty='true', spacing='compact', bare="true")
-                li.append(ul)
-                for sub in subs:
-                    sub_entries = [ i for i in item_entries if i.sub==sub ]
-                    ul.append(sub_li(item, sub, sub_entries))
-            return li
-        def sub_li(item, sub, sub_entries):
-            li = self.element('li')
-            t = self.element('t')
-            t.text = sub
-            li.append(t)
-            t = self.element('t')
-            t.text = '\n'+' '*16
-            for i in sub_entries:
-                if i.anchor:
-                    t.append(mkxref(self, i.sub, target=i.anchor, format='counter', derivedContent=i.sub))
-            return li
+
+        def sub_dl(sub_elements):
+            """Generate <dl> for a subitem entry
+
+            <dl>
+              <dt>subitem 1</dt>
+              <dd>[references]</dd>
+              [...]
+            </dl>
+            """
+            binned_subs = bin_item_entries(sub_elements, bin_by='sub')
+            sub_dl = self.element('dl', spacing='compact')
+            for sub in sorted(binned_subs):
+                entries = binned_subs[sub]
+                for elt in entry_dt_dd(sub, entries, 22):
+                    sub_dl.append(elt)
+            return sub_dl
+
+        def entry_dt_dd(label, entries, indent):
+            """Definition list <dt>/<dd> pair for either a list item or subitem
+
+            <dt>item</dt>
+            and
+            <dd>
+              <t>
+                <xref target="first entry"/>
+                <xref target="second entry"/>
+                [...]
+              </t>
+            </dd>
+            """
+            dt = self.element('dt')
+            dt.text = label
+            dd = self.element('dd')
+            if len(entries) > 0:
+                t = self.element('t')
+                t.text = '\n' + ' ' * (indent + 2)
+                dd.append(t)
+                anchored_entries = [e for e in entries if e.anchor]
+                for index, ent in enumerate(anchored_entries):
+                    xr = mkxref(self, text=None, target=ent.anchor, format='counter')
+                    t.append(xr)
+                    if index < len(anchored_entries) - 1:
+                        xr.tail = ','
+                    xr.tail = (xr.tail or '') + '\n'
+            return dt, dd
+
         def index_letter(entry):
             return entry.item[0].upper()
+
         def letter_anchor(letter):
             """Get an anchor string for a letter
 
@@ -2102,6 +2169,7 @@ class PrepToolWriter(BaseV3Writer):
             its decimal representation is used in the anchor string.
             """
             return 'rfc.index.u{}'.format(int.from_bytes(letter.encode(), byteorder='big'))
+
         def index_sort(letters):
             """Sort letters for the index
 
@@ -2111,6 +2179,8 @@ class PrepToolWriter(BaseV3Writer):
                 letters,
                 key=lambda letter: (letter.isalnum(), letter)
             )
+
+        # done defining helpers, resume back_insert_index() flow
         if self.index_entries and self.root.get('indexInclude') == 'true':
             index = self.element('section', numbered='false', toc='include')
             name = self.element('name')
@@ -2127,10 +2197,11 @@ class PrepToolWriter(BaseV3Writer):
             letters = index_sort(uniq([ index_letter(i) for i in self.index_entries ]))
             # set up the index index
             for letter in letters:
-                xref = mkxref(self, letter, target=letter_anchor(letter), format='none', derivedContent=letter)
+                xref = mkxref(self, letter, target=letter_anchor(letter), format='none')
+                xref.tail = '\n'
                 index_index.append(xref)
             # one letter entry per letter
-            index_ul = self.element('ul', empty='true', spacing='compact', bare="true")
+            index_ul = self.element('ul', empty='true', spacing='normal')
             index.append(index_ul)
             for letter in letters:
                 letter_entries = [ i for i in self.index_entries if index_letter(i) == letter ]
