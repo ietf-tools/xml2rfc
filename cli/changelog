@@ -21,6 +21,11 @@ xml2rfc (3.7.0) ietf; urgency=medium
     Correctly gather irefs by item/subitem. Improve index rendering. Use
     section numbers for xref text in index. Fixes #418. Fixes #610.  
 
+  * Changed the Makefile's use of bash builtin read to only test for
+    non-zero responses, instead of looking for responses higher than 128.
+    Not all bash, and in particular not the bash available on osx, return
+    error codes higher than 1 for the read builtin.
+
  -- Robert Sparks <rjsparks@nostrum.com>  05 Apr 2021 18:53:29 +0100
 
 xml2rfc (3.6.0) ietf; urgency=medium
