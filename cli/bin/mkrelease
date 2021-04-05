@@ -89,12 +89,20 @@ if   [ "$(uname)" = "Linux" ]; then
     if [ $? != 0 ] ; then die "Terminating..." >&2 ; exit 1 ; fi
     eval set -- "$args"
     sed="sed -r"
+    by=$(getent passwd $(whoami) | cut -d ':' -f 5 | tr -d ',')
+elif [ "$(uname)" = "Darwin" ]; then
+    args=$(getopt -o "$shortopts" --long "$longopts" -n '$program' -- $SV "$@")
+    if [ $? != 0 ] ; then die "Terminating..." >&2 ; exit 1 ; fi
+    eval set -- "$args"
+    sed="sed -E"
+    by=$(id -F)
 else
-    # Darwin, BSDs
+    # BSDs
     args=$(getopt -o$shortopts $SV $*)
     if [ $? != 0 ] ; then die "Terminating..." >&2 ; exit 1 ; fi
     set -- $args
     sed="sed -E"
+    by=$(getent passwd $(whoami) | cut -d ':' -f 5 | tr -d ',')
 fi
 
 while true ; do
@@ -109,6 +117,7 @@ while true ; do
     esac
     shift
 done
+
 
 # ----------------------------------------------------------------------
 # The program itself
@@ -136,7 +145,6 @@ elif [ "${DIR%%/*}" = "branch" ]; then
     SRC="branch/${tmp%%/*}"	# keep first subdir under branch/
 fi
 
-by=$(getent passwd $(whoami) | cut -d ':' -f 5 | tr -d ',')
 [ -z "$by" ] && die "Can't determine the real name of the user running this script"
 
 # If a project subdirectory was specified on the command line, then use it
@@ -212,7 +220,11 @@ note "\nChecking that the changelog is valid rst ..."
 $do rst2html changelog > /dev/null	# verify that the changelog is valid rst
 
 note "\nDoing the upload..."
-$do python setup.py sdist upload --sign
+if [ -n "${XML2RFC_SIGNING_IDENTITY}" ]; then
+    $do python setup.py sdist upload --sign --identity="${XML2RFC_SIGNING_IDENTITY}"
+else
+    $do python setup.py sdist upload --sign
+fi
 
 #note "\nCopying the tarfile to the web directory for xml2rfc"
 #$do rsync dist/xml2rfc-$(xml2rfc --version | awk '{print $2}').tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/ || true
@@ -262,7 +274,7 @@ Regards,
 
 note "\nSend mail to interested parties"
 cat ./mail/release-mail-v$VER.txt | $do mail -s "New xml2rfc release: v$VER" \
-        -c henrik@levkowetz.com -c glen@amsl.com -c rjs@nostrum.com -c jay@ietf.org \
+        -c henrik@levkowetz.com -c glen@amsl.com -c rjsparks@nostrum.com -c jay@ietf.org \
         -c housley@vigilsec.com -c arusso@amsl.com -c priyanka@amsl.com -c johnl@taugh.com \
         -c sginoza@amsl.com -c mferguson@amsl.com -c kmoreland@amsl.com -c maddy@amsl.com \
         $contributors rse@rfc-editor.org
