@@ -57,12 +57,18 @@ test-install: all
 	    fi; \
 	done
 
-test: index.cgi
+test: index.cgi test-xml-returns test-text-returns
+
+test-xml-returns:
 	PATH_INFO=/reference-IANA.ancp.xml ./nph-index.cgi
 	PATH_INFO=/reference-IANA.application/samlassertion.xml ./nph-index.cgi
 	PATH_INFO=/reference-IANA.application.samlassertion.xml ./nph-index.cgi
 	PATH_INFO=/reference-IANA.cbor-tags.xml ./nph-index.cgi
 	PATH_INFO=/reference.IANA.service-names-port-numbers.xml ./nph-index.cgi
+test-text-returns:
+	CACHEDIR=/tmp PATH_INFO=/reference.IANA.enterprise-numbers.xml ./nph-index.cgi
+	CACHEDIR=/tmp PATH_INFO=/reference.IANA.language-subtag-registry.xml ./nph-index.cgi
+	CACHEDIR=/tmp PATH_INFO=/reference.IANA.language-tag-extensions-registry.xml ./nph-index.cgi
 
 clean:
 	rm -f *~ $(DERIVATIVES)

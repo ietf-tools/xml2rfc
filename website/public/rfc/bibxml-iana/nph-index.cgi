@@ -100,7 +100,7 @@ class reference_printer(object):
 
     def update_cache(self, txt):
         """ update the cache file with the new text """
-        print("updating cache", file=sys.stderr)
+        # print("updating cache", file=sys.stderr)
         cf = self.cache_file()
         try:
             with open(cf, "w") as fd:
@@ -125,7 +125,7 @@ class reference_printer(object):
             cf = self.cache_file()
             statinfo = os.stat(cf)
             isrecent = self.check_isrecent(statinfo)
-            print(f"statinfo={statinfo}, isrecent={isrecent}", file=sys.stderr)
+            # print(f"statinfo={statinfo}, isrecent={isrecent}", file=sys.stderr)
             txt = self.get_file_contents(cf)
 
         except FileNotFoundError:
@@ -134,16 +134,16 @@ class reference_printer(object):
             txt = None
 
         if statinfo and isrecent and txt:
-            print("found a recent cache file", file=sys.stderr)
+            # print("found a recent cache file", file=sys.stderr)
             self.print_text(txt)
 
         else:
             ntxt, error_message = self.generate_reference()
             if not ntxt and txt:
-                print("could not regenerate -- using old text", file=sys.stderr)
+                # print("could not regenerate -- using old text", file=sys.stderr)
                 self.print_text(txt)
             elif ntxt:
-                print("have new text", file=sys.stderr)
+                # print("have new text", file=sys.stderr)
                 self.update_cache(ntxt)
                 self.print_text(ntxt)
             else:
@@ -157,7 +157,7 @@ class iana_reference_printer(reference_printer):
 
     def __init__(self, arg0, reference, replacement_anchor):
         self.reference = reference
-        super().__init__(arg0, "/var/cache/bibxml-iana", "IANA", replacement_anchor)
+        super().__init__(arg0, os.environ.get("CACHEDIR", "/var/cache/bibxml-iana"), "IANA", replacement_anchor)
 
     def extract_reference_info(self):
         """
@@ -203,21 +203,17 @@ class iana_reference_printer(reference_printer):
 
         text = resp.content.decode()
         if resp.headers["content-type"].startswith("text/plain"):
-            m = re.search(r"\s*([^\n]+)", text)
-            if m:
-                title = m.group(1).strip()
-            else:
-                return (None, f"found text/plain: with no title at {url}")
+            title = self.reference_number.replace("-"," ").title()
 
         else:
             m = re.search(r"<title>([^<]*)</title>", text)
             if not m:
-                print(f"{self.arg0}: NO TITLE:\n{text}", file=sys.stderr)
+                print(f"{self.arg0}: NO TITLE in {self.reference_number.replace}:\n{text}", file=sys.stderr)
                 return (None, "No title found in IANA response")
             title = m.group(1).strip()
 
         if re.search(r"page not found", text, re.IGNORECASE):
-            print(f"{self.arg0}: title=page not found\n{text}", file=sys.stderr)
+            print(f"{self.arg0}: title=page not found for {self.reference_number.replace}\n{text}", file=sys.stderr)
             return (None, "IANA returned 'page not found'")
 
         return ("\n".join([f"<reference anchor='{self.reference_number.upper()}'",
@@ -227,8 +223,8 @@ class iana_reference_printer(reference_printer):
                            "<author><organization>IANA</organization></author>",
                            "<date/>",
                            "</front>",
-                           "</reference>"
-			   ]), None)
+                           "</reference>",
+                           ""]), None)
 
 def main():
     """
@@ -244,8 +240,8 @@ def main():
     cgi_anchor = None
     if "anchor" in cgi_arguments.keys():
         cgi_anchor = cgi_arguments["anchor"].value
-    print(f"{sys.argv[0]}: cgi_anchor={cgi_anchor}", file=sys.stderr)
-    print(f"{sys.argv[0]}: ref={ref}", file=sys.stderr)
+    # print(f"{sys.argv[0]}: cgi_anchor={cgi_anchor}", file=sys.stderr)
+    # print(f"{sys.argv[0]}: ref={ref}", file=sys.stderr)
 
     rp = iana_reference_printer(sys.argv[0], ref, cgi_anchor)
     rp.print_reference()
