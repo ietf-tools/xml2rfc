@@ -194,19 +194,28 @@ class iana_reference_printer(reference_printer):
         Generate the text for a reference, in this case by doing a GET from www.iana.org/assignments.
         """
         # print(f'requests.get(f"http://www.iana.org/assignments/{self.reference_number}/"', file=sys.stderr)
-        resp = requests.get(f"http://www.iana.org/assignments/{self.reference_number}/")
+        url = f"http://www.iana.org/assignments/{self.reference_number}/"
+        resp = requests.get(url)
         if resp.status_code >= 400:
             print(f"{self.arg0}: www.iana.org/assignments/{self.reference_number} {resp.status_code}", file=sys.stderr)
             # print(f"{self.arg0}: www.iana.org/assignments/{self.reference_number} {resp.status_code}\n{resp.content.decode()}", file=sys.stderr)
             return (None, f"Page not available from IANA: status_code = {resp.status_code}")
 
         text = resp.content.decode()
-        m = re.search(r"<title>([^<]*)</title>", text)
-        if not m:
-            print(f"{self.arg0}: NO TITLE:\n{text}", file=sys.stderr)
-            return (None, "No title found in IANA response")
+        if resp.headers["content-type"].startswith("text/plain"):
+            m = re.search(r"\s*([^\n]+)", text)
+            if m:
+                title = m.group(1).strip()
+            else:
+                return (None, f"found text/plain: with no title at {url}")
 
-        title = m.group(1)
+        else:
+            m = re.search(r"<title>([^<]*)</title>", text)
+            if not m:
+                print(f"{self.arg0}: NO TITLE:\n{text}", file=sys.stderr)
+                return (None, "No title found in IANA response")
+            title = m.group(1).strip()
+
         if re.search(r"page not found", text, re.IGNORECASE):
             print(f"{self.arg0}: title=page not found\n{text}", file=sys.stderr)
             return (None, "IANA returned 'page not found'")
@@ -218,7 +227,8 @@ class iana_reference_printer(reference_printer):
                            "<author><organization>IANA</organization></author>",
                            "<date/>",
                            "</front>",
-                           "</reference>"]), None)
+                           "</reference>"
+			   ]), None)
 
 def main():
     """
