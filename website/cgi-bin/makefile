@@ -4,7 +4,7 @@ NOCGI=  xml2rfc-dev.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi kramdown-v
 	nph-reanchor.cgi id2xml-version.cgi \
 	github2text.cgi github2html.cgi \
 	tee-xml2rfc.cgi tee-xml2rfc-dev.cgi \
-	scan-for-nonascii.cgi
+	scan-for-nonascii.cgi nph-bibxml-id-error-catcher.cgi
 INS=$(NOCGI) cat.cgi xml2rfc.cgi kramdown.cgi id2xml.cgi
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= 
