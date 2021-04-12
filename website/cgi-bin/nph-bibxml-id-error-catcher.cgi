@@ -22,7 +22,8 @@ badReference()
     esac
     echo Content-Type: text/plain
     echo
-    echo $( basename "$REDIRECT_URL" ) is a bad reference
+    echo $( basename "$REDIRECT_URL" ) is a bad reference: "$@"
+    echo $( basename "$REDIRECT_URL" ) is a bad reference: "$@" 1>&2
     exit
 }
 
@@ -37,9 +38,11 @@ goodReference()
     cat "$file"
 }
 
+echo "REDIRECT_URL=$REDIRECT_URL" 1>&2
+
 case "$REDIRECT_URL" in
     */reference.I-D.*.xml ) ;;
-    * ) badReference ;;
+    * ) badReference Malformed name ;;
 esac
 
 bref=$( basename "$REDIRECT_URL" )
@@ -52,10 +55,13 @@ TMP=$(mktemp)
 TMP2=$(mktemp)
 trap 'rm -f "$TMP" "$TMP2"' 0 1 2 3 15
 
+# echo CACHEDFILE= "$CACHEDIR/$bibdir/$bref" 1>&2
+
 # check the cache first
 if [ -f "$CACHEDIR/$bibdir/$bref" ]
 then
     goodReference "$CACHEDIR/$bibdir/$bref"
+    exit
 fi
 
 # try retrieving from datatracker
@@ -90,7 +96,7 @@ then
 		;;
 	esac
     else
-	badReference
+	badReference $noref does not seem to exist on the datatracker
     fi
 else
     badReference
