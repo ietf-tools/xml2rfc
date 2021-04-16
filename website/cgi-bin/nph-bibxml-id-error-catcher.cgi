@@ -51,9 +51,13 @@ bibdir=$( basename $( dirname "$REDIRECT_URL" ) )
 
 # echo "BIBDIR=$BIBDIR bibdir=$bibdir bref=$bref noref=$noref" 1>&2
 
+umask 077	# temp files mode 600
+
 TMP=$(mktemp)
 TMP2=$(mktemp)
 trap 'rm -f "$TMP" "$TMP2"' 0 1 2 3 15
+
+umask 022	# cache files mode 644
 
 # echo CACHEDFILE= "$CACHEDIR/$bibdir/$bref" 1>&2
 
