@@ -61,7 +61,7 @@ pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
 tests: minify tests-no-network cachetest
 
 # Tests that can run without network access
-tests-no-network: test flaketest drafttest rfctest utf8test v3featuretest elementstest bomtest wiptest mantest
+tests-no-network: test flaketest drafttest rfctest utf8test v3featuretest elementstest indextest bomtest wiptest mantest
 
 # Clear the cache
 .PHONY: clear-cache
@@ -231,6 +231,8 @@ dateshifttest: cleantmp install
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
 elementstest: install tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.$(py).html.test
+
+indextest: install tests/out/indexes.prepped.xml.test tests/out/indexes.text.test tests/out/indexes.pages.text.test tests/out/indexes.v3.$(py).html.test
 
 bomtest: tests/out/elements.bom.text.test
 
