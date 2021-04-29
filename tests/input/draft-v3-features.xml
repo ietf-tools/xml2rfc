@@ -44,6 +44,26 @@
         Something important about this document.
       </t>
     </note>
+    <note removeInRFC="true">
+      <t>
+        Something else important, this time with no &lt;name&gt;.
+      </t>
+    </note>
+    <note removeInRFC="true">
+      <t>This note is to be removed before publishing as an RFC.</t>
+      <t>The warning in this note should not be doubled.</t>
+    </note>
+    <note removeInRFC="true">
+      <name>Another Note</name>
+      <t>This note is to be removed before publishing as an RFC.</t>
+      <t>The warning in this note should not be doubled either.</t>
+    </note>
+    <note removeInRFC="true">
+      <name>Yet Another Note</name>
+      <t>The removeInRFC warning is only ever the first paragraph, so if a paragraph like this:</t>
+      <t>This note is to be removed before publishing as an RFC.</t>
+      <t>appears but is not the first paragraph, the warning should be added again.</t>
+    </note>
   </front>
   <middle>
     <section>
@@ -2726,6 +2746,20 @@ foo = bar
     <name>Test</name>
     <t>Foo</t>
   </section>
+</section>
+<section removeInRFC="true">
+  <name>Test removeInRFC duplication</name>
+  <t>This section is to be removed before publishing as an RFC.</t>
+  <t>The above note should NOT appear twice.</t>
+</section>
+<section removeInRFC="true">
+  <name>Test removeInRFC duplication again</name>
+  <t>Since it is not the first paragraph in the source XML,</t>
+  <t>This section is to be removed before publishing as an RFC.</t>
+  <t>should appear twice this time.</t>
+</section>
+<section title="Test removeInRFC without name" removeInRFC="true">
+  <section title="section as first child"><t>The warning should still appear.</t></section>
 </section>
 <section numbered="false" anchor="contributors">
   <name>Contributors</name>
