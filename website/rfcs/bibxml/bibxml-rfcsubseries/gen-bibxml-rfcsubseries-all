@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ $# -ne 3 ]
+then
+    echo "Usage: $0 bibxml-top-directory bibxml-name rfc-index-url"
+    exit 1
+fi
+
+TOPDIR="$1"
+BIBXMLNAME="$2"
+RFCINDEXURL="$3"
+
+./gen-bibxml-rfcsubseries -b "$TOPDIR/$BIBXMLNAME" -$ "$TOPDIR/bibxml-rfcs" -u "$RFCINDEXURL"
+../bibxml_common/generate-tarball-zipfile "$TOPDIR" "$BIBXMLNAME"

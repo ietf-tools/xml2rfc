@@ -1,0 +1,123 @@
+#!/usr/local/bin/python3
+
+"""
+    Generate XML2RFC bibxml entries for the BCPs, FYIs and STDs.
+
+    Author - Tony Hansen
+"""
+
+import argparse
+import errno
+import os
+import sys
+import xml.etree.ElementTree as ET
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+from bibxml_common import *
+
+def getinfo(args, nm, elroot):
+    """
+    Look in the rfc-index for "nm" entries, where "nm" is something like bcp, fyi or std.
+    Grab the doc-id and is-also entries.
+    If they exist, create a reference file for it.
+    If not, remove the reference file.
+    The file reference.{nm}.{####}.xml looks like:
+
+    <referencegroup anchor="BCP14" target="https://www.rfc-editor.org/info/bcp14">
+      <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml" />
+      <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml" />
+     </referencegroup>
+    """
+
+    elid = None
+    elisalso = []
+    for docid in elroot.findall("{http://www.rfc-editor.org/rfc-index}doc-id"):
+        elid = docid.text
+    for isalso in elroot.findall("{http://www.rfc-editor.org/rfc-index}is-also"):
+        for isalso_docid in isalso.findall("{http://www.rfc-editor.org/rfc-index}doc-id"):
+            elisalso.append(isalso_docid.text)
+
+    num4 = elid[-4:]
+    if len(elisalso) == 0:
+        if args.verbose: print(f"RM {args.bibxml_dir}/{elid}")
+        if os.path.isfile(f"{args.bibxml_dir}/{elid}"):
+            if args.verbose: print(f"unlinking {elid}")
+            if not args.test:
+                os.unlink(f"{args.bibxml_dir}/{elid}")
+
+    else:
+        shortnum = num4.lstrip("0")
+        nmlower = nm.lower()
+        diskfile = f"{args.bibxml_dir}/reference.{nm}.{num4}.xml"
+        global index
+        index += f"<a href='reference.{nm}.{num4}.xml'>reference.{nm}.{num4}.xml</a><br/>\n"
+        if args.verbose: print(f"GEN {diskfile}")
+        xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        url = f"https://www.rfc-editor.org/info/{nmlower}{shortnum}"
+        xml += f'<referencegroup anchor="{nm}{shortnum}" target="{url}">\n'
+
+        for eli in elisalso:
+            rfcnum = eli[-4:]
+            xml += f"<!-- reference.RFC.{rfcnum}.xml -->\n"
+	    # TODO: if the file does not exist, we could regenerate it here
+            with open(f"{args.ref_bibxml_dir}/reference.RFC.{rfcnum}.xml", "r") as fp:
+                for l in fp:
+                    if not l.startswith("<?xml"):
+                        xml += fp.read()
+
+        xml += f'</referencegroup>\n'
+        checkfile(args, diskfile, xml)
+
+        rdf = "\n".join([
+            f"    <item rdf:about='{url}'>",
+            f"        <link>{url}</link>",
+            f"        <title>{elid}</title>",
+            # f"        <dc:date>{ref['date']['year']}-{revmonths0[ref['date']['month']]}-{int(ref['date']['day']):02d}T23:00:00-00:00</dc:date>",
+            f"        <description/>",
+            "    </item>",
+            ""
+            ])
+
+        rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{elid}.rdf"
+        checkfile(args, rdf_disk_file, rdf)
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-b", "--bibxml-dir", help="Directory to write to", type=str, required=True)
+    parser.add_argument("-r", "--rfcindex", help="Location of rfc-index.xml", type=str)
+    parser.add_argument("-u", "--rfcindex-url", help="URL for rfc-index.xml, used if local file is not found", type=str)
+    parser.add_argument("-R", "--ref-bibxml-dir", help="Location of bibxml references to read from", type=str, required=True)
+    parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    args = parser.parse_args()
+
+    if not args.rfcindex and not args.rfcindex_url:
+        sys.exit("Must provide either -r/--rfcindex or -u/--rfcindex-url")
+
+    if args.verbose > 1: print(f"working in {args.bibxml_dir}")
+    os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
+
+    if args.rfcindex_url:
+        args.rfcindex = get_url_tempfile(args.rfcindex_url, exit_ok=True)
+
+    global index
+    index = ""
+
+    tree = ET.parse(args.rfcindex)
+    root = tree.getroot()
+
+    for bcp in root.findall("{http://www.rfc-editor.org/rfc-index}bcp-entry"):
+        getinfo(args, "BCP", bcp)
+
+    for fyi in root.findall("{http://www.rfc-editor.org/rfc-index}fyi-entry"):
+        getinfo(args, "FYI", fyi)
+
+    for std in root.findall("{http://www.rfc-editor.org/rfc-index}std-entry"):
+        getinfo(args, "STD", std)
+
+    checkfile(args, f"{args.bibxml_dir}/index.html", index)
+    rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+    index_rdf = gen_index_rdf(rx)
+    checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+
+if __name__ == '__main__':
+    main()

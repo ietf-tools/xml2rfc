@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ $# -ne 3 ]
+then
+    echo "Usage: $0 bibxml-top-directory bibxml-name 1id-abstracts.txt-url"
+    exit 1
+fi
+
+TOPDIR="$1"
+BIBXMLNAME="$2"
+URL="$3"
+
+./gen-bibxml-ids -v -B -u "$URL" -b "$TOPDIR/$BIBXMLNAME" -c
+../bibxml_common/generate-tarball-zipfile "$TOPDIR" "$BIBXMLNAME"

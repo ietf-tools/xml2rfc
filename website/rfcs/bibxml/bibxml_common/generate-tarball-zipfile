@@ -1,0 +1,32 @@
+#!/bin/bash
+
+die()
+{
+    exec 1>&2
+    echo "$@"
+    exit 2
+}
+
+usage()
+{
+    exec 1>&2
+    echo "Usage: $0 topdir bibxml-directory-names"
+    exit 1
+}
+
+[ $# -ge 2 ] || usage
+
+TOPDIR="$1"
+shift
+[ -d "$TOPDIR" ] || die "$0: the directory '$TOPDIR' does not exist"
+
+for BIBXML
+do
+    if [ ! -d "$TOPDIR/$BIBXML" ]
+    then
+    # update $BIBXML.zip
+    ( cd "$TOPDIR"/$BIBXML" && zip -r "$TOPDIR/$BIBXML".tmp . && mv "$TOPDIR/$BIBXML".tmp "$TOPDIR/$BIBXML".zip )
+
+    # update $BIBXML.tgz
+    ( cd "$TOPDIR/$BIBXML" && tar czf "$TOPDIR/$BIBXML".tmp --exclude rdf . && mv "$TOPDIR/$BIBXML".tmp "$TOPDIR/$BIBXML".tgz )
+done

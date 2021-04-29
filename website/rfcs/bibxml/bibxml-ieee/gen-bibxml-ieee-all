@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ $# -ne 4 ]
+then
+    echo "Usage: $0 bibxml-top-directory bibxml-name rfc-index-url pswd-file-location"
+    exit 1
+fi
+
+TOPDIR="$1"
+BIBXMLNAME="$2"
+CACHEDIR="$3"
+PSWDFILE="$4"
+
+source "$PSWDFILE"
+
+DATE=$(date +%Y%m%d)
+WEEKDAY=$(date +%A)
+
+UPDATEDIR="$CACHEDIR"/updates."$DATE"
+
+case "$WEEKDAY" in
+    Monday | Thursday )
+	if [ ! -d "$UPDATEDIR" ]
+	then
+	    # get the update from IEEE
+	    ./gen-bibxml-ieee-get-update -d "$UPDATEDIR" -H 'ftp.ieee.org' -U "$IEEEUSER" -P "$IEEEPSWD"
+	    # incorporate the update into the cache
+	    ./gen-bibxml-ieee-apply-update -t -d "$UPDATEDIR" -i "$CACHEDIR"/cache
+	    # create the bibxml files
+	    ./gen-bibxml-ieee-gen-bibxml -b "$TOPDIR/$BIBXMLNAME" -i "$CACHEDIR"/cache/IEEEstd -x
+	    # generate the tarball and zipfile
+	    ../bibxml_common/generate-tarball-zipfile "$TOPDIR" "$BIBXMLNAME"
+	else
+	    echo "Skipping because $UPDATEDIR already exists"
+	fi
+	;;
+
+    * )
+	echo "Skipping because we only run on Monday and Thursday"
+	;;
+esac
+

@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+
+"""
+    Retrieve all of the files on the remote IEEE FTP site.
+    Store them in the specified directory.
+
+    Author: Tony Hansen
+"""
+
+import os
+import sys
+import argparse
+import ssl
+from zipfile import ZipFile
+from ftplib import FTP_TLS
+from pathlib import Path
+
+def get_fname(x):
+    """ from a string
+    'drwxr-x---    2 11800    1432         4096 Nov 03  2019 Deleted_IEEEDraftStd'
+    retrieve 'Deleted_IEEEDraftStd'
+    """
+    return x.split(' ')[-1]
+
+def allowed_filename(args, x):
+    """ from a string
+    '-rwxr-x---    2 11800    1432         4096 Nov 03  2019 09184351.pdf'
+    check if the name ends with either .zip or .xml
+    """
+    allow_file = args.allfiles  or x.lower().endswith('.zip') or x.lower().endswith('.xml')
+    if not allow_file:
+        print(f"skipping file {x}")
+    return allow_file
+
+def retrieve(args, ftp, where):
+    """ 
+    Retrieve all files from the specified directory.
+    Recursively retrieve all subdirectories.
+    Return the number of files and directories retrieved.
+    """
+    dcnt, fcnt, xcnt = (1, 0, 0)
+    if not args.count_only:
+        Path(f"{args.directory}/{where}").mkdir(parents=True, exist_ok=True)
+
+    if args.verbose:
+        print("=== dir ===")
+    dir_results = []
+    d = ftp.dir(where, lambda x: dir_results.append(x))
+    if args.verbose:
+        print(f"d={d}")
+        print(f"dir_results={dir_results}")
+
+    files = sorted([get_fname(x) for x in dir_results if x.startswith("-") and allowed_filename(args, x)])
+    if args.verbose:
+        print(f"files={files}")
+    for file in files:
+        if args.verbose:
+            print(f"retrieving file {where}/{file} into {args.directory}/{where}/{file}")
+        fcnt += 1
+        if not args.count_only:
+            with open(f"{args.directory}/{where}/{file}", "wb") as fp:
+                if args.verbose:
+                    print(f" created {args.directory}/{where}/{file}")
+                ftp.retrbinary(f"RETR {where}/{file}", lambda x: fp.write(x))
+            if file.lower().endswith(".zip") and args.unpack_zipfile:
+                with ZipFile(f"{args.directory}/{where}/{file}", 'r') as zipObj:
+                    listOfFileNames = zipObj.namelist()
+                    if args.verbose:
+                        print(f"listOfFileNames={listOfFileNames}")
+                    # Iterate over the file names
+                    for fileName in listOfFileNames:
+                        # Check filename endswith xml
+                        if fileName.lower().endswith('.xml'):
+                            # Extract all xml files from zip
+                            print(f"extracting {fileName} into {args.directory}/{where}")
+                            xcnt += 1
+                            extracted = False
+                            for suff in ["", "-a", "-b", "-c", "-d", "-e", "-f", "-g",
+                                         "-h", "-i", "-j", "-k", "-l", "-m", "-n", "-o",
+                                         "-p", "-q", "-r", "-s", "-t", "-u", "-v", "-w",
+                                         "-x", "-y", "-z"]:
+                                odir = f"{args.directory}/{where}{suff}"
+                                oname = f"{odir}/{fileName}"
+                                if os.path.isfile(oname):
+                                    print(f"the file {oname} already exists")
+                                else:
+                                    zipObj.extract(fileName, odir)
+                                    extracted = True
+                                if extracted:
+                                    break
+                            if not extracted:
+                                print(f"Cannot extract {fileName} into {args.directory}/{where}")
+
+    dirs = sorted([get_fname(x) for x in dir_results if x.startswith("d")])
+    if args.verbose:
+        print(f"dirs={dirs}")
+    for d in dirs:
+        if args.verbose:
+            print(f"recursively retrieving dir {where}/{d}")
+        (dcnt2, fcnt2, xcnt2) = retrieve(args, ftp, f"{where}/{d}")
+        fcnt += fcnt2
+        dcnt += dcnt2
+        xcnt += xcnt2
+
+    return (dcnt, fcnt, xcnt)
+
+def login(args):
+    """ login to the FTP-SSL host """
+    try:
+
+        ssl_context = ssl.create_default_context()
+        # Sets up old and insecure TLSv1.
+        ssl_context.options &= (
+            ~getattr(ssl, "OP_NO_TLSv1_3", 0)
+            & ~ssl.OP_NO_TLSv1_2
+            & ~ssl.OP_NO_TLSv1_1
+        )
+        ssl_context.minimum_version = ssl.TLSVersion.TLSv1
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+
+        if args.verbose:
+            print(f"FTP_TLS(host={args.host}, user={args.user}, passwd={args.password}, timeout={60})")
+
+        ftp = FTP_TLS(host=args.host, context=ssl_context, timeout=60)
+        if args.verbose:
+            print("=== getwelcome ===")
+        w = ftp.getwelcome()
+        if args.verbose:
+            print(f"Connected to {args.host} as {args.user}", file=sys.stderr)
+        if args.verbose:
+            print(f"welcome={w}")
+        if args.verbose:
+            print("=== login ===")
+        ftp.login(user=args.user, passwd=args.password)
+
+        if args.verbose:
+            print("=== prot_p ===")
+        ftp.prot_p()
+        if args.verbose:
+            print("=== set_pasv ===")
+        ftp.set_pasv(True)
+
+        dcnt, fcnt, xcnt = retrieve(args, ftp, ".")
+        print(f"{fcnt} files seen in {dcnt} directories, with {xcnt} xml files")
+            
+        if args.verbose:
+            print("=== quit ===")
+        ftp.quit()
+    except Exception as e:
+        print(f"Cannot connect to {args.host} as {args.user}: {e}", file=sys.stderr)
+
+
+def main():
+    """ main function """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-b", "--bibxml", help="top of bibxml directory to create", type=str, required=False)
+    parser.add_argument("-d", "--directory", help="top of output directory to create", type=str, required=True)
+    parser.add_argument("-H", "--host", help="Host to connect to", type=str, default='ftp.ieee.org')
+    parser.add_argument("-U", "--user", help="User to connect as", type=str, required=True)
+    parser.add_argument("-P", "--password", help="Password to use", type=str, required=True)
+    parser.add_argument("-a", "--allfiles", help="Set to true if all files are to be retrieved", action="store_true")
+    parser.add_argument("-z", "--unpack-zipfile", help="Set to true if xml files are to be extracted from zip files", action="store_true")
+    parser.add_argument("-c", "--count-only", help="Count the files and directories that would be retrieved", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    # parser.add_argument("filenames", nargs='+')
+    args = parser.parse_args()
+
+    login(args)
+
+if __name__ == "__main__":
+    main()

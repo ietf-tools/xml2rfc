@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]
+then
+    echo "Usage: $0 bibxml-top-directory bibxml-name"
+    exit 1
+fi
+
+TOPDIR="$1"
+BIBXMLNAME="$2"
+
+URL=https://pages.nist.gov/NIST-Tech-Pubs/NIST_Tech_Pubs_all.xlsx
+
+./gen-bibxml-nist -v -c -u "$URL" -b "$TOPDIR/$BIBXMLNAME"
+../bibxml_common/generate-tarball-zipfile "$TOPDIR" "$BIBXMLNAME"

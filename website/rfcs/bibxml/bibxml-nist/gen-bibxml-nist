@@ -1,0 +1,250 @@
+#!/usr/bin/env python3
+
+"""
+    Retrieve all of the files on the remote NIST web site.
+    Store them in the specified directory
+
+    https://pages.nist.gov/NIST-Tech-Pubs/
+    https://pages.nist.gov/NIST-Tech-Pubs/NIST_Tech_Pubs_all.xlsx
+    https://pages.nist.gov/NIST-Tech-Pubs/tree/nist-pages/xml
+"""
+
+import argparse
+import glob
+import io
+import json
+# import yaml
+import os
+import sys
+import tempfile
+from pathlib import Path
+# import hexdump
+import requests
+import xlrd
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+from bibxml_common import *
+
+def gen_std_number(info):
+    """ 
+    From the DOI field, generate something suitable for use by the reference file.
+    In particular, change spaces to underscores and slashes to dashes.
+    """
+    rn = info['DOI']
+    if rn.startswith("10.6028/"):
+        rn = rn[8:]
+    if not rn.startswith("NIST."):
+        rn = "NIST." + rn
+    return rn.replace(' ', '_').replace('/', '-')
+
+def get_month(info):
+    """
+    From the numeric Month Published field, convert to January-December.
+    Print an error message if not in the range 1-12 or empty.
+    """
+    try:
+        m = int(float(info['Month Published']))
+        return months[m]
+    except:
+        print(f"invalid value for month: info['Month Published']: '{info['Month Published']}' found in {gen_std_number(info)}")
+        return ""
+
+def gen_ref(args, info, bibxml_file, stdnumber):
+    ref = gen_empty_ref_xml("NIST")
+    ref["url"] = ref["target"] = info["URL"]
+    ref["anchor"] = gen_std_number(info)
+    ref["title"] = ref["rdftitle"] = info['Title']
+    OU = info['OU']
+
+    for auth in info['Authors'].split(';'):
+        nm = (auth + ",").split(',')
+        sur_name = nm[0].strip()
+        given_names = nm[1].strip()
+        if sur_name:
+            ref["authors"].append({ "initials": given_names, "surname": sur_name, "fullname": f"{given_names} {sur_name}", "role": "", "org": OU })
+
+    # ignore abstract, format
+
+    if info['Month Published']:
+        ref["date"] = { "year": int(float(info['Year Published'])), "month": get_month(info) }
+    else:
+        ref["date"] = { "year": int(float(info['Year Published'])) }
+
+    ref["series_info"].append({ "name": 'NIST', "value": info['Report Number'] })
+    ref["series_info"].append({ "name": 'DOI', "value": info['DOI'] })
+    return ref
+
+def get_excel_data(args):
+    """ 
+    Open the excel file, generate bibxml files from it.
+    """
+    # print("get_excel_data({args.file})")
+
+    xl_workbook = xlrd.open_workbook(args.file)
+    sheet_names = xl_workbook.sheet_names()
+    # print(f"sheet_names={sheet_names}")
+    xl_sheet = xl_workbook.sheet_by_name(sheet_names[0])
+
+    # # Or grab the first sheet by index
+    # xl_sheet = xl_workbook.sheet_by_index(0)
+
+    # Get the first row of data
+    row = xl_sheet.row(0)
+    # print(f"row={row}")
+
+    #to enumerate through all columns and rows
+    #get the number of rows in the sheet
+    num_columns = xl_sheet.ncols
+    # print(f"num_columns={num_columns}")
+
+    # Extract the column names from the first row
+    col_ids = {}
+    col_names = []
+    for col_idx in range(0, num_columns):  # Iterate through the columns
+        cell = xl_sheet.cell(0, col_idx) # Get cell object by row, col
+        # print(f'Column: [{col_idx}] cell: [{cell.value}]')
+        col_name = str(cell.value).strip()
+        col_names.append(col_name)
+        col_ids[col_name] = col_idx
+
+    # print(f"col_ids={col_ids}")
+
+    if args.dump_json:
+        dump_jsonfp = open(args.dump_json, "w")
+        print("[", file=dump_jsonfp, end="")
+        dump_json_sep = ""
+
+    #if args.dump_yaml:
+    #    dump_yamlfp = open(args.dump_yaml, "w")
+
+    if args.dump_csv:
+        dump_csvfp = open(args.dump_csv, "w")
+        print(",".join(col_names), file=dump_csvfp)
+
+    bibxml_files = {}
+
+    for row_idx in range(1, xl_sheet.nrows):    # Iterate through rows
+        # print('Row: %s' % row_idx) # Print the row number
+        info = {}
+
+        # create a dictionary with the values and the columns names read above
+        for r, c in col_ids.items():
+            info[r] = str(xl_sheet.cell(row_idx, c).value).strip()
+
+        stdnumber = gen_std_number(info)
+        xml_disk_file = f"{args.bibxml_dir}/reference.{stdnumber}.xml"
+        bibxml_files[xml_disk_file] = 1
+        if args.verbose > 1:
+            print(f"working on {xml_disk_file}", file=sys.stderr)
+
+        if args.dump_json:
+            print(dump_json_sep, file=dump_jsonfp)
+            json.dump(info, dump_jsonfp)
+            dump_json_sep = ","
+
+        #if args.dump_yaml:
+        #    yaml.dump(y, dump_yamlfp, default_flow_style=False)
+
+        if args.dump_csv:
+            sep = ""
+            for c in col_names:
+                print(sep, file=dump_csvfp, end="")
+                if ',' in info[c]:
+                    i = info[c].replace('"', '""')
+                    print(f'"{i}"', file=dump_csvfp, end="")
+                else:
+                    print(info[c], file=dump_csvfp, end="")
+                sep = ","
+            print("", file=dump_csvfp)
+
+        ref = gen_ref(args, info, xml_disk_file, stdnumber)
+        xml = gen_xml(ref)
+
+        if args.bibxml_dir:
+            checkfile(args, xml_disk_file, xml)
+            rdf = gen_rdf(ref)
+            rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{stdnumber}.rdf"
+            bibxml_files[rdf_disk_file] = 1
+            checkfile(args, rdf_disk_file, rdf)
+
+        elif args.print:
+            print(f"================ {xml_disk_file} ================")
+            print(xml)
+
+    if args.dump_json:
+        print("\n]", file=dump_jsonfp)
+        dump_jsonfp.close()
+
+    #if args.dump_yaml:
+    #    dump_yamlfp.close()
+
+    if args.dump_csv:
+        dump_csvfp.close()
+
+    if args.clean_bibxml:
+        clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
+        clean_dir(args, f"{args.bibxml_dir}/rdf/*.xml", bibxml_files)
+
+def get_spread_sheet(args):
+    """ using the specified URL, get the data into a temp file """
+    print(f"get_spread_sheet({args.url})")
+
+    # Send HTTP GET request to server and attempt to receive a response
+    response = requests.get(args.url)
+
+    # If the HTTP GET request can be served
+    if response.status_code == 200:
+        # Write the file contents in the response to a file specified by local_file_path
+        with open(args.file, 'wb') as local_file:
+            for chunk in response.iter_content(chunk_size=128):
+                local_file.write(chunk)
+    else:
+        sys.exit(f"Cannot retrieve {args.url}. Status_code={response.status_code}")
+
+def main():
+    """ main function """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-b", "--bibxml-dir", help="top of bibxml directory to create", type=str, required=False)
+    parser.add_argument("-p", "--print", help="print all of the bibxml info instead of writing to files", required=False)
+    parser.add_argument("-u", "--url", help="URL for NIST excel spreadsheet", type=str, required=False)
+    parser.add_argument("-f", "--file", help="filename to write/read the NIST excel spreadsheet", type=str)
+    parser.add_argument("-j", "--dump-json", help="filename to write a copy of the NIST excel spreadsheet, as json", type=str, required=False)
+    #parser.add_argument("-y", "--dump-yaml", help="filename to write a copy of the NIST excel spreadsheet, as yaml", type=str, required=False)
+    parser.add_argument("-C", "--dump-csv", help="filename to write a copy of the NIST excel spreadsheet, as csv", type=str, required=False)
+    parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
+    parser.add_argument("-c", "--clean-bibxml", help="Clean up bibxml files not in current excel spreadsheet", action="store_true")
+    parser.add_argument("-S", "--skip-clean", help="Skip cleaning bibxml files", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    args = parser.parse_args()
+
+    if args.url:
+        if not args.file:
+            args.file = tempfile.NamedTemporaryFile().name
+            if args.verbose:
+                print(f"Using {args.file}")
+        get_spread_sheet(args)
+
+    if args.bibxml_dir or args.dump_json or args.dump_csv or args.print: # or args.dump_yaml
+        if args.bibxml_dir:
+            os.makedirs(args.bibxml_dir, exist_ok=True)
+            os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
+        if args.dump_json and args.verbose:
+            print(f"Creating {args.dump_json}")
+        #if args.dump_yaml and args.verbose:
+        #    print(f"Creating {args.dump_yaml}")
+        if args.dump_csv and args.verbose:
+            print(f"Creating {args.dump_csv}")
+        get_excel_data(args)
+
+        if args.bibxml_dir:
+            # generate index.html file
+            hx = gen_index_html_set(args.bibxml_dir, "reference.")
+            index_html = gen_index_html(hx)
+            checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+
+            # generate index.rdf file
+            rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+            index_rdf = gen_index_rdf(rx)
+            checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+
+if __name__ == "__main__":
+    main()

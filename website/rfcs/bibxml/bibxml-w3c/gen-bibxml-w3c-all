@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]
+then
+    echo "Usage: $0 bibxml-top-directory bibxml-name"
+    exit 1
+fi
+
+TOPDIR="$1"
+BIBXMLNAME="$2"
+
+URL=https://www.w3.org/2002/01/tr-automation/tr.rdf
+
+./gen-bibxml-w3c -v -c -u "$URL" -b "$TOPDIR/$BIBXMLNAME"
+../bibxml_common/generate-tarball-zipfile "$TOPDIR" "$BIBXMLNAME"

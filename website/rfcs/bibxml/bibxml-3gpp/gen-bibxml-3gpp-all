@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]
+then
+    echo "Usage: $0 bibxml-top-directory bibxml-name"
+    exit 1
+fi
+
+TOPDIR="$1"
+BIBXMLNAME="$2"
+
+URL=ftp://www.3gpp.org/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt
+
+./gen-bibxml-3gpp -v -u "$URL" -b "$TOPDIR/$BIBXMLNAME" -c
+../bibxml_common/generate-tarball-zipfile "$TOPDIR" "$BIBXMLNAME"

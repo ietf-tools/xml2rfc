@@ -1,0 +1,270 @@
+#!/usr/bin/env python3
+
+"""
+    Retrieve the remote W3C web site's RDF file.
+    Store bibxml files in the specified directory
+
+    W3C records we are interested in fall into these categories:
+        CR, NOTE, PER, PR, REC, WD
+    The following categories will be ignored:
+        LastCall, rdf:Description, Retired
+
+TODO: what generates target2?
+    reference.W3C.$(basename $target)
+TODO:
+    double check rdf vals
+    look at cleanup option
+    look at rdf/index generation
+
+
+    <REC rdf:about="https://www.w3.org/TR/1998/REC-DSig-label-19980527/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#Retired"/>
+        <dc:date>1998-05-27</dc:date>
+        <dc:title>PICS Signed Labels (DSig) 1.0 Specification</dc:title>
+        <doc:obsoletes rdf:resource="https://www.w3.org/TR/1998/PR-DSig-label-19980403/"/>
+        <doc:versionOf rdf:resource="https://www.w3.org/TR/REC-DSig-label/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Yanghua Chu</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Philip DesAutels</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Brian LaMacchia</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Peter Lipp</contact:fullName>
+        </editor>
+    </REC>
+
+    <reference anchor='W3C.REC-DSig-label-19980527'
+               target='https://www.w3.org/TR/1998/REC-DSig-label-19980527'>
+    <front>
+        <title>PICS Signed Labels (DSig) 1.0 Specification</title>
+        <author initials='Y.' surname='Chu' fullname='Yanghua Chu'>
+            <organization />
+        </author>
+        <author initials='P.' surname='DesAutels' fullname='Philip DesAutels'>
+            <organization />
+        </author>
+        <author initials='B.' surname='LaMacchia' fullname='Brian LaMacchia'>
+            <organization />
+        </author>
+        <author initials='P.' surname='Lipp' fullname='Peter Lipp'>
+            <organization />
+        </author>
+
+        <date month='May' day='27' year='1998' />
+    </front>
+    
+    <seriesInfo name='World Wide Web Consortium Recommendation' value='REC-DSig-label-19980527' />
+    <format type='HTML' target='https://www.w3.org/TR/1998/REC-DSig-label-19980527' />
+    </reference>
+
+
+"""
+
+import argparse
+import glob
+import io
+import json
+# import yaml
+import os
+import re
+import sys
+import tempfile
+from pathlib import Path
+# import hexdump
+import requests
+import xml.etree.ElementTree as ET
+
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+from bibxml_common import *
+
+W3C_NAMESPACE = '{http://www.w3.org/2001/02pd/rec54#}'
+RDF_NAMESPACE = '{http://www.w3.org/1999/02/22-rdf-syntax-ns#}'
+DC_NAMESPACE = '{http://purl.org/dc/elements/1.1/}'
+PIM_NAMESPACE = '{http://www.w3.org/2000/10/swap/pim/contact#}'
+
+def get_stdnumber(elroot):
+    """
+    From a W3C element's rdf:about attribute, return the last portion of the path.
+    For example, from
+        rdf:about="https://www.w3.org/TR/2021/WD-IndexedDB-3-20210311/"
+    return
+        W3C.WD-IndexedDB-3-20210311
+    """
+    stdnumber = elroot.attrib.get(f'{RDF_NAMESPACE}about')
+    if stdnumber is None:
+        return None
+    if stdnumber[-1] == '/':
+        stdnumber = stdnumber[:-1]
+    ret = os.path.basename(stdnumber)
+    if ret == "":
+        return None
+    return ret
+
+def gen_ref_data(args, elroot, stdnumber, count):
+    """
+    Extract the ref information from a w3c element.
+    """
+    ref = gen_empty_ref_xml("W3C")
+    url = elroot.attrib.get(f'{RDF_NAMESPACE}about')
+    ref["url"] = ref["target"] = url
+    ref["anchor"] = f"W3C.{stdnumber}"
+    w3c_type = elroot.tag[len(W3C_NAMESPACE):]
+    ref["target2"] = f"reference.W3C.{stdnumber}.xml"
+    ref["title"] = get_xml_text(elroot, f"./{DC_NAMESPACE}title")
+    date = get_xml_text(elroot, f"./{DC_NAMESPACE}date")
+    m = re.match(r"(\d*)-(\d*)-(\d*)$", date)
+    if not m:
+        print(f"WARNING: Invalid date ({date}) found in record {count} for {stdnumber}", file=sys.stderr)
+    else:
+        ref["date"]["year"] = m.group(1)
+        ref["date"]["month"] = months[int(m.group(2))]
+        ref["date"]["day"] = m.group(3)
+    
+    allnames = ""
+    allnames_sep = ""
+    for author in elroot.findall(f"./{W3C_NAMESPACE}editor"):
+        if author.attrib.get(f"{RDF_NAMESPACE}parseType", "") == "Resource":
+            fullname = get_xml_text(author, f"{PIM_NAMESPACE}fullName")
+            allnames += allnames_sep + fullname
+            allnames_sep = ", "
+            initials = fullname[0]
+            nameparts = fullname.split()
+            surname = " ".join(nameparts[1:])
+            ref["authors"].append({ "initials": initials, "surname": surname, "fullname": fullname, "role": "", "org": ""})
+
+    if allnames != "":
+        ref["rdftitle"] = '"' + ref["title"] + "'" + allnames
+    else:
+        ref["rdftitle"] = ref["title"]
+    ref["series_info"].append({ "name": f"W3C {w3c_type}", "value": stdnumber })
+
+    ref["format"].append({ "type": "HTML", "target": url })
+    return ref            
+
+def dump_xml(elroot, prefix, include_children=False):
+    """ print info on an xml element """
+    print(f"{prefix}elroot={elroot}")
+    print(f"{prefix}elroot.tag={elroot.tag}")
+    print(f"{prefix}dir(elroot)={dir(elroot)}")
+    print(f"{prefix}elroot.attrib={elroot.attrib}")
+    print(f"{prefix}elroot.getchildren()={list(elroot)}")
+    if include_children:
+        for ch in elroot:
+            dump_xml(ch, f"    {prefix}")
+
+def gen_bibxml(args, elroot, count):
+    """
+    Look in the RDF entry.
+    Grab the std number, date, and other entries entries.
+    If they exist, create a reference file for it.
+    """
+    stdnumber = get_stdnumber(elroot)
+
+    if stdnumber is None:
+        print(f"WARNING: Cannot find the rdf:about attribute on record {count}")
+        return
+
+    ref = gen_ref_data(args, elroot, stdnumber, count)
+    xml = gen_xml(ref)
+
+    xml_disk_file = f"{args.bibxml_dir}/reference.W3C.{stdnumber}.xml"
+    if args.verbose:
+        print(f"==== {xml_disk_file} ====")
+    checkfile(args, xml_disk_file, xml)
+
+    rdf = gen_rdf(ref)
+    rdf_disk_file = f"{args.bibxml_dir}/rdf/item.W3C.{stdnumber}.rdf"
+    checkfile(args, rdf_disk_file, rdf)
+
+def getRDFData(args):
+    """ 
+    Open the RDF file, generate bibxml files from it.
+    """
+    if args.verbose:
+        print("getRDFData({args.file})")
+
+    bibxmlFiles = {}
+
+    tree = ET.parse(args.file)
+    root = tree.getroot()
+
+    used_types = ["WD", "NOTE", "PER", "PR", "REC", "CR"]
+    nm_used_types = [ f"{W3C_NAMESPACE}{x}" for x in used_types]
+    unused_types = ["Retired", "LastCall"]
+    nm_unused_types = [ f"{W3C_NAMESPACE}{x}" for x in unused_types]
+    nm_unused_types.append(f"{RDF_NAMESPACE}Description")
+
+    count = 0
+    for el in root:
+        count += 1
+        if el.tag in nm_used_types:
+            gen_bibxml(args, el, count)
+        elif el.tag in nm_unused_types:
+            pass
+        else:
+            print(f"WARNING: the element tag {el.tag} is NOT known", file=sys.stderr)
+
+def getRDF(args):
+    """ using the specified URL, get the data into a temp file """
+    if args.verbose:
+        print(f"getRDF({args.url})")
+
+    # Send HTTP GET request to server and attempt to receive a response
+    response = requests.get(args.url)
+
+    # If the HTTP GET request can be served
+    if response.status_code == 200:
+        # Write the file contents in the response to a file specified by local_file_path
+        with open(args.file, 'wb') as local_file:
+            for chunk in response.iter_content(chunk_size=128):
+                local_file.write(chunk)
+    else:
+        sys.exit(f"Cannot retrieve {args.url}. Status_code={response.status_code}")
+
+def main():
+    """ main function """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-b", "--bibxml-dir", help="top of bibxml directory to create", type=str, required=False)
+    parser.add_argument("-p", "--print", help="print all of the bibxml info instead of writing to files", required=False)
+    parser.add_argument("-u", "--url", help="URL for W3C RDF spreadsheet", type=str, required=False)
+    parser.add_argument("-f", "--file", help="filename to write/read the W3C RDF spreadsheet", type=str)
+    parser.add_argument("-j", "--dump-json", help="filename to write a copy of the W3C RDF spreadsheet, as json", type=str, required=False)
+    #parser.add_argument("-y", "--dump-yaml", help="filename to write a copy of the W3C RDF spreadsheet, as yaml", type=str, required=False)
+    parser.add_argument("-C", "--dump-csv", help="filename to write a copy of the W3C RDF spreadsheet, as csv", type=str, required=False)
+    parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
+    parser.add_argument("-c", "--clean-bibxml", help="Clean up bibxml files not in current RDF spreadsheet", action="store_true")
+    parser.add_argument("-S", "--skip-clean", help="Skip cleaning bibxml files", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    args = parser.parse_args()
+
+    if args.url:
+        if not args.file:
+            args.file = tempfile.NamedTemporaryFile().name
+            if args.verbose:
+                print(f"Using {args.file}")
+        getRDF(args)
+
+    if args.bibxml_dir or args.print:
+        if args.bibxml_dir:
+            os.makedirs(args.bibxml_dir, exist_ok=True)
+            os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
+
+        getRDFData(args)
+
+        if args.bibxml_dir:
+            # generate index.html file
+            hx = gen_index_html_set(args.bibxml_dir, "reference.")
+            index_html = gen_index_html(hx)
+            checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+
+            # generate index.rdf file
+            rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+            index_rdf = gen_index_rdf(rx)
+            checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,264 @@
+#!/usr/bin/env python3
+
+"""
+    The files gathered from the IEEE FTP site consist of a set of
+    zip files, which in turn contain xml files, one xml file per
+    standard.
+
+    Given a directory gathered from the IEEE FTP site,
+    create a bibxml tree to match.
+    Be able to work from the xml files OR the zip files.
+
+    Filenames may also be specified
+
+    Author: Tony Hansen
+"""
+
+import argparse
+import os
+import re
+import sys
+import xml.etree.ElementTree as ET
+from xml.dom.minidom import parse
+from zipfile import ZipFile
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+from bibxml_common import *
+
+def process_xml_contents(args, fname, x, bibxmlFiles):
+    """
+    Given XML in IEEE format, generate equivalent BIBXML format and write
+    to the args.bibxml_dir directory.
+    """
+
+    # This shows the mapping of items in the IEEE xml into the bibxml output.
+    # filename: reference.IEEE.802.16M_2011.xml
+    #        <publication><publicationinfo><stdnumber>802.16m-2011 => IEEE.802.16M_2011
+    #
+    # <reference anchor='
+    #        <publication><publicationinfo><stdnumber>802.16m-2011 => IEEE.802.16M_2011
+    # ' target='http://ieeexplore.ieee.org/servlet/opac?punumber=
+    #        <publication><publicationinfo><amsid>5765734
+    # '>
+    # <front>
+    # <title>
+    #        <publication><volume><article><title>IEEE Standard for Local and metropolitan area networks Part 16: Air Interface for Broadband Wireless Access Systems Amendment 3: Advanced Air Interface
+    # </title>
+    # <author>
+    # <organization>IEEE</organization>
+    # </author>
+    # <date day= month= year= />
+    #        <publication><volume><articleinfo>
+    #            <date datetype="OriginalPub">
+    #                <year>2011</year>
+    #                <month>May</month>
+    #                <day>6</day>
+    #
+    # <abstract><t>
+    #        <publication><volume><articleinfo>
+    #            <abstract abstracttype="Regular">This amendment specifies the WirelessMAN-Advanced Air Interface, an enhanced air interface designated as "IMT-Advanced" by the International Telecommunication Union- Radiocommunication Sector (ITU-R). The amendment is based on the WirelessMAN-OFDMA specification and provides continuing support for legacy subscriber stations.
+    # </t></abstract>
+    # </front>
+    # <seriesInfo name='IEEE' value='
+    #        <publication><publicationinfo><stdnumber>802.16m-2011
+    # '/>
+    # <seriesInfo name='DOI' value='
+    #        <publication><volume><article><articleinfo><articledoi>
+    # ' />
+    # </reference>
+
+    try:
+        root = ET.fromstring(x)
+    except:
+        print(f"{fname}: WARNING: BAD XML found")
+        return
+
+    ref = gen_empty_ref_xml("IEEE")
+
+    stdnumber = get_xml_text(root, './publicationinfo/stdnumber')
+    # change [/, ] => _, with __=>_
+    ref['rdftitle'] = ref["title"] = get_xml_text(root, './volume/article/title')
+
+    years = get_xml_text_by_attribute(root, './volume/article/articleinfo/date', 'datetype', './year')
+    year = get_xml_first_of(years, ('OriginalPub', 'ePub'))
+    months = get_xml_text_by_attribute(root, './volume/article/articleinfo/date', 'datetype', './month')
+    month = get_xml_first_of(months, ('OriginalPub', 'ePub'))
+    days = get_xml_text_by_attribute(root, './volume/article/articleinfo/date', 'datetype', './day')
+    day = get_xml_first_of(days, ('OriginalPub', 'ePub'))
+
+    abstracts = get_xml_text_by_attribute(root, './volume/article/articleinfo/abstract', 'abstracttype', '.')
+    ref["abstract"] = get_xml_first_of(abstracts, ('Regular', 'Standard'))
+    if ref["abstract"] is None:
+        ref["abstract"] = ""
+
+    amsid = get_xml_text(root, './publicationinfo/amsid')
+    ref['url'] = f"http://ieeexplore.ieee.org/servlet/opac?punumber={amsid}"
+
+    ref["series_info"] = [ ]
+    ref["series_info"].append( { "name": "IEEE", "value": stdnumber } )
+    doi = get_xml_text(root, './volume/article/articleinfo/articledoi')
+    if doi:
+        ref["series_info"].append( { "name": "DOI", "value": doi } )
+
+    # print(f"xml looks like:\n{x}")
+    if not stdnumber or not ref['title'] or not year or not month or not day or not ref['abstract'] or not amsid or not doi:
+        # print(f"xml looks like:\n{x}")
+        pass
+
+    mod_stdnumber = re.sub('_+', '_', re.sub(r'[/,\'" ]', '_', stdnumber))
+
+    bibxmlFile = f"{args.bibxml_dir}/reference.IEEE.{mod_stdnumber}.xml"
+    bibxmlFiles.add(bibxmlFile)
+    if args.verbose:
+        print(f"writing {bibxmlFile}")
+
+    ref['anchor'] = f"IEEE.{mod_stdnumber}"
+
+    if month:
+        if str(month).find(' ') > -1:
+            monthparts = month.split(' ')
+            if day is not None:
+                print(f"{fname}: WARNING: found a month value of {month}, but day alreay has a value of {day}")
+            day = monthparts[0]
+            month = monthparts[1]
+            if args.warnings:
+                print(f"{fname} has both the month and day in the month field")
+
+        svmonth = month
+        month = monthnames.get(month.replace(".",""))
+        if not month:
+            print(f"{bibxmlFile}: WARNING: the month name of '{svmonth}' is not known. Setting the month blank.")
+
+    ref["date"] = { "year": year, "month": month, "day": day }
+
+    xml = gen_xml(ref)
+    checkfile(args, bibxmlFile, xml)
+
+    if month is None:
+        ref['date']['month'] = "January"
+    if day is None:
+        ref['date']['day'] = '1'
+    rdf = gen_rdf(ref)
+    rdf_disk_file = f"{args.bibxml_dir}/rdf/item.IEEE.{mod_stdnumber}.rdf"
+    checkfile(args, rdf_disk_file, rdf)
+
+def process_xml(args, fname, bibxmlFiles):
+    """
+    Given an xml file, read the contents, and create a bibxml file from it.
+    """
+    count = 0
+    with open(fname, "r") as fp:
+        x = fp.read()
+        process_xml_contents(args, fname, x, bibxmlFiles)
+        count += 1
+    return count
+
+def process_zip(args, fname, bibxmlFiles):
+    """
+    Given an xml file, read the contents, and create a bibxml file from it.
+    """
+    count = 0
+    with ZipFile(fname, 'r') as zipObj:
+        listOfFileNames = zipObj.namelist()
+        if args.verbose:
+            print(f"listOfFileNames={listOfFileNames}")
+        # Iterate over the file names
+        for fileName in listOfFileNames:
+            # Check filename endswith xml
+            if fileName.endswith('.xml'):
+                # Extract all xml files from zip
+                x = zipObj.read(fileName)
+                process_xml_contents(args, f"{fname} -> {fileName}", x, bibxmlFiles)
+                count += 1
+    return count
+
+def process(args, fname, bibxmlFiles):
+    """
+    Process a given filename.
+    If a .xml file, create a bibxml file from it.
+    If a .zip file, extract each .xml file from it, then process as above.
+    """
+    if args.verbose:
+        print(f"processing {fname}")
+    if fname.endswith(".xml"):
+        process_xml(args, fname, bibxmlFiles)
+    elif fname.endswith(".zip"):
+        process_zip(args, fname, bibxmlFiles)
+    else:
+        sys.exit(f"Cannot process {fname}")
+
+def search_files(args, dirname, ext):
+    """
+    Search the given directory for files with the given extension.
+    Invoke process() on each.
+    """
+    bibxmlFiles = set()
+    count = 0
+    for root, dirs, files in os.walk(dirname):
+        for fname in files:
+            if fname.endswith(ext):
+                process(args, f"{root}/{fname}", bibxmlFiles)
+                count += 1
+    return count
+
+def main():
+    """ main function """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-b", "--bibxml-dir", help="top of bibxml directory to create", type=str, required=True)
+    parser.add_argument("-i", "--ieee-directory", help="top of IEEE directory to search", type=str)
+    parser.add_argument("-x", "--process-xml-files", help="Set to true if xml files in ieee-directory are to be processed", action='store_true')
+    parser.add_argument("-z", "--process-zip-files", help="Set to true if zip files in ieee-directory are to be processed", action='store_true')
+    parser.add_argument("-f", "--process-file-list", help="List of files to be processed", type=str)
+    parser.add_argument("-c", "--clean-bibxml", help="When used with --ieee-directory, clean up bibxml files not in the current IEEE directory", action="store_true")
+    parser.add_argument("-S", "--skip-clean", help="When cleaning, only print the bibxml filenames that would be removed", action="store_true")
+    parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
+    parser.add_argument("-w", "--warnings", help="Enable some additional warnings about things in the IEEE files that have been worked around", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    parser.add_argument("filenames", nargs='*')
+    args = parser.parse_args()
+
+    os.makedirs(args.bibxml_dir, exist_ok=True)
+    os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
+
+    if args.process_xml_files + args.process_zip_files + (len(args.filenames) > 0) > 1:
+        sys.exit("Only one of --process-xml-files (-x), --process-zip-files (-z) and filenames may be specified")
+
+    if (args.process_xml_files or args.process_zip_files) and not args.ieee_directory:
+        sys.exit("-ieee-directory (-i) is required with  --process-xml-files (-x) or --process-zip-files (-z)")
+
+    count = 0
+    if args.filenames:
+        for file in args.filenames:
+            process(args, file, set())
+            count += 1
+
+    if args.process_xml_files:
+        count += search_files(args, args.ieee_directory, ".xml")
+
+    if args.process_zip_files:
+        count += search_files(args, args.ieee_directory, ".zip")
+
+    if args.process_file_list:
+        with open(args.process_file_list) as fp:
+            for line in fp:
+                process(args, line.strip(), set())
+                count += 1
+
+    # generate index.html file
+    hx = gen_index_html_set(args.bibxml_dir, "reference.")
+    index_html = gen_index_html(hx)
+    checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+
+    # generate index.rdf file
+    rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+    index_rdf = gen_index_rdf(rx)
+    checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+
+    print(f"Files processed: {count}")
+
+if __name__ == "__main__":
+    main()
+
+    # TODO auto cleanup for --bibxml-cleanup
+    # as bibxmlFile names are created, fill in bibxmlFiles[bibxmlFile] set
+    # then run through the entire list at the end and clean
+    # check bibxml-nist options

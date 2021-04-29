@@ -1,0 +1,102 @@
+#!/bin/bash
+
+XML2RFC=/home/www/tools.ietf.org/tools/xml2rfc
+DIR=$XML2RFC/rfcs/bibxml
+BIBDIR=$XML2RFC/web/public/rfc
+PROD_RFC_INDEX_URL=https://www.rfc-editor.org/rfc-index.xml
+PROD_1ID_ABSTRACTS_URL=https://www.ietf.org/id/1id-abstracts.txt
+BIBNAMES="bibxml-rfcs bibxml-rfcsubseries bibxml-ids bibxml-ieee bibxml-nist bibxml-w3c bibxml-doi bibxml-iana bibxml-3gpp"
+NEW=-new
+
+usage()
+{
+    exec 1>&2
+    echo "Usage: $0 [-b directory] [-d directory] [-P] [-v] [bibxml-directories-to-process]"
+    echo "-P\tProduction run - else store into directories 'bibxml-...-new'"
+    echo "-b dir\tcreate bibxml directories in this directory instead of $BIBDIR"
+    echo "-d dir\trun in this directory instead of $DIR"
+    echo "-v\tbe verbose by using set -x"
+    echo "bibxml-directories-to-process defaults to all of them:"
+    echo "    $BIBNAMES"
+}
+
+while getopts b:d:Pv c
+do
+    case $c in
+	d ) DIR="$OPTARG" ;;
+	b ) BIBDIR="$OPTARG" ;;
+	P ) NEW= ;;
+	v ) set -x ;;
+	? ) usage ;;
+    esac
+done
+shift $(( OPTIND - 1))
+# shellcheck disable=SC2086
+[ $# -gt 0 ] || set -- $BIBNAMES
+
+# bibxml-rfcs - working
+# bibxml-rfcsubseries - working
+# bibxml-ids - working - cumulative
+# bibxml-ieee - working - uses cached directory - uses auto-clean
+# bibxml-nist - working - uses URL - uses auto-clean
+# bibxml-w3c - working
+# bibxml-doi - automatic
+# bibxml-iana - automatic
+# bibxml-3gpp - working - uses auto-clean - changed the URL
+
+
+gen()
+{
+    bibxml="$1"
+    shift
+    (
+	cd "$bibxml" &&
+	if [ -x gen-"$bibxml"-all ]
+	then
+	    ./gen-bibxml-all "$@"
+	else
+	    echo "gen-bibxml-all not found in $bibxml"
+	fi
+    )
+}
+
+for bibxml
+do
+    case "$bibxml" in
+	bibxml-rfcs )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW" "$PROD_RFC_INDEX_URL"
+	    ;;
+
+	bibxml-rfcsubseries )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW" "$PROD_RFC_INDEX_URL"
+	    ;;
+
+	bibxml-ids )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW" "$PROD_1ID_ABSTRACTS_URL"
+	    ;;
+
+	bibxml-ieee )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW" "$BIBDIR" "$BIBDIR/ieee" /home/tonyh/.bibxml.pswd
+	    ;;
+
+	bibxml-nist )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
+	    ;;
+
+	bibxml-w3c )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
+	    ;;
+
+	bibxml-doi )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
+	    ;;
+
+	bibxml-iana )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
+	    ;;
+
+	bibxml-3gpp )
+	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
+	    ;;
+    esac
+done

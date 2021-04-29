@@ -1,0 +1,631 @@
+#!/usr/local/bin/python3
+
+"""
+    Generate XML2RFC bibxml entries for the RFCs.
+
+    Generate all of:
+        bibxml/reference.RFC.####.xml
+        bibxml/index.xml
+        bibxml/index.rdf
+        bibxml/rdf/item.RFC.####.rdf
+
+    Author - Tony Hansen
+"""
+
+import argparse
+import os
+import re
+import sys
+
+import xml.etree.ElementTree as ET
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+from bibxml_common import *
+
+assert sys.version_info >= (3,7)
+
+def gen_author_element(args, rfcid, n, title):
+    """
+    Given a name such as F. M. then Last, generate
+    <author initials='F. M.' surname='then Last' fullname='F. M. then Last'><organization /></author>
+
+    Given a name such as The Internet Society
+    <author><organization>The Internet Society</organization></author>
+
+    does nm[0] look end in a "."? => initial
+        or a single capital letter? two capital letters (RJ, SN),
+        Y(J)?
+
+    if n[0] is initial, gather all initial-like-items into intials, rest go into surname
+    else treat as an organization
+
+
+    TODO
+    special cases:
+        <name>Network Information Center. Stanford Research Institute</name> becomes
+        <author><organization>Network Information Center. Stanford Research Institute</organization></author>
+
+Information Sciences Institute University of Southern California
+<author><organization>Information Sciences Institute University of Southern California</organization></author>
+
+0804 International Telegraph and Telephone Consultative Committee of the International Telecommunication Union
+<author><organization>International Telegraph and Telephone Consultative Committee of the International Telecommunication Union</organization></author>
+0806 National Bureau of Standards
+<author><organization>National Bureau of Standards</organization></author>
+0892 International Organization for Standardization
+<author><organization>International Organization for Standardization</organization></author>
+0939 National Research Council
+<author><organization>National Research Council</organization></author>
+0940 Gateway Algorithms and Data Structures Task Force
+<author><organization>Gateway Algorithms and Data Structures Task Force</organization></author>
+0941 International Organization for Standardization
+<author><organization>International Organization for Standardization</organization></author>
+0985 National Science Foundation
+<author><organization>National Science Foundation</organization></author>
+0985 Network Technical Advisory Group
+<author><organization>Network Technical Advisory Group</organization></author>
+1001 NetBIOS Working Group in the Defense Advanced Research Projects Agency
+<author><organization>NetBIOS Working Group in the Defense Advanced Research Projects Agency</organization></author>
+1001 Internet Activities Board
+<author><organization>Internet Activities Board</organization></author>
+1001 End-to-End Services Task Force
+<author><organization>End-to-End Services Task Force</organization></author>
+1002 NetBIOS Working Group in the Defense Advanced Research Projects Agency
+<author><organization>NetBIOS Working Group in the Defense Advanced Research Projects Agency</organization></author>
+1002 Internet Activities Board
+<author><organization>Internet Activities Board</organization></author>
+1002 End-to-End Services Task Force
+<author><organization>End-to-End Services Task Force</organization></author>
+1083 Defense Advanced Research Projects Agency
+<author><organization>Defense Advanced Research Projects Agency</organization></author>
+1083 Internet Activities Board
+<author><organization>Internet Activities Board</organization></author>
+1255 The North American Directory Forum
+<author><organization>The North American Directory Forum</organization></author>
+1330 ESCC X.500/X.400 Task Force
+<author><organization>ESCC X.500/X.400 Task Force</organization></author>
+1330 ESnet Site Coordinating Comittee (ESCC)
+<author><organization>ESnet Site Coordinating Comittee (ESCC)</organization></author>
+1330 Energy Sciences Network (ESnet)
+<author><organization>Energy Sciences Network (ESnet)</organization></author>
+1417 The North American Directory Forum
+<author><organization>The North American Directory Forum</organization></author>
+1517 Internet Engineering Steering Group
+<author><organization>Internet Engineering Steering Group</organization></author>
+1616 RARE WG-MSG Task Force 88
+<author><organization>RARE WG-MSG Task Force 88</organization></author>
+1758 The North American Directory Forum
+<author><organization>The North American Directory Forum</organization></author>
+1797 Internet Assigned Numbers Authority (IANA)
+<author><organization>Internet Assigned Numbers Authority (IANA)</organization></author>
+1811 Federal Networking Council
+<author><organization>Federal Networking Council</organization></author>
+1889 Audio-Video Transport Working Group
+<author><organization>Audio-Video Transport Working Group</organization></author>
+2319 KOI8-U Working Group
+<author><organization>KOI8-U Working Group</organization></author>
+2339 The Internet Society
+<author><organization>The Internet Society</organization></author>
+2339 Sun Microsystems
+<author><organization>Sun Microsystems</organization></author>
+
+
+0912 M. St. Johns
+<author initials='M.' surname='St. Johns' fullname='M. St. Johns'><organization /></author>
+1392 T. LaQuey Parker
+<author initials='T.' surname='LaQuey Parker' fullname='T. LaQuey Parker'><organization /></author>
+1438 A. Lyman Chapin
+<author initials='A.' surname='Lyman Chapin' fullname='A. Lyman Chapin'><organization /></author>
+1455 D. Eastlake 3rd
+<author initials='D.' surname='Eastlake 3rd' fullname='D. Eastlake 3rd'><organization /></author>
+1468 E. van der Poel
+<author initials='E.' surname='van der Poel' fullname='E. van der Poel'><organization /></author>
+1917 P. Nesser II
+<author initials='P.' surname='Nesser II' fullname='P. Nesser II'><organization /></author>
+1918 G. J. de Groot
+<author initials='G. J.' surname='de Groot' fullname='G. J. de Groot'><organization /></author>
+1953 F. Ching Liaw
+<author initials='F.' surname='Ching Liaw' fullname='F. Ching Liaw'><organization /></author>
+1985 J. De Winter
+<author initials='J.' surname='De Winter' fullname='J. De Winter'><organization /></author>
+2145 J. C. Mogul
+<author initials='J. C.' surname='Mogul' fullname='J. C. Mogul'><organization /></author>
+2170 J. Le Boudec
+<author initials='J.' surname='Le Boudec' fullname='J. Le Boudec'><organization /></author>
+2239 K. de Graaf
+<author initials='K.' surname='de Graaf' fullname='K. de Graaf'><organization /></author>
+2244 J. G. Myers
+<author initials='J. G.' surname='Myers' fullname='J. G. Myers'><organization /></author>
+2317 G. de Groot
+<author initials='G.' surname='de Groot' fullname='G. de Groot'><organization /></author>
+2322 K. van den Hout
+<author initials='K.' surname='van den Hout' fullname='K. van den Hout'><organization /></author>
+2611 D. van Gulik
+<author initials='D.' surname='van Gulik' fullname='D. van Gulik'><organization /></author>
+2626 P. Nesser II
+<author initials='P.' surname='Nesser II' fullname='P. Nesser II'><organization /></author>
+2836 F. Le Faucheur
+<author initials='F.' surname='Le Faucheur' fullname='F. Le Faucheur'><organization /></author>
+2839 F. da Cruz
+<author initials='F.' surname='da Cruz' fullname='F. da Cruz'><organization /></author>
+2877 T. Murphy Jr.
+<author initials='T.' surname='Murphy Jr.' fullname='T. Murphy Jr.'><organization /></author>
+2884 J. Hadi Salim
+<author initials='J.' surname='Hadi Salim' fullname='J. Hadi Salim'><organization /></author>
+2903 C. de Laat
+<author initials='C.' surname='de Laat' fullname='C. de Laat'><organization /></author>
+2904 B. de Bruijn
+<author initials='B.' surname='de Bruijn' fullname='B. de Bruijn'><organization /></author>
+2926 P. St. Pierre
+<author initials='P.' surname='St. Pierre' fullname='P. St. Pierre'><organization /></author>
+2963 S. De Cnodder
+<author initials='S.' surname='De Cnodder' fullname='S. De Cnodder'><organization /></author>
+3156 D. Del Torto
+<author initials='D.' surname='Del Torto' fullname='D. Del Torto'><organization /></author>
+3175 F. Le Faucheur
+<author initials='F.' surname='Le Faucheur' fullname='F. Le Faucheur'><organization /></author>
+3203 P. De Schrijver
+<author initials='P.' surname='De Schrijver' fullname='P. De Schrijver'><organization /></author>
+3229 A. van Hoff
+<author initials='A.' surname='van Hoff' fullname='A. van Hoff'><organization /></author>
+3245 J.C.R. Bennet
+<author initials='J.C.R.' surname='Bennet' fullname='J.C.R. Bennet'><organization /></author>
+3246 J.Y. Le Boudec
+<author initials='J.Y.' surname='Le Boudec' fullname='J.Y. Le Boudec'><organization /></author>
+3265 A. B. Roach
+<author initials='A. B.' surname='Roach' fullname='A. B. Roach'><organization /></author>
+3270 F. Le Faucheur
+<author initials='F.' surname='Le Faucheur' fullname='F. Le Faucheur'><organization /></author>
+3300 A. De La Cruz
+<author initials='A.' surname='De La Cruz' fullname='A. De La Cruz'><organization /></author>
+3304 R. P. Swale
+<author initials='R. P.' surname='Swale' fullname='R. P. Swale'><organization /></author>
+<author initials='P. A.' surname='Mart' fullname='P. A. Mart'><organization /></author>
+3304 P. A. Mart
+<author initials='R. P.' surname='Swale' fullname='R. P. Swale'><organization /></author>
+<author initials='P. A.' surname='Mart' fullname='P. A. Mart'><organization /></author>
+3351 A. van Wijk
+<author initials='A.' surname='van Wijk' fullname='A. van Wijk'><organization /></author>
+3571 K. Ho Chan
+<author initials='K.' surname='Ho Chan' fullname='K. Ho Chan'><organization /></author>
+3638 C. M. Heard
+<author initials='J.' surname='Flick' fullname='J. Flick'><organization /></author>
+<author initials='C. M.' surname='Heard' fullname='C. M. Heard'><organization /></author>
+3640 J. van der Meer
+<author initials='J.' surname='van der Meer' fullname='J. van der Meer'><organization /></author>
+3997 R. K. deBry
+<author initials='R. K.' surname='deBry' fullname='R. K. deBry'><organization /></author>
+4038 E. M. Castro
+<author initials='M-K.' surname='Shin' fullname='M-K. Shin' role='editor'><organization /></author>
+<author initials='Y-G.' surname='Hong' fullname='Y-G. Hong'><organization /></author>
+<author initials='E. M.' surname='Castro' fullname='E. M. Castro'><organization /></author>
+4080 S. Van den Bosch
+<author initials='S.' surname='Van den Bosch' fullname='S. Van den Bosch'><organization /></author>
+4082 J. D. Tygar
+<author initials='J. D.' surname='Tygar' fullname='J. D. Tygar'><organization /></author>
+4105 J.-L. Le Roux
+<author initials='J.-P.' surname='Vasseur' fullname='J.-P. Vasseur' role='editor'><organization /></author>
+<author initials='J.-L.' surname='Le Roux' fullname='J.-L. Le Roux' role='editor'><organization /></author>
+4117 A. van Wijk
+<author initials='A.' surname='van Wijk' fullname='A. van Wijk'><organization /></author>
+4124 F. Le Faucheur
+<author initials='F.' surname='Le Faucheur' fullname='F. Le Faucheur' role='editor'><organization /></author>
+4140 K. El Malki
+<author initials='K.' surname='El Malki' fullname='K. El Malki'><organization /></author>
+4171 C. Du Laney
+<author initials='C.' surname='Du Laney' fullname='C. Du Laney'><organization /></author>
+4176 Y. El Mghazli
+<author initials='Y.' surname='El Mghazli' fullname='Y. El Mghazli' role='editor'><organization /></author>
+4240 J. Van Dyke
+<author initials='J.' surname='Van Dyke' fullname='J. Van Dyke'><organization /></author>
+4382 H. van der Linde
+<author initials='H.' surname='van der Linde' fullname='H. van der Linde' role='editor'><organization /></author>
+4452 H. Van de Sompel
+<author initials='H.' surname='Van de Sompel' fullname='H. Van de Sompel'><organization /></author>
+4653 A. L. N. Reddy
+<author initials='A. L. N.' surname='Reddy' fullname='A. L. N. Reddy'><organization /></author>
+4657 J.L. Le Roux
+<author initials='J.L.' surname='Le Roux' fullname='J.L. Le Roux' role='editor'><organization /></author>
+4659 J. De Clercq
+<author initials='J.' surname='De Clercq' fullname='J. De Clercq'><organization /></author>
+4659 F. Le Faucheur
+<author initials='F.' surname='Le Faucheur' fullname='F. Le Faucheur'><organization /></author>
+4662 A. B. Roach
+<author initials='A. B.' surname='Roach' fullname='A. B. Roach'><organization /></author>
+4672 S. De Cnodder
+<author initials='S.' surname='De Cnodder' fullname='S. De Cnodder'><organization /></author>
+4674 J.L. Le Roux
+<author initials='J.L.' surname='Le Roux' fullname='J.L. Le Roux' role='editor'><organization /></author>
+4712 M. Rahman,Y. Kim
+<author initials='M.' surname='Rahman' fullname='M. Rahman'><organization /></author>
+<author initials='Y.' surname='Kim' fullname='Y. Kim'><organization /></author>
+4719 M. Dos Santos
+<author initials='M.' surname='Dos Santos' fullname='M. Dos Santos' role='editor'><organization /></author>
+4720 N. Del Regno
+<author initials='N.' surname='Del Regno' fullname='N. Del Regno'><organization /></author>
+4722 J. Van Dyke
+<author initials='J.' surname='Van Dyke' fullname='J. Van Dyke'><organization /></author>
+4777 T. Murphy Jr.
+<author initials='T.' surname='Murphy Jr.' fullname='T. Murphy Jr.'><organization /></author>
+4798 J. De Clercq
+<author initials='J.' surname='De Clercq' fullname='J. De Clercq'><organization /></author>
+4829 J. de Oliveira
+<author initials='J.' surname='de Oliveira' fullname='J. de Oliveira' role='editor'><organization /></author>
+<author initials='JP.' surname='Vasseur' fullname='JP. Vasseur' role='editor'><organization /></author>
+4864 G. Van de Velde
+<author initials='G.' surname='Van de Velde' fullname='G. Van de Velde'><organization /></author>
+4874 S. De Cnodder
+<author initials='CY.' surname='Lee' fullname='CY. Lee'><organization /></author>
+<author initials='S.' surname='De Cnodder' fullname='S. De Cnodder'><organization /></author>
+4881 K. El Malki
+<author initials='K.' surname='El Malki' fullname='K. El Malki' role='editor'><organization /></author>
+4927 J.-L. Le Roux
+<author initials='J.-L.' surname='Le Roux' fullname='J.-L. Le Roux' role='editor'><organization /></author>
+4976 A. B. Roach
+<author initials='A. B.' surname='Roach' fullname='A. B. Roach'><organization /></author>
+5022 J. Van Dyke
+<author initials='J.' surname='Van Dyke' fullname='J. Van Dyke'><organization /></author>
+5023 B. de hOra
+<author initials='B.' surname='de hOra' fullname='B. de hOra' role='editor'><organization /></author>
+5073 J.L. Le Roux
+<author initials='J.P.' surname='Vasseur' fullname='J.P. Vasseur' role='editor'><organization /></author>
+<author initials='J.L.' surname='Le Roux' fullname='J.L. Le Roux' role='editor'><organization /></author>
+5088 JL. Le Roux
+<author initials='JL.' surname='Le Roux' fullname='JL. Le Roux' role='editor'><organization /></author>
+<author initials='JP.' surname='Vasseur' fullname='JP. Vasseur' role='editor'><organization /></author>
+5194 A. van Wijk
+<author initials='A.' surname='van Wijk' fullname='A. van Wijk' role='editor'><organization /></author>
+5212 JL. Le Roux
+<author initials='JL.' surname='Le Roux' fullname='JL. Le Roux'><organization /></author>
+5283 JL. Le Roux
+<author initials='JL.' surname='Le Roux' fullname='JL. Le Roux'><organization /></author>
+6001 JL. Le Roux
+<author initials='JL.' surname='Le Roux' fullname='JL. Le Roux'><organization /></author>
+6053 J. Hadi Salim
+<author initials='J.' surname='Hadi Salim' fullname='J. Hadi Salim'><organization /></author>
+6105 G. Van de Velde
+<author initials='G.' surname='Van de Velde' fullname='G. Van de Velde'><organization /></author>
+6108 B. Van Lieu
+<author initials='B.' surname='Van Lieu' fullname='B. Van Lieu'><organization /></author>
+6146 I. van Beijnum
+<author initials='I.' surname='van Beijnum' fullname='I. van Beijnum'><organization /></author>
+6198 A.J. Elizondo Armengol
+<author initials='A.J.' surname='Elizondo Armengol' fullname='A.J. Elizondo Armengol'><organization /></author>
+6283 A. Jerman Blazic
+<author initials='A.' surname='Jerman Blazic' fullname='A. Jerman Blazic'><organization /></author>
+6284 T. Van Caenegem
+<author initials='T.' surname='Van Caenegem' fullname='T. Van Caenegem'><organization /></author>
+6285 B. Ver Steeg
+<author initials='B.' surname='Ver Steeg' fullname='B. Ver Steeg'><organization /></author>
+6291 H. van Helvoort
+<author initials='H.' surname='van Helvoort' fullname='H. van Helvoort'><organization /></author>
+6339 L. Hornquist Astrand
+<author initials='L.' surname='Hornquist Astrand' fullname='L. Hornquist Astrand'><organization /></author>
+6344 H. van Helvoort
+<author initials='H.' surname='van Helvoort' fullname='H. van Helvoort'><organization /></author>
+6348 JL. Le Roux
+<author initials='JL.' surname='Le Roux' fullname='JL. Le Roux' role='editor'><organization /></author>
+6841 AM. Eklund Lowinder
+<author initials='AM.' surname='Eklund Lowinder' fullname='AM. Eklund Lowinder'><organization /></author>
+6894 JL. Le Roux
+<author initials='JL.' surname='Le Roux' fullname='JL. Le Roux'><organization /></author>
+7058 S P. Romano
+<author initials='S P.' surname='Romano' fullname='S P. Romano'><organization /></author>
+7059 R. van Rein
+<author initials='R.' surname='van Rein' fullname='R. van Rein'><organization /></author>
+7059 I. van Beijnum
+<author initials='I.' surname='van Beijnum' fullname='I. van Beijnum'><organization /></author>
+7079 N. Del Regno
+<author initials='N.' surname='Del Regno' fullname='N. Del Regno' role='editor'><organization /></author>
+8515 M.A. Reina Ortega
+<author initials='M.A.' surname='Reina Ortega' fullname='M.A. Reina Ortega'><organization /></author>
+8585 H. M.-H. Liu
+<author initials='H. M.-H.' surname='Liu' fullname='H. M.-H. Liu'><organization /></author>
+8846 S P. Romano
+<author initials='S P.' surname='Romano' fullname='S P. Romano'><organization /></author>
+8885 A. de la Oliva
+<author initials='A.' surname='de la Oliva' fullname='A. de la Oliva'><organization /></author>
+<author initials='JC.' surname='Zúñiga' fullname='JC. Zúñiga'><organization /></author>
+8907 D.C. Medway Gash
+<author initials='D.C.' surname='Medway Gash' fullname='D.C. Medway Gash'><organization /></author>
+8979 D. von Hugo
+
+    """
+
+    n = n.strip().replace("  ", " ")
+    nm = n.split(" ")
+    if len(nm) == 1 and re.match(r'[A-Z][.][A-Z]', n):	# split A.Foo into A. Foo, but only if that's all there is
+        if args.warning: print(f"{rfcid}: single element name: {n}")
+        n = n[0:2] + " " + n[2:]
+        nm = n.split(" ")
+
+    nm0 = nm[0]
+    if nm0.endswith(".") or re.match(r'[A-Z]{1,2}$', nm0) or (
+        nm0 in ("ACM", "Bolt", "EARN", "RFC", "Y(J)") or n in ("IETF Secretariat", "ISO", "et al.")
+        ):
+        if args.warning and not nm0.endswith("."): print(f"{rfcid}: spurious name: {n}")
+        initials = nm0
+        surname = ""
+        surnamesep = ""
+        for i in range(1, len(nm)):
+            if nm[i].endswith(".") and not re.match(r"[A-Z][a-z]", nm[i]) and i != len(nm)-1: #  != "St.":
+                initials += " "
+                initials += nm[i]
+            else:
+                for j in range(i, len(nm)):
+                    surname += surnamesep
+                    surnamesep = " "
+
+                    surname += nm[j]
+                    if args.warning and nm[j] == "Ed.": print(f"{rfcid}: spurious name: {n}")
+                break
+
+        return { "initials": initials, "surname": surname, "fullname": n, "role": title, "org": "" }
+
+    return { "initials": "", "surname": "", "fullname": "", "role": "", "org": n }
+
+def find_one(elroot, namespace, nm):
+    """ find the first element with the given name, else None """
+    for r in elroot.findall(f"{namespace}{nm}"):
+        return r
+    return None
+
+def get_text(elroot, namespace, nm):
+    """
+    extract the text from an xml element
+    """
+    el = find_one(elroot, namespace, nm)
+    return el.text if el is not None else None
+
+def get_not_issued(args, namespace, nm, elroot):
+    """
+    Look in the rfc-index for "nm" entries, where "nm" is something like rfc, bcp, fyi or std.
+
+    <?xml version='1.0' encoding='UTF-8'?>
+
+    <reference  anchor='RFC0014' target='https://www.rfc-editor.org/info/rfc14'>
+    <front>
+    <title>Not Issued</title>
+    <author initials='' surname='' fullname=''><organization /></author>
+    </front>
+    <seriesInfo name='RFC' value='14'/>
+    </reference>
+
+    """
+    rfcid = get_text(elroot, namespace, "doc-id")
+    if not rfcid:
+        print(f"ERROR: cannot determine RFC number in the entry {ET.tostring(elroot)}")
+        return (None, None, None, None)
+
+    num4 = rfcid[-4:]	# RFC-10k issue
+    shortnum = num4.lstrip("0")
+    nmlower = nm.lower()
+
+    diskfile = f"{args.bibxml_dir}/reference.{nm}.{num4}.xml"
+    if args.verbose > 1: print(f"GEN {diskfile}")
+
+    ref = gen_empty_ref_xml("RFC")
+    ref["anchor"] = f"{nm}{num4}"
+    ref["target"] = f"https://www.rfc-editor.org/info/{nmlower}{shortnum}"
+    ref["title"] = "Not Issued"
+    ref["authors"] = [{ "initials":'', "surname":'', "fullname":'', "role":'', "org":'' }]
+    ref["series_info"].append( { "name": "RFC", "value": shortnum } )
+    xml = gen_xml(ref, genEmptyAuthor=True)
+
+#    xml = "\n".join([
+#            "<?xml version='1.0' encoding='UTF-8'?>",
+#            "",
+#            f"<reference  anchor='{nm}{num4}' target='https://www.rfc-editor.org/info/{nmlower}{shortnum}'>",
+#            "<front>",
+#            "<title>Not Issued</title>",
+#            "<author initials='' surname='' fullname=''><organization /></author>",
+#            "</front>",
+#            f"<seriesInfo name='RFC' value='{shortnum}'/>",
+#            "</reference>",
+#            ""]) # and end with a NL
+
+    checkfile(args, diskfile, xml)
+    index = f"<a href='reference.{nm}.{num4}.xml'>reference.{nm}.{num4}.xml</a><br/>\n"
+    return (num4, index, xml)
+
+def get_ref_info(args, namespace, nm, elroot):
+    """
+    Look in the rfc-index for "nm" entries, where "nm" is something like rfc, bcp, fyi or std.
+    Grab the doc-id and other entries entries.
+    If they exist, create a reference file for it.
+    The file reference.{nm}.{####}.xml looks like:
+
+    <rfc-entry>
+        <doc-id>RFC8005</doc-id>
+        <title>Host Identity Protocol (HIP) Domain Name System (DNS) Extension</title>
+        <author>
+            <name>J. Laganier</name>
+        </author>
+        <date>
+            <month>October</month>
+            <year>2016</year>
+        </date>
+        <format>
+            <file-format>ASCII</file-format>
+            <file-format>HTML</file-format>
+        </format>
+        <page-count>18</page-count>
+        <keywords>
+            <kw>HIP</kw>
+            <kw>Host Identity Protocol</kw>
+            <kw>Host Identity Payload</kw>
+            <kw>DNS</kw>
+            <kw>Domain Name System</kw>
+        </keywords>
+        <abstract><p>This document specifies a resource record (RR) for the Domain Name System (DNS) and how to use it with the Host Identity Protocol (HIP).  This RR allows a HIP node to store in the DNS its Host Identity (HI), the public component of the node public-private key pair; its Host Identity Tag (HIT), a truncated hash of its public key (PK); and the domain names of its rendezvous servers (RVSs).  This document obsoletes RFC 5205.</p></abstract>
+        <draft>draft-ietf-hip-rfc5205-bis-10</draft>
+        <obsoletes>
+            <doc-id>RFC5205</doc-id>
+        </obsoletes>
+        <current-status>PROPOSED STANDARD</current-status>
+        <publication-status>PROPOSED STANDARD</publication-status>
+        <stream>IETF</stream>
+        <area>int</area>
+        <wg_acronym>hip</wg_acronym>
+        <doi>10.17487/RFC8005</doi>
+    </rfc-entry>
+
+    becomes
+
+    <?xml version='1.0' encoding='UTF-8'?>
+    <reference  anchor='RFC8005' target='https://www.rfc-editor.org/info/rfc8005'>
+    <front>
+        <title>Host Identity Protocol (HIP) Domain Name System (DNS) Extension</title>
+        <author initials='J.' surname='Laganier' fullname='J. Laganier'><organization /></author>
+        <date year='2016' month='October' />
+        <abstract><t>This document specifies a resource record (RR) for the Domain Name System (DNS) and how to use it with the Host Identity Protocol (HIP). This RR allows a HIP node to store in the DNS its Host Identity (HI), the public component of the node public-private key pair; its Host Identity Tag (HIT), a truncated hash of its public key (PK); and the domain names of its rendezvous servers (RVSs).  This document obsoletes RFC 5205.</t></abstract>
+    </front>
+    <seriesInfo name='RFC' value='8005'/>
+    <seriesInfo name='DOI' value='10.17487/RFC8005'/>
+    </reference>
+    """
+
+    rfcid = get_text(elroot, namespace, "doc-id")
+    if not rfcid:
+        print(f"ERROR: cannot determine RFC number in the entry {ET.tostring(elroot)}")
+        return (None, None, None, None)
+
+    num4 = rfcid[-4:]	# RFC-10k issue
+    shortnum = num4.lstrip("0")
+    nmlower = nm.lower()
+
+    diskfile = f"{args.bibxml_dir}/reference.{nm}.{num4}.xml"
+    if args.verbose > 1: print(f"GEN {diskfile}")
+
+    ref = gen_empty_ref_xml("RFC")
+    ref["anchor"] = f"{nm}{num4}"
+    ref["target"] = f"https://www.rfc-editor.org/info/{nmlower}{shortnum}"
+    ref["url"] = f"https://www.rfc-editor.org/info/rfc{num4}.txt"
+    # xml = "<?xml version='1.0' encoding='UTF-8'?>\n\n"
+    # xml += f"<reference  anchor='{nm}{num4}' target='https://www.rfc-editor.org/info/{nmlower}{shortnum}'>\n"
+    ref["title"] = get_text(elroot, namespace, "title")
+    if not ref["title"]:
+        print(f"{rfcid} does not have a title")
+        return
+
+    # xml += "<front>\n"
+    # xml += f"<title>{escape1(title)}</title>\n"
+
+    ref["authors"] = []
+    authors = ""
+    authorsep = ""
+    for author in elroot.findall(f"{namespace}author"):
+        name = None
+        for names in author.findall(f"./{namespace}name"):
+            name = names.text
+
+        authors += authorsep
+        authors += name
+        authorsep = ", "
+
+        atitle = ''
+        for atitles in author.findall(f"./{namespace}title"):
+            atitle = atitles.text
+        for authorname in name.split(","):
+            a = gen_author_element(args, rfcid, authorname, escape(atitle.lower()))
+            # print(f"{num4} {name.text} {a}")
+            if a:
+                ref["authors"].append(a)
+
+    date = find_one(elroot, namespace, "date")
+    day = get_text(date, namespace, "day")
+    ref["date"] = {
+        "year": get_text(date, namespace, "year"),
+        "month": get_text(date, namespace, "month"),
+        # the day is always left blank for RFCs
+        # "day": get_text(date, namespace, "day")
+        "day": "" }
+
+    abstract = find_one(elroot, namespace, "abstract")
+    if abstract:
+        abs = ""
+        for p in abstract.findall(f"{namespace}p"):
+            pr = p.text.replace('\n', ' ').strip()
+            abs += pr
+            abs += "\n\n"
+        ref["abstract"] = abs
+    else:
+        ref["abstract"] = ""
+
+    ref["series_info"] = [ ]
+    for isalso in elroot.findall(f"{namespace}is-also"):
+        isalso_docid = get_text(isalso, namespace, "doc-id")
+        isalso_type = isalso_docid[0:3]
+        isalso_num4 = isalso_docid[-4:]
+        isalso_shortnum = isalso_num4.lstrip("0")
+        ref["series_info"].append( { "name": isalso_type, "value": isalso_shortnum } )
+
+    ref["series_info"].append( { "name": "RFC", "value": shortnum } )
+    doi = get_text(elroot, namespace, "doi")
+    if doi:
+        ref["series_info"].append( { "name": "DOI", "value": doi } )
+    ref["format"] = []
+
+    xml = gen_xml(ref)
+    checkfile(args, diskfile, xml)
+
+    index = f"<a href='reference.{nm}.{num4}.xml'>reference.{nm}.{num4}.xml</a><br/>\n"
+
+    ref['date']['day'] = int(day) if day else 1
+    ref['rdftitle'] = f"RFC {num4}: {ref['title']}, {authors}"
+    rdf = gen_rdf(ref)
+    rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{nm}.{num4}.rdf"
+    wroterdf = checkfile(args, rdf_disk_file, rdf)
+
+    return (num4, index, xml, rdf, wroterdf)
+
+def main():
+    """ main loop """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-b", "--bibxml-dir", help="Directory for reference...xml files", type=str, required=True)
+    group_base = parser.add_mutually_exclusive_group()
+    group_base.add_argument("-r", "--rfcindex", help="Location of rfc-index.xml", type=str)
+    group_base.add_argument("-u", "--rfcindex-url", help="URL for rfc-index.xml", type=str)
+    parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
+    parser.add_argument("-w", "--warning", help="Warn about some questionable entries.", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    args = parser.parse_args()
+
+    if not args.rfcindex and not args.rfcindex_url:
+        sys.exit("Must provide either -r/--rfcindex or -u/--rfcindex-url")
+
+    os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
+
+    if args.rfcindex_url:
+        args.rfcindex = get_url_tempfile(args.rfcindex_url, exit_ok=True)
+
+    index = ""
+    tree = ET.parse(args.rfcindex)
+    root = tree.getroot()
+
+    ix = {}
+    rx = {}
+    namespace = "{http://www.rfc-editor.org/rfc-index}"
+    for rfc in root.findall(f"{namespace}rfc-entry"):
+        num4, index_update, x, rdf, wroterdf = get_ref_info(args, namespace, "RFC", rfc)
+        if num4 is not None:
+            index += index_update
+            ix[num4] = x
+            if wroterdf:
+                rx[num4] = rdf
+
+    for rfc in root.findall(f"{namespace}rfc-not-issued-entry"):
+        num4, index_update, x = get_not_issued(args, namespace, "RFC", rfc)
+        if num4 is not None:
+            index += index_update
+            ix[num4] = x
+
+    checkfile(args, f"{args.bibxml_dir}/index.html", index)
+    index_xml = gen_index_xml(ix)
+    checkfile(args, f"{args.bibxml_dir}/index.xml", index_xml)
+
+    # generate rdf/*
+    index_rdf = gen_index_rdf(rx)
+    checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+
+if __name__ == '__main__':
+    main()

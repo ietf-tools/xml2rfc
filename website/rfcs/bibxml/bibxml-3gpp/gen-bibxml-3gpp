@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+
+"""
+    Retrieve the remote 3GPP web site's list of documents.
+    It is a windows-1252-encoded file, one document per line,
+    that uses "~" as field separators.
+    Store bibxml files in the specified directory.
+
+    The URL was originally
+        https://www.3gpp.org/ftp/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt
+    which then became
+        https://www.3gpp.org/DynaReport/2003-04-10_webexp11a_status-report_special_select.txt
+    That started giving a 404, but FTP has the file still at this location:
+        ftp://www.3gpp.org/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt
+
+
+"statrepwdrwn"~"statreprel"~"statreptype"~"statrepspec"~"statreptitle"~"statrepvers"~"statrepwg"~"statrepremark"~"statrepdraft"~"statrepwebpage"~"statrepavailable"
+"active"~"Rel-9"~"TS"~"24.303"~"Mobility management based on Dual-Stack Mobile IPv6; Stage-3"~"9.5.0"~"C1"~"CP-39: WID @ CP-080075."~""~"24303.htm"~"2012-06-27"
+
+becomes
+
+
+"""
+
+import argparse
+import json
+import re
+import sys
+from ftplib import FTP_TLS
+
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+from bibxml_common import *
+
+import shutil
+import urllib.request as request
+from contextlib import closing
+
+
+def get_w3c_file(args):
+    """
+    Retrieve
+    https://stackoverflow.com/questions/11768214/python-download-a-file-from-an-ftp-server
+    and write to the args.file location.
+    """
+    with closing(request.urlopen(args.url)) as r:
+        with open(args.file, 'wb') as f:
+            shutil.copyfileobj(r, f)
+
+def gen_ref_data(args, l, header_names, count):
+    """
+    Extract the ref information from a 3gpp line.
+
+"active"~"R97"~"TS"~"01.02"~"General Description of a GSM Public Land Mobile Network (PLMN)"~"6.0.1"~"S1"~~""~"0102.htm"~"2001-01-16"
+
+<?xml version='1.0' encoding='UTF-8'?>
+<reference anchor='3GPP.01.02'>
+  <front>
+    <title>General Description of a GSM Public Land Mobile Network (PLMN)</title>
+    <author><organization>3GPP</organization></author>
+    <date day='13' month='August' year='2001' />
+  </front>
+  <seriesInfo name='3GPP TS' value='01.02 3.0.1' />
+  <format type='HTML' target='http://www.3gpp.org/ftp/Specs/html-info/0102.htm' />
+</reference>
+
+    if reptype TS, use 3GPP
+    if reptype TR, use SDO-3GPP
+
+    """
+    flds = {}
+    lflds = l.split("~")
+    for i in range(len(lflds)):
+        f = lflds[i].strip().lstrip('"').rstrip('"')
+        flds[header_names[i]] = f
+    if args.verbose > 1:
+        print(flds)
+
+    reptype = flds["statreptype"]
+    orgname = "3GPP" if reptype == 'TS' else "SDO-3GPP" if reptype == 'TR' else None
+    if orgname is None:
+        print(f"WARNING: Invalid statreptype type {reptype} found in record {count}. Expecting 'TS' or 'TR'")
+        return None
+
+    ref = gen_empty_ref_xml(orgname)
+    if flds["statrepspec"] == '':
+        print(f"WARNING: Missing statrepspec value found in record {count}")
+        return None
+        
+    stdnumber = orgname + "." + flds["statrepspec"]
+    ref["anchor"] = stdnumber
+    ref["title"] = ref["rdftitle"] = flds["statreptitle"].replace('""','"')
+    ref["authors"].append({ "org": "3GPP" })
+    date = flds["statrepavailable"]
+    m = re.match(r"(\d*)-(\d*)-(\d*)$", date)
+    if not m:
+        print(f"WARNING: Invalid date ({date}) found in record {count} for {stdnumber}", file=sys.stderr)
+    else:
+        ref["date"]["year"] = m.group(1)
+        ref["date"]["month"] = months[int(m.group(2))]
+        ref["date"]["day"] = m.group(3)
+        ref["date"]["full"] = date
+
+    ref["series_info"].append({ "name": f"3GPP {flds['statreptype']}", "value": flds["statrepspec"] + " " + flds["statrepvers"] })
+    ref["url"] = "http://www.3gpp.org/ftp/Specs/html-info/" + flds['statrepwebpage']
+    ref["format"].append({ "type": "HTML", "target": ref["url"] })
+    if args.verbose > 2:
+        json.dump(ref, sys.stdout, indent=4)
+        print("")
+    return ref
+
+def get_w3c_data(args):
+    """
+    Open the args.file and read it a line at a time.
+    We make the assumption that the last entry for a given standard found in the file is the one to use.
+    """
+    allrefs = {}
+    header_names = []
+    with open(args.file, "rb") as fpb:
+        count = 0
+        for lb in fpb.readlines():
+            l = lb.decode("windows-1252")
+            if args.verbose > 1:
+                print(l, end="")
+            if not header_names:
+                flds = l.split("~")
+                for f in flds:
+                    f = f.strip().lstrip('"').rstrip('"')
+                    header_names.append(f)
+                if args.verbose > 1:
+                    print(f"header_names=\n{header_names}")
+                
+            else:
+                count += 1
+                ref = gen_ref_data(args, l, header_names, count)
+                if ref:
+                    stdnumber = ref['anchor']
+                    fulldate = ref["date"]["full"]
+                    if stdnumber not in allrefs or \
+                            fulldate > allrefs[stdnumber]["date"]["full"]:
+                        allrefs[stdnumber] = ref
+
+    bibxml_files = {}
+    for ref in allrefs.values():
+        xml = gen_xml(ref)
+
+        stdnumber = ref['anchor']
+        xml_disk_file = f"{args.bibxml_dir}/reference.{stdnumber}.xml"
+        bibxml_files[xml_disk_file] = 1
+        if args.verbose:
+            print(f"GEN {xml_disk_file}")
+            if args.verbose > 2:
+                print(xml)
+        checkfile(args, xml_disk_file, xml)
+
+        rdf = gen_rdf(ref)
+        rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{stdnumber}.rdf"
+        bibxml_files[rdf_disk_file] = 1
+        if args.verbose:
+            print(f"GEN {rdf_disk_file}")
+            if args.verbose > 2:
+                print(rdf)
+        checkfile(args, rdf_disk_file, rdf)
+        
+    if args.clean_bibxml:
+        clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
+        clean_dir(args, f"{args.bibxml_dir}/rdf/*.xml", bibxml_files)
+
+def main():
+    """ main function """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-b", "--bibxml-dir", help="top of bibxml directory to create", type=str, required=False)
+    parser.add_argument("-p", "--print", help="print all of the bibxml info instead of writing to files", required=False)
+    parser.add_argument("-u", "--url", help="URL for 3GPP document list", type=str, required=False)
+    parser.add_argument("-f", "--file", help="filename to write/read the 3GPP document list", type=str)
+    parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
+    parser.add_argument("-c", "--clean-bibxml", help="Clean up bibxml files not in current 3GPP document list", action="store_true")
+    parser.add_argument("-S", "--skip-clean", help="Skip cleaning bibxml files", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    args = parser.parse_args()
+
+    if args.url:
+        if not args.file:
+            args.file = tempfile.NamedTemporaryFile().name
+            if args.verbose:
+                print(f"Using {args.file}")
+        get_w3c_file(args)
+
+    if args.bibxml_dir or args.print:
+        if args.bibxml_dir:
+            os.makedirs(args.bibxml_dir, exist_ok=True)
+            os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
+
+        get_w3c_data(args)
+
+        if args.bibxml_dir:
+            # generate index.html file
+            hx = gen_index_html_set(args.bibxml_dir, "reference.")
+            index_html = gen_index_html(hx)
+            checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+
+            # generate index.rdf file
+            rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+            index_rdf = gen_index_rdf(rx)
+            checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+
+if __name__ == "__main__":
+    main()

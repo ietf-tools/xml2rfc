@@ -1,0 +1,321 @@
+#!/usr/bin/env python3
+
+"""
+    Read the 1id-abstracts.txt file and create a bibxml-ids directory structure.
+
+    The current 1id-abstracts.txt file consists of a header that needs to be skipped over,
+    then headers for each working group followed by line of dashes.
+
+    Within each working group are one or more document blocks. A document block has 
+    a title block followed by a blank line, then an optional abstract block.
+
+    The title block has several lines with the title, author list, date and draft name.
+    These are all indented by two spaces.
+
+    The abstract block has one or more paragraphs, all indented by six spaces. The
+    paragraphs are separated by a blank line that usually only has 6 spaces.
+
+    The draft name looks like <draft-abc-lmn-xyz-00.txt>. The exact ID name is "draft-abc-lmn-xyz-00".
+    We also generate a "canonical-id-name" that removes the leading "draft-" and the trailing
+    generation number, leaving "abc-lmn-xyz".
+
+    Generate all of:
+        bibxml-ids/reference.I-D.exact-id-name.xml
+        bibxml-ids/reference.I-D.canonical-id-name.xml
+        bibxml-ids/index.xml
+        bibxml-ids/rdf/item.I-D.canonical-id-name.rdf
+        bibxml-ids/index.rdf
+
+    Author: Tony Hansen
+"""
+
+import argparse
+import os
+import re
+import sys
+from enum import Enum
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+from bibxml_common import *
+
+assert sys.version_info >= (3,7)
+
+class State(Enum):
+    BEFORE_DASHES = 1
+    BEFORE_DOC = 2
+    GATHERING_DOC = 3
+    BEFORE_ABSTRACT = 4
+    GATHERING_ABSTRACT = 5
+    IN_ERROR = 6
+
+white_space = [" ", "\t", "\n", "\r"]
+
+def indented_6(ln):
+    """ check if the line is indented by 6 spaces and not empty """
+    return ln.startswith("      ") and (len(ln) > 6) and (ln[6] not in white_space)
+
+def indented_2(ln):
+    """ Check if the line is indented by 2 spaces, and not empty. """
+    return ln.startswith("  ") and (ln[2] not in white_space)
+
+def indented_0(ln):
+    """ Check if the line has no indent and is not empty """
+    return len(ln) > 0 and (ln[0] not in white_space)
+
+def is_empty(ln):
+    """ Check if the line is empty: nothing but whitespace """
+    return len(ln) == 0 or re.match("[ \t\r\n]*$", ln)
+
+def error(st, ln, msg=""):
+    """ print an error message about unexpected input """
+    if msg:
+        print(f"state is {st}: {msg}")
+    else:
+        print(f"state is {st}")
+    print("\tUnexpected line found: {ln}")
+    return State.IN_ERROR
+
+def print_doc(args, doc, abstract):
+    """ print a document with its abstract """
+
+    ref = gen_empty_ref_xml("I-D")
+
+    words = doc.split(" ")
+    if len(words) < 3:
+        print(f"ERROR: Insufficient words in document heading: {doc}")
+        return
+    idname = words[-1]		# idname is last
+    date = words[-2]		# date comes before that, leave off trailing ,
+    if date.endswith(","):
+        date = date[0:-1]
+    m = re.match(r"(\d{4})-(\d{2})-(\d{2})$", date)
+    if not m:
+        print(f"ERROR: date does not appear to be yyyy-mm-dd: {doc}")
+        return
+
+    ref["date"] = { "year": m.group(1), "month": months[int(m.group(2))], "day": m.group(3) }
+
+    title = words[0][1:]	# grab first part of title without leading "
+    authors = []
+    inauthors = False
+    wordsep = " "
+    for word in words[1:-2]:	# 
+        if inauthors:
+            authors.append(word)
+        else:
+            if word.endswith('",'):
+                inauthors = True
+                word = word[:-2]	# strip the trailing ",
+            title += wordsep
+            title += word
+            wordsep = " "
+
+    # further process the authors
+    ref["authors"] = []
+    authors.append("END")
+    i = 0
+    rdf_authors = ""
+    rdf_authorsep = ""
+    while authors[i] != "END":
+        author = ""
+        authorsep = ""
+        surname = ""
+        prev_surname = ""
+        while not authors[i].endswith(","):
+            author += authorsep
+            author += authors[i]
+            prev_surname = surname
+            surname = authors[i]
+            # print(f"i={i}, surname >>={surname}")
+            authorsep = " "
+            i += 1
+        author += authorsep
+        prev_surname = surname
+        surname = authors[i][:-1]
+        # print(f"i={i}, surname !>={surname}")
+        author += surname
+        i += 1
+        # print(f"author={author}")
+        if prev_surname.lower() in ["van"]:
+            surname = f"{prev_surname} {surname}"
+
+        # print(f"surname={surname}")
+
+        init = author[0]
+        # TODO - verify that "Ed." is really used
+        rdf_authors += rdf_authorsep
+        rdf_authors += author
+        rdf_authorsep = ", "
+        if authors[i] in ["Ed.", "Ed.,"]:
+            i += 1
+            ref["authors"].append({ "initials": init, "surname": surname, "fullname": author, "role": "editor", "org": "" })
+        else:
+            ref["authors"].append({ "initials": init, "surname": surname, "fullname": author, "role": "", "org": "" })
+
+    ref["title"] = title
+
+    # process I-D name
+    m = re.match(r"^<(draft-(.*)(-\d+))([.][a-z]+(,[.][a-z]+)*)>$", idname)
+    if not m:
+        print(f"ERROR: I-D name does not start with <draft- or not end in -## followed by a list of filename extensions: {doc}")
+        return
+
+    # if arg.verbose > 2: 
+    # print(f"idname={idname}, g={m.groups()}")
+
+    full_name = m.group(1)
+    diskfile1 = f"{args.bibxml_dir}/reference.I-D.{full_name}.xml"
+    diskfile1_backup = f"{args.bibxml_dir}/backup/reference.I-D.{full_name}.xml" if args.backup_existing_files else None
+    if args.verbose > 0: print(f"GEN {diskfile1}")
+
+    canonical_name = m.group(2)	# skip draft- and -##
+    generation = m.group(3)
+    suffix_list = m.group(4)
+
+    if args.verbose > 1: print(f"idname={idname}, full_name={full_name}, canonical_name={canonical_name}, suffix_list={suffix_list}")
+
+    ref["anchor"] = f"I-D.{canonical_name}"
+
+    # process abstract
+    if abstract.endswith("\n\n"):
+        abstract = abstract[0:-2]
+    ref["abstract"] = abstract
+
+    ref["series_info"] = [ { "name": "Internet-Draft", "value": f"{full_name}" } ]
+    ref["url"] = f"http://www.ietf.org/internet-drafts/{full_name}.txt"
+    ref["format"] = [ ]
+    for typ in suffix_list.split(","):
+        if args.verbose >2: print(f"looking at typ={typ}")
+        typu = typ[1:].upper() # .txt => TXT, .pdf => PDF
+        ref["format"].append({ "type": typu, "target": f"https://www.ietf.org/internet-drafts/{full_name}{typ}" })
+    ref["about"] = ref["url"] # TODO: remove this line?
+    ref['rdftitle'] = f"\"{ref['title']}\", {rdf_authors}"
+
+    xml = gen_xml(ref)
+    diskfile2 = f"{args.bibxml_dir}/reference.I-D.{canonical_name}.xml"
+    diskfile2_backup = f"{args.bibxml_dir}/backup/reference.I-D.{canonical_name}.xml" if args.backup_existing_files else None
+
+    checkfile(args, diskfile1, xml, backup_fname=diskfile1_backup)
+    checkfile(args, diskfile2, xml, backup_fname=diskfile2_backup)
+
+    rdf = gen_rdf(ref)
+    rdf_disk_file = f"{args.bibxml_dir}/rdf/item.I-D.{canonical_name}.rdf"
+    checkfile(args, rdf_disk_file, rdf)
+
+def process_input(args, fp):
+    """
+    Process the 1id-abstracts.txt file.
+    This uses a state machine approach to grab each document.
+    """
+
+    state = State.BEFORE_DASHES
+
+    doc = ""
+    abstract = ""
+
+    for ln in fp:
+
+        if State.BEFORE_DASHES == state:
+            if ln.startswith("--------"):
+                state = State.BEFORE_DOC
+            else:
+                pass
+
+        elif State.BEFORE_DOC == state:
+            if indented_6(ln):
+                state = error(state, ln, "abstract without a doc?")
+            elif indented_2(ln):
+                doc = ln.strip()
+                state = State.GATHERING_DOC
+            elif indented_0(ln):
+                state = error(state, ln, "one line doc with no abstract?")
+            else:
+                pass
+
+        elif State.GATHERING_DOC == state:
+            if indented_2(ln):
+                doc += " "
+                doc += ln.strip()
+            elif is_empty(ln):
+                state = State.BEFORE_ABSTRACT
+            else:
+                state = error(state, ln)
+                # elif ind 0
+                # error no abstract
+                # elif ind 6
+                # error abstract w/o doc end
+
+        elif State.BEFORE_ABSTRACT == state:
+            if is_empty(ln):
+                pass
+            elif indented_6(ln):
+                abstract = ln.strip()
+                state = State.GATHERING_ABSTRACT
+            elif indented_2(ln):
+                state = error(state, ln, "no abstract?")
+            elif indented_0(ln):
+                state = error(state, ln, "no abstract?")
+            else:
+                state = error(state, ln)
+
+        elif State.GATHERING_ABSTRACT == state:
+            if is_empty(ln):
+                abstract += "\n\n"
+            elif indented_6(ln):
+                abstract += " "
+                abstract += ln.strip()
+            elif indented_2(ln):
+                print_doc(args, doc, abstract)
+                doc = ln.strip()
+                state = State.GATHERING_DOC
+            elif indented_0(ln):
+                print_doc(args, doc, abstract)
+                if ln.startswith("--------"):
+                    state = State.BEFORE_DOC
+                else:
+                    state = State.BEFORE_DASHES
+            else:
+                state = error(state, ln)
+
+    if doc != "":
+       print_doc(args, doc, abstract)
+
+
+def main():
+    """ main loop """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-b", "--bibxml-dir", help="Directory to write to", type=str, required=True)
+    group_base = parser.add_mutually_exclusive_group()
+    group_base.add_argument("-i", "--idindex", help="Location of 1id-abstracts.txt", type=str)
+    group_base.add_argument("-u", "--idindex-url", help="URL for 1id-abstracts.txt", type=str)
+    parser.add_argument("-B", "--backup-existing-files", help="Backup any existing files before overwriting", action="store_true")
+    parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
+    parser.add_argument("-w", "--warning", help="Warn about some questionable entries.", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    args = parser.parse_args()
+
+    if not args.idindex and not args.idindex_url:
+        sys.exit("Must provide either -i/--idindex or -u/--idindex-url")
+
+    os.makedirs(args.bibxml_dir, exist_ok=True)
+    os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
+    if args.backup_existing_files:
+        os.makedirs(args.bibxml_dir + "/backup", exist_ok=True)
+
+    if args.idindex_url:
+        args.idindex = get_url_tempfile(args.idindex_url, exit_ok=True)
+
+    with open(args.idindex) as fp:
+        process_input(args, fp)
+
+    # generate index.html file
+    hx = gen_index_html_set(args.bibxml_dir, "reference.")
+    index_html = gen_index_html(hx)
+    checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+
+    # generate index.rdf file
+    rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+    index_rdf = gen_index_rdf(rx)
+    checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+
+if __name__ == '__main__':
+    main()
