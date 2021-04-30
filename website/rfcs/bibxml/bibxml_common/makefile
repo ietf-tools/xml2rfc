@@ -1,16 +1,21 @@
 DIR=bibxml/bibxml_common
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/rfcs/$(DIR)
 
-EXEFILES=generate-tarball-zipfile gen-rdf-from-resource-xml
-OTHERFILES=bibxml_common.py makefile
+SHFILES=generate-tarball-zipfile
+PYFILES=gen-rdf-from-resource-xml bibxml_common.py
+EXEFILES= $(SHFILES) $(PYFILES)
+OTHERFILES=makefile
 
 none:
 	@echo make install -- install all files into production
 
 test:
-	@for i in $(EXEFILES); do \
-	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
-	done
+	for i in $(PYFILES); do "./$$i" --unit-tests; done
+	for i in $(SHFILES); do bash -n "$$i"; done
+	for i in $(PYFILES); do "./$$i" --help; done
+
+pylint:
+	PYTHONPATH=../bibxml_common pylint --rcfile=../.pylintrc $(PYFILES)
 
 install:
 	@for i in $(EXEFILES); do \

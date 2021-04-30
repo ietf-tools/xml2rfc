@@ -1,7 +1,9 @@
 DIR=bibxml/bibxml-rfcsubseries
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/rfcs/$(DIR)
 
-EXEFILES=gen-bibxml-rfcsubseries-all gen-bibxml-rfcsubseries
+SHFILES=gen-bibxml-rfcsubseries-all
+PYFILES=gen-bibxml-rfcsubseries
+EXEFILES= $(SHFILES) $(PYFILES)
 OTHERFILES=makefile
 
 PROD_BIBXML_DIR = "/home/www/tools.ietf.org/tools/xml2rfc/web/public/rfc/bibxml-rfcsubseries-new"
@@ -22,6 +24,9 @@ none:
 	@echo make install
 	@echo
 	@echo Test targets:
+	@echo make test
+	@echo make pylint
+	@echo
 	@echo make all-local
 	@echo make all-url
 
@@ -36,9 +41,12 @@ production:
 	./gen-bibxml-rfcsubseries -b $(PROD_BIBXML_DIR) -R $(REF_BIBXML_DIR) -u $(PROD_RFCINDEX_URL)
 
 test:
-	@for i in $(EXEFILES); do \
-	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
-	done
+	for i in $(PYFILES); do "./$$i" --unit-tests; done
+	for i in $(SHFILES); do bash -n "$$i"; done
+	for i in $(PYFILES); do "./$$i" --help; done
+
+pylint:
+	PYTHONPATH=../bibxml_common pylint --rcfile=../.pylintrc $(PYFILES)
 
 install:
 	@for i in $(EXEFILES); do \

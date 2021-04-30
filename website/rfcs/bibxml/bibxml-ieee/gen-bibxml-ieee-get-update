@@ -3,9 +3,8 @@
 """
     Retrieve all of the files on the remote IEEE FTP site.
     Store them in the specified directory.
-
-    Author: Tony Hansen
 """
+#    Author: Tony Hansen
 
 import os
 import sys
@@ -14,26 +13,28 @@ import ssl
 from zipfile import ZipFile
 from ftplib import FTP_TLS
 from pathlib import Path
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+import bibxml_common
 
-def get_fname(x):
+def get_fname(dir_entry):
     """ from a string
     'drwxr-x---    2 11800    1432         4096 Nov 03  2019 Deleted_IEEEDraftStd'
     retrieve 'Deleted_IEEEDraftStd'
     """
-    return x.split(' ')[-1]
+    return dir_entry.split(' ')[-1]
 
-def allowed_filename(args, x):
+def allowed_filename(args, dir_entry):
     """ from a string
     '-rwxr-x---    2 11800    1432         4096 Nov 03  2019 09184351.pdf'
     check if the name ends with either .zip or .xml
     """
-    allow_file = args.allfiles  or x.lower().endswith('.zip') or x.lower().endswith('.xml')
+    allow_file = args.allfiles  or dir_entry.lower().endswith('.zip') or dir_entry.lower().endswith('.xml')
     if not allow_file:
-        print(f"skipping file {x}")
+        print(f"skipping file {dir_entry}")
     return allow_file
 
 def retrieve(args, ftp, where):
-    """ 
+    """
     Retrieve all files from the specified directory.
     Recursively retrieve all subdirectories.
     Return the number of files and directories retrieved.
@@ -42,37 +43,37 @@ def retrieve(args, ftp, where):
     if not args.count_only:
         Path(f"{args.directory}/{where}").mkdir(parents=True, exist_ok=True)
 
-    if args.verbose:
+    if args.verbose > 1:
         print("=== dir ===")
     dir_results = []
     d = ftp.dir(where, lambda x: dir_results.append(x))
-    if args.verbose:
+    if args.verbose > 2:
         print(f"d={d}")
         print(f"dir_results={dir_results}")
 
     files = sorted([get_fname(x) for x in dir_results if x.startswith("-") and allowed_filename(args, x)])
-    if args.verbose:
+    if args.verbose > 2:
         print(f"files={files}")
     for file in files:
-        if args.verbose:
+        if args.verbose > 1:
             print(f"retrieving file {where}/{file} into {args.directory}/{where}/{file}")
         fcnt += 1
         if not args.count_only:
-            with open(f"{args.directory}/{where}/{file}", "wb") as fp:
-                if args.verbose:
+            with open(f"{args.directory}/{where}/{file}", "wb") as outfp:
+                if args.verbose > 2:
                     print(f" created {args.directory}/{where}/{file}")
-                ftp.retrbinary(f"RETR {where}/{file}", lambda x: fp.write(x))
+                ftp.retrbinary(f"RETR {where}/{file}", lambda x: outfp.write(x))
             if file.lower().endswith(".zip") and args.unpack_zipfile:
-                with ZipFile(f"{args.directory}/{where}/{file}", 'r') as zipObj:
-                    listOfFileNames = zipObj.namelist()
-                    if args.verbose:
-                        print(f"listOfFileNames={listOfFileNames}")
+                with ZipFile(f"{args.directory}/{where}/{file}", 'r') as zip_obj:
+                    list_of_file_names = zip_obj.namelist()
+                    if args.verbose > 2:
+                        print(f"list_of_file_names={list_of_file_names}")
                     # Iterate over the file names
-                    for fileName in listOfFileNames:
+                    for file_name in list_of_file_names:
                         # Check filename endswith xml
-                        if fileName.lower().endswith('.xml'):
+                        if file_name.lower().endswith('.xml'):
                             # Extract all xml files from zip
-                            print(f"extracting {fileName} into {args.directory}/{where}")
+                            print(f"extracting {file_name} into {args.directory}/{where}")
                             xcnt += 1
                             extracted = False
                             for suff in ["", "-a", "-b", "-c", "-d", "-e", "-f", "-g",
@@ -80,22 +81,22 @@ def retrieve(args, ftp, where):
                                          "-p", "-q", "-r", "-s", "-t", "-u", "-v", "-w",
                                          "-x", "-y", "-z"]:
                                 odir = f"{args.directory}/{where}{suff}"
-                                oname = f"{odir}/{fileName}"
+                                oname = f"{odir}/{file_name}"
                                 if os.path.isfile(oname):
                                     print(f"the file {oname} already exists")
                                 else:
-                                    zipObj.extract(fileName, odir)
+                                    zip_obj.extract(file_name, odir)
                                     extracted = True
                                 if extracted:
                                     break
                             if not extracted:
-                                print(f"Cannot extract {fileName} into {args.directory}/{where}")
+                                print(f"Cannot extract {file_name} into {args.directory}/{where}")
 
     dirs = sorted([get_fname(x) for x in dir_results if x.startswith("d")])
-    if args.verbose:
+    if args.verbose > 2:
         print(f"dirs={dirs}")
     for d in dirs:
-        if args.verbose:
+        if args.verbose > 1:
             print(f"recursively retrieving dir {where}/{d}")
         (dcnt2, fcnt2, xcnt2) = retrieve(args, ftp, f"{where}/{d}")
         fcnt += fcnt2
@@ -103,6 +104,7 @@ def retrieve(args, ftp, where):
         xcnt += xcnt2
 
     return (dcnt, fcnt, xcnt)
+
 
 def login(args):
     """ login to the FTP-SSL host """
@@ -123,48 +125,75 @@ def login(args):
             print(f"FTP_TLS(host={args.host}, user={args.user}, passwd={args.password}, timeout={60})")
 
         ftp = FTP_TLS(host=args.host, context=ssl_context, timeout=60)
-        if args.verbose:
+        if args.verbose > 1:
             print("=== getwelcome ===")
         w = ftp.getwelcome()
         if args.verbose:
             print(f"Connected to {args.host} as {args.user}", file=sys.stderr)
-        if args.verbose:
+        if args.verbose > 1:
             print(f"welcome={w}")
-        if args.verbose:
+        if args.verbose > 1:
             print("=== login ===")
         ftp.login(user=args.user, passwd=args.password)
 
-        if args.verbose:
+        if args.verbose > 1:
             print("=== prot_p ===")
         ftp.prot_p()
-        if args.verbose:
+        if args.verbose > 1:
             print("=== set_pasv ===")
         ftp.set_pasv(True)
 
         dcnt, fcnt, xcnt = retrieve(args, ftp, ".")
         print(f"{fcnt} files seen in {dcnt} directories, with {xcnt} xml files")
-            
-        if args.verbose:
+
+        if args.verbose > 1:
             print("=== quit ===")
         ftp.quit()
+
     except Exception as e:
         sys.exit(f"Cannot connect to {args.host} as {args.user}: {e}", file=sys.stderr)
+
+
+def run_unit_tests(args):
+    """
+    Run some unit tests on some of the code modules.
+    """
+    # TODO -- fill in here
+    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
+
+    print("All tests passed")
+    sys.exit()
 
 
 def main():
     """ main function """
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("-b", "--bibxml", help="top of bibxml directory to create", type=str, required=False)
-    parser.add_argument("-d", "--directory", help="top of output directory to create", type=str, required=True)
-    parser.add_argument("-H", "--host", help="Host to connect to", type=str, default='ftp.ieee.org')
-    parser.add_argument("-U", "--user", help="User to connect as", type=str, required=True)
-    parser.add_argument("-P", "--password", help="Password to use", type=str, required=True)
+    parser.add_argument("-d", "--directory", help="top of output directory to create", type=str)
+    parser.add_argument("-H", "--host", help="Host to connect to. Defaults to $IEEEHOST.", type=str, default=os.environ.get("IEEEHOST"))
+    parser.add_argument("-U", "--user", help="User to connect as. Defaults to $IEEEUSER.", type=str, default=os.environ.get("IEEEUSER"))
+    parser.add_argument("-P", "--password", help="Password to use. Defaults to $IEEEPSWD.", type=str, default=os.environ.get("IEEEPSWD"))
     parser.add_argument("-a", "--allfiles", help="Set to true if all files are to be retrieved", action="store_true")
     parser.add_argument("-z", "--unpack-zipfile", help="Set to true if xml files are to be extracted from zip files", action="store_true")
     parser.add_argument("-c", "--count-only", help="Count the files and directories that would be retrieved", action="store_true")
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
     parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
     # parser.add_argument("filenames", nargs='+')
     args = parser.parse_args()
+
+    if args.unit_tests:
+        run_unit_tests(args)
+
+    if not args.directory:
+        bibxml_common.usage(parser, "error: the following arguments are required: -d/--director")
+
+    if not args.host:
+        bibxml_common.usage(parser, "Either $IEEEHOST is -H/--host required")
+
+    if not args.user:
+        bibxml_common.usage(parser, "Either $IEEEUSER is -H/--user required")
+
+    if not args.password:
+        bibxml_common.usage(parser, "Either $IEEEPSWD is -H/--password required")
 
     login(args)
 

@@ -1,59 +1,61 @@
 #!/usr/bin/env python3
 
 """
-Given a resource.xyz.xml file such as this:
-
-    <?xml version='1.0' encoding='UTF-8'?>
-    <reference anchor='RFC###'>
-    <front>
-    <title>$TITLE</title>
-    <author initials='S.' surname='Name1' fullname='S. Name1'>
-    <organization /></author>
-    <author initials='T.' surname='Name2' fullname='T. Name2'>
-    <organization /></author>
-    <author initials='B.' surname='Name3' fullname='B. Name3'>
-    <organization /></author>
-    <date year='$YEAR' month='$MONTH' />
-    <abstract>
-    <t>$ABSTRACT</t></abstract></front>
-    <seriesInfo name='RFC' value='####' />
-    <seriesInfo name='DOI' value='10.17487/RFC####' />
-    <format type='TXT' octets='1759' target='http://www.rfc-editor.org/rfc/rfc####.txt' />
-    </reference>
-    
-create a corresponding RDF file such as this:
-
-    <item rdf:about='http://www.rfc-editor.org/rfc/rfc####.txt'>
-        <link>http://www.rfc-editor.org/rfc/rfc####.txt</link>
-        <title>RFC ####: $TITLE, S. Name1, T. Name2, B. Name3</title>
-        <dc:date>$YEAR-$MONTH-31T23:00:00-00:00</dc:date>
-        <description>$ABSTRACT $STANDARDSTRACE</description>
-    </item>
+Given a resource.xyz.xml file create a corresponding RDF file.
 """
+#    Author: Tony Hansen
+
+# A resource.xyz.xml looks like this:
+#    <?xml version='1.0' encoding='UTF-8'?>
+#    <reference anchor='RFC###'>
+#    <front>
+#    <title>$TITLE</title>
+#    <author initials='S.' surname='Name1' fullname='S. Name1'>
+#    <organization /></author>
+#    <author initials='T.' surname='Name2' fullname='T. Name2'>
+#    <organization /></author>
+#    <author initials='B.' surname='Name3' fullname='B. Name3'>
+#    <organization /></author>
+#    <date year='$YEAR' month='$MONTH' />
+#    <abstract>
+#    <t>$ABSTRACT</t></abstract></front>
+#    <seriesInfo name='RFC' value='####' />
+#    <seriesInfo name='DOI' value='10.17487/RFC####' />
+#    <format type='TXT' octets='1759' target='http://www.rfc-editor.org/rfc/rfc####.txt' />
+#    </reference>
+#
+# A corresponding RDF file looks like this:
+#
+#    <item rdf:about='http://www.rfc-editor.org/rfc/rfc####.txt'>
+#        <link>http://www.rfc-editor.org/rfc/rfc####.txt</link>
+#        <title>RFC ####: $TITLE, S. Name1, T. Name2, B. Name3</title>
+#        <dc:date>$YEAR-$MONTH-31T23:00:00-00:00</dc:date>
+#        <description>$ABSTRACT $STANDARDSTRACE</description>
+#    </item>
 
 import argparse
 import os
-import re
 import sys
-
+import glob
+import stat
 import xml.etree.ElementTree as ET
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
-from bibxml_common import *
+import bibxml_common
 
-assert sys.version_info >= (3,7)
+assert sys.version_info >= (3,6)
 
-def find_one(elroot, namespace, nm):
+def find_one(elroot, namespace, name):
     """ find the first element with the given name, else None """
-    for r in elroot.findall(f"{namespace}{nm}"):
+    for r in elroot.findall(f"{namespace}{name}"):
         return r
     return None
 
-def get_text(elroot, namespace, nm, dft=None):
+def get_text(elroot, namespace, name, dft=None):
     """
     Extract the text from an xml element.
     If not found, return dft.
     """
-    el = find_one(elroot, namespace, nm)
+    el = find_one(elroot, namespace, name)
     txt = el.text if el is not None else None
     if txt is None:
         return dft
@@ -69,18 +71,19 @@ def parse(args, fname, ofp):
     tree = ET.parse(fname)
     root = tree.getroot()
 
-    ref = gen_empty_ref_xml("RFC")
+    ref = bibxml_common.gen_empty_ref_xml("RFC")
     ref["title"] = ref["rdftitle"] = get_text(root, "", "./front/title")
     std = root.attrib["anchor"]
-    rfc = std[3:]
+    # rfc = std[3:]
     for author in root.findall("./front/author"):
-        ref["authors"].append({ 
+        ref["authors"].append({
                 "initials": author.attrib.get("initials", ""),
                 "surname": author.attrib.get("surname", ""),
                 "fullname": author.attrib.get("fullname", ""),
                 "role": author.attrib.get("role", ""),
                 "org": get_text(author, "", "./organization", "")
                 })
+
     date = find_one(root, "", "./front/date")
     if date is not None:
         ref["date"] = {
@@ -106,7 +109,7 @@ def parse(args, fname, ofp):
                 "octets": fmt.attrib.get("octets"),
                 "target": fmt.attrib.get("target")
                 })
-    rdf = gen_rdf(ref)        
+    rdf = bibxml_common.gen_rdf(ref)
     print(rdf, file=ofp)
 
 
@@ -150,7 +153,18 @@ def scan_directory(args):
                     parse(args, fn, ofp)
             except Exception as e:
                 print(e, file=sys.stderr)
-        
+
+
+def run_unit_tests(args):
+    """
+    Run some unit tests on some of the code modules.
+    """
+    # TODO -- fill in here
+    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
+
+    print("All tests passed")
+    sys.exit()
+
 
 def main():
     """ main loop """
@@ -159,8 +173,12 @@ def main():
     parser.add_argument("-D", "--scan-directory", help="Directory to scan", type=str)
     parser.add_argument("-O", "--output-directory", help="Directory to write to", type=str)
     parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
     parser.add_argument("file", nargs='*')
     args = parser.parse_args()
+
+    if args.unit_tests:
+        run_unit_tests(args)
 
     if args.scan_directory and args.output_directory:
         scan_directory(args)

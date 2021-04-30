@@ -10,7 +10,9 @@ PROD_RFC_INDEX = "/home/ietf/rfc/rfc-index.xml"
 PROD_RFC_INDEX_URL = "https://www.rfc-editor.org/rfc-index.xml"
 DEF_RFC_INDEX_URL = "https://www.rfc-editor.org/rfc-index.xml"
 
-EXEFILES=gen-bibxml-rfcs-all gen-bibxml-rfcs-via-rfc-index gen-bibxml-rfcs-via-rsync
+SHFILES=gen-bibxml-rfcs-all gen-bibxml-rfcs-via-rsync
+PYFILES=gen-bibxml-rfcs-via-rfc-index
+EXEFILES= $(SHFILES) $(PYFILES)
 OTHERFILES=makefile
 
 
@@ -18,6 +20,10 @@ none:
 	@echo make all -- build locally using rfc-index file and URL
 	@echo make production using rfc-index URL
 	@echo make install -- install all files into production
+	@echo
+	@echo Test targets:
+	@echo make test
+	@echo make pylint
 
 all: all-local all-url
 
@@ -30,9 +36,12 @@ production:
 	./gen-bibxml-rfcs-via-rfc-index -b $(PROD_BIBXML_DIR) -r $(PROD_RFC_INDEX) -w -v
 
 test:
-	@for i in $(EXEFILES); do \
-	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
-	done
+	for i in $(PYFILES); do "./$$i" --unit-tests; done
+	for i in $(SHFILES); do bash -n "$$i"; done
+	for i in $(PYFILES); do "./$$i" --help; done
+
+pylint:
+	PYTHONPATH=../bibxml_common pylint --rcfile=../.pylintrc $(PYFILES)
 
 install:
 	@for i in $(EXEFILES); do \

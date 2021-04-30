@@ -1,7 +1,9 @@
 DIR=bibxml/bibxml-nist
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/rfcs/$(DIR)
 
-EXEFILES=gen-bibxml-nist-all gen-bibxml-nist
+SHFILES=gen-bibxml-nist-all
+PYFILES=gen-bibxml-nist
+EXEFILES= $(SHFILES) $(PYFILES)
 OTHERFILES=makefile
 
 none:
@@ -10,6 +12,9 @@ none:
 	@echo make install
 	@echo
 	@echo Test targets:
+	@echo make test
+	@echo make pylint
+	@echo
 	@echo make getxls
 	@echo make geturl
 	@echo make dumpjson
@@ -28,9 +33,12 @@ production:
 	./gen-bibxml-nist -v -u $(URL) -b $(PRODDIR) -c
 
 test:
-	@for i in $(EXEFILES); do \
-	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
-	done
+	for i in $(PYFILES); do "./$$i" --unit-tests; done
+	for i in $(SHFILES); do bash -n "$$i"; done
+	for i in $(PYFILES); do "./$$i" --help; done
+
+pylint:
+	PYTHONPATH=../bibxml_common pylint --rcfile=../.pylintrc $(PYFILES)
 
 install:
 	@for i in $(EXEFILES); do \

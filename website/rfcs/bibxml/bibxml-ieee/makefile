@@ -1,7 +1,9 @@
 DIR=bibxml/bibxml-ieee
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/rfcs/$(DIR)
 
-EXEFILES=gen-bibxml-ieee-all gen-bibxml-ieee-apply-update gen-bibxml-ieee-gen-bibxml gen-bibxml-ieee-get-update
+SHFILES=gen-bibxml-ieee-all
+PYFILES=gen-bibxml-ieee-apply-update gen-bibxml-ieee-gen-bibxml gen-bibxml-ieee-get-update
+EXEFILES= $(SHFILES) $(PYFILES)
 OTHERFILES=makefile
 
 none:
@@ -10,6 +12,9 @@ none:
 	@echo make install
 	@echo
 	@echo Test targets:
+	@echo make test
+	@echo make pylint
+	@echo
 	@echo make get-cache - do not use
 	@echo make get-update
 	@echo make apply-update - not done yet
@@ -29,17 +34,17 @@ PRODCACHESTD=$(PRODCACHE)/IEEEstd
 # NOTE get-cache will no longer work because the site was taken down
 get-cache-do-not-use:
 	. ~/.bibxml.pswd; \
-	./gen-bibxml-ieee-get-update -d ieee-cache -H 'pubftpnew.ieee.org' -U 'guest2' -P '4UpNorth' -v
+	./gen-bibxml-ieee-get-update -d ieee-cache -H 'no-longer-works' -U 'no-longer-works' -P 'no-longer-works' -v
 
 all: get-update apply-update gen-bibxml-dev
 production: get-update-prod apply-update-prod gen-bibxml-prod
 
 get-update:
 	. ~/.bibxml.pswd; \
-	./gen-bibxml-ieee-get-update -d $(UPDATES) -H "$$IEEEHOST" -U "$$IEEEUSER" -P "$IEEEPSWD"
+	./gen-bibxml-ieee-get-update -d $(UPDATES)
 get-update-prod:
 	. ~/.bibxml.pswd; \
-	./gen-bibxml-ieee-get-update -d $(PRODUPDATES) -H "$$IEEEHOST" -U "$$IEEEUSER" -P "$IEEEPSWD"
+	./gen-bibxml-ieee-get-update -d $(PRODUPDATES)
 
 apply-update:
 	./gen-bibxml-ieee-apply-update -t -i $(CACHE) -d $(UPDATES)
@@ -52,9 +57,12 @@ gen-bibxml-prod:
 	./gen-bibxml-ieee-gen-bibxml -b $(PRODDIR) -i $(PRODCACHESTD) -x
 
 test:
-	@for i in $(EXEFILES); do \
-	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
-	done
+	for i in $(PYFILES); do "./$$i" --unit-tests; done
+	for i in $(SHFILES); do bash -n "$$i"; done
+	for i in $(PYFILES); do "./$$i" --help; done
+
+pylint:
+	PYTHONPATH=../bibxml_common pylint --rcfile=../.pylintrc $(PYFILES)
 
 install:
 	@for i in $(EXEFILES); do \

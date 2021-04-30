@@ -2,15 +2,14 @@
 
 """
     Generate XML2RFC bibxml entries for the RFCs.
-
-    Generate all of:
-        bibxml/reference.RFC.####.xml
-        bibxml/index.xml
-        bibxml/index.rdf
-        bibxml/rdf/item.RFC.####.rdf
-
-    Author - Tony Hansen
 """
+#    Author: Tony Hansen
+
+#    Generate all of:
+#        bibxml/reference.RFC.####.xml
+#        bibxml/index.xml
+#        bibxml/index.rdf
+#        bibxml/rdf/item.RFC.####.rdf
 
 import argparse
 import os
@@ -19,11 +18,11 @@ import sys
 
 import xml.etree.ElementTree as ET
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
-from bibxml_common import *
+import bibxml_common
 
 assert sys.version_info >= (3,7)
 
-def gen_author_element(args, rfcid, n, title):
+def gen_author_element(args, rfcid, name, title):
     """
     Given a name such as F. M. then Last, generate
     <author initials='F. M.' surname='then Last' fullname='F. M. then Last'><organization /></author>
@@ -35,7 +34,7 @@ def gen_author_element(args, rfcid, n, title):
         or a single capital letter? two capital letters (RJ, SN),
         Y(J)?
 
-    if n[0] is initial, gather all initial-like-items into intials, rest go into surname
+    if name[0] is initial, gather all initial-like-items into intials, rest go into surname
     else treat as an organization
 
 
@@ -331,18 +330,18 @@ Information Sciences Institute University of Southern California
 
     """
 
-    n = n.strip().replace("  ", " ")
-    nm = n.split(" ")
-    if len(nm) == 1 and re.match(r'[A-Z][.][A-Z]', n):	# split A.Foo into A. Foo, but only if that's all there is
-        if args.warning: print(f"{rfcid}: single element name: {n}")
-        n = n[0:2] + " " + n[2:]
-        nm = n.split(" ")
+    name = name.strip().replace("  ", " ")
+    nm = name.split(" ")
+    if len(nm) == 1 and re.match(r'[A-Z][.][A-Z]', name):	# split A.Foo into A. Foo, but only if that's all there is
+        if args.warning: print(f"{rfcid}: single element name: {name}")
+        name = name[0:2] + " " + name[2:]
+        nm = name.split(" ")
 
     nm0 = nm[0]
     if nm0.endswith(".") or re.match(r'[A-Z]{1,2}$', nm0) or (
-        nm0 in ("ACM", "Bolt", "EARN", "RFC", "Y(J)") or n in ("IETF Secretariat", "ISO", "et al.")
+        nm0 in ("ACM", "Bolt", "EARN", "RFC", "Y(J)") or name in ("IETF Secretariat", "ISO", "et al.")
         ):
-        if args.warning and not nm0.endswith("."): print(f"{rfcid}: spurious name: {n}")
+        if args.warning and not nm0.endswith("."): print(f"{rfcid}: spurious name: {name}")
         initials = nm0
         surname = ""
         surnamesep = ""
@@ -356,32 +355,32 @@ Information Sciences Institute University of Southern California
                     surnamesep = " "
 
                     surname += nm[j]
-                    if args.warning and nm[j] == "Ed.": print(f"{rfcid}: spurious name: {n}")
+                    if args.warning and nm[j] == "Ed.": print(f"{rfcid}: spurious name: {name}")
                 break
 
-        return { "initials": initials, "surname": surname, "fullname": n, "role": title, "org": "" }
+        return { "initials": initials, "surname": surname, "fullname": name, "role": title, "org": "" }
 
-    return { "initials": "", "surname": "", "fullname": "", "role": "", "org": n }
+    return { "initials": "", "surname": "", "fullname": "", "role": "", "org": name }
 
-def find_one(elroot, namespace, nm):
+def find_one(elroot, namespace, name):
     """ find the first element with the given name, else None """
-    for r in elroot.findall(f"{namespace}{nm}"):
+    for r in elroot.findall(f"{namespace}{name}"):
         return r
     return None
 
-def get_text(elroot, namespace, nm):
+def get_text(elroot, namespace, name):
     """
     extract the text from an xml element
     """
-    el = find_one(elroot, namespace, nm)
+    el = find_one(elroot, namespace, name)
     txt = el.text if el is not None else None
     if txt is not None:
         txt = txt.strip()
     return txt
 
-def get_not_issued(args, namespace, nm, elroot):
+def gen_not_issued(args, namespace, name, elroot):
     """
-    Look in the rfc-index for "nm" entries, where "nm" is something like rfc, bcp, fyi or std.
+    Look in the rfc-index for "name" entries, where "name" is something like rfc, bcp, fyi or std.
 
     <?xml version='1.0' encoding='UTF-8'?>
 
@@ -397,46 +396,45 @@ def get_not_issued(args, namespace, nm, elroot):
     rfcid = get_text(elroot, namespace, "doc-id")
     if not rfcid:
         print(f"ERROR: cannot determine RFC number in the entry {ET.tostring(elroot)}")
-        return (None, None, None, None)
+        return None, None, None
 
-    num4 = rfcid[-4:]	# RFC-10k issue
+    num4 = rfcid[3:]
     shortnum = num4.lstrip("0")
-    nmlower = nm.lower()
+    nmlower = name.lower()
 
-    diskfile = f"{args.bibxml_dir}/reference.{nm}.{num4}.xml"
-    if args.verbose > 1: print(f"GEN {diskfile}")
-
-    ref = gen_empty_ref_xml("RFC")
-    ref["anchor"] = f"{nm}{num4}"
+    ref = bibxml_common.gen_empty_ref_xml("RFC")
+    ref["anchor"] = f"{name}{num4}"
     ref["target"] = f"https://www.rfc-editor.org/info/{nmlower}{shortnum}"
     ref["title"] = "Not Issued"
     ref["authors"] = [{ "initials":'', "surname":'', "fullname":'', "role":'', "org":'' }]
     ref["series_info"].append( { "name": "RFC", "value": shortnum } )
-    xml = gen_xml(ref, genEmptyAuthor=True)
+    xml = bibxml_common.gen_xml(ref, gen_empty_author=True)
 
-#    xml = "\n".join([
-#            "<?xml version='1.0' encoding='UTF-8'?>",
-#            "",
-#            f"<reference  anchor='{nm}{num4}' target='https://www.rfc-editor.org/info/{nmlower}{shortnum}'>",
-#            "<front>",
-#            "<title>Not Issued</title>",
-#            "<author initials='' surname='' fullname=''><organization /></author>",
-#            "</front>",
-#            f"<seriesInfo name='RFC' value='{shortnum}'/>",
-#            "</reference>",
-#            ""]) # and end with a NL
+    index = f"<a href='reference.{name}.{num4}.xml'>reference.{name}.{num4}.xml</a><br/>\n"
+    if args.verbose > 2:
+        print(xml)
+    return num4, index, xml
 
-    if checkfile(args, diskfile, xml) and args.verbose:
-        print(f"UPD {diskfile}")
-    index = f"<a href='reference.{nm}.{num4}.xml'>reference.{nm}.{num4}.xml</a><br/>\n"
-    return (num4, index, xml)
 
-def get_ref_info(args, namespace, nm, elroot):
+def get_not_issued(args, namespace, name, elroot):
     """
-    Look in the rfc-index for "nm" entries, where "nm" is something like rfc, bcp, fyi or std.
+    Get the xml, index and rdf for not-issued items, then write to disk.
+    """
+    num4, index, xml = gen_not_issued(args, namespace, name, elroot)
+
+    diskfile = f"{args.bibxml_dir}/reference.{name}.{num4}.xml"
+    if args.verbose > 1: print(f"GEN {diskfile}")
+    if bibxml_common.checkfile(args, diskfile, xml) and args.verbose:
+        print(f"UPD {diskfile}")
+    return num4, index, xml
+
+
+def gen_ref_info(args, namespace, name, elroot):
+    """
+    Look in the rfc-index for "name" entries, where "name" is something like rfc, bcp, fyi or std.
     Grab the doc-id and other entries entries.
     If they exist, create a reference file for it.
-    The file reference.{nm}.{####}.xml looks like:
+    The file reference.{name}.{####}.xml looks like:
 
     <rfc-entry>
         <doc-id>RFC8005</doc-id>
@@ -460,7 +458,12 @@ def get_ref_info(args, namespace, nm, elroot):
             <kw>DNS</kw>
             <kw>Domain Name System</kw>
         </keywords>
-        <abstract><p>This document specifies a resource record (RR) for the Domain Name System (DNS) and how to use it with the Host Identity Protocol (HIP).  This RR allows a HIP node to store in the DNS its Host Identity (HI), the public component of the node public-private key pair; its Host Identity Tag (HIT), a truncated hash of its public key (PK); and the domain names of its rendezvous servers (RVSs).  This document obsoletes RFC 5205.</p></abstract>
+        <abstract><p>This document specifies a resource record (RR) for the Domain Name
+        System (DNS) and how to use it with the Host Identity Protocol (HIP).  This RR
+        allows a HIP node to store in the DNS its Host Identity (HI), the public component
+        of the node public-private key pair; its Host Identity Tag (HIT), a truncated hash
+        of its public key (PK); and the domain names of its rendezvous servers (RVSs).
+        This document obsoletes RFC 5205.</p></abstract>
         <draft>draft-ietf-hip-rfc5205-bis-10</draft>
         <obsoletes>
             <doc-id>RFC5205</doc-id>
@@ -481,7 +484,12 @@ def get_ref_info(args, namespace, nm, elroot):
         <title>Host Identity Protocol (HIP) Domain Name System (DNS) Extension</title>
         <author initials='J.' surname='Laganier' fullname='J. Laganier'><organization /></author>
         <date year='2016' month='October' />
-        <abstract><t>This document specifies a resource record (RR) for the Domain Name System (DNS) and how to use it with the Host Identity Protocol (HIP). This RR allows a HIP node to store in the DNS its Host Identity (HI), the public component of the node public-private key pair; its Host Identity Tag (HIT), a truncated hash of its public key (PK); and the domain names of its rendezvous servers (RVSs).  This document obsoletes RFC 5205.</t></abstract>
+        <abstract><t>This document specifies a resource record (RR) for the Domain Name
+        System (DNS) and how to use it with the Host Identity Protocol (HIP). This RR
+        allows a HIP node to store in the DNS its Host Identity (HI), the public component
+        of the node public-private key pair; its Host Identity Tag (HIT), a truncated hash
+        of its public key (PK); and the domain names of its rendezvous servers (RVSs).
+        This document obsoletes RFC 5205.</t></abstract>
     </front>
     <seriesInfo name='RFC' value='8005'/>
     <seriesInfo name='DOI' value='10.17487/RFC8005'/>
@@ -491,25 +499,22 @@ def get_ref_info(args, namespace, nm, elroot):
     rfcid = get_text(elroot, namespace, "doc-id")
     if not rfcid:
         print(f"ERROR: cannot determine RFC number in the entry {ET.tostring(elroot)}")
-        return (None, None, None, None)
+        return None, None, None, None
 
     num4 = rfcid[3:]
     shortnum = num4.lstrip("0")
-    nmlower = nm.lower()
+    nmlower = name.lower()
 
-    diskfile = f"{args.bibxml_dir}/reference.{nm}.{num4}.xml"
-    if args.verbose > 1: print(f"GEN {diskfile}")
-
-    ref = gen_empty_ref_xml("RFC")
-    ref["anchor"] = f"{nm}{num4}"
+    ref = bibxml_common.gen_empty_ref_xml("RFC")
+    ref["anchor"] = f"{name}{num4}"
     ref["target"] = f"https://www.rfc-editor.org/info/{nmlower}{shortnum}"
     ref["url"] = f"https://www.rfc-editor.org/info/rfc{num4}.txt"
     # xml = "<?xml version='1.0' encoding='UTF-8'?>\n\n"
-    # xml += f"<reference  anchor='{nm}{num4}' target='https://www.rfc-editor.org/info/{nmlower}{shortnum}'>\n"
+    # xml += f"<reference  anchor='{name}{num4}' target='https://www.rfc-editor.org/info/{nmlower}{shortnum}'>\n"
     ref["title"] = get_text(elroot, namespace, "title")
     if not ref["title"]:
         print(f"{rfcid} does not have a title")
-        return
+        return None, None, None, None
 
     # xml += "<front>\n"
     # xml += f"<title>{escape1(title)}</title>\n"
@@ -530,7 +535,7 @@ def get_ref_info(args, namespace, nm, elroot):
         for atitles in author.findall(f"./{namespace}title"):
             atitle = atitles.text
         for authorname in name.split(","):
-            a = gen_author_element(args, rfcid, authorname, escape(atitle.lower()))
+            a = gen_author_element(args, rfcid, authorname, bibxml_common.escape(atitle.lower()))
             # print(f"{num4} {name.text} {a}")
             if a:
                 ref["authors"].append(a)
@@ -546,12 +551,12 @@ def get_ref_info(args, namespace, nm, elroot):
 
     abstract = find_one(elroot, namespace, "abstract")
     if abstract:
-        abs = ""
+        abst = ""
         for p in abstract.findall(f"{namespace}p"):
             pr = p.text.replace('\n', ' ').strip()
-            abs += pr
-            abs += "\n\n"
-        ref["abstract"] = abs
+            abst += pr
+            abst += "\n\n"
+        ref["abstract"] = abst
     else:
         ref["abstract"] = ""
 
@@ -569,41 +574,76 @@ def get_ref_info(args, namespace, nm, elroot):
         ref["series_info"].append( { "name": "DOI", "value": doi } )
     ref["format"] = []
 
-    xml = gen_xml(ref)
-    if checkfile(args, diskfile, xml) and args.verbose:
-        print(f"UPD {diskfile}")
+    xml = bibxml_common.gen_xml(ref)
 
-    index = f"<a href='reference.{nm}.{num4}.xml'>reference.{nm}.{num4}.xml</a><br/>\n"
+    index = f"<a href='reference.{name}.{num4}.xml'>reference.{name}.{num4}.xml</a><br/>\n"
 
     ref['date']['day'] = int(day) if day else 1
     ref['rdftitle'] = f"RFC {num4}: {ref['title']}, {authors}"
-    rdf = gen_rdf(ref)
-    rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{nm}.{num4}.rdf"
-    wroterdf = checkfile(args, rdf_disk_file, rdf)
+    rdf = bibxml_common.gen_rdf(ref)
+
+    if args.verbose > 2:
+        print(xml)
+    return num4, index, xml, rdf
+
+
+def get_ref_info(args, namespace, name, elroot):
+    """
+    Get the xml, index and rdf for RFCs, then write to disk.
+    """
+    num4, index, xml, rdf = gen_ref_info(args, namespace, name, elroot)
+
+    diskfile = f"{args.bibxml_dir}/reference.{name}.{num4}.xml"
+    if args.verbose > 1: print(f"GEN {diskfile}")
+
+    if bibxml_common.checkfile(args, diskfile, xml) and args.verbose:
+        print(f"UPD {diskfile}")
+
+    rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{name}.{num4}.rdf"
+    wroterdf = bibxml_common.checkfile(args, rdf_disk_file, rdf)
     if wroterdf:
         print(f"UPD {rdf_disk_file}")
 
-    return (num4, index, xml, rdf, wroterdf)
+    return num4, index, xml, rdf, wroterdf
+
+
+def run_unit_tests(args):
+    """
+    Run some unit tests on some of the code modules.
+    """
+    # TODO -- fill in here
+    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
+
+    print("All tests passed")
+    sys.exit()
+
 
 def main():
     """ main loop """
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("-b", "--bibxml-dir", help="Directory for reference...xml files", type=str, required=True)
+    parser.add_argument("-b", "--bibxml-dir", help="Directory for reference...xml files", type=str)
     group_base = parser.add_mutually_exclusive_group()
     group_base.add_argument("-r", "--rfcindex", help="Location of rfc-index.xml", type=str)
     group_base.add_argument("-u", "--rfcindex-url", help="URL for rfc-index.xml", type=str)
     parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
     parser.add_argument("-w", "--warning", help="Warn about some questionable entries.", action="store_true")
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
     parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
     args = parser.parse_args()
 
+    if args.unit_tests:
+        run_unit_tests(args)
+
+    if not args.bibxml_dir:
+        bibxml_common.usage(parser, "error: the following arguments are required: -b/--bibxml-dir")
+
     if not args.rfcindex and not args.rfcindex_url:
-        sys.exit("Must provide either -r/--rfcindex or -u/--rfcindex-url")
+        bibxml_common.usage(parser, "error: one of -r/--rfcindex or -u/--rfcindex-url is required")
 
     os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
 
     if args.rfcindex_url:
-        args.rfcindex = get_url_tempfile(args.rfcindex_url, exit_ok=True)
+        args.rfcindex = bibxml_common.get_url_tempfile(args.rfcindex_url, exit_ok=True)
 
     index = ""
     tree = ET.parse(args.rfcindex)
@@ -626,16 +666,16 @@ def main():
             index += index_update
             ix[num4] = x
 
-    if checkfile(args, f"{args.bibxml_dir}/index.html", index) and args.verbose:
+    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index) and args.verbose:
         print(f"UPD {args.bibxml_dir}/index.html")
 
-    index_xml = gen_index_xml(ix)
-    if checkfile(args, f"{args.bibxml_dir}/index.xml", index_xml) and args.verbose:
+    index_xml = bibxml_common.gen_index_xml(ix)
+    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.xml", index_xml) and args.verbose:
         print(f"UPD {args.bibxml_dir}/index.xml")
 
     # generate rdf/*
-    index_rdf = gen_index_rdf(rx)
-    if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+    index_rdf = bibxml_common.gen_index_rdf(rx)
+    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
         print(f"UPD {args.bibxml_dir}/index.rdf")
 
 if __name__ == '__main__':

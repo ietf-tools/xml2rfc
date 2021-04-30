@@ -2,32 +2,31 @@
 
 """
     Read the 1id-abstracts.txt file and create a bibxml-ids directory structure.
-
-    The current 1id-abstracts.txt file consists of a header that needs to be skipped over,
-    then headers for each working group followed by line of dashes.
-
-    Within each working group are one or more document blocks. A document block has 
-    a title block followed by a blank line, then an optional abstract block.
-
-    The title block has several lines with the title, author list, date and draft name.
-    These are all indented by two spaces.
-
-    The abstract block has one or more paragraphs, all indented by six spaces. The
-    paragraphs are separated by a blank line that usually only has 6 spaces.
-
-    The draft name looks like <draft-abc-lmn-xyz-00.txt>. The exact ID name is "draft-abc-lmn-xyz-00".
-    We also generate a "canonical-id-name" that removes the leading "draft-" and the trailing
-    generation number, leaving "abc-lmn-xyz".
-
-    Generate all of:
-        bibxml-ids/reference.I-D.exact-id-name.xml
-        bibxml-ids/reference.I-D.canonical-id-name.xml
-        bibxml-ids/index.xml
-        bibxml-ids/rdf/item.I-D.canonical-id-name.rdf
-        bibxml-ids/index.rdf
-
-    Author: Tony Hansen
 """
+#    Author: Tony Hansen
+
+#    The current 1id-abstracts.txt file consists of a header that needs to be skipped over,
+#    then headers for each working group followed by line of dashes.
+#
+#    Within each working group are one or more document blocks. A document block has
+#    a title block followed by a blank line, then an optional abstract block.
+#
+#    The title block has several lines with the title, author list, date and draft name.
+#    These are all indented by two spaces.
+#
+#    The abstract block has one or more paragraphs, all indented by six spaces. The
+#    paragraphs are separated by a blank line that usually only has 6 spaces.
+#
+#    The draft name looks like <draft-abc-lmn-xyz-00.txt>. The exact ID name is "draft-abc-lmn-xyz-00".
+#    We also generate a "canonical-id-name" that removes the leading "draft-" and the trailing
+#    generation number, leaving "abc-lmn-xyz".
+#
+#    Generate all of:
+#        bibxml-ids/reference.I-D.exact-id-name.xml
+#        bibxml-ids/reference.I-D.canonical-id-name.xml
+#        bibxml-ids/index.xml
+#        bibxml-ids/rdf/item.I-D.canonical-id-name.rdf
+#        bibxml-ids/index.rdf
 
 import argparse
 import os
@@ -36,11 +35,12 @@ import sys
 import codecs
 from enum import Enum
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
-from bibxml_common import *
+import bibxml_common
 
-assert sys.version_info >= (3,7)
+assert sys.version_info >= (3,6)
 
 class State(Enum):
+    """ state machine for parsing a 1id-abstracts file """
     BEFORE_DASHES = 1
     BEFORE_DOC = 2
     GATHERING_DOC = 3
@@ -50,40 +50,41 @@ class State(Enum):
 
 white_space = [" ", "\t", "\n", "\r"]
 
-def indented_6(ln):
+def indented_6(line):
     """ check if the line is indented by 6 spaces and not empty """
-    return ln.startswith("      ") and (len(ln) > 6) and (ln[6] not in white_space)
+    return line.startswith("      ") and (len(line) > 6) and (line[6] not in white_space)
 
-def indented_2(ln):
+def indented_2(line):
     """ Check if the line is indented by 2 spaces, and not empty. """
-    return ln.startswith("  ") and (ln[2] not in white_space)
+    return line.startswith("  ") and (line[2] not in white_space)
 
-def indented_0(ln):
+def indented_0(line):
     """ Check if the line has no indent and is not empty """
-    return len(ln) > 0 and (ln[0] not in white_space)
+    return len(line) > 0 and (line[0] not in white_space)
 
-def is_empty(ln):
+def is_empty(line):
     """ Check if the line is empty: nothing but whitespace """
-    return len(ln) == 0 or re.match("[ \t\r\n]*$", ln)
+    return len(line) == 0 or re.match("[ \t\r\n]*$", line)
 
-def error(st, ln, msg=""):
+def error(state, line, msg=""):
     """ print an error message about unexpected input """
     if msg:
-        print(f"state is {st}: {msg}")
+        print(f"state is {state}: {msg}")
     else:
-        print(f"state is {st}")
-    print("\tUnexpected line found: {ln}")
+        print(f"state is {state}")
+    print(f"\tUnexpected line found: {line}")
     return State.IN_ERROR
 
-def print_doc(args, doc, abstract):
-    """ print a document with its abstract """
+def gen_refs(args, doc, abstract):
+    """ generate a document with its abstract to be printed """
 
-    ref = gen_empty_ref_xml("I-D")
+    ref = bibxml_common.gen_empty_ref_xml("I-D")
 
     words = doc.split(" ")
     if len(words) < 3:
         print(f"ERROR: Insufficient words in document heading: {doc}")
-        return
+        return None, None, None, None
+
     idname = words[-1]		# idname is last
     date = words[-2]		# date comes before that, leave off trailing ,
     if date.endswith(","):
@@ -91,15 +92,15 @@ def print_doc(args, doc, abstract):
     m = re.match(r"(\d{4})-(\d{2})-(\d{2})$", date)
     if not m:
         print(f"ERROR: date does not appear to be yyyy-mm-dd: {doc}")
-        return
+        return None, None, None, None
 
-    ref["date"] = { "year": m.group(1), "month": months[int(m.group(2))], "day": m.group(3) }
+    ref["date"] = { "year": m.group(1), "month": bibxml_common.months[int(m.group(2))], "day": m.group(3) }
 
     title = words[0][1:]	# grab first part of title without leading "
     authors = []
     inauthors = False
     wordsep = " "
-    for word in words[1:-2]:	# 
+    for word in words[1:-2]:
         if inauthors:
             authors.append(word)
         else:
@@ -158,18 +159,15 @@ def print_doc(args, doc, abstract):
     m = re.match(r"^<(draft-(.*)(-\d+))([.][a-z]+(,[.][a-z]+)*)>$", idname)
     if not m:
         print(f"ERROR: I-D name does not start with <draft- or not end in -## followed by a list of filename extensions: {doc}")
-        return
+        return None, None, None, None
 
-    # if arg.verbose > 2: 
+    # if arg.verbose > 2:
     # print(f"idname={idname}, g={m.groups()}")
 
     full_name = m.group(1)
-    diskfile1 = f"{args.bibxml_dir}/reference.I-D.{full_name}.xml"
-    diskfile1_backup = f"{args.bibxml_dir}/backup/reference.I-D.{full_name}.xml" if args.backup_existing_files else None
-    if args.verbose > 1: print(f"GEN {diskfile1}")
 
     canonical_name = m.group(2)	# skip draft- and -##
-    generation = m.group(3)
+    _ = m.group(3)
     suffix_list = m.group(4)
 
     if args.verbose > 2: print(f"idname={idname}, full_name={full_name}, canonical_name={canonical_name}, suffix_list={suffix_list}")
@@ -191,21 +189,33 @@ def print_doc(args, doc, abstract):
     ref["about"] = ref["url"] # TODO: remove this line?
     ref['rdftitle'] = f"\"{ref['title']}\", {rdf_authors}"
 
-    xml = gen_xml(ref)
+    xml = bibxml_common.gen_xml(ref)
+    rdf = bibxml_common.gen_rdf(ref)
+    return (full_name, canonical_name, xml, rdf)
+
+def print_doc(args, doc, abstract):
+    """ print a document with its abstract """
+
+    full_name, canonical_name, xml, rdf = gen_refs(args, doc, abstract)
+    if full_name is None:
+        return
+
+    diskfile1 = f"{args.bibxml_dir}/reference.I-D.{full_name}.xml"
+    diskfile1_backup = f"{args.bibxml_dir}/backup/reference.I-D.{full_name}.xml" if args.backup_existing_files else None
+    if args.verbose > 1: print(f"GEN {diskfile1}")
+    if bibxml_common.checkfile(args, diskfile1, xml, backup_fname=diskfile1_backup) and args.verbose:
+        print(f"UPD {diskfile1}")
+
     diskfile2 = f"{args.bibxml_dir}/reference.I-D.{canonical_name}.xml"
     diskfile2_backup = f"{args.bibxml_dir}/backup/reference.I-D.{canonical_name}.xml" if args.backup_existing_files else None
-
-    if checkfile(args, diskfile1, xml, backup_fname=diskfile1_backup) and args.verbose:
-        print(f"UPD {diskfile1}")
-    if checkfile(args, diskfile2, xml, backup_fname=diskfile2_backup) and args.verbose:
+    if bibxml_common.checkfile(args, diskfile2, xml, backup_fname=diskfile2_backup) and args.verbose:
         print(f"UPD {diskfile2}")
 
-    rdf = gen_rdf(ref)
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.I-D.{canonical_name}.rdf"
-    if checkfile(args, rdf_disk_file, rdf) and args.verbose:
+    if bibxml_common.checkfile(args, rdf_disk_file, rdf) and args.verbose:
         print(f"UPD {rdf_disk_file}")
 
-def process_input(args, fp):
+def process_input(args, infp):
     """
     Process the 1id-abstracts.txt file.
     This uses a state machine approach to grab each document.
@@ -216,91 +226,222 @@ def process_input(args, fp):
     doc = ""
     abstract = ""
 
-    for ln in fp:
+    for line in infp:
         if args.verbose > 1:
-            print(f"looking at '{ln}'")
+            print(f"looking at '{line}'")
 
         if State.BEFORE_DASHES == state:
-            if ln.startswith("--------"):
+            if line.startswith("--------"):
                 state = State.BEFORE_DOC
             else:
                 pass
 
         elif State.BEFORE_DOC == state:
-            if indented_6(ln):
-                state = error(state, ln, "abstract without a doc?")
-            elif indented_2(ln):
-                doc = ln.strip()
+            if indented_6(line):
+                state = error(state, line, "abstract without a doc?")
+            elif indented_2(line):
+                doc = line.strip()
                 state = State.GATHERING_DOC
-            elif indented_0(ln):
-                state = error(state, ln, "one line doc with no abstract?")
+            elif indented_0(line):
+                state = error(state, line, "one line doc with no abstract?")
             else:
                 pass
 
         elif State.GATHERING_DOC == state:
-            if indented_2(ln):
+            if indented_2(line):
                 doc += " "
-                doc += ln.strip()
-            elif is_empty(ln):
+                doc += line.strip()
+            elif is_empty(line):
                 state = State.BEFORE_ABSTRACT
             else:
-                state = error(state, ln)
+                state = error(state, line)
                 # elif ind 0
                 # error no abstract
                 # elif ind 6
                 # error abstract w/o doc end
 
         elif State.BEFORE_ABSTRACT == state:
-            if is_empty(ln):
+            if is_empty(line):
                 pass
-            elif indented_6(ln):
-                abstract = ln.strip()
+            elif indented_6(line):
+                abstract = line.strip()
                 state = State.GATHERING_ABSTRACT
-            elif indented_2(ln):
-                state = error(state, ln, "no abstract?")
-            elif indented_0(ln):
-                state = error(state, ln, "no abstract?")
+            elif indented_2(line):
+                state = error(state, line, "no abstract?")
+            elif indented_0(line):
+                state = error(state, line, "no abstract?")
             else:
-                state = error(state, ln)
+                state = error(state, line)
 
         elif State.GATHERING_ABSTRACT == state:
-            if is_empty(ln):
+            if is_empty(line):
                 abstract += "\n\n"
-            elif indented_6(ln):
+            elif indented_6(line):
                 abstract += " "
-                abstract += ln.strip()
-            elif indented_2(ln):
+                abstract += line.strip()
+            elif indented_2(line):
                 print_doc(args, doc, abstract)
-                doc = ln.strip()
+                doc = line.strip()
                 state = State.GATHERING_DOC
-            elif indented_0(ln):
+            elif indented_0(line):
                 print_doc(args, doc, abstract)
-                if ln.startswith("--------"):
+                if line.startswith("--------"):
                     state = State.BEFORE_DOC
                 else:
                     state = State.BEFORE_DASHES
             else:
-                state = error(state, ln)
+                state = error(state, line)
 
     if doc != "":
-       print_doc(args, doc, abstract)
+        print_doc(args, doc, abstract)
 
+
+def run_unit_tests(args):
+    """
+    Run some unit tests on some of the code modules.
+    """
+    doc = '''"Transmission of IPv6 Packets over Near Field Communication", Younghwan Choi, Yong-Geun Hong, Joo-Sang Youn, Dongkyun Kim, JinHyeock Choi, 2020-08-23, <draft-ietf-6lo-nfc-17.txt>'''
+    abstract = '''Near Field Communication (NFC) is a set of standards for smartphones ''' \
+        '''and portable devices to establish radio communication with each other by touching ''' \
+        '''them together or bringing them into proximity, usually no more than 10 cm apart.  ''' \
+        '''NFC standards cover communications protocols and data exchange formats, and are based ''' \
+        '''on existing radio-frequency identification (RFID) standards including ISO/IEC 14443 and ''' \
+        '''FeliCa. The standards include ISO/IEC 18092 and those defined by the NFC Forum.  The NFC ''' \
+        '''technology has been widely implemented and available in mobile phones, laptop computers, ''' \
+        '''and many other devices.  This document describes how IPv6 is transmitted over NFC using ''' \
+        '''6LoWPAN techniques.'''
+
+    full_name, canonical_name, xml, rdf = gen_refs(args, doc, abstract)
+    if args.verbose: print("full_name #1", full_name)
+    assert full_name == "draft-ietf-6lo-nfc-17"
+    if args.verbose: print("canonical_name #1", canonical_name)
+    assert canonical_name == "ietf-6lo-nfc"
+    if args.verbose: print("xml #1", xml)
+    assert xml == """<?xml version='1.0' encoding='UTF-8'?>
+
+<reference anchor='I-D.ietf-6lo-nfc'>
+<front>
+<title>Transmission of IPv6 Packets over Near Field Communication</title>
+<author initials='Y' surname='Choi' fullname='Younghwan Choi'>
+<organization />
+</author>
+<author initials='Y' surname='Hong' fullname='Yong-Geun Hong'>
+<organization />
+</author>
+<author initials='J' surname='Youn' fullname='Joo-Sang Youn'>
+<organization />
+</author>
+<author initials='D' surname='Kim' fullname='Dongkyun Kim'>
+<organization />
+</author>
+<author initials='J' surname='Choi' fullname='JinHyeock Choi'>
+<organization />
+</author>
+<date year='2020' month='August' day='23' />
+<abstract><t>Near Field Communication (NFC) is a set of standards for smartphones """ \
+"""and portable devices to establish radio communication with each other by touching """ \
+"""them together or bringing them into proximity, usually no more than 10 cm apart.  """ \
+"""NFC standards cover communications protocols and data exchange formats, and are """ \
+"""based on existing radio-frequency identification (RFID) standards including ISO/IEC """ \
+"""14443 and FeliCa. The standards include ISO/IEC 18092 and those defined by the NFC """ \
+"""Forum.  The NFC technology has been widely implemented and available in mobile phones, """ \
+"""laptop computers, and many other devices.  This document describes how IPv6 is """ \
+"""transmitted over NFC using 6LoWPAN techniques.</t></abstract>
+</front>
+<seriesInfo name='Internet-Draft' value='draft-ietf-6lo-nfc-17'/>
+<format type='TXT' target='https://www.ietf.org/internet-drafts/draft-ietf-6lo-nfc-17.txt'/>
+</reference>
+"""
+    if args.verbose: print("rdf #1", rdf)
+    assert rdf == """    <item rdf:about='http://www.ietf.org/internet-drafts/draft-ietf-6lo-nfc-17.txt'>
+        <link>http://www.ietf.org/internet-drafts/draft-ietf-6lo-nfc-17.txt</link>
+        <title>"Transmission of IPv6 Packets over Near Field Communication", Younghwan Choi, Yong-Geun Hong, Joo-Sang Youn, Dongkyun Kim, JinHyeock Choi</title>
+        <dc:date>2020-08-23T23:00:00-00:00</dc:date>
+        <description>Near Field Communication (NFC) is a set of standards for """ \
+"""smartphones and portable devices to establish radio communication with each """ \
+"""other by touching them together or bringing them into proximity, usually no """ \
+"""more than 10 cm apart.  NFC standards cover communications protocols and data """ \
+"""exchange formats, and are based on existing radio-frequency identification """ \
+"""(RFID) standards including ISO/IEC 14443 and FeliCa. The standards include """ \
+"""ISO/IEC 18092 and those defined by the NFC Forum.  The NFC technology has """ \
+"""been widely implemented and available in mobile phones, laptop computers, """ \
+"""and many other devices.  This document describes how IPv6 is transmitted """ \
+"""over NFC using 6LoWPAN techniques.</description>
+    </item>
+"""
+
+    doc2 = '''"Use of the Walnut Digital Signature Algorithm with CBOR Object ''' \
+        '''Signing and Encryption (COSE)", Derek Atkins, 2021-01-26, <draft-atkins-suit-cose-walnutdsa-07.txt>'''
+
+    abstract2 = '''This document specifies the conventions for using the Walnut ''' \
+        '''Digital Signature Algorithm (WalnutDSA) for digital signatures with ''' \
+        '''the CBOR Object Signing and Encryption (COSE) syntax.  WalnutDSA is ''' \
+        '''a lightweight, quantum-resistant signature scheme based on Group ''' \
+        '''Theoretic Cryptography with implementation and computational efficiency ''' \
+        '''of signature verification in constrained environments, even on 8- and 16-bit platforms.
+
+ The goal of this publication is to document a way to use the lightweight, ''' \
+    '''quantum-resistant WalnutDSA signature algorithm in COSE in a way that ''' \
+    '''would allow multiple developers to build compatible implementations.  ''' \
+    '''As of this publication, the security properties of WalnutDSA have not ''' \
+    '''been evaluated by the IETF and its use has not been endorsed by the IETF.
+
+ WalnutDSA(TM) and Walnut Digital Signature Algorithm(TM) are trademarks of Veridify Security Inc..'''
+    full_name2, canonical_name2, xml2, rdf2 = gen_refs(args, doc2, abstract2)
+    if args.verbose: print("full_name2", full_name2)
+    assert full_name2 == "draft-atkins-suit-cose-walnutdsa-07"
+    if args.verbose: print("canonical_name2", canonical_name2)
+    assert canonical_name2 == "atkins-suit-cose-walnutdsa"
+    if args.verbose: print("xml2", xml2)
+    assert xml2 == """<?xml version='1.0' encoding='UTF-8'?>
+
+<reference anchor='I-D.atkins-suit-cose-walnutdsa'>
+<front>
+<title>Use of the Walnut Digital Signature Algorithm with CBOR Object Signing and Encryption (COSE)</title>
+<author initials='D' surname='Atkins' fullname='Derek Atkins'>
+<organization />
+</author>
+<date year='2021' month='January' day='26' />
+<abstract><t>This document specifies the conventions for using the Walnut Digital Signature Algorithm (WalnutDSA) for digital signatures with the CBOR Object Signing and Encryption (COSE) syntax.  WalnutDSA is a lightweight, quantum-resistant signature scheme based on Group Theoretic Cryptography with implementation and computational efficiency of signature verification in constrained environments, even on 8- and 16-bit platforms.</t><t> The goal of this publication is to document a way to use the lightweight, quantum-resistant WalnutDSA signature algorithm in COSE in a way that would allow multiple developers to build compatible implementations.  As of this publication, the security properties of WalnutDSA have not been evaluated by the IETF and its use has not been endorsed by the IETF.</t><t> WalnutDSA(TM) and Walnut Digital Signature Algorithm(TM) are trademarks of Veridify Security Inc..</t></abstract>
+</front>
+<seriesInfo name='Internet-Draft' value='draft-atkins-suit-cose-walnutdsa-07'/>
+<format type='TXT' target='https://www.ietf.org/internet-drafts/draft-atkins-suit-cose-walnutdsa-07.txt'/>
+</reference>
+"""
+    if args.verbose: print("rdf2", rdf2)
+    assert rdf2 == """    <item rdf:about='http://www.ietf.org/internet-drafts/draft-atkins-suit-cose-walnutdsa-07.txt'>
+        <link>http://www.ietf.org/internet-drafts/draft-atkins-suit-cose-walnutdsa-07.txt</link>
+        <title>"Use of the Walnut Digital Signature Algorithm with CBOR Object Signing and Encryption (COSE)", Derek Atkins</title>
+        <dc:date>2021-01-26T23:00:00-00:00</dc:date>
+        <description>This document specifies the conventions for using the Walnut Digital Signature Algorithm (WalnutDSA) for digital signatures with the CBOR Object Signing and Encryption (COSE) syntax.  WalnutDSA is a lightweight, quantum-resistant signature scheme based on Group Theoretic Cryptography with implementation and computational efficiency of signature verification in constrained environments, even on 8- and 16-bit platforms.  The goal of this publication is to document a way to use the lightweight, quantum-resistant WalnutDSA signature algorithm in COSE in a way that would allow multiple developers to build compatible implementations.  As of this publication, the security properties of WalnutDSA have not been evaluated by the IETF and its use has not been endorsed by the IETF.  WalnutDSA(TM) and Walnut Digital Signature Algorithm(TM) are trademarks of Veridify Security Inc..</description>
+    </item>
+"""
+
+    print("All tests passed")
+    sys.exit()
 
 def main():
     """ main loop """
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("-b", "--bibxml-dir", help="Directory to write to", type=str, required=True)
+    parser.add_argument("-b", "--bibxml-dir", help="Directory to write to", type=str)
     group_base = parser.add_mutually_exclusive_group()
     group_base.add_argument("-i", "--idindex", help="Location of 1id-abstracts.txt", type=str)
     group_base.add_argument("-u", "--idindex-url", help="URL for 1id-abstracts.txt", type=str)
     parser.add_argument("-B", "--backup-existing-files", help="Backup any existing files before overwriting", action="store_true")
     parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
     parser.add_argument("-w", "--warning", help="Warn about some questionable entries.", action="store_true")
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
     parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
     args = parser.parse_args()
 
+    if args.unit_tests:
+        run_unit_tests(args)
+
+    if not args.bibxml_dir:
+        bibxml_common.usage(parser, "error: the following arguments are required: -b/--bibxml-dir")
+
     if not args.idindex and not args.idindex_url:
-        sys.exit("Must provide either -i/--idindex or -u/--idindex-url")
+        bibxml_common.usage(parser, "error: one of -i/--idindex or -u/--idindex-url is required")
 
     os.makedirs(args.bibxml_dir, exist_ok=True)
     os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
@@ -308,23 +449,23 @@ def main():
         os.makedirs(args.bibxml_dir + "/backup", exist_ok=True)
 
     if args.idindex_url:
-        fp = codecs.getreader("utf-8")(get_url_tempfile(args.idindex_url, exit_ok=True))
-        process_input(args, fp)
+        infp = codecs.getreader("utf-8")(bibxml_common.get_url_tempfile(args.idindex_url, exit_ok=True))
+        process_input(args, infp)
 
     else:
-        with open(args.idindex) as fp:
-            process_input(args, fp)
+        with open(args.idindex) as infp:
+            process_input(args, infp)
 
     # generate index.html file
-    hx = gen_index_html_set(args.bibxml_dir, "reference.")
-    index_html = gen_index_html(hx)
-    if checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
+    hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
+    index_html = bibxml_common.gen_index_html(hx)
+    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
         print(f"UPD {args.bibxml_dir}/index.html")
 
     # generate index.rdf file
-    rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
-    index_rdf = gen_index_rdf(rx)
-    if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+    rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+    index_rdf = bibxml_common.gen_index_rdf(rx)
+    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
         print(f"UPD {args.bibxml_dir}/index.rdf")
 
 if __name__ == '__main__':

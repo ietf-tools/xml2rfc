@@ -5,36 +5,32 @@
     It is a windows-1252-encoded file, one document per line,
     that uses "~" as field separators.
     Store bibxml files in the specified directory.
-
-    The URL was originally
-        https://www.3gpp.org/ftp/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt
-    which then became
-        https://www.3gpp.org/DynaReport/2003-04-10_webexp11a_status-report_special_select.txt
-    That started giving a 404, but FTP has the file still at this location:
-        ftp://www.3gpp.org/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt
-
-
-"statrepwdrwn"~"statreprel"~"statreptype"~"statrepspec"~"statreptitle"~"statrepvers"~"statrepwg"~"statrepremark"~"statrepdraft"~"statrepwebpage"~"statrepavailable"
-"active"~"Rel-9"~"TS"~"24.303"~"Mobility management based on Dual-Stack Mobile IPv6; Stage-3"~"9.5.0"~"C1"~"CP-39: WID @ CP-080075."~""~"24303.htm"~"2012-06-27"
-
-becomes
-
-
 """
+#    Author: Tony Hansen
+
+#    The URL was originally
+#        https://www.3gpp.org/ftp/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt
+#    which then became
+#        https://www.3gpp.org/DynaReport/2003-04-10_webexp11a_status-report_special_select.txt
+#    That started giving a 404, but FTP has the file still at this location:
+#        ftp://www.3gpp.org/Specs/html-info/2003-04-10_webexp11a_status-report_special_select.txt
+#
+#
+#"statrepwdrwn"~"statreprel"~"statreptype"~"statrepspec"~"statreptitle"~"statrepvers"~"statrepwg"~"statrepremark"~"statrepdraft"~"statrepwebpage"~"statrepavailable"
+#"active"~"Rel-9"~"TS"~"24.303"~"Mobility management based on Dual-Stack Mobile IPv6; Stage-3"~"9.5.0"~"C1"~"CP-39: WID @ CP-080075."~""~"24303.htm"~"2012-06-27"
+#
 
 import argparse
 import json
+import os
 import re
-import sys
-from ftplib import FTP_TLS
-
-sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
-from bibxml_common import *
-
 import shutil
+import sys
+import tempfile
 import urllib.request as request
 from contextlib import closing
-
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+import bibxml_common
 
 def get_w3c_file(args):
     """
@@ -46,7 +42,7 @@ def get_w3c_file(args):
         with open(args.file, 'wb') as f:
             shutil.copyfileobj(r, f)
 
-def gen_ref_data(args, l, header_names, count):
+def gen_ref_data(args, line, header_names, count):
     """
     Extract the ref information from a 3gpp line.
 
@@ -68,9 +64,9 @@ def gen_ref_data(args, l, header_names, count):
 
     """
     flds = {}
-    lflds = l.split("~")
-    for i in range(len(lflds)):
-        f = lflds[i].strip().lstrip('"').rstrip('"')
+    lflds = line.split("~")
+    for i, lfld in enumerate(lflds):
+        f = lfld.strip().lstrip('"').rstrip('"')
         flds[header_names[i]] = f
     if args.verbose > 2:
         print(flds)
@@ -81,11 +77,11 @@ def gen_ref_data(args, l, header_names, count):
         print(f"WARNING: Invalid statreptype type {reptype} found in record {count}. Expecting 'TS' or 'TR'")
         return None
 
-    ref = gen_empty_ref_xml(orgname)
+    ref = bibxml_common.gen_empty_ref_xml(orgname)
     if flds["statrepspec"] == '':
         print(f"WARNING: Missing statrepspec value found in record {count}")
         return None
-        
+
     stdnumber = orgname + "." + flds["statrepspec"]
     ref["anchor"] = stdnumber
     ref["title"] = ref["rdftitle"] = flds["statreptitle"].replace('""','"')
@@ -96,7 +92,7 @@ def gen_ref_data(args, l, header_names, count):
         print(f"WARNING: Invalid date ({date}) found in record {count} for {stdnumber}", file=sys.stderr)
     else:
         ref["date"]["year"] = m.group(1)
-        ref["date"]["month"] = months[int(m.group(2))]
+        ref["date"]["month"] = bibxml_common.months[int(m.group(2))]
         ref["date"]["day"] = m.group(3)
         ref["date"]["full"] = date
 
@@ -118,20 +114,20 @@ def get_w3c_data(args):
     with open(args.file, "rb") as fpb:
         count = 0
         for lb in fpb.readlines():
-            l = lb.decode("windows-1252")
+            line = lb.decode("windows-1252")
             if args.verbose > 2:
-                print(l, end="")
+                print(line, end="")
             if not header_names:
-                flds = l.split("~")
+                flds = line.split("~")
                 for f in flds:
                     f = f.strip().lstrip('"').rstrip('"')
                     header_names.append(f)
                 if args.verbose > 2:
                     print(f"header_names=\n{header_names}")
-                
+
             else:
                 count += 1
-                ref = gen_ref_data(args, l, header_names, count)
+                ref = gen_ref_data(args, line, header_names, count)
                 if ref:
                     stdnumber = ref['anchor']
                     fulldate = ref["date"]["full"]
@@ -141,7 +137,7 @@ def get_w3c_data(args):
 
     bibxml_files = {}
     for ref in allrefs.values():
-        xml = gen_xml(ref)
+        xml = bibxml_common.gen_xml(ref)
 
         stdnumber = ref['anchor']
         xml_disk_file = f"{args.bibxml_dir}/reference.{stdnumber}.xml"
@@ -150,22 +146,43 @@ def get_w3c_data(args):
             print(f"GEN {xml_disk_file}")
             if args.verbose > 3:
                 print(xml)
-        if checkfile(args, xml_disk_file, xml) and args.verbose:
+        if bibxml_common.checkfile(args, xml_disk_file, xml) and args.verbose:
             print(f"UPD {xml_disk_file}")
 
-        rdf = gen_rdf(ref)
+        rdf = bibxml_common.gen_rdf(ref)
         rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{stdnumber}.rdf"
         bibxml_files[rdf_disk_file] = 1
         if args.verbose > 1:
             print(f"GEN {rdf_disk_file}")
             if args.verbose > 3:
                 print(rdf)
-        if checkfile(args, rdf_disk_file, rdf) and args.verbose:
+        if bibxml_common.checkfile(args, rdf_disk_file, rdf) and args.verbose:
             print(f"UPD {rdf_disk_file}")
-        
+
     if args.clean_bibxml:
-        clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
-        clean_dir(args, f"{args.bibxml_dir}/rdf/*.xml", bibxml_files)
+        bibxml_common.clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
+        bibxml_common.clean_dir(args, f"{args.bibxml_dir}/rdf/*.xml", bibxml_files)
+
+def run_unit_tests(args):
+    """
+    Run some unit tests on some of the code modules.
+    """
+    hn = ["statrepwdrwn","statreprel","statreptype","statrepspec","statreptitle","statrepvers","statrepwg","statrepremark","statrepdraft","statrepwebpage","statrepavailable"]
+    l2 = '"active"~"Rel-9"~"TS"~"24.303"~"Mobility management based on Dual-Stack Mobile IPv6; Stage-3"~"9.5.0"~"C1"~"CP-39: WID @ CP-080075."~""~"24303.htm"~"2012-06-27"'
+    ref = gen_ref_data(args, l2, hn, 3)
+    ref_expected = {
+        'date': {'year': '2012', 'month': 'June', 'day': '27', 'full': '2012-06-27'},
+        'authors': [{'org': '3GPP'}],
+        'title': 'Mobility management based on Dual-Stack Mobile IPv6; Stage-3',
+        'rdftitle': 'Mobility management based on Dual-Stack Mobile IPv6; Stage-3',
+        'type': '3GPP', 'anchor': '3GPP.24.303', 'abstract': '',
+        'series_info': [{'name': '3GPP TS', 'value': '24.303 9.5.0'}],
+        'format': [{'type': 'HTML', 'target': 'http://www.3gpp.org/ftp/Specs/html-info/24303.htm'}],
+        'target': '', 'url': 'http://www.3gpp.org/ftp/Specs/html-info/24303.htm'}
+    if args.verbose: print("ref", ref)
+    assert ref_expected == ref
+    print("All tests passed")
+    sys.exit()
 
 def main():
     """ main function """
@@ -177,8 +194,12 @@ def main():
     parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
     parser.add_argument("-c", "--clean-bibxml", help="Clean up bibxml files not in current 3GPP document list", action="store_true")
     parser.add_argument("-S", "--skip-clean", help="Skip cleaning bibxml files", action="store_true")
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
     parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
     args = parser.parse_args()
+
+    if args.unit_tests:
+        run_unit_tests(args)
 
     if args.url:
         if not args.file:
@@ -196,15 +217,15 @@ def main():
 
         if args.bibxml_dir:
             # generate index.html file
-            hx = gen_index_html_set(args.bibxml_dir, "reference.")
-            index_html = gen_index_html(hx)
-            if checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
+            hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
+            index_html = bibxml_common.gen_index_html(hx)
+            if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
                 print(f"UPD {args.bibxml_dir}/index.html")
 
             # generate index.rdf file
-            rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
-            index_rdf = gen_index_rdf(rx)
-            if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+            rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+            index_rdf = bibxml_common.gen_index_rdf(rx)
+            if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
                 print(f"UPD {args.bibxml_dir}/index.rdf")
 
 if __name__ == "__main__":

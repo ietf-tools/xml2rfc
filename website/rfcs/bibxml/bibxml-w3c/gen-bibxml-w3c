@@ -3,83 +3,76 @@
 """
     Retrieve the remote W3C web site's RDF file.
     Store bibxml files in the specified directory
-
-    W3C records we are interested in fall into these categories:
-        CR, NOTE, PER, PR, REC, WD
-    The following categories will be ignored:
-        LastCall, rdf:Description, Retired
-
-TODO: what generates target2?
-    reference.W3C.$(basename $target)
-TODO:
-    double check rdf vals
-    look at cleanup option
-    look at rdf/index generation
-
-
-    <REC rdf:about="https://www.w3.org/TR/1998/REC-DSig-label-19980527/">
-        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#Retired"/>
-        <dc:date>1998-05-27</dc:date>
-        <dc:title>PICS Signed Labels (DSig) 1.0 Specification</dc:title>
-        <doc:obsoletes rdf:resource="https://www.w3.org/TR/1998/PR-DSig-label-19980403/"/>
-        <doc:versionOf rdf:resource="https://www.w3.org/TR/REC-DSig-label/"/>
-        <editor rdf:parseType="Resource">
-            <contact:fullName>Yanghua Chu</contact:fullName>
-        </editor>
-        <editor rdf:parseType="Resource">
-            <contact:fullName>Philip DesAutels</contact:fullName>
-        </editor>
-        <editor rdf:parseType="Resource">
-            <contact:fullName>Brian LaMacchia</contact:fullName>
-        </editor>
-        <editor rdf:parseType="Resource">
-            <contact:fullName>Peter Lipp</contact:fullName>
-        </editor>
-    </REC>
-
-    <reference anchor='W3C.REC-DSig-label-19980527'
-               target='https://www.w3.org/TR/1998/REC-DSig-label-19980527'>
-    <front>
-        <title>PICS Signed Labels (DSig) 1.0 Specification</title>
-        <author initials='Y.' surname='Chu' fullname='Yanghua Chu'>
-            <organization />
-        </author>
-        <author initials='P.' surname='DesAutels' fullname='Philip DesAutels'>
-            <organization />
-        </author>
-        <author initials='B.' surname='LaMacchia' fullname='Brian LaMacchia'>
-            <organization />
-        </author>
-        <author initials='P.' surname='Lipp' fullname='Peter Lipp'>
-            <organization />
-        </author>
-
-        <date month='May' day='27' year='1998' />
-    </front>
-    
-    <seriesInfo name='World Wide Web Consortium Recommendation' value='REC-DSig-label-19980527' />
-    <format type='HTML' target='https://www.w3.org/TR/1998/REC-DSig-label-19980527' />
-    </reference>
-
-
 """
+#    Author - Tony Hansen
+
+#    W3C records we are interested in fall into these categories:
+#        CR, NOTE, PER, PR, REC, WD
+#    The following categories will be ignored:
+#        LastCall, rdf:Description, Retired
+#
+#TODO: what generates target2?
+#    reference.W3C.$(basename $target)
+#TODO:
+#    double check rdf vals
+#    look at cleanup option
+#    look at rdf/index generation
+#
+#
+#    <REC rdf:about="https://www.w3.org/TR/1998/REC-DSig-label-19980527/">
+#        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#Retired"/>
+#        <dc:date>1998-05-27</dc:date>
+#        <dc:title>PICS Signed Labels (DSig) 1.0 Specification</dc:title>
+#        <doc:obsoletes rdf:resource="https://www.w3.org/TR/1998/PR-DSig-label-19980403/"/>
+#        <doc:versionOf rdf:resource="https://www.w3.org/TR/REC-DSig-label/"/>
+#        <editor rdf:parseType="Resource">
+#            <contact:fullName>Yanghua Chu</contact:fullName>
+#        </editor>
+#        <editor rdf:parseType="Resource">
+#            <contact:fullName>Philip DesAutels</contact:fullName>
+#        </editor>
+#        <editor rdf:parseType="Resource">
+#            <contact:fullName>Brian LaMacchia</contact:fullName>
+#        </editor>
+#        <editor rdf:parseType="Resource">
+#            <contact:fullName>Peter Lipp</contact:fullName>
+#        </editor>
+#    </REC>
+#
+#    <reference anchor='W3C.REC-DSig-label-19980527'
+#               target='https://www.w3.org/TR/1998/REC-DSig-label-19980527'>
+#    <front>
+#        <title>PICS Signed Labels (DSig) 1.0 Specification</title>
+#        <author initials='Y.' surname='Chu' fullname='Yanghua Chu'>
+#            <organization />
+#        </author>
+#        <author initials='P.' surname='DesAutels' fullname='Philip DesAutels'>
+#            <organization />
+#        </author>
+#        <author initials='B.' surname='LaMacchia' fullname='Brian LaMacchia'>
+#            <organization />
+#        </author>
+#        <author initials='P.' surname='Lipp' fullname='Peter Lipp'>
+#            <organization />
+#        </author>
+#
+#        <date month='May' day='27' year='1998' />
+#    </front>
+#
+#    <seriesInfo name='World Wide Web Consortium Recommendation' value='REC-DSig-label-19980527' />
+#    <format type='HTML' target='https://www.w3.org/TR/1998/REC-DSig-label-19980527' />
+#    </reference>
 
 import argparse
-import glob
-import io
-import json
-# import yaml
 import os
 import re
 import sys
 import tempfile
-from pathlib import Path
-# import hexdump
-import requests
 import xml.etree.ElementTree as ET
+import requests
 
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
-from bibxml_common import *
+import bibxml_common
 
 W3C_NAMESPACE = '{http://www.w3.org/2001/02pd/rec54#}'
 RDF_NAMESPACE = '{http://www.w3.org/1999/02/22-rdf-syntax-ns#}'
@@ -108,27 +101,27 @@ def gen_ref_data(args, elroot, stdnumber, count):
     """
     Extract the ref information from a w3c element.
     """
-    ref = gen_empty_ref_xml("W3C")
+    ref = bibxml_common.gen_empty_ref_xml("W3C")
     url = elroot.attrib.get(f'{RDF_NAMESPACE}about')
     ref["url"] = ref["target"] = url
     ref["anchor"] = f"W3C.{stdnumber}"
     w3c_type = elroot.tag[len(W3C_NAMESPACE):]
     ref["target2"] = f"reference.W3C.{stdnumber}.xml"
-    ref["title"] = get_xml_text(elroot, f"./{DC_NAMESPACE}title")
-    date = get_xml_text(elroot, f"./{DC_NAMESPACE}date")
+    ref["title"] = bibxml_common.get_xml_text(elroot, f"./{DC_NAMESPACE}title")
+    date = bibxml_common.get_xml_text(elroot, f"./{DC_NAMESPACE}date")
     m = re.match(r"(\d*)-(\d*)-(\d*)$", date)
     if not m:
         print(f"WARNING: Invalid date ({date}) found in record {count} for {stdnumber}", file=sys.stderr)
     else:
         ref["date"]["year"] = m.group(1)
-        ref["date"]["month"] = months[int(m.group(2))]
+        ref["date"]["month"] = bibxml_common.months[int(m.group(2))]
         ref["date"]["day"] = m.group(3)
-    
+
     allnames = ""
     allnames_sep = ""
     for author in elroot.findall(f"./{W3C_NAMESPACE}editor"):
         if author.attrib.get(f"{RDF_NAMESPACE}parseType", "") == "Resource":
-            fullname = get_xml_text(author, f"{PIM_NAMESPACE}fullName")
+            fullname = bibxml_common.get_xml_text(author, f"{PIM_NAMESPACE}fullName")
             allnames += allnames_sep + fullname
             allnames_sep = ", "
             initials = fullname[0]
@@ -143,7 +136,7 @@ def gen_ref_data(args, elroot, stdnumber, count):
     ref["series_info"].append({ "name": f"W3C {w3c_type}", "value": stdnumber })
 
     ref["format"].append({ "type": "HTML", "target": url })
-    return ref            
+    return ref
 
 def dump_xml(elroot, prefix, include_children=False):
     """ print info on an xml element """
@@ -169,27 +162,25 @@ def gen_bibxml(args, elroot, count):
         return
 
     ref = gen_ref_data(args, elroot, stdnumber, count)
-    xml = gen_xml(ref)
+    xml = bibxml_common.gen_xml(ref)
 
     xml_disk_file = f"{args.bibxml_dir}/reference.W3C.{stdnumber}.xml"
     if args.verbose > 1:
         print(f"==== {xml_disk_file} ====")
-    if checkfile(args, xml_disk_file, xml) and args.verbose:
+    if bibxml_common.checkfile(args, xml_disk_file, xml) and args.verbose:
         print(f"UPD {xml_disk_file}")
 
-    rdf = gen_rdf(ref)
+    rdf = bibxml_common.gen_rdf(ref)
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.W3C.{stdnumber}.rdf"
-    if checkfile(args, rdf_disk_file, rdf) and args.verbose:
+    if bibxml_common.checkfile(args, rdf_disk_file, rdf) and args.verbose:
         print(f"UPD {rdf_disk_file}")
 
-def getRDFData(args):
-    """ 
+def get_rdf_data(args):
+    """
     Open the RDF file, generate bibxml files from it.
     """
     if args.verbose > 1:
-        print("getRDFData({args.file})")
-
-    bibxmlFiles = {}
+        print("get_rdf_data({args.file})")
 
     tree = ET.parse(args.file)
     root = tree.getroot()
@@ -210,10 +201,10 @@ def getRDFData(args):
         else:
             print(f"WARNING: the element tag {el.tag} is NOT known", file=sys.stderr)
 
-def getRDF(args):
+def get_rdf(args):
     """ using the specified URL, get the data into a temp file """
     if args.verbose > 1:
-        print(f"getRDF({args.url})")
+        print(f"get_rdf({args.url})")
 
     # Send HTTP GET request to server and attempt to receive a response
     response = requests.get(args.url)
@@ -226,6 +217,18 @@ def getRDF(args):
                 local_file.write(chunk)
     else:
         sys.exit(f"Cannot retrieve {args.url}. Status_code={response.status_code}")
+
+
+def run_unit_tests(args):
+    """
+    Run some unit tests on some of the code modules.
+    """
+    # TODO -- fill in here
+    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
+
+    print("All tests passed")
+    sys.exit()
+
 
 def main():
     """ main function """
@@ -240,34 +243,38 @@ def main():
     parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
     parser.add_argument("-c", "--clean-bibxml", help="Clean up bibxml files not in current RDF spreadsheet", action="store_true")
     parser.add_argument("-S", "--skip-clean", help="Skip cleaning bibxml files", action="store_true")
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
     parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
     args = parser.parse_args()
+
+    if args.unit_tests:
+        run_unit_tests(args)
 
     if args.url:
         if not args.file:
             args.file = tempfile.NamedTemporaryFile().name
             if args.verbose > 1:
                 print(f"Using {args.file}")
-        getRDF(args)
+        get_rdf(args)
 
     if args.bibxml_dir or args.print:
         if args.bibxml_dir:
             os.makedirs(args.bibxml_dir, exist_ok=True)
             os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
 
-        getRDFData(args)
+        get_rdf_data(args)
 
         if args.bibxml_dir:
             # generate index.html file
-            hx = gen_index_html_set(args.bibxml_dir, "reference.")
-            index_html = gen_index_html(hx)
-            if checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
+            hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
+            index_html = bibxml_common.gen_index_html(hx)
+            if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
                 print(f"UPD {args.bibxml_dir}/index.html")
 
             # generate index.rdf file
-            rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
-            index_rdf = gen_index_rdf(rx)
-            if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+            rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+            index_rdf = bibxml_common.gen_index_rdf(rx)
+            if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
                 print(f"UPD {args.bibxml_dir}/index.rdf")
 
 if __name__ == "__main__":

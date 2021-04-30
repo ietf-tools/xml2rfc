@@ -3,29 +3,25 @@
 """
     Retrieve all of the files on the remote NIST web site.
     Store them in the specified directory
-
-    https://pages.nist.gov/NIST-Tech-Pubs/
-    https://pages.nist.gov/NIST-Tech-Pubs/NIST_Tech_Pubs_all.xlsx
-    https://pages.nist.gov/NIST-Tech-Pubs/tree/nist-pages/xml
 """
+#    Author: Tony Hansen
+
+#    https://pages.nist.gov/NIST-Tech-Pubs/
+#    https://pages.nist.gov/NIST-Tech-Pubs/NIST_Tech_Pubs_all.xlsx
+#    https://pages.nist.gov/NIST-Tech-Pubs/tree/nist-pages/xml
 
 import argparse
-import glob
-import io
 import json
-# import yaml
 import os
 import sys
 import tempfile
-from pathlib import Path
-# import hexdump
 import requests
 import xlrd
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
-from bibxml_common import *
+import bibxml_common
 
 def gen_std_number(info):
-    """ 
+    """
     From the DOI field, generate something suitable for use by the reference file.
     In particular, change spaces to underscores and slashes to dashes.
     """
@@ -43,13 +39,16 @@ def get_month(info):
     """
     try:
         m = int(float(info['Month Published']))
-        return months[m]
+        return bibxml_common.months[m]
     except:
         print(f"invalid value for month: info['Month Published']: '{info['Month Published']}' found in {gen_std_number(info)}")
         return ""
 
-def gen_ref(args, info, bibxml_file, stdnumber):
-    ref = gen_empty_ref_xml("NIST")
+def gen_ref(args, info):
+    """
+    Generate a reference for the given doc
+    """
+    ref = bibxml_common.gen_empty_ref_xml("NIST")
     ref["url"] = ref["target"] = info["URL"]
     ref["anchor"] = gen_std_number(info)
     ref["title"] = ref["rdftitle"] = info['Title']
@@ -71,10 +70,12 @@ def gen_ref(args, info, bibxml_file, stdnumber):
 
     ref["series_info"].append({ "name": 'NIST', "value": info['Report Number'] })
     ref["series_info"].append({ "name": 'DOI', "value": info['DOI'] })
+    if args.verbose > 2:
+        print("ref", ref)
     return ref
 
 def get_excel_data(args):
-    """ 
+    """
     Open the excel file, generate bibxml files from it.
     """
     # print("get_excel_data({args.file})")
@@ -88,7 +89,7 @@ def get_excel_data(args):
     # xl_sheet = xl_workbook.sheet_by_index(0)
 
     # Get the first row of data
-    row = xl_sheet.row(0)
+    _ = xl_sheet.row(0)
     # print(f"row={row}")
 
     #to enumerate through all columns and rows
@@ -156,16 +157,16 @@ def get_excel_data(args):
                 sep = ","
             print("", file=dump_csvfp)
 
-        ref = gen_ref(args, info, xml_disk_file, stdnumber)
-        xml = gen_xml(ref)
+        ref = gen_ref(args, info)
+        xml = bibxml_common.gen_xml(ref)
 
         if args.bibxml_dir:
-            if checkfile(args, xml_disk_file, xml) and args.verbose:
+            if bibxml_common.checkfile(args, xml_disk_file, xml) and args.verbose:
                 print(f"UPD {xml_disk_file}")
-            rdf = gen_rdf(ref)
+            rdf = bibxml_common.gen_rdf(ref)
             rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{stdnumber}.rdf"
             bibxml_files[rdf_disk_file] = 1
-            if checkfile(args, rdf_disk_file, rdf) and args.verbose:
+            if bibxml_common.checkfile(args, rdf_disk_file, rdf) and args.verbose:
                 print(f"UPD {rdf_disk_file}")
 
         elif args.print:
@@ -183,8 +184,8 @@ def get_excel_data(args):
         dump_csvfp.close()
 
     if args.clean_bibxml:
-        clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
-        clean_dir(args, f"{args.bibxml_dir}/rdf/*.xml", bibxml_files)
+        bibxml_common.clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
+        bibxml_common.clean_dir(args, f"{args.bibxml_dir}/rdf/*.xml", bibxml_files)
 
 def get_spread_sheet(args):
     """ using the specified URL, get the data into a temp file """
@@ -202,6 +203,42 @@ def get_spread_sheet(args):
     else:
         sys.exit(f"Cannot retrieve {args.url}. Status_code={response.status_code}")
 
+def run_unit_tests(args):
+    """
+    Run some unit tests on some of the code modules.
+    """
+    info = {
+        'Series': 'BH', 'Report Number': 'NBS BH 1', 'Month Published': '',
+        'Year Published': '1923.0',
+        'Title': 'Recommended minimum requirements for small dwelling construction :report of Building Code Committee July 20, 1922',
+        'Authors': 'Woolson, Ira H; Brown, Edwin H; Newlin, John A; Hatt, William K; Russell, Ernest J; Miller, Rudolph P; Worcester, Joseph R; Cartwright, Frank P',
+        'OU': '', 'DOI': '10.6028/NBS.BH.1',
+        'URL': 'https://nvlpubs.nist.gov/nistpubs/Legacy/BH/nbsbuildinghousing1.pdf'}
+
+    ref = gen_ref(args, info)
+    assert ref == {
+        'date': {'year': 1923},
+        'authors': [
+            {'initials': 'Ira H', 'surname': 'Woolson', 'fullname': 'Ira H Woolson', 'role': '', 'org': ''},
+            {'initials': 'Edwin H', 'surname': 'Brown', 'fullname': 'Edwin H Brown', 'role': '', 'org': ''},
+            {'initials': 'John A', 'surname': 'Newlin', 'fullname': 'John A Newlin', 'role': '', 'org': ''},
+            {'initials': 'William K', 'surname': 'Hatt', 'fullname': 'William K Hatt', 'role': '', 'org': ''},
+            {'initials': 'Ernest J', 'surname': 'Russell', 'fullname': 'Ernest J Russell', 'role': '', 'org': ''},
+            {'initials': 'Rudolph P', 'surname': 'Miller', 'fullname': 'Rudolph P Miller', 'role': '', 'org': ''},
+            {'initials': 'Joseph R', 'surname': 'Worcester', 'fullname': 'Joseph R Worcester', 'role': '', 'org': ''},
+            {'initials': 'Frank P', 'surname': 'Cartwright', 'fullname': 'Frank P Cartwright', 'role': '', 'org': ''}
+            ],
+        'title': 'Recommended minimum requirements for small dwelling construction :report of Building Code Committee July 20, 1922',
+        'rdftitle': 'Recommended minimum requirements for small dwelling construction :report of Building Code Committee July 20, 1922',
+        'type': 'NIST', 'anchor': 'NIST.NBS.BH.1', 'abstract': '',
+        'series_info': [{'name': 'NIST', 'value': 'NBS BH 1'}, {'name': 'DOI', 'value': '10.6028/NBS.BH.1'}],
+        'format': [],
+        'target': 'https://nvlpubs.nist.gov/nistpubs/Legacy/BH/nbsbuildinghousing1.pdf',
+        'url': 'https://nvlpubs.nist.gov/nistpubs/Legacy/BH/nbsbuildinghousing1.pdf'
+}
+    print("All tests passed")
+    sys.exit()
+
 def main():
     """ main function """
     parser = argparse.ArgumentParser(description=__doc__)
@@ -215,8 +252,12 @@ def main():
     parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
     parser.add_argument("-c", "--clean-bibxml", help="Clean up bibxml files not in current excel spreadsheet", action="store_true")
     parser.add_argument("-S", "--skip-clean", help="Skip cleaning bibxml files", action="store_true")
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
     parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
     args = parser.parse_args()
+
+    if args.unit_tests:
+        run_unit_tests(args)
 
     if args.url:
         if not args.file:
@@ -239,15 +280,15 @@ def main():
 
         if args.bibxml_dir:
             # generate index.html file
-            hx = gen_index_html_set(args.bibxml_dir, "reference.")
-            index_html = gen_index_html(hx)
-            if checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
+            hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
+            index_html = bibxml_common.gen_index_html(hx)
+            if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
                 print(f"UPD {args.bibxml_dir}/index.html")
 
             # generate index.rdf file
-            rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
-            index_rdf = gen_index_rdf(rx)
-            if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+            rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+            index_rdf = bibxml_common.gen_index_rdf(rx)
+            if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
                 print(f"UPD {args.bibxml_dir}/index.rdf")
 
 if __name__ == "__main__":

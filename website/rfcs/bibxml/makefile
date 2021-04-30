@@ -30,12 +30,12 @@ none:
 	@echo make install-local -- install local files into production
 
 test:
-	for dir in $(PRODDIRS) bibxml_common; do \
+	for dir in bibxml_common $(PRODDIRS); do \
 	    ( cd $$dir && $(MAKE) test ) \
 	done
 
 install: test install-local
-	for dir in $(PRODDIRS) bibxml_common; do \
+	for dir in bibxml_common $(PRODDIRS); do \
 	    ( cd $$dir && $(MAKE) install ) \
 	done
 
@@ -53,8 +53,9 @@ install-local:
 	    fi; \
 	done
 
-clean:
+clean: clean-local
 	for dir in $(DEVDIRS); do ( cd $$dir && $(MAKE) clean ) done
+clean-local:
 	rm -f *~
 
 all:
@@ -63,3 +64,8 @@ all:
 production:
 	for dir in $(PRODDIRS); do ( cd $$dir && $(MAKE) production ) done
 
+pylint:
+	for dir in bibxml_common $(PRODDIRS); do ( cd $$dir && $(MAKE) pylint ) done
+
+pylint-all: clean
+	pylint `grep -l '#!.*python3' b*/*[!~] 2>/dev/null`

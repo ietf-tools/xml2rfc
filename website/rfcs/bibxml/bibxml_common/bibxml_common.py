@@ -2,57 +2,64 @@
 
 """
     A set of functions that make it easy to create a bibxml xml and related files.
-
-    Author: Tony Hansen
 """
+#    Author: Tony Hansen
 
 import datetime
 import glob
 import io
 import os
-import requests
 import stat
+import sys
 import tempfile
+import requests
 
 months = [ "", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
 
 monthnames = {
     1: "January", "Jan": "January", "January": "January",
     2: "February", "Feb": "February", "February": "February",
-    3: "March", "March": "March", "March": "March",
-    4: "April", "April": "April", "April": "April",
-    5: "May", "May": "May", "May": "May",
-    6: "June", "June": "June", "June": "June",
-    7: "July", "July": "July", "July": "July",
+    3: "March", "Mar": "March", "March": "March",
+    4: "April", "Apr": "April", "April": "April",
+    5: "May", "May": "May",
+    6: "June", "Jun": "June", "June": "June",
+    7: "July", "Jul": "July", "July": "July",
     8: "August", "Aug": "August", "August": "August",
-    9: "September", "Sept": "September", "September": "September",
+    9: "September", "Sep": "September", "Sept": "September", "September": "September",
     10: "October", "Oct": "October", "October": "October",
     11: "November", "Nov": "November", "November": "November",
     12: "December", "Dec": "December", "December": "December",
     }
 
-revmonths = { "January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6,
-              "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12,
-               1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
-               7: "7", 8: "8", 9: "9", 10: "10", 11: "11", 12: "12"
- }
-revmonths0 = { "January": "01", "February": "02", "March": "03", "April": "04", "May": "05", "June": "06",
-               "July": "07", "August": "08", "September": "09", "October": "10", "November": "11", "December": "12",
-               1: "01", 2: "02", 3: "03", 4: "04", 5: "05", 6: "06",
-               7: "07", 8: "08", 9: "09", 10: "10", 11: "11", 12: "12"
-               }
+revmonths = {
+    "January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6,
+    "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12,
+    1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
+    7: "7", 8: "8", 9: "9", 10: "10", 11: "11", 12: "12"
+    }
 
-def escape(d):
-    """ escape the &,<,>,",' characters within the string d with appropriate XML entities """
-    return d.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&apos;").replace('"', "&quot;")
+revmonths0 = {
+    "January": "01", "February": "02", "March": "03", "April": "04", "May": "05", "June": "06",
+    "July": "07", "August": "08", "September": "09", "October": "10", "November": "11", "December": "12",
+    1: "01", 2: "02", 3: "03", 4: "04", 5: "05", 6: "06",
+    7: "07", 8: "08", 9: "09", 10: "10", 11: "11", 12: "12"
+    }
 
-def escape_no_squote(d):
-    """ escape the &,<,>," characters within the string d with appropriate XML entities. (No apos.) """
-    return d.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
-def escape_no_quotes(d):
-    """ escape the &,<,> characters within the string d with appropriate XML entities. (No apos or quot.) """
-    return d.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+def escape(xstr):
+    """ escape the &,<,>,",' characters within the string xstr with appropriate XML entities """
+    return xstr.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&apos;").replace('"', "&quot;")
+
+
+def escape_no_squote(xstr):
+    """ escape the &,<,>," characters within the string xstr with appropriate XML entities. (No apos.) """
+    return xstr.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+
+def escape_no_quotes(xstr):
+    """ escape the &,<,> characters within the string xstr with appropriate XML entities. (No apos or quot.) """
+    return xstr.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
 
 def gen_empty_ref_xml(typ):
     """ generate an empty ref dictionary to be used by gen_xml() """
@@ -69,7 +76,8 @@ def gen_empty_ref_xml(typ):
         "target": ""
         }
 
-def gen_xml(ref, genEmptyAuthor=False):
+
+def gen_xml(ref, gen_empty_author=False):
     """ given a ref dictionary, create and print the xml for the RFC/I-D """
 
     xml = "<?xml version='1.0' encoding='UTF-8'?>\n\n"
@@ -89,14 +97,14 @@ def gen_xml(ref, genEmptyAuthor=False):
     for author in ref["authors"]:
         if author.get("role", "") != "":
             xml += f"<author initials='{escape(author['initials'])}' surname='{escape(author['surname'])}' fullname='{escape(author['fullname'])}' role='{escape(author['role'])}'>\n"
-        elif author.get('initials', "") != '' or author.get('surname', "") != '' or author.get('fullname', "") != '' or genEmptyAuthor:
+        elif author.get('initials', "") != '' or author.get('surname', "") != '' or author.get('fullname', "") != '' or gen_empty_author:
             xml += f"<author initials='{escape(author.get('initials',''))}' surname='{escape(author.get('surname',''))}' fullname='{escape(author.get('fullname',''))}'>\n"
         else:
-            xml += f"<author>\n"
+            xml += "<author>\n"
         if author['org'] != "":
             xml += f"<organization>{escape_no_squote(author['org'])}</organization>\n"
         else:
-            xml += f"<organization />\n"
+            xml += "<organization />\n"
         xml += "</author>\n"
 
     date = ref["date"]
@@ -129,6 +137,7 @@ def gen_xml(ref, genEmptyAuthor=False):
     xml += "</reference>\n"
     return xml
 
+
 def gen_rdf(ref):
     """ given a ref dictionary, create and print the rdf for the RFC/I-D """
     abstract = ref['abstract']
@@ -156,34 +165,39 @@ def gen_rdf(ref):
             ])
     return rdf
 
+
 def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None):
     """
     Check to see if a file exists and contains "newcontent".
     If not, (re)create the file.
     """
-    writefile = True
+    writefile = None
 
     if create_dirs:
         os.makedirs(os.path.dirname(fname), exist_ok=True)
 
     if not os.path.isfile(fname):
         if args.verbose > 1: print(f"{fname} does not exist")
+        writefile = "NEW"
+
     else:
         content = ""
         with open(fname, 'r') as fp:
             content = fp.read()
         if content == newcontent:
-            writefile = False
             if args.verbose > 1: print(f"{fname} same contents")
+
         else:
             if args.verbose > 1: print(f"{fname} contents differ")
+            writefile = "UPD"
             # print(f"contents=\n{content}\n")
             # print(f"newcontents=\n{newcontent}\n")
             if backup_fname:
                 checkfile(args, backup_fname, content, True)
 
     if writefile:
-        if args.verbose > 1: print(f"{fname} writing file")
+        if args.verbose:
+            print(f"{writefile} {fname}")
         if args.test:
             print(f"test mode: skipping writing to {fname}")
         else:
@@ -191,8 +205,9 @@ def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None):
                 print(newcontent, end="", file=fp)
     return writefile
 
-def gen_index_rdf(rx):
-    """ generate an index.xml file, based on a list of entries in the rx dict, sorted by the rx keys """
+
+def gen_index_rdf(rxdict):
+    """ generate an index.xml file, based on a list of entries in the rxdict dict, sorted by the rxdict keys """
     now = datetime.datetime.now()
     index_rdf = "\n".join([
             "<?xml version='1.0' encoding='UTF-8'?>",
@@ -213,11 +228,11 @@ def gen_index_rdf(rx):
             ""
             ])
 
-    for k in sorted(rx.keys()):
-        if rx[k]:
-            index_rdf += rx[k]
+    for k in sorted(rxdict.keys()):
+        if rxdict[k]:
+            index_rdf += rxdict[k]
         else:
-            print(f"rx[{k}] is {rx[k]}")
+            print(f"rxdict[{k}] is {rxdict[k]}")
 
     index_rdf += "\n".join([
             "        </rdf:Seq></items>",
@@ -228,14 +243,16 @@ def gen_index_rdf(rx):
 
     return index_rdf
 
-def get_file_contents(fn):
+
+def get_file_contents(fname):
     """ return the contents of a file, None if it cannot be read """
     try:
-        with open(fn) as fp:
+        with open(fname) as fp:
             return fp.read()
     except Exception as e:
-        print(f"Cannot read {fn}: {e}")
+        print(f"Cannot read {fname}: {e}")
         return None
+
 
 def gen_index_rdf_scan(ref_file, rdf_dir, rdf_prefix):
     """
@@ -254,28 +271,28 @@ def gen_index_rdf_scan(ref_file, rdf_dir, rdf_prefix):
             pass
 
     preflen = len(f"{rdf_dir}/{rdf_prefix}")
-    for fn in glob.glob(f"{rdf_dir}/{rdf_prefix}*.rdf"):
+    for fname in glob.glob(f"{rdf_dir}/{rdf_prefix}*.rdf"):
         try:
-            stat_file = os.stat(fn)
+            stat_file = os.stat(fname)
             if stat.S_ISREG(stat_file.st_mode) and stat_file.st_mtime > stat_ref_mtime:
-                nm  = fn[preflen:]
-                c = get_file_contents(fn)
+                nm  = fname[preflen:]
+                c = get_file_contents(fname)
                 if c:
                     ret[nm] = c
         except Exception as e:
-            print(f"#4: Cannot stat {fn}: {e}")
+            print(f"#4: Cannot stat {fname}: {e}")
 
     return ret
 
-def gen_index_html(hx):
-    """ generate an index.html file, based on a list of entries in the hx set """
-    now = datetime.datetime.now()
 
+def gen_index_html(hxset):
+    """ generate an index.html file, based on a list of entries in the set hxset """
     with io.StringIO() as ret:
-        for k in sorted(hx):
+        for k in sorted(hxset):
             ret.write(f"<a href='{escape(k)}'>{escape_no_quotes(k)}</a><br/>\n")
         return ret.getvalue()
     return ""
+
 
 def gen_index_html_set(html_dir, html_prefix):
     """
@@ -284,14 +301,17 @@ def gen_index_html_set(html_dir, html_prefix):
     """
     ret = set()
     preflen = len(f"{html_dir}/") -1
-    for fn in glob.glob(f"{html_dir}/{html_prefix}*.xml"):
-        nm  = fn[preflen:]
+    for fname in glob.glob(f"{html_dir}/{html_prefix}*.xml"):
+        nm  = fname[preflen:]
         ret.add(nm)
 
     return ret
 
-def gen_index_xml(ix):
-    """ Generate an index.xml file. ix is a dictionary indexed by filenames and the contents of those files. """
+
+def gen_index_xml(ixdict):
+    """
+    Generate an index.xml file. ixdict is a dictionary indexed by filenames and the contents of those files.
+    """
     now = datetime.datetime.now()
     month = months[now.month]
     index_xml = "\n".join(["<?xml version='1.0' encoding='UTF-8'?>",
@@ -315,8 +335,8 @@ def gen_index_xml(ix):
                          "",
                           ])
 
-    for k in sorted(ix.keys()):
-        index_xml += ix[k]
+    for k in sorted(ixdict.keys()):
+        index_xml += ixdict[k]
 
     index_xml += "\n".join([
             "</references>",
@@ -326,6 +346,7 @@ def gen_index_xml(ix):
             ])
 
     return index_xml
+
 
 def get_url_tempfile(url, exit_ok=False):
     """ Send HTTP GET request to server and attempt to receive a response """
@@ -341,11 +362,11 @@ def get_url_tempfile(url, exit_ok=False):
         local_file.seek(0)
         return local_file
 
-    elif exit_ok:
+    if exit_ok:
         sys.exit(f"Cannot retrieve {url}. Status_code={response.status_code}")
 
-    else:
-        return None
+    return None
+
 
 def get_xml_text(root, path):
     """
@@ -354,6 +375,7 @@ def get_xml_text(root, path):
     for item in root.findall(path):
         return item.text.strip()
     return None
+
 
 def get_xml_text_by_attribute(root, path, attribute, secondary_path):
     """
@@ -368,16 +390,18 @@ def get_xml_text_by_attribute(root, path, attribute, secondary_path):
             ret[k] = v
     return ret
 
-def get_xml_first_of(d, knames):
+
+def get_xml_first_of(dsrch, knames):
     """
-    Loop over the keys in knames, returning the first one found.
+    Loop over the keys in knames, returning the first one in dsrch found.
     None if none present.
     """
     for k in knames:
-        v = d.get(k)
+        v = dsrch.get(k)
         if k:
             return v
     return None
+
 
 def dump_xml(elroot, prefix, include_children=False):
     """ print info on an xml element """
@@ -389,6 +413,7 @@ def dump_xml(elroot, prefix, include_children=False):
     if include_children:
         for ch in elroot:
             dump_xml(ch, f"    {prefix}")
+
 
 def clean_dir(args, glob_pattern, file_dict):
     """
@@ -408,9 +433,84 @@ def clean_dir(args, glob_pattern, file_dict):
                 print(f"REMOVING {f}", file=sys.stderr)
                 os.unlink(f)
 
+
+def usage(parser, msg=None):
+    """
+    Print an appropriate usage message.
+    """
+    if msg:
+        print(msg, file=sys.stderr)
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+
+
+def run_unit_tests(args):
+    """
+    Run some unit tests on some of the code modules.
+    """
+    assert escape("ab&sup;<'\"def") == "ab&amp;sup;&lt;&apos;&quot;def"
+    assert escape_no_squote("ab&sup;<'\"def") == "ab&amp;sup;&lt;'&quot;def"
+    assert escape_no_quotes("ab&sup;<'\"def") == "ab&amp;sup;&lt;'\"def"
+    empty_ref = gen_empty_ref_xml("abc")
+    assert empty_ref == {
+        'date': {'year': '', 'month': '', 'day': '', 'full': ''},
+        'authors': [], 'title': '', 'rdftitle': '', 'type': 'abc',
+        'anchor': '', 'abstract': '', 'series_info': [], 'format': [], 'target': ''
+        }
+    empty_ref["title"] = "this is a title"
+    empty_ref["target"] = "this is a target"
+    empty_ref["url"] = "this is a url"
+    empty_ref["date"]["year"] = 2021
+    empty_ref["authors"].append({ "initials": "V.A.", "surname": "Cant", "org": "" })
+    assert gen_xml(empty_ref) == """<?xml version='1.0' encoding='UTF-8'?>
+
+<reference anchor='' target='this is a target'>
+<front>
+<title>this is a title</title>
+<author initials='V.A.' surname='Cant' fullname=''>
+<organization />
+</author>
+<date year='2021' />
+</front>
+</reference>
+"""
+    assert gen_rdf(empty_ref) == """    <item rdf:about='this is a url'>
+        <link>this is a url</link>
+        <title></title>
+        <dc:date>2021-01-01T23:00:00-00:00</dc:date>
+        <description></description>
+    </item>
+"""
+
+    # def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None): - filesystem
+    # def gen_index_rdf(rxdict): - possible
+    # def get_file_contents(fname): - filesystem
+    # def gen_index_rdf_scan(ref_file, rdf_dir, rdf_prefix): - filesystem
+    # def gen_index_html(hxset): - possible
+    # def gen_index_html_set(html_dir, html_prefix): - possible
+    # def gen_index_xml(ixdict): - possible
+    # def get_url_tempfile(url, exit_ok=False): - filesystem
+    # def get_xml_text(root, path): - possible, xml
+    # def get_xml_text_by_attribute(root, path, attribute, secondary_path): - possible, xml
+    # def get_xml_first_of(dsrch, knames): - possible, xml
+    # def dump_xml(elroot, prefix, include_children=False): - filesystem
+    # def clean_dir(args, glob_pattern, file_dict): - filesystem
+
+    print("All tests passed")
+    sys.exit()
+
+
 def main():
     """ Do unit tests on the common functions. """
-    pass
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
+    args = parser.parse_args()
+
+    if args.unit_tests:
+        run_unit_tests(args)
+
 
 if __name__ == "__main__":
     main()
