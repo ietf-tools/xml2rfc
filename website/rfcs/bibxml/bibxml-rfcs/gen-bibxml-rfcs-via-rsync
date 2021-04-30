@@ -2,7 +2,7 @@
 
 set -u		# error on unset variables
 
-PATH=$PATH:$PWD
+PATH=$PATH:$PWD:$PWD/../bibxml_common
 
 DEFTOPDIR=/unknown
 TOPDIR=$DEFTOPDIR
@@ -117,16 +117,18 @@ mkBibxmlRdfFiles()
 
     mkdir -p "$BIBXML"/rdf
 
-    for i in "$BIBXML"/reference.RFC.*.xml
-    do
-	num=$( getnum "$i" )
-	rdf=$BIBXML/rdf/item.RFC.$num.rdf
-	if [ ! -f "$rdf" -o "$i" -nt "$rdf" ]
-	then
-	    echo "making $rdf"
-	    mkRdfFromXml -i "$i" -o "$rdf"
-	fi
-    done
+    gen-rdf-from-resource-xml -v -D "$BIBXML" -O "$BIBXML/rdf"
+
+    #    for i in "$BIBXML"/reference.RFC.*.xml
+    #    do
+    #	num=$( getnum "$i" )
+    #	rdf=$BIBXML/rdf/item.RFC.$num.rdf
+    #	if [ ! -f "$rdf" -o "$i" -nt "$rdf" ]
+    #	then
+    #	    echo "making $rdf"
+    #	    gen-rdf-from-resource-xml "$i" -o "$rdf"
+    #	fi
+    #    done
 }
 
 mkBibxmlIndexRdf()

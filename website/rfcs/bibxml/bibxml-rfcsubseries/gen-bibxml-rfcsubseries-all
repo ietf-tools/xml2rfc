@@ -1,14 +1,27 @@
 #!/bin/bash
 
-if [ $# -ne 3 ]
-then
-    echo "Usage: $0 bibxml-top-directory bibxml-name rfc-index-url"
+usage()
+{
+    exec 1>&2
+    echo "Usage: $0 [-v] bibxml-top-directory bibxml-name rfc-index-url"
+    echo "-v be verbose by using set -x"
     exit 1
-fi
+}
+
+while getopts v c
+do
+    case $c in
+	v ) set -x ;;
+	? ) usage ;;
+    esac
+done
+shift $(( OPTIND - 1))
+
+[ $# -eq 3 ] || usage
 
 TOPDIR="$1"
 BIBXMLNAME="$2"
 RFCINDEXURL="$3"
 
-./gen-bibxml-rfcsubseries -b "$TOPDIR/$BIBXMLNAME" -$ "$TOPDIR/bibxml-rfcs" -u "$RFCINDEXURL"
+./gen-bibxml-rfcsubseries -v -b "$TOPDIR/$BIBXMLNAME" -R "$TOPDIR/bibxml-rfcs" -u "$RFCINDEXURL"
 ../bibxml_common/generate-tarball-zipfile "$TOPDIR" "$BIBXMLNAME"

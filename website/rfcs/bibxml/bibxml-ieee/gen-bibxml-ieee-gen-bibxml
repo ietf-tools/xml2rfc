@@ -108,7 +108,7 @@ def process_xml_contents(args, fname, x, bibxmlFiles):
 
     bibxmlFile = f"{args.bibxml_dir}/reference.IEEE.{mod_stdnumber}.xml"
     bibxmlFiles.add(bibxmlFile)
-    if args.verbose:
+    if args.verbose > 1:
         print(f"writing {bibxmlFile}")
 
     ref['anchor'] = f"IEEE.{mod_stdnumber}"
@@ -131,7 +131,8 @@ def process_xml_contents(args, fname, x, bibxmlFiles):
     ref["date"] = { "year": year, "month": month, "day": day }
 
     xml = gen_xml(ref)
-    checkfile(args, bibxmlFile, xml)
+    if checkfile(args, bibxmlFile, xml) and args.verbose:
+        print(f"UPD {bibxmlFile}")
 
     if month is None:
         ref['date']['month'] = "January"
@@ -139,7 +140,8 @@ def process_xml_contents(args, fname, x, bibxmlFiles):
         ref['date']['day'] = '1'
     rdf = gen_rdf(ref)
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.IEEE.{mod_stdnumber}.rdf"
-    checkfile(args, rdf_disk_file, rdf)
+    if checkfile(args, rdf_disk_file, rdf) and args.verbose:
+        print(f"UPD {rdf_disk_file}")
 
 def process_xml(args, fname, bibxmlFiles):
     """
@@ -159,7 +161,7 @@ def process_zip(args, fname, bibxmlFiles):
     count = 0
     with ZipFile(fname, 'r') as zipObj:
         listOfFileNames = zipObj.namelist()
-        if args.verbose:
+        if args.verbose > 1:
             print(f"listOfFileNames={listOfFileNames}")
         # Iterate over the file names
         for fileName in listOfFileNames:
@@ -177,7 +179,7 @@ def process(args, fname, bibxmlFiles):
     If a .xml file, create a bibxml file from it.
     If a .zip file, extract each .xml file from it, then process as above.
     """
-    if args.verbose:
+    if args.verbose > 1:
         print(f"processing {fname}")
     if fname.endswith(".xml"):
         process_xml(args, fname, bibxmlFiles)
@@ -246,12 +248,14 @@ def main():
     # generate index.html file
     hx = gen_index_html_set(args.bibxml_dir, "reference.")
     index_html = gen_index_html(hx)
-    checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+    if checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
+        print(f"UPD {args.bibxml_dir}/index.html")
 
     # generate index.rdf file
     rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
     index_rdf = gen_index_rdf(rx)
-    checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+    if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+        print(f"UPD {args.bibxml_dir}/index.rdf")
 
     print(f"Files processed: {count}")
 

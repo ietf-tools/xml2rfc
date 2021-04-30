@@ -1,5 +1,8 @@
 #!/bin/bash
 
+date
+set -x
+
 XML2RFC=/home/www/tools.ietf.org/tools/xml2rfc
 DIR=$XML2RFC/rfcs/bibxml
 BIBDIR=$XML2RFC/web/public/rfc
@@ -7,6 +10,8 @@ PROD_RFC_INDEX_URL=https://www.rfc-editor.org/rfc-index.xml
 PROD_1ID_ABSTRACTS_URL=https://www.ietf.org/id/1id-abstracts.txt
 BIBNAMES="bibxml-rfcs bibxml-rfcsubseries bibxml-ids bibxml-ieee bibxml-nist bibxml-w3c bibxml-doi bibxml-iana bibxml-3gpp"
 NEW=-new
+
+export PATH=/bin:/usr/bin:/usr/local/bin:"$DIR/bibxml_common"
 
 usage()
 {
@@ -18,6 +23,7 @@ usage()
     echo "-v\tbe verbose by using set -x"
     echo "bibxml-directories-to-process defaults to all of them:"
     echo "    $BIBNAMES"
+    exit 1
 }
 
 while getopts b:d:Pv c
@@ -34,6 +40,8 @@ shift $(( OPTIND - 1))
 # shellcheck disable=SC2086
 [ $# -gt 0 ] || set -- $BIBNAMES
 
+umask 02
+
 # bibxml-rfcs - working
 # bibxml-rfcsubseries - working
 # bibxml-ids - working - cumulative
@@ -49,15 +57,19 @@ gen()
 {
     bibxml="$1"
     shift
+    echo "$(date): $bibxml starting"
     (
-	cd "$bibxml" &&
+	export PATH="$PATH:$DIR/$bibxml"
+	cd "$DIR/$bibxml" &&
+	echo "Running in $(pwd)" &&
 	if [ -x gen-"$bibxml"-all ]
 	then
-	    ./gen-bibxml-all "$@"
+	    ./gen-"$bibxml"-all "$@"
 	else
-	    echo "gen-bibxml-all not found in $bibxml"
+	    echo "gen-$bibxml-all not found in $bibxml"
 	fi
     )
+    echo "$(date): $bibxml ending"
 }
 
 for bibxml
@@ -76,7 +88,7 @@ do
 	    ;;
 
 	bibxml-ieee )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW" "$BIBDIR" "$BIBDIR/ieee" /home/tonyh/.bibxml.pswd
+	    gen "$bibxml" -v "$BIBDIR" "$bibxml$NEW" "$BIBDIR/ieee" /home/tonyh/.bibxml.pswd
 	    ;;
 
 	bibxml-nist )
@@ -87,16 +99,10 @@ do
 	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
 	    ;;
 
-	bibxml-doi )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
-	    ;;
-
-	bibxml-iana )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
-	    ;;
-
 	bibxml-3gpp )
 	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
 	    ;;
     esac
 done
+
+date

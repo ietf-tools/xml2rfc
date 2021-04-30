@@ -374,7 +374,10 @@ def get_text(elroot, namespace, nm):
     extract the text from an xml element
     """
     el = find_one(elroot, namespace, nm)
-    return el.text if el is not None else None
+    txt = el.text if el is not None else None
+    if txt is not None:
+        txt = txt.strip()
+    return txt
 
 def get_not_issued(args, namespace, nm, elroot):
     """
@@ -423,7 +426,8 @@ def get_not_issued(args, namespace, nm, elroot):
 #            "</reference>",
 #            ""]) # and end with a NL
 
-    checkfile(args, diskfile, xml)
+    if checkfile(args, diskfile, xml) and args.verbose:
+        print(f"UPD {diskfile}")
     index = f"<a href='reference.{nm}.{num4}.xml'>reference.{nm}.{num4}.xml</a><br/>\n"
     return (num4, index, xml)
 
@@ -489,7 +493,7 @@ def get_ref_info(args, namespace, nm, elroot):
         print(f"ERROR: cannot determine RFC number in the entry {ET.tostring(elroot)}")
         return (None, None, None, None)
 
-    num4 = rfcid[-4:]	# RFC-10k issue
+    num4 = rfcid[3:]
     shortnum = num4.lstrip("0")
     nmlower = nm.lower()
 
@@ -566,7 +570,8 @@ def get_ref_info(args, namespace, nm, elroot):
     ref["format"] = []
 
     xml = gen_xml(ref)
-    checkfile(args, diskfile, xml)
+    if checkfile(args, diskfile, xml) and args.verbose:
+        print(f"UPD {diskfile}")
 
     index = f"<a href='reference.{nm}.{num4}.xml'>reference.{nm}.{num4}.xml</a><br/>\n"
 
@@ -575,6 +580,8 @@ def get_ref_info(args, namespace, nm, elroot):
     rdf = gen_rdf(ref)
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{nm}.{num4}.rdf"
     wroterdf = checkfile(args, rdf_disk_file, rdf)
+    if wroterdf:
+        print(f"UPD {rdf_disk_file}")
 
     return (num4, index, xml, rdf, wroterdf)
 
@@ -619,13 +626,17 @@ def main():
             index += index_update
             ix[num4] = x
 
-    checkfile(args, f"{args.bibxml_dir}/index.html", index)
+    if checkfile(args, f"{args.bibxml_dir}/index.html", index) and args.verbose:
+        print(f"UPD {args.bibxml_dir}/index.html")
+
     index_xml = gen_index_xml(ix)
-    checkfile(args, f"{args.bibxml_dir}/index.xml", index_xml)
+    if checkfile(args, f"{args.bibxml_dir}/index.xml", index_xml) and args.verbose:
+        print(f"UPD {args.bibxml_dir}/index.xml")
 
     # generate rdf/*
     index_rdf = gen_index_rdf(rx)
-    checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+    if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+        print(f"UPD {args.bibxml_dir}/index.rdf")
 
 if __name__ == '__main__':
     main()

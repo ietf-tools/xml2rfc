@@ -51,6 +51,11 @@ gen-bibxml-dev:
 gen-bibxml-prod:
 	./gen-bibxml-ieee-gen-bibxml -b $(PRODDIR) -i $(PRODCACHESTD) -x
 
+test:
+	@for i in $(EXEFILES); do \
+	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
+	done
+
 install:
 	@for i in $(EXEFILES); do \
 	    if [ $$i -nt $(WEB)/$$i -o ! -f $(WEB)/$$i ];then \

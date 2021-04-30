@@ -27,8 +27,19 @@ none:
 	@echo make all -- cd to each directory and make all
 	@echo make production -- cd to each directory and make production
 	@echo make install -- install all files into production
+	@echo make install-local -- install local files into production
 
-install:
+test:
+	for dir in $(PRODDIRS) bibxml_common; do \
+	    ( cd $$dir && $(MAKE) test ) \
+	done
+
+install: test install-local
+	for dir in $(PRODDIRS) bibxml_common; do \
+	    ( cd $$dir && $(MAKE) install ) \
+	done
+
+install-local:
 	@for i in $(EXEFILES); do \
 	    if [ $$i -nt $(WEB)/$$i -o ! -f $(WEB)/$$i ];then \
 	        echo cp -p $$i $(WEB)/$$i; \
@@ -40,9 +51,6 @@ install:
 	        echo cp -p $$i $(WEB)/$$i; \
 	        chmod a+r,a-x $$i && cp -p $$i $(WEB)/$$i ; \
 	    fi; \
-	done
-	for dir in $(PRODDIRS) bibxml_common; do \
-	    ( cd $$dir && $(MAKE) install ) \
 	done
 
 clean:

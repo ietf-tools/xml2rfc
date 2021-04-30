@@ -115,10 +115,10 @@ def update_file(args, ieee_type, fname, contents, xml_file):
         # copy the file into place, using checkfile()
         # ex: ieee-backfiles/IEEEstd/2021/9316201/9316202/09316203.xml
         nfname = f"{args.ieee_directory}/{ieee_type}/{year}/{xml_file}"
-        if args.verbose: 
-            print(f"fname={fname}")
-            print(f"nfname={nfname}")
-        checkfile(args, nfname, contents, create_dirs=True)
+        if args.verbose > 1:
+            print(f"fname={fname} nfname={nfname}")
+        if checkfile(args, nfname, contents, create_dirs=True) and args.verbose:
+            print(f"UPD {nfname}")
 
     else:
         # move file to $DEST/Error_$TYPE/$DATE_$WEEK tree
@@ -139,7 +139,7 @@ def main():
     parser.add_argument("filenames", nargs='*')
     args = parser.parse_args()
 
-    if args.verbose: print(f"directory with updates={args.update_directory}")
+    if args.verbose > 1: print(f"directory with updates={args.update_directory}")
 
     week_list = get_weeks(args)
 
@@ -155,28 +155,27 @@ def main():
             #     actually move it to $DEST/Deleted_$TYPE/$DATE_$WEEK tree
 
             for del_dir in glob.glob(f"{args.update_directory}/Deleted_{ieee_type}/week{week}[a-z]"):
-                if args.verbose > 1: print(f"del_dir={del_dir}")
+                if args.verbose > 2: print(f"del_dir={del_dir}")
                 del_len = len(del_dir)+1
                 if args.use_xmlfile:
                     for file in glob.glob(f"{del_dir}/*/*/*.xml"):
                         count += 1
                         xml_file = file[del_len:]
-                        if args.verbose > 1: print(f"    del file={file}, xml file={xml_file}")
+                        if args.verbose > 2: print(f"    del file={file}, xml file={xml_file}")
                         delete_file(args, ieee_type, xml_file)
 
                 else:
                     for file in glob.glob(f"{del_dir}/*.zip"):
-                        if args.verbose > 1: print(f"    del zip file={file}")
+                        if args.verbose > 2: print(f"    del zip file={file}")
                         with ZipFile(file, 'r') as zipObj:
                             list_of_file_names = zipObj.namelist()
-                            # if args.verbose:
-                            if args.verbose > 1: print(f"list_of_file_names={list_of_file_names}")
+                            if args.verbose > 2: print(f"list_of_file_names={list_of_file_names}")
                             # Iterate over the file names
                             for internal_file_name in list_of_file_names:
                                 # Check that the filename ends with .xml
                                 if internal_file_name.lower().endswith('.xml'):
                                     count += 1
-                                    if args.verbose > 1: print(f"        del xml file={internal_file_name.lower()}")
+                                    if args.verbose > 2: print(f"        del xml file={internal_file_name.lower()}")
                                     delete_file(args, ieee_type, internal_file_name)
 
             # add Updates to the proper year
@@ -184,41 +183,41 @@ def main():
             #         $DEST/$TYPE/$YEAR/path.xml
 
             for upd_dir in glob.glob(f"{args.update_directory}/IEEEUpdates_{ieee_type}/week{week}[a-z]"):
-                if args.verbose > 1: print(f"upd_dir={upd_dir}")
+                if args.verbose > 2: print(f"upd_dir={upd_dir}")
                 upd_len = len(upd_dir)+1
                 if args.use_xmlfile:
                     # update from an xml file previously extracted from a zip file
                     for fname in glob.glob(f"{upd_dir}/*/*/*.xml"):
                         count += 1
                         # ex: ieee-cache.20210301/IEEEUpdates_IEEEstd/week4a/9316201/9316202/09316203.xml
-                        if args.verbose > 1: print(f"    upd fname={fname}")
+                        if args.verbose > 2: print(f"    upd fname={fname}")
                         xml_name = fname[upd_len:]
-                        if args.verbose > 1: print(f"        xml name = {xml_name}")
+                        if args.verbose > 2: print(f"        xml name = {xml_name}")
                         # figure out the year for the new fname from
                         # <publication> <volume> <volumeinfo> <year>1922</year>
                         contents = get_file_contents(fname)
-                        if args.verbose > 2: print(f"{contents[0:120]}")
+                        if args.verbose > 3: print(f"{contents[0:120]}")
                         update_file(args, ieee_type, fname, contents, xml_name)
 
                 else:
                     # update from a zip file
                     for file in glob.glob(f"{upd_dir}/*.zip"):
-                        if args.verbose > 1: 
+                        if args.verbose > 2: 
                             print(f"    upd file={file}")
                             print(f"    suffix = {file[upd_len:]}")
                         with ZipFile(file, 'r') as zipObj:
                             list_of_file_names = zipObj.namelist()
-                            if args.verbose > 1: print(f"list_of_file_names={list_of_file_names}")
+                            if args.verbose > 2: print(f"list_of_file_names={list_of_file_names}")
                             # Iterate over the file names
                             for internal_file_name in list_of_file_names:
                                 # Check filename endswith xml
                                 if internal_file_name.lower().endswith('.xml'):
                                     count += 1
                                     # Extract all xml files from zip
-                                    if args.verbose > 1: print(f"extracting {internal_file_name}")
+                                    if args.verbose > 2: print(f"extracting {internal_file_name}")
                                     fname = f"{file} - {internal_file_name}"
                                     contents = zipObj.read(internal_file_name)
-                                    if args.verbose > 2: print(f"read: {contents[0:120]}")
+                                    if args.verbose > 3: print(f"read: {contents[0:120]}")
                                     # update_file(args, ieee_type, fname, contents.decode('utf-8'), internal_file_name)
 
     print(f"Files processed: {count}")

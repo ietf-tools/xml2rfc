@@ -1,17 +1,38 @@
 #!/bin/bash
 
-if [ $# -ne 4 ]
-then
-    echo "Usage: $0 bibxml-top-directory bibxml-name rfc-index-url pswd-file-location"
+usage()
+{
+    exec 1>&2
+    echo "Usage: $0 [-v] bibxml-top-directory bibxml-name cache-top-directory pswd-file-location"
+    echo "-v be verbose by using set -x"
     exit 1
-fi
+}
+
+while getopts v c
+do
+    case $c in
+	v ) set -x ;;
+	? ) usage ;;
+    esac
+done
+shift $(( OPTIND - 1))
+
+[ $# -eq 4 ] || usage
 
 TOPDIR="$1"
 BIBXMLNAME="$2"
 CACHEDIR="$3"
 PSWDFILE="$4"
 
-source "$PSWDFILE"
+id -a
+ls -l "$PSWDFILE"
+cat "$PSWDFILE"
+
+if ! source "$PSWDFILE"
+then
+    echo "$0: Cannot read $PSWDFILE"
+    exit 2
+fi
 
 DATE=$(date +%Y%m%d)
 WEEKDAY=$(date +%A)
@@ -23,11 +44,11 @@ case "$WEEKDAY" in
 	if [ ! -d "$UPDATEDIR" ]
 	then
 	    # get the update from IEEE
-	    ./gen-bibxml-ieee-get-update -d "$UPDATEDIR" -H 'ftp.ieee.org' -U "$IEEEUSER" -P "$IEEEPSWD"
+	    ./gen-bibxml-ieee-get-update -d "$UPDATEDIR" -H 'ftp.ieee.org' -U "$IEEEUSER" -P "$IEEEPSWD" &&
 	    # incorporate the update into the cache
-	    ./gen-bibxml-ieee-apply-update -t -d "$UPDATEDIR" -i "$CACHEDIR"/cache
+	    ./gen-bibxml-ieee-apply-update -t -d "$UPDATEDIR" -i "$CACHEDIR"/cache &&
 	    # create the bibxml files
-	    ./gen-bibxml-ieee-gen-bibxml -b "$TOPDIR/$BIBXMLNAME" -i "$CACHEDIR"/cache/IEEEstd -x
+	    ./gen-bibxml-ieee-gen-bibxml -v -b "$TOPDIR/$BIBXMLNAME" -i "$CACHEDIR"/cache/IEEEstd -x &&
 	    # generate the tarball and zipfile
 	    ../bibxml_common/generate-tarball-zipfile "$TOPDIR" "$BIBXMLNAME"
 	else

@@ -72,7 +72,7 @@ def gen_ref_data(args, l, header_names, count):
     for i in range(len(lflds)):
         f = lflds[i].strip().lstrip('"').rstrip('"')
         flds[header_names[i]] = f
-    if args.verbose > 1:
+    if args.verbose > 2:
         print(flds)
 
     reptype = flds["statreptype"]
@@ -103,7 +103,7 @@ def gen_ref_data(args, l, header_names, count):
     ref["series_info"].append({ "name": f"3GPP {flds['statreptype']}", "value": flds["statrepspec"] + " " + flds["statrepvers"] })
     ref["url"] = "http://www.3gpp.org/ftp/Specs/html-info/" + flds['statrepwebpage']
     ref["format"].append({ "type": "HTML", "target": ref["url"] })
-    if args.verbose > 2:
+    if args.verbose > 3:
         json.dump(ref, sys.stdout, indent=4)
         print("")
     return ref
@@ -119,14 +119,14 @@ def get_w3c_data(args):
         count = 0
         for lb in fpb.readlines():
             l = lb.decode("windows-1252")
-            if args.verbose > 1:
+            if args.verbose > 2:
                 print(l, end="")
             if not header_names:
                 flds = l.split("~")
                 for f in flds:
                     f = f.strip().lstrip('"').rstrip('"')
                     header_names.append(f)
-                if args.verbose > 1:
+                if args.verbose > 2:
                     print(f"header_names=\n{header_names}")
                 
             else:
@@ -146,20 +146,22 @@ def get_w3c_data(args):
         stdnumber = ref['anchor']
         xml_disk_file = f"{args.bibxml_dir}/reference.{stdnumber}.xml"
         bibxml_files[xml_disk_file] = 1
-        if args.verbose:
+        if args.verbose > 1:
             print(f"GEN {xml_disk_file}")
-            if args.verbose > 2:
+            if args.verbose > 3:
                 print(xml)
-        checkfile(args, xml_disk_file, xml)
+        if checkfile(args, xml_disk_file, xml) and args.verbose:
+            print(f"UPD {xml_disk_file}")
 
         rdf = gen_rdf(ref)
         rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{stdnumber}.rdf"
         bibxml_files[rdf_disk_file] = 1
-        if args.verbose:
+        if args.verbose > 1:
             print(f"GEN {rdf_disk_file}")
-            if args.verbose > 2:
+            if args.verbose > 3:
                 print(rdf)
-        checkfile(args, rdf_disk_file, rdf)
+        if checkfile(args, rdf_disk_file, rdf) and args.verbose:
+            print(f"UPD {rdf_disk_file}")
         
     if args.clean_bibxml:
         clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
@@ -181,7 +183,7 @@ def main():
     if args.url:
         if not args.file:
             args.file = tempfile.NamedTemporaryFile().name
-            if args.verbose:
+            if args.verbose > 1:
                 print(f"Using {args.file}")
         get_w3c_file(args)
 
@@ -196,12 +198,14 @@ def main():
             # generate index.html file
             hx = gen_index_html_set(args.bibxml_dir, "reference.")
             index_html = gen_index_html(hx)
-            checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+            if checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
+                print(f"UPD {args.bibxml_dir}/index.html")
 
             # generate index.rdf file
             rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
             index_rdf = gen_index_rdf(rx)
-            checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+            if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+                print(f"UPD {args.bibxml_dir}/index.rdf")
 
 if __name__ == "__main__":
     main()

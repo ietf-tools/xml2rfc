@@ -148,7 +148,7 @@ def login(args):
             print("=== quit ===")
         ftp.quit()
     except Exception as e:
-        print(f"Cannot connect to {args.host} as {args.user}: {e}", file=sys.stderr)
+        sys.exit(f"Cannot connect to {args.host} as {args.user}: {e}", file=sys.stderr)
 
 
 def main():

@@ -1,10 +1,23 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]
-then
-    echo "Usage: $0 bibxml-top-directory bibxml-name"
+usage()
+{
+    exec 1>&2
+    echo "Usage: $0 [-v] bibxml-top-directory bibxml-name"
+    echo "-v be verbose by using set -x"
     exit 1
-fi
+}
+
+while getopts v c
+do
+    case $c in
+	v ) set -x ;;
+	? ) usage ;;
+    esac
+done
+shift $(( OPTIND - 1))
+
+[ $# -eq 2 ] || usage
 
 TOPDIR="$1"
 BIBXMLNAME="$2"

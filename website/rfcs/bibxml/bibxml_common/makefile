@@ -1,11 +1,16 @@
-DIR=bibxml/bibxml-ids
+DIR=bibxml/bibxml_common
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/rfcs/$(DIR)
 
-EXEFILES=generate-tarball-zipfile 
+EXEFILES=generate-tarball-zipfile gen-rdf-from-resource-xml
 OTHERFILES=bibxml_common.py makefile
 
 none:
 	@echo make install -- install all files into production
+
+test:
+	@for i in $(EXEFILES); do \
+	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
+	done
 
 install:
 	@for i in $(EXEFILES); do \

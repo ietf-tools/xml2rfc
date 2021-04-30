@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+
+"""
+Given a resource.xyz.xml file such as this:
+
+    <?xml version='1.0' encoding='UTF-8'?>
+    <reference anchor='RFC###'>
+    <front>
+    <title>$TITLE</title>
+    <author initials='S.' surname='Name1' fullname='S. Name1'>
+    <organization /></author>
+    <author initials='T.' surname='Name2' fullname='T. Name2'>
+    <organization /></author>
+    <author initials='B.' surname='Name3' fullname='B. Name3'>
+    <organization /></author>
+    <date year='$YEAR' month='$MONTH' />
+    <abstract>
+    <t>$ABSTRACT</t></abstract></front>
+    <seriesInfo name='RFC' value='####' />
+    <seriesInfo name='DOI' value='10.17487/RFC####' />
+    <format type='TXT' octets='1759' target='http://www.rfc-editor.org/rfc/rfc####.txt' />
+    </reference>
+    
+create a corresponding RDF file such as this:
+
+    <item rdf:about='http://www.rfc-editor.org/rfc/rfc####.txt'>
+        <link>http://www.rfc-editor.org/rfc/rfc####.txt</link>
+        <title>RFC ####: $TITLE, S. Name1, T. Name2, B. Name3</title>
+        <dc:date>$YEAR-$MONTH-31T23:00:00-00:00</dc:date>
+        <description>$ABSTRACT $STANDARDSTRACE</description>
+    </item>
+"""
+
+import argparse
+import os
+import re
+import sys
+
+import xml.etree.ElementTree as ET
+sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+from bibxml_common import *
+
+assert sys.version_info >= (3,7)
+
+def find_one(elroot, namespace, nm):
+    """ find the first element with the given name, else None """
+    for r in elroot.findall(f"{namespace}{nm}"):
+        return r
+    return None
+
+def get_text(elroot, namespace, nm, dft=None):
+    """
+    Extract the text from an xml element.
+    If not found, return dft.
+    """
+    el = find_one(elroot, namespace, nm)
+    txt = el.text if el is not None else None
+    if txt is None:
+        return dft
+    txt = txt.strip()
+    return txt
+
+
+def parse(args, fname, ofp):
+    """
+    Open a reference file and extract information from it
+    """
+
+    tree = ET.parse(fname)
+    root = tree.getroot()
+
+    ref = gen_empty_ref_xml("RFC")
+    ref["title"] = ref["rdftitle"] = get_text(root, "", "./front/title")
+    std = root.attrib["anchor"]
+    rfc = std[3:]
+    for author in root.findall("./front/author"):
+        ref["authors"].append({ 
+                "initials": author.attrib.get("initials", ""),
+                "surname": author.attrib.get("surname", ""),
+                "fullname": author.attrib.get("fullname", ""),
+                "role": author.attrib.get("role", ""),
+                "org": get_text(author, "", "./organization", "")
+                })
+    date = find_one(root, "", "./front/date")
+    if date is not None:
+        ref["date"] = {
+            "year": date.attrib.get("year", ""),
+            "month": date.attrib.get("month", ""),
+            "day": date.attrib.get("day", "1"),
+            }
+    ref["target"] = ref["url"] = f"https://www.rfc-editor.org/info/{std.lower()}"
+    abstract = ""
+    for t in root.findall("./front/abstract"):
+        for ch in t:
+            abstract += ch.text
+            abstract += "\n\n"
+    ref["abstract"] = abstract
+    for series in root.findall("./seriesInfo"):
+        ref["series_info"].append({
+                "name": series.attrib.get("name"),
+                "value": series.attrib.get("value")
+                })
+    for fmt in root.findall("./format"):
+        ref["format"].append({
+                "type": fmt.attrib.get("type"),
+                "octets": fmt.attrib.get("octets"),
+                "target": fmt.attrib.get("target")
+                })
+    rdf = gen_rdf(ref)        
+    print(rdf, file=ofp)
+
+
+def scan_directory(args):
+    """
+    Scan the scan_directory look for reference.*.xml files.
+    Generate corresponding output_directory item.*.rdf files.
+    """
+    preflen = len(args.scan_directory)
+    for fn in glob.glob(f"{args.scan_directory}/reference.*.xml"):
+        stdname = fn[preflen+11:-4]
+        # print("stdname", stdname)
+        ofname = f"{args.output_directory}/item.{stdname}.rdf"
+        # print("    ofname", ofname)
+
+        stat_ref_mtime = 0
+        try:
+            stat_ref_mtime = os.stat(fn).st_mtime
+            if args.verbose:
+                print(f"    mtime {fn}={stat_ref_mtime}")
+        except Exception as e:
+            pass
+
+        needfile = False
+        try:
+            stat_file = os.stat(ofname)
+            if stat.S_ISREG(stat_file.st_mode) and stat_file.st_mtime < stat_ref_mtime:
+                if args.verbose:
+                    print(f"    mtime {ofname}={stat_file.st_mtime}")
+                needfile = True
+                if args.verbose:
+                    print(f"UPD {ofname} (timestamp)")
+        except:
+            needfile = True
+            if args.verbose:
+                print(f"UPD {ofname} (missing)")
+
+        if needfile:
+            try:
+                with open(ofname, "w") as ofp:
+                    parse(args, fn, ofp)
+            except Exception as e:
+                print(e, file=sys.stderr)
+        
+
+def main():
+    """ main loop """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-o", "--output-rdf", help="File to write to. Defaults to stdout", type=str)
+    parser.add_argument("-D", "--scan-directory", help="Directory to scan", type=str)
+    parser.add_argument("-O", "--output-directory", help="Directory to write to", type=str)
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    parser.add_argument("file", nargs='*')
+    args = parser.parse_args()
+
+    if args.scan_directory and args.output_directory:
+        scan_directory(args)
+
+    elif args.scan_directory or args.output_directory:
+        sys.exit("-D/--scan-directory and -O/--output-directory must be used together")
+
+    else:
+        if not args.file:
+            sys.exit("No files specified")
+
+        ofp = sys.stdout
+        if args.output_rdf:
+            try:
+                ofp = open(args.output_rdf, "w")
+            except Exception as e:
+                sys.exit(e)
+
+        for fname in args.file:
+            parse(args, fname, ofp)
+
+
+if __name__ == '__main__':
+    main()

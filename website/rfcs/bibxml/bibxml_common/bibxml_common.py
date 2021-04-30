@@ -136,16 +136,20 @@ def gen_rdf(ref):
         abstract = abstract[:-1]
     abstract = escape_no_quotes(abstract).replace("\n\n", " ")
     # print(f"ref[date]={ref['date']}")
-    if not ref['date'].get('month'):
-        ref['date']['month'] = 1
-    if not ref['date'].get('day'):
-        ref['date']['day'] = 1
+    if not ref['date'].get('year'):
+        prdate = ""
+    else:
+        if not ref['date'].get('month'):
+            ref['date']['month'] = 1
+        if not ref['date'].get('day'):
+            ref['date']['day'] = 1
+        prdate = f"{ref['date']['year']}-{revmonths0[ref['date']['month']]}-{int(ref['date']['day']):02d}T23:00:00-00:00"
 
     rdf = "\n".join([
             f"    <item rdf:about='{ref['url']}'>",
             f"        <link>{ref['url']}</link>",
             f"        <title>{escape_no_quotes(ref['rdftitle'])}</title>",
-            f"        <dc:date>{ref['date']['year']}-{revmonths0[ref['date']['month']]}-{int(ref['date']['day']):02d}T23:00:00-00:00</dc:date>",
+            f"        <dc:date>{prdate}</dc:date>",
             f"        <description>{abstract}</description>",
             "    </item>",
             ""
@@ -163,7 +167,7 @@ def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None):
         os.makedirs(os.path.dirname(fname), exist_ok=True)
 
     if not os.path.isfile(fname):
-        if args.verbose: print(f"{fname} does not exist")
+        if args.verbose > 1: print(f"{fname} does not exist")
     else:
         content = ""
         with open(fname, 'r') as fp:
@@ -172,7 +176,7 @@ def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None):
             writefile = False
             if args.verbose > 1: print(f"{fname} same contents")
         else:
-            if args.verbose: print(f"{fname} contents differ")
+            if args.verbose > 1: print(f"{fname} contents differ")
             # print(f"contents=\n{content}\n")
             # print(f"newcontents=\n{newcontent}\n")
             if backup_fname:

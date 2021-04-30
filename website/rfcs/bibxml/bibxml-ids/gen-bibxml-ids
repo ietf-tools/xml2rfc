@@ -33,6 +33,7 @@ import argparse
 import os
 import re
 import sys
+import codecs
 from enum import Enum
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
 from bibxml_common import *
@@ -165,13 +166,13 @@ def print_doc(args, doc, abstract):
     full_name = m.group(1)
     diskfile1 = f"{args.bibxml_dir}/reference.I-D.{full_name}.xml"
     diskfile1_backup = f"{args.bibxml_dir}/backup/reference.I-D.{full_name}.xml" if args.backup_existing_files else None
-    if args.verbose > 0: print(f"GEN {diskfile1}")
+    if args.verbose > 1: print(f"GEN {diskfile1}")
 
     canonical_name = m.group(2)	# skip draft- and -##
     generation = m.group(3)
     suffix_list = m.group(4)
 
-    if args.verbose > 1: print(f"idname={idname}, full_name={full_name}, canonical_name={canonical_name}, suffix_list={suffix_list}")
+    if args.verbose > 2: print(f"idname={idname}, full_name={full_name}, canonical_name={canonical_name}, suffix_list={suffix_list}")
 
     ref["anchor"] = f"I-D.{canonical_name}"
 
@@ -184,7 +185,7 @@ def print_doc(args, doc, abstract):
     ref["url"] = f"http://www.ietf.org/internet-drafts/{full_name}.txt"
     ref["format"] = [ ]
     for typ in suffix_list.split(","):
-        if args.verbose >2: print(f"looking at typ={typ}")
+        if args.verbose > 3: print(f"looking at typ={typ}")
         typu = typ[1:].upper() # .txt => TXT, .pdf => PDF
         ref["format"].append({ "type": typu, "target": f"https://www.ietf.org/internet-drafts/{full_name}{typ}" })
     ref["about"] = ref["url"] # TODO: remove this line?
@@ -194,12 +195,15 @@ def print_doc(args, doc, abstract):
     diskfile2 = f"{args.bibxml_dir}/reference.I-D.{canonical_name}.xml"
     diskfile2_backup = f"{args.bibxml_dir}/backup/reference.I-D.{canonical_name}.xml" if args.backup_existing_files else None
 
-    checkfile(args, diskfile1, xml, backup_fname=diskfile1_backup)
-    checkfile(args, diskfile2, xml, backup_fname=diskfile2_backup)
+    if checkfile(args, diskfile1, xml, backup_fname=diskfile1_backup) and args.verbose:
+        print(f"UPD {diskfile1}")
+    if checkfile(args, diskfile2, xml, backup_fname=diskfile2_backup) and args.verbose:
+        print(f"UPD {diskfile2}")
 
     rdf = gen_rdf(ref)
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.I-D.{canonical_name}.rdf"
-    checkfile(args, rdf_disk_file, rdf)
+    if checkfile(args, rdf_disk_file, rdf) and args.verbose:
+        print(f"UPD {rdf_disk_file}")
 
 def process_input(args, fp):
     """
@@ -213,6 +217,8 @@ def process_input(args, fp):
     abstract = ""
 
     for ln in fp:
+        if args.verbose > 1:
+            print(f"looking at '{ln}'")
 
         if State.BEFORE_DASHES == state:
             if ln.startswith("--------"):
@@ -302,20 +308,24 @@ def main():
         os.makedirs(args.bibxml_dir + "/backup", exist_ok=True)
 
     if args.idindex_url:
-        args.idindex = get_url_tempfile(args.idindex_url, exit_ok=True)
-
-    with open(args.idindex) as fp:
+        fp = codecs.getreader("utf-8")(get_url_tempfile(args.idindex_url, exit_ok=True))
         process_input(args, fp)
+
+    else:
+        with open(args.idindex) as fp:
+            process_input(args, fp)
 
     # generate index.html file
     hx = gen_index_html_set(args.bibxml_dir, "reference.")
     index_html = gen_index_html(hx)
-    checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+    if checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
+        print(f"UPD {args.bibxml_dir}/index.html")
 
     # generate index.rdf file
     rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
     index_rdf = gen_index_rdf(rx)
-    checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+    if checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
+        print(f"UPD {args.bibxml_dir}/index.rdf")
 
 if __name__ == '__main__':
     main()

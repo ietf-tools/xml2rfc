@@ -29,6 +29,11 @@ all:
 production:
 	./gen-bibxml-w3c -v -u $(URL) -b $(PRODDIR) -c
 
+test:
+	@for i in $(EXEFILES); do \
+	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
+	done
+
 install:
 	@for i in $(EXEFILES); do \
 	    if [ $$i -nt $(WEB)/$$i -o ! -f $(WEB)/$$i ];then \

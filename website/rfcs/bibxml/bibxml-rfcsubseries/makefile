@@ -35,6 +35,11 @@ all-url:
 production:
 	./gen-bibxml-rfcsubseries -b $(PROD_BIBXML_DIR) -R $(REF_BIBXML_DIR) -u $(PROD_RFCINDEX_URL)
 
+test:
+	@for i in $(EXEFILES); do \
+	    case `file $$` in *Python* ) "$$i" --help ;; *shell* ) bash -n "$$i" ;; esac; \
+	done
+
 install:
 	@for i in $(EXEFILES); do \
 	    if [ $$i -nt $(WEB)/$$i -o ! -f $(WEB)/$$i ];then \
