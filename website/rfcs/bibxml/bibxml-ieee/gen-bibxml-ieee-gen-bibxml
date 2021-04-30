@@ -157,11 +157,10 @@ def process_xml_contents(args, fname, xml_root, bibxml_files):
     if args.verbose > 1:
         print(f"writing {bibxml_file}")
 
-    if bibxml_common.checkfile(args, bibxml_file, xml) and args.verbose:
-        print(f"UPD {bibxml_file}")
+    bibxml_common.checkfile(args, bibxml_file, xml)
+
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.IEEE.{mod_stdnumber}.rdf"
-    if bibxml_common.checkfile(args, rdf_disk_file, rdf) and args.verbose:
-        print(f"UPD {rdf_disk_file}")
+    bibxml_common.checkfile(args, rdf_disk_file, rdf)
 
 def process_xml(args, fname, bibxml_files):
     """
@@ -287,14 +286,12 @@ def main():
     # generate index.html file
     hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
     index_html = bibxml_common.gen_index_html(hx)
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.html")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
 
     # generate index.rdf file
     rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
     index_rdf = bibxml_common.gen_index_rdf(rx)
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.rdf")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
 
     print(f"Files processed: {count}")
 

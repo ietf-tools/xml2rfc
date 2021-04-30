@@ -203,17 +203,15 @@ def print_doc(args, doc, abstract):
     diskfile1 = f"{args.bibxml_dir}/reference.I-D.{full_name}.xml"
     diskfile1_backup = f"{args.bibxml_dir}/backup/reference.I-D.{full_name}.xml" if args.backup_existing_files else None
     if args.verbose > 1: print(f"GEN {diskfile1}")
-    if bibxml_common.checkfile(args, diskfile1, xml, backup_fname=diskfile1_backup) and args.verbose:
-        print(f"UPD {diskfile1}")
+    bibxml_common.checkfile(args, diskfile1, xml, backup_fname=diskfile1_backup)
 
     diskfile2 = f"{args.bibxml_dir}/reference.I-D.{canonical_name}.xml"
     diskfile2_backup = f"{args.bibxml_dir}/backup/reference.I-D.{canonical_name}.xml" if args.backup_existing_files else None
-    if bibxml_common.checkfile(args, diskfile2, xml, backup_fname=diskfile2_backup) and args.verbose:
-        print(f"UPD {diskfile2}")
+    bibxml_common.checkfile(args, diskfile2, xml, backup_fname=diskfile2_backup)
 
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.I-D.{canonical_name}.rdf"
-    if bibxml_common.checkfile(args, rdf_disk_file, rdf) and args.verbose:
-        print(f"UPD {rdf_disk_file}")
+    bibxml_common.checkfile(args, rdf_disk_file, rdf)
+
 
 def process_input(args, infp):
     """
@@ -459,14 +457,12 @@ def main():
     # generate index.html file
     hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
     index_html = bibxml_common.gen_index_html(hx)
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.html")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
 
     # generate index.rdf file
     rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
     index_rdf = bibxml_common.gen_index_rdf(rx)
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.rdf")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
 
 if __name__ == '__main__':
     main()

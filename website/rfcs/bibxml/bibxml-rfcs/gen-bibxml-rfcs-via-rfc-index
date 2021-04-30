@@ -424,8 +424,7 @@ def get_not_issued(args, namespace, name, elroot):
 
     diskfile = f"{args.bibxml_dir}/reference.{name}.{num4}.xml"
     if args.verbose > 1: print(f"GEN {diskfile}")
-    if bibxml_common.checkfile(args, diskfile, xml) and args.verbose:
-        print(f"UPD {diskfile}")
+    bibxml_common.checkfile(args, diskfile, xml)
     return num4, index, xml
 
 
@@ -596,13 +595,10 @@ def get_ref_info(args, namespace, name, elroot):
     diskfile = f"{args.bibxml_dir}/reference.{name}.{num4}.xml"
     if args.verbose > 1: print(f"GEN {diskfile}")
 
-    if bibxml_common.checkfile(args, diskfile, xml) and args.verbose:
-        print(f"UPD {diskfile}")
+    bibxml_common.checkfile(args, diskfile, xml)
 
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{name}.{num4}.rdf"
     wroterdf = bibxml_common.checkfile(args, rdf_disk_file, rdf)
-    if wroterdf:
-        print(f"UPD {rdf_disk_file}")
 
     return num4, index, xml, rdf, wroterdf
 
@@ -666,17 +662,14 @@ def main():
             index += index_update
             ix[num4] = x
 
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.html")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index)
 
     index_xml = bibxml_common.gen_index_xml(ix)
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.xml", index_xml) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.xml")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.xml", index_xml)
 
     # generate rdf/*
     index_rdf = bibxml_common.gen_index_rdf(rx)
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.rdf")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
 
 if __name__ == '__main__':
     main()

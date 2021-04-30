@@ -124,8 +124,7 @@ def update_file(args, ieee_type, fname, contents, xml_file):
         nfname = f"{args.ieee_directory}/{ieee_type}/{year}/{xml_file}"
         if args.verbose > 1:
             print(f"fname={fname} nfname={nfname}")
-        if bibxml_common.checkfile(args, nfname, contents, create_dirs=True) and args.verbose:
-            print(f"UPD {nfname}")
+        bibxml_common.checkfile(args, nfname, contents, create_dirs=True)
 
     else:
         # move file to $DEST/Error_$TYPE/$DATE_$WEEK tree
@@ -135,7 +134,7 @@ def update_file(args, ieee_type, fname, contents, xml_file):
         errfile = f"{args.ieee_directory}/Error_{base_update_directory}/{xml_file}"
         if args.verbose:
             print(f"Cannot determine the year from {fname}. Saving into {errfile}")
-        bibxml_common.checkfile(args, errfile, contents, create_dirs=True)
+        bibxml_common.checkfile(args, errfile, contents, create_dirs=True, write_message=False)
 
 
 def run_unit_tests(args):

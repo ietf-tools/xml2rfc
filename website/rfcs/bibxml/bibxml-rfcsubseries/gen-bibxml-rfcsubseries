@@ -63,8 +63,7 @@ def getinfo(args, name, elroot, index):
                         xml += fp.read()
 
         xml += '</referencegroup>\n'
-        if bibxml_common.checkfile(args, diskfile, xml) and args.verbose:
-            print(f"UPD {diskfile}")
+        bibxml_common.checkfile(args, diskfile, xml)
 
         rdf = "\n".join([
             f"    <item rdf:about='{url}'>",
@@ -77,8 +76,7 @@ def getinfo(args, name, elroot, index):
             ])
 
         rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{elid}.rdf"
-        if bibxml_common.checkfile(args, rdf_disk_file, rdf) and args.verbose:
-            print(f"UPD {rdf_disk_file}")
+        bibxml_common.checkfile(args, rdf_disk_file, rdf)
 
 def run_unit_tests(args):
     """
@@ -135,13 +133,11 @@ def main():
     for std in root.findall("{http://www.rfc-editor.org/rfc-index}std-entry"):
         getinfo(args, "STD", std, index)
 
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index.getvalue()) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.html")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index.getvalue())
 
     rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
     index_rdf = bibxml_common.gen_index_rdf(rx)
-    if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
-        print(f"UPD {args.bibxml_dir}/index.rdf")
+    bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
 
 if __name__ == '__main__':
     main()

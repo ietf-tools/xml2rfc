@@ -166,7 +166,7 @@ def gen_rdf(ref):
     return rdf
 
 
-def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None):
+def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None, write_message=True):
     """
     Check to see if a file exists and contains "newcontent".
     If not, (re)create the file.
@@ -193,10 +193,10 @@ def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None):
             # print(f"contents=\n{content}\n")
             # print(f"newcontents=\n{newcontent}\n")
             if backup_fname:
-                checkfile(args, backup_fname, content, True)
+                checkfile(args, backup_fname, content, create_dirs=True, write_message=False)
 
     if writefile:
-        if args.verbose:
+        if args.verbose and write_message:
             print(f"{writefile} {fname}")
         if args.test:
             print(f"test mode: skipping writing to {fname}")

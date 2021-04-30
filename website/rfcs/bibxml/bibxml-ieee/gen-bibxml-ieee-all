@@ -8,10 +8,11 @@ usage()
     exit 1
 }
 
+VERBOSE=false
 while getopts v c
 do
     case $c in
-	v ) set -x ;;
+	v ) VERBOSE=true; set -x ;;
 	? ) usage ;;
     esac
 done
@@ -24,15 +25,15 @@ BIBXMLNAME="$2"
 CACHEDIR="$3"
 PSWDFILE="$4"
 
-id -a
-ls -l "$PSWDFILE"
-cat "$PSWDFILE"
-
+set +x
 if ! source "$PSWDFILE"
 then
+    ls -l "$PSWDFILE"
     echo "$0: Cannot read $PSWDFILE"
     exit 2
 fi
+$VERBOSE && set -x
+export IEEEHOST IEEEUSER IEEEPSWD
 
 DATE=$(date +%Y%m%d)
 WEEKDAY=$(date +%A)
@@ -44,7 +45,9 @@ case "$WEEKDAY" in
 	if [ ! -d "$UPDATEDIR" ]
 	then
 	    # get the update from IEEE
-	    ./gen-bibxml-ieee-get-update -d "$UPDATEDIR" -H 'ftp.ieee.org' -U "$IEEEUSER" -P "$IEEEPSWD" &&
+	    # let the values used for logging in come from $PSWDFILE
+	    # ./gen-bibxml-ieee-get-update -d "$UPDATEDIR" -H 'ftp.ieee.org' -U "$IEEEUSER" -P "$IEEEPSWD" &&
+	    ./gen-bibxml-ieee-get-update -d "$UPDATEDIR" &&
 	    # incorporate the update into the cache
 	    ./gen-bibxml-ieee-apply-update -t -d "$UPDATEDIR" -i "$CACHEDIR"/cache &&
 	    # create the bibxml files

@@ -161,13 +161,11 @@ def get_excel_data(args):
         xml = bibxml_common.gen_xml(ref)
 
         if args.bibxml_dir:
-            if bibxml_common.checkfile(args, xml_disk_file, xml) and args.verbose:
-                print(f"UPD {xml_disk_file}")
+            bibxml_common.checkfile(args, xml_disk_file, xml)
             rdf = bibxml_common.gen_rdf(ref)
             rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{stdnumber}.rdf"
             bibxml_files[rdf_disk_file] = 1
-            if bibxml_common.checkfile(args, rdf_disk_file, rdf) and args.verbose:
-                print(f"UPD {rdf_disk_file}")
+            bibxml_common.checkfile(args, rdf_disk_file, rdf)
 
         elif args.print:
             print(f"================ {xml_disk_file} ================")
@@ -282,14 +280,12 @@ def main():
             # generate index.html file
             hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
             index_html = bibxml_common.gen_index_html(hx)
-            if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html) and args.verbose:
-                print(f"UPD {args.bibxml_dir}/index.html")
+            bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
 
             # generate index.rdf file
             rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
             index_rdf = bibxml_common.gen_index_rdf(rx)
-            if bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf) and args.verbose:
-                print(f"UPD {args.bibxml_dir}/index.rdf")
+            bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
 
 if __name__ == "__main__":
     main()
