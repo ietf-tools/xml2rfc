@@ -10,8 +10,11 @@ import io
 import os
 import sys
 import xml.etree.ElementTree as ET
+
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+# pylint: disable=C0413
 import bibxml_common
+
 
 def getinfo(args, name, elroot, index):
     """
@@ -77,6 +80,7 @@ def getinfo(args, name, elroot, index):
 
         rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{elid}.rdf"
         bibxml_common.checkfile(args, rdf_disk_file, rdf)
+
 
 def run_unit_tests(args):
     """

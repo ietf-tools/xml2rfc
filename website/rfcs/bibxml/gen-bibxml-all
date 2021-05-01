@@ -1,5 +1,8 @@
 #!/bin/bash
 
+B=$(basename $0)
+DT=$(date +%H)
+exec > ~tonyh/tmp/$B.$DT 2>&1
 date
 set -x
 
@@ -76,15 +79,15 @@ for bibxml
 do
     case "$bibxml" in
 	bibxml-rfcs )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW" "$PROD_RFC_INDEX_URL"
+	    gen "$bibxml" -v "$BIBDIR" "$bibxml$NEW" "$PROD_RFC_INDEX_URL"
 	    ;;
 
 	bibxml-rfcsubseries )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW" "$PROD_RFC_INDEX_URL"
+	    gen "$bibxml" -v "$BIBDIR" "$bibxml$NEW" "$PROD_RFC_INDEX_URL"
 	    ;;
 
 	bibxml-ids )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW" "$PROD_1ID_ABSTRACTS_URL"
+	    gen "$bibxml" -v "$BIBDIR" "$bibxml$NEW" "$PROD_1ID_ABSTRACTS_URL"
 	    ;;
 
 	bibxml-ieee )
@@ -92,15 +95,15 @@ do
 	    ;;
 
 	bibxml-nist )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
+	    gen "$bibxml" -v "$BIBDIR" "$bibxml$NEW"
 	    ;;
 
 	bibxml-w3c )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
+	    gen "$bibxml" -v "$BIBDIR" "$bibxml$NEW"
 	    ;;
 
 	bibxml-3gpp )
-	    gen "$bibxml" "$BIBDIR" "$bibxml$NEW"
+	    gen "$bibxml" -v "$BIBDIR" "$bibxml$NEW"
 	    ;;
     esac
 done

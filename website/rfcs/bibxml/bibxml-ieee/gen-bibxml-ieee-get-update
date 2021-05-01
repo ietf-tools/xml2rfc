@@ -13,8 +13,11 @@ import ssl
 from zipfile import ZipFile
 from ftplib import FTP_TLS
 from pathlib import Path
+
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+# pylint: disable=C0413
 import bibxml_common
+
 
 def get_fname(dir_entry):
     """ from a string
@@ -22,6 +25,7 @@ def get_fname(dir_entry):
     retrieve 'Deleted_IEEEDraftStd'
     """
     return dir_entry.split(' ')[-1]
+
 
 def allowed_filename(args, dir_entry):
     """ from a string
@@ -32,6 +36,7 @@ def allowed_filename(args, dir_entry):
     if not allow_file:
         print(f"skipping file {dir_entry}")
     return allow_file
+
 
 def retrieve(args, ftp, where):
     """

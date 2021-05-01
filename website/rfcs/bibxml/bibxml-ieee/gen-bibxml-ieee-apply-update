@@ -50,9 +50,11 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
-# from xml.dom.minidom import parse
+
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+# pylint: disable=C0413
 import bibxml_common
+
 
 def get_xml_year(fname, root):
     """
@@ -67,6 +69,7 @@ def get_xml_year(fname, root):
         return None
 
     return bibxml_common.get_xml_text(root, './volume/volumeinfo/year')
+
 
 def get_weeks(args):
     """ retrieve the list of weeks from the update directory """
@@ -91,6 +94,7 @@ def get_weeks(args):
     print(f"week_list={week_list}")
     return week_list
 
+
 def delete_file(args, ieee_type, xml_file):
     """ for a given xml_file name, do the "deletion" of it """
     for del_file in glob.glob(f"{args.ieee_directory}/{ieee_type}/*/{xml_file}"):
@@ -111,6 +115,7 @@ def delete_file(args, ieee_type, xml_file):
                     print(f"cannot rename {del_file} to {renamed_file}: {e}")
             except Exception as e:
                 print(f"cannot create directory for {renamed_file}: {e}")
+
 
 def update_file(args, ieee_type, fname, contents, xml_file):
     """ for a given xml_file name, do the "update" of it """

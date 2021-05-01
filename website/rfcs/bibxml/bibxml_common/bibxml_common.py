@@ -166,6 +166,7 @@ def gen_rdf(ref):
     return rdf
 
 
+# pylint: disable=R0913
 def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None, write_message=True):
     """
     Check to see if a file exists and contains "newcontent".
@@ -287,10 +288,10 @@ def gen_index_rdf_scan(ref_file, rdf_dir, rdf_prefix):
 
 def gen_index_html(hxset):
     """ generate an index.html file, based on a list of entries in the set hxset """
-    with io.StringIO() as ret:
+    with io.StringIO() as outfp:
         for k in sorted(hxset):
-            ret.write(f"<a href='{escape(k)}'>{escape_no_quotes(k)}</a><br/>\n")
-        return ret.getvalue()
+            outfp.write(f"<a href='{escape(k)}'>{escape_no_quotes(k)}</a><br/>\n")
+        return outfp.getvalue()
     return ""
 
 
@@ -502,6 +503,7 @@ def run_unit_tests(args):
 
 def main():
     """ Do unit tests on the common functions. """
+    # pylint: disable=c0415
     import argparse
 
     parser = argparse.ArgumentParser(description=__doc__)

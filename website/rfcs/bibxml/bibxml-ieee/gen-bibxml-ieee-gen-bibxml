@@ -19,8 +19,11 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
+
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+# pylint: disable=C0413
 import bibxml_common
+
 
 def gen_xml_contents(args, fname, xml_root):
     """
@@ -145,6 +148,7 @@ def gen_xml_contents(args, fname, xml_root):
 
     return mod_stdnumber, bibxml_file, xml, rdf
 
+
 def process_xml_contents(args, fname, xml_root, bibxml_files):
     """
     Write out the generated bibxml files.
@@ -162,6 +166,7 @@ def process_xml_contents(args, fname, xml_root, bibxml_files):
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.IEEE.{mod_stdnumber}.rdf"
     bibxml_common.checkfile(args, rdf_disk_file, rdf)
 
+
 def process_xml(args, fname, bibxml_files):
     """
     Given an xml file, read the contents, and create a bibxml file from it.
@@ -172,6 +177,7 @@ def process_xml(args, fname, bibxml_files):
         process_xml_contents(args, fname, x, bibxml_files)
         count += 1
     return count
+
 
 def process_zip(args, fname, bibxml_files):
     """
@@ -192,6 +198,7 @@ def process_zip(args, fname, bibxml_files):
                 count += 1
     return count
 
+
 def process(args, fname, bibxml_files):
     """
     Process a given filename.
@@ -206,6 +213,7 @@ def process(args, fname, bibxml_files):
         process_zip(args, fname, bibxml_files)
     else:
         sys.exit(f"Cannot process {fname}")
+
 
 def search_files(args, dirname, ext):
     """

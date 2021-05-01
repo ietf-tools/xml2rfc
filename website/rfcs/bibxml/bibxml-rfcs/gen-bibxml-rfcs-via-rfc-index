@@ -15,12 +15,14 @@ import argparse
 import os
 import re
 import sys
-
 import xml.etree.ElementTree as ET
+
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+# pylint: disable=C0413
 import bibxml_common
 
 assert sys.version_info >= (3,7)
+
 
 def gen_author_element(args, rfcid, name, title):
     """
@@ -362,11 +364,13 @@ Information Sciences Institute University of Southern California
 
     return { "initials": "", "surname": "", "fullname": "", "role": "", "org": name }
 
+
 def find_one(elroot, namespace, name):
     """ find the first element with the given name, else None """
     for r in elroot.findall(f"{namespace}{name}"):
         return r
     return None
+
 
 def get_text(elroot, namespace, name):
     """
@@ -377,6 +381,7 @@ def get_text(elroot, namespace, name):
     if txt is not None:
         txt = txt.strip()
     return txt
+
 
 def gen_not_issued(args, namespace, name, elroot):
     """

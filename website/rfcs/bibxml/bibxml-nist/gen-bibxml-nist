@@ -17,8 +17,11 @@ import sys
 import tempfile
 import requests
 import xlrd
+
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+# pylint: disable=C0413
 import bibxml_common
+
 
 def gen_std_number(info):
     """
@@ -32,6 +35,7 @@ def gen_std_number(info):
         rn = "NIST." + rn
     return rn.replace(' ', '_').replace('/', '-')
 
+
 def get_month(info):
     """
     From the numeric Month Published field, convert to January-December.
@@ -43,6 +47,7 @@ def get_month(info):
     except:
         print(f"invalid value for month: info['Month Published']: '{info['Month Published']}' found in {gen_std_number(info)}")
         return ""
+
 
 def gen_ref(args, info):
     """
@@ -73,6 +78,7 @@ def gen_ref(args, info):
     if args.verbose > 2:
         print("ref", ref)
     return ref
+
 
 def get_excel_data(args):
     """
@@ -185,6 +191,7 @@ def get_excel_data(args):
         bibxml_common.clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
         bibxml_common.clean_dir(args, f"{args.bibxml_dir}/rdf/*.xml", bibxml_files)
 
+
 def get_spread_sheet(args):
     """ using the specified URL, get the data into a temp file """
     print(f"get_spread_sheet({args.url})")
@@ -200,6 +207,7 @@ def get_spread_sheet(args):
                 local_file.write(chunk)
     else:
         sys.exit(f"Cannot retrieve {args.url}. Status_code={response.status_code}")
+
 
 def run_unit_tests(args):
     """
@@ -236,6 +244,7 @@ def run_unit_tests(args):
 }
     print("All tests passed")
     sys.exit()
+
 
 def main():
     """ main function """

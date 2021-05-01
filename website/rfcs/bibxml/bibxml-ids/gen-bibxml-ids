@@ -34,7 +34,9 @@ import re
 import sys
 import codecs
 from enum import Enum
+
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+# pylint: disable=C0413
 import bibxml_common
 
 assert sys.version_info >= (3,6)
@@ -54,17 +56,21 @@ def indented_6(line):
     """ check if the line is indented by 6 spaces and not empty """
     return line.startswith("      ") and (len(line) > 6) and (line[6] not in white_space)
 
+
 def indented_2(line):
     """ Check if the line is indented by 2 spaces, and not empty. """
     return line.startswith("  ") and (line[2] not in white_space)
+
 
 def indented_0(line):
     """ Check if the line has no indent and is not empty """
     return len(line) > 0 and (line[0] not in white_space)
 
+
 def is_empty(line):
     """ Check if the line is empty: nothing but whitespace """
     return len(line) == 0 or re.match("[ \t\r\n]*$", line)
+
 
 def error(state, line, msg=""):
     """ print an error message about unexpected input """
@@ -74,6 +80,7 @@ def error(state, line, msg=""):
         print(f"state is {state}")
     print(f"\tUnexpected line found: {line}")
     return State.IN_ERROR
+
 
 def gen_refs(args, doc, abstract):
     """ generate a document with its abstract to be printed """
@@ -192,6 +199,7 @@ def gen_refs(args, doc, abstract):
     xml = bibxml_common.gen_xml(ref)
     rdf = bibxml_common.gen_rdf(ref)
     return (full_name, canonical_name, xml, rdf)
+
 
 def print_doc(args, doc, abstract):
     """ print a document with its abstract """
@@ -417,6 +425,7 @@ def run_unit_tests(args):
 
     print("All tests passed")
     sys.exit()
+
 
 def main():
     """ main loop """

@@ -34,21 +34,24 @@ Given a resource.xyz.xml file create a corresponding RDF file.
 #    </item>
 
 import argparse
-import os
+import io
 import sys
 import glob
-import stat
 import xml.etree.ElementTree as ET
+
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
+# pylint: disable=C0413
 import bibxml_common
 
 assert sys.version_info >= (3,6)
+
 
 def find_one(elroot, namespace, name):
     """ find the first element with the given name, else None """
     for r in elroot.findall(f"{namespace}{name}"):
         return r
     return None
+
 
 def get_text(elroot, namespace, name, dft=None):
     """
@@ -63,9 +66,10 @@ def get_text(elroot, namespace, name, dft=None):
     return txt
 
 
-def parse(args, fname, ofp):
+def parse(args, fname):
     """
-    Open a reference file and extract information from it
+    Open a reference file and extract information from it.
+    The argument fname can be a filename or an open file pointer.
     """
 
     tree = ET.parse(fname)
@@ -110,7 +114,9 @@ def parse(args, fname, ofp):
                 "target": fmt.attrib.get("target")
                 })
     rdf = bibxml_common.gen_rdf(ref)
-    print(rdf, file=ofp)
+    if args.verbose > 1:
+        print(rdf)
+    return rdf
 
 
 def scan_directory(args):
@@ -121,46 +127,38 @@ def scan_directory(args):
     preflen = len(args.scan_directory)
     for fn in glob.glob(f"{args.scan_directory}/reference.*.xml"):
         stdname = fn[preflen+11:-4]
-        # print("stdname", stdname)
         ofname = f"{args.output_directory}/item.{stdname}.rdf"
-        # print("    ofname", ofname)
 
-        stat_ref_mtime = 0
-        try:
-            stat_ref_mtime = os.stat(fn).st_mtime
-            if args.verbose:
-                print(f"    mtime {fn}={stat_ref_mtime}")
-        except Exception as e:
-            pass
-
-        needfile = False
-        try:
-            stat_file = os.stat(ofname)
-            if stat.S_ISREG(stat_file.st_mode) and stat_file.st_mtime < stat_ref_mtime:
-                if args.verbose:
-                    print(f"    mtime {ofname}={stat_file.st_mtime}")
-                needfile = True
-                if args.verbose:
-                    print(f"UPD {ofname} (timestamp)")
-        except:
-            needfile = True
-            if args.verbose:
-                print(f"UPD {ofname} (missing)")
-
-        if needfile:
-            try:
-                with open(ofname, "w") as ofp:
-                    parse(args, fn, ofp)
-            except Exception as e:
-                print(e, file=sys.stderr)
+        rdf = parse(args, fn)
+        bibxml_common.checkfile(args, ofname, rdf)
 
 
 def run_unit_tests(args):
     """
     Run some unit tests on some of the code modules.
     """
-    # TODO -- fill in here
-    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
+    xml = """<?xml version='1.0' encoding='UTF-8'?>
+
+<reference  anchor='RFC0001' target='https://www.rfc-editor.org/info/rfc1'>
+<front>
+<title>Host Software</title>
+<author initials='S.' surname='Crocker' fullname='S. Crocker'><organization /></author>
+<date year='1969' month='April' />
+</front>
+<seriesInfo name='RFC' value='1'/>
+<seriesInfo name='DOI' value='10.17487/RFC0001'/>
+</reference>
+"""
+    rdf = None
+    with io.StringIO(xml) as infp:
+        rdf = parse(args, infp)
+    assert rdf == """    <item rdf:about='https://www.rfc-editor.org/info/rfc0001'>
+        <link>https://www.rfc-editor.org/info/rfc0001</link>
+        <title>Host Software</title>
+        <dc:date>1969-04-01T23:00:00-00:00</dc:date>
+        <description></description>
+    </item>
+"""
 
     print("All tests passed")
     sys.exit()
@@ -172,8 +170,9 @@ def main():
     parser.add_argument("-o", "--output-rdf", help="File to write to. Defaults to stdout", type=str)
     parser.add_argument("-D", "--scan-directory", help="Directory to scan", type=str)
     parser.add_argument("-O", "--output-directory", help="Directory to write to", type=str)
-    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
+    parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
     parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
+    parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
     parser.add_argument("file", nargs='*')
     args = parser.parse_args()
 
@@ -190,15 +189,15 @@ def main():
         if not args.file:
             sys.exit("No files specified")
 
-        ofp = sys.stdout
-        if args.output_rdf:
-            try:
-                ofp = open(args.output_rdf, "w")
-            except Exception as e:
-                sys.exit(e)
+        rdf = parse(args, args.output_rdf)
+        if args.verbose > 1:
+            print(rdf)
 
-        for fname in args.file:
-            parse(args, fname, ofp)
+        if args.output_rdf:
+            bibxml_common.checkfile(args, args.output_rdf, rdf)
+
+        else:
+            print(rdf)
 
 
 if __name__ == '__main__':

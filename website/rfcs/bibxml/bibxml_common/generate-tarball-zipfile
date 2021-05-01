@@ -16,18 +16,22 @@ usage()
 
 [ $# -ge 2 ] || usage
 
+set -x
+
 TOPDIR="$1"
 shift
 [ -d "$TOPDIR" ] || die "$0: the directory '$TOPDIR' does not exist"
 
 for BIBXML
 do
-    if [ ! -d "$TOPDIR/$BIBXML" ]
+    if [ -d "$TOPDIR/$BIBXML" ]
     then
 	# update $BIBXML.zip
 	( cd "$TOPDIR/$BIBXML" && zip -r "$TOPDIR/$BIBXML".tmp . && mv "$TOPDIR/$BIBXML".tmp "$TOPDIR/$BIBXML".zip )
 
 	# update $BIBXML.tgz
 	( cd "$TOPDIR/$BIBXML" && tar czf "$TOPDIR/$BIBXML".tmp --exclude rdf . && mv "$TOPDIR/$BIBXML".tmp "$TOPDIR/$BIBXML".tgz )
+    else
+	echo "$TOPDIR/$BIBXML does not exist"
     fi
 done
