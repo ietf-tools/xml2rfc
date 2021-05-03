@@ -48,31 +48,30 @@ def retrieve(args, ftp, where):
     if not args.count_only:
         Path(f"{args.directory}/{where}").mkdir(parents=True, exist_ok=True)
 
-    if args.verbose > 1:
-        print("=== dir ===")
+    bibxml_common.verbose_print(args, 1, "=== dir ===")
     dir_results = []
+    # pylint: disable=W0108
+    # W0108=Lambda may not be necessary. This is a false positive.
     d = ftp.dir(where, lambda x: dir_results.append(x))
-    if args.verbose > 2:
-        print(f"d={d}")
-        print(f"dir_results={dir_results}")
+    bibxml_common.verbose_print(args, 2, f"d={d}\ndir_results={dir_results}")
 
     files = sorted([get_fname(x) for x in dir_results if x.startswith("-") and allowed_filename(args, x)])
-    if args.verbose > 2:
-        print(f"files={files}")
+    bibxml_common.verbose_print(args, 2, f"files={files}")
     for file in files:
-        if args.verbose > 1:
-            print(f"retrieving file {where}/{file} into {args.directory}/{where}/{file}")
+        bibxml_common.verbose_print(args, 1, f"retrieving file {where}/{file} into {args.directory}/{where}/{file}")
         fcnt += 1
         if not args.count_only:
             with open(f"{args.directory}/{where}/{file}", "wb") as outfp:
-                if args.verbose > 2:
-                    print(f" created {args.directory}/{where}/{file}")
+                bibxml_common.verbose_print(args, 2, f" created {args.directory}/{where}/{file}")
+                # pylint: disable=W0108,W0640
+                # W0108=Lambda may not be necessary. This is a false positive.
+                # W0640=Cell variable outfp defined in loop.
+                # The lambda is used immediately, so there is no issue.
                 ftp.retrbinary(f"RETR {where}/{file}", lambda x: outfp.write(x))
             if file.lower().endswith(".zip") and args.unpack_zipfile:
                 with ZipFile(f"{args.directory}/{where}/{file}", 'r') as zip_obj:
                     list_of_file_names = zip_obj.namelist()
-                    if args.verbose > 2:
-                        print(f"list_of_file_names={list_of_file_names}")
+                    bibxml_common.verbose_print(args, 2, f"list_of_file_names={list_of_file_names}")
                     # Iterate over the file names
                     for file_name in list_of_file_names:
                         # Check filename endswith xml
@@ -98,11 +97,9 @@ def retrieve(args, ftp, where):
                                 print(f"Cannot extract {file_name} into {args.directory}/{where}")
 
     dirs = sorted([get_fname(x) for x in dir_results if x.startswith("d")])
-    if args.verbose > 2:
-        print(f"dirs={dirs}")
+    bibxml_common.verbose_print(args, 2, f"dirs={dirs}")
     for d in dirs:
-        if args.verbose > 1:
-            print(f"recursively retrieving dir {where}/{d}")
+        bibxml_common.verbose_print(args, 1, f"recursively retrieving dir {where}/{d}")
         (dcnt2, fcnt2, xcnt2) = retrieve(args, ftp, f"{where}/{d}")
         fcnt += fcnt2
         dcnt += dcnt2
@@ -126,33 +123,25 @@ def login(args):
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
 
-        if args.verbose:
-            print(f"FTP_TLS(host={args.host}, user={args.user}, passwd={args.password}, timeout={60})")
+        bibxml_common.verbose_print(args, 0, f"FTP_TLS(host={args.host}, user={args.user}, passwd={args.password}, timeout={60})")
 
         ftp = FTP_TLS(host=args.host, context=ssl_context, timeout=60)
-        if args.verbose > 1:
-            print("=== getwelcome ===")
+        bibxml_common.verbose_print(args, 1, "=== getwelcome ===")
         w = ftp.getwelcome()
-        if args.verbose:
-            print(f"Connected to {args.host} as {args.user}", file=sys.stderr)
-        if args.verbose > 1:
-            print(f"welcome={w}")
-        if args.verbose > 1:
-            print("=== login ===")
+        bibxml_common.verbose_print(args, 0, f"Connected to {args.host} as {args.user}", file=sys.stderr)
+        bibxml_common.verbose_print(args, 1, f"welcome={w}")
+        bibxml_common.verbose_print(args, 1, "=== login ===")
         ftp.login(user=args.user, passwd=args.password)
 
-        if args.verbose > 1:
-            print("=== prot_p ===")
+        bibxml_common.verbose_print(args, 1, "=== prot_p ===")
         ftp.prot_p()
-        if args.verbose > 1:
-            print("=== set_pasv ===")
+        bibxml_common.verbose_print(args, 1, "=== set_pasv ===")
         ftp.set_pasv(True)
 
         dcnt, fcnt, xcnt = retrieve(args, ftp, ".")
         print(f"{fcnt} files seen in {dcnt} directories, with {xcnt} xml files")
 
-        if args.verbose > 1:
-            print("=== quit ===")
+        bibxml_common.verbose_print(args, 1, "=== quit ===")
         ftp.quit()
 
     except Exception as e:
@@ -164,10 +153,7 @@ def run_unit_tests(args):
     Run some unit tests on some of the code modules.
     """
     # TODO -- fill in here
-    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
-
-    print("All tests passed")
-    sys.exit()
+    bibxml_common.empty_run_unit_tests(args)
 
 
 def main():

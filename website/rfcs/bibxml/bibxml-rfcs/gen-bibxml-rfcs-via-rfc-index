@@ -416,8 +416,7 @@ def gen_not_issued(args, namespace, name, elroot):
     xml = bibxml_common.gen_xml(ref, gen_empty_author=True)
 
     index = f"<a href='reference.{name}.{num4}.xml'>reference.{name}.{num4}.xml</a><br/>\n"
-    if args.verbose > 2:
-        print(xml)
+    bibxml_common.verbose_print(args, 2, xml)
     return num4, index, xml
 
 
@@ -428,7 +427,7 @@ def get_not_issued(args, namespace, name, elroot):
     num4, index, xml = gen_not_issued(args, namespace, name, elroot)
 
     diskfile = f"{args.bibxml_dir}/reference.{name}.{num4}.xml"
-    if args.verbose > 1: print(f"GEN {diskfile}")
+    bibxml_common.verbose_print(args, 1, f"GEN {diskfile}")
     bibxml_common.checkfile(args, diskfile, xml)
     return num4, index, xml
 
@@ -513,15 +512,11 @@ def gen_ref_info(args, namespace, name, elroot):
     ref["anchor"] = f"{name}{num4}"
     ref["target"] = f"https://www.rfc-editor.org/info/{nmlower}{shortnum}"
     ref["url"] = f"https://www.rfc-editor.org/info/rfc{num4}.txt"
-    # xml = "<?xml version='1.0' encoding='UTF-8'?>\n\n"
-    # xml += f"<reference  anchor='{name}{num4}' target='https://www.rfc-editor.org/info/{nmlower}{shortnum}'>\n"
+
     ref["title"] = get_text(elroot, namespace, "title")
     if not ref["title"]:
         print(f"{rfcid} does not have a title")
         return None, None, None, None
-
-    # xml += "<front>\n"
-    # xml += f"<title>{escape1(title)}</title>\n"
 
     ref["authors"] = []
     authors = ""
@@ -549,8 +544,9 @@ def gen_ref_info(args, namespace, name, elroot):
     ref["date"] = {
         "year": get_text(date, namespace, "year"),
         "month": get_text(date, namespace, "month"),
-        # the day is always left blank for RFCs
-        # "day": get_text(date, namespace, "day")
+        # The day is always left blank for RFCs
+	# But keep the variable for use later.
+        # "day": day,
         "day": "" }
 
     abstract = find_one(elroot, namespace, "abstract")
@@ -586,8 +582,7 @@ def gen_ref_info(args, namespace, name, elroot):
     ref['rdftitle'] = f"RFC {num4}: {ref['title']}, {authors}"
     rdf = bibxml_common.gen_rdf(ref)
 
-    if args.verbose > 2:
-        print(xml)
+    bibxml_common.verbose_print(args, 2, xml)
     return num4, index, xml, rdf
 
 
@@ -598,7 +593,7 @@ def get_ref_info(args, namespace, name, elroot):
     num4, index, xml, rdf = gen_ref_info(args, namespace, name, elroot)
 
     diskfile = f"{args.bibxml_dir}/reference.{name}.{num4}.xml"
-    if args.verbose > 1: print(f"GEN {diskfile}")
+    bibxml_common.verbose_print(args, 1, f"GEN {diskfile}")
 
     bibxml_common.checkfile(args, diskfile, xml)
 
@@ -613,10 +608,7 @@ def run_unit_tests(args):
     Run some unit tests on some of the code modules.
     """
     # TODO -- fill in here
-    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
-
-    print("All tests passed")
-    sys.exit()
+    bibxml_common.empty_run_unit_tests(args)
 
 
 def main():

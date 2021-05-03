@@ -100,7 +100,9 @@ mkBibxmlIndexXml()
 	<references title='rfc-index'>
 EOF
 
-    find "$BIBXML" -name 'reference.RFC.*.xml' -print | sort | xargs cat >> "$NINDEX"
+    find "$BIBXML" -name 'reference.RFC.*.xml' -print0 |
+	sort --zero-terminated |
+	xargs --null grep -v '^<[?]xml ' >> "$NINDEX"
 
     cat <<-EOF >> "$NINDEX"
 	</references>
@@ -118,17 +120,6 @@ mkBibxmlRdfFiles()
     mkdir -p "$BIBXML"/rdf
 
     gen-rdf-from-resource-xml -v -D "$BIBXML" -O "$BIBXML/rdf"
-
-    #    for i in "$BIBXML"/reference.RFC.*.xml
-    #    do
-    #	num=$( getnum "$i" )
-    #	rdf=$BIBXML/rdf/item.RFC.$num.rdf
-    #	if [ ! -f "$rdf" -o "$i" -nt "$rdf" ]
-    #	then
-    #	    echo "making $rdf"
-    #	    gen-rdf-from-resource-xml "$i" -o "$rdf"
-    #	fi
-    #    done
 }
 
 mkBibxmlIndexRdf()

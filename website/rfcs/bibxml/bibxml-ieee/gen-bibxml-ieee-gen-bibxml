@@ -158,8 +158,7 @@ def process_xml_contents(args, fname, xml_root, bibxml_files):
         return
 
     bibxml_files.add(bibxml_file)
-    if args.verbose > 1:
-        print(f"writing {bibxml_file}")
+    bibxml_common.verbose_print(args, 1, f"writing {bibxml_file}")
 
     bibxml_common.checkfile(args, bibxml_file, xml)
 
@@ -186,8 +185,7 @@ def process_zip(args, fname, bibxml_files):
     count = 0
     with ZipFile(fname, 'r') as zipObj:
         listOfFileNames = zipObj.namelist()
-        if args.verbose > 1:
-            print(f"listOfFileNames={listOfFileNames}")
+        bibxml_common.verbose_print(args, 1, f"listOfFileNames={listOfFileNames}")
         # Iterate over the file names
         for fileName in listOfFileNames:
             # Check filename endswith xml
@@ -205,8 +203,7 @@ def process(args, fname, bibxml_files):
     If a .xml file, create a bibxml file from it.
     If a .zip file, extract each .xml file from it, then process as above.
     """
-    if args.verbose > 1:
-        print(f"processing {fname}")
+    bibxml_common.verbose_print(args, 1, f"processing {fname}")
     if fname.endswith(".xml"):
         process_xml(args, fname, bibxml_files)
     elif fname.endswith(".zip"):
@@ -235,10 +232,7 @@ def run_unit_tests(args):
     Run some unit tests on some of the code modules.
     """
     # TODO -- fill in here
-    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
-
-    print("All tests passed")
-    sys.exit()
+    bibxml_common.empty_run_unit_tests(args)
 
 
 def main():

@@ -12,10 +12,8 @@
 
 import argparse
 import json
-import os
 import sys
 import tempfile
-import requests
 import xlrd
 
 sys.path.append((sys.path[0] if sys.path[0] != '' else '.') + "/../bibxml_common")
@@ -75,8 +73,7 @@ def gen_ref(args, info):
 
     ref["series_info"].append({ "name": 'NIST', "value": info['Report Number'] })
     ref["series_info"].append({ "name": 'DOI', "value": info['DOI'] })
-    if args.verbose > 2:
-        print("ref", ref)
+    bibxml_common.verbose_print(args, 2, f"ref={ref}")
     return ref
 
 
@@ -116,14 +113,19 @@ def get_excel_data(args):
     # print(f"col_ids={col_ids}")
 
     if args.dump_json:
+        bibxml_common.verbose_print(args, 1, f"Creating {args.dump_json}")
+        # pylint: disable=R1732
+        # R1732=Consider using 'with' for resource-allocating operations
+        # Can't do that with the conditional nature of dump_json.
         dump_jsonfp = open(args.dump_json, "w")
         print("[", file=dump_jsonfp, end="")
         dump_json_sep = ""
 
-    #if args.dump_yaml:
-    #    dump_yamlfp = open(args.dump_yaml, "w")
-
     if args.dump_csv:
+        bibxml_common.verbose_print(args, 1, f"Creating {args.dump_csv}")
+        # pylint: disable=R1732
+        # R1732=Consider using 'with' for resource-allocating operations
+        # Can't do that with the conditional nature of dump_csv.
         dump_csvfp = open(args.dump_csv, "w")
         print(",".join(col_names), file=dump_csvfp)
 
@@ -140,8 +142,7 @@ def get_excel_data(args):
         stdnumber = gen_std_number(info)
         xml_disk_file = f"{args.bibxml_dir}/reference.{stdnumber}.xml"
         bibxml_files[xml_disk_file] = 1
-        if args.verbose > 2:
-            print(f"working on {xml_disk_file}", file=sys.stderr)
+        bibxml_common.verbose_print(args, 2, f"working on {xml_disk_file}", file=sys.stderr)
 
         if args.dump_json:
             print(dump_json_sep, file=dump_jsonfp)
@@ -194,19 +195,8 @@ def get_excel_data(args):
 
 def get_spread_sheet(args):
     """ using the specified URL, get the data into a temp file """
-    print(f"get_spread_sheet({args.url})")
-
-    # Send HTTP GET request to server and attempt to receive a response
-    response = requests.get(args.url)
-
-    # If the HTTP GET request can be served
-    if response.status_code == 200:
-        # Write the file contents in the response to a file specified by local_file_path
-        with open(args.file, 'wb') as local_file:
-            for chunk in response.iter_content(chunk_size=128):
-                local_file.write(chunk)
-    else:
-        sys.exit(f"Cannot retrieve {args.url}. Status_code={response.status_code}")
+    bibxml_common.verbose_print(args, 1, f"get_spread_sheet({args.url})")
+    bibxml_common.get_url_to_file(args.url, args.file, exit_ok=True)
 
 
 def run_unit_tests(args):
@@ -269,32 +259,16 @@ def main():
     if args.url:
         if not args.file:
             args.file = tempfile.NamedTemporaryFile().name
-            if args.verbose > 1:
-                print(f"Using {args.file}")
+            bibxml_common.verbose_print(args, 1, f"Using {args.file}")
         get_spread_sheet(args)
 
     if args.bibxml_dir or args.dump_json or args.dump_csv or args.print: # or args.dump_yaml
-        if args.bibxml_dir:
-            os.makedirs(args.bibxml_dir, exist_ok=True)
-            os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
-        if args.dump_json and args.verbose > 1:
-            print(f"Creating {args.dump_json}")
-        #if args.dump_yaml and args.verbose > 1:
-        #    print(f"Creating {args.dump_yaml}")
-        if args.dump_csv and args.verbose > 1:
-            print(f"Creating {args.dump_csv}")
+        bibxml_common.create_bibxml_directories(args)
+
         get_excel_data(args)
 
-        if args.bibxml_dir:
-            # generate index.html file
-            hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
-            index_html = bibxml_common.gen_index_html(hx)
-            bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+        bibxml_common.generate_final_index_html_and_rdf(args)
 
-            # generate index.rdf file
-            rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
-            index_rdf = bibxml_common.gen_index_rdf(rx)
-            bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
 
 if __name__ == "__main__":
     main()

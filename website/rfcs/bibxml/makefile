@@ -30,14 +30,18 @@ none:
 	@echo make install-local -- install local files into production
 
 test:
+	ret=0; \
 	for dir in bibxml_common $(PRODDIRS); do \
-	    ( cd $$dir && $(MAKE) test ) \
-	done
+	    ( cd $$dir && $(MAKE) test ) || ret=1; \
+	done; \
+	exit $$ret
 
 install: test install-local
+	ret=0; \
 	for dir in bibxml_common $(PRODDIRS); do \
-	    ( cd $$dir && $(MAKE) install ) \
-	done
+	    ( cd $$dir && $(MAKE) install ) || ret=1; \
+	done; \
+	exit $$ret
 
 install-local:
 	@for i in $(EXEFILES); do \

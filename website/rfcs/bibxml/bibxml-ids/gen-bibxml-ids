@@ -177,7 +177,7 @@ def gen_refs(args, doc, abstract):
     _ = m.group(3)
     suffix_list = m.group(4)
 
-    if args.verbose > 2: print(f"idname={idname}, full_name={full_name}, canonical_name={canonical_name}, suffix_list={suffix_list}")
+    bibxml_common.verbose_print(args, 2, f"idname={idname}, full_name={full_name}, canonical_name={canonical_name}, suffix_list={suffix_list}")
 
     ref["anchor"] = f"I-D.{canonical_name}"
 
@@ -190,7 +190,7 @@ def gen_refs(args, doc, abstract):
     ref["url"] = f"http://www.ietf.org/internet-drafts/{full_name}.txt"
     ref["format"] = [ ]
     for typ in suffix_list.split(","):
-        if args.verbose > 3: print(f"looking at typ={typ}")
+        bibxml_common.verbose_print(args, 3, f"looking at typ={typ}")
         typu = typ[1:].upper() # .txt => TXT, .pdf => PDF
         ref["format"].append({ "type": typu, "target": f"https://www.ietf.org/internet-drafts/{full_name}{typ}" })
     ref["about"] = ref["url"] # TODO: remove this line?
@@ -210,7 +210,7 @@ def print_doc(args, doc, abstract):
 
     diskfile1 = f"{args.bibxml_dir}/reference.I-D.{full_name}.xml"
     diskfile1_backup = f"{args.bibxml_dir}/backup/reference.I-D.{full_name}.xml" if args.backup_existing_files else None
-    if args.verbose > 1: print(f"GEN {diskfile1}")
+    bibxml_common.verbose_print(args, 1, f"GEN {diskfile1}")
     bibxml_common.checkfile(args, diskfile1, xml, backup_fname=diskfile1_backup)
 
     diskfile2 = f"{args.bibxml_dir}/reference.I-D.{canonical_name}.xml"
@@ -233,8 +233,7 @@ def process_input(args, infp):
     abstract = ""
 
     for line in infp:
-        if args.verbose > 1:
-            print(f"looking at '{line}'")
+        bibxml_common.verbose_print(args, 1, f"looking at '{line}'")
 
         if State.BEFORE_DASHES == state:
             if line.startswith("--------"):
@@ -306,6 +305,7 @@ def run_unit_tests(args):
     """
     Run some unit tests on some of the code modules.
     """
+    bibxml_common.verbose_print(args, 0, "testing gen_refs")
     doc = '''"Transmission of IPv6 Packets over Near Field Communication", Younghwan Choi, Yong-Geun Hong, Joo-Sang Youn, Dongkyun Kim, JinHyeock Choi, 2020-08-23, <draft-ietf-6lo-nfc-17.txt>'''
     abstract = '''Near Field Communication (NFC) is a set of standards for smartphones ''' \
         '''and portable devices to establish radio communication with each other by touching ''' \
@@ -318,11 +318,14 @@ def run_unit_tests(args):
         '''6LoWPAN techniques.'''
 
     full_name, canonical_name, xml, rdf = gen_refs(args, doc, abstract)
-    if args.verbose: print("full_name #1", full_name)
+
+    bibxml_common.verbose_print(args, 0, f"full_name #1={full_name}")
     assert full_name == "draft-ietf-6lo-nfc-17"
-    if args.verbose: print("canonical_name #1", canonical_name)
+
+    bibxml_common.verbose_print(args, 0, f"canonical_name #1={canonical_name}")
     assert canonical_name == "ietf-6lo-nfc"
-    if args.verbose: print("xml #1", xml)
+
+    bibxml_common.verbose_print(args, 0, f"xml #1={xml}")
     assert xml == """<?xml version='1.0' encoding='UTF-8'?>
 
 <reference anchor='I-D.ietf-6lo-nfc'>
@@ -358,7 +361,8 @@ def run_unit_tests(args):
 <format type='TXT' target='https://www.ietf.org/internet-drafts/draft-ietf-6lo-nfc-17.txt'/>
 </reference>
 """
-    if args.verbose: print("rdf #1", rdf)
+
+    bibxml_common.verbose_print(args, 0, f"rdf #1={rdf}")
     assert rdf == """    <item rdf:about='http://www.ietf.org/internet-drafts/draft-ietf-6lo-nfc-17.txt'>
         <link>http://www.ietf.org/internet-drafts/draft-ietf-6lo-nfc-17.txt</link>
         <title>"Transmission of IPv6 Packets over Near Field Communication", Younghwan Choi, Yong-Geun Hong, Joo-Sang Youn, Dongkyun Kim, JinHyeock Choi</title>
@@ -394,11 +398,14 @@ def run_unit_tests(args):
 
  WalnutDSA(TM) and Walnut Digital Signature Algorithm(TM) are trademarks of Veridify Security Inc..'''
     full_name2, canonical_name2, xml2, rdf2 = gen_refs(args, doc2, abstract2)
-    if args.verbose: print("full_name2", full_name2)
+
+    bibxml_common.verbose_print(args, 0, f"full_name2={full_name2}")
     assert full_name2 == "draft-atkins-suit-cose-walnutdsa-07"
-    if args.verbose: print("canonical_name2", canonical_name2)
+
+    bibxml_common.verbose_print(args, 0, f"canonical_name2={canonical_name2}")
     assert canonical_name2 == "atkins-suit-cose-walnutdsa"
-    if args.verbose: print("xml2", xml2)
+
+    bibxml_common.verbose_print(args, 0, f"xml2={xml2}")
     assert xml2 == """<?xml version='1.0' encoding='UTF-8'?>
 
 <reference anchor='I-D.atkins-suit-cose-walnutdsa'>
@@ -414,7 +421,7 @@ def run_unit_tests(args):
 <format type='TXT' target='https://www.ietf.org/internet-drafts/draft-atkins-suit-cose-walnutdsa-07.txt'/>
 </reference>
 """
-    if args.verbose: print("rdf2", rdf2)
+    bibxml_common.verbose_print(args, 0, f"rdf2={rdf2}")
     assert rdf2 == """    <item rdf:about='http://www.ietf.org/internet-drafts/draft-atkins-suit-cose-walnutdsa-07.txt'>
         <link>http://www.ietf.org/internet-drafts/draft-atkins-suit-cose-walnutdsa-07.txt</link>
         <title>"Use of the Walnut Digital Signature Algorithm with CBOR Object Signing and Encryption (COSE)", Derek Atkins</title>

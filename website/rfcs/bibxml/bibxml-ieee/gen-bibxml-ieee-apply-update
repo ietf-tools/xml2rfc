@@ -101,8 +101,7 @@ def delete_file(args, ieee_type, xml_file):
         # ex: ieee-cache.20210301/Deleted_IEEEstd/week5b/7970248/8684486/08684487.xml
         ieee_dir_len = len(args.ieee_directory)+1
         renamed_file = f"{args.ieee_directory}/Deleted_{del_file[ieee_dir_len:]}"
-        if args.verbose:
-            print(f"    >>>>>>>>>>>>>>>> deleting {del_file} by renaming it to {renamed_file}")
+        bibxml_common.verbose_print(args, 0, f"    >>>>>>>>>>>>>>>> deleting {del_file} by renaming it to {renamed_file}")
         if args.test:
             print(f"test mode: skipping rename {del_file} to {renamed_file}")
 
@@ -120,25 +119,21 @@ def delete_file(args, ieee_type, xml_file):
 def update_file(args, ieee_type, fname, contents, xml_file):
     """ for a given xml_file name, do the "update" of it """
     year = get_xml_year(fname, contents)
-    if args.verbose:
-        print(f"year={year}")
+    bibxml_common.verbose_print(args, 0, f"year={year}")
 
     if year is not None:
         # copy the file into place, using checkfile()
         # ex: ieee-backfiles/IEEEstd/2021/9316201/9316202/09316203.xml
         nfname = f"{args.ieee_directory}/{ieee_type}/{year}/{xml_file}"
-        if args.verbose > 1:
-            print(f"fname={fname} nfname={nfname}")
+        bibxml_common.verbose_print(args, 1, f"fname={fname} nfname={nfname}")
         bibxml_common.checkfile(args, nfname, contents, create_dirs=True)
 
     else:
         # move file to $DEST/Error_$TYPE/$DATE_$WEEK tree
         base_update_directory = os.path.basename(args.update_directory)
-        if args.verbose > 1:
-            print(f"base_update_directory={base_update_directory}")
+        bibxml_common.verbose_print(args, 1, f"base_update_directory={base_update_directory}")
         errfile = f"{args.ieee_directory}/Error_{base_update_directory}/{xml_file}"
-        if args.verbose:
-            print(f"Cannot determine the year from {fname}. Saving into {errfile}")
+        bibxml_common.verbose_print(args, 0, f"Cannot determine the year from {fname}. Saving into {errfile}")
         bibxml_common.checkfile(args, errfile, contents, create_dirs=True, write_message=False)
 
 
@@ -147,10 +142,7 @@ def run_unit_tests(args):
     Run some unit tests on some of the code modules.
     """
     # TODO -- fill in here
-    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
-
-    print("All tests passed")
-    sys.exit()
+    bibxml_common.empty_run_unit_tests(args)
 
 
 def main():
@@ -171,8 +163,7 @@ def main():
     if not args.update_dir:
         bibxml_common.usage(parser, "error: the following arguments are required: -d/--update-directory")
 
-    if args.verbose > 1:
-        print(f"directory with updates={args.update_directory}")
+    bibxml_common.verbose_print(args, 1, f"directory with updates={args.update_directory}")
 
     week_list = get_weeks(args)
 
@@ -188,32 +179,27 @@ def main():
             #     actually move it to $DEST/Deleted_$TYPE/$DATE_$WEEK tree
 
             for del_dir in glob.glob(f"{args.update_directory}/Deleted_{ieee_type}/week{week}[a-z]"):
-                if args.verbose > 2:
-                    print(f"del_dir={del_dir}")
+                bibxml_common.verbose_print(args, 2, f"del_dir={del_dir}")
                 del_len = len(del_dir)+1
                 if args.use_xmlfile:
                     for file in glob.glob(f"{del_dir}/*/*/*.xml"):
                         count += 1
                         xml_file = file[del_len:]
-                        if args.verbose > 2:
-                            print(f"    del file={file}, xml file={xml_file}")
+                        bibxml_common.verbose_print(args, 2, f"    del file={file}, xml file={xml_file}")
                         delete_file(args, ieee_type, xml_file)
 
                 else:
                     for file in glob.glob(f"{del_dir}/*.zip"):
-                        if args.verbose > 2:
-                            print(f"    del zip file={file}")
+                        bibxml_common.verbose_print(args, 2, f"    del zip file={file}")
                         with ZipFile(file, 'r') as zipObj:
                             list_of_file_names = zipObj.namelist()
-                            if args.verbose > 2:
-                                print(f"list_of_file_names={list_of_file_names}")
+                            bibxml_common.verbose_print(args, 2, f"list_of_file_names={list_of_file_names}")
                             # Iterate over the file names
                             for internal_file_name in list_of_file_names:
                                 # Check that the filename ends with .xml
                                 if internal_file_name.lower().endswith('.xml'):
                                     count += 1
-                                    if args.verbose > 2:
-                                        print(f"        del xml file={internal_file_name.lower()}")
+                                    bibxml_common.verbose_print(args, 2, f"        del xml file={internal_file_name.lower()}")
                                     delete_file(args, ieee_type, internal_file_name)
 
             # add Updates to the proper year
@@ -221,47 +207,39 @@ def main():
             #         $DEST/$TYPE/$YEAR/path.xml
 
             for upd_dir in glob.glob(f"{args.update_directory}/IEEEUpdates_{ieee_type}/week{week}[a-z]"):
-                if args.verbose > 2:
-                    print(f"upd_dir={upd_dir}")
+                bibxml_common.verbose_print(args, 2, f"upd_dir={upd_dir}")
                 upd_len = len(upd_dir)+1
                 if args.use_xmlfile:
                     # update from an xml file previously extracted from a zip file
                     for fname in glob.glob(f"{upd_dir}/*/*/*.xml"):
                         count += 1
                         # ex: ieee-cache.20210301/IEEEUpdates_IEEEstd/week4a/9316201/9316202/09316203.xml
-                        if args.verbose > 2:
-                            print(f"    upd fname={fname}")
+                        bibxml_common.verbose_print(args, 2, f"    upd fname={fname}")
                         xml_name = fname[upd_len:]
-                        if args.verbose > 2:
-                            print(f"        xml name = {xml_name}")
+                        bibxml_common.verbose_print(args, 2, f"        xml name = {xml_name}")
                         # figure out the year for the new fname from
                         # <publication> <volume> <volumeinfo> <year>1922</year>
                         contents = bibxml_common.get_file_contents(fname)
-                        if args.verbose > 3:
-                            print(f"{contents[0:120]}")
+                        bibxml_common.verbose_print(args, 3, f"{contents[0:120]}")
                         update_file(args, ieee_type, fname, contents, xml_name)
 
                 else:
                     # update from a zip file
                     for file in glob.glob(f"{upd_dir}/*.zip"):
-                        if args.verbose > 2:
-                            print(f"    upd file={file}")
-                            print(f"    suffix = {file[upd_len:]}")
+                        bibxml_common.verbose_print(args, 2, f"    upd file={file}\n    suffix = {file[upd_len:]}")
                         with ZipFile(file, 'r') as zipObj:
                             list_of_file_names = zipObj.namelist()
-                            if args.verbose > 2:
-                                print(f"list_of_file_names={list_of_file_names}")
+                            bibxml_common.verbose_print(args, 2, f"list_of_file_names={list_of_file_names}")
                             # Iterate over the file names
                             for internal_file_name in list_of_file_names:
                                 # Check filename endswith xml
                                 if internal_file_name.lower().endswith('.xml'):
                                     count += 1
                                     # Extract all xml files from zip
-                                    if args.verbose > 2:
-                                        print(f"extracting {internal_file_name}")
+                                    bibxml_common.verbose_print(args, 2, f"extracting {internal_file_name}")
                                     fname = f"{file} - {internal_file_name}"
                                     contents = zipObj.read(internal_file_name)
-                                    if args.verbose > 3: print(f"read: {contents[0:120]}")
+                                    bibxml_common.verbose_print(args, 3, f"read: {contents[0:120]}")
                                     # update_file(args, ieee_type, fname, contents.decode('utf-8'), internal_file_name)
 
     print(f"Files processed: {count}")

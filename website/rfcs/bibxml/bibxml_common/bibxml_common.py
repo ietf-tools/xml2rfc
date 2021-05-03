@@ -77,7 +77,7 @@ def gen_empty_ref_xml(typ):
         }
 
 
-def gen_xml(ref, gen_empty_author=False):
+def gen_xml(ref, *, gen_empty_author=False):
     """ given a ref dictionary, create and print the xml for the RFC/I-D """
 
     xml = "<?xml version='1.0' encoding='UTF-8'?>\n\n"
@@ -167,7 +167,14 @@ def gen_rdf(ref):
 
 
 # pylint: disable=R0913
-def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None, write_message=True):
+def verbose_print(args, val, msg, *, file=sys.stdout, end=None):
+    """
+    Print the message if args.verbose > val
+    """
+    if args.verbose > val:
+        print(msg, file=file, end=end)
+
+def checkfile(args, fname, newcontent, *, create_dirs=False, backup_fname=None, write_message=True):
     """
     Check to see if a file exists and contains "newcontent".
     If not, (re)create the file.
@@ -178,7 +185,7 @@ def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None, wri
         os.makedirs(os.path.dirname(fname), exist_ok=True)
 
     if not os.path.isfile(fname):
-        if args.verbose > 1: print(f"{fname} does not exist")
+        verbose_print(args, 1, f"{fname} does not exist")
         writefile = "NEW"
 
     else:
@@ -186,10 +193,10 @@ def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None, wri
         with open(fname, 'r') as fp:
             content = fp.read()
         if content == newcontent:
-            if args.verbose > 1: print(f"{fname} same contents")
+            verbose_print(args, 1, f"{fname} same contents")
 
         else:
-            if args.verbose > 1: print(f"{fname} contents differ")
+            verbose_print(args, 1, f"{fname} contents differ")
             writefile = "UPD"
             # print(f"contents=\n{content}\n")
             # print(f"newcontents=\n{newcontent}\n")
@@ -197,8 +204,8 @@ def checkfile(args, fname, newcontent, create_dirs=False, backup_fname=None, wri
                 checkfile(args, backup_fname, content, create_dirs=True, write_message=False)
 
     if writefile:
-        if args.verbose and write_message:
-            print(f"{writefile} {fname}")
+        if write_message:
+            verbose_print(args, 0, f"{writefile} {fname}")
         if args.test:
             print(f"test mode: skipping writing to {fname}")
         else:
@@ -349,9 +356,15 @@ def gen_index_xml(ixdict):
     return index_xml
 
 
-def get_url_tempfile(url, exit_ok=False):
-    """ Send HTTP GET request to server and attempt to receive a response """
+def get_url_tempfile(url, *, exit_ok=False):
+    """
+    Send HTTP GET request to server and attempt to receive a response.
+    Write to and return a temporary file. Optionally exit on error.
+    """
     response = requests.get(url)
+    # pylint: disable=R1732
+    # R1732=Consider using 'with' for resource-allocating operations
+    # Can't do that here because we're returning the value.
     local_file = tempfile.TemporaryFile()
 
     # If the HTTP GET request can be served
@@ -367,6 +380,27 @@ def get_url_tempfile(url, exit_ok=False):
         sys.exit(f"Cannot retrieve {url}. Status_code={response.status_code}")
 
     return None
+
+
+def get_url_to_file(url, fname, *, exit_ok=False):
+    """
+    Send HTTP GET request to server and attempt to receive a response.
+    Write to the specified file. Return the status code. Optionally exit on error.
+    """
+    # Send HTTP GET request to server and attempt to receive a response
+    response = requests.get(url)
+
+    # If the HTTP GET request can be served
+    if response.status_code == 200:
+        # Write the file contents in the response to a file specified by local_file_path
+        with open(fname, 'wb') as local_file:
+            for chunk in response.iter_content(chunk_size=128):
+                local_file.write(chunk)
+        return response.status_code
+
+    if exit_ok:
+        sys.exit(f"Cannot retrieve {url}. Status_code={response.status_code}")
+    return response.status_code
 
 
 def get_xml_text(root, path):
@@ -404,7 +438,7 @@ def get_xml_first_of(dsrch, knames):
     return None
 
 
-def dump_xml(elroot, prefix, include_children=False):
+def dump_xml(elroot, prefix, *, include_children=False):
     """ print info on an xml element """
     print(f"{prefix}elroot={elroot}")
     print(f"{prefix}elroot.tag={elroot.tag}")
@@ -423,16 +457,39 @@ def clean_dir(args, glob_pattern, file_dict):
     """
     for f in glob.iglob(glob_pattern):
         if file_dict.get(f):
-            if args.verbose > 1:
-                print(f"found {f}", file=sys.stderr)
-            else:
-                pass
+            verbose_print(args, 1, f"found {f}", file=sys.stderr)
         else:
             if args.skip_clean:
                 print(f"skipping REMOVING {f}", file=sys.stderr)
             else:
                 print(f"REMOVING {f}", file=sys.stderr)
                 os.unlink(f)
+
+
+def generate_final_index_html_and_rdf(args):
+    """
+    Generate the index.html and index.rdf files based on what
+    is found in the reference...xml and rdf/item...rdf files.
+    """
+    if args.bibxml_dir:
+        # generate index.html file
+        hx = gen_index_html_set(args.bibxml_dir, "reference.")
+        index_html = gen_index_html(hx)
+        checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+
+        # generate index.rdf file
+        rx = gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
+        index_rdf = gen_index_rdf(rx)
+        checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
+
+
+def create_bibxml_directories(args):
+    """
+    Create the needed directories under bibxml_dir.
+    """
+    if args.bibxml_dir:
+        os.makedirs(args.bibxml_dir, exist_ok=True)
+        os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
 
 
 def usage(parser, msg=None):
@@ -445,19 +502,37 @@ def usage(parser, msg=None):
     sys.exit(1)
 
 
+def empty_run_unit_tests(args):
+    """
+    Print a message about there being no unit tests and exit.
+    THIS FUNCTION SHOULD EVENTUALLY GO AWAY.
+    """
+    verbose_print(args, 0, "Testing ????()")
+
+    print(f"NO TESTS DEFINED YET FOR {sys.argv[0]}")
+
+    print("All tests passed")
+    sys.exit()
+
+
 def run_unit_tests(args):
     """
     Run some unit tests on some of the code modules.
     """
+    verbose_print(args, 0, "Testing escape()")
     assert escape("ab&sup;<'\"def") == "ab&amp;sup;&lt;&apos;&quot;def"
+    verbose_print(args, 0, "Testing escape_no_squote()")
     assert escape_no_squote("ab&sup;<'\"def") == "ab&amp;sup;&lt;'&quot;def"
+    verbose_print(args, 0, "Testing escape_no_quotes()")
     assert escape_no_quotes("ab&sup;<'\"def") == "ab&amp;sup;&lt;'\"def"
+    verbose_print(args, 0, "Testing gen_empty_ref_xml()")
     empty_ref = gen_empty_ref_xml("abc")
     assert empty_ref == {
         'date': {'year': '', 'month': '', 'day': '', 'full': ''},
         'authors': [], 'title': '', 'rdftitle': '', 'type': 'abc',
         'anchor': '', 'abstract': '', 'series_info': [], 'format': [], 'target': ''
         }
+    verbose_print(args, 0, "Testing gen_xml()")
     empty_ref["title"] = "this is a title"
     empty_ref["target"] = "this is a target"
     empty_ref["url"] = "this is a url"
@@ -475,6 +550,7 @@ def run_unit_tests(args):
 </front>
 </reference>
 """
+    verbose_print(args, 0, "Testing gen_rdf()")
     assert gen_rdf(empty_ref) == """    <item rdf:about='this is a url'>
         <link>this is a url</link>
         <title></title>
@@ -504,10 +580,12 @@ def run_unit_tests(args):
 def main():
     """ Do unit tests on the common functions. """
     # pylint: disable=c0415
+    # c0414=Import outside toplevel -- we only need argparse for running unit tests.
     import argparse
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
+    parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true", required=True)
+    parser.add_argument("-v", "--verbose", help="Run unit tests", action="store_true")
     args = parser.parse_args()
 
     if args.unit_tests:

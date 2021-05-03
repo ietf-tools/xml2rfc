@@ -114,8 +114,7 @@ def parse(args, fname):
                 "target": fmt.attrib.get("target")
                 })
     rdf = bibxml_common.gen_rdf(ref)
-    if args.verbose > 1:
-        print(rdf)
+    bibxml_common.verbose_print(args, 1, rdf)
     return rdf
 
 
@@ -190,8 +189,7 @@ def main():
             sys.exit("No files specified")
 
         rdf = parse(args, args.output_rdf)
-        if args.verbose > 1:
-            print(rdf)
+        bibxml_common.verbose_print(args, 1, rdf)
 
         if args.output_rdf:
             bibxml_common.checkfile(args, args.output_rdf, rdf)

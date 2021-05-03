@@ -27,7 +27,7 @@ do
     if [ -d "$TOPDIR/$BIBXML" ]
     then
 	# update $BIBXML.zip
-	( cd "$TOPDIR/$BIBXML" && zip -r "$TOPDIR/$BIBXML".tmp . && mv "$TOPDIR/$BIBXML".tmp "$TOPDIR/$BIBXML".zip )
+	( cd "$TOPDIR/$BIBXML" && zip -q -r "$TOPDIR/$BIBXML".tmp . && mv "$TOPDIR/$BIBXML".tmp "$TOPDIR/$BIBXML".zip )
 
 	# update $BIBXML.tgz
 	( cd "$TOPDIR/$BIBXML" && tar czf "$TOPDIR/$BIBXML".tmp --exclude rdf . && mv "$TOPDIR/$BIBXML".tmp "$TOPDIR/$BIBXML".tgz )

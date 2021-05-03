@@ -22,7 +22,6 @@
 
 import argparse
 import json
-import os
 import re
 import shutil
 import sys
@@ -72,8 +71,7 @@ def gen_ref_data(args, line, header_names, count):
     for i, lfld in enumerate(lflds):
         f = lfld.strip().lstrip('"').rstrip('"')
         flds[header_names[i]] = f
-    if args.verbose > 2:
-        print(flds)
+    bibxml_common.verbose_print(args, 2, flds)
 
     reptype = flds["statreptype"]
     orgname = "3GPP" if reptype == 'TS' else "SDO-3GPP" if reptype == 'TR' else None
@@ -120,15 +118,13 @@ def get_w3c_data(args):
         count = 0
         for lb in fpb.readlines():
             line = lb.decode("windows-1252")
-            if args.verbose > 2:
-                print(line, end="")
+            bibxml_common.verbose_print(args, 2, line, end="")
             if not header_names:
                 flds = line.split("~")
                 for f in flds:
                     f = f.strip().lstrip('"').rstrip('"')
                     header_names.append(f)
-                if args.verbose > 2:
-                    print(f"header_names=\n{header_names}")
+                bibxml_common.verbose_print(args, 2, f"header_names=\n{header_names}")
 
             else:
                 count += 1
@@ -147,19 +143,15 @@ def get_w3c_data(args):
         stdnumber = ref['anchor']
         xml_disk_file = f"{args.bibxml_dir}/reference.{stdnumber}.xml"
         bibxml_files[xml_disk_file] = 1
-        if args.verbose > 1:
-            print(f"GEN {xml_disk_file}")
-            if args.verbose > 3:
-                print(xml)
+        bibxml_common.verbose_print(args, 1, f"GEN {xml_disk_file}")
+        bibxml_common.verbose_print(args, 3, xml)
         bibxml_common.checkfile(args, xml_disk_file, xml)
 
         rdf = bibxml_common.gen_rdf(ref)
         rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{stdnumber}.rdf"
         bibxml_files[rdf_disk_file] = 1
-        if args.verbose > 1:
-            print(f"GEN {rdf_disk_file}")
-            if args.verbose > 3:
-                print(rdf)
+        bibxml_common.verbose_print(args, 1, f"GEN {rdf_disk_file}")
+        bibxml_common.verbose_print(args, 3, rdf)
         bibxml_common.checkfile(args, rdf_disk_file, rdf)
 
     if args.clean_bibxml:
@@ -183,7 +175,7 @@ def run_unit_tests(args):
         'series_info': [{'name': '3GPP TS', 'value': '24.303 9.5.0'}],
         'format': [{'type': 'HTML', 'target': 'http://www.3gpp.org/ftp/Specs/html-info/24303.htm'}],
         'target': '', 'url': 'http://www.3gpp.org/ftp/Specs/html-info/24303.htm'}
-    if args.verbose: print("ref", ref)
+    bibxml_common.verbose_print(args, 0, f"ref={ref}")
     assert ref_expected == ref
     print("All tests passed")
     sys.exit()
@@ -209,27 +201,16 @@ def main():
     if args.url:
         if not args.file:
             args.file = tempfile.NamedTemporaryFile().name
-            if args.verbose > 1:
-                print(f"Using {args.file}")
+            bibxml_common.verbose_print(args, 1, f"Using {args.file}")
         get_w3c_file(args)
 
     if args.bibxml_dir or args.print:
-        if args.bibxml_dir:
-            os.makedirs(args.bibxml_dir, exist_ok=True)
-            os.makedirs(args.bibxml_dir + "/rdf", exist_ok=True)
+        bibxml_common.create_bibxml_directories(args)
 
         get_w3c_data(args)
 
-        if args.bibxml_dir:
-            # generate index.html file
-            hx = bibxml_common.gen_index_html_set(args.bibxml_dir, "reference.")
-            index_html = bibxml_common.gen_index_html(hx)
-            bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.html", index_html)
+        bibxml_common.generate_final_index_html_and_rdf(args)
 
-            # generate index.rdf file
-            rx = bibxml_common.gen_index_rdf_scan(f"{args.bibxml_dir}/index.rdf", f"{args.bibxml_dir}/rdf", "item.")
-            index_rdf = bibxml_common.gen_index_rdf(rx)
-            bibxml_common.checkfile(args, f"{args.bibxml_dir}/index.rdf", index_rdf)
 
 if __name__ == "__main__":
     main()
