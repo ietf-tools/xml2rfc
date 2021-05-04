@@ -10,6 +10,7 @@ none:
 	@echo make install -- install all files into production
 
 test:
+	chmod a+rx $(PYFILES) $(SHFILES)
 	for i in $(PYFILES); do "./$$i" --unit-tests; done
 	for i in $(SHFILES); do bash -n "$$i"; done
 	for i in $(PYFILES); do "./$$i" --help; done
@@ -33,3 +34,10 @@ install:
 
 clean:
 	rm -f *~
+
+test-all:
+	cd .. && $(MAKE) test
+clean-all:
+	cd .. && $(MAKE) clean
+install-all:
+	cd .. && $(MAKE) install

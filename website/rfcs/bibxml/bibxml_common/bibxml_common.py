@@ -308,7 +308,7 @@ def gen_index_html_set(html_dir, html_prefix):
     Return a set of the basename(filenames).
     """
     ret = set()
-    preflen = len(f"{html_dir}/") -1
+    preflen = len(f"{html_dir}/") - 1
     for fname in glob.glob(f"{html_dir}/{html_prefix}*.xml"):
         nm  = fname[preflen:]
         ret.add(nm)
@@ -450,20 +450,34 @@ def dump_xml(elroot, prefix, *, include_children=False):
             dump_xml(ch, f"    {prefix}")
 
 
-def clean_dir(args, glob_pattern, file_dict):
+def clean_dir(args, glob_pattern, file_set):
     """
     Loop over a set of globbed filenames.
-    Any that is not in the list gets removed.
+    Any that is not in the list set removed.
     """
     for f in glob.iglob(glob_pattern):
-        if file_dict.get(f):
+        if f in file_set:
             verbose_print(args, 1, f"found {f}", file=sys.stderr)
         else:
             if args.skip_clean:
                 print(f"skipping REMOVING {f}", file=sys.stderr)
             else:
-                print(f"REMOVING {f}", file=sys.stderr)
-                os.unlink(f)
+                if args.backup_cleaned_files:
+                    bdir = os.path.dirname(f) + "/backup"
+                    os.makedirs(bdir, exist_ok=True)
+
+                    bname = bdir + "/" + os.path.basename(f)
+                    print(f"BACKING UP {f} to {bname}", file=sys.stderr)
+
+                    try:
+                        os.unlink(bname)
+                    except FileNotFoundError:
+                        pass
+                    os.rename(f, bname)
+
+                else:
+                    print(f"REMOVING {f}", file=sys.stderr)
+                    os.unlink(f)
 
 
 def generate_final_index_html_and_rdf(args):

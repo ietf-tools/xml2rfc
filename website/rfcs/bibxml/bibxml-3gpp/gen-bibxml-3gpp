@@ -136,27 +136,27 @@ def get_w3c_data(args):
                             fulldate > allrefs[stdnumber]["date"]["full"]:
                         allrefs[stdnumber] = ref
 
-    bibxml_files = {}
+    bibxml_files = set()
     for ref in allrefs.values():
         xml = bibxml_common.gen_xml(ref)
 
         stdnumber = ref['anchor']
         xml_disk_file = f"{args.bibxml_dir}/reference.{stdnumber}.xml"
-        bibxml_files[xml_disk_file] = 1
+        bibxml_files.add(xml_disk_file)
         bibxml_common.verbose_print(args, 1, f"GEN {xml_disk_file}")
         bibxml_common.verbose_print(args, 3, xml)
         bibxml_common.checkfile(args, xml_disk_file, xml)
 
         rdf = bibxml_common.gen_rdf(ref)
         rdf_disk_file = f"{args.bibxml_dir}/rdf/item.{stdnumber}.rdf"
-        bibxml_files[rdf_disk_file] = 1
+        bibxml_files.add(rdf_disk_file)
         bibxml_common.verbose_print(args, 1, f"GEN {rdf_disk_file}")
         bibxml_common.verbose_print(args, 3, rdf)
         bibxml_common.checkfile(args, rdf_disk_file, rdf)
 
     if args.clean_bibxml:
         bibxml_common.clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
-        bibxml_common.clean_dir(args, f"{args.bibxml_dir}/rdf/*.xml", bibxml_files)
+        bibxml_common.clean_dir(args, f"{args.bibxml_dir}/rdf/*.rdf", bibxml_files)
 
 
 def run_unit_tests(args):
@@ -191,6 +191,7 @@ def main():
     parser.add_argument("-t", "--test", help="Test mode; do not change any files", action="store_true")
     parser.add_argument("-c", "--clean-bibxml", help="Clean up bibxml files not in current 3GPP document list", action="store_true")
     parser.add_argument("-S", "--skip-clean", help="Skip cleaning bibxml files", action="store_true")
+    parser.add_argument("-X", "--backup-cleaned-files", help="Backup any files that would be cleaned", action="store_true")
     parser.add_argument("-T", "--unit-tests", help="Run unit tests", action="store_true")
     parser.add_argument("-v", "--verbose", help="Verbose, may be specified multiple times", action="count", default=0)
     args = parser.parse_args()

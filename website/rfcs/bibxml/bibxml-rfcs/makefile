@@ -19,11 +19,12 @@ OTHERFILES=makefile
 none:
 	@echo make all -- build locally using rfc-index file and URL
 	@echo make production using rfc-index URL
-	@echo make install -- install all files into production
+	@echo make install -- install local files into production
+	@echo make clean -- clean local files into production
 	@echo
 	@echo Test targets:
-	@echo make test
-	@echo make pylint
+	@echo make test -- unit test local files
+	@echo make pylint -- run pylint on python scripts
 
 all: all-local all-url
 
@@ -36,6 +37,7 @@ production:
 	./gen-bibxml-rfcs-via-rfc-index -b $(PROD_BIBXML_DIR) -r $(PROD_RFC_INDEX) -w -v
 
 test:
+	chmod a+rx $(PYFILES) $(SHFILES)
 	for i in $(PYFILES); do "./$$i" --unit-tests; done
 	for i in $(SHFILES); do bash -n "$$i"; done
 	for i in $(PYFILES); do "./$$i" --help; done
@@ -59,3 +61,10 @@ install:
 
 clean:
 	rm -f *~
+
+test-all:
+	cd .. && $(MAKE) test
+clean-all:
+	cd .. && $(MAKE) clean
+install-all:
+	cd .. && $(MAKE) install

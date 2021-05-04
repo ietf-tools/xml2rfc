@@ -164,13 +164,13 @@ def gen_bibxml(args, elroot, count):
     rdf = bibxml_common.gen_rdf(ref)
     rdf_disk_file = f"{args.bibxml_dir}/rdf/item.W3C.{stdnumber}.rdf"
     bibxml_common.checkfile(args, rdf_disk_file, rdf)
+    return xml_disk_file, rdf_disk_file
 
-
-def get_rdf_data(args):
+def get_w3c_rdf_data(args):
     """
     Open the RDF file, generate bibxml files from it.
     """
-    bibxml_common.verbose_print(args, 1, "get_rdf_data({args.file})")
+    bibxml_common.verbose_print(args, 1, "get_w3c_rdf_data({args.file})")
 
     tree = ET.parse(args.file)
     root = tree.getroot()
@@ -181,22 +181,29 @@ def get_rdf_data(args):
     nm_unused_types = [ f"{W3C_NAMESPACE}{x}" for x in unused_types]
     nm_unused_types.append(f"{RDF_NAMESPACE}Description")
 
+    bibxml_files = set()
+
     count = 0
     for el in root:
         count += 1
         if el.tag in nm_used_types:
-            gen_bibxml(args, el, count)
+            xml_disk_file, rdf_disk_file = gen_bibxml(args, el, count)
+            bibxml_files.add(xml_disk_file)
+            bibxml_files.add(rdf_disk_file)
         elif el.tag in nm_unused_types:
             pass
         else:
             print(f"WARNING: the element tag {el.tag} is NOT known", file=sys.stderr)
+
+    if args.clean_bibxml:
+        bibxml_common.clean_dir(args, f"{args.bibxml_dir}/*.xml", bibxml_files)
+        bibxml_common.clean_dir(args, f"{args.bibxml_dir}/rdf/*.rdf", bibxml_files)
 
 
 def get_rdf(args):
     """ using the specified URL, get the data into a temp file """
     bibxml_common.verbose_print(args, 1, f"get_rdf({args.url})")
     bibxml_common.get_url_to_file(args.url, args.file, exit_ok=True)
-
 
 def run_unit_tests(args):
     """
@@ -236,7 +243,7 @@ def main():
     if args.bibxml_dir or args.print:
         bibxml_common.create_bibxml_directories(args)
 
-        get_rdf_data(args)
+        get_w3c_rdf_data(args)
 
         bibxml_common.generate_final_index_html_and_rdf(args)
 

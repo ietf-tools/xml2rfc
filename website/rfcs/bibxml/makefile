@@ -19,31 +19,36 @@ DEVDIRS= bibxml-rfcs bibxml-rfcsubseries bibxml-ids \
 PRODDIRS= bibxml-rfcs bibxml-rfcsubseries bibxml-ids \
 	bibxml-ieee bibxml-nist bibxml-w3c bibxml-3gpp
 
-EXEFILES=gen-bibxml-all
+SHFILES=gen-bibxml-all
+PYFILES=
+EXEFILES= $(SHFILES) $(PYFILES)
 OTHERFILES=README.txt makefile
 
 
 none:
-	@echo make all -- cd to each directory and make all
-	@echo make production -- cd to each directory and make production
-	@echo make install -- install all files into production
-	@echo make install-local -- install local files into production
+	@echo Global targets:
+	@echo make all-all -- cd to each directory and make all
+	@echo make production-all -- cd to each directory and make production
+	@echo make install-all -- cd to each directory and make install
+	@echo make clean-all -- cd to each directory and make clean
+	@echo make pylint-all -- cd to each directory and make pylint
+	@echo make pylint-together -- run pylint on all python programs together
+	@echo
+	@echo Local targets:
+	@echo make install -- install local files into production
+	@echo make clean -- clean local files into production
+	@echo
+	@echo Test targets:
+	@echo make test-all -- cd to each directory and make test
+	@echo make test -- unit test local files
 
 test:
-	ret=0; \
-	for dir in bibxml_common $(PRODDIRS); do \
-	    ( cd $$dir && $(MAKE) test ) || ret=1; \
-	done; \
-	exit $$ret
+	chmod a+rx $(PYFILES) $(SHFILES)
+	for i in $(PYFILES); do "./$$i" --unit-tests; done
+	for i in $(SHFILES); do bash -n "$$i"; done
+	for i in $(PYFILES); do "./$$i" --help; done
 
-install: test install-local
-	ret=0; \
-	for dir in bibxml_common $(PRODDIRS); do \
-	    ( cd $$dir && $(MAKE) install ) || ret=1; \
-	done; \
-	exit $$ret
-
-install-local:
+install:
 	@for i in $(EXEFILES); do \
 	    if [ $$i -nt $(WEB)/$$i -o ! -f $(WEB)/$$i ];then \
 	        echo cp -p $$i $(WEB)/$$i; \
@@ -57,19 +62,34 @@ install-local:
 	    fi; \
 	done
 
-clean: clean-local
-	for dir in $(DEVDIRS); do ( cd $$dir && $(MAKE) clean ) done
-clean-local:
+clean:
 	rm -f *~
 
-all:
+all-all:
 	for dir in $(DEVDIRS); do ( cd $$dir && $(MAKE) all ) done
 
-production:
+production-all:
 	for dir in $(PRODDIRS); do ( cd $$dir && $(MAKE) production ) done
 
-pylint:
+pylint-all:
 	for dir in bibxml_common $(PRODDIRS); do ( cd $$dir && $(MAKE) pylint ) done
 
-pylint-all: clean
-	pylint `grep -l '#!.*python3' b*/*[!~] 2>/dev/null`
+pylint-together: clean
+	pylint `grep -l '#!.*python3' b*/[!#]*[!~] 2>/dev/null`
+
+test-all: test
+	ret=0; \
+	for dir in bibxml_common $(PRODDIRS); do \
+	    ( cd $$dir && $(MAKE) test ) || ret=1; \
+	done; \
+	exit $$ret
+
+install-all: test-all install
+	ret=0; \
+	for dir in bibxml_common $(PRODDIRS); do \
+	    ( cd $$dir && $(MAKE) install ) || ret=1; \
+	done; \
+	exit $$ret
+
+clean-all: clean
+	for dir in $(DEVDIRS); do ( cd $$dir && $(MAKE) clean ) done

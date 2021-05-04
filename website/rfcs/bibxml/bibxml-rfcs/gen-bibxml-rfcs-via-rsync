@@ -164,9 +164,9 @@ mkBibxmlIndexRdf()
 
     while read NUM
     do
-	echo "Adding $BIBXML/rdf/index.RFC.$NUM.rdf" 1>&2
-	[ -f "$BIBXML/rdf/index.RFC.$NUM.rdf" ] &&
-	cat "$BIBXML/rdf/index.RFC.$NUM.rdf"
+	echo "Adding $BIBXML/rdf/item.RFC.$NUM.rdf" 1>&2
+	[ -f "$BIBXML/rdf/item.RFC.$NUM.rdf" ] &&
+	cat "$BIBXML/rdf/item.RFC.$NUM.rdf"
     done < "$TMP4" >> "$NINDEXRDF"
 
     cat <<-EOF >> "$NINDEXRDF"

@@ -18,10 +18,11 @@ none:
 	@echo make all
 	@echo make production
 	@echo make install -- install all files into production
+	@echo make clean -- clean local files into production
 	@echo
 	@echo Test targets:
-	@echo make test
-	@echo make pylint
+	@echo make test -- unit test local files
+	@echo make pylint -- run pylint on python scripts
 
 all:
 	./gen-bibxml-ids -v -B -b $(DEF_BIBXML_DIR) -i $(DEF_IDINDEX)
@@ -30,6 +31,7 @@ production:
 	./gen-bibxml-ids -v -B -b $(PROD_BIBXML_DIR) -i $(PROD_IDINDEX)
 
 test:
+	chmod a+rx $(PYFILES) $(SHFILES)
 	for i in $(PYFILES); do "./$$i" --unit-tests; done
 	for i in $(SHFILES); do bash -n "$$i"; done
 	for i in $(PYFILES); do "./$$i" --help; done
@@ -53,3 +55,10 @@ install:
 
 clean:
 	rm -f *~
+
+test-all:
+	cd .. && $(MAKE) test
+clean-all:
+	cd .. && $(MAKE) clean
+install-all:
+	cd .. && $(MAKE) install

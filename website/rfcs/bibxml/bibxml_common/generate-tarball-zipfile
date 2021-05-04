@@ -10,9 +10,18 @@ die()
 usage()
 {
     exec 1>&2
-    echo "Usage: $0 topdir bibxml-directory-names"
+    echo "Usage: $0 [-v] topdir bibxml-directory-names"
     exit 1
 }
+
+while getopts v c
+do
+    case $c in
+	v ) set -x ;;
+	? ) usage ;;
+    esac
+done
+shift $(( OPTIND - 1))
 
 [ $# -ge 2 ] || usage
 
