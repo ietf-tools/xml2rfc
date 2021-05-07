@@ -1498,6 +1498,11 @@ class PrepToolWriter(BaseV3Writer):
             type, num = pn.split('-')[:2]
             return type, num
         #
+        def get_name(t):
+            """Get target element name or None"""
+            name = t if t.tag == 'name' else t.find('./name')
+            return None if name is None else clean_text(''.join(list(name.itertext())))
+        #
         target = e.get('target')
         if not target:
             self.die(e, "Expected <xref> to have a target= attribute, but found none")
@@ -1562,12 +1567,12 @@ class PrepToolWriter(BaseV3Writer):
                 type, num = split_pn(t, pn)
                 if num.startswith('appendix'):
                     type, num = num.replace('.', ' ', 1).title().split(None, 1)
-                    content = "%s %s" % (type, num)
                 elif num[0].isalpha():
                     type, num = 'Appendix', num.title()
-                    content = "%s %s" % (type, num)
-                else:
-                    content = "%s %s" % (type.capitalize(), num)
+                # If section is numbered, refer by number, otherwise use section name if available
+                numbered = t.get('numbered') != 'false'
+                label = num if numbered else '"%s"' % (get_name(t) or target)
+                content = "%s %s" % (type.capitalize(), label)
         elif format == 'title':
             if t.tag in ['u', 'author', 'contact', ]:
                 self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
@@ -1578,11 +1583,9 @@ class PrepToolWriter(BaseV3Writer):
                 content = clean_text(title.text)
             elif t.tag in ['abstract']:
                 content = t.tag.capitalize()
-            elif t.tag == 'name' or t.find('./name') != None:
-                name = t if t.tag == 'name' else t.find('./name')
-                content = clean_text(''.join(list(name.itertext())))
             else:
-                content = target
+                name = get_name(t)
+                content = name if name is not None else target
         elif format == 'none':
             content = ''
             if self.options.verbose and not e.text:
