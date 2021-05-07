@@ -18,6 +18,19 @@ try:
 except ImportError:
     pass
 
+
+# Set up options before declaring classes - some are used during class construction.
+options_for_xmlrfcparser = dict()
+def _load_environment():
+    from os import environ
+    cache_path =  environ.get('IETF_TEST_CACHE_PATH', None)
+    if cache_path:
+        options_for_xmlrfcparser['cache_path'] = cache_path
+
+
+_load_environment()
+
+
 def arrstrip(arr):
     """ Strip beginning and end blanklines of an array """
     if not arr[0]: arr.pop(0)
@@ -266,7 +279,7 @@ class WriterRootTest(unittest.TestCase):
 
     def parse(self, path):
         """ Parse a minimal RFC tree and instantiate a writer """
-        self.parser = xml2rfc.XmlRfcParser(path, quiet=True)
+        self.parser = xml2rfc.XmlRfcParser(path, quiet=True, **options_for_xmlrfcparser)
         self.xmlrfc = self.parser.parse()
         self.writer = xml2rfc.PaginatedTextRfcWriter(self.xmlrfc, quiet=True)
         self.writer._format_date()
@@ -453,29 +466,36 @@ class WriterRfcTest(WriterRootTest):
         return self.status_test()
 
 
-def pdfwriter(path):
-    """ Parse a minimal RFC tree and instantiate a writer """
-    parser = xml2rfc.XmlRfcParser(path, quiet=True)
-    xmlrfc = parser.parse()
-    writer = xml2rfc.writers.pdf.PdfWriter(xmlrfc, quiet=True, )
-    return writer
-
-elements_writer = pdfwriter('tests/input/elements.xml')
-try:
-    elements_pdfdoc = elements_writer.pdf() # has side effects on .root
-except Exception as e:
-    print(e)
-    raise
-elements_root   = elements_writer.root
-elements_pdfxml = xmldoc(None, bytes=elements_pdfdoc)
-
 class PdfWriterTests(unittest.TestCase):
+    elements_root = None
+    elements_pdfxml = None
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        # Putting this in setUpClass() allows this module to be imported even if this
+        # procedure will fail. This improves some error messages and makes debugging
+        # a little bit easier. The setUpClass() method is run by unittest during init.
+        # This happens only once, avoiding repeated execution of slow operations.
+        def _pdfwriter(path):
+            """ Parse a minimal RFC tree and instantiate a writer """
+            parser = xml2rfc.XmlRfcParser(path, quiet=True, **options_for_xmlrfcparser)
+            xmlrfc = parser.parse()
+            writer = xml2rfc.writers.pdf.PdfWriter(xmlrfc, quiet=True, )
+            return writer
+
+        elements_writer = _pdfwriter('tests/input/elements.xml')
+        try:
+            elements_pdfdoc = elements_writer.pdf() # has side effects on .root
+        except Exception as e:
+            print(e)
+            raise
+        cls.elements_root   = elements_writer.root
+        cls.elements_pdfxml = xmldoc(None, bytes=elements_pdfdoc)
 
     def setUp(self):
         xml2rfc.log.quiet = True
-        self.pdfxml = copy.deepcopy(elements_pdfxml)
-        self.root = copy.deepcopy(elements_root)
-
+        self.pdfxml = copy.deepcopy(self.elements_pdfxml)
+        self.root = copy.deepcopy(self.elements_root)
 
     def test_text_content(self):
         def norm(t):
