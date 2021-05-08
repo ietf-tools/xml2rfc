@@ -60,7 +60,7 @@ pnprefix = {
     'u':            'u',
 }
 
-index_item = namedtuple('index_item', ['item', 'sub', 'anchor', 'page', 'iref', ])
+index_item = namedtuple('index_item', ['item', 'sub', 'anchor', 'anchor_tag', 'iref', ])
 
 def uniq(l):
     seen = set()
@@ -1386,6 +1386,21 @@ class PrepToolWriter(BaseV3Writer):
     #    item='foo' subitem='bar'>" will have the "irefid" attribute set to
     #    'i-foo-bar-1'.
     def iref_add_number(self, e, p):
+        def get_anchor(parent):
+            # Walk up the tree until an anchored or numbered element is encountered
+            while parent is not None:
+                # <reference> elements inside a <referencegroup> are not labeled with their
+                # own anchor, so skip up to the <referencegroup> element.
+                if parent.tag == 'reference':
+                    grandparent = parent.getparent()
+                    if grandparent.tag == 'referencegroup':
+                        parent = grandparent
+                anchor = parent.get('anchor') or parent.get('pn')
+                if anchor:
+                    return anchor, parent.tag
+                parent = parent.getparent()
+            return None, None
+
         item = e.get('item')
         sub  = e.get('subitem')
         self.iref_number += 1
@@ -1397,13 +1412,11 @@ class PrepToolWriter(BaseV3Writer):
             else:
                 pn = slugify_name('%s-%s-%s' % (pnprefix[e.tag], item, self.iref_number))
             e.set('pn', pn)
-            anchor = p.get('anchor')
-            if not anchor:
-                anchor = p.get('pn')
+            anchor, anchor_tag = get_anchor(p)
             if not anchor:
                 self.err(e, "Did not find an anchor to use for <iref item='%s'> in <%s>" % (item, p.tag))
             else:
-                self.index_entries.append(index_item(item, sub, anchor, None, e))
+                self.index_entries.append(index_item(item, sub, anchor, anchor_tag, e))
 
     def ol_add_counter(self, e, p):
         start = e.get('start')
@@ -2153,10 +2166,14 @@ class PrepToolWriter(BaseV3Writer):
                 dd.append(t)
                 anchored_entries = [e for e in entries if e.anchor]
                 for index, ent in enumerate(anchored_entries):
-                    xr = mkxref(self, text=None, target=ent.anchor, format='counter')
+                    xr = mkxref(
+                        self,
+                        text='Reference' if ent.anchor_tag in ['reference', 'referencegroup'] else None,
+                        target=ent.anchor,
+                    )
                     t.append(xr)
                     if index < len(anchored_entries) - 1:
-                        xr.tail = ','
+                        xr.tail = '; '
                     xr.tail = (xr.tail or '') + '\n'
             return dt, dd
 

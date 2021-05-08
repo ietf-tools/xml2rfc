@@ -1,0 +1,141 @@
+<?xml version='1.0'?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc-ext include-references-in-index="yes" ?>
+<?rfc-ext paragraph-links='yes'?>
+<rfc sortRefs="true" category="exp" submissionType="independent" ipr="trust200902" docName="indexes-00"
+     indexInclude="true">
+    <?v3xml2rfc silence="Unused reference: There seems to be no reference to .*" ?>
+    <?v3xml2rfc silence="The 'docName' attribute of the .rfc/. element should have a revision number" ?>
+    <?v3xml2rfc silence='Did not find a recognized country entry' ?>
+    <?v3xml2rfc silence="Postal address" ?>
+    <?v3xml2rfc silence="Recognized postal address elements" ?>
+    <?v3xml2rfc silence="The document date (.*) is more than 3 days away from today's date" ?>
+    <?v3xml2rfc silence="Found SVG with width or height specified" ?>
+    <front>
+        <title>xml2rfc index tests</title>
+        <author fullname="Human Person" initials="H" surname="Person" role="editor">
+            <address>
+                <postal>
+                    <postalLine>line 1</postalLine>
+                    <postalLine>line 2</postalLine>
+                    <postalLine>line 3</postalLine>
+                </postal>
+            </address>
+        </author>
+    </front>
+    <middle>
+        <section>
+            <name>First Section</name>
+            <iref item="section"/>
+            <t>
+                <iref item="t"/>
+                This is a section!
+                <em>
+                    <iref item="em"/>
+                    Emphatically.
+                </em>
+                <strong>
+                    <iref item="strong"/>
+                    Loudly.
+                </strong>
+                <sub>
+                    <iref item="sub"/>
+                    Subscripted.
+                </sub>
+                <sup>
+                    <iref item="sup"/>
+                    Superscripted.
+                </sup>
+                <tt>
+                    <iref item="tt"/>
+                    Typewritten.
+                </tt>
+            </t>
+            <t>
+                <iref item="t"/>
+                This is another section!
+            </t>
+            <dl>
+                <dt><iref item="dt"/>dt
+                </dt>
+                <dd>
+                    <iref item="dd"/>
+                    dd
+                </dd>
+            </dl>
+            <ul>
+                <li>
+                    <iref item="li" subitem="ul"/>
+                    unnumbered item
+                </li>
+            </ul>
+            <ol>
+                <li>
+                    <iref item="li" subitem="ol"/>
+                    numbered item
+                </li>
+            </ol>
+            <aside>
+                <!-- <iref> as a direct child of <aside> breaks the TextWriter -->
+                <!-- <iref item="aside"/>-->
+                <t>
+                    <iref item="t" subitem="in an aside tag"/>
+                    This is an aside.
+                </t>
+            </aside>
+            <blockquote>
+                <iref item="blockquote"/>
+                This is a blockquote.
+            </blockquote>
+            <table>
+                <iref item="table"/>
+                <tbody>
+                    <tr>
+                        <th>
+                            <iref item="th"/>
+                            Table heading
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <iref item="td"/>
+                            <figure>
+                                <iref item="figure"/>
+                                <sourcecode>
+                                    printf("Hello world!\n");
+                                </sourcecode>
+                            </figure>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </middle>
+    <back>
+        <references>
+            <name>References</name>
+            <reference anchor="ref0">
+                <front>
+                    <title>Reference</title>
+                    <author fullname="Reference Q. Author"/>
+                </front>
+                <annotation>
+                    <iref item="annotation"/>
+                    This is a reference not in a reference group.
+                </annotation>
+            </reference>
+            <referencegroup anchor="refgroup0">
+                <reference anchor="ref1">
+                    <front>
+                        <title>Reference Group</title>
+                        <author fullname="Reference Q. Author"/>
+                    </front>
+                    <annotation>
+                        <iref item="annotation" subitem="in reference group"/>
+                        This is a reference in a reference group.
+                    </annotation>
+                </reference>
+            </referencegroup>
+        </references>
+    </back>
+</rfc>
