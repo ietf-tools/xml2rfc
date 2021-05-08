@@ -789,10 +789,16 @@ class PrepToolWriter(BaseV3Writer):
     def attribute_note_removeinrfc_true(self, e, p):
         if not self.options.rfc:
             warning_text = "This %s is to be removed before publishing as an RFC." % e.tag
-            top_para = e.find('t')
-            if top_para==None or top_para.text != warning_text:
-                name = e.xpath('name')
-                pos = 1 if name != None else 0
+            # Ignore the <name> element, if present. It must be the first child.
+            if len(e) > 0 and e[0].tag == 'name':
+                pos = 1
+            else:
+                pos = 0
+            # Check whether the first child (after optional <name>) is a <t>
+            first_child_tag = e[pos].tag if len(e) > pos else None
+            top_para = e[pos] if first_child_tag == 't' else None
+            # If no top_para, or if it is not the warning, then insert the warning
+            if top_para is None or top_para.text != warning_text:
                 t = self.element('t')
                 t.text = warning_text
                 e.insert(pos, t)
