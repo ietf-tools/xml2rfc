@@ -1867,8 +1867,8 @@ class PrepToolWriter(BaseV3Writer):
                 if src and not data:
                     self.warn(e, "No image data found in source %s" % src)
 
-            if e.get('type') == 'ascii-art' and e.text:
-                self.normalize_whitespace(e)
+        if e.get('type') == 'ascii-art' and e.text:
+            self.normalize_whitespace(e)
 
     # 5.5.2.  <sourcecode> Processing
 
