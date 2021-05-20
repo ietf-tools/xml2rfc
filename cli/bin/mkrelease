@@ -210,7 +210,7 @@ note "\nCommitting the changelog..."
 $do svn commit changelog -m "Changelog entry for $VER"
 
 note "\nUpdating manpage and docfiles with the new versions"
-$do tox -- manupdate
+$do tox -epy36 -- manupdate
 $do svn commit -m "Updated manpage.txt and docfiles"
 
 note "\nVerifying there's no uncommitted changes..."
