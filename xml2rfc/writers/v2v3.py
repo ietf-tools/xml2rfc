@@ -108,19 +108,25 @@ class V2v3XmlWriter(BaseV3Writer):
         if self.options.add_xinclude:
             self.add_xinclude()
 
+        # Use an internal DTD to declare entities
+        doctype_string = """<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>"""
         # Use lxml's built-in serialization
         file = open(filename, 'w', encoding='utf-8')
         text = lxml.etree.tostring(self.root.getroottree(), 
-                                       encoding='unicode',
-                                       doctype='<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">',
-                                       pretty_print=True)
+                                   encoding='unicode',
+                                   doctype=doctype_string,
+                                   pretty_print=True)
 
         # Use entities for some selected unicode code points, for later
         # editing readability and convenience
         text = text.replace(u'\u00A0', u'&nbsp;')
         text = text.replace(u'\u200B', u'&zwsp;')
         text = text.replace(u'\u2011', u'&nbhy;')
-        text = text.replace(u'\u2028', u'&br;')
         text = text.replace(u'\u2060', u'&wj;')
 
         file.write(u"<?xml version='1.0' encoding='utf-8'?>\n")
@@ -321,9 +327,8 @@ class V2v3XmlWriter(BaseV3Writer):
             '.;wrap_non_ascii()',
         ]
 
-        # replace the vocabulary v2 dtd, but keep some entity definitions.
-        tree = self.tree
-        tree.docinfo.system_url = "rfc2629-xhtml.ent"
+        # Remove any DOCTYPE declaration
+        self.tree.docinfo.clear()
 
         for s in selectors:
             slug = slugify(s.replace('self::', '').replace(' or ','_').replace(';','_'))
