@@ -1336,11 +1336,11 @@ class PrepToolWriter(BaseV3Writer):
         if level < self.prev_section_level:
             self.back_section_number = self.back_section_number[:level+1]
         section_number = self.back_section_number[:]
+        if section_number[0] > 26:
+            # avoid running off the end of the alphabet when assigning appendix letters
+            self.err(e, '<back> has at least %s sections, only 26 supported' % section_number[0])
         section_number[0] = chr(0x60+section_number[0])
-        if level == 0:
-            e.set('pn', '%s-appendix.%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in section_number ]), ))
-        else:
-            e.set('pn', '%s-%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in section_number ]), ))
+        e.set('pn', '%s-appendix.%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in section_number ]), ))
         self.prev_section_level = level
 
     def paragraph_add_numbers(self, e, p):
@@ -1514,8 +1514,10 @@ class PrepToolWriter(BaseV3Writer):
         def split_pn(t, pn):
             if pn is None:
                 self.die(e, "Expected to find a pn= attribute on <%s anchor='%s'> when processing <xref>, but found none" % (t.tag, t.get('anchor')), trace=True)
-            type, num = pn.split('-')[:2]
-            return type, num
+            type, num, para = self.split_pn(pn)
+            if self.is_appendix(pn):
+                type = 'appendix'
+            return type.capitalize(), num.title(), para
         #
         def get_name(t):
             """Get target element name or None"""
@@ -1538,19 +1540,17 @@ class PrepToolWriter(BaseV3Writer):
         while p != None and pn == None:
             pn = p.get('pn')
             p = p.getparent()
+
         #
         format = e.get('format', 'default')
-        if   format == 'counter':
+        content = ''
+        if format == 'counter':
             if not t.tag in ['section', 'table', 'figure', 'li', 'reference', 'references', 't', 'dt', ]:
                 self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
             elif t.tag == 'reference':
                 if not e.get('section'):
                     self.die(e, "Using <xref> format='%s' with a <%s> target requires a section attribute" % (format, t.tag, ))
-            type, num = split_pn(t, pn)
-            if num.startswith('appendix'):
-                num = num.split('.')[1].title()
-            elif re.search('^[a-z]', num):
-                num = num.title()
+            _, num, _ = split_pn(t, pn)
             if t.tag == 'li':
                 parent = t.getparent()
                 if not parent.tag == 'ol':
@@ -1561,16 +1561,16 @@ class PrepToolWriter(BaseV3Writer):
             else:
                 content = num
         elif format == 'default':
-            if   t.tag in [ 'reference', 'referencegroup' ]:
+            if t.tag in [ 'reference', 'referencegroup' ]:
                 anchor = t.get('anchor')
                 content = '%s' % self.refname_mapping[anchor] if anchor in self.refname_mapping else anchor
             elif t.tag in [ 't', 'ul', 'ol', 'dl', ]:
-                type, num, para = pn.split('-', 2)
-                content = "%s %s, Paragraph %s" % (type.capitalize(), num.title(), para)
+                type, num, para = split_pn(t, pn)
+                content = "%s %s, Paragraph %s" % (type, num, para)
             elif t.tag in [ 'li', ]:
-                type, num, para = pn.split('-', 2)
+                type, num, para = split_pn(t, pn)
                 para, item = para.split('.', 1)
-                content = "%s %s, Paragraph %s, Item %s" % (type.capitalize(), num.title(), para, item)
+                content = "%s %s, Paragraph %s, Item %s" % (type, num, para, item)
             elif t.tag == 'u':
                 try:
                     content = expand_unicode_element(t, bare=True)
@@ -1583,15 +1583,14 @@ class PrepToolWriter(BaseV3Writer):
             elif t.tag in ['cref']:
                 content = "Comment %s" % target
             else:
-                type, num = split_pn(t, pn)
-                if num.startswith('appendix'):
-                    type, num = num.replace('.', ' ', 1).title().split(None, 1)
-                elif num[0].isalpha():
-                    type, num = 'Appendix', num.title()
                 # If section is numbered, refer by number, otherwise use section name if available
                 numbered = t.get('numbered') != 'false'
-                label = num if numbered else '"%s"' % (get_name(t) or target)
-                content = "%s %s" % (type.capitalize(), label)
+                type, num, _ = split_pn(t, pn)
+                if numbered:
+                    label = num
+                else:
+                    label = '"%s"' % (get_name(t) or target)
+                content = "%s %s" % (type, label)
         elif format == 'title':
             if t.tag in ['u', 'author', 'contact', ]:
                 self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
@@ -1606,7 +1605,6 @@ class PrepToolWriter(BaseV3Writer):
                 name = get_name(t)
                 content = name if name is not None else target
         elif format == 'none':
-            content = ''
             if self.options.verbose and not e.text:
                 self.warn(e, 'Expected <%s format="none"> to have text content, but found none.  There will be no text rendered for this element.' % (e.tag, ))
         else:
@@ -1633,9 +1631,9 @@ class PrepToolWriter(BaseV3Writer):
                 for s in t.xpath('.//seriesInfo'):
                     if s.get('name') in ['RFC', 'Internet-Draft']:
                         if section[0].isdigit():
-                            relative = '#section-%s' % section
+                            relative = '#section-%s' % section.title()
                         else:
-                            relative = '#appendix-%s' % section                            
+                            relative = '#appendix-%s' % section.title()
                         break
                 if not relative:
                     self.err(e, 'Cannot build a href for <%s target="%s"> with a section= attribute without also having a relative= attribute.' % (e.tag, e.get('target')))
@@ -1969,26 +1967,30 @@ class PrepToolWriter(BaseV3Writer):
             if name is None:
                 self.die(s, "No name entry found for section, can't continue")
             numbered = s.get('numbered')=='true' or (self.check_refs_numbered() if s.tag == 'references' else False)
-            if not s.get('pn'):
+
+            pn = s.get('pn')
+            if not pn:
                 self.warn(s, "Expected a pn number, found none in <%s>" % (s.tag, ))
-            num = s.get('pn','unknown-unknown').split('-', 1)[1].replace('-', ' ').title() if numbered else ''
-            if num.startswith('Appendix'):
-                # Replace the first dot for later use in derivedContent
-                num = num.replace('.', ' ', 1) 
-                num_format = 'default'
-            elif not num:
+                self.die(s, "No no pn entry found for section, can't continue: %s" % (etree.tostring(s)))
+
+            if not numbered:
+                num = ''
                 num_format = 'none'
             else:
-                num_format = 'counter'
+                # numbered
+                _, num, _ = self.split_pn(pn)
+                num = num.title()
+                if self.is_appendix(pn) and self.is_top_level_section(num):
+                    num_format = 'default'
+                    num = 'Appendix %s' % num
+                else:
+                    num_format = 'counter'
             #
             if self.keep_toc_lines > 0:
                 t = self.element('t', keepWithNext='true')
                 self.keep_toc_lines -= 1
             else:
                 t = self.element('t')
-            pn = s.get('pn')
-            if not pn:
-                self.die(s, "No no pn entry found for section, can't continue: %s" % (etree.tostring(s)))
 
             xref = self.element('xref', target=pn, format=num_format, derivedContent=num)
             xref.tail = ('.'+self.spacer) if num.strip() else ( self.spacer if num else '')
