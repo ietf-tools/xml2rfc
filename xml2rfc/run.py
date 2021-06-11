@@ -693,7 +693,7 @@ def main():
             options.output_filename = None
 
         if options.v2v3:
-            xmlrfc = parser.parse(remove_comments=False, quiet=True, normalize=False, add_xmlns=True)
+            xmlrfc = parser.parse(remove_comments=False, quiet=True, normalize=False, strip_cdata=False, add_xmlns=True)
             filename = options.output_filename
             if not filename:
                 filename = basename + '.v2v3.xml'
