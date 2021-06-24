@@ -1,9 +1,10 @@
-# Copyright The IETF Trust 2017, All Rights Reserved
+# Copyright The IETF Trust 2017,2021 All Rights Reserved
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
 # The following text entries, derived from RFC 7841, were taken from
 # https://www.rfc-editor.org/materials/status-memos.txt on 01 Feb 2018
+# and updated to match https://www.iab.org/documents/headers-boilerplate/
 
 boilerplate_rfc_status_of_memo = {
     'IETF': {
@@ -279,8 +280,8 @@ boilerplate_rfc_status_of_memo = {
             research and development activities.  These results might not be
             suitable for deployment.  This RFC represents the consensus of the
             {group_name} Research Group of the Internet Research Task Force
-            (IRTF).  Documents approved for publication by the IRSG are not a
-            candidate for any level of Internet Standard; see Section 2 of RFC
+            (IRTF).  Documents approved for publication by the IRSG are not
+            candidates for any level of Internet Standard; see Section 2 of RFC
             7841.
             </t>""",
 
@@ -350,7 +351,7 @@ boilerplate_rfc_status_of_memo = {
             research and development activities.  These results might not be
             suitable for deployment.  This RFC represents the consensus of
             the {group_name} Research Group of the Internet Research Task Force (IRTF).
-            Documents approved for publication by the IRSG are not a candidate for
+            Documents approved for publication by the IRSG are not candidates for
             any level of Internet Standard; see Section 2 of RFC 7841.
             </t>""",
 
@@ -373,7 +374,7 @@ boilerplate_rfc_status_of_memo = {
             suitable for deployment.  This RFC represents the individual opinion(s) of one or more
             members of the {group_name} Research Group of the Internet
             Research Task Force (IRTF).  Documents approved for
-            publication by the IRSG are not a candidate for
+            publication by the IRSG are not candidates for
             any level of Internet Standard; see Section 2 of RFC 7841.
             </t>""",
 
@@ -417,8 +418,8 @@ boilerplate_rfc_status_of_memo = {
             research and development activities.  These results might not be
             suitable for deployment.  This RFC represents the consensus of the {group_name}
             Research Group of the Internet Research Task Force (IRTF).
-            Documents approved for publication by the IRSG are not a
-            candidate for any level of Internet Standard; see Section 2 of RFC
+            Documents approved for publication by the IRSG are not
+            candidates for any level of Internet Standard; see Section 2 of RFC
             7841.   
             </t>""",
 
@@ -439,8 +440,8 @@ boilerplate_rfc_status_of_memo = {
             research and development activities.  These results might not be
             suitable for deployment.  This RFC represents the individual opinion(s) of one or more
             members of the {group_name} Research Group of the Internet
-            Research Task Force (IRTF).  Documents approved for publication by the IRSG are not a
-            candidate for any level of Internet Standard; see Section 2 of RFC 7841.
+            Research Task Force (IRTF).  Documents approved for publication by the IRSG are not
+            candidates for any level of Internet Standard; see Section 2 of RFC 7841.
             </t>""",
 
             """<t>
