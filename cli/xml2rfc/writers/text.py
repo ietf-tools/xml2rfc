@@ -3306,9 +3306,10 @@ class TextWriter(BaseV3Writer):
         text = ''
         pn = e.get('pn', 'unknown-unknown')
         if e.get('numbered') == 'true':
-            text = pn.split('-',1)[1].replace('-', ' ').title() +'.'
-            if text.startswith('Appendix'):
-                text = text.replace('.', ' ', 1)
+            _, num, _ = self.split_pn(pn)
+            text = num.title() + '.'
+            if self.is_appendix(pn) and self.is_top_level_section(num):
+                text = 'Appendix %s' % text
             kwargs['joiners'].update({
                 'name':     Joiner('  ', len(text)+2, 0, False, False),
             })

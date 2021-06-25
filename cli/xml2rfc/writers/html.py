@@ -82,6 +82,19 @@ def wrap_ascii(tag, name, ascii, role='', classes=None):
         e = build(tag, name, *role, classes=classes)
     return e
 
+def id_for_pn(pn):
+    """Convert a pn to an HTML element ID"""
+    if HtmlWriter.is_appendix(pn):
+        _, num, para = HtmlWriter.split_pn(pn)
+        frag = 'appendix-%s' % num.title()
+        if para is None or len(para) == 0:
+            return frag
+        else:
+            return '%s-%s' % (frag, para)
+    # not an appendix
+    return pn
+
+
 class ClassElementMaker(ElementMaker):
 
     def __call__(self, tag, *children, **attrib):
@@ -107,14 +120,15 @@ class ExtendingElementMaker(ClassElementMaker):
             sn = precursor.get('slugifiedName')
             an = precursor.get('anchor')
             if   pn != None:
-                elem.set('id', pn)
+                id = id_for_pn(pn)
+                elem.set('id', id)
                 if an != None:
                     if is_block:
                         child = wrap(elem, 'div', id=an)
                     else:
                         # cannot wrap a non-block in <div>, so we invert the
                         # wrapping by swapping the tags:
-                        child = wrap(elem, 'div', id=pn, **attrib)
+                        child = wrap(elem, 'div', id=id, **attrib)
                         elem.tag = child.tag
                         child.tag = tag
                         for k in attrib:
@@ -1826,24 +1840,24 @@ class HtmlWriter(BaseV3Writer):
         if   p.tag in [ 'note', 'section', 'references' ]:
             name_slug = x.get('slugifiedName') or None
             pn = p.get('pn')
-            prefix, number = pn.split('-', 1)
-            number += '.'
-            if re.search(r'^[a-z]', number):
-                num = number.split('.', 1)[1]
-            else:
-                num = number
-            level = min([6, len(num.split('.')) ])
+            # determine whether we have an appendix
+            _, num, _ = self.split_pn(pn)
+            num += '.'
+            level = min([6, self.level_of_section_num(num) + 1])
             tag = 'h%d' % level
             h = build(tag, id=name_slug)
             s.append(h)
             #
             numbered = p.get('numbered')=='true' or (self.check_refs_numbered() if p.tag == 'references' else False)
-            if number and numbered:
-                if number.startswith('appendix'):
-                    number = number.replace('.', ' ', 1).title()
-                elif re.search('^[a-z]', number):
-                    number = number.title()
-                a_number = build.a(number, ' ', href='#%s'%pn, classes='section-number selfRef')
+            if num and numbered:
+                if self.is_appendix(pn) and self.is_top_level_section(num):
+                    num = 'Appendix %s' % num
+                a_number = build.a(
+                    num.title(),
+                    ' ',
+                    href='#%s' % id_for_pn(pn),
+                    classes='section-number selfRef',
+                )
                 h.append( a_number)
             if name_slug:
                 a_title = build.a(href='#%s'%name_slug, classes='section-name selfRef')
@@ -2805,6 +2819,9 @@ class HtmlWriter(BaseV3Writer):
         if reftext is None:
             self.die(x, "Found an <%s> without derivedContent: %s" % (x.tag, lxml.etree.tostring(x),))
         if not (section or relative):
+            if self.is_appendix(target):
+                # link to xref using section fragment instead of ID
+                target = id_for_pn(target)
             # plain xref
             if in_name:
                 hh = build.em('[', reftext, ']', classes="xref")
