@@ -122,13 +122,6 @@ class V2v3XmlWriter(BaseV3Writer):
                                    doctype=doctype_string,
                                    pretty_print=True)
 
-        # Use entities for some selected unicode code points, for later
-        # editing readability and convenience
-        text = text.replace(u'\u00A0', u'&nbsp;')
-        text = text.replace(u'\u200B', u'&zwsp;')
-        text = text.replace(u'\u2011', u'&nbhy;')
-        text = text.replace(u'\u2060', u'&wj;')
-
         file.write(u"<?xml version='1.0' encoding='utf-8'?>\n")
         file.write(text)
 
