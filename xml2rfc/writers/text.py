@@ -4565,12 +4565,7 @@ class TextWriter(BaseV3Writer):
     #    element can be combined with other character formatting elements, and
     #    the formatting will be additive.
     def render_tt(self, e, width, **kwargs):
-        p = e.getparent()
-        render_plain = list(p.iterancestors('table')) and not utils.hastext(p, ignore=['tt'])
-        if render_plain:
-            text = '%s' % self.inner_text_renderer(e)
-        else:
-            text = '"%s"' % self.inner_text_renderer(e)
+        text = '%s' % self.inner_text_renderer(e)
         text += e.tail or ''
         return text
 

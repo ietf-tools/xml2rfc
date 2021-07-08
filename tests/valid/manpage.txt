@@ -1,5 +1,5 @@
 xml2rfc(1)                                                    xml2rfc(1)
-                                                             7 July 2021
+                                                             8 July 2021
 
 
                   Xml2rfc Vocabulary Version 3 Schema
@@ -23,9 +23,9 @@ Table of Contents
    3.  Deprecated Elements and Attributes
    4.  References
    Appendix A.  RELAX NG Schema
-   Appendix B.  "xml2rfc" Command-line Options
-   Appendix C.  "xml2rfc" Configuration Files
-   Appendix D.  "xml2rfc" Documentation Template Variables
+   Appendix B.  xml2rfc Command-line Options
+   Appendix C.  xml2rfc Configuration Files
+   Appendix D.  xml2rfc Documentation Template Variables
    Author's Address
 
 1.  Introduction
@@ -545,7 +545,7 @@ Table of Contents
    three-letter country codes according to ISO 3166 are recognized.
 
    xml2rfc has a help option which will list all names and country codes
-   it recognizes as valid country names: "xml2rfc --country-help" .
+   it recognizes as valid country names: xml2rfc --country-help .
 
    This element can be a child element of <postal>.
 
@@ -1069,7 +1069,7 @@ Table of Contents
    Default value:  "adaptive"
 
    The indentation of the list elements relative to the start of the
-   list item number.  With "indent='adaptive'", the width of the widest
+   list item number.  With indent='adaptive', the width of the widest
    list item number will determine the indentation.  With a numeric
    value, that value will be used to determine the amount of
    indentation.  The indentation amount is interpreted as characters
@@ -1576,7 +1576,7 @@ Table of Contents
    followed by a numbered section in this part of the document.
    Descendant sections of unnumbered sections are unnumbered by
    definition.  (New) Both top-level <section>s and other <section>s may
-   have "numbered='false'".
+   have numbered='false'.
 
 2.50.3.  "removeInRFC" Attribute
 
@@ -1862,8 +1862,8 @@ Table of Contents
 
    Acts as a hint to the output formatters that do pagination to do a
    best-effort attempt to keep the paragraph with the next element,
-   whatever that happens to be.  For example, for HTML output "@media
-   print" CSS might translate this to page-break-after: avoid.  For PDF,
+   whatever that happens to be.  For example, for HTML output @media
+   print CSS might translate this to page-break-after: avoid.  For PDF,
    the paginator could attempt to keep the paragraph with the next
    element.  Note: this attribute is strictly a hint and not always
    actionable.
@@ -1875,11 +1875,11 @@ Table of Contents
 
    Acts as a hint to the output formatters that do pagination to do a
    best-effort attempt to keep the paragraph with the previous element,
-   whatever that happens to be.  For example, for HTML output "@media
-   print" CSS might translate this to page-break-before: avoid.  For
-   PDF, the paginator could attempt to keep the paragraph with the
-   previous element.  Note: this attribute is strictly a hint and not
-   always actionable.
+   whatever that happens to be.  For example, for HTML output @media
+   print CSS might translate this to page-break-before: avoid.  For PDF,
+   the paginator could attempt to keep the paragraph with the previous
+   element.  Note: this attribute is strictly a hint and not always
+   actionable.
 
 2.60.  <table>
 
@@ -3875,7 +3875,7 @@ Appendix A.  RELAX NG Schema
    start |= rfc
    <CODE ENDS>
 
-Appendix B.  "xml2rfc" Command-line Options
+Appendix B.  xml2rfc Command-line Options
 
    The following command-line options are available.  Long options may
    be shortened to the shortest substring that still makes the option
@@ -3884,7 +3884,7 @@ Appendix B.  "xml2rfc" Command-line Options
 
 B.1.  Positional arguments
 
-   "source"
+   source
       Input XML file to render to one or more of the available formats.
 
 B.2.  Documentation options
@@ -3892,57 +3892,56 @@ B.2.  Documentation options
    Some options to generate built-in documentation.  The group has 8
    options.
 
-   "--help", "-h"
+   --help, -h
       Show a help message and exit.
 
-   "--docfile"
+   --docfile
       Generate a documentation XML file ready for formatting.
 
-      The "--docfile" and "--manpage" switches takes input from 5
-      places:
+      The --docfile and --manpage switches takes input from 5 places:
 
-      *  The "v3.rng" file distributed as part of the xml2rfc package,
+      *  The v3.rng file distributed as part of the xml2rfc package,
          which is also used to validate and process v3 XML input.
-      *  A "rfc7991.rng" file distributed as part of the xml2rfc
-         package, which holds the schema defined in [RFC7991].  This is
-         used in determining elements and attributes that are new in the
-         current "v3.rng" schema, compared to the RFC7991 schema.
+      *  A rfc7991.rng file distributed as part of the xml2rfc package,
+         which holds the schema defined in [RFC7991].  This is used in
+         determining elements and attributes that are new in the current
+         v3.rng schema, compared to the RFC7991 schema.
       *  Lists of deprecated elements and attributes, which are part of
          the xml2rfc source.
-      *  A YAML file "doc.yaml" that contains XML snippets with
+      *  A YAML file doc.yaml that contains XML snippets with
          descriptions of elements, attributes, attribute values, and
-         switches, from the same directory as "doc.xml".
-      *  An XML template file "doc.xml", by default taken from the
-         "templates" directory of the xml2rfc package (but this can be
-         changed with the "--templates-dir" switch).  The 4 preceding
+         switches, from the same directory as doc.xml.
+      *  An XML template file doc.xml, by default taken from the
+         templates directory of the xml2rfc package (but this can be
+         changed with the --templates-dir switch).  The 4 preceding
          sources provide content that is used to expand the template
-         file when generating the "--docfile" and "--manpage" output.
+         file when generating the --docfile and --manpage output.
 
-   "--manpage"
+   --manpage
       Show paged text documentation.
 
       Generates on-the-fly paged text documentation for the v3 schema
       elements and attributes from the v3 RelaxNG schema file which is
       part of the xml2rfc distribution, and YAML and XML files that
-      provide the text content and formatting.  See the "--docfile"
-      switch for more details.
+      provide the text content and formatting.  See the --docfile switch
+      for more details.
 
-   "--country-help"
+   --country-help
       Show the recognized <country> strings.
 
-   "--pdf-help"
+   --pdf-help
       Show pdf generation requirements.
 
-   "--template-dir"
+   --template-dir
       Directory to pull the doc.xml and doc.yaml templates from.  The
       default is the "templates" directory of the xml2rfc package.
 
-      This is used to find the templates used by the "--docfile" and
-      "--manpage" commands and for legacy .html template and .dtd files.
+      This is used to find the templates used by the --docfile and
+      --manpage commands and for legacy .html template and .dtd files.
 
       A consequence of being able to specify a different template
       directory than the default is that it's possible to use the
-      "--docfile" command to generate additional documentation XML files
+      --docfile command to generate additional documentation XML files
       based on the current V3 grammar file.  The default template and
       snippets file does not include documentation for deprecated
       elements and attributes, for instance; but if it is desired to
@@ -3951,7 +3950,7 @@ B.2.  Documentation options
       is Jinja2; the snippens file is YAML with extra support for some
       escape sequences: '\ <' and '\ >'.
 
-   "--values"
+   --values
       Show option values and from where they come.
 
       This shows (in order):
@@ -3961,10 +3960,10 @@ B.2.  Documentation options
       *  Default values
       *  Config file search path
 
-   "--version", "-V"
+   --version, -V
       Display the version number and exit.
 
-      With the "--verbose" switch, the versions of the external python
+      With the --verbose switch, the versions of the external python
       modules used will also be shown.
 
 B.3.  Format selection
@@ -3974,54 +3973,54 @@ B.3.  Format selection
    input filename, unless --out=FILE or --basename=BASE is used.  The
    group has 10 options.
 
-   "--text"
+   --text
       Outputs formatted text to file, with proper page breaks.
 
-   "--html"
+   --html
       Outputs formatted HTML to file.
 
-   "--nroff"
+   --nroff
       Outputs formatted nroff to file (only v2 input).
 
-   "--pdf"
+   --pdf
       Outputs formatted PDF to file.
 
-   "--raw"
+   --raw
       Outputs formatted text to file, unpaginated (only v2 input).
 
-   "--expand"
+   --expand
       Outputs XML to file with all references expanded.
 
-   "--v2v3"
+   --v2v3
       Convert vocabulary version 2 XML to version 3.
 
-   "--preptool"
+   --preptool
       Run preptool on the input.
 
-   "--unprep"
+   --unprep
       Reduce prepped xml to unprepped.
 
-   "--info"
+   --info
       Generate a JSON file with anchor to section lookup information.
 
 B.4.  Generic Switch Options
 
-   "--clear-cache", "-C"
+   --clear-cache, -C
       Purge the cache and exit.
 
-   "--debug"
+   --debug
       Show debugging output.
 
-   "--no-network", "-N"
+   --no-network, -N
       Don't use the network to resolve references.
 
-   "--no-org-info", "-O"
+   --no-org-info, -O
       Don't show author orgainzation info on page one (legacy only).
 
-   "--quiet", "-q"
+   --quiet, -q
       Don't print anything while working.
 
-   "--skip-config-files"
+   --skip-config-files
       Ignore config file settings.
 
       Use this to ignore values in config files, even if there are
@@ -4029,55 +4028,55 @@ B.4.  Generic Switch Options
       can itself be set in a config file, and cause all other config
       file settings to be ignored.
 
-   "--remove-pis", "-r"
+   --remove-pis, -r
       Remove XML processing instructions.
 
-   "--utf8", "-u"
+   --utf8, -u
       Generate utf8 output.
 
-   "--verbose", "-v"
+   --verbose, -v
       Print extra information.
 
 B.5.  Generic Options with Values
 
-   "--basename", "-b" = NAME
+   --basename, -b = NAME
       Specify the base name for output files.
 
-   "--cache", "-c" = PATH
+   --cache, -c = PATH
       Specify a primary cache directory to write to; default: try [
       /var/cache/xml2rfc, ~/.cache/xml2rfc ].
 
-   "--config-file" = FILE
+   --config-file = FILE
       Specify a configuration file.
 
       This argument can be repeated, to read multiple explicitly
       specified config files.  They will be read after any config files
-      found in 'standard' locations have been read.  Run "xml2rfc
-      --values" to see the default search path for config files.
+      found in 'standard' locations have been read.  Run xml2rfc
+      --values to see the default search path for config files.
 
-   "--dtd", "-d" = DTDFILE
+   --dtd, -d = DTDFILE
       Specify an alternate dtd file.
 
       This option can be negated with --no-dtd.
 
-   "--date", "-D" = DATE
+   --date, -D = DATE
       Run as if the date is DATE (format: yyyy-mm-dd).  Default: Today's
       date.
 
-   "--filename", "-f" = FILE
+   --filename, -f = FILE
       Deprecated.  The same as -o.
 
-   "--indent", "-i" = INDENT
+   --indent, -i = INDENT
       With some v3 formatters: Indentation to use when pretty-printing
       XML.
 
-   "--out", "-o" = FILE
+   --out, -o = FILE
       Specify an explicit output filename.
 
-   "--path", "-p" = PATH
+   --path, -p = PATH
       Specify the directory path for output files.
 
-   "--silence", "-s" = STRING
+   --silence, -s = STRING
       Silence any warning beginning with the given string.
 
       Specifies a string prefix or a regular expression to match against
@@ -4101,7 +4100,7 @@ B.5.  Generic Options with Values
 
 B.6.  Generic Format Options
 
-   "--v3"
+   --v3
       With --text and --html: use the v3 formatter, rather than the
       legacy one.
 
@@ -4111,7 +4110,7 @@ B.6.  Generic Format Options
       of functionality and exact control of the output, due to the
       intermediary conversion step.
 
-   "--v2", "--legacy"
+   --v2, --legacy
       With --text and --html: use the legacy output formatters, rather
       than the v3 ones.
 
@@ -4119,30 +4118,30 @@ B.6.  Generic Format Options
       instead of the default schema v3 output formatters.  This can only
       be used with pure v2 input files.
 
-   "--id-is-work-in-progress"
+   --id-is-work-in-progress
       In references, refer to Internet-Drafts as "Work in Progress".
 
 B.7.  Text Format Options
 
-   "--no-headers"
+   --no-headers
       Calculate page breaks, and emit form feeds and page top spacing,
       but omit headers and footers from the paginated format.
 
-   "--legacy-list-symbols"
+   --legacy-list-symbols
       Use the legacy list bullet symbols, rather than the new ones.
 
-   "--legacy-date-format"
+   --legacy-date-format
       Use the legacy date format, rather than the new one.
 
       This option can be negated with --no-legacy-date-format.
 
-   "--list-symbols" = 4*CHAR
+   --list-symbols = 4*CHAR
       Use the characters given as list bullet symbols.
 
-   "--BOM", "--bom"
+   --BOM, --bom
       Add a BOM (unicode byte order mark) to the start of text files.
 
-   "--pagination", "--paginate"
+   --pagination, --paginate
       Do pagination.
 
       By default, drafts are paginated, but not RFCs.  Use this switch
@@ -4150,11 +4149,11 @@ B.7.  Text Format Options
 
       This option can be negated with --no-pagination.
 
-   "--table-hyphen-breaks"
+   --table-hyphen-breaks
       More easily do line breaks after hyphens in table cells to give a
       more compact table.
 
-   "--table-borders"
+   --table-borders
 
       Default value: full
 
@@ -4216,45 +4215,45 @@ B.7.  Text Format Options
 
 B.8.  Html Format Options
 
-   "--css" = FILE
+   --css = FILE
       Use the given CSS file instead of the builtin.
 
-   "--external-css"
+   --external-css
       Place css in external files.
 
       This option can be negated with --no-external-css.
 
-   "--external-js"
+   --external-js
       Place js in external files.
 
       This option can be negated with --no-external-js.
 
-   "--rfc-base-url"
+   --rfc-base-url
 
       Default value: https://www.rfc-editor.org/rfc/
 
       Base URL for RFC links.
 
-   "--id-base-url"
+   --id-base-url
 
       Default value: https://datatracker.ietf.org/doc/html/
 
       Base URL for Internet-Draft links.
 
-   "--rfc-reference-base-url"
+   --rfc-reference-base-url
 
       Default value: https://rfc-editor.org/rfc/
 
       Base URL for RFC reference targets, replacing the target="..."
       value given in the reference entry.
 
-   "--id-reference-base-url"
+   --id-reference-base-url
 
       Default value: https://datatracker.ietf.org/doc/html/
 
       Base URL for I-D reference targets.
 
-   "--metadata-js-url"
+   --metadata-js-url
 
       Default value: metadata.min.js
 
@@ -4262,31 +4261,31 @@ B.8.  Html Format Options
 
 B.9.  V2-V3 Converter Options
 
-   "--add-xinclude"
+   --add-xinclude
       Replace reference elements with RFC and Internet-Draft seriesInfo
       with the appropriate XInclude element.
 
-   "--draft-revs", "--draft-revisions"
+   --draft-revs, --draft-revisions
       Reference explicit draft revisions when inserting XIncludes for
       draft references.
 
-   "--strict"
+   --strict
       Be strict about stripping some deprecated attributes.
 
 B.10.  Preptool Options
 
-   "--accept-prepped"
+   --accept-prepped
       Accept already prepped input.
 
-Appendix C.  "xml2rfc" Configuration Files
+Appendix C.  xml2rfc Configuration Files
 
    Most options have built-in defaults, and the command-line switches
-   above can be used to override those.  Additionally, "xml2rfc" will
-   look for config files in some standard file locations.  The option
-   "--values" will show the places "xml2rfc" will look for config files
-   on your system (among other information).  Any settings in config
-   files will override the program defaults, but will in turn be
-   overridden by command-line options.
+   above can be used to override those.  Additionally, xml2rfc will look
+   for config files in some standard file locations.  The option
+   --values will show the places xml2rfc will look for config files on
+   your system (among other information).  Any settings in config files
+   will override the program defaults, but will in turn be overridden by
+   command-line options.
 
    The config files are expected to contain lines with option value
    assignments.  Lines with '#' as the first character are considered
@@ -4302,7 +4301,7 @@ Appendix C.  "xml2rfc" Configuration Files
    abbreviations will not be recognised (in contrast with how
    abbreviations are handled during command-line option processing).
 
-Appendix D.  "xml2rfc" Documentation Template Variables
+Appendix D.  xml2rfc Documentation Template Variables
 
    The following variables are available for use in an xml2rfc manpage
    Jinja2 template, as of xml2rfc version 3.9.1:
@@ -4310,7 +4309,7 @@ Appendix D.  "xml2rfc" Documentation Template Variables
    {{ bare_latin_tags }}:
 
    {{ descriptions }}:
-      The descriptions read from the "doc.yaml" file
+      The descriptions read from the doc.yaml file
 
    {{ element_tags }}:
       A list of all the element tags in the XML schema
