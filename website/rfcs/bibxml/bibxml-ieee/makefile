@@ -1,3 +1,5 @@
+# See documentation in README.txt
+
 DIR=bibxml/bibxml-ieee
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/rfcs/$(DIR)
 
