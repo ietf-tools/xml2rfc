@@ -2250,7 +2250,8 @@ class BaseV3Writer(object):
     def is_top_level_section(cls, num):
         return cls.level_of_section_num(num) == 1
 
-    @staticmethod
-    def is_appendix(pn):
+    appendix_pn_re = re.compile(r'^section-[a-z]\.|^section-appendix\.')
+    @classmethod
+    def is_appendix(cls, pn):
         """Is a section with this number an appendix?"""
-        return pn.startswith('section-appendix.')
+        return cls.appendix_pn_re.match(pn) is not None
