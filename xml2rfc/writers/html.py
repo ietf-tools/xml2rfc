@@ -2995,6 +2995,7 @@ class HtmlWriter(BaseV3Writer):
     # Post processing
     def post_process(self, h):
         for x in h.iter():
+            x = self.sort_classes(x)
             if x.text and x.text.strip() and '\u2028' in x.text:
                 parts = x.text.split('\u2028')
                 x.text = parts[0]
@@ -3016,3 +3017,15 @@ class HtmlWriter(BaseV3Writer):
                     i += 1
         return h
 
+
+    # --------------------------------------------------------------------------
+    # Sort class values
+    def sort_classes(self, element):
+        classes = element.get('class', None)
+        if classes:
+            classes_set = classes.split(' ')
+            if len(classes_set) > 1:
+                classes_set.sort()
+                classes = ' '.join(classes_set)
+            element.set('class', classes)
+        return element
