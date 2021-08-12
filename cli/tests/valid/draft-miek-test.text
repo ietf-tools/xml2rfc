@@ -111,7 +111,7 @@ Table of Contents
    source format for documents in the Internet-Drafts (I-Ds) and Request
    for Comments (RFC) series.
 
-   This version is adapted to work with "xml2rfc" version 2.x.
+   This version is adapted to work with xml2rfc version 2.x.
 
    Pandoc is an "almost plain text" format and therefor particularly
    well suited for editing RFC-like documents.
@@ -130,18 +130,17 @@ Table of Contents
 
    During the last few years people have been developing markup
    languages that are very easy to remember and type.  These languages
-   have become known as "almost plain text"-markup languages.  One of
-   the first was the Markdown (http://daringfireball.net/projects/
-   markdown/) syntax.  One that was developed later and incorporates
-   Markdown and a number of extensions is Pandoc
-   (http://johnmacfarlane.net/pandoc/).  The power of Pandoc also comes
-   from the fact that it can be translated to numerous output formats,
-   including, but not limited to: HTML, (plain) Markdown and "docbook"
-   XML.
+   have become known as almost plain text-markup languages.  One of the
+   first was the Markdown (http://daringfireball.net/projects/markdown/)
+   syntax.  One that was developed later and incorporates Markdown and a
+   number of extensions is Pandoc (http://johnmacfarlane.net/pandoc/).
+   The power of Pandoc also comes from the fact that it can be
+   translated to numerous output formats, including, but not limited to:
+   HTML, (plain) Markdown and docbook XML.
 
    So using Pandoc for writing RFCs seems like a sane choice.  As
-   "xml2rfc" uses XML, the easiest way would be to create "docbook" XML
-   and transform that using XSLT.  Pandoc2rfc does just that.  The
+   xml2rfc uses XML, the easiest way would be to create docbook XML and
+   transform that using XSLT.  Pandoc2rfc does just that.  The
    conversions are, in some way amusing, as we start off with (almost)
    plain text, use elaborate XML and end up with plain text again.
 
@@ -158,10 +157,10 @@ Table of Contents
 
                   Figure 1: Attempt to justify Pandoc2rfc.
 
-   The XML generated (the output after the "xsltproc" step in Figure 1)
-   is suitable for inclusion in either the "middle" or "back" section of
-   an RFC.  The simplest way is to create a template XML file and
-   include the appropriate XML:
+   The XML generated (the output after the xsltproc step in Figure 1) is
+   suitable for inclusion in either the middle or back section of an
+   RFC.  The simplest way is to create a template XML file and include
+   the appropriate XML:
 
    <?xml version='1.0' ?>
    <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
@@ -195,16 +194,15 @@ Table of Contents
 
    3.  template.xml (probably a fairly static file).
 
-   The draft ("draft.txt") you are reading now, is automatically created
-   when you call "make".  The homepage of Pandoc2rfc is this github
+   The draft (draft.txt) you are reading now, is automatically created
+   when you call make.  The homepage of Pandoc2rfc is this github
    repository (https://github.com/miekg/pandoc2rfc).
 
 2.1.  Dependencies
 
-   It needs "xsltproc" and "pandoc" to be installed.  See the Pandoc
-   user manual for the details (http://johnmacfarlane.net/pandoc/
-   README.html) on how to type in Pandoc style.  And of course "xml2rfc"
-   version two.
+   It needs xsltproc and pandoc to be installed.  See the Pandoc user
+   manual for the details (http://johnmacfarlane.net/pandoc/README.html)
+   on how to type in Pandoc style.  And of course xml2rfc version two.
 
    When using Pandoc2rfc consider adding the following sentence to an
    Acknowledgements section:
@@ -213,20 +211,20 @@ Table of Contents
 
 3.  Starting a new project
 
-   When starting a new project with "pandoc2rfc" you'll need to copy the
+   When starting a new project with pandoc2rfc you'll need to copy the
    following files:
 
-   *  "Makefile"
+   *  Makefile
 
-   *  "transform.xslt"
+   *  transform.xslt
 
    *  And the above mentioned files:
 
-      -  "middle.pdc"
+      -  middle.pdc
 
-      -  "back.pdc"
+      -  back.pdc
 
-      -  "template.xml"
+      -  template.xml
 
    After that you can start editing.
 
@@ -253,7 +251,7 @@ Table of Contents
 
    *  Figure/artwork with a title (Section 7.4);
 
-   *  Block quote this is converted to "<list style="empty">" paragraph
+   *  Block quote this is converted to <list style="empty"> paragraph
       (Section 7.5);
 
    *  References
@@ -278,13 +276,13 @@ Table of Contents
 
 5.  Unsupported Features
 
-   *  Lists inside a table ("xml2rfc" doesn't handle this);
+   *  Lists inside a table (xml2rfc doesn't handle this);
 
    *  Pandoc markup in the caption for figures/artwork.  Pandoc markup
       for table captions _is_ supported;
 
    *  crefs: for comments (no input syntax available), use HTML
-      comments: "<!-- ... -->";
+      comments: <!-- ... -->;
 
 6.  Acknowledgements
 
@@ -316,13 +314,13 @@ Table of Contents
    # Section1 One
    Bla
 
-   Converts to: "<section title="Section1 One" anchor="section1-one">"
-   If you have another section that is also named "Section1 One", that
+   Converts to: <section title="Section1 One" anchor="section1-one"> If
+   you have another section that is also named "Section1 One", that
    anchor will be called "section1-one-1", but _only_ when the sections
    are in the _same_ source file!
 
-   Referencing the section is done with "see [](#section1-one)", as in
-   see Section 7.2.
+   Referencing the section is done with see [](#section1-one), as in see
+   Section 7.2.
 
 7.3.  List Styles
 
@@ -335,7 +333,7 @@ Table of Contents
    * Item one;
    * Item two.
 
-   Converts to "<list style="symbol">":
+   Converts to <list style="symbol">:
 
    *  Item one;
 
@@ -348,7 +346,7 @@ Table of Contents
    1. Item one;
    1. Item two.
 
-   Converts to "<list style="numbers">":
+   Converts to <list style="numbers">:
 
    1.  Item one;
 
@@ -363,7 +361,7 @@ Table of Contents
    #. Item one;
    #. Item two.
 
-   Converts to "<list style="empty">":
+   Converts to <list style="empty">:
 
       Item one;
 
@@ -376,7 +374,7 @@ Table of Contents
    ii. Item one;
    ii. Item two.
 
-   Converts to "<list style="format %i.">":
+   Converts to <list style="format %i.">:
 
    i.   Item one;
 
@@ -388,7 +386,7 @@ Table of Contents
    II. Item one;
    II. Item two.
 
-   Yields "<list style="format (%d) ">":
+   Yields <list style="format (%d) ">:
 
    (1)  Item one;
 
@@ -401,7 +399,7 @@ Table of Contents
    a.  Item one;
    b.  Item two.
 
-   Converts to "<list style="letters">":
+   Converts to <list style="letters">:
 
    a.  Item one;
 
@@ -433,11 +431,11 @@ Table of Contents
 
    :   Explanation two
 
-   Converts to: "<list style="hanging">" and "<t hangText="First item
-   that...">"
+   Converts to: <list style="hanging"> and <t hangText="First item
+   that...">
 
    If you want a newline after the hangTexts, search for the string
-   "OPTION" in "transform.xsl" and uncomment it.
+   OPTION in transform.xsl and uncomment it.
 
 7.4.  Figure/Artwork
 
@@ -445,32 +443,32 @@ Table of Contents
 
    Like this
 
-   Converts to: "<figure><artwork> ..." Note that "xml2rfc" supports a
-   caption with "<artwork>".  Pandoc does not support this, but
-   Pandoc2rfc does.  If you add a "@Figure: some text" as the last line,
-   the artwork gets a "title" attribute with the text after "@Figure:".
-   It will also be possible to reference the artwork.  If a caption is
-   supplied the artwork will be centered.  If a caption is needed but
-   the figure should not be centered use "@figure:\".
+   Converts to: <figure><artwork> ...  Note that xml2rfc supports a
+   caption with <artwork>.  Pandoc does not support this, but Pandoc2rfc
+   does.  If you add a @Figure: some text as the last line, the artwork
+   gets a title attribute with the text after @Figure:. It will also be
+   possible to reference the artwork.  If a caption is supplied the
+   artwork will be centered.  If a caption is needed but the figure
+   should not be centered use @figure:\.
 
 7.4.1.  References
 
-   The reference anchor attribute will be: "fig:" + "first 10
-   (normalized) characters from the caption".  Where normalized means:
+   The reference anchor attribute will be: fig: + first 10 (normalized)
+   characters from the caption.  Where normalized means:
 
    *  Take the first 10 characters of the caption (i.e. this is the text
-      _after_ the string "@Figure:");
+      _after_ the string @Figure:);
 
-   *  Spaces and single quotes (') are translated to a minus "-";
+   *  Spaces and single quotes (') are translated to a minus -;
 
    *  Uppercase letters translated to lowercase.
 
-   So the first artwork with a caption will get "fig:a-minimal-" as a
+   So the first artwork with a caption will get fig:a-minimal- as a
    reference.  See for instance Figure 2.
 
-   This anchoring is completely handled from within the "xslt".  Note
-   that duplicate anchors are an XML validation error which will make
-   "xml2rfc" fail.
+   This anchoring is completely handled from within the xslt.  Note that
+   duplicate anchors are an XML validation error which will make xml2rfc
+   fail.
 
 7.5.  Block Quote
 
@@ -478,7 +476,7 @@ Table of Contents
 
    > quoted text
 
-   Converts to: "<t><list style="empty"> ..." paragraph, making it
+   Converts to: <t><list style="empty"> ...  paragraph, making it
    indented.
 
 7.6.  References
@@ -489,7 +487,7 @@ Table of Contents
 
    [Click here](URI)
 
-   Converts to: "<ulink target="URI">Click here ..."
+   Converts to: <ulink target="URI">Click here ...
 
 7.6.2.  Internal
 
@@ -497,7 +495,7 @@ Table of Contents
 
    [Click here](#localid)
 
-   Converts to: "<link target="localid">Click here ..."
+   Converts to: <link target="localid">Click here ...
 
    For referring to RFCs (for which you manually need add the reference
    source in the template, with an external XML entity), you can just
@@ -515,14 +513,14 @@ Table of Contents
 
 7.7.  Spanx Styles
 
-   The verb style can be selected with back-tics: "`text`" Converts to:
-   "<spanx style="verb"> ..."
+   The verb style can be selected with back-tics: `text` Converts to:
+   <spanx style="verb"> ...
 
-   And the emphasis style with asterisks: "*text*" or underscores:
-   "_text_" Converts to: "<spanx style="emph"> ..."
+   And the emphasis style with asterisks: *text* or underscores: _text_
+   Converts to: <spanx style="emph"> ...
 
-   And the emphasis style with double asterisks: "**text**" Converts to:
-   "<spanx style="strong"> ..."
+   And the emphasis style with double asterisks: **text** Converts to:
+   <spanx style="strong"> ...
 
 7.8.  Tables
 
@@ -538,31 +536,31 @@ Table of Contents
 
       Figure 3: A caption describing the figure describing the table.
 
-   Is translated to "<texttable>" element in "xml2rfc".  You can choose
+   Is translated to <texttable> element in xml2rfc.  You can choose
    multiple styles as input, but they all are converted to the same
-   style (plain "<texttable>") table in "xml2rfc".  The column alignment
-   is copied over to the generated XML.
+   style (plain <texttable>) table in xml2rfc.  The column alignment is
+   copied over to the generated XML.
 
 7.8.1.  References
 
-   The caption is _always_ translated to a "title" attribute.  If a
-   table has a caption, it will _also_ get a reference.  The reference
-   anchor attribute will be: "tab-" + "first 10 (normalized) characters
-   from the caption".  Where normalized means:
+   The caption is _always_ translated to a title attribute.  If a table
+   has a caption, it will _also_ get a reference.  The reference anchor
+   attribute will be: tab- + first 10 (normalized) characters from the
+   caption.  Where normalized means:
 
    *  Take the first 10 characters of the caption (i.e. this is the text
-      _after_ the string "Table:");
+      _after_ the string Table:);
 
-   *  Spaces and single quotes (') are translated to a minus "-";
+   *  Spaces and single quotes (') are translated to a minus -;
 
    *  Uppercase letters translated to lowercase.
 
-   So the first table with a caption will get "tab-a-caption-" for
+   So the first table with a caption will get tab-a-caption- for
    reference use.  See for instance
 
-   This anchoring is completely handled from within the "xslt".  Note
-   that duplicate anchors are an XML validation error which will make
-   "xml2rfc" fail.
+   This anchoring is completely handled from within the xslt.  Note that
+   duplicate anchors are an XML validation error which will make xml2rfc
+   fail.
 
 7.9.  Indexes
 
@@ -574,12 +572,12 @@ Table of Contents
 
    [^1]: footnote text
 
-   We re-use this syntax for the "<iref>" tag.  The above text
-   translates to:
+   We re-use this syntax for the <iref> tag.  The above text translates
+   to:
 
    <iref item="footnote text"/>
 
-   Sub items are also supported.  Use an exclamation mark ("!") to
+   Sub items are also supported.  Use an exclamation mark (!) to
    separate them:
 
    [^1]: item!sub item
@@ -594,17 +592,17 @@ Table of Contents
    situation, but only if the different sections are in the _same_ file
    or processed in the same Pandoc run.  Concatenating the different
    section files before processing them is a solution to this problem.
-   You can, for instance, amend the "Makefile" and add something like
+   You can, for instance, amend the Makefile and add something like
    this:
 
    allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
            cat $@ > allsections.pdc
 
-   And then process "allsection.pdc" in the normal way.
+   And then process allsection.pdc in the normal way.
 
 8.2.  Setting the title
 
-   If you use double quotes in the documents title in the "docName"
+   If you use double quotes in the documents title in the docName
    attribute, like:
 
    <rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02">
@@ -618,8 +616,8 @@ Table of Contents
 
 8.3.  Uploading the XML/txt
 
-   The "draft.xml" target will generate an XML file with all XML
-   included, so you can upload just one file to the I-D tracker.
+   The draft.xml target will generate an XML file with all XML included,
+   so you can upload just one file to the I-D tracker.
 
 8.4.  VIM syntax highlighting
 
@@ -655,7 +653,7 @@ Table of Contents
 Appendix A.  Tests
 
    This appendix consists out of a few tests that should all render to
-   proper "xml2rfc" XML.
+   proper xml2rfc XML.
 
 A.1.  A Very Long Title Considerations With Regards to the Already
       Deployed Routing Policy
@@ -664,7 +662,7 @@ A.1.  A Very Long Title Considerations With Regards to the Already
 
 A.2.  Markup in heading
 
-   This is discarded by "xml2rfc".
+   This is discarded by xml2rfc.
 
 A.3.  Blockquote
 
@@ -689,7 +687,7 @@ A.6.  Spanx Tests
 
       double asterisks: *double asterisks*
 
-      backticks: "backticks"
+      backticks: backticks
 
 A.7.  List Tests
 
@@ -928,15 +926,15 @@ A.10.  Figure tests
       Figure 4: This is the caption, with text in `typewriter`. Which
       isnt converted to a <spanx> style, because this is copied as-is.
 
-   And how a figure that is not centered, do to using "figure" and not
-   "Figure".
+   And how a figure that is not centered, do to using figure and not
+   Figure.
 
    This is a figure
    This is a figure
 
                       Figure 5: A non centered figure.
 
-   Test the use of "@title":
+   Test the use of @title:
 
    This is a figure with a title
    This is a figure with a title
