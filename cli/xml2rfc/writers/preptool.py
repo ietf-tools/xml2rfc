@@ -146,6 +146,15 @@ class PrepToolWriter(BaseV3Writer):
             self.attribute_defaults[tag] = sdict(dict( (k, defaults[k]) for k in keys if defaults[k] ))
         return copy.copy(self.attribute_defaults[tag])
 
+    def set_element_pn(self, elt, value):
+        existing_value = elt.get('pn', None)
+        if existing_value is None:
+            if self.prepped:
+                self.warn(elt, 'pn not set on element in prepped input, setting to {}'.format(value))
+            elt.set('pn', value)
+        elif existing_value != value:
+            self.warn(elt, 'using existing pn ({}) instead of generated pn ({})'.format(existing_value, value))
+
     def element(self, tag, line=None, **kwargs):
         attrib = self.get_attribute_defaults(tag)
         attrib.update(kwargs)
@@ -1280,20 +1289,23 @@ class PrepToolWriter(BaseV3Writer):
     # 
     #    o  <artwork>, <aside>, <blockquote>, <dt>, <li>, <sourcecode>, <t>:
     #       pn='p-[section]-[counter]'
+    #
+    # N.B., the pn formats have changed from the above comment.
+    #
     def boilerplate_section_add_number(self, e, p):
         self.boilerplate_section_number += 1
-        e.set('pn', '%s-boilerplate.%s' % (pnprefix[e.tag], self.boilerplate_section_number, ))
+        self.set_element_pn(e, '%s-boilerplate.%s' % (pnprefix[e.tag], self.boilerplate_section_number, ))
 
     def toc_section_add_number(self, e, p):
         self.toc_section_number += 1
-        e.set('pn', '%s-toc.%s' % (pnprefix[e.tag], self.toc_section_number, ))
+        self.set_element_pn(e, '%s-toc.%s' % (pnprefix[e.tag], self.toc_section_number, ))
 
     def front_abstract_add_number(self, e, p):
-        e.set('pn', '%s-abstract' % pnprefix[e.tag])
+        self.set_element_pn(e, '%s-abstract' % pnprefix[e.tag])
 
     def front_note_add_number(self, e, p):
         self.note_number += 1
-        e.set('pn', '%s-note.%s' % (pnprefix[e.tag], self.note_number, ))
+        self.set_element_pn(e, '%s-note.%s' % (pnprefix[e.tag], self.note_number, ))
 
     def middle_section_add_number(self, e, p):
         level = len(list(e.iterancestors('section')))
@@ -1302,21 +1314,21 @@ class PrepToolWriter(BaseV3Writer):
         self.middle_section_number[level] += 1
         if level < self.prev_section_level:
             self.middle_section_number = self.middle_section_number[:level+1]
-        e.set('pn', '%s-%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in self.middle_section_number ]), ))
+        self.set_element_pn(e, '%s-%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in self.middle_section_number ]), ))
         self.prev_section_level = level
         self.references_number[0] = self.middle_section_number[0]
 
     def table_add_number(self, e, p):
         self.table_number += 1
-        e.set('pn', '%s-%s' % (pnprefix[e.tag], self.table_number, ))
+        self.set_element_pn(e, '%s-%s' % (pnprefix[e.tag], self.table_number, ))
 
     def figure_add_number(self, e, p):
         self.figure_number += 1
-        e.set('pn', '%s-%s' % (pnprefix[e.tag], self.figure_number, ))
+        self.set_element_pn(e, '%s-%s' % (pnprefix[e.tag], self.figure_number, ))
 
     def u_add_number(self, e, p):
         self.unicode_number += 1
-        e.set('pn', '%s-%s' % (pnprefix[e.tag], self.unicode_number, ))
+        self.set_element_pn(e, '%s-%s' % (pnprefix[e.tag], self.unicode_number, ))
 
     def references_add_number(self, e, p):
         level = len(list(e.iterancestors('references')))
@@ -1325,7 +1337,7 @@ class PrepToolWriter(BaseV3Writer):
         self.references_number[level] += 1
         if level < self.prev_references_level:
             self.references_number = self.references_number[:level+1]
-        e.set('pn', '%s-%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in self.references_number ]), ))
+        self.set_element_pn(e, '%s-%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in self.references_number ]), ))
         self.prev_references_level = level
 
     def back_section_add_number(self, e, p):
@@ -1340,7 +1352,7 @@ class PrepToolWriter(BaseV3Writer):
             # avoid running off the end of the alphabet when assigning appendix letters
             self.err(e, '<back> has at least %s sections, only 26 supported' % section_number[0])
         section_number[0] = chr(0x60+section_number[0])
-        e.set('pn', '%s-appendix.%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in section_number ]), ))
+        self.set_element_pn(e, '%s-appendix.%s' % (pnprefix[e.tag], '.'.join([ str(n) for n in section_number ]), ))
         self.prev_section_level = level
 
     def paragraph_add_numbers(self, e, p):
@@ -1369,7 +1381,7 @@ class PrepToolWriter(BaseV3Writer):
                         debug.show('c.items()')
                     num[-1] += 1
                     if c.tag not in ['figure', 'table']:
-                        c.set('pn', prefix+num2str(num))
+                        self.set_element_pn(c, prefix+num2str(num))
                 elif c.tag in bloc_tags:
                     num[-1] += 1
                 if c.tag in sect_tags:
@@ -1417,7 +1429,7 @@ class PrepToolWriter(BaseV3Writer):
                 pn = slugify_name('%s-%s-%s-%s' % (pnprefix[e.tag], item, sub, self.iref_number))
             else:
                 pn = slugify_name('%s-%s-%s' % (pnprefix[e.tag], item, self.iref_number))
-            e.set('pn', pn)
+            self.set_element_pn(e, pn)
             anchor, anchor_tag = get_anchor(p)
             if not anchor:
                 self.err(e, "Did not find an anchor to use for <iref item='%s'> in <%s>" % (item, p.tag))

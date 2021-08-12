@@ -1173,7 +1173,7 @@ class HtmlWriter(BaseV3Writer):
             next  = x.getnext()
             if next is not None and next.tag == 'author':
                 after_next = next.getnext()
-                if after_next.tag != 'author':
+                if after_next is not None and after_next.tag != 'author':
                     after_next = None
             else:
                 next = None
