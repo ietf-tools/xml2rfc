@@ -131,7 +131,7 @@ tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).text --text --no-pagination --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (3)"; exit 1; }
 
-tests/out/%.canonical.html: tests/input/%.canonical.xml install
+tests/out/%.canonical.html: tests/input/%.canonicalxml install
 	@echo " Checking generation of .html from canonical prepped .xml"
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).$(py).html --html --external-css --external-js --legacy-date-format --no-inline-version $<" 2> /dev/null || { err=$$?; echo "Error output when generating .html from canonical prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/valid/$(notdir $(basename $(basename $@))).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
