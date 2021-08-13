@@ -3,7 +3,7 @@
 from __future__ import unicode_literals, print_function, division
 
 # Static values
-__version__  = '3.9.1'
+__version__  = '3.10.0rc1'
 NAME         = 'xml2rfc'
 VERSION      = [ int(i) if i.isdigit() else i for i in __version__.split('.') ]
 CACHES       = ['/var/cache/xml2rfc', '~/.cache/xml2rfc']  # Ordered by priority
