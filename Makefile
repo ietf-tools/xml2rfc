@@ -214,6 +214,18 @@ cachetest: cleantmp install
 
 rfctest: cleantmp env/bin/python install $(rfctests) tests/out/rfc9001.canonical.html
 
+rfcregressiontest: cleantmp install
+	@echo -e "\n Running RFC regression test ..."
+	@echo -e "\n Gathering RFC XML files ..."
+	mkdir -p tests/rfc/out
+	@PS4=" " /bin/bash -cx "rsync -avz --delete --include='rfc[0-9][0-9][0-9][0-9].xml' --exclude='*' rsync.ietf.org::rfc tests/rfc/"
+	@echo -e "\n Generating text ..."
+	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --text $$rfc; done
+	@echo -e "\n Generating html ..."
+	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --html $$rfc; done
+	@echo -e "\n Generating pdf ..."
+	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --pdf $$rfc; done
+
 drafttest: cleantmp env/bin/python install $(drafttests) dateshifttest
 
 # rfctest: cleantmp env/bin/python install $(rfctests)
@@ -265,7 +277,7 @@ yestests: yes tests
 
 noflakestests: install pytests regressiontests
 
-regressiontests: drafttest rfctest
+regressiontests: drafttest rfctest rfcregressiontest
 
 minify: xml2rfc/data/metadata.min.js
 
