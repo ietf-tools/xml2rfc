@@ -277,7 +277,7 @@ yestests: yes tests
 
 noflakestests: install pytests regressiontests
 
-regressiontests: drafttest rfctest rfcregressiontest
+regressiontests: drafttest rfctest
 
 minify: xml2rfc/data/metadata.min.js
 
