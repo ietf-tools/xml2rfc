@@ -61,21 +61,33 @@ umask 022	# cache files mode 644
 
 # echo CACHEDFILE= "$CACHEDIR/$bibdir/$bref" 1>&2
 
-# check the cache first
-if [ -f "$CACHEDIR/$bibdir/$bref" ]
-then
-    goodReference "$CACHEDIR/$bibdir/$bref"
-    exit
-fi
-
 # try retrieving from datatracker
 case "$noref" in
     draft-* )
+	# check the cache first
+	if [ -s "$CACHEDIR/$bibdir/$bref" ]
+	then
+	    goodReference "$CACHEDIR/$bibdir/$bref"
+	    exit
+	fi
+
 	echo curl "$DTURLBASE/$noref/xml" 1>&2
 	curl "$DTURLBASE/$noref/xml" > "$TMP" 2> "$TMP2"
 	# cat "$TMP2" 1>&2
 	;;
     * )
+	# check the cache first, but only use it if it's <24 hours old
+	if [ -s "$CACHEDIR/$bibdir/$bref" ]
+	then
+	    cachetime=$(stat --printf=%Y "$CACHEDIR/$bibdir/$bref")
+	    now=$(date +%s)
+	    if (( cachetime >= now - 24 * 60 * 60 ))
+	    then
+		goodReference "$CACHEDIR/$bibdir/$bref"
+		exit
+	    fi
+	fi
+
 	echo curl "$DTURLBASE/draft-$noref/xml" 1>&2
 	curl "$DTURLBASE/draft-$noref/xml" > "$TMP" 2> "$TMP2"
 	# cat "$TMP2" 1>&2
