@@ -661,6 +661,8 @@ class TextWriter(BaseV3Writer):
             'artset':   Joiner('\n\n', 0, 0, False, False),
             'artwork':  Joiner('\n\n', 3, 0, False, True),
             'sourcecode':  Joiner('\n\n', 3, 0, False, False),
+            'ul':  Joiner('\n\n', 0, 0, False, False),
+            'ol':  Joiner('\n\n', 0, 0, False, False),
         })
         width = width if width else 69
         text, plain = self.text_or_block_renderer(e, width-3, **kwargs)
