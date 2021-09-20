@@ -110,6 +110,12 @@ CHECKOUTPUT=	\
 	@echo " Diffing .plain.text against regular .text"
 	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(date_regex)' $$doc.plain.text $$doc.text || { echo 'Diff failed for $$doc.plain.text output'; exit 1; }
 
+# keep this ahead of the tests/out/%.html rule so it takes precedence for pre-3.82 GNU make, which used
+# the first matching rule instead of the shortest stem
+tests/out/%.canonical.html: tests/input/%.canonical.xml install
+	@echo " Checking generation of .html from canonical prepped .xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).html --html --external-css --external-js --legacy-date-format --no-inline-version $<" 2> /dev/null || { err=$$?; echo "Error output when generating .html from canonical prepped .xml"; exit $$err; }
+
 tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt : tests/input/%.xml install
 	@echo -e "\n Processing $<"
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tests/out/ --raw --legacy --text --nroff --html --strict $<"
@@ -130,11 +136,6 @@ tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%
 	@echo " Checking generation of .text from prepped .xml"
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).text --text --no-pagination --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (3)"; exit 1; }
-
-tests/out/%.canonical.html: tests/input/%.canonicalxml install
-	@echo " Checking generation of .html from canonical prepped .xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).$(py).html --html --external-css --external-js --legacy-date-format --no-inline-version $<" 2> /dev/null || { err=$$?; echo "Error output when generating .html from canonical prepped .xml"; exit $$err; }
-	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/valid/$(notdir $(basename $(basename $@))).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
 
 tests/out/docfile.xml:
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --doc --out $@"
@@ -212,7 +213,7 @@ cachetest: cleantmp install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache .cache tests/input/rfc6787.xml --no-network --base tmp/ --raw --legacy"
 
 
-rfctest: cleantmp env/bin/python install $(rfctests) tests/out/rfc9001.canonical.html
+rfctest: cleantmp env/bin/python install $(rfctests) tests/out/rfc9001.canonical.html.test
 
 rfcregressiontest: cleantmp install
 	@echo -e "\n Running RFC regression test ..."
