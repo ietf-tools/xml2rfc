@@ -95,7 +95,7 @@ $ENV{SERVER_ADMIN} = 'tony@att.com';
 # $ENV{HOME} = "/home/tonyh";
 $ENV{LANG} = "en_US";
 $ENV{KRAMDOWN_SAFE} = "y";
-$ENV{KRAMDOWN_REFCACHEDIR} = "/var/tmp/.refcache";
+$ENV{KRAMDOWN_REFCACHEDIR} = "/tmp/.refcache";
 
 my $newinputfn = setSubTempFile("$basename.mkd");
 my $ret = rename($inputfn, $newinputfn);
