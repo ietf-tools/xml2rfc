@@ -206,9 +206,9 @@ boilerplate_tlp = {
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document. Code Components extracted from this
-            document must include Simplified BSD License text as described in
+            document must include Revised BSD License text as described in
             Section 4.e of the Trust Legal Provisions and are provided without
-            warranty as described in the Simplified BSD License.
+            warranty as described in the Revised BSD License.
             </t>""",
         ],
         "alt": [
