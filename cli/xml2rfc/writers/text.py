@@ -432,7 +432,7 @@ class TextWriter(BaseV3Writer):
                         for r in range(block.beg, break_target):
                             if lines[r].elem!=None and lines[r].elem.tag != 'section':
                                 tcount += 1
-                        if wlen == 1 or tcount <= self.options.min_section_start_lines:
+                        if tcount <= self.options.min_section_start_lines:
                             adj = break_lineno - block.beg
                             pad += adj
                             break_lineno -= adj
