@@ -122,9 +122,12 @@ if [ "$(uname)" == "Linux" ]; then
     die "Didn't expect to run this script on Linux -- are you inside docker?"
 fi
 
-
+# copy requirements.txt
+cp $parent/requirements.txt $DIR/requirements.txt
 docker rmi -f ${REPO}:${FLAVOUR:-$TAG} || true
 docker build $FLAGS -t ${REPO}:${FLAVOUR:-$TAG} -f $FILE $DIR
+# remove copied requirements.txt
+rm $DIR/requirements.txt
 docker tag $(docker images -q | head -n 1) ${REPO}:${FLAVOUR:-latest}
 [ "$FLAVOUR" ] || docker push ${REPO}:latest
 docker push ${REPO}:${FLAVOUR:-$TAG}
