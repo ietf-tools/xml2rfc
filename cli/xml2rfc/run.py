@@ -247,6 +247,8 @@ def main():
                             help="don't print anything while working")
     plain_options.add_argument('--skip-config-files', action="store_true", default=False,
                             help='ignore config file settings')
+    plain_options.add_argument('--allow-local-file-access', action="store_true", default=False,
+                            help='Allow local file system references')
     plain_options.add_argument('-r', '--remove-pis', action='store_true', default=False,
                             help='Remove XML processing instructions')
     plain_options.add_argument('-u', '--utf8', action='store_true',

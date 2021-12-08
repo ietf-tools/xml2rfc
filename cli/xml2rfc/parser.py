@@ -138,9 +138,17 @@ class CachingResolver(lxml.etree.Resolver):
             if self.rfc_number:
                 return self.resolve_string(self.rfc_number, context)
             return self.resolve_string("XXXX", context)
-        if not urlparse(request).netloc:
-            if request.startswith("file:///"):
+        url = urlparse(request)
+        if not url.netloc or url.scheme == 'file':
+            if request.startswith("file://"):
                 request = request[7:]
+            if not self.options.allow_local_file_access:
+                path = self.getReferenceRequest(request)
+                abspath = os.path.abspath(path)
+                if not abspath.startswith(self.options.template_dir):
+                    error = 'Can not access local file: {}'.format(request)
+                    xml2rfc.log.error(error)
+                    raise XmlRfcError(error)
         try:
             path = self.getReferenceRequest(request)
             return self.resolve_filename(path, context)

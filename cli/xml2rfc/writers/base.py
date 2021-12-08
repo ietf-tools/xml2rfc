@@ -16,6 +16,7 @@ import xml2rfc.utils
 
 from lxml import etree
 from argparse import Namespace
+from urllib.parse import urlparse
 
 try:
     from xml2rfc import debug
@@ -40,6 +41,7 @@ default_options = Namespace()
 default_options.__dict__ = {
         'accept_prepped': None,
         'add_xinclude': None,
+        'allow_local_file_access': False,
         'basename': None,
         'bom': False,
         'cache': None,
@@ -1839,9 +1841,21 @@ class BaseV3Writer(object):
         #    xml:base attribute).  The tool may be configurable with a limit on
         #    the depth of recursion.
         try:
+            if not self.options.allow_local_file_access:
+                self.check_includes()
             self.tree.xinclude()
         except etree.XIncludeError as e:
             self.die(None, "XInclude processing failed: %s" % e)
+
+    def check_includes(self):
+        # Check for <xi:include> elements with local filesystem references
+        ns = {'xi':   b'http://www.w3.org/2001/XInclude'}
+        xincludes = self.root.xpath('//xi:include', namespaces=ns)
+        for xinclude in xincludes:
+            href = urlparse(xinclude.get('href'))
+            if not href.netloc or href.scheme == 'file':
+                error = 'XInclude processing failed: Can not access local file: {}'.format(xinclude.get('href'))
+                self.die(None, error)
 
     def remove_dtd(self):
         # 

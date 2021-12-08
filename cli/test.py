@@ -11,6 +11,7 @@ import xml2rfc
 import xml2rfc.utils
 
 from xml2rfc.walkpdf import xmldoc
+from xml2rfc.writers.base import default_options
 
 try:
     from xml2rfc import debug
@@ -28,6 +29,7 @@ def _load_environment():
         options_for_xmlrfcparser['cache_path'] = cache_path
 
 
+default_options.allow_local_file_access = True
 _load_environment()
 
 
@@ -279,7 +281,7 @@ class WriterRootTest(unittest.TestCase):
 
     def parse(self, path):
         """ Parse a minimal RFC tree and instantiate a writer """
-        self.parser = xml2rfc.XmlRfcParser(path, quiet=True, **options_for_xmlrfcparser)
+        self.parser = xml2rfc.XmlRfcParser(path, quiet=True, options=default_options, **options_for_xmlrfcparser)
         self.xmlrfc = self.parser.parse()
         self.writer = xml2rfc.PaginatedTextRfcWriter(self.xmlrfc, quiet=True)
         self.writer._format_date()
