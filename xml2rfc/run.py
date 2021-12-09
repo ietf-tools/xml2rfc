@@ -402,6 +402,8 @@ def main():
         sys.exit()
 
     # --- Parse and validate arguments ---------------------------------
+    # tempates_dir
+    options.template_dir = options.template_dir or default_options.template_dir
 
     if (options.docfile or options.manpage) and not options.list_symbols:
         options.list_symbols = default_options.list_symbols
@@ -527,7 +529,6 @@ def main():
     xml2rfc.log.verbose = options.verbose
 
     # Parse the document into an xmlrfc tree instance
-    options.template_dir = options.template_dir or default_options.template_dir
     parser = xml2rfc.XmlRfcParser(source,
                                   options=options,
                                   templates_path=options.template_dir,
