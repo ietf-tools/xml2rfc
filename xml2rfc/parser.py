@@ -138,14 +138,18 @@ class CachingResolver(lxml.etree.Resolver):
             if self.rfc_number:
                 return self.resolve_string(self.rfc_number, context)
             return self.resolve_string("XXXX", context)
+        # Warn if .ent file is referred.
+        if request.endswith('.ent'):
+            xml2rfc.log.warn('{} is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.'.format(request))
         url = urlparse(request)
         if not url.netloc or url.scheme == 'file':
             if request.startswith("file://"):
                 request = request[7:]
             if not self.options.allow_local_file_access:
                 path = self.getReferenceRequest(request)
-                abspath = os.path.abspath(path)
-                if not abspath.startswith(self.options.template_dir):
+                abspath = os.path.dirname(os.path.abspath(path))
+                if not (abspath == self.options.template_dir or
+                        abspath == self.source_dir):
                     error = 'Can not access local file: {}'.format(request)
                     xml2rfc.log.error(error)
                     raise XmlRfcError(error)
