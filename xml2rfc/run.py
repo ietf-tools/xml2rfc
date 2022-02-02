@@ -33,12 +33,6 @@ def get_missing_pdf_libs():
     missing = ""
     if not xml2rfc.HAVE_WEASYPRINT:
         missing += "\nCould not import weasyprint"
-    if not xml2rfc.HAVE_PYCAIRO:
-        missing += "\nCould not import pycairo"
-    if not xml2rfc.HAVE_CAIRO:
-        missing += "\nCould not find the cairo lib"
-    if not xml2rfc.HAVE_PANGO:
-        missing += "\nCould not find the pango lib"
     return missing
 
 
@@ -212,7 +206,7 @@ def main():
                            help='outputs formatted HTML to file')
     formatgroup.add_argument('--nroff', action='store_true',
                            help='outputs formatted nroff to file (only v2 input)')
-    if xml2rfc.HAVE_CAIRO and xml2rfc.HAVE_PANGO:
+    if xml2rfc.HAVE_WEASYPRINT:
         formatgroup.add_argument('--pdf', action='store_true',
                                help='outputs formatted PDF to file')
     else:

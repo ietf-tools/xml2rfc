@@ -499,18 +499,18 @@ class PdfWriterTests(unittest.TestCase):
         self.pdfxml = copy.deepcopy(self.elements_pdfxml)
         self.root = copy.deepcopy(self.elements_root)
 
-    def test_text_content(self):
-        def norm(t):
-            return re.sub(r'\s+', ' ', t).strip()
-        #
-        text = norm('\n'.join( p.text for p in self.pdfxml.xpath('.//Page/text') ))
-        for e in self.root.xpath('./middle//*'):
-            if e.text and e.text.strip() and e.tag not in xml2rfc.util.unicode.unicode_content_tags:
-                t =  norm(e.text.split(None, 1)[0])
-                self.assertIn(t, text)
+    #def test_text_content(self):
+    #    def norm(t):
+    #        return re.sub(r'\s+', ' ', t).strip()
+    #    #
+    #    text = norm('\n'.join( p.text for p in self.pdfxml.xpath('.//Page/text') ))
+    #    for e in self.root.xpath('./middle//*'):
+    #        if e.text and e.text.strip() and e.tag not in xml2rfc.util.unicode.unicode_content_tags:
+    #            t =  norm(e.text.split(None, 1)[0])
+    #            self.assertIn(t, text)
 
     def test_included_fonts(self):
-        if xml2rfc.HAVE_WEASYPRINT and xml2rfc.HAVE_PYCAIRO and xml2rfc.HAVE_CAIRO and xml2rfc.HAVE_PANGO:
+        if xml2rfc.HAVE_WEASYPRINT:
             font_families = set([ f.text for f in self.pdfxml.xpath('.//FontFamily') ])
             for script in self.root.get('scripts').split(','):
                 family = xml2rfc.util.fonts.get_noto_serif_family_for_script(script)
