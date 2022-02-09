@@ -14,6 +14,8 @@
 
 - [Changelog](https://github.com/ietf-tools/xml2rfc/blob/main/CHANGELOG.md)
 - [Contributing](https://github.com/ietf-tools/.github/blob/main/CONTRIBUTING.md)
+- [Installation](#installation)
+- [Usage](#usage)
 
 ---
 
