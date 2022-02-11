@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# --------------------------------------------------
-# Copyright The IETF Trust 2011, All Rights Reserved
-# --------------------------------------------------
+# -------------------------------------------------------
+# Copyright The IETF Trust 2011-2022, All Rights Reserved
+# -------------------------------------------------------
 
 import os
-import re
 from codecs import open
 from setuptools import setup
 import sys
@@ -21,67 +20,17 @@ description = "Xml2rfc generates RFCs and IETF drafts from document source in XM
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with open(os.path.join(here, 'README'), encoding='utf-8') as file:
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as file:
     long_description = file.read()
 
 # Get the requirements from the local requirements.txt file
 with open(os.path.join(here, 'requirements.txt'), encoding='utf-8') as file:
     requirements = file.read().splitlines()
 
-# Check python versions
-major, minor = sys.version_info[:2] 
-if not (major == 3 and minor >= 5):
-    print("") 
-    print("The xml2rfc installation requires python 3.5+") 
-    print("Can't proceed, quitting.") 
-    exit() 
-
-def parse(changelog):
-    ver_line = "^([a-z0-9+-]+) \(([^)]+)\)(.*?) *$"
-    sig_line = "^ -- ([^<]+) <([^>]+)>  (.*?) *$"
-
-    entries = []
-    if type(changelog) == type(''):
-        changelog = open(changelog, encoding='utf-8')
-    for line in changelog:
-        if re.match(ver_line, line):
-            package, version, rest = re.match(ver_line, line).groups()
-            entry = {}
-            entry["package"] = package
-            entry["version"] = version
-            entry["logentry"] = ""
-        elif re.match(sig_line, line):
-            author, email, date = re.match(sig_line, line).groups()
-            entry["author"] = author
-            entry["email"] = email
-            entry["datetime"] = date
-            entry["date"] = " ".join(date.split()[:3])
-
-            entries += [ entry ]
-        else:
-            entry["logentry"] += line
-    changelog.close()
-    return entries
-
-changelog_entry_template = """
-Version %(version)s (%(date)s)
-------------------------------------------------
-
-%(logentry)s
-
-"""
-
-long_description += """
-Changelog
-=========
-
-""" + "\n".join([ changelog_entry_template % entry for entry in parse("changelog")[:3] ])
-
 
 setup(
     # Package metadata
     name='xml2rfc',
-    version='3.12.1',
     author='Henrik Levkowetz',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
@@ -89,6 +38,7 @@ setup(
     url='https://tools.ietf.org/tools/xml2rfc/trac/',
     description=description,
     long_description=long_description,
+    long_description_content_type="text/markdown",
     download_url = "https://pypi.python.org/pypi/xml2rfc",
     classifiers= [
         'Development Status :: 5 - Production/Stable',
@@ -100,6 +50,14 @@ setup(
         'Topic :: Text Processing',
         'Topic :: Text Processing :: Markup :: XML',
         'License :: OSI Approved :: BSD License',
+
+        # Specify the Python versions you support here. In particular, ensure
+        # that you indicate whether you support Python 2, Python 3 or both.
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     license="BSD-3-Clause",
 

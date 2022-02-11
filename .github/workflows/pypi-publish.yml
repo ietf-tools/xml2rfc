@@ -1,0 +1,102 @@
+name: Publish Python Package
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: Set Build Variables
+      run: |
+        if [[ "$GITHUB_REF" =~ ^refs/tags/v* ]]; then
+          echo "Using TAG mode: $GITHUB_REF_NAME"
+          echo "PKG_VERSION=$GITHUB_REF_NAME" >> $GITHUB_ENV
+          echo "PKG_VERSION_STRICT=${GITHUB_REF_NAME#?}" >> $GITHUB_ENV
+        else
+          echo "Using BRANCH mode: v3.0.0-dev.$GITHUB_RUN_NUMBER"
+          echo "PKG_VERSION=v3.0.0-dev.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+          echo "PKG_VERSION_STRICT=3.0.0-dev.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+        fi
+    
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        
+    - name: Install Python dependencies
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip setuptools wheel twine
+        pip install build
+        sudo apt update
+        sudo apt install -y twine
+        
+    - name: Build Python package
+      run: |
+        echo "Using version $PKG_VERSION_STRICT"
+        sed -i -r -e "s/^__version__ += '.*'$/__version__ = '$PKG_VERSION_STRICT'/" xml2rfc/__init__.py
+        python ./setup.py setopt --command=metadata --option=version --set-value=$PKG_VERSION_STRICT
+        python ./setup.py sdist --dist-dir dist
+        
+    - name: Publish to Test PyPI
+      if: startsWith(github.ref, 'refs/tags/v') != true
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_TOKEN }}
+        TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
+      run: |
+        echo "Using repository $TWINE_REPOSITORY_URL"
+        twine check dist/*
+        twine upload --verbose dist/*
+        
+    - name: Update CHANGELOG
+      id: changelog
+      uses: Requarks/changelog-action@v1
+      if: startsWith(github.ref, 'refs/tags/v')
+      with:
+        token: ${{ github.token }}
+        tag: ${{ github.ref_name }}
+
+    - name: Commit CHANGELOG.md
+      uses: stefanzweifel/git-auto-commit-action@v4
+      if: startsWith(github.ref, 'refs/tags/v')
+      with:
+        branch: main
+        commit_message: 'docs: update CHANGELOG.md + __init__.py for ${{ github.ref_name }} [skip ci]'
+        file_pattern: CHANGELOG.md xml2rfc/__init__.py
+        
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      if: startsWith(github.ref, 'refs/tags/v')
+      with:
+        allowUpdates: true
+        draft: false
+        name: ${{ github.ref_name }}
+        body: ${{ steps.changelog.outputs.changes }}
+        artifacts: "dist/**"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v2.3.1
+      with:
+        name: artifacts
+        path: |
+          CHANGELOG.md
+          setup.cfg
+          xml2rfc/__init__.py
