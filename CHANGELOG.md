@@ -209,13 +209,13 @@ From the commit log:
 - Did some minor code cleanup and dead code removal, and corrected the  header generation for non-IETF documents (using `<rfc ipr=''>`).
 - Fixed an issue where XML parser errors could be reported for '`<string>`'  instead of the actual input file name.
 - Added new options --docfile/--doc and --manpage/--man, used to trigger generation and display of the built-in documentation.  Reorganised the option grouping.  Updated some option help strings.  Made it possible to propagate all command-line option information to the documentation template.
-- Corrected the default templates path.  This is related to [fae96d4](https://github.com/ietf-tools/rfc2html/commit/fae96d430f00d23e407ce88bf1790a90081a01cf).
-- Reverted a change from [c51345a](https://github.com/ietf-tools/rfc2html/commit/c51345ae3a908a7e6bed382f213412ca311b6ac0) in the v2v3 converter.
+- Corrected the default templates path.  This is related to [fae96d4](https://github.com/ietf-tools/xml2rfc/commit/fae96d430f00d23e407ce88bf1790a90081a01cf).
+- Reverted a change from [c51345a](https://github.com/ietf-tools/xml2rfc/commit/c51345ae3a908a7e6bed382f213412ca311b6ac0) in the v2v3 converter.
 - Added a custom Jinja2 filter 'capfirst()', for use in the documentation  template.
 - Tweaked the documentation template: Some changed wording, support for  sub-items not wrapped in `<t>`, corrected capitalisation using the 'capfirst'  filter.
 - Updated hastext() and iscomment() to do the right thing if given  content with embedded xml processing instructions.
 - Tweaked the handling of default values for --date, so as to give better  documentation of the option, and also tweaked the help text for  --table-borders.
-- Added a class utility method to get any current PI related to a given  setting, and fixed another case of template path default value, related to  [c51345a](https://github.com/ietf-tools/rfc2html/commit/c51345ae3a908a7e6bed382f213412ca311b6ac0).
+- Added a class utility method to get any current PI related to a given  setting, and fixed another case of template path default value, related to  [c51345a](https://github.com/ietf-tools/xml2rfc/commit/c51345ae3a908a7e6bed382f213412ca311b6ac0).
 - Added PI support for text table borders setting, and improved the text  table output for transitions between `<th>` and `<td>` rows for 'light' and  'minimal' borders.
 - Added makefile support for testing of the --manpage and --docfile  switches.  Added silencing of one unavoidable warning in the test of  --unprep.
 
@@ -329,7 +329,7 @@ From the commit log:
 - Added a new filter for pdf-gneration library warnings, to avoid it  appearing on every xml2rfc invocation.
 - Added a v2v3 converter for dates with non-numeric years.
 - Added an error for attempting to insert a missing XInclude namespace  prefix when 'xi' is already defined as something else.
-- Fixed a bug introduced with the refactoring in [c01225d](https://github.com/ietf-tools/rfc2html/commit/c01225d06afa7390217c743af2a271e649e2626e).
+- Fixed a bug introduced with the refactoring in [c01225d](https://github.com/ietf-tools/xml2rfc/commit/c01225d06afa7390217c743af2a271e649e2626e).
 
 ## [2.38.2] - 2020-01-27
 
@@ -338,7 +338,7 @@ From the commit log:
 - Added a new filter for pdf-gneration library warnings, to avoid it  appearing on every xml2rfc invocation.
 - Added a v2v3 converter for dates with non-numeric years.
 - Added an error for attempting to insert a missing XInclude namespace  prefix when 'xi' is already defined as something else.
-- Fixed a bug introduced with the refactoring in [c01225d](https://github.com/ietf-tools/rfc2html/commit/c01225d06afa7390217c743af2a271e649e2626e).
+- Fixed a bug introduced with the refactoring in [c01225d](https://github.com/ietf-tools/xml2rfc/commit/c01225d06afa7390217c743af2a271e649e2626e).
 
 ## [2.38.1] - 2020-01-20
 
@@ -599,7 +599,7 @@ This rounds up the remaining known issues raised by the RFC Editor staff. Commit
 - Tweaked the conditions for a preptool warning about missing docName to only apply in non-rfc mode, and added generation of any missing `<link rel='prev'>` element from docName if present.
 - Widened the search for seriesInfo elements when handling the  `--rfc-reference-base-url` option, in order to handle all possible  placements, and fixed a bug in the creation of target URL when using this option.
 - Added a warning for `<vspace>` elements without proper v3 alternatives  during v2v3 conversion.
-- Fixed a bug introduced in [295fd79](https://github.com/ietf-tools/rfc2html/commit/295fd7930474de10d24d42a6a68a264d4409a44f) when stabilizing attribute order, which could cause errors when running v2v3 conversion with XInclude insertion.
+- Fixed a bug introduced in [295fd79](https://github.com/ietf-tools/xml2rfc/commit/295fd7930474de10d24d42a6a68a264d4409a44f) when stabilizing attribute order, which could cause errors when running v2v3 conversion with XInclude insertion.
 - Changed the code for --info dump to work for both py27 and py3x.
 - The --legacy-list-symbols option was checked for validity before the  version attribute of the input file was seen.  Moved this check (and some  similar cases) later, in order to permit it to be used with v3 input  without giving the --v3 option.  Fixes issue [#414](https://github.com/ietf-tools/xml2rfc/issues/414).
 
@@ -899,7 +899,7 @@ This release fixes some issues found when running the html renderer over a corpu
 - Added BaseV3Writer methods: downcode() and downcode_punctuation(),  get_text_tags() and get_inline_tags() (works this out from the schema), and  added a list of deprecated elements.
 - Fixed a typo in an error message.  Added asciification of smart quotes  and other punctuation for the v3 renderers  to match that done for v2.   Some class refactoring.
 - Changed the workaround for non-ascii metadata in setup.py to only be  active under py2.  Fixes a problem with setup.py under python 3.x
-- Reverted [00f9a47](https://github.com/ietf-tools/rfc2html/commit/00f9a47d93b380f2c402536c039bc3ff4cf671f9), which permitted non-ascii characters inside artwork for the v2 renderers, but broke when trying to write to file without utf-8 encoding.  Fixes issue [#387](https://github.com/ietf-tools/xml2rfc/issues/387).
+- Reverted [00f9a47](https://github.com/ietf-tools/xml2rfc/commit/00f9a47d93b380f2c402536c039bc3ff4cf671f9), which permitted non-ascii characters inside artwork for the v2 renderers, but broke when trying to write to file without utf-8 encoding.  Fixes issue [#387](https://github.com/ietf-tools/xml2rfc/issues/387).
 
 ## [2.15.0] - 2018-11-30
 
@@ -1511,7 +1511,7 @@ This release fixes all major and critical issues registered in the issue tracker
 - Fixed two other cases of missing blank lines when PI 'compact' is 'no'. Fixes issue #82 (some more).
 - Disabled the iprnotified IP.  See issue [#123](https://github.com/ietf-tools/xml2rfc/issues/123); closes [#123](https://github.com/ietf-tools/xml2rfc/issues/123).
 - When protecting http: URLs from line-breaking in nroff output, place the \% outside enclosing parentheses, if any.  Fixes issue [#120](https://github.com/ietf-tools/xml2rfc/issues/120).
-- Added a warning for incomplete and out-of-date `<date/>` elements.  Fixed an issue with changeset [792](https://github.com/ietf-tools/rfc2html/commit/792/).
+- Added a warning for incomplete and out-of-date `<date/>` elements.  Fixed an issue with changeset [792](https://github.com/ietf-tools/xml2rfc/commit/792/).
 - Issue a warning when the source file isn't for an RFC, but doesn't have a docName attribute in the `<rfc/>` element.
 - Fixed the use of separating lines in table drawing, to match v1 for text and nroff output.  (There is no specification for the meaining of the different styles though...).  Fixes issue [#113](https://github.com/ietf-tools/xml2rfc/issues/113).  Note that additional style definitions are needed to get the correct results for the html output.
 - Refactored and re-wrote the paginated text writer and the nroff writer in order to generate a ToC in nroff by re-using the fairly complex post-rendering code which inserts the ToC (and iref entries) in the paginated text writer.  As a side effect, the page-breaking calculations for the nroff writer becomes the same as for the paginated writer. Re-factored the line and page-break emitting code to be cleaner and more readable.  Changed the code to not start inserting a ToC too close to the end of a page (currently hardcoded to require at least 10 lines), otherwise skip to a new page.  Fixes issue [#109](https://github.com/ietf-tools/xml2rfc/issues/109).
@@ -1569,8 +1569,8 @@ An extract from the commit log is available below:
 This release fixes all outstanding major bugs, details below. The issue tracker is at https://tools.ietf.org/tools/xml2rfc/trac/.
 
 - Updated the nroff writer to do backslash escaping on source text, to  avoid escaping nroff control characters.  Fixes issue [#77](https://github.com/ietf-tools/xml2rfc/issues/77).
-- Added a modified xref writer to the nroff output writer, in order to  handle xref targets which should not be broken across lines.  This,  together with changeset [b6f3b0d](https://github.com/ietf-tools/rfc2html/commit/b6f3b0d556dfe72e1c3638bd7cf812843388b38f), fixes issue [#80](https://github.com/ietf-tools/xml2rfc/issues/80).
-- Added text to the section test case to trigger the second part of issue  [#79](https://github.com/ietf-tools/xml2rfc/issues/79).  It turns out that the changes in [b6f3b0d](https://github.com/ietf-tools/rfc2html/commit/b6f3b0d556dfe72e1c3638bd7cf812843388b38f) fixed this, too; this closes  issue [#79](https://github.com/ietf-tools/xml2rfc/issues/79).
+- Added a modified xref writer to the nroff output writer, in order to  handle xref targets which should not be broken across lines.  This,  together with changeset [b6f3b0d](https://github.com/ietf-tools/xml2rfc/commit/b6f3b0d556dfe72e1c3638bd7cf812843388b38f), fixes issue [#80](https://github.com/ietf-tools/xml2rfc/issues/80).
+- Added text to the section test case to trigger the second part of issue  [#79](https://github.com/ietf-tools/xml2rfc/issues/79).  It turns out that the changes in [b6f3b0d](https://github.com/ietf-tools/xml2rfc/commit/b6f3b0d556dfe72e1c3638bd7cf812843388b38f) fixed this, too; this closes  issue [#79](https://github.com/ietf-tools/xml2rfc/issues/79).
 - Tweaked the nroff generation to not break on hyphens, in order to avoid  hyphenated words ending up with embedded spaces: 'pre-processing' becoming  'pre- processing' if 'pre-' occurred at the end of an nroff text line.   Also tweaked the line-width used in line-breaking to have matching  line-breaks between .txt and .nroff output (with exception for lines ending  in hyphens).
 - Tweaked roman number list counter to output roman numbers in a field 5  spaces wide, instead of having varied widths.  This is different from  version 1, so may have to be reverted, depending on how people react.
 - Added a warning for too long lines in figures and tables.  No  outdenting for now; I'd like to consult some about that. Fixes issue [#76](https://github.com/ietf-tools/xml2rfc/issues/76).
