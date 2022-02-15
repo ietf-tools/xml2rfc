@@ -78,7 +78,7 @@ longopts=download-data,help,port=,docker-repo=,tag=,verbose,version,user=,
 # Default values
 FILEDIR=$parent/../data/
 REPO="levkowetz/xml2rfc"
-TAG=$(basename $(svn info $parent | grep ^URL | awk '{print $2}'))
+TAG=$(grep "##" CHANGELOG.md | head -n1 | grep -oh "\[.*\]" | sed  's/[]\[]//g')
 DBURL=https://www.ietf.org/lib/dt/sprint/ietf_utf8.bin.tar.bz2
 WHO=$(whoami)
 WHOUID=$(id -u $WHO)
