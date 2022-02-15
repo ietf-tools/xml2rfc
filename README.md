@@ -16,6 +16,7 @@
 - [Contributing](https://github.com/ietf-tools/.github/blob/main/CONTRIBUTING.md)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Release Procedure](https://github.com/ietf-tools/.github/blob/main/CONTRIBUTING.md#release-procedure)
 
 ---
 
