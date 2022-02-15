@@ -81,7 +81,7 @@ shortopts=f:F:ht:vV
 longopts=file=,flags=,help,tag=,verbose,version
 
 # Default values
-BRANCH=$(head -n1 $parent/changelog | sed -r 's#^.*\((.*)\).*$#\1#g')
+BRANCH=$(grep "##" CHANGELOG.md | head -n1 | grep -oh "\[.*\]" | sed  's/[]\[]//g')
 TAG=${BRANCH##*/}
 DIR="$parent/docker"
 FLAVOUR=""
