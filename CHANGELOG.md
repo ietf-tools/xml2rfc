@@ -7,89 +7,89 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.12.1] - 2022-02-01
 
-- Improve local file lookup: Add source directory to the allowed list, Disallow any files that are on child directories of the source directory, Add a warning when including `.ent` files. Fixes [#703](https://github.com/ietf-tools/xml2rfc/issues/703).
-- Update bibxml subdirectories list. Fixes [#701](https://github.com/ietf-tools/xml2rfc/issues/701).
-- Fixes manpage generation issue. Fixes [#694](https://github.com/ietf-tools/xml2rfc/issues/694).
+- Improve local file lookup: Add source directory to the allowed list, Disallow any files that are on child directories of the source directory, Add a warning when including `.ent` files. Fixes [#703](https://github.com/ietf-tools/xml2rfc/issues/703). (by [@kesara](https://github.com/kesara))
+- Update bibxml subdirectories list. Fixes [#701](https://github.com/ietf-tools/xml2rfc/issues/701). (by [@kesara](https://github.com/kesara))
+- Fixes manpage generation issue. Fixes [#694](https://github.com/ietf-tools/xml2rfc/issues/694). (by [@kesara](https://github.com/kesara))
 
 ## [3.12.0] - 2021-12-08
 
-- Security release - disallow includes from local filesystem by default. Adds a `--allow-local-file-access` flag (and associated library configuration option) to allow it.
+- Security release - disallow includes from local filesystem by default. Adds a `--allow-local-file-access` flag (and associated library configuration option) to allow it. (by [@rjsparks](https://github.com/rjsparks))
 
 ## [3.11.1] - 2021-10-29
 
-- Cosmetic release to address changelog formatting
+- Cosmetic release to address changelog formatting (by [@rjsparks](https://github.com/rjsparks))
 
 ## [3.11.0] - 2021-10-29
 
-- Fixes a case where an infinite loop could occur in text rendering.  Fixes [#684](https://github.com/ietf-tools/xml2rfc/issues/684).
-- Updates TPL 5 boilerplate text from Simplified to Revised. Fixes [#676](https://github.com/ietf-tools/xml2rfc/issues/676).
-- Reverts back Apple M1 specific changes from docker/run.
+- Fixes a case where an infinite loop could occur in text rendering.  Fixes [#684](https://github.com/ietf-tools/xml2rfc/issues/684). (by [@kesara](https://github.com/kesara))
+- Updates TPL 5 boilerplate text from Simplified to Revised. Fixes [#676](https://github.com/ietf-tools/xml2rfc/issues/676). (by [@kesara](https://github.com/kesara))
+- Reverts back Apple M1 specific changes from docker/run. (by [@kesara](https://github.com/kesara))
 
 ## [3.10.0] - 2021-09-21
 
-- Fixes Python compatibility issues in `bin/uglifycall`. 
-- Updates docker/run command to support Apple M1. Fixes  [#675](https://github.com/ietf-tools/xml2rfc/issues/675).
-- Adds missing line joiner settings for `<ol>` and `<ul>`. Fixes [#673](https://github.com/ietf-tools/xml2rfc/issues/673).
-- Fix Makefile rule precedence and repair canonical.xml test to  work with yestest. Fixes [#671](https://github.com/ietf-tools/xml2rfc/issues/671).
-- Changes RFC regression test to be a seperate test.
-- Adds RFC regression tests. Fixes [#667](https://github.com/ietf-tools/xml2rfc/issues/667).
-- Fix for bad PDF breaks.
-- pin weasyprint<53 for tox tests
-- Sort class values in HTML output. Fixes [#553](https://github.com/ietf-tools/xml2rfc/issues/553).
-- Keep pns from incoming xml when present; handle case that an author  does not have an after-next element. Fixes [#664](https://github.com/ietf-tools/xml2rfc/issues/664).
-- Remove quotes from the text rendering of `<tt>`. Fixes [#600](https://github.com/ietf-tools/xml2rfc/issues/600) and [#647](https://github.com/ietf-tools/xml2rfc/issues/647).
-- Fix info block runoff issue in PDFs. Fixes [#606](https://github.com/ietf-tools/xml2rfc/issues/606).
-- Remove unicode entity replacement step from v2v3 conversion. Fixes [#641](https://github.com/ietf-tools/xml2rfc/issues/641).
-- Cache XML XInclude files with referencegroup. Fixes [#653](https://github.com/ietf-tools/xml2rfc/issues/653).
+- Fixes Python compatibility issues in `bin/uglifycall`.  (by [@kesara](https://github.com/kesara))
+- Updates docker/run command to support Apple M1. Fixes  [#675](https://github.com/ietf-tools/xml2rfc/issues/675). (by [@kesara](https://github.com/kesara))
+- Adds missing line joiner settings for `<ol>` and `<ul>`. Fixes [#673](https://github.com/ietf-tools/xml2rfc/issues/673). (by [@kesara](https://github.com/kesara))
+- Fix Makefile rule precedence and repair canonical.xml test to  work with yestest. Fixes [#671](https://github.com/ietf-tools/xml2rfc/issues/671). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Changes RFC regression test to be a seperate test. (by [@kesara](https://github.com/kesara)) (by [@kesara](https://github.com/kesara))
+- Adds RFC regression tests. Fixes [#667](https://github.com/ietf-tools/xml2rfc/issues/667). (by [@kesara](https://github.com/kesara))
+- Fix for bad PDF breaks. (by [@kesara](https://github.com/kesara))
+- pin weasyprint<53 for tox tests (by [@rjsparks](https://github.com/rjsparks))
+- Sort class values in HTML output. Fixes [#553](https://github.com/ietf-tools/xml2rfc/issues/553). (by [@kesara](https://github.com/kesara))
+- Keep pns from incoming xml when present; handle case that an author  does not have an after-next element. Fixes [#664](https://github.com/ietf-tools/xml2rfc/issues/664). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Remove quotes from the text rendering of `<tt>`. Fixes [#600](https://github.com/ietf-tools/xml2rfc/issues/600) and [#647](https://github.com/ietf-tools/xml2rfc/issues/647). (by [@kesara](https://github.com/kesara))
+- Fix info block runoff issue in PDFs. Fixes [#606](https://github.com/ietf-tools/xml2rfc/issues/606). (by [@kesara](https://github.com/kesara))
+- Remove unicode entity replacement step from v2v3 conversion. Fixes [#641](https://github.com/ietf-tools/xml2rfc/issues/641). (by [@kesara](https://github.com/kesara))
+- Cache XML XInclude files with referencegroup. Fixes [#653](https://github.com/ietf-tools/xml2rfc/issues/653). (by [@kesara](https://github.com/kesara))
 
 ## [3.9.1] - 2021-06-25
 
-- This is a cosmetic release, only to correct issues with the changelog formatting in 3.9.0
+- This is a cosmetic release, only to correct issues with the changelog formatting in 3.9.0 (by [@rjsparks](https://github.com/rjsparks))
 
 ## [3.9.0] - 2021-06-25
 
-- Stop stripping CDATA with v2v3 option. Fixes [#601](https://github.com/ietf-tools/xml2rfc/issues/601).
-- Implement bare attribute rendering in HTML and PDF. Fixes [#609](https://github.com/ietf-tools/xml2rfc/issues/609).
-- Add `https://datatracker.ietf.org/doc/html/` as default `id-base-url` and `id-reference-base-url`. Fixes [#618](https://github.com/ietf-tools/xml2rfc/issues/618).
-- Use 'appendix-A.1' format for section ids in HTML output. Use '`section-appendix-...`' as XML id both for all appendixes, not just top level. Fixes [#581](https://github.com/ietf-tools/xml2rfc/issues/581).
-- Define entities in v2v3 output instead of referencing an external DTD. Fixes [#548](https://github.com/ietf-tools/xml2rfc/issues/548).
-- Properly reflect the updates to headers and boilerplate reflecting  erratum 5258. Fixes [#648](https://github.com/ietf-tools/xml2rfc/issues/648).
+- Stop stripping CDATA with v2v3 option. Fixes [#601](https://github.com/ietf-tools/xml2rfc/issues/601). (by [@kesara](https://github.com/kesara))
+- Implement bare attribute rendering in HTML and PDF. Fixes [#609](https://github.com/ietf-tools/xml2rfc/issues/609). (by [@kesara](https://github.com/kesara))
+- Add `https://datatracker.ietf.org/doc/html/` as default `id-base-url` and `id-reference-base-url`. Fixes [#618](https://github.com/ietf-tools/xml2rfc/issues/618). (by [@kesara](https://github.com/kesara))
+- Use 'appendix-A.1' format for section ids in HTML output. Use '`section-appendix-...`' as XML id both for all appendixes, not just top level. Fixes [#581](https://github.com/ietf-tools/xml2rfc/issues/581). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Define entities in v2v3 output instead of referencing an external DTD. Fixes [#548](https://github.com/ietf-tools/xml2rfc/issues/548). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Properly reflect the updates to headers and boilerplate reflecting  erratum 5258. Fixes [#648](https://github.com/ietf-tools/xml2rfc/issues/648). (by [@rjsparks](https://github.com/rjsparks))
 
 ## [3.8.0] - 2021-05-20
 
-- Fix indentation error that prevented normalizing ascii-art whitespace. Fixes [#403](https://github.com/ietf-tools/xml2rfc/issues/403).
-- Insert removeInRFC notice as first child even when `<name>` tag is absent. Fixes [#622](https://github.com/ietf-tools/xml2rfc/issues/622).
-- Handle `<iref>` as child of most of its allowed parent elements. An `<aside>` parent is still not handled properly. Fixes [#620](https://github.com/ietf-tools/xml2rfc/issues/620).
-- Refer to un-numbered sections by name rather than number. Fixes [#572](https://github.com/ietf-tools/xml2rfc/issues/572).
-- Create tests-no-network and clear-cache Makefile targets to support network-free testing. Updates to tests/cache and tests/valid so tests pass with and without network. Fixes [#561](https://github.com/ietf-tools/xml2rfc/issues/561).
+- Fix indentation error that prevented normalizing ascii-art whitespace. Fixes [#403](https://github.com/ietf-tools/xml2rfc/issues/403). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Insert removeInRFC notice as first child even when `<name>` tag is absent. Fixes [#622](https://github.com/ietf-tools/xml2rfc/issues/622). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Handle `<iref>` as child of most of its allowed parent elements. An `<aside>` parent is still not handled properly. Fixes [#620](https://github.com/ietf-tools/xml2rfc/issues/620). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Refer to un-numbered sections by name rather than number. Fixes [#572](https://github.com/ietf-tools/xml2rfc/issues/572). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Create tests-no-network and clear-cache Makefile targets to support network-free testing. Updates to tests/cache and tests/valid so tests pass with and without network. Fixes [#561](https://github.com/ietf-tools/xml2rfc/issues/561). (by [@jennifer-richards](https://github.com/jennifer-richards))
 
 ## [3.7.0] - 2021-04-05
 
 - Updated manpage.txt and docfiles
-- Remove mention of Python2.7 from the README. Add pointer to self-generated documentation.
-- Restore xref format for cref target from r3890 (was accidentally reverted in r3910).  Fixes [#431](https://github.com/ietf-tools/xml2rfc/issues/431).
-- Handle iref items starting with special characters when constructing index. Fixes [#603](https://github.com/ietf-tools/xml2rfc/issues/603).
-- Include the index in the toc and retain index in prepped XML.  Fixes [#607](https://github.com/ietf-tools/xml2rfc/issues/607).
-- Correctly gather irefs by item/subitem. Improve index rendering. Use section numbers for xref text in index. Fixes [#418](https://github.com/ietf-tools/xml2rfc/issues/418). Fixes [#610](https://github.com/ietf-tools/xml2rfc/issues/610).  
-- Changed the Makefile's use of bash builtin read to only test for non-zero responses, instead of looking for responses higher than 128. Not all bash, and in particular not the bash available on osx, return error codes higher than 1 for the read builtin.
+- Remove mention of Python2.7 from the README. Add pointer to self-generated documentation. (by [@rjsparks](https://github.com/rjsparks))
+- Restore xref format for cref target from r3890 (was accidentally reverted in r3910).  Fixes [#431](https://github.com/ietf-tools/xml2rfc/issues/431). (by [@rjsparks](https://github.com/rjsparks))
+- Handle iref items starting with special characters when constructing index. Fixes [#603](https://github.com/ietf-tools/xml2rfc/issues/603). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Include the index in the toc and retain index in prepped XML.  Fixes [#607](https://github.com/ietf-tools/xml2rfc/issues/607). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Correctly gather irefs by item/subitem. Improve index rendering. Use section numbers for xref text in index. Fixes [#418](https://github.com/ietf-tools/xml2rfc/issues/418). Fixes [#610](https://github.com/ietf-tools/xml2rfc/issues/610). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Changed the Makefile's use of bash builtin read to only test for non-zero responses, instead of looking for responses higher than 128. Not all bash, and in particular not the bash available on osx, return error codes higher than 1 for the read builtin. (by [@rjsparks](https://github.com/rjsparks))
 
 ## [3.6.0] - 2021-03-17
 
 **Add pagination, bugfixes, drops Python 3.5**
 
-- Prevent crash when column count varies between table rows. Fixes [#512](https://github.com/ietf-tools/xml2rfc/issues/512).
-- Cite the abstract as 'Abstract' instead of 'Appendix Abstract'.  Fixes [#429](https://github.com/ietf-tools/xml2rfc/issues/429).
-- Modify selector to include rfc element in yes/no to true/false conversion. Fixes [#457](https://github.com/ietf-tools/xml2rfc/issues/457).
-- Move conjunctions out of author `<span>` elements in reference citations. Fixes [#575](https://github.com/ietf-tools/xml2rfc/issues/575).
-- Remove quotes from `<xref format='title'>` in text writer. Fixes [#563](https://github.com/ietf-tools/xml2rfc/issues/563).
-- Label xref to a cref with the anchor instead of 'Section X.Y'. Fixes [#431](https://github.com/ietf-tools/xml2rfc/issues/431).
-- Simplify text rendering of super/subscripts. Based on patch submitted by martin.thomson@gmail.com and refinement from subsequent list discussion. Fixes [#590](https://github.com/ietf-tools/xml2rfc/issues/590).
-- moved away test targets for untested versions of python
-- Remove pilcrows from tables of contents In addition to searching list item descendants for the existence of previously-added pilcrows, the code now  also searches the list item ancestors for any node that has the 'toc'  class to indicate that it is part of a table of contents.  If either are found, the pilcrow is not added.  Fixes [#568](https://github.com/ietf-tools/xml2rfc/issues/568).
-- Made a --paginate/--pagination switch available, to force pagination for text output.
-- Adjusted li > p margin to fit better with other list spacing, and to not let the `<p>` margin spill out from inside a `<li>`.  FIxes issue [#580](https://github.com/ietf-tools/xml2rfc/issues/580).
-- Drop python 35 from tests
-- Updated manpage.txt and docfiles
+- Prevent crash when column count varies between table rows. Fixes [#512](https://github.com/ietf-tools/xml2rfc/issues/512). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Cite the abstract as 'Abstract' instead of 'Appendix Abstract'.  Fixes [#429](https://github.com/ietf-tools/xml2rfc/issues/429). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Modify selector to include rfc element in yes/no to true/false conversion. Fixes [#457](https://github.com/ietf-tools/xml2rfc/issues/457). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Move conjunctions out of author `<span>` elements in reference citations. Fixes [#575](https://github.com/ietf-tools/xml2rfc/issues/575). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Remove quotes from `<xref format='title'>` in text writer. Fixes [#563](https://github.com/ietf-tools/xml2rfc/issues/563). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Label xref to a cref with the anchor instead of 'Section X.Y'. Fixes [#431](https://github.com/ietf-tools/xml2rfc/issues/431). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- Simplify text rendering of super/subscripts. Based on patch submitted by martin.thomson@gmail.com and refinement from subsequent list discussion. Fixes [#590](https://github.com/ietf-tools/xml2rfc/issues/590). (by [@jennifer-richards](https://github.com/jennifer-richards))
+- moved away test targets for untested versions of python (by [@rjsparks](https://github.com/rjsparks))
+- Remove pilcrows from tables of contents In addition to searching list item descendants for the existence of previously-added pilcrows, the code now  also searches the list item ancestors for any node that has the 'toc'  class to indicate that it is part of a table of contents.  If either are found, the pilcrow is not added.  Fixes [#568](https://github.com/ietf-tools/xml2rfc/issues/568). (by mark@painless-security.com)
+- Made a --paginate/--pagination switch available, to force pagination for text output. (by [@levkowetz](https://github.com/levkowetz))
+- Adjusted li > p margin to fit better with other list spacing, and to not let the `<p>` margin spill out from inside a `<li>`.  FIxes issue [#580](https://github.com/ietf-tools/xml2rfc/issues/580). (by [@levkowetz](https://github.com/levkowetz))
+- Drop python 35 from tests (by [@rjsparks](https://github.com/rjsparks))
+- Updated manpage.txt and docfiles (by [@rjsparks](https://github.com/rjsparks))
 
 ## [3.5.0] - 2020-11-18
 
