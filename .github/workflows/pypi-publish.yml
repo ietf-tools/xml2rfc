@@ -7,8 +7,12 @@ on:
     tags:
       - 'v*'
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish to Production PyPI'
+        required: true
+        type: boolean
 
 jobs:
   publish:
@@ -18,15 +22,37 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+        
+    - name: Get Next Version
+      if: ${{ inputs.publish }}
+      id: semver
+      uses: ietf-tools/semver-action@v1
+      with:
+        token: ${{ github.token }}
+        branch: main
+        
+    - name: Set Next Version Env Var
+      if: ${{ inputs.publish }}
+      env:
+        NEXT_VERSION: ${{ steps.semver.outputs.next }}
+      run: |
+        echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
     
     - name: Set Build Variables
       run: |
-        if [[ "$GITHUB_REF" =~ ^refs/tags/v* ]]; then
+        if [ -z ${NEXT_VERSION+x} ]; then
+          echo "Using AUTO SEMVER mode: $NEXT_VERSION"
+          echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
+          echo "PKG_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
+          echo "PKG_VERSION_STRICT=${NEXT_VERSION#?}" >> $GITHUB_ENV
+        elif [[ "$GITHUB_REF" =~ ^refs/tags/v* ]]; then
           echo "Using TAG mode: $GITHUB_REF_NAME"
+          echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
           echo "PKG_VERSION=$GITHUB_REF_NAME" >> $GITHUB_ENV
           echo "PKG_VERSION_STRICT=${GITHUB_REF_NAME#?}" >> $GITHUB_ENV
         else
-          echo "Using BRANCH mode: v3.0.0-dev.$GITHUB_RUN_NUMBER"
+          echo "Using TEST mode: v3.0.0-dev.$GITHUB_RUN_NUMBER"
+          echo "SHOULD_DEPLOY=false" >> $GITHUB_ENV
           echo "PKG_VERSION=v3.0.0-dev.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
           echo "PKG_VERSION_STRICT=3.0.0-dev.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
         fi
@@ -55,7 +81,7 @@ jobs:
         python ./setup.py sdist --dist-dir dist
         
     - name: Publish to Test PyPI
-      if: startsWith(github.ref, 'refs/tags/v') != true
+      if: env.SHOULD_DEPLOY != 'true'
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.TEST_PYPI_TOKEN }}
@@ -68,26 +94,27 @@ jobs:
     - name: Update CHANGELOG
       id: changelog
       uses: Requarks/changelog-action@v1
-      if: startsWith(github.ref, 'refs/tags/v')
+      if: env.SHOULD_DEPLOY == 'true'
       with:
         token: ${{ github.token }}
-        tag: ${{ github.ref_name }}
+        tag: ${{ env.PKG_VERSION }}
 
     - name: Commit CHANGELOG.md
       uses: stefanzweifel/git-auto-commit-action@v4
-      if: startsWith(github.ref, 'refs/tags/v')
+      if: env.SHOULD_DEPLOY == 'true'
       with:
         branch: main
-        commit_message: 'docs: update CHANGELOG.md + __init__.py for ${{ github.ref_name }} [skip ci]'
+        commit_message: 'docs: update CHANGELOG.md + __init__.py for ${{ env.PKG_VERSION }} [skip ci]'
         file_pattern: CHANGELOG.md xml2rfc/__init__.py
         
     - name: Create Release
       uses: ncipollo/release-action@v1
-      if: startsWith(github.ref, 'refs/tags/v')
+      if: env.SHOULD_DEPLOY == 'true'
       with:
         allowUpdates: true
         draft: false
-        name: ${{ github.ref_name }}
+        tag: ${{ env.PKG_VERSION }}
+        name: ${{ env.PKG_VERSION }}
         body: ${{ steps.changelog.outputs.changes }}
         artifacts: "dist/**"
         token: ${{ secrets.GITHUB_TOKEN }}
