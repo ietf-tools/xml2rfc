@@ -37,6 +37,16 @@ jobs:
         NEXT_VERSION: ${{ steps.semver.outputs.next }}
       run: |
         echo "NEXT_VERSION=$next" >> $GITHUB_ENV
+        
+    - name: Create Draft Release
+      uses: ncipollo/release-action@v1
+      if: ${{ github.event.inputs.publish }}
+      with:
+        draft: true
+        tag: ${{ env.NEXT_VERSION }}
+        name: ${{ env.NEXT_VERSION }}
+        body: '*pending*'
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Set Build Variables
       run: |
