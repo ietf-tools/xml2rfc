@@ -42,7 +42,9 @@ jobs:
       uses: ncipollo/release-action@v1
       if: ${{ github.event.inputs.publish }}
       with:
-        draft: true
+        prerelease: true
+        draft: false
+        commit: ${{ github.sha }}
         tag: ${{ env.NEXT_VERSION }}
         name: ${{ env.NEXT_VERSION }}
         body: '*pending*'
