@@ -24,7 +24,7 @@ jobs:
         fetch-depth: 0
         
     - name: Get Next Version
-      if: ${{ inputs.publish }}
+      if: ${{ github.event.inputs.publish }}
       id: semver
       uses: ietf-tools/semver-action@v1
       with:
@@ -32,7 +32,7 @@ jobs:
         branch: main
         
     - name: Set Next Version Env Var
-      if: ${{ inputs.publish }}
+      if: ${{ github.event.inputs.publish }}
       env:
         NEXT_VERSION: ${{ steps.semver.outputs.next }}
       run: |
