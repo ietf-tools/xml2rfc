@@ -40,7 +40,7 @@ jobs:
     
     - name: Set Build Variables
       run: |
-        if [ -z ${NEXT_VERSION+x} ]; then
+        if [[ $NEXT_VERSION ]]; then
           echo "Using AUTO SEMVER mode: $NEXT_VERSION"
           echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
           echo "PKG_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
