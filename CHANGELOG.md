@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.12.2] - 2022-02-16
+### Bug Fixes
+- [`fe71b28365`](https://github.com/ietf-tools/xml2rfc/commit/fe71b2836576826a1cc82e35255d492d3b560bb1) - Remove the blank line from the contact information in text output ([#720](https://github.com/ietf-tools/xml2rfc/pull/720) by [@kesara](https://github.com/kesara))
+
+### Chores
+- [`895a85d9d4`](https://github.com/ietf-tools/xml2rfc/commit/895a85d9d40ea8c6df376533c67dd559d5376d6e) - move /cli to root
+- [`0dee2ce130`](https://github.com/ietf-tools/xml2rfc/commit/0dee2ce1305900bda399c27d0cbe79dbfa6b826b) - remove gui and package folders
+- [`ed7051a0b0`](https://github.com/ietf-tools/xml2rfc/commit/ed7051a0b05dee9c89ef93d6a877395ff471c008) - Docker build script updates
+- [`ff7bb5785b`](https://github.com/ietf-tools/xml2rfc/commit/ff7bb5785bdc9621325093b79427cb24e7137adf) - Add executable permission to fix.pl ([#718](https://github.com/ietf-tools/xml2rfc/pull/718) by [@kesara](https://github.com/kesara))
+- [`a6227f88fc`](https://github.com/ietf-tools/xml2rfc/commit/a6227f88fcd2130592a0947b4dcedb3ea4517f9b) - remove font-install binary from repo
+
+
 ## [3.12.1] - 2022-02-01
 
 - Improve local file lookup: Add source directory to the allowed list, Disallow any files that are on child directories of the source directory, Add a warning when including `.ent` files. Fixes [#703](https://github.com/ietf-tools/xml2rfc/issues/703). (by [@kesara](https://github.com/kesara))
@@ -1739,3 +1751,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [2.3.11.3]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.11.3
 [2.3.11]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.11
 [2.3.10]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.10
+[v3.12.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.1...v3.12.2
