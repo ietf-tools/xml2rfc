@@ -2560,7 +2560,7 @@ class TextWriter(BaseV3Writer):
                 latin = True
             try:
                 text = format_address(adr, latin=latin)
-                text = text.strip(stripspace)+'\n\n'
+                text = text.strip(stripspace)+'\n'
                 return mklines(text, e)
             except:
                 debug.pprint('adr')
