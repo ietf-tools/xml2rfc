@@ -36,4 +36,4 @@ RUN echo "Downloading Noto Font..." \
     && fc-cache -f -v
 
 RUN pip3 --disable-pip-version-check --no-cache-dir install --upgrade pip wheel
-RUN pip3 --disable-pip-version-check --no-cache-dir install tox certifi decorator dict2xml==1.7 "pycairo<1.20" PyPDF2 "weasyprint<53" markupsafe==2.0.1
+RUN pip3 --disable-pip-version-check --no-cache-dir install tox certifi decorator dict2xml==1.7 "pycairo<1.20" PyPDF2 "weasyprint<53"
