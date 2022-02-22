@@ -116,8 +116,8 @@ jobs:
       if: env.SHOULD_DEPLOY == 'true'
       with:
         branch: main
-        commit_message: 'docs: update CHANGELOG.md + __init__.py for ${{ env.PKG_VERSION }} [skip ci]'
-        file_pattern: CHANGELOG.md xml2rfc/__init__.py
+        commit_message: 'docs: update CHANGELOG.md + py file versions for ${{ env.PKG_VERSION }} [skip ci]'
+        file_pattern: CHANGELOG.md setup.cfg xml2rfc/__init__.py
         
     - name: Create Release
       uses: ncipollo/release-action@v1
