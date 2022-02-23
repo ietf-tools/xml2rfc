@@ -1761,4 +1761,5 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [2.3.11.3]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.11.3
 [2.3.11]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.11
 [2.3.10]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.10
-[v3.12.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.1...v3.12.2[v3.12.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.2...v3.12.3
+[v3.12.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.1...v3.12.2
+[v3.12.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.2...v3.12.3
