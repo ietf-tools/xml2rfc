@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.12.3] - 2022-02-23
+### Bug Fixes
+- [`dc1231174d`](https://github.com/ietf-tools/xml2rfc/commit/dc1231174d9df01b96ad8cf341633978d8fc1af9) - make xml2rfc/run.py executable ([#726](https://github.com/ietf-tools/xml2rfc/pull/726) by [@dkg](https://github.com/dkg))
+- [`1ed938433c`](https://github.com/ietf-tools/xml2rfc/commit/1ed938433c792055d9bbc930f5d99e6909b9f3fc) - sourcecode element definition copy-paste error ([#731](https://github.com/ietf-tools/xml2rfc/pull/731) by [@cabo](https://github.com/cabo))
+
+### Chores
+- [`3ae5c77751`](https://github.com/ietf-tools/xml2rfc/commit/3ae5c77751c7118a817a52ae165756e9b37f7fd0) - add vscode dev container config ([#730](https://github.com/ietf-tools/xml2rfc/pull/730) by [@NGPixel](https://github.com/NGPixel))
+- [`e6e07375b3`](https://github.com/ietf-tools/xml2rfc/commit/e6e07375b32c265ef3d42516d003fa24cb507b77) - Revert Jinja2 3.* update ([#732](https://github.com/ietf-tools/xml2rfc/pull/732) by [@kesara](https://github.com/kesara))
+
+
 ## [v3.12.2] - 2022-02-16
 ### Bug Fixes
 - [`fe71b28365`](https://github.com/ietf-tools/xml2rfc/commit/fe71b2836576826a1cc82e35255d492d3b560bb1) - Remove the blank line from the contact information in text output ([#720](https://github.com/ietf-tools/xml2rfc/pull/720) by [@kesara](https://github.com/kesara))
@@ -1751,4 +1761,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [2.3.11.3]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.11.3
 [2.3.11]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.11
 [2.3.10]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.10
-[v3.12.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.1...v3.12.2
+[v3.12.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.1...v3.12.2[v3.12.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.2...v3.12.3
