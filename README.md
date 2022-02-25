@@ -1,6 +1,6 @@
 <div align="center">
     
-<img src="https://raw.githubusercontent.com/ietf-tools/common/main/assets/logos/ietf-xml2rfc-logo.svg" alt="IETF XML2RFC" width="600" />
+<img src="https://raw.githubusercontent.com/ietf-tools/common/main/assets/logos/xml2rfc.svg" alt="XML2RFC" height="125" />
     
 [![Release](https://img.shields.io/github/release/ietf-tools/xml2rfc.svg?style=flat&maxAge=600)](https://github.com/ietf-tools/xml2rfc/releases)
 [![License](https://img.shields.io/github/license/ietf-tools/xml2rfc)](https://github.com/ietf-tools/xml2rfc/blob/main/LICENSE)
