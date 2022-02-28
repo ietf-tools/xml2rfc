@@ -246,7 +246,9 @@ def expand_ellipsis(text, width):
             tail = '%4s' % tail.lstrip('0')     # strip leading zeros
         last = head.split('\n')[-1]
         lack = width - (len(last) + len(tail))
-        elip = (' .'*40)[-lack:]
+        elip = ''
+        if lack > 0:
+            elip = (' .'*40)[-lack:]
         text = head + elip + tail
     return text
 
