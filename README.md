@@ -5,8 +5,7 @@
 [![Release](https://img.shields.io/github/release/ietf-tools/xml2rfc.svg?style=flat&maxAge=600)](https://github.com/ietf-tools/xml2rfc/releases)
 [![License](https://img.shields.io/github/license/ietf-tools/xml2rfc)](https://github.com/ietf-tools/xml2rfc/blob/main/LICENSE)
 [![PyPI - Version](https://img.shields.io/pypi/v/xml2rfc)](https://pypi.org/project/xml2rfc/)
-[![PyPI - Status](https://img.shields.io/pypi/status/xml2rfc)](https://pypi.org/project/xml2rfc/)  
-[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/ietf-tools/xml2rfc)
+[![PyPI - Status](https://img.shields.io/pypi/status/xml2rfc)](https://pypi.org/project/xml2rfc/)
 [![PyPI - Format](https://img.shields.io/pypi/format/xml2rfc)](https://pypi.org/project/xml2rfc/)
     
 ##### Generate RFCs and IETF drafts from document source in XML according to the IETF xml2rfc v2 and v3 vocabularies
