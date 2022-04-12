@@ -32,6 +32,12 @@ from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_co
     bare_latin_tags, unicode_attributes, downcode, downcode_punctuation)
 from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
 
+
+DEADLY_ERRORS = [
+    'Element svg has extra content: script',
+    'Did not expect element script there',
+]
+
 default_silenced_messages = [
 #    ".*[Pp]ostal address",
 ]
@@ -2136,6 +2142,15 @@ class BaseV3Writer(object):
         indent(e, 0)
         e.tail = None
 
+    def deadly_error(self, error):
+        # errors that xml2rfc must not allow to continue
+
+        if error.message in DEADLY_ERRORS:
+            if self.options.verbose:
+                msg = "%s(%s): Error: Can not continue further with error: %s" % (self.xmlrfc.source, error.line, error.message)
+                self.log(msg)
+            return True
+
     def validate(self, when='', warn=False):
         # Note: Our schema doesn't permit xi:include elements, so the document
         # must have had XInclude processing done before calling validate()
@@ -2164,11 +2179,14 @@ class BaseV3Writer(object):
                           "higher for better error messages." % ('.'.join(str(v) for v in lxmlver), ))
             # These warnings are occasionally incorrect -- disable this
             # output for now:
+            deadly = False
             if hasattr(e, 'error_log'):
                 for error in e.error_log:
                     path = getattr(error, 'path', '')
                     msg = "%s(%s): %s: %s, at %s" % (self.xmlrfc.source, error.line, error.level_name.title(), error.message, path)
                     self.log(msg)
+                    if not deadly:
+                        deadly = self.deadly_error(error)
                     if error.message.startswith("Did not expect text"):
                         items = self.tree.xpath(error.path + '/text()')
                         for item in items:
@@ -2179,7 +2197,7 @@ class BaseV3Writer(object):
 
             else:
                 log.warn('\nInvalid document: %s' % (e,))
-            if warn:
+            if warn and not deadly:
                 self.warn(self.root, 'Invalid document%s.' % (when, ))
                 return False
             else:
