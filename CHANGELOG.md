@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.12.4] - 2022-04-12
+### :bug: Bug Fixes
+- [`bf6ee73`](https://github.com/ietf-tools/xml2rfc/commit/bf6ee731b0d643598267e2eb267cb3ddc8f67d26) - Fix an edge case in the table of contents in text output *(PR [#735](https://github.com/ietf-tools/xml2rfc/pull/735) by [@kesara](https://github.com/kesara))*
+- [`6e64a1c`](https://github.com/ietf-tools/xml2rfc/commit/6e64a1c667892a9600c2a772615c1be3df855936) - Render cref elements correctly in text output *(PR [#744](https://github.com/ietf-tools/xml2rfc/pull/744) by [@cabo](https://github.com/cabo))*
+- [`df99f94`](https://github.com/ietf-tools/xml2rfc/commit/df99f948b53ca4836d830ac55ec84eb4023e81da) - Terminate if SVG data includes a script tag (GHSA-cf4q-4cqr-7g7w) *(commit by [@kesara](https://github.com/kesara))*
+
+### :white_check_mark: Tests
+- [`3badf55`](https://github.com/ietf-tools/xml2rfc/commit/3badf559aabab15270702deccf2922961c2c2c34) - Improve cref tests *(PR [#747](https://github.com/ietf-tools/xml2rfc/pull/747) by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`4262e58`](https://github.com/ietf-tools/xml2rfc/commit/4262e58c198fc9c72d25036cf4c42fecc91ac2e4) - add vscode dev debug configs *(PR [#737](https://github.com/ietf-tools/xml2rfc/pull/737) by [@NGPixel](https://github.com/NGPixel))*
+
+
 ## [v3.12.3] - 2022-02-23
 ### Bug Fixes
 - [`dc1231174d`](https://github.com/ietf-tools/xml2rfc/commit/dc1231174d9df01b96ad8cf341633978d8fc1af9) - make xml2rfc/run.py executable ([#726](https://github.com/ietf-tools/xml2rfc/pull/726) by [@dkg](https://github.com/dkg))
@@ -1763,3 +1776,5 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [2.3.10]: https://trac.ietf.org/trac/xml2rfc/browser/tags/cli/2.3.10
 [v3.12.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.1...v3.12.2
 [v3.12.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.2...v3.12.3
+
+[v3.12.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.3...v3.12.4
