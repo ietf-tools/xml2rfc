@@ -34,11 +34,14 @@ def short_author_name_parts(a):
     else:
         fullname = a.get('fullname') or ''
         if fullname:
-            if len(fullname.split())>1:
-                parts = fullname.split()
-                initials = ' '.join([ "%s."%n[0].upper() for n in parts[:-1] ])
-                surname  = parts[-1]
-                parts = [initials, surname ]
+            if is_script(fullname, 'Latin'):
+                if len(fullname.split())>1:
+                    parts = fullname.split()
+                    initials = ' '.join([ "%s."%n[0].upper() for n in parts[:-1] ])
+                    surname  = parts[-1]
+                    parts = [initials, surname ]
+                else:
+                    parts = [ None, fullname ]
             else:
                 parts = [ None, fullname ]
         else:
