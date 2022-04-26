@@ -2128,7 +2128,7 @@ class PrepToolWriter(BaseV3Writer):
             dl = self.element('dl', spacing='compact')
             li2.append(dl)
             # sort entries - py36 does not guarantee order and later versions use LIFO order
-            for item in sorted(binned_entries):
+            for item in sorted(binned_entries, key=str.casefold):
                 regular_entries = []
                 sub_entries = []
                 for i in binned_entries[item]:
