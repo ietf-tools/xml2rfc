@@ -2455,6 +2455,8 @@ class HtmlWriter(BaseV3Writer):
         classes = 'sourcecode'
         if type:
             classes += ' lang-%s' % type
+        if (len(x.text.split('\n')) > 50):
+            classes += ' breakable'
         div = add.div(h, x)
         div.text = None
         pre = add.pre(div, None, x.text, classes=classes)
