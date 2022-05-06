@@ -61,7 +61,7 @@ pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
 tests: minify tests-no-network cachetest
 
 # Tests that can run without network access
-tests-no-network: test flaketest drafttest rfctest utf8test v3featuretest elementstest indextest sourcecodetest bomtest wiptest mantest
+tests-no-network: test flaketest drafttest rfctest utf8test v3featuretest elementstest indextest sourcecodetest notoctest bomtest wiptest mantest
 
 # Clear the cache
 .PHONY: clear-cache
@@ -256,6 +256,8 @@ elementstest: install tests/out/elements.prepped.xml.test tests/out/elements.tex
 indextest: install tests/out/indexes.prepped.xml.test tests/out/indexes.text.test tests/out/indexes.pages.text.test tests/out/indexes.v3.$(py).html.test
 
 sourcecodetest: install tests/out/sourcecode.prepped.xml.test tests/out/sourcecode.text.test tests/out/sourcecode.pages.text.test tests/out/sourcecode.v3.$(py).html.test
+
+notoctest: install tests/out/no-toc.prepped.xml.test tests/out/no-toc.text.test tests/out/no-toc.pages.text.test tests/out/no-toc.v3.$(py).html.test
 
 bomtest: tests/out/elements.bom.text.test
 
