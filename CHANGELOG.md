@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.12.5] - 2022-05-02
+### :bug: Bug Fixes
+- [`8436c2f`](https://github.com/ietf-tools/xml2rfc/commit/8436c2f9716b5c7a73d5587bc6201c7e56fb6ac0) - Make index sort case insensitive *(PR [#763](https://github.com/ietf-tools/xml2rfc/pull/763) by [@kesara](https://github.com/kesara))*
+- [`0884e8d`](https://github.com/ietf-tools/xml2rfc/commit/0884e8dc11f7040986b208961275a7cb3af07f92) - Don't attempt to select initials when fullname contains non Latin characters *(PR [#760](https://github.com/ietf-tools/xml2rfc/pull/760) by [@kesara](https://github.com/kesara))*
+- [`9e12093`](https://github.com/ietf-tools/xml2rfc/commit/9e120937f5a66e180a7522f9d7e7066a5486c4de) - Make long sourcecode sections breakable *(PR [#764](https://github.com/ietf-tools/xml2rfc/pull/764) by [@kesara](https://github.com/kesara))*
+
+### :white_check_mark: Tests
+- [`24406e5`](https://github.com/ietf-tools/xml2rfc/commit/24406e5007ec5acefa331565a082a48207b055dd) - Bug fix in tests/input/draft-miek-test.v3.xml *(PR [#738](https://github.com/ietf-tools/xml2rfc/pull/738) by [@kesara](https://github.com/kesara))*
+- [`72255eb`](https://github.com/ietf-tools/xml2rfc/commit/72255ebd479f4a8c87f1e7b6352d4abc6e1d4622) - Pin PyPDF2 to 2.16.* versions *(PR [#762](https://github.com/ietf-tools/xml2rfc/pull/762) by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`8fc7efb`](https://github.com/ietf-tools/xml2rfc/commit/8fc7efbd37ca746cf4b9f97793b7236c013a0388) - Update deprecated tox configuration option *(PR [#746](https://github.com/ietf-tools/xml2rfc/pull/746) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.12.4] - 2022-04-12
 ### :bug: Bug Fixes
 - [`bf6ee73`](https://github.com/ietf-tools/xml2rfc/commit/bf6ee731b0d643598267e2eb267cb3ddc8f67d26) - Fix an edge case in the table of contents in text output *(PR [#735](https://github.com/ietf-tools/xml2rfc/pull/735) by [@kesara](https://github.com/kesara))*
@@ -1778,3 +1792,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.12.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.2...v3.12.3
 
 [v3.12.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.3...v3.12.4
+[v3.12.5]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.4...v3.12.5
