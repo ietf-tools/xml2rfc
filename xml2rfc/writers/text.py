@@ -371,8 +371,9 @@ class TextWriter(BaseV3Writer):
 
     def add_pageno_placeholders(self):
         toc = self.root.find('./front/toc/section')
-        for e in toc.xpath('.//xref[2]'):
-            e.set('pageno', '0000')
+        if toc:
+            for e in toc.xpath('.//xref[2]'):
+                e.set('pageno', '0000')
 
     def paginate(self, lines):
         """
