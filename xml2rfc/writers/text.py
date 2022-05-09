@@ -28,8 +28,9 @@ from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc import utils
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, get_expiry_date, format_date
-from xml2rfc.util.name import short_author_name, short_author_ascii_name, short_author_name_parts, short_org_name_set
-
+from xml2rfc.util.name import (short_author_name, short_author_ascii_name,
+                               short_org_name_set, ref_author_name_first,
+                               ref_author_name_last)
 from xml2rfc.util.name import full_author_name_set
 from xml2rfc.util.num import ol_style_formatter, num_width
 from xml2rfc.util.unicode import expand_unicode_element, textwidth
@@ -1126,28 +1127,21 @@ class TextWriter(BaseV3Writer):
         for i, author in enumerate(authors):
             if i == len(authors) - 1 and len(authors) > 1:
                 buf.append('and ')
-            organization = author.find('organization')
-            initials, surname = short_author_name_parts(author)
-            if surname:
-                initials = initials or ''
-                if i == len(authors) - 1 and len(authors) > 1:
-                    # Last author is rendered in reverse
-                    if len(initials) > 0:
-                        buf.append(initials + ' ' + \
-                                     surname)
-                    else:
-                        buf.append(surname)
-                elif len(initials) > 0:
-                    buf.append(surname + ', ' + initials)
-                else:
-                    buf.append(surname)
-                if author.attrib.get('role', '') == 'editor':
-                    buf.append(', Ed.')
-            elif organization is not None and organization.text:
-                # Use organization instead of name
-                buf.append(organization.text.strip(stripspace))
+
+            if i == len(authors) - 1 and len(authors) > 1:
+                # Last author is rendered in reverse
+                name, ascii = ref_author_name_last(author)
             else:
-                continue
+                name, ascii = ref_author_name_first(author)
+
+            if ascii:
+                buf.append('{name} ({ascii})'.format(name=name, ascii=ascii))
+            elif name:
+                buf.append(name)
+
+            if author.attrib.get('role', '') == 'editor':
+                buf.append(', Ed.')
+
             if len(authors) == 2 and i == 0:
                 buf.append(' ')
             elif i < len(authors) - 1:
