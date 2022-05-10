@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.12.6] - 2022-05-10
+### :bug: Bug Fixes
+- [`6b32a5d`](https://github.com/ietf-tools/xml2rfc/commit/6b32a5d789925f5f74b7898b556cf7b8f3bd1d10) - Render text without toc *(PR [#766](https://github.com/ietf-tools/xml2rfc/pull/766) by [@cabo](https://github.com/cabo))*
+- [`384399c`](https://github.com/ietf-tools/xml2rfc/commit/384399cae4a52fbb689abacfdf1a55c3217276db) - Display ASCII names for authors in references *(PR [#771](https://github.com/ietf-tools/xml2rfc/pull/771) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.12.5] - 2022-05-02
 ### :bug: Bug Fixes
 - [`8436c2f`](https://github.com/ietf-tools/xml2rfc/commit/8436c2f9716b5c7a73d5587bc6201c7e56fb6ac0) - Make index sort case insensitive *(PR [#763](https://github.com/ietf-tools/xml2rfc/pull/763) by [@kesara](https://github.com/kesara))*
@@ -1793,3 +1799,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 
 [v3.12.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.3...v3.12.4
 [v3.12.5]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.4...v3.12.5
+[v3.12.6]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.5...v3.12.6
