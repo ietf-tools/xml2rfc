@@ -3,7 +3,6 @@
 from __future__ import unicode_literals, print_function, division
 
 import collections
-import datetime
 import io
 import jinja2
 import lxml
@@ -25,7 +24,7 @@ def capfirst(value):
     return value and value[0].upper() + value[1:]
 
 class DocWriter(base.BaseV3Writer):
-    def __init__(self, xmlrfc, quiet=None, options=base.default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=base.default_options, date=None):
         super(DocWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         rfc7991_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'rfc7991.rng')
         self.rfc7991_schema = lxml.etree.ElementTree(file=rfc7991_rng_file)

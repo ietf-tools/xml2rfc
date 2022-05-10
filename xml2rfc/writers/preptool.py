@@ -97,7 +97,7 @@ def slugify_name(name):
 class PrepToolWriter(BaseV3Writer):
     """ Writes an XML file where the input has been modified according to RFC 7998"""
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None, keep_pis=['v3xml2rfc']):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=None, liberal=None, keep_pis=['v3xml2rfc']):
         super(PrepToolWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         if not quiet is None:
             options.quiet = quiet

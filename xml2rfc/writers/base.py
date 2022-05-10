@@ -55,7 +55,7 @@ default_options.__dict__ = {
         'css': None,
         'config_file': None,
         'country_help': False,
-        'date': datetime.date.today(),
+        'date': None,
         'datestring': None,
         'debug': False,
         'docfile': False,
@@ -442,11 +442,11 @@ class BaseRfcWriter:
 
     # -------------------------------------------------------------------------
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=None):
         if not quiet is None:
             options.quiet = quiet
         self.options = options
-        self.date = date
+        self.date = date if date is not None else datetime.date.today()
         self.expire_string = ''
         self.ascii = False
         self.nbws_cond = u'\u00A0'
@@ -1717,13 +1717,13 @@ xref_tags   = get_xref_tags()
 
 class BaseV3Writer(object):
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=None):
         global v3_rnc_file, v3_rng_file, v3_schema
         self.xmlrfc = xmlrfc
         self.tree = xmlrfc.tree if xmlrfc else None
         self.root = self.tree.getroot() if xmlrfc else None
         self.options = options
-        self.date = date
+        self.date = date if date is not None else datetime.date.today()
         self.v3_rnc_file = v3_rnc_file
         self.v3_rng_file = v3_rng_file
         self.v3_rng = lxml.etree.RelaxNG(file=self.v3_rng_file)
