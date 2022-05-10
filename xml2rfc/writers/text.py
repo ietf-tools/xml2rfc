@@ -3,7 +3,6 @@
 from __future__ import unicode_literals, print_function, division
 
 import copy
-import datetime
 import inspect
 import re
 import sys
@@ -290,7 +289,7 @@ def format_address(address, latin=False, normalize=False):
 
 class TextWriter(BaseV3Writer):
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=None):
         super(TextWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         self.options.min_section_start_lines = 5
         self.refname_mapping = self.get_refname_mapping()

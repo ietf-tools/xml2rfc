@@ -4,7 +4,6 @@
 
 import lxml.etree
 import xml2rfc
-import datetime
 from io import open
 from xml2rfc.writers.base import default_options
 
@@ -14,7 +13,7 @@ class ExpandedXmlWriter:
     # Note -- we don't need to subclass BaseRfcWriter because the behavior
     # is so different and so trivial
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=None):
         if not quiet is None:
             options.quiet = quiet
         self.root = xmlrfc.getroot()

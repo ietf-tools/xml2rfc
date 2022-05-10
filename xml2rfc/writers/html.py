@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function, division
 
-import datetime
 import lxml
 import os
 import re
@@ -232,7 +231,7 @@ def get_bidi_alignment(address):
 
 class HtmlWriter(BaseV3Writer):
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=None):
         super(HtmlWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         self.anchor_tags = self.get_tags_with_anchor()
         self.duplicate_html_ids = set()

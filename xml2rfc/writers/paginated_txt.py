@@ -3,7 +3,6 @@
 # --------------------------------------------------
 
 # Python libs
-import datetime
 import calendar
 import six
 
@@ -26,7 +25,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     """
 
     def __init__(self, xmlrfc, width=72, quiet=None, options=default_options,
-                               date=datetime.date.today(), omit_headers=False):
+                               date=None, omit_headers=False):
         if not quiet is None:
             options.quiet = quiet
         RawTextRfcWriter.__init__(self, xmlrfc, options=options, date=date)

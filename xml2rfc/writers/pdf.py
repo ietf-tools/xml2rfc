@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function, division
 
-import datetime
 import io
 import logging
 import os
@@ -38,7 +37,7 @@ except ImportError:
 
 class PdfWriter(BaseV3Writer):
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=None):
         super(PdfWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         if not weasyprint:
             self.err(None, "Cannot run PDF formatter: %s" % import_error)

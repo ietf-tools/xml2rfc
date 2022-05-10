@@ -265,7 +265,7 @@ def main():
     value_options.add_argument(      '--config-file', dest="config_file", metavar='FILE', is_config_file_arg=True,
                             help='specify a configuration file')
     value_options.add_argument('-d', '--dtd', dest='dtd', metavar='DTDFILE', help='specify an alternate dtd file')
-    value_options.add_argument('-D', '--date', dest='datestring', metavar='DATE', default=datetime.date.today(),
+    value_options.add_argument('-D', '--date', dest='datestring', metavar='DATE', default=None,
                             help="run as if the date is DATE (format: yyyy-mm-dd).  Default: Today's date")
     value_options.add_argument('-f', '--filename', dest='filename', metavar='FILE',
                             help='Deprecated.  The same as -o')
@@ -498,14 +498,12 @@ def main():
                 print('Cache directory is not writable: %s' % options.cache)
                 sys.exit(1)
     #
-    if options.datestring:
-        if isinstance(options.datestring, str):
-            options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
-        elif isinstance(options.datestring, datetime.date):
-            options.date = options.datestring
-        else:
-            xml2rfc.log.warn("Unexpected type for options.datestring: %s" % type(options.datestring))
+    if options.datestring is not None:
+        options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
     else:
+        # Use today by default. Even though date = None is later translated to today(), set it
+        # explicitly to ensure there's no date skew between instance inits if we happen to be run
+        # exactly at midnight.
         options.date = datetime.date.today()
 
     if options.omit_headers and not options.text:

@@ -4,7 +4,6 @@
 
 # Python libs
 import textwrap
-import datetime
 import lxml
 import re
 
@@ -26,7 +25,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, margin=3, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, width=72, margin=3, quiet=None, options=default_options, date=None):
         if not quiet is None:
             options.quiet = quiet
         BaseRfcWriter.__init__(self, xmlrfc, options=options, date=date)

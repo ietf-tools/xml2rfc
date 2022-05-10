@@ -42,7 +42,7 @@ class HtmlRfcWriter(BaseRfcWriter):
     }
 
     def __init__(self, xmlrfc, quiet=None, options=default_options,
-                               date=datetime.date.today(), templates_dir=None):
+                               date=None, templates_dir=None):
         if not quiet is None:
             options.quiet = quiet
         BaseRfcWriter.__init__(self, xmlrfc, options=options)

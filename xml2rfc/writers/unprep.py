@@ -24,7 +24,7 @@ from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 class UnPrepWriter(BaseV3Writer):
     """ Writes an XML file where many of the preptool additions have been removed"""
 
-    def __init__(self, xmlrfc, quiet=None, options=default_options, date=datetime.date.today(), liberal=None, keep_pis=['v3xml2rfc']):
+    def __init__(self, xmlrfc, quiet=None, options=default_options, date=None, liberal=None, keep_pis=['v3xml2rfc']):
         super(UnPrepWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
         if not quiet is None:
             options.quiet = quiet

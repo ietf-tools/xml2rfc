@@ -50,7 +50,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     in_list = False
 
-    def __init__(self, xmlrfc, width=72, quiet=None, options=default_options, date=datetime.date.today()):
+    def __init__(self, xmlrfc, width=72, quiet=None, options=default_options, date=None):
         if not quiet is None:
             options.quiet = quiet
         PaginatedTextRfcWriter.__init__(self, xmlrfc, width=width, options=options, date=date)
