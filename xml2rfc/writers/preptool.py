@@ -2191,8 +2191,10 @@ class PrepToolWriter(BaseV3Writer):
                         text='Reference' if ent.anchor_tag in ['reference', 'referencegroup'] else None,
                         target=ent.anchor,
                     )
-                    """ if ent.primary: wrap that xr in a <strong"""
-                    """ Python coding left as an exercise to the reader """
+                    if ent.iref.get('primary') == 'true':
+                        emb = self.element('strong')
+                        emb.append(xr)
+                        xr = emb
                     t.append(xr)
                     if index < len(anchored_entries) - 1:
                         xr.tail = '; '
