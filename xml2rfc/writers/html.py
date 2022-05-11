@@ -493,6 +493,30 @@ class HtmlWriter(BaseV3Writer):
             versions.tail = '\n'
             head.append(versions)
 
+        ### Open Graph metadata - see <https://ogp.me/>
+        add.meta(head, None, name="og:title", content=text)
+        if abstract != None:
+            add.meta(head, None, name="og:description", content=abstract_text)
+        add.meta(head, None, name="og:type", content="website")
+        if self.options.rfc:
+            add.meta(head, None, name="og:url",
+              content=f"https://www.rfc-editor.org/rfc/rfc{self.root.get('number')}.html")
+        else:
+            add.meta(head, None, name="og:url",
+              content=f"https://datatracker.ietf.org/doc/{self.root.get('docName')}/")
+
+        stream = self.root.get('submissionType')
+        docname = self.root.get('docName')
+        if stream == "IETF" or docname.startsWith('draft-ietf'):
+            add.meta(head, None, name="og:image",
+              content="https://www.ietf.org/media/images/ietf-logo.original.png")
+        elif stream == "IAB" or docname.startsWith('draft-iab'):
+            add.meta(head, None, name="og:image",
+              content="https://www.iab.org/wp-content/themes/toolbox-IAB/shadow150.png")
+        elif stream == "IRTF" or docname.startsWith('draft-irtf'):
+            add.meta(head, None, name="og:image",
+              content="https://irtf.org/img/irtf.png")
+
     #    For example:
     # 
     #    <meta name="author" content="Joe Hildebrand">
