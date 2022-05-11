@@ -371,7 +371,7 @@ class TextWriter(BaseV3Writer):
 
     def add_pageno_placeholders(self):
         toc = self.root.find('./front/toc/section')
-        if toc:
+        if toc is not None:
             for e in toc.xpath('.//xref[2]'):
                 e.set('pageno', '0000')
 
