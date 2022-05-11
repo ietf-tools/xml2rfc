@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.12.7] - 2022-05-11
+### :bug: Bug Fixes
+- [`42568b3`](https://github.com/ietf-tools/xml2rfc/commit/42568b3787ae549c8e718e43ac8f164a9b195067) - evaluate date.today() on class init, not import *(PR [#774](https://github.com/ietf-tools/xml2rfc/pull/774) by [@jennifer-richards](https://github.com/jennifer-richards))*
+- [`07ef95e`](https://github.com/ietf-tools/xml2rfc/commit/07ef95e8fb4a0bbbadac9ee4ffcd7478405eb1fd) - Fix warnings in text and manpage *(PR [#775](https://github.com/ietf-tools/xml2rfc/pull/775) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.12.6] - 2022-05-10
 ### :bug: Bug Fixes
 - [`6b32a5d`](https://github.com/ietf-tools/xml2rfc/commit/6b32a5d789925f5f74b7898b556cf7b8f3bd1d10) - Render text without toc *(PR [#766](https://github.com/ietf-tools/xml2rfc/pull/766) by [@cabo](https://github.com/cabo))*
@@ -1800,3 +1806,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.12.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.3...v3.12.4
 [v3.12.5]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.4...v3.12.5
 [v3.12.6]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.5...v3.12.6
+[v3.12.7]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.6...v3.12.7
