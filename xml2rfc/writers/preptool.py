@@ -2191,6 +2191,11 @@ class PrepToolWriter(BaseV3Writer):
                         text='Reference' if ent.anchor_tag in ['reference', 'referencegroup'] else None,
                         target=ent.anchor,
                     )
+                    if ent.iref.get('primary') == 'true':
+                        xr_em = self.element('em')
+                        xr_em.append(xr)
+                        xr = self.element('strong')
+                        xr.append(xr_em)
                     t.append(xr)
                     if index < len(anchored_entries) - 1:
                         xr.tail = '; '
