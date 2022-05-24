@@ -149,7 +149,8 @@ class DocWriter(base.BaseV3Writer):
             # This depend on at least one generic option with title being listed before '--config-file'
             if a.container.title == 'Generic Options with Values':
                 genargs_group = a.container
-            if a.container.title == 'optional arguments':
+            if a.container.title == 'optional arguments' or a.container.title == 'options':
+                # Python 3.10 calls this 'options' while Python 3.6 to Python 3.9 calls this 'optional arguments'
                 a.container = genargs_group
         # Deal with options that has an inverse form
         option_strings = { a.option_strings[-1]: a for a in optionparser._actions if a.option_strings }
