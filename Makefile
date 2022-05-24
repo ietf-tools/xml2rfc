@@ -29,8 +29,6 @@ legacydate_regex = [ADFJMOS][a-u]* [123]*[0-9], [12][0-9][0-9][0-9]$$
 generator_regex = name="generator"
 libversion_regex = \(pyflakes\|PyYAML\|requests\|setuptools\|six\|Weasyprint\) [0-9]\+\(\.[0-9]\+\)*
 
-py = $(shell python3 -c 'import sys; print("py%s%s" %(sys.version_info.major,sys.version_info.minor))')
-
 rfcxml= \
 	rfc6787.xml		\
 	rfc7911.xml		\
@@ -102,7 +100,7 @@ CHECKOUTPUT=	\
 %.rng: %.rnc
 	trang $< $@
 
-%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.v3add-xinclude.xml.test %.text.test %.pages.text.test %.v3.$(py).html.test %.prepped.xml.test %.plain.text
+%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.v3add-xinclude.xml.test %.text.test %.pages.text.test %.v3.html.test %.prepped.xml.test %.plain.text
 	@echo " Diffing .nroff.txt against regular .txt"
 	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)'  -I '$(libversion_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
 	@echo " Checking v3 validity"
@@ -128,11 +126,11 @@ tests/out/%.v2v3.xml: tests/input/%.xml install
 tests/out/%.v3add-xinclude.xml: tests/input/draft-miek-test.v3.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --add-xinclude $< --out $@"
 
-tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%.text install
+tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.html tests/out/%.text install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --prep $<"
 	@echo " Checking generation of .html from prepped .xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).$(py).html --html --external-css --external-js --legacy-date-format --no-inline-version $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
-	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.$(py).html $(basename $@).$(py).html || { echo "Diff failed for $(basename $@).$(py).html output (2)"; exit 1; }
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).html --html --external-css --external-js --legacy-date-format --no-inline-version $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.html $(basename $@).html || { echo "Diff failed for $(basename $@).html output (2)"; exit 1; }
 	@echo " Checking generation of .text from prepped .xml"
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).text --text --no-pagination --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (3)"; exit 1; }
@@ -140,7 +138,7 @@ tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.$(py).html tests/out/%
 tests/out/docfile.xml:
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --doc --out $@"
 
-tests/out/docfile.$(py).html: tests/out/docfile.xml
+tests/out/docfile.html: tests/out/docfile.xml
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --html --external-css --external-js --no-inline-version --out $@ $<"
 
 tests/out/manpage.txt:
@@ -158,7 +156,7 @@ tests/out/%.bom.text: tests/input/%.xml install
 tests/out/%.wip.text: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --id-is-work-in-progress $< --out $@"
 
-tests/out/%.v3.$(py).html: tests/input/%.xml install
+tests/out/%.v3.html: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --html --v3 --external-css --external-js --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ --no-inline-version $< --out $@"
 
 tests/out/%.pdf: tests/input/%.xml install
@@ -190,7 +188,7 @@ tests/out/%.exp.xml: tests/input/%.xml install
 %.min.js: %.js
 	bin/uglifycall $<
 
-.PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.$(py).html %.prepped.xml %.nroff.txt tests/out/%.plain.txt
+.PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.html %.prepped.xml %.nroff.txt tests/out/%.plain.txt
 
 # ----------------------------------------------------------------------
 
@@ -245,25 +243,25 @@ utf8test: cleantmp  env/bin/python install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --no-inline-version --exp --v2v3 --prep -q tests/input/utf8.xml"
 	@doc=utf8 ; postnrofffix="cat" ; type=utf8; $(CHECKOUTPUT)
 
-v3featuretest: tests/out/draft-v3-features.prepped.xml.test tests/out/draft-v3-features.text.test tests/out/draft-v3-features.v3.$(py).html.test
+v3featuretest: tests/out/draft-v3-features.prepped.xml.test tests/out/draft-v3-features.text.test tests/out/draft-v3-features.v3.html.test
 
 dateshifttest: cleantmp install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --date 2013-02-01 --legacy --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml"
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
-elementstest: install tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.$(py).html.test
+elementstest: install tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.html.test
 
-indextest: install tests/out/indexes.prepped.xml.test tests/out/indexes.text.test tests/out/indexes.pages.text.test tests/out/indexes.v3.$(py).html.test
+indextest: install tests/out/indexes.prepped.xml.test tests/out/indexes.text.test tests/out/indexes.pages.text.test tests/out/indexes.v3.html.test
 
-sourcecodetest: install tests/out/sourcecode.prepped.xml.test tests/out/sourcecode.text.test tests/out/sourcecode.pages.text.test tests/out/sourcecode.v3.$(py).html.test
+sourcecodetest: install tests/out/sourcecode.prepped.xml.test tests/out/sourcecode.text.test tests/out/sourcecode.pages.text.test tests/out/sourcecode.v3.html.test
 
-notoctest: install tests/out/no-toc.prepped.xml.test tests/out/no-toc.text.test tests/out/no-toc.pages.text.test tests/out/no-toc.v3.$(py).html.test
+notoctest: install tests/out/no-toc.prepped.xml.test tests/out/no-toc.text.test tests/out/no-toc.pages.text.test tests/out/no-toc.v3.html.test
 
 bomtest: tests/out/elements.bom.text.test
 
 wiptest: tests/out/elements.wip.text.test
 
-mantest: install cleantmp tests/out/manpage.txt.test tests/out/docfile.$(py).html.test
+mantest: install cleantmp tests/out/manpage.txt.test tests/out/docfile.html.test
 	@fgrep -q '***' tests/out/manpage.txt; res="$$?"; if [ "$$res" = "1" ]; then true; else echo "Missing documentation in manpage"; exit 1; fi
 
 manupdate: yes mantest
