@@ -29,7 +29,7 @@ legacydate_regex = [ADFJMOS][a-u]* [123]*[0-9], [12][0-9][0-9][0-9]$$
 generator_regex = name="generator"
 libversion_regex = \(pyflakes\|PyYAML\|requests\|setuptools\|six\|Weasyprint\) [0-9]\+\(\.[0-9]\+\)*
 
-py = $(shell python -c 'import sys; print("py%s%s" %(sys.version_info.major,sys.version_info.minor))')
+py = $(shell python3 -c 'import sys; print("py%s%s" %(sys.version_info.major,sys.version_info.minor))')
 
 rfcxml= \
 	rfc6787.xml		\
@@ -74,9 +74,9 @@ env/bin/python:
 
 .PHONY: install
 install:
-	python --version
-	python setup.py --quiet install
-	python configtest.py
+	python3 --version
+	python3 setup.py --quiet install
+	python3 configtest.py
 	rm -rf xml2rfc.egg-info/
 
 test:	install flaketest xml2rfc/data/v3.rng pytests
@@ -86,7 +86,7 @@ flaketest:
 	@[ -d tests/failed/ ] && rm -f tests/failed/*
 
 pytests:
-	python test.py --verbose
+	python3 test.py --verbose
 
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
