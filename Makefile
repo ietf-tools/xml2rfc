@@ -72,9 +72,9 @@ env/bin/python:
 
 .PHONY: install
 install:
-	python --version
-	python setup.py --quiet install
-	python configtest.py
+	python3 --version
+	python3 setup.py --quiet install
+	python3 configtest.py
 	rm -rf xml2rfc.egg-info/
 
 test:	install flaketest xml2rfc/data/v3.rng pytests
@@ -84,7 +84,7 @@ flaketest:
 	@[ -d tests/failed/ ] && rm -f tests/failed/*
 
 pytests:
-	python test.py --verbose
+	python3 test.py --verbose
 
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
