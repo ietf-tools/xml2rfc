@@ -147,7 +147,7 @@ jobs:
         
     - name: Install dependencies
       run: |
-        brew install pango libffi groff
+        brew install pango libffi groff make diffutils
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing requirements.txt + test dependencies..."
@@ -155,13 +155,16 @@ jobs:
         
     - name: Generate Valid Tests
       run: |
+        echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
         make yestests || true
         cp -af tests/out/. tests/valid
         
     - name: Test with tox
       env:
         PLATFORM: macos-latest
-      run: tox
+      run: |
+        echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
+        tox
       
 #   tests-windows:
 #     name: Unit Tests (Windows)
