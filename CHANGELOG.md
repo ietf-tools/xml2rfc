@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v3.12.8] - 2022-05-25
+### ✨ New Features
+- [`51e8b24`](https://github.com/ietf-tools/xml2rfc/commit/51e8b24fd25e5cffaadba415374aa7e5cc24c9a8) - Add support for Python 3.10 *(PR [#772](https://github.com/ietf-tools/xml2rfc/pull/772) by [@dkg](https://github.com/dkg))*
+
 ### :bug: Bug Fixes
 - [`46399d7`](https://github.com/ietf-tools/xml2rfc/commit/46399d7efaf77f21b0de01c42226d0bf44e699a4) - Implement emboldening primary iref entries *(PR [#778](https://github.com/ietf-tools/xml2rfc/pull/778) by [@cabo](https://github.com/cabo))*
 
