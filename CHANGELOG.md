@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.12.8] - 2022-05-25
+### :bug: Bug Fixes
+- [`46399d7`](https://github.com/ietf-tools/xml2rfc/commit/46399d7efaf77f21b0de01c42226d0bf44e699a4) - Implement emboldening primary iref entries *(PR [#778](https://github.com/ietf-tools/xml2rfc/pull/778) by [@cabo](https://github.com/cabo))*
+
+### :white_check_mark: Tests
+- [`e0095fd`](https://github.com/ietf-tools/xml2rfc/commit/e0095fdf9ece092a57746aa4313339b7191f9aff) - Remove Python version specific test results *(PR [#780](https://github.com/ietf-tools/xml2rfc/pull/780) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.12.7] - 2022-05-11
 ### :bug: Bug Fixes
 - [`42568b3`](https://github.com/ietf-tools/xml2rfc/commit/42568b3787ae549c8e718e43ac8f164a9b195067) - evaluate date.today() on class init, not import *(PR [#774](https://github.com/ietf-tools/xml2rfc/pull/774) by [@jennifer-richards](https://github.com/jennifer-richards))*
@@ -1807,3 +1815,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.12.5]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.4...v3.12.5
 [v3.12.6]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.5...v3.12.6
 [v3.12.7]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.6...v3.12.7
+[v3.12.8]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.7...v3.12.8
