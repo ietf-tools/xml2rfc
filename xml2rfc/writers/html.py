@@ -507,13 +507,13 @@ class HtmlWriter(BaseV3Writer):
 
         stream = self.root.get('submissionType')
         docname = self.root.get('docName')
-        if stream == "IETF" or docname.startsWith('draft-ietf'):
+        if stream == "IETF" or docname.startswith('draft-ietf'):
             add.meta(head, None, name="og:image",
               content="https://www.ietf.org/media/images/ietf-logo.original.png")
-        elif stream == "IAB" or docname.startsWith('draft-iab'):
+        elif stream == "IAB" or docname.startswith('draft-iab'):
             add.meta(head, None, name="og:image",
               content="https://www.iab.org/wp-content/themes/toolbox-IAB/shadow150.png")
-        elif stream == "IRTF" or docname.startsWith('draft-irtf'):
+        elif stream == "IRTF" or docname.startswith('draft-irtf'):
             add.meta(head, None, name="og:image",
               content="https://irtf.org/img/irtf.png")
 
