@@ -5,7 +5,6 @@ import importlib
 import sys
 import warnings
 
-warnings.filterwarnings("ignore", message='There are known rendering problems and missing features with cairo < 1.15.4')
 
 errors = 0
 
@@ -13,7 +12,6 @@ sys.stderr.write("Checking installation of test and development packages:\n")
 for (pname, mname) in [
             ('decorator', 'decorator'),
             ('dict2xml', 'dict2xml'),
-            ('pycairo', 'cairo'),
             ('PyPDF2', 'PyPDF2'),
         ]:
     try:
