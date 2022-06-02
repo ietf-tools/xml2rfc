@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.12.9] - 2022-06-02
+### :bug: Bug Fixes
+- [`1643d68`](https://github.com/ietf-tools/xml2rfc/commit/1643d6845e2309f79f4ddc34f22749372b359a2b) - Display long ASCII art correctly in PDF *(PR [#788](https://github.com/ietf-tools/xml2rfc/pull/788) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.12.8] - 2022-05-25
 ### ✨ New Features
 - [`51e8b24`](https://github.com/ietf-tools/xml2rfc/commit/51e8b24fd25e5cffaadba415374aa7e5cc24c9a8) - Add support for Python 3.10 *(PR [#772](https://github.com/ietf-tools/xml2rfc/pull/772) by [@dkg](https://github.com/dkg))*
@@ -1819,3 +1824,5 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.12.6]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.5...v3.12.6
 [v3.12.7]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.6...v3.12.7
 [v3.12.8]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.7...v3.12.8
+
+[v3.12.9]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.8...v3.12.9
