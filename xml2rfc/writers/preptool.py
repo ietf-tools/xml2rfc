@@ -416,7 +416,7 @@ class PrepToolWriter(BaseV3Writer):
         for c in e.iter(tags):
             for a in integer_attributes[c.tag]:
                 i = c.get(a)
-                if i and not i.isdigit() and not i==self.get_attribute_defaults(c.tag)[a]:
+                if i and not i.isdigit() and not i==self.get_attribute_defaults(c.tag).get(a):
                     self.err(c, 'Expected <%s> attribute "%s" to be a non-negative integer, but found "%s"' % (c.tag, a, i))
 
 
@@ -661,7 +661,10 @@ class PrepToolWriter(BaseV3Writer):
                 month = today.strftime('%m')
                 day = today.strftime('%d')
             datestr = "%s-%s-%s" %(year, month, day or '01')
-            date = datetime.datetime.strptime(datestr, "%Y-%m-%d").date()
+            try:
+                date = datetime.datetime.strptime(datestr, "%Y-%m-%d").date()
+            except ValueError:
+                self.die(e, '<date> {} is invalid'.format(datestr))
             if abs(date - datetime.date.today()) > datetime.timedelta(days=3):
                 self.warn(d, "The document date (%s) is more than 3 days away from today's date" % date)
             n = self.element('date', year=year, month=month, line=d.sourceline)
