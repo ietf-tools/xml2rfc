@@ -36,9 +36,6 @@ RUN apt-get install -y \
 
 # From deadsnakes
 RUN apt-get install -y \
-    python3.6 \
-    python3.6-dev \
-    python3.6-distutils \
     python3.7 \
     python3.7-dev \
     python3.7-distutils \
