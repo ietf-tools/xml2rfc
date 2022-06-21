@@ -64,7 +64,7 @@ class V2v3XmlWriter(BaseV3Writer):
                         xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                     nsmap=self.xmlrfc.nsmap,
                                     line=e.sourceline,
-                                    href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.%04d.xml"%int(num))
+                                    href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.%04d.xml"%int(num))
                         xi.tail = e.tail
                         i = p.index(e)
                         p.remove(e)

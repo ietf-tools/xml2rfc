@@ -54,8 +54,10 @@ class CachingResolver(lxml.etree.Resolver):
     def __init__(self, cache_path=None, library_dirs=None, source=None,
                  templates_path=base.default_options.template_dir, verbose=None, quiet=None,
                  no_network=None, network_locs= [
+                     'https://bib.ietf.org/public/rfc/',
                      'https://xml2rfc.ietf.org/public/rfc/',
                      'https://xml2rfc.tools.ietf.org/public/rfc/',
+                     'http://bib.ietf.org/public/rfc/',
                      'http://xml2rfc.ietf.org/public/rfc/',
                      'http://xml2rfc.tools.ietf.org/public/rfc/',
                  ],
