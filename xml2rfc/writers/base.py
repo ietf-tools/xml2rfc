@@ -2014,6 +2014,7 @@ class BaseV3Writer(object):
         authors = self.root.findall('front/author')
         authors = [ a for a in authors if a.get('role') != 'contributor' ]
         surnames = [ n for n in [ short_author_ascii_name_parts(a)[1] for a in authors ] if n ]
+        text = ''
         if len(surnames) == 1:
             text = surnames[0]
         elif len(surnames) == 2:
