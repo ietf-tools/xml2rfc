@@ -4137,18 +4137,24 @@ class TextWriter(BaseV3Writer):
             minspan = sys.maxsize
             for j in range(cols):
                 cell = cells[i][j]
-                k, l = cell.origin
-                hspan = cell.rowspan+k-i if cell.rowspan else minspan
-                if hspan > 0 and hspan < minspan:
-                    minspan = hspan
+                if hasattr(cell, 'origin'):
+                    k, l = cell.origin
+                    hspan = cell.rowspan+k-i if cell.rowspan else minspan
+                    if hspan > 0 and hspan < minspan:
+                        minspan = hspan
+                else:
+                    self.die(e, "Inconsistent table width: Found different row lengths in this table")
             maxlines = 0
             for j in range(cols):
                 cell = cells[i][j]
-                k, l = cell.origin
-                hspan = cell.rowspan+k-i if cell.rowspan else minspan
-                lines = len(cell.wrapped) if cell.wrapped else 0
-                if hspan == minspan and lines > maxlines:
-                    maxlines = lines
+                if hasattr(cell, 'origin'):
+                    k, l = cell.origin
+                    hspan = cell.rowspan+k-i if cell.rowspan else minspan
+                    lines = len(cell.wrapped) if cell.wrapped else 0
+                    if hspan == minspan and lines > maxlines:
+                        maxlines = lines
+                else:
+                    self.die(e, "Inconsistent table width: Found different row lengths in this table")
             for j in range(cols):
                 cells[i][j].lines = maxlines
 
@@ -4156,22 +4162,28 @@ class TextWriter(BaseV3Writer):
         # Calculate total height for rowspan cells
         for i in range(rows):
             for j in range(cols):
-                cells[i][j].m = None
-                cells[i][j].height = None
-                k, l = cells[i][j].origin
-                cell = cells[k][l]
-                if cell.m is None:
-                    cell.m = 0
-                    cell.height = sum([ cells[n][l].lines for n in range(k, k+cell.rowspan)]) + cell.rowspan-1
+                if hasattr(cells[i][j], 'origin'):
+                    cells[i][j].m = None
+                    cells[i][j].height = None
+                    k, l = cells[i][j].origin
+                    cell = cells[k][l]
+                    if cell.m is None:
+                        cell.m = 0
+                        cell.height = sum([ cells[n][l].lines for n in range(k, k+cell.rowspan)]) + cell.rowspan-1
+                else:
+                    self.die(e, "Inconsistent table width: Found different row lengths in this table")
 
         # ----------------------------------------------------------------------
         # Calculate total width for colspan cells
         for i in range(rows):
             for j in range(cols):
-                k, l = cells[i][j].origin
-                cell = cells[k][l]
-                if cell.origin == (i,j):
-                    cell.colwidth = sum([ cells[i][n].colwidth for n in range(j, j+cell.colspan)]) + cell.colspan-1
+                if hasattr(cells[i][j], 'origin'):
+                    k, l = cells[i][j].origin
+                    cell = cells[k][l]
+                    if cell.origin == (i,j):
+                        cell.colwidth = sum([ cells[i][n].colwidth for n in range(j, j+cell.colspan)]) + cell.colspan-1
+                else:
+                    self.die(e, "Inconsistent table width: Found different row lengths in this table")
 
         # ----------------------------------------------------------------------
         # Calculate minimum padding per table column
@@ -4179,10 +4191,13 @@ class TextWriter(BaseV3Writer):
         for i in range(rows):
             for j in range(cols):
                 cell = cells[i][j]
-                if cell.origin == (i, j):
-                    padding = min([width] + [(cell.colwidth - textwidth(line)) for line in cell.wrapped])
-                    if padding < minpad[j]:
-                        minpad[j] = padding
+                if hasattr(cell, 'origin'):
+                    if cell.origin == (i, j):
+                        padding = min([width] + [(cell.colwidth - textwidth(line)) for line in cell.wrapped])
+                        if padding < minpad[j]:
+                            minpad[j] = padding
+                else:
+                    self.die(e, "Inconsistent table width: Found different row lengths in this table")
 
         # ----------------------------------------------------------------------
         # Add cell borders
@@ -4191,12 +4206,15 @@ class TextWriter(BaseV3Writer):
         for i in range(rows):
             for j in range(cols):
                 cell = cells[i][j]
-                if cell.origin == (i, j):
-                    wrapped = (cell.wrapped + ['']*cell.height)[:cell.height]
-                    lines = (  ([ x + cell.top*cell.colwidth + x ] if cell.top else [])
-                             + ([ l + justify(cell, line, minpad[j]) + l for line in wrapped ])
-                             + ([ x + cell.bot*cell.colwidth + x ] if cell.bot else []) )
-                    cell.wrapped = lines
+                if hasattr(cell, 'origin'):
+                    if cell.origin == (i, j):
+                        wrapped = (cell.wrapped + ['']*cell.height)[:cell.height]
+                        lines = (  ([ x + cell.top*cell.colwidth + x ] if cell.top else [])
+                                 + ([ l + justify(cell, line, minpad[j]) + l for line in wrapped ])
+                                 + ([ x + cell.bot*cell.colwidth + x ] if cell.bot else []) )
+                        cell.wrapped = lines
+                else:
+                    self.die(e, "Inconsistent table width: Found different row lengths in this table")
 
         #show(cells, 'lines', 'before assembly')
         # ----------------------------------------------------------------------
