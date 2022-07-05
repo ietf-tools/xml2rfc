@@ -480,8 +480,10 @@ class XmlRfcParser:
     def __init__(self, source, verbose=None, quiet=None, options=base.default_options,
                  cache_path=None, templates_path=base.default_options.template_dir, library_dirs=None, add_xmlns=False,
                  no_network=None, network_locs=[
+                     'https://bib.ietf.org/public/rfc/',
                      'https://xml2rfc.ietf.org/public/rfc/',
                      'https://xml2rfc.tools.ietf.org/public/rfc/',
+                     'http://bib.ietf.org/public/rfc/',
                      'http://xml2rfc.ietf.org/public/rfc/',
                      'http://xml2rfc.tools.ietf.org/public/rfc/',
                  ]
