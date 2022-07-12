@@ -41,7 +41,7 @@ from xml2rfc.util.date import get_expiry_date, format_date, normalize_month
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import ( unicode_content_tags, unicode_attributes, bare_unicode_tags,
-    expand_unicode_element, isascii, downcode, latinscript_attributes)
+    expand_unicode_element, isascii, downcode, latinscript_attributes, is_svg)
 from xml2rfc.utils import build_dataurl, namespaces, sdict, clean_text
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 
@@ -501,6 +501,8 @@ class PrepToolWriter(BaseV3Writer):
     def check_ascii_text(self, e, p):
         self.downcode_punctuation()
         for c in self.root.iter():
+            if is_svg(c):
+                continue
             p = c.getparent()
             if c.text and not isascii(c.text):
                 show = c.text.encode('ascii', errors='replace')
