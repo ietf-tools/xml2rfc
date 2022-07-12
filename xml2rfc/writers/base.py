@@ -2123,18 +2123,17 @@ class BaseV3Writer(object):
                 else:
                     if e.text and re.search(r'\n[ \t]+$', e.text):
                         e.text = re.sub(r'\n[ \t]+$', '\n'+' '*(i), e.text)
-                    
-            #
+
             for c in e:
                 indent(c, i+ind)
-            #
-            if e.tag not in all_inline_tags:# and e.tag not in ['artwork', 'sourcecode', ]:
+
+            if e.tag not in all_inline_tags:
                 if e.tail is None or e.tail.strip()=='':
                     if e.getnext() != None:
                         e.tail = '\n'+' '*i
                     else:
                         e.tail = '\n'+' '*(i-ind)
-                else:
+                elif not is_svg(e):
                     self.warn(e, 'Unexpected text content after block tag: <%s>%s' % (e.tag, e.tail))
             else:
                 if e.tail != None and e.tail.strip()=='' and '\n' in e.tail:
