@@ -505,7 +505,7 @@ class PdfWriterTests(unittest.TestCase):
         #
         text = norm('\n'.join( p.text for p in self.pdfxml.xpath('.//Page/text') ))
         for e in self.root.xpath('./middle//*'):
-            if e.text and e.text.strip() and e.tag not in xml2rfc.util.unicode.unicode_content_tags:
+            if e.text and e.text.strip() and e.tag not in xml2rfc.util.unicode.unicode_content_tags and not xml2rfc.util.unicode.is_svg(e):
                 t =  norm(e.text.split(None, 1)[0])
                 self.assertIn(t, text)
 

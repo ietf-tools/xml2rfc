@@ -84,6 +84,17 @@ bare_latin_tags = set([
     ])
 
 
+def is_svg(e):
+    '''
+    Returns true if an element is a SVG element
+    '''
+
+    if str(e.tag).startswith('{http://www.w3.org/2000/svg}'):
+        return True
+    else:
+        return False
+
+
 for t in bare_unicode_tags:
     assert t in unicode_content_tags
 

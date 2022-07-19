@@ -13,7 +13,7 @@ from lxml.etree import Element, Comment, CDATA
 
 import xml2rfc
 from xml2rfc import log
-from xml2rfc.util.unicode import unicode_content_tags, unicode_replacements, isascii
+from xml2rfc.util.unicode import unicode_content_tags, unicode_replacements, isascii, is_svg
 from xml2rfc.utils import hastext, isempty, sdict, slugify, iscomment
 from xml2rfc.writers.base import default_options, BaseV3Writer
 
@@ -1153,6 +1153,8 @@ class V2v3XmlWriter(BaseV3Writer):
         self.downcode(replacements=unicode_replacements)
         self.downcode_punctuation()
         for e in self.tree.iter():
+            if is_svg(e):
+                continue
             def uwrap(text, line): 
                 words = []
                 elements = []
@@ -1177,7 +1179,6 @@ class V2v3XmlWriter(BaseV3Writer):
                     else:
                         elements[-1].tail = ''.join(words)
                 return ascii, elements
-            #
             if e.text and e.tag not in unicode_content_tags:
                     try:
                         e.text.encode('ascii')

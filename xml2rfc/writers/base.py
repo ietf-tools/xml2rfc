@@ -29,7 +29,7 @@ from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
 from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_content_tags, bare_unicode_tags,
-    bare_latin_tags, unicode_attributes, downcode, downcode_punctuation)
+    bare_latin_tags, unicode_attributes, downcode, downcode_punctuation, is_svg)
 from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
 
 
@@ -2047,6 +2047,8 @@ class BaseV3Writer(object):
 
         """
         for e in self.tree.iter():
+            if is_svg(e):
+                continue
             if e.text:
                 if not e.tag in unicode_content_tags:
                     try:
@@ -2121,18 +2123,17 @@ class BaseV3Writer(object):
                 else:
                     if e.text and re.search(r'\n[ \t]+$', e.text):
                         e.text = re.sub(r'\n[ \t]+$', '\n'+' '*(i), e.text)
-                    
-            #
+
             for c in e:
                 indent(c, i+ind)
-            #
-            if e.tag not in all_inline_tags:# and e.tag not in ['artwork', 'sourcecode', ]:
+
+            if e.tag not in all_inline_tags:
                 if e.tail is None or e.tail.strip()=='':
                     if e.getnext() != None:
                         e.tail = '\n'+' '*i
                     else:
                         e.tail = '\n'+' '*(i-ind)
-                else:
+                elif not is_svg(e):
                     self.warn(e, 'Unexpected text content after block tag: <%s>%s' % (e.tag, e.tail))
             else:
                 if e.tail != None and e.tail.strip()=='' and '\n' in e.tail:
