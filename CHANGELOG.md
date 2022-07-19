@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.13.1] - 2022-07-19
+### :bug: Bug Fixes
+- [`63de72a`](https://github.com/ietf-tools/xml2rfc/commit/63de72a05452d47bb71845e855b723bd3b87c3d9) - Use bib.ietf.org for citations  *(PR [#804](https://github.com/ietf-tools/xml2rfc/pull/804) by [@kesara](https://github.com/kesara))*
+- [`ad44bb8`](https://github.com/ietf-tools/xml2rfc/commit/ad44bb8d3e42a7a3a045eb1471e8e3311365133f) - Render unicode characters in SVG elements correctly  *(PR [#832](https://github.com/ietf-tools/xml2rfc/pull/832) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.13.0] - 2022-06-22
 ### :sparkles: New Features
 - [`6938d80`](https://github.com/ietf-tools/xml2rfc/commit/6938d806e5d84ea892f3eabe8dc6c10426d3b5ca) - Drop support for Python 3.6 *(PR [#796](https://github.com/ietf-tools/xml2rfc/pull/796) by [@kesara](https://github.com/kesara))*
@@ -1846,3 +1852,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.12.9]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.8...v3.12.9
 [v3.12.10]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.9...v3.12.10
 [v3.13.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.10...v3.13.0
+[v3.13.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.13.0...v3.13.1
