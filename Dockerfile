@@ -71,11 +71,10 @@ COPY requirements.txt .
 
 # build xml2rfc
 RUN pip3 install -r requirements.txt \
-    "weasyprint==55.0" \
+    "weasyprint>=53.0" \
     decorator \
     dict2xml \
-    typing-extensions \
-    pdfplumber
+    "pypdf2>=2.6.0"
 RUN make install
 
 # cleanup
@@ -84,7 +83,7 @@ RUN rm roboto-mono.zip
 RUN apt-get remove --purge -y software-properties-common wget unzip
 RUN apt-get autoclean
 RUN apt-get clean
-RUN pip3 uninstall -y decorator dict2xml typing-extensions pdfplumber
+RUN pip3 uninstall -y decorator dict2xml pypdf2
 RUN rm setup.py README.md Makefile configtest.py requirements.txt
 RUN rm -r xml2rfc build dist
 

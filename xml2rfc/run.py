@@ -87,7 +87,7 @@ def get_pdf_help(missing_libs=""):
 
     2. Next, install weasyprint python modules using pip.
 
-        pip install 'weasyprint==55.0'
+        pip install 'weasyprint>=53.0'
 
 
     3. Finally, install the full Noto Font and Roboto Mono packages:
