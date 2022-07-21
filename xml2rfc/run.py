@@ -33,10 +33,6 @@ def get_missing_pdf_libs():
     missing = ""
     if not xml2rfc.HAVE_WEASYPRINT:
         missing += "\nCould not import weasyprint"
-    if not xml2rfc.HAVE_PYCAIRO:
-        missing += "\nCould not import pycairo"
-    if not xml2rfc.HAVE_CAIRO:
-        missing += "\nCould not find the cairo lib"
     if not xml2rfc.HAVE_PANGO:
         missing += "\nCould not find the pango lib"
     return missing
@@ -84,29 +80,14 @@ def get_pdf_help(missing_libs=""):
     In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
     depends on external libaries that must be installed as native packages.
 
-    1. First, install the Cairo, Pango, and GDK-PixBuf library files on your
+    1. First, install the Pango, and other required libraries on your
     system.  See installation instructions on the WeasyPrint Docs:
     
-        https://weasyprint.readthedocs.io/en/stable/install.html
+        https://doc.courtbouillon.org/weasyprint/stable/first_steps.html
 
-    (Python 3 is not needed if your system Python is 2.7, though).
+    2. Next, install weasyprint python modules using pip.
 
-
-    2. Next, install the pycairo and weasyprint python modules using pip.
-    Depending on your system, you may need to use 'sudo' or install in
-    user-specific directories, using the --user switch.  On OS X in
-    particular, you may also need to install a newer version of setuptools
-    using --user before weasyprint can be installed.  If you install with 
-    the --user switch, you may need to also set PYTHONPATH, e.g.,
-    
-        PYTHONPATH=/Users/username/Library/Python/2.7/lib/python/site-packages
-
-    for Python 2.7.
-
-    The basic pip commands (modify as needed according to the text above)
-    are:
-
-        pip install 'pycairo>=1.18' 'weasyprint<=0.42.3'
+        pip install 'weasyprint>=53.0'
 
 
     3. Finally, install the full Noto Font and Roboto Mono packages:
@@ -212,7 +193,7 @@ def main():
                            help='outputs formatted HTML to file')
     formatgroup.add_argument('--nroff', action='store_true',
                            help='outputs formatted nroff to file (only v2 input)')
-    if xml2rfc.HAVE_CAIRO and xml2rfc.HAVE_PANGO:
+    if xml2rfc.HAVE_PANGO:
         formatgroup.add_argument('--pdf', action='store_true',
                                help='outputs formatted PDF to file')
     else:

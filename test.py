@@ -510,7 +510,7 @@ class PdfWriterTests(unittest.TestCase):
                 self.assertIn(t, text)
 
     def test_included_fonts(self):
-        if xml2rfc.HAVE_WEASYPRINT and xml2rfc.HAVE_PYCAIRO and xml2rfc.HAVE_CAIRO and xml2rfc.HAVE_PANGO:
+        if xml2rfc.HAVE_WEASYPRINT and xml2rfc.HAVE_PANGO:
             font_families = set([ f.text for f in self.pdfxml.xpath('.//FontFamily') ])
             for script in self.root.get('scripts').split(','):
                 family = xml2rfc.util.fonts.get_noto_serif_family_for_script(script)

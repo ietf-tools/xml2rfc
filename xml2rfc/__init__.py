@@ -35,20 +35,7 @@ except (ImportError, OSError, ValueError):
     weasyprint = False
     HAVE_WEASYPRINT = False
 try:
-    import cairo
-    HAVE_PYCAIRO = True
-except (ImportError, OSError):
-    cairo = False
-    HAVE_PYCAIRO = False
-try:
-    from weasyprint.text import cairo
-    HAVE_CAIRO = True
-    CAIRO_VERSION = cairo.cairo_version()
-except (ImportError, OSError):
-    HAVE_CAIRO = False
-    CAIRO_VERSION = None
-try:
-    from weasyprint.text import pango
+    from weasyprint.text.ffi import pango
     HAVE_PANGO = True
     PANGO_VERSION = pango.pango_version
 except (ImportError, OSError, AttributeError):
@@ -59,7 +46,7 @@ except (ImportError, OSError, AttributeError):
 def get_versions():
     import sys
     versions = []
-    extras = set(['pycairo', 'weasyprint'])
+    extras = set(['weasyprint'])
     try:
         import pkg_resources
         this = pkg_resources.working_set.by_key[NAME]

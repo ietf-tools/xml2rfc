@@ -8,8 +8,6 @@ import os
 
 import warnings
 
-warnings.filterwarnings("ignore", message='There are known rendering problems with Cairo <= 1.14.0')
-warnings.filterwarnings("ignore", message='There are known rendering problems and missing features with cairo < 1.15.4')
 warnings.filterwarnings("ignore", message='@font-face support needs Pango >= 1.38')
 
 try:
@@ -44,6 +42,8 @@ class PdfWriter(BaseV3Writer):
             return
 
         logging.basicConfig(level=logging.INFO)
+
+        # Weasyprint logger
         wplogger = logging.getLogger('weasyprint')
         if   self.options.quiet:
             wplogger.setLevel(logging.CRITICAL)
@@ -51,6 +51,15 @@ class PdfWriter(BaseV3Writer):
             wplogger.setLevel(logging.WARNING)
         else:
             wplogger.setLevel(logging.ERROR)
+
+        # fontTools logger
+        ftlogger = logging.getLogger('fontTools')
+        if self.options.quiet:
+            ftlogger.setLevel(logging.CRITICAL)
+        elif self.options.verbose:
+            ftlogger.setLevel(logging.WARNING)
+        else:
+            ftlogger.setLevel(logging.ERROR)
 
     def pdf(self):
         if not weasyprint:
