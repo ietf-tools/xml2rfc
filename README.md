@@ -81,7 +81,7 @@ As outlined in the [Contributing](https://github.com/ietf-tools/.github/blob/mai
 For example *(replace `USERNAME` with your GitHub username)*:
 
 ```sh
-git clone https://github.com/USERNAME/datatracker.git
+git clone https://github.com/USERNAME/xml2rfc.git
 ```
 #### Docker Dev Environment
 
