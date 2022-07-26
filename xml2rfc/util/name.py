@@ -168,7 +168,8 @@ def full_author_name_set(a):
         else:
             ascii = full_author_ascii_name(a)
     else:
-        ascii = None
+        name = full_org_name(a)
+        ascii = full_org_ascii_name(a)
     if name == ascii:
         ascii = None
     return name, ascii
