@@ -586,7 +586,7 @@ class HtmlWriter(BaseV3Writer):
         for link in x.xpath('./link'):
             head.append(link)
 
-        body = add.body(html, None)
+        body = add.body(html, None, classes='xml2rfc')
 
         scheme = urlparse(self.options.metadata_js_url).scheme
         if scheme in ['http', 'https', 'ftp', 'file', ]:
