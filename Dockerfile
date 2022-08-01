@@ -20,7 +20,12 @@ RUN apt-get install -y --fix-missing \
     groff \
     wget \
     unzip \
-    locales
+    locales \
+    # additional tools
+    git \
+    vim \
+    less
+
 # Set locale
 RUN locale-gen en_US.UTF-8
 
