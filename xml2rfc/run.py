@@ -315,6 +315,8 @@ def main():
                            help=configargparse.SUPPRESS),
     htmloptions.add_argument('--no-inline-version-info', action='store_false', dest="inline_version_info",
                            help=configargparse.SUPPRESS),
+    htmloptions.add_argument('--no-rfc-local', action='store_false', dest='rfc_local', default=True,
+                             help='Do not link to rfc-local.css')
 
     v2v3options = optionparser.add_argument_group('V2-V3 Converter Options')
     v2v3options.add_argument('--add-xinclude', action='store_true',
