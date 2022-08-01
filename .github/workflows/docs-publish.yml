@@ -35,13 +35,14 @@ jobs:
         
       - name: Generate docs
         run: |
+          mkdir docs-dist
           xml2rfc --docfile --out docs.xml
-          xml2rfc --html docs.xml --out index.html
+          xml2rfc --html docs.xml --out docs-dist/index.html
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: 'index.html'
+          path: 'dist'
         
       - name: Deploy to GitHub Pages
         id: deployment
