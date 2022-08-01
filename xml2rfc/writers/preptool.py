@@ -667,7 +667,7 @@ class PrepToolWriter(BaseV3Writer):
                 date = datetime.datetime.strptime(datestr, "%Y-%m-%d").date()
             except ValueError:
                 self.die(e, '<date> {} is invalid'.format(datestr))
-            if abs(date - datetime.date.today()) > datetime.timedelta(days=3):
+            if not self.rfcnumber and abs(date - datetime.date.today()) > datetime.timedelta(days=3):
                 self.warn(d, "The document date (%s) is more than 3 days away from today's date" % date)
             n = self.element('date', year=year, month=month, line=d.sourceline)
             if day:
