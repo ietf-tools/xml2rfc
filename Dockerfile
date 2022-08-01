@@ -49,15 +49,9 @@ RUN apt-get install -y \
     python3.9-dev \
     python3.9-distutils
 
-# Update pip
-RUN pip install --upgrade pip
-
-# Instal tox
-RUN pip3 install tox
-
 WORKDIR /root
 
-# install required fonts
+# Install required fonts
 RUN mkdir -p ~/.fonts/opentype
 RUN wget -q https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
 RUN unzip -q Noto-unhinted.zip -d ~/.fonts/opentype/
@@ -66,21 +60,11 @@ RUN unzip -q roboto-mono.zip -d ~/.fonts/opentype/
 RUN ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
 RUN fc-cache -f
 
-# Copy everything required to build xml2rfc
-COPY setup.py .
-COPY README.md .
-COPY Makefile .
-COPY configtest.py .
-COPY xml2rfc ./xml2rfc
-COPY requirements.txt .
+# Update pip
+RUN pip install --upgrade pip
 
-# build xml2rfc
-RUN pip3 install -r requirements.txt \
-    "weasyprint>=53.0" \
-    decorator \
-    dict2xml \
-    "pypdf2>=2.6.0"
-RUN make install
+# Install latest packages from PyPI
+RUN pip3 install xml2rfc "weasyprint>=53.0" tox
 
 # cleanup
 RUN rm Noto-unhinted.zip
@@ -88,13 +72,14 @@ RUN rm roboto-mono.zip
 RUN apt-get remove --purge -y software-properties-common wget unzip
 RUN apt-get autoclean
 RUN apt-get clean
-RUN pip3 uninstall -y decorator dict2xml pypdf2
-RUN rm setup.py README.md Makefile configtest.py requirements.txt
-RUN rm -r xml2rfc build dist
+
+# Copy files
+COPY README.md .
+COPY LICENSE .
 
 # bash config
 RUN echo 'export LANG=en_US.UTF-8' >> ~/.bashrc
-RUN echo 'xml2rfc --version' >> ~/.bashrc
+RUN echo 'xml2rfc --version --verbose' >> ~/.bashrc
 RUN echo 'if [ -d ~/xml2rfc ]; then cd ~/xml2rfc; fi' >> ~/.bashrc
 
 ENTRYPOINT bash
