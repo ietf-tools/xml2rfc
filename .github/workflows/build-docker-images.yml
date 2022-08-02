@@ -1,4 +1,4 @@
-name: Build Base Docker Image
+name: Build Docker Images
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - 'main'
     paths:
       - 'docker/base.Dockerfile'
+      - 'docker/dev.Dockerfile'
 
   workflow_dispatch:
 
@@ -32,7 +33,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Docker Build & Push
+    - name: Base image - Docker Build & Push
       uses: docker/build-push-action@v3
       with:
         context: .
@@ -40,3 +41,12 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ghcr.io/ietf-tools/xml2rfc-base:latest
+
+    - name: Dev image - Docker Build & Push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: docker/dev.Dockerfile
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ghcr.io/ietf-tools/xml2rfc-dev:latest
