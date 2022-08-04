@@ -205,9 +205,9 @@ cachetest: cleantmp install
 	@echo -e "\n Clearing cache ..."
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache .cache --clear-cache"
 	@echo " Filling cache ..."
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache .cache tests/input/rfc6787.xml --base tmp/ --raw --legacy"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache .cache tests/input/draft-template.xml --base tmp/"
 	@echo " Running without accessing network ..."
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache .cache tests/input/rfc6787.xml --no-network --base tmp/ --raw --legacy"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache .cache tests/input/draft-template.xml --no-network --base tmp/"
 
 
 rfctest: cleantmp env/bin/python install $(rfctests) tests/out/rfc9001.canonical.html.test
