@@ -1,847 +1,1916 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Put Your Internet Draft Title Here</title>
+<meta content="Elwyn Davies" name="author">
+<meta content="Quintin Zhao" name="author">
+<meta content="
+       Insert an abstract: MANDATORY. This template is for creating an
+      Internet Draft. 
+    " name="description">
+<meta content="xml2rfc 3.13.1" name="generator">
+<meta content="template" name="keyword">
+<meta content="draft-ietf-xml2rfc-template-05" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.13.1
+    Python 3.9.13
+    appdirs 1.4.4
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.2
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    kitchen 1.2.6
+    lxml 4.9.1
+    MarkupSafe 2.1.1
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.28.1
+    setuptools 63.2.0
+    six 1.16.0
+    weasyprint 56.1
+-->
+<link href="tests/input/draft-template.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
-  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
 
-  <title>Put Your Internet Draft Title Here</title>
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necssary during the development of the v3
+  formatters.
 
-  <style type="text/css" title="Xml2Rfc (sans serif)">
-  /*<![CDATA[*/
-	  a {
-	  text-decoration: none;
-	  }
-      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
-      a.info {
-          /* This is the key. */
-          position: relative;
-          z-index: 24;
-          text-decoration: none;
-      }
-      a.info:hover {
-          z-index: 25;
-          color: #FFF; background-color: #900;
-      }
-      a.info span { display: none; }
-      a.info:hover span.info {
-          /* The span will display just on :hover state. */
-          display: block;
-          position: absolute;
-          font-size: smaller;
-          top: 2em; left: -5em; width: 15em;
-          padding: 2px; border: 1px solid #333;
-          color: #900; background-color: #EEE;
-          text-align: left;
-      }
-	  a.smpl {
-	  color: black;
-	  }
-	  a:hover {
-	  text-decoration: underline;
-	  }
-	  a:active {
-	  text-decoration: underline;
-	  }
-	  address {
-	  margin-top: 1em;
-	  margin-left: 2em;
-	  font-style: normal;
-	  }
-	  body {
-	  color: black;
-	  font-family: verdana, helvetica, arial, sans-serif;
-	  font-size: 10pt;
-	  max-width: 55em;
-	  
-	  }
-	  cite {
-	  font-style: normal;
-	  }
-	  dd {
-	  margin-right: 2em;
-	  }
-	  dl {
-	  margin-left: 2em;
-	  }
-	
-	  ul.empty {
-	  list-style-type: none;
-	  }
-	  ul.empty li {
-	  margin-top: .5em;
-	  }
-	  dl p {
-	  margin-left: 0em;
-	  }
-	  dt {
-	  margin-top: .5em;
-	  }
-	  h1 {
-	  font-size: 14pt;
-	  line-height: 21pt;
-	  page-break-after: avoid;
-	  }
-	  h1.np {
-	  page-break-before: always;
-	  }
-	  h1 a {
-	  color: #333333;
-	  }
-	  h2 {
-	  font-size: 12pt;
-	  line-height: 15pt;
-	  page-break-after: avoid;
-	  }
-	  h3, h4, h5, h6 {
-	  font-size: 10pt;
-	  page-break-after: avoid;
-	  }
-	  h2 a, h3 a, h4 a, h5 a, h6 a {
-	  color: black;
-	  }
-	  img {
-	  margin-left: 3em;
-	  }
-	  li {
-	  margin-left: 2em;
-	  margin-right: 2em;
-	  }
-	  ol {
-	  margin-left: 2em;
-	  margin-right: 2em;
-	  }
-	  ol p {
-	  margin-left: 0em;
-	  }
-	  p {
-	  margin-left: 2em;
-	  margin-right: 2em;
-	  }
-	  pre {
-	  margin-left: 3em;
-	  background-color: lightyellow;
-	  padding: .25em;
-	  }
-	  pre.text2 {
-	  border-style: dotted;
-	  border-width: 1px;
-	  background-color: #f0f0f0;
-	  width: 69em;
-	  }
-	  pre.inline {
-	  background-color: white;
-	  padding: 0em;
-	  }
-	  pre.text {
-	  border-style: dotted;
-	  border-width: 1px;
-	  background-color: #f8f8f8;
-	  width: 69em;
-	  }
-	  pre.drawing {
-	  border-style: solid;
-	  border-width: 1px;
-	  background-color: #f8f8f8;
-	  padding: 2em;
-	  }
-	  table {
-	  margin-left: 2em;
-	  }
-	  table.tt {
-	  vertical-align: top;
-	  }
-	  table.full {
-	  border-style: outset;
-	  border-width: 1px;
-	  }
-	  table.headers {
-	  border-style: outset;
-	  border-width: 1px;
-	  }
-	  table.tt td {
-	  vertical-align: top;
-	  }
-	  table.full td {
-	  border-style: inset;
-	  border-width: 1px;
-	  }
-	  table.tt th {
-	  vertical-align: top;
-	  }
-	  table.full th {
-	  border-style: inset;
-	  border-width: 1px;
-	  }
-	  table.headers th {
-	  border-style: none none inset none;
-	  border-width: 1px;
-	  }
-	  table.left {
-	  margin-right: auto;
-	  }
-	  table.right {
-	  margin-left: auto;
-	  }
-	  table.center {
-	  margin-left: auto;
-	  margin-right: auto;
-	  }
-	  caption {
-	  caption-side: bottom;
-	  font-weight: bold;
-	  font-size: 9pt;
-	  margin-top: .5em;
-	  }
-	
-	  table.header {
-	  border-spacing: 1px;
-	  width: 95%;
-	  font-size: 10pt;
-	  color: white;
-	  }
-	  td.top {
-	  vertical-align: top;
-	  }
-	  td.topnowrap {
-	  vertical-align: top;
-	  white-space: nowrap; 
-	  }
-	  table.header td {
-	  background-color: gray;
-	  width: 50%;
-	  }
-	  table.header a {
-	  color: white;
-	  }
-	  td.reference {
-	  vertical-align: top;
-	  white-space: nowrap;
-	  padding-right: 1em;
-	  }
-	  thead {
-	  display:table-header-group;
-	  }
-	  ul.toc, ul.toc ul {
-	  list-style: none;
-	  margin-left: 1.5em;
-	  margin-right: 0em;
-	  padding-left: 0em;
-	  }
-	  ul.toc li {
-	  line-height: 150%;
-	  font-weight: bold;
-	  font-size: 10pt;
-	  margin-left: 0em;
-	  margin-right: 0em;
-	  }
-	  ul.toc li li {
-	  line-height: normal;
-	  font-weight: normal;
-	  font-size: 9pt;
-	  margin-left: 0em;
-	  margin-right: 0em;
-	  }
-	  li.excluded {
-	  font-size: 0pt;
-	  }
-	  ul p {
-	  margin-left: 0em;
-	  }
-	
-	  .comment {
-	  background-color: yellow;
-	  }
-	  .center {
-	  text-align: center;
-	  }
-	  .error {
-	  color: red;
-	  font-style: italic;
-	  font-weight: bold;
-	  }
-	  .figure {
-	  font-weight: bold;
-	  text-align: center;
-	  font-size: 9pt;
-	  }
-	  .filename {
-	  color: #333333;
-	  font-weight: bold;
-	  font-size: 12pt;
-	  line-height: 21pt;
-	  text-align: center;
-	  }
-	  .fn {
-	  font-weight: bold;
-	  }
-	  .hidden {
-	  display: none;
-	  }
-	  .left {
-	  text-align: left;
-	  }
-	  .right {
-	  text-align: right;
-	  }
-	  .title {
-	  color: #990000;
-	  font-size: 18pt;
-	  line-height: 18pt;
-	  font-weight: bold;
-	  text-align: center;
-	  margin-top: 36pt;
-	  }
-	  .vcardline {
-	  display: block;
-	  }
-	  .warning {
-	  font-size: 14pt;
-	  background-color: yellow;
-	  }
-	
-	
-	  @media print {
-	  .noprint {
-		display: none;
-	  }
-	
-	  a {
-		color: black;
-		text-decoration: none;
-	  }
-	
-	  table.header {
-		width: 90%;
-	  }
-	
-	  td.header {
-		width: 50%;
-		color: black;
-		background-color: white;
-		vertical-align: top;
-		font-size: 12pt;
-	  }
-	
-	  ul.toc a::after {
-		content: leader('.') target-counter(attr(href), page);
-	  }
-	
-	  ul.ind li li a {
-		content: target-counter(attr(href), page);
-	  }
-	
-	  .print2col {
-		column-count: 2;
-		-moz-column-count: 2;
-		column-fill: auto;
-	  }
-	  }
-	
-	  @page {
-	  @top-left {
-		   content: "Internet-Draft"; 
-	  } 
-	  @top-right {
-		   content: "December 2010"; 
-	  } 
-	  @top-center {
-		   content: "Abbreviated Title";
-	  } 
-	  @bottom-left {
-		   content: "Doe"; 
-	  } 
-	  @bottom-center {
-		   content: "Expires June 2011"; 
-	  } 
-	  @bottom-right {
-		   content: "[Page " counter(page) "]"; 
-	  } 
-	  }
-	
-	  @page:first { 
-		@top-left {
-		  content: normal;
-		}
-		@top-right {
-		  content: normal;
-		}
-		@top-center {
-		  content: normal;
-		}
-	  }
-  /*]]>*/
-  </style>
+*/
 
-  <link href="#rfc.toc" rel="Contents">
-<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
-<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language">
-<link href="#rfc.section.2" rel="Chapter" title="2 Simple List">
-<link href="#rfc.section.3" rel="Chapter" title="3 Figures">
-<link href="#rfc.section.4" rel="Chapter" title="4 Subsections and Tables">
-<link href="#rfc.section.4.1" rel="Chapter" title="4.1 A Subsection">
-<link href="#rfc.section.4.2" rel="Chapter" title="4.2 Tables">
-<link href="#rfc.section.5" rel="Chapter" title="5 More about Lists">
-<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Numbering Lists across Lists and Sections">
-<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Where the List Numbering Continues">
-<link href="#rfc.section.5.3" rel="Chapter" title="5.3 nested lists">
-<link href="#rfc.section.5.4" rel="Chapter" title="5.4 List Formats">
-<link href="#rfc.section.6" rel="Chapter" title="6 Example of Code or MIB Module To Be Extracted">
-<link href="#rfc.section.7" rel="Chapter" title="7 Acknowledgements">
-<link href="#rfc.section.8" rel="Chapter" title="8 IANA Considerations">
-<link href="#rfc.section.9" rel="Chapter" title="9 Security Considerations">
-<link href="#rfc.references" rel="Chapter" title="10 References">
-<link href="#rfc.references.1" rel="Chapter" title="10.1 Normative References">
-<link href="#rfc.references.2" rel="Chapter" title="10.2 Informative References">
-<link href="#rfc.appendix.A" rel="Chapter" title="A Additional Stuff">
-<link href="#rfc.contributors" rel="Chapter">
-<link href="#rfc.authors" rel="Chapter">
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre, code {
+  background-color: #f9f9f9;
+  font-family: 'Roboto Mono', monospace;
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+/* Fix PDF info block run off issue */
+@media print {
+  #identifiers dd {
+    float: none;
+  }
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  pre.breakable {
+    break-inside: auto;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The follwing is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
 
 
-  <meta name="generator" content="xml2rfc version 3.13.1 - https://tools.ietf.org/tools/xml2rfc" />
-  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
 
-  <meta name="dct.creator" content="Davies, E.B., Ed. and Q. Zhao" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-xml2rfc-template-05" />
-  <meta name="dct.issued" scheme="ISO8601" content="2009-03-01" />
-  <meta name="dct.abstract" content="Insert an abstract: MANDATORY. This template is for creating an Internet Draft. " />
-  <meta name="description" content="Insert an abstract: MANDATORY. This template is for creating an Internet Draft. " />
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
 
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre, code {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+pre.sourcecode,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact informatio look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background sligthtly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: auto;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottim margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the comact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div:first-child > pre.sourcecode,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
 </head>
-
 <body>
-
-  <table class="header">
-    <tbody>
-    
-    	<tr>
-<td class="left">Internet Engineering Task Force</td>
-<td class="right">E.B. Davies, Ed.</td>
-</tr>
-<tr>
-<td class="left">Internet-Draft</td>
-<td class="right">Folly Consulting</td>
-</tr>
-<tr>
-<td class="left">Intended status: Informational</td>
-<td class="right">Q. Zhao</td>
-</tr>
-<tr>
-<td class="left">Expires: September 2, 2009</td>
-<td class="right">Huawei Technology</td>
-</tr>
-<tr>
-<td class="left"></td>
-<td class="right">March 1, 2009</td>
-</tr>
-
-    	
-    </tbody>
-  </table>
-
-  <p class="title">Put Your Internet Draft Title Here<br />
-  <span class="filename">draft-ietf-xml2rfc-template-05</span></p>
-  
-  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
-<p>Insert an abstract: MANDATORY. This template is for creating an Internet Draft.</p>
-<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
-<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
-<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
-<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on September 2, 2009.</p>
-<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
-<p>Copyright (c) 2009 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
-<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
-
-  
-  <hr class="noprint" />
-  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
-  <ul class="toc">
-
-  	<li>1.   <a href="#rfc.section.1">Introduction</a>
-</li>
-<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a>
-</li>
-</ul><li>2.   <a href="#rfc.section.2">Simple List</a>
-</li>
-<li>3.   <a href="#rfc.section.3">Figures</a>
-</li>
-<li>4.   <a href="#rfc.section.4">Subsections and Tables</a>
-</li>
-<ul><li>4.1.   <a href="#rfc.section.4.1">A Subsection</a>
-</li>
-<li>4.2.   <a href="#rfc.section.4.2">Tables</a>
-</li>
-</ul><li>5.   <a href="#rfc.section.5">More about Lists</a>
-</li>
-<ul><li>5.1.   <a href="#rfc.section.5.1">Numbering Lists across Lists and Sections</a>
-</li>
-<li>5.2.   <a href="#rfc.section.5.2">Where the List Numbering Continues</a>
-</li>
-<li>5.3.   <a href="#rfc.section.5.3">nested lists</a>
-</li>
-<li>5.4.   <a href="#rfc.section.5.4">List Formats</a>
-</li>
-</ul><li>6.   <a href="#rfc.section.6">Example of Code or MIB Module To Be Extracted</a>
-</li>
-<li>7.   <a href="#rfc.section.7">Acknowledgements</a>
-</li>
-<li>8.   <a href="#rfc.section.8">IANA Considerations</a>
-</li>
-<li>9.   <a href="#rfc.section.9">Security Considerations</a>
-</li>
-<li>10.   <a href="#rfc.references">References</a>
-</li>
-<ul><li>10.1.   <a href="#rfc.references.1">Normative References</a>
-</li>
-<li>10.2.   <a href="#rfc.references.2">Informative References</a>
-</li>
-</ul><li>Appendix A.   <a href="#rfc.appendix.A">Additional Stuff</a>
-</li>
-<li><a href="#rfc.contributors">Contributors</a>
-</li>
-<li><a href="#rfc.authors">Authors' Addresses</a>
-</li>
-
-
-  </ul>
-
-  <h1 id="rfc.section.1">
-<a href="#rfc.section.1">1.</a> Introduction</h1>
-<p id="rfc.section.1.p.1">The original specification of xml2rfc format is in <a href="#RFC2629" class="xref">RFC&#160;2629</a>.</p>
-<h1 id="rfc.section.1.1">
-<a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
-<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119" class="xref">RFC 2119</a>.</p>
-<h1 id="rfc.section.2">
-<a href="#rfc.section.2">2.</a> <a href="#simple_list" id="simple_list">Simple List</a>
-</h1>
-<p id="rfc.section.2.p.1">List styles: 'empty', 'symbols', 'letters', 'numbers', 'hanging', 'format'.</p>
-<p></p>
-
-<ul>
-<li>First bullet</li>
-<li>Second bullet</li>
-</ul>
-
-<p> You can write text here as well.</p>
-<h1 id="rfc.section.3">
-<a href="#rfc.section.3">3.</a> Figures</h1>
-<p id="rfc.section.3.p.1">Figures should not exceed 69 characters wide to allow for the indent of sections.</p>
-<div id="rfc.figure.1"></div>
-<div id="xml_happy"></div>
-<p>Preamble text - can be omitted or empty.</p>
-<pre>
-+-----------------------+
-| Use XML, be Happy :-) |
-|_______________________|
-            </pre>
-<p>Cross-references allowed in pre- and postamble. <a href="#min_ref" class="xref">[min_ref]</a>.</p>
-<p class="figure">Figure 1</p>
-<p id="rfc.section.3.p.2">The CDATA means you don't need to escape meta-characters (especially &lt;&#160;(&amp;lt;) and &amp;&#160;(&amp;amp;)) but is not essential.  Figures may also have a title attribute but it won't be displayed unless there is also an anchor. White space, both horizontal and vertical, is <em>significant</em> in figures even if you don't use CDATA.</p>
-<h1 id="rfc.section.4">
-<a href="#rfc.section.4">4.</a> Subsections and Tables</h1>
-<h1 id="rfc.section.4.1">
-<a href="#rfc.section.4.1">4.1.</a> A Subsection</h1>
-<p id="rfc.section.4.1.p.1">By default 3 levels of nesting show in table of contents but that can be adjusted with the value of the "tocdepth" processing instruction.</p>
-<h1 id="rfc.section.4.2">
-<a href="#rfc.section.4.2">4.2.</a> Tables</h1>
-<p id="rfc.section.4.2.p.1">.. are very similar to figures:</p>
-<div id="rfc.table.1"></div>
-<div id="table_example"></div>
-<p>Tables use ttcol to define column headers and widths.  Every cell then has a "c" element for its content.</p>
-<table cellpadding="3" cellspacing="0" class="tt full center">
-<caption>A Very Simple Table</caption>
+<script src="metadata.min.js"></script>
+<table class="ears">
 <thead><tr>
-<th class="center">ttcol #1</th>
-<th class="center">ttcol #2</th>
+<td class="left">Internet-Draft</td>
+<td class="center">Abbreviated Title</td>
+<td class="right">March 2009</td>
 </tr></thead>
-<tbody>
-<tr>
-<td class="center">c #1</td>
-<td class="center">c #2</td>
-</tr>
-<tr>
-<td class="center">c #3</td>
-<td class="center">c #4</td>
-</tr>
-<tr>
-<td class="center">c #5</td>
-<td class="center">c #6</td>
-</tr>
-</tbody>
+<tfoot><tr>
+<td class="left">Davies &amp; Zhao</td>
+<td class="center">Expires 2 September 2009</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
 </table>
-<p>which is a very simple example.</p>
-<h1 id="rfc.section.5">
-<a href="#rfc.section.5">5.</a> <a href="#nested_lists" id="nested_lists">More about Lists</a>
-</h1>
-<p id="rfc.section.5.p.1">Lists with 'hanging labels': the list item is indented the amount of the hangIndent: </p>
-
-<dl>
-<dt>short</dt>
-<dd style="margin-left: 8">With a label shorter than the hangIndent.</dd>
-<dt>fantastically long label</dt>
-<dd style="margin-left: 8">With a label longer than the hangIndent.</dd>
-<dt>vspace_trick</dt>
-<dd style="margin-left: 8">
-<br>Forces the new item to start on a new line.</dd>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Internet Engineering Task Force</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-xml2rfc-template-05</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2009-03-01" class="published">1 March 2009</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2009-09-02">2 September 2009</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">E.B. Davies, <span class="editor">Ed.</span>
+</div>
+<div class="org">Folly Consulting</div>
+</div>
+<div class="author">
+      <div class="author-name">Q. Zhao</div>
+<div class="org">Huawei Technology</div>
+</div>
+</dd>
 </dl>
-<p id="rfc.section.5.p.2">Simulating more than one paragraph in a list item using &lt;vspace&gt;: </p>
-
-<ol style="list-style-type: lower-alpha">
-<li>First, a short item.</li>
-<li>Second, a longer list item.<br><br> And something that looks like a separate pararaph..</li>
-</ol>
-<p id="rfc.section.5.p.3">Simple indented paragraph using the "empty" style: </p>
-
-<ul class="empty"><li>The quick, brown fox jumped over the lazy dog and lived to fool many another hunter in the great wood in the west.</li></ul>
-<h1 id="rfc.section.5.1">
-<a href="#rfc.section.5.1">5.1.</a> Numbering Lists across Lists and Sections</h1>
-<p id="rfc.section.5.1.p.1">Numbering items continuously although they are in separate &lt;list&gt; elements, maybe in separate sections using the "format" style and a "counter" variable.</p>
-<p id="rfc.section.5.1.p.2">First list: </p>
-
-<dl>
-<dt>R1   </dt>
-<dd>#1</dd>
-<dt>R2   </dt>
-<dd>#2</dd>
-<dt>R3   </dt>
-<dd>#3</dd>
-</dl>
-
-<p> Specify the indent explicitly so that all the items line up nicely.</p>
-<p id="rfc.section.5.1.p.3">Second list: </p>
-
-<dl>
-<dt>R4   </dt>
-<dd>#4</dd>
-<dt>R5   </dt>
-<dd>#5</dd>
-<dt>R6   </dt>
-<dd>#6</dd>
-</dl>
-<h1 id="rfc.section.5.2">
-<a href="#rfc.section.5.2">5.2.</a> Where the List Numbering Continues</h1>
-<p id="rfc.section.5.2.p.1">List continues here.</p>
-<p id="rfc.section.5.2.p.2">Third list: </p>
-
-<dl>
-<dt>R7   </dt>
-<dd>#7</dd>
-<dt>R8   </dt>
-<dd>#8</dd>
-<dt>R9   </dt>
-<dd>#9</dd>
-<dt>R10  </dt>
-<dd>#10</dd>
-</dl>
-
-<p> The end of the list.</p>
-<h1 id="rfc.section.5.3">
-<a href="#rfc.section.5.3">5.3.</a> nested lists</h1>
-<p id="rfc.section.5.3.p.1">Simulating more than one paragraph in a list item using &lt;vspace&gt;: </p>
-
-<ol style="list-style-type: lower-alpha">
-<li>First, a short item.</li>
-<li>Second, a longer list item.<br><br> And something that looks like a separate paragraph.</li>
-<li>and a sublist, also with letters <ol style="list-style-type: upper-alpha">
-<li>first subitem</li>
-<li>second subitem</li>
-<li>and a sub-sublist, also with letters <ol style="list-style-type: lower-alpha">
-<li>first sub-subitem</li>
-<li>second sub-subitem</li>
-</ol>
-<p> </p>
+</div>
+<h1 id="title">Put Your Internet Draft Title Here</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">Insert an abstract: MANDATORY. This template is for creating an
+      Internet Draft.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo-2">
+<a href="#name-status-of-this-memo-2" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="http://datatracker.ietf.org/drafts/current/">http://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 2 September 2009.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice-2">
+<a href="#name-copyright-notice-2" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2009 IETF Trust and the persons identified as
+            the document authors.  All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents in effect on the date of
+            publication of this document (http://trustee.ietf.org/license-info).
+            Please review these documents carefully, as they describe your rights
+            and restrictions with respect to this document.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents-2">
+<a href="#name-table-of-contents-2" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction-2" class="xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-requirements-language-2" class="xref">Requirements Language</a></p>
 </li>
-</ol>
-<p> </p>
+            </ul>
 </li>
-</ol>
-
-<p> </p>
-<h1 id="rfc.section.5.4">
-<a href="#rfc.section.5.4">5.4.</a> List Formats</h1>
-<p id="rfc.section.5.4.p.1">many formats </p>
-
-<dl>
-<dt>a   </dt>
-<dd>first %c-item</dd>
-<dt>b   </dt>
-<dd>more %c-items</dd>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-simple-list-2" class="xref">Simple List</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-figures-2" class="xref">Figures</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-subsections-and-tables-2" class="xref">Subsections and Tables</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-a-subsection-2" class="xref">A Subsection</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-tables-2" class="xref">Tables</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-more-about-lists-2" class="xref">More about Lists</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-numbering-lists-across-lists" class="xref">Numbering Lists across Lists and Sections</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-where-the-list-numbering-con" class="xref">Where the List Numbering Continues</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-nested-lists-2" class="xref">nested lists</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-list-formats-2" class="xref">List Formats</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-example-of-code-or-mib-modul" class="xref">Example of Code or MIB Module To Be Extracted</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-acknowledgements-2" class="xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-iana-considerations-2" class="xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-security-considerations-2" class="xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-references-2" class="xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="xref">10.1</a>.  <a href="#name-normative-references-2" class="xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="xref">10.2</a>.  <a href="#name-informative-references-2" class="xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-additional-stuff-2" class="xref">Additional Stuff</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="xref"></a><a href="#name-contributors-2" class="xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="xref"></a><a href="#name-authors-addresses-2" class="xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<section id="section-1">
+      <h2 id="name-introduction-2">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction-2" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The original specification of xml2rfc format is in <span><a href="#RFC2629" class="xref">RFC 2629</a> [<a href="#RFC2629" class="xref">RFC2629</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<section id="section-1.1">
+        <h3 id="name-requirements-language-2">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-requirements-language-2" class="section-name selfRef">Requirements Language</a>
+        </h3>
+<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <span><a href="#RFC2119" class="xref">RFC 2119</a> [<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+</section>
+</section>
+<div id="simple_list">
+<section id="section-2">
+      <h2 id="name-simple-list-2">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-simple-list-2" class="section-name selfRef">Simple List</a>
+      </h2>
+<p id="section-2-1">List styles: 'empty', 'symbols', 'letters', 'numbers', 'hanging',
+      'format'.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-2.1">First bullet<a href="#section-2-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-2.2">Second bullet<a href="#section-2-2.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-3"> You can write text here as well.<a href="#section-2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-3">
+      <h2 id="name-figures-2">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-figures-2" class="section-name selfRef">Figures</a>
+      </h2>
+<p id="section-3-1">Figures should not exceed 69 characters wide to allow for the indent
+      of sections.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2" class="keepWithNext">Preamble text - can be omitted or empty.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<div id="xml_happy">
+<figure id="figure-1">
+        <div id="section-3-3.1">
+          <div class="alignLeft art-svg artwork" id="section-3-3.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
+              <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"></path>
+              <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"></path>
+              <path d="M3,26h5v5h-5zM168,26h5v5h-5z"></path>
+            </svg><a href="#section-3-3.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a></figcaption></figure>
+</div>
+<p id="section-3-4" class="keepWithPrevious">Cross-references allowed in pre- and postamble. <span>[<a href="#min_ref" class="xref">min_ref</a>]</span>.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The CDATA means you don't need to escape meta-characters (especially
+      &lt; (&amp;lt;) and &amp; (&amp;amp;)) but is not essential.
+      Figures may also have a title attribute but it won't be displayed unless
+      there is also an anchor. White space, both horizontal and vertical, is
+      <em>significant</em> in figures even if you don't use CDATA.<a href="#section-3-5" class="pilcrow">¶</a></p>
+</section>
+<section id="section-4">
+      <h2 id="name-subsections-and-tables-2">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-subsections-and-tables-2" class="section-name selfRef">Subsections and Tables</a>
+      </h2>
+<section id="section-4.1">
+        <h3 id="name-a-subsection-2">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-a-subsection-2" class="section-name selfRef">A Subsection</a>
+        </h3>
+<p id="section-4.1-1">By default 3 levels of nesting show in table of contents but that
+        can be adjusted with the value of the "tocdepth" processing
+        instruction.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-4.2">
+        <h3 id="name-tables-2">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-tables-2" class="section-name selfRef">Tables</a>
+        </h3>
+<p id="section-4.2-1">.. are very similar to figures:<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2" class="keepWithNext">Tables use ttcol to define column headers and widths.
+          Every cell then has a "c" element for its content.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<span id="name-a-very-simple-table-2"></span><div id="table_example">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-a-very-simple-table-2" class="selfRef">A Very Simple Table</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">ttcol #1</th>
+              <th class="text-center" rowspan="1" colspan="1">ttcol #2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">c #1</td>
+              <td class="text-center" rowspan="1" colspan="1">c #2</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">c #3</td>
+              <td class="text-center" rowspan="1" colspan="1">c #4</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">c #5</td>
+              <td class="text-center" rowspan="1" colspan="1">c #6</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-4.2-4" class="keepWithPrevious">which is a very simple example.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+</section>
+</section>
+<div id="nested_lists">
+<section id="section-5">
+      <h2 id="name-more-about-lists-2">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-more-about-lists-2" class="section-name selfRef">More about Lists</a>
+      </h2>
+<p id="section-5-1">Lists with 'hanging labels': the list item is indented the amount of
+      the hangIndent:<a href="#section-5-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-5-2">
+        <dt id="section-5-2.1">short</dt>
+        <dd style="margin-left: 4.0em" id="section-5-2.2">With a label shorter than the hangIndent.<a href="#section-5-2.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-5-2.3">fantastically long label</dt>
+        <dd style="margin-left: 4.0em" id="section-5-2.4">With a label longer than the
+          hangIndent.<a href="#section-5-2.4" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-5-2.5">vspace_trick</dt>
+        <dd style="margin-left: 4.0em" id="section-5-2.6">Forces the new
+          item to start on a new line.<a href="#section-5-2.6" class="pilcrow">¶</a>
+</dd>
+      <dd class="break"></dd>
 </dl>
-
-<p> </p>
-
-<dl>
-<dt>A   </dt>
-<dd>first %C-item</dd>
-<dt>B   </dt>
-<dd>more %C-items</dd>
+<p id="section-5-3">Simulating more than one paragraph in a list item using
+      &lt;vspace&gt;:<a href="#section-5-3" class="pilcrow">¶</a></p>
+<ol start="1" type="a" class="normal type-a" id="section-5-4">
+<li id="section-5-4.1">First, a short item.<a href="#section-5-4.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-5-4.2">
+          <p id="section-5-4.2.1">Second, a longer list item.<a href="#section-5-4.2.1" class="pilcrow">¶</a></p>
+<p id="section-5-4.2.2"> And
+          something that looks like a separate pararaph..<a href="#section-5-4.2.2" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+<p id="section-5-5">Simple indented paragraph using the "empty" style:<a href="#section-5-5" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-5-6.1">The quick, brown fox jumped over the lazy dog and lived to fool
+          many another hunter in the great wood in the west.<a href="#section-5-6.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<section id="section-5.1">
+        <h3 id="name-numbering-lists-across-lists">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-numbering-lists-across-lists" class="section-name selfRef">Numbering Lists across Lists and Sections</a>
+        </h3>
+<p id="section-5.1-1">Numbering items continuously although they are in separate
+        &lt;list&gt; elements, maybe in separate sections using the "format"
+        style and a "counter" variable.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">First list:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-5.1-3">
+<dt>R1</dt>
+<dd id="section-5.1-3.1">#1<a href="#section-5.1-3.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>R2</dt>
+<dd id="section-5.1-3.2">#2<a href="#section-5.1-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>R3</dt>
+<dd id="section-5.1-3.3">#3<a href="#section-5.1-3.3" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
 </dl>
-
-<p> </p>
-
-<dl>
-<dt>1   </dt>
-<dd>first %d-item.</dd>
-<dt>2   </dt>
-<dd>more %d-items.</dd>
+<p id="section-5.1-4"> Specify the indent explicitly so that all the items line up
+        nicely.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1-5">Second list:<a href="#section-5.1-5" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-5.1-6">
+<dt>R4</dt>
+<dd id="section-5.1-6.1">#4<a href="#section-5.1-6.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>R5</dt>
+<dd id="section-5.1-6.2">#5<a href="#section-5.1-6.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>R6</dt>
+<dd id="section-5.1-6.3">#6<a href="#section-5.1-6.3" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
 </dl>
-
-<p> </p>
-
-<dl>
-<dt>i    </dt>
-<dd>first %i-item</dd>
-<dt>ii   </dt>
-<dd>more %i-items</dd>
-<dt>iii  </dt>
-<dd>more %i-items</dd>
-<dt>iv   </dt>
-<dd>more %i-items</dd>
-<dt>v    </dt>
-<dd>more %i-items</dd>
-<dt>vi   </dt>
-<dd>more %i-items</dd>
-<dt>vii  </dt>
-<dd>more %i-items</dd>
-<dt>viii </dt>
-<dd>more %i-items</dd>
-<dt>ix   </dt>
-<dd>more %i-items</dd>
+</section>
+<section id="section-5.2">
+        <h3 id="name-where-the-list-numbering-con">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-where-the-list-numbering-con" class="section-name selfRef">Where the List Numbering Continues</a>
+        </h3>
+<p id="section-5.2-1">List continues here.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">Third list:<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-5.2-3">
+<dt>R7</dt>
+<dd id="section-5.2-3.1">#7<a href="#section-5.2-3.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>R8</dt>
+<dd id="section-5.2-3.2">#8<a href="#section-5.2-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>R9</dt>
+<dd id="section-5.2-3.3">#9<a href="#section-5.2-3.3" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>R10</dt>
+<dd id="section-5.2-3.4">#10<a href="#section-5.2-3.4" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
 </dl>
-
-<p> </p>
-
-<dl>
-<dt>I    </dt>
-<dd>first %I-item</dd>
-<dt>II   </dt>
-<dd>more %I-items</dd>
-<dt>III  </dt>
-<dd>more %I-items</dd>
-<dt>IV   </dt>
-<dd>more %I-items</dd>
-<dt>V    </dt>
-<dd>more %I-items</dd>
-<dt>VI   </dt>
-<dd>more %I-items</dd>
-<dt>VII  </dt>
-<dd>more %I-items</dd>
-<dt>VIII </dt>
-<dd>more %I-items</dd>
-<dt>IX   </dt>
-<dd>more %I-items</dd>
+<p id="section-5.2-4"> The end of the list.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+</section>
+<section id="section-5.3">
+        <h3 id="name-nested-lists-2">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-nested-lists-2" class="section-name selfRef">nested lists</a>
+        </h3>
+<p id="section-5.3-1">Simulating more than one paragraph in a list item using
+   &lt;vspace&gt;:<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="a" class="normal type-a" id="section-5.3-2">
+<li id="section-5.3-2.1">First, a short item.<a href="#section-5.3-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-5.3-2.2">
+            <p id="section-5.3-2.2.1">Second, a longer list item.<a href="#section-5.3-2.2.1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2.2.2"> And
+       something that looks like a separate paragraph.<a href="#section-5.3-2.2.2" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.3-2.3">
+            <p id="section-5.3-2.3.1">and a sublist, also with letters<a href="#section-5.3-2.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="A" class="normal type-A" id="section-5.3-2.3.2">
+<li id="section-5.3-2.3.2.1">first subitem<a href="#section-5.3-2.3.2.1" class="pilcrow">¶</a>
+</li>
+              <li id="section-5.3-2.3.2.2">second subitem<a href="#section-5.3-2.3.2.2" class="pilcrow">¶</a>
+</li>
+              <li id="section-5.3-2.3.2.3">
+                <p id="section-5.3-2.3.2.3.1">and a sub-sublist, also with letters<a href="#section-5.3-2.3.2.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="a" class="normal type-a" id="section-5.3-2.3.2.3.2">
+<li id="section-5.3-2.3.2.3.2.1">first sub-subitem<a href="#section-5.3-2.3.2.3.2.1" class="pilcrow">¶</a>
+</li>
+                  <li id="section-5.3-2.3.2.3.2.2">second sub-subitem<a href="#section-5.3-2.3.2.3.2.2" class="pilcrow">¶</a>
+</li>
+                </ol>
+</li>
+            </ol>
+</li>
+        </ol>
+</section>
+<section id="section-5.4">
+        <h3 id="name-list-formats-2">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-list-formats-2" class="section-name selfRef">List Formats</a>
+        </h3>
+<p id="section-5.4-1">many formats<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-5.4-2">
+<dt>a</dt>
+<dd id="section-5.4-2.1">first %c-item<a href="#section-5.4-2.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>b</dt>
+<dd id="section-5.4-2.2">more %c-items<a href="#section-5.4-2.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
 </dl>
-
-<p> </p>
-
-<dl>
-<dt>1   </dt>
-<dd>first %o-item</dd>
-<dt>2   </dt>
-<dd>more %o-items</dd>
-<dt>3   </dt>
-<dd>more %o-items</dd>
-<dt>4   </dt>
-<dd>more %o-items</dd>
-<dt>5   </dt>
-<dd>more %o-items</dd>
-<dt>6   </dt>
-<dd>more %o-items</dd>
-<dt>7   </dt>
-<dd>more %o-items</dd>
-<dt>10  </dt>
-<dd>more %o-items</dd>
-<dt>11  </dt>
-<dd>more %o-items</dd>
+<span class="break"></span><dl class="olPercent" id="section-5.4-3">
+<dt>A</dt>
+<dd id="section-5.4-3.1">first %C-item<a href="#section-5.4-3.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>B</dt>
+<dd id="section-5.4-3.2">more %C-items<a href="#section-5.4-3.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
 </dl>
-
-<p> </p>
-
-<dl>
-<dt>1   </dt>
-<dd>first %x-item</dd>
-<dt>2   </dt>
-<dd>more %x-items</dd>
-<dt>3   </dt>
-<dd>more %x-items</dd>
-<dt>4   </dt>
-<dd>more %x-items</dd>
-<dt>5   </dt>
-<dd>more %x-items</dd>
-<dt>6   </dt>
-<dd>more %x-items</dd>
-<dt>7   </dt>
-<dd>more %x-items</dd>
-<dt>8   </dt>
-<dd>more %x-items</dd>
-<dt>9   </dt>
-<dd>more %x-items</dd>
-<dt>a   </dt>
-<dd>more %x-items</dd>
-<dt>b   </dt>
-<dd>more %x-items</dd>
-<dt>c   </dt>
-<dd>more %x-items</dd>
-<dt>d   </dt>
-<dd>more %x-items</dd>
-<dt>e   </dt>
-<dd>more %x-items</dd>
-<dt>f   </dt>
-<dd>more %x-items</dd>
-<dt>10  </dt>
-<dd>more %x-items</dd>
-<dt>11  </dt>
-<dd>more %x-items</dd>
+<span class="break"></span><dl class="olPercent" id="section-5.4-4">
+<dt>1</dt>
+<dd id="section-5.4-4.1">first %d-item.<a href="#section-5.4-4.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>2</dt>
+<dd id="section-5.4-4.2">more %d-items.<a href="#section-5.4-4.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
 </dl>
-
-<p> </p>
-
-<dl>
-<dt>1   </dt>
-<dd>first %X-item</dd>
-<dt>2   </dt>
-<dd>more %X-items</dd>
-<dt>3   </dt>
-<dd>more %X-items</dd>
-<dt>4   </dt>
-<dd>more %X-items</dd>
-<dt>5   </dt>
-<dd>more %X-items</dd>
-<dt>6   </dt>
-<dd>more %X-items</dd>
-<dt>7   </dt>
-<dd>more %X-items</dd>
-<dt>8   </dt>
-<dd>more %X-items</dd>
-<dt>9   </dt>
-<dd>more %X-items</dd>
-<dt>A   </dt>
-<dd>more %X-items</dd>
-<dt>B   </dt>
-<dd>more %X-items</dd>
-<dt>C   </dt>
-<dd>more %X-items</dd>
-<dt>D   </dt>
-<dd>more %X-items</dd>
-<dt>E   </dt>
-<dd>more %X-items</dd>
-<dt>F   </dt>
-<dd>more %X-items</dd>
-<dt>10  </dt>
-<dd>more %X-items</dd>
-<dt>11  </dt>
-<dd>more %X-items</dd>
+<span class="break"></span><dl class="olPercent" id="section-5.4-5">
+<dt>i</dt>
+<dd id="section-5.4-5.1">first %i-item<a href="#section-5.4-5.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>ii</dt>
+<dd id="section-5.4-5.2">more %i-items<a href="#section-5.4-5.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>iii</dt>
+<dd id="section-5.4-5.3">more %i-items<a href="#section-5.4-5.3" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>iv</dt>
+<dd id="section-5.4-5.4">more %i-items<a href="#section-5.4-5.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>v</dt>
+<dd id="section-5.4-5.5">more %i-items<a href="#section-5.4-5.5" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>vi</dt>
+<dd id="section-5.4-5.6">more %i-items<a href="#section-5.4-5.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>vii</dt>
+<dd id="section-5.4-5.7">more %i-items<a href="#section-5.4-5.7" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>viii</dt>
+<dd id="section-5.4-5.8">more %i-items<a href="#section-5.4-5.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>ix</dt>
+<dd id="section-5.4-5.9">more %i-items<a href="#section-5.4-5.9" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
 </dl>
+<span class="break"></span><dl class="olPercent" id="section-5.4-6">
+<dt>I</dt>
+<dd id="section-5.4-6.1">first %I-item<a href="#section-5.4-6.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>II</dt>
+<dd id="section-5.4-6.2">more %I-items<a href="#section-5.4-6.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>III</dt>
+<dd id="section-5.4-6.3">more %I-items<a href="#section-5.4-6.3" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>IV</dt>
+<dd id="section-5.4-6.4">more %I-items<a href="#section-5.4-6.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>V</dt>
+<dd id="section-5.4-6.5">more %I-items<a href="#section-5.4-6.5" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>VI</dt>
+<dd id="section-5.4-6.6">more %I-items<a href="#section-5.4-6.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>VII</dt>
+<dd id="section-5.4-6.7">more %I-items<a href="#section-5.4-6.7" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>VIII</dt>
+<dd id="section-5.4-6.8">more %I-items<a href="#section-5.4-6.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>IX</dt>
+<dd id="section-5.4-6.9">more %I-items<a href="#section-5.4-6.9" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="olPercent" id="section-5.4-7">
+<dt>1</dt>
+<dd id="section-5.4-7.1">first %o-item<a href="#section-5.4-7.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>2</dt>
+<dd id="section-5.4-7.2">more %o-items<a href="#section-5.4-7.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>3</dt>
+<dd id="section-5.4-7.3">more %o-items<a href="#section-5.4-7.3" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>4</dt>
+<dd id="section-5.4-7.4">more %o-items<a href="#section-5.4-7.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>5</dt>
+<dd id="section-5.4-7.5">more %o-items<a href="#section-5.4-7.5" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>6</dt>
+<dd id="section-5.4-7.6">more %o-items<a href="#section-5.4-7.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>7</dt>
+<dd id="section-5.4-7.7">more %o-items<a href="#section-5.4-7.7" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>10</dt>
+<dd id="section-5.4-7.8">more %o-items<a href="#section-5.4-7.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>11</dt>
+<dd id="section-5.4-7.9">more %o-items<a href="#section-5.4-7.9" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="olPercent" id="section-5.4-8">
+<dt>1</dt>
+<dd id="section-5.4-8.1">first %x-item<a href="#section-5.4-8.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>2</dt>
+<dd id="section-5.4-8.2">more %x-items<a href="#section-5.4-8.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>3</dt>
+<dd id="section-5.4-8.3">more %x-items<a href="#section-5.4-8.3" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>4</dt>
+<dd id="section-5.4-8.4">more %x-items<a href="#section-5.4-8.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>5</dt>
+<dd id="section-5.4-8.5">more %x-items<a href="#section-5.4-8.5" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>6</dt>
+<dd id="section-5.4-8.6">more %x-items<a href="#section-5.4-8.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>7</dt>
+<dd id="section-5.4-8.7">more %x-items<a href="#section-5.4-8.7" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>8</dt>
+<dd id="section-5.4-8.8">more %x-items<a href="#section-5.4-8.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>9</dt>
+<dd id="section-5.4-8.9">more %x-items<a href="#section-5.4-8.9" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>a</dt>
+<dd id="section-5.4-8.10">more %x-items<a href="#section-5.4-8.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>b</dt>
+<dd id="section-5.4-8.11">more %x-items<a href="#section-5.4-8.11" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>c</dt>
+<dd id="section-5.4-8.12">more %x-items<a href="#section-5.4-8.12" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>d</dt>
+<dd id="section-5.4-8.13">more %x-items<a href="#section-5.4-8.13" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>e</dt>
+<dd id="section-5.4-8.14">more %x-items<a href="#section-5.4-8.14" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>f</dt>
+<dd id="section-5.4-8.15">more %x-items<a href="#section-5.4-8.15" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>10</dt>
+<dd id="section-5.4-8.16">more %x-items<a href="#section-5.4-8.16" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>11</dt>
+<dd id="section-5.4-8.17">more %x-items<a href="#section-5.4-8.17" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="olPercent" id="section-5.4-9">
+<dt>1</dt>
+<dd id="section-5.4-9.1">first %X-item<a href="#section-5.4-9.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>2</dt>
+<dd id="section-5.4-9.2">more %X-items<a href="#section-5.4-9.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>3</dt>
+<dd id="section-5.4-9.3">more %X-items<a href="#section-5.4-9.3" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>4</dt>
+<dd id="section-5.4-9.4">more %X-items<a href="#section-5.4-9.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>5</dt>
+<dd id="section-5.4-9.5">more %X-items<a href="#section-5.4-9.5" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>6</dt>
+<dd id="section-5.4-9.6">more %X-items<a href="#section-5.4-9.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>7</dt>
+<dd id="section-5.4-9.7">more %X-items<a href="#section-5.4-9.7" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>8</dt>
+<dd id="section-5.4-9.8">more %X-items<a href="#section-5.4-9.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>9</dt>
+<dd id="section-5.4-9.9">more %X-items<a href="#section-5.4-9.9" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>A</dt>
+<dd id="section-5.4-9.10">more %X-items<a href="#section-5.4-9.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>B</dt>
+<dd id="section-5.4-9.11">more %X-items<a href="#section-5.4-9.11" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>C</dt>
+<dd id="section-5.4-9.12">more %X-items<a href="#section-5.4-9.12" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>D</dt>
+<dd id="section-5.4-9.13">more %X-items<a href="#section-5.4-9.13" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>E</dt>
+<dd id="section-5.4-9.14">more %X-items<a href="#section-5.4-9.14" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>F</dt>
+<dd id="section-5.4-9.15">more %X-items<a href="#section-5.4-9.15" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>10</dt>
+<dd id="section-5.4-9.16">more %X-items<a href="#section-5.4-9.16" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>11</dt>
+<dd id="section-5.4-9.17">more %X-items<a href="#section-5.4-9.17" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</section>
+</div>
+<div id="codeExample">
+<section id="section-6">
+      <h2 id="name-example-of-code-or-mib-modul">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-example-of-code-or-mib-modul" class="section-name selfRef">Example of Code or MIB Module To Be Extracted</a>
+      </h2>
+<p id="section-6-1" class="keepWithNext">The &lt;artwork&gt; element has a number of extra attributes
+        that can be used to substitute a more aesthetically pleasing rendition
+        into HTML output while continuing to use the ASCII art version in the
+        text and nroff outputs (see the xml2rfc README for details). It also
+        has a "type" attribute. This is currently ignored except in the case
+        'type="abnf"'. In this case the "artwork" is expected to contain a
+        piece of valid Augmented Backus-Naur Format (ABNF) grammar. This will
+        be syntax checked by xml2rfc and any errors will cause a fatal error
+        if the "strict" processing instruction is set to "yes". The ABNF will
+        also be colorized in HTML output to highlight the syntactic
+        components. Checking of additional "types" may be provided in future
+        versions of xml2rfc.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<div id="section-6-2">
+<pre class="sourcecode">&lt;CODE BEGINS&gt; file "example.c"
 
-<p> </p>
-<h1 id="rfc.section.6">
-<a href="#rfc.section.6">6.</a> <a href="#codeExample" id="codeExample">Example of Code or MIB Module To Be Extracted</a>
-</h1>
-<p>The &lt;artwork&gt; element has a number of extra attributes that can be used to substitute a more aesthetically pleasing rendition into HTML output while continuing to use the ASCII art version in the text and nroff outputs (see the xml2rfc README for details). It also has a "type" attribute. This is currently ignored except in the case 'type="abnf"'. In this case the "artwork" is expected to contain a piece of valid Augmented Backus-Naur Format (ABNF) grammar. This will be syntax checked by xml2rfc and any errors will cause a fatal error if the "strict" processing instruction is set to "yes". The ABNF will also be colorized in HTML output to highlight the syntactic components. Checking of additional "types" may be provided in future versions of xml2rfc.</p>
-<pre>
-
-&lt;CODE BEGINS&gt; file "example.c"
 
 /**** an example C program */
 
@@ -862,125 +1931,154 @@ main(int argc, char *argv[])
 
 /* end of file */
 
-&lt;CODE ENDS&gt;
-            </pre>
-<h1 id="rfc.section.7">
-<a href="#rfc.section.7">7.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
-</h1>
-<p id="rfc.section.7.p.1">This template was derived from an initial version written by Pekka Savola and contributed by him to the xml2rfc project.</p>
-<p id="rfc.section.7.p.2">This document is part of a plan to make xml2rfc indispensable <a href="#DOMINATION" class="xref">[DOMINATION]</a>.  This document may be shared as needed <a href="#SHARING" class="xref">[SHARING]</a>.  If necessary, appeal to <a href="#JUPITER" class="xref">[JUPITER]</a>.  </p>
-<h1 id="rfc.section.8">
-<a href="#rfc.section.8">8.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
-</h1>
-<p id="rfc.section.8.p.1">This memo includes no request to IANA.</p>
-<p id="rfc.section.8.p.2">All drafts are required to have an IANA considerations section (see <a href="#I-D.narten-iana-considerations-rfc2434bis" class="xref">the update of RFC 2434</a> for a guide). If the draft does not require IANA to do anything, the section contains an explicit statement that this is the case (as above). If there are no requirements for IANA, the section will be removed during conversion into an RFC by the RFC Editor.</p>
-<h1 id="rfc.section.9">
-<a href="#rfc.section.9">9.</a> <a href="#Security" id="Security">Security Considerations</a>
-</h1>
-<p id="rfc.section.9.p.1">All drafts are required to have a security considerations section.  See <a href="#RFC3552" class="xref">RFC 3552</a> for a guide.</p>
-<h1 id="rfc.references">
-<a href="#rfc.references">10.</a> References</h1>
-<h1 id="rfc.references.1">
-<a href="#rfc.references.1">10.1.</a> Normative References</h1>
-<table><tbody>
-<tr>
-<td class="reference"><b id="min_ref">[min_ref]</b></td>
-<td class="top">
-<a>authSurName, authInitials.</a>, "<a>Minimal Reference</a>", 2006.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC2119">[RFC2119]</b></td>
-<td class="top">
-<a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", DOI 10.17487/RFC2119, BCP 14, RFC 2119, March 1997.</td>
-</tr>
-</tbody></table>
-<h1 id="rfc.references.2">
-<a href="#rfc.references.2">10.2.</a> Informative References</h1>
-<table><tbody>
-<tr>
-<td class="reference"><b id="DOMINATION">[DOMINATION]</b></td>
-<td class="top">
-<a>Mad Dominators, Inc.</a>, "<a href="http://www.example.com/dominator.html">Ultimate Plan for Taking Over the World</a>", 1984.</td>
-</tr>
-<tr>
-<td class="reference"><b id="I-D.narten-iana-considerations-rfc2434bis">[I-D.narten-iana-considerations-rfc2434bis]</b></td>
-<td class="top">
-<a>Narten, T.</a> and <a>H. Alvestrand</a>, "<a href="https://tools.ietf.org/html/draft-narten-iana-considerations-rfc2434bis-09">Guidelines for Writing an IANA Considerations Section in RFCs</a>", Internet-Draft draft-narten-iana-considerations-rfc2434bis-09, March 2008.</td>
-</tr>
-<tr>
-<td class="reference"><b id="JUPITER">[JUPITER]</b></td>
-<td class="top">
-<a>Singh, A.</a>, <a>Ong, J.</a>, <a>Agarwal, A.</a>, <a>Anderson, G.</a>, <a>Armistead, A.</a>, <a>Bannon, R.</a>, <a>Boving, S.</a>, <a>Desai, G.</a>, <a>Felderman, B.</a>, <a>Germano, P.</a>, <a>Kanagala, A.</a>, <a>Liu, H.</a>, <a>Provost, J.</a>, <a>Simmons, J.</a>, <a>Tanda, E.</a>, <a>Wanderer, J.</a>, <a>H&#246;lzle, U.</a>, <a>Stuart, S.</a> and <a>A. Vahdat</a>, "<a>Jupiter rising: a decade of clos topologies and centralized control in Google's datacenter network</a>", Communications of the ACM Vol. 59, pp. 88-97, DOI 10.1145/2975159, August 2016.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC2629">[RFC2629]</b></td>
-<td class="top">
-<a>Rose, M.</a>, "<a href="https://tools.ietf.org/html/rfc2629">Writing I-Ds and RFCs using XML</a>", RFC 2629, DOI 10.17487/RFC2629, June 1999.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC3552">[RFC3552]</b></td>
-<td class="top">
-<a>Rescorla, E.</a> and <a>B. Korver</a>, "<a href="https://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>", BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td>
-</tr>
-<tr>
-<td class="reference"><b id="SHARING">[SHARING]</b></td>
-<td class="top">
-<a>Sesame Street</a>, "<a href="http://www.example.com/sharing.html">I Learned to Share in Kindergarten</a>", 1972.</td>
-</tr>
-</tbody></table>
-<h1 id="rfc.appendix.A">
-<a href="#rfc.appendix.A">Appendix A.</a> <a href="#app-additional" id="app-additional">Additional Stuff</a>
-</h1>
-<p id="rfc.section.A.p.1">This becomes an Appendix.</p>
-<h1 id="rfc.contributors"><a href="#rfc.contributors">Contributors</a></h1>
-<p id="rfc.section.B.p.1">This becomes an unnumbered section</p>
-<h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
-<div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
-	  <span class="fn">Elwyn Davies</span> (editor)
-	  <span class="n hidden">
-		<span class="family-name">Davies</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Folly Consulting</span>
-	<span class="adr">
-	  
-	  <span class="vcardline">
-		<span class="locality">Soham</span>,  
-		<span class="region"></span>
-		<span class="code"></span>
-	  </span>
-	  <span class="country-name vcardline">UK</span>
-	</span>
-	<span class="vcardline">Phone: +44 7889 488 335</span>
 
-<span class="vcardline">EMail: <a href="mailto:elwynd@dial.pipex.com">elwynd@dial.pipex.com</a></span>
-
-  </address>
-</div><div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
-	  <span class="fn">Quintin Zhao</span> 
-	  <span class="n hidden">
-		<span class="family-name">Zhao</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Huawei Technology</span>
-	<span class="adr">
-	  <span class="vcardline">125 Nagog Technology Park</span>
-
-	  <span class="vcardline">
-		<span class="locality">Acton</span>,  
-		<span class="region">MA</span> 
-		<span class="code">01719</span>
-	  </span>
-	  <span class="country-name vcardline">US</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:quintin.zhao@huawei.com">quintin.zhao@huawei.com</a></span>
-
-  </address>
+&lt;CODE ENDS&gt;</pre><a href="#section-6-2" class="pilcrow">¶</a>
 </div>
-
+</section>
+</div>
+<div id="Acknowledgements">
+<section id="section-7">
+      <h2 id="name-acknowledgements-2">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-acknowledgements-2" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="section-7-1">This template was derived from an initial version written by Pekka
+      Savola and contributed by him to the xml2rfc project.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">
+ This document is part of a plan to make xml2rfc indispensable <span>[<a href="#DOMINATION" class="xref">DOMINATION</a>]</span>.
+ This document may be shared as needed <span>[<a href="#SHARING" class="xref">SHARING</a>]</span>.  If necessary, appeal to <span>[<a href="#DOI_10.1145_2975159" class="xref">DOI_10.1145_2975159</a>]</span>.<a href="#section-7-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="IANA">
+<section id="section-8">
+      <h2 id="name-iana-considerations-2">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations-2" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-8-1">This memo includes no request to IANA.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">All drafts are required to have an IANA considerations section (see
+      <span><a href="#I-D.narten-iana-considerations-rfc2434bis" class="xref">the update of
+      RFC 2434</a> [<a href="#I-D.narten-iana-considerations-rfc2434bis" class="xref">I-D.narten-iana-considerations-rfc2434bis</a>]</span> for a guide). If the draft does not require IANA to do
+      anything, the section contains an explicit statement that this is the
+      case (as above). If there are no requirements for IANA, the section will
+      be removed during conversion into an RFC by the RFC Editor.<a href="#section-8-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="Security">
+<section id="section-9">
+      <h2 id="name-security-considerations-2">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations-2" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-9-1">All drafts are required to have a security considerations section.
+      See <span><a href="#RFC3552" class="xref">RFC 3552</a> [<a href="#RFC3552" class="xref">RFC3552</a>]</span> for a guide.<a href="#section-9-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-10">
+      <h2 id="name-references-2">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references-2" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-10.1">
+        <h3 id="name-normative-references-2">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references-2" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="min_ref">[min_ref]</dt>
+        <dd>
+<span class="refAuthor">authSurName, authInitials.</span>, <span class="refTitle">"Minimal Reference"</span>, <time datetime="2006" class="refDate">2006</time>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-10.2">
+        <h3 id="name-informative-references-2">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references-2" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="DOI_10.1145_2975159">[DOI_10.1145_2975159]</dt>
+        <dd>
+<span class="refAuthor">Singh, A.</span>, <span class="refAuthor">Ong, J.</span>, <span class="refAuthor">Agarwal, A.</span>, <span class="refAuthor">Anderson, G.</span>, <span class="refAuthor">Armistead, A.</span>, <span class="refAuthor">Bannon, R.</span>, <span class="refAuthor">Boving, S.</span>, <span class="refAuthor">Desai, G.</span>, <span class="refAuthor">Felderman, B.</span>, <span class="refAuthor">Germano, P.</span>, <span class="refAuthor">Kanagala, A.</span>, <span class="refAuthor">Liu, H.</span>, <span class="refAuthor">Provost, J.</span>, <span class="refAuthor">Simmons, J.</span>, <span class="refAuthor">Tanda, E.</span>, <span class="refAuthor">Wanderer, J.</span>, <span class="refAuthor">Hölzle, U.</span>, <span class="refAuthor">Stuart, S.</span>, <span class="refAuthor">Vahdat, A.</span>, and <span class="refAuthor">Association for Computing Machinery (ACM)</span>, <span class="refTitle">"Jupiter rising"</span>, <span class="refContent">Communications of the ACM, vol. 59, no. 9, pp. 88-97</span>, <span class="seriesInfo">DOI 10.1145/2975159</span>, <time datetime="2016-08-24" class="refDate">24 August 2016</time>, <span>&lt;<a href="http://dx.doi.org/10.1145/2975159">http://dx.doi.org/10.1145/2975159</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="DOMINATION">[DOMINATION]</dt>
+        <dd>
+<span class="refAuthor">Mad Dominators, Inc.</span>, <span class="refTitle">"Ultimate Plan for Taking Over the World"</span>, <time datetime="1984" class="refDate">1984</time>, <span>&lt;<a href="http://www.example.com/dominator.html">http://www.example.com/dominator.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.narten-iana-considerations-rfc2434bis">[I-D.narten-iana-considerations-rfc2434bis]</dt>
+        <dd>
+<span class="refAuthor">Narten, T.</span> and <span class="refAuthor">H. Alvestrand</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-narten-iana-considerations-rfc2434bis-09</span>, <time datetime="2008-03-26" class="refDate">26 March 2008</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-narten-iana-considerations-rfc2434bis-09.txt">https://www.ietf.org/archive/id/draft-narten-iana-considerations-rfc2434bis-09.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2629">[RFC2629]</dt>
+        <dd>
+<span class="refAuthor">Rose, M.</span>, <span class="refTitle">"Writing I-Ds and RFCs using XML"</span>, <span class="seriesInfo">RFC 2629</span>, <span class="seriesInfo">DOI 10.17487/RFC2629</span>, <time datetime="1999-06" class="refDate">June 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2629">https://www.rfc-editor.org/info/rfc2629</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3552">[RFC3552]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span> and <span class="refAuthor">B. Korver</span>, <span class="refTitle">"Guidelines for Writing RFC Text on Security Considerations"</span>, <span class="seriesInfo">BCP 72</span>, <span class="seriesInfo">RFC 3552</span>, <span class="seriesInfo">DOI 10.17487/RFC3552</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3552">https://www.rfc-editor.org/info/rfc3552</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SHARING">[SHARING]</dt>
+      <dd>
+<span class="refAuthor">Sesame Street</span>, <span class="refTitle">"I Learned to Share in Kindergarten"</span>, <time datetime="1972" class="refDate">1972</time>, <span>&lt;<a href="http://www.example.com/sharing.html">http://www.example.com/sharing.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="app-additional">
+<section id="appendix-A">
+      <h2 id="name-additional-stuff-2">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-additional-stuff-2" class="section-name selfRef">Additional Stuff</a>
+      </h2>
+<p id="appendix-A-1">This becomes an Appendix.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="contributors">
+<section id="appendix-B">
+      <h2 id="name-contributors-2">
+<a href="#name-contributors-2" class="section-name selfRef">Contributors</a>
+      </h2>
+<p id="appendix-B-1">This becomes an unnumbered section<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-addresses-2">
+<a href="#name-authors-addresses-2" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Elwyn Davies (<span class="role">editor</span>)</span></div>
+<div dir="auto" class="left"><span class="org">Folly Consulting</span></div>
+<div dir="auto" class="left"><span class="locality">Soham</span></div>
+<div dir="auto" class="left"><span class="country-name">United Kingdom</span></div>
+<div class="tel">
+<span>Phone:</span>
+<a href="tel:+44%207889%20488%20335" class="tel">+44 7889 488 335</a>
+</div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:elwynd@dial.pipex.com" class="email">elwynd@dial.pipex.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Quintin Zhao</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technology</span></div>
+<div dir="auto" class="left"><span class="street-address">125 Nagog Technology Park</span></div>
+<div dir="auto" class="left">
+<span class="locality">Acton</span>, <span class="region">MA</span> <span class="postal-code">01719</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:quintin.zhao@huawei.com" class="email">quintin.zhao@huawei.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
 </body>
 </html>

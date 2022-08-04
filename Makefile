@@ -59,7 +59,7 @@ pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
 tests: minify tests-no-network cachetest
 
 # Tests that can run without network access
-tests-no-network: test flaketest drafttest rfctest utf8test v3featuretest elementstest indextest sourcecodetest notoctest bomtest wiptest mantest
+tests-no-network: test flaketest drafttest old-drafttest rfctest utf8test v3featuretest elementstest indextest sourcecodetest notoctest bomtest wiptest mantest
 
 # Clear the cache
 .PHONY: clear-cache
@@ -100,9 +100,7 @@ CHECKOUTPUT=	\
 %.rng: %.rnc
 	trang $< $@
 
-%.tests: %.txt.test %.raw.txt.test %.nroff.test %.html.test %.exp.xml.test %.nroff.txt %.v2v3.xml.test %.v3add-xinclude.xml.test %.text.test %.pages.text.test %.v3.html.test %.prepped.xml.test %.plain.text
-	@echo " Diffing .nroff.txt against regular .txt"
-	@doc=$(basename $@); diff -u -I '$(datetime_regex)' -I '$(version_regex)'  -I '$(libversion_regex)' -I '$(date_regex)' $$doc.nroff.txt $$doc.txt || { echo 'Diff failed for $$doc.nroff.txt output'; exit 1; }
+%.tests: %.txt.test %.html.test %.exp.xml.test %.v2v3.xml.test %.v3add-xinclude.xml.test %.text.test %.pages.text.test %.v3.html.test %.prepped.xml.test %.plain.text
 	@echo " Checking v3 validity"
 	@doc=$(basename $@); printf ' '; xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
 	@echo " Diffing .plain.text against regular .text"
@@ -116,7 +114,7 @@ tests/out/%.canonical.html: tests/input/%.canonical.xml install
 
 tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt : tests/input/%.xml install
 	@echo -e "\n Processing $<"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tests/out/ --raw --legacy --text --nroff --html --strict $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tests/out/ --text --html --strict $<"
 
 tests/out/%.v2v3.xml: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --strict --legacy-date-format $< --out $@"
@@ -169,7 +167,7 @@ tests/out/%.plain.text: tests/out/%.plain.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@  --silence='The document date'"
 
 tests/out/%.exp.xml: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --exp --legacy $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --exp $<"
 
 %.prepped.xml: %.v2v3.xml
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --prep $<"
@@ -193,9 +191,10 @@ tests/out/%.exp.xml: tests/input/%.xml install
 # ----------------------------------------------------------------------
 
 old-drafttest: cleantmp install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 tests/input/draft-template.xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out tmp/draft-template.prepped.xml --prep tmp/draft-template.v2v3.xml "
-	doc=draft-template ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 tests/input/draft-template-old.xml"
+	@PS4=" " /bin/bash -cx "cp  tests/input/ietf.svg tmp/"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out tmp/draft-template-old.prepped.xml --prep tmp/draft-template-old.v2v3.xml "
+	doc=draft-template-old ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 miektest: cleantmp install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 tests/input/draft-miek-test.xml"
