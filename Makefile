@@ -30,8 +30,8 @@ generator_regex = name="generator"
 libversion_regex = \(pyflakes\|PyYAML\|requests\|setuptools\|six\|Weasyprint\) [0-9]\+\(\.[0-9]\+\)*
 
 rfcxml= \
-	rfc6787.xml		\
 	rfc7911.xml		\
+#	rfc6787.xml		\
 #	rfc7754.edited.xml	\
 
 rfcxmlfiles = $(addprefix tests/input/, $(rfcxml))
