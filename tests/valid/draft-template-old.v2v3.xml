@@ -5,7 +5,10 @@
   <!ENTITY nbhy   "&#8209;">
   <!ENTITY wj     "&#8288;">
 ]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+     please see http://xml.resource.org/authoring/README.html. -->
 <!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
      (Here they are set differently than their defaults in xml2rfc v1.32) -->
 <?rfc strict="yes" ?>
@@ -29,7 +32,7 @@
 <!-- permit multiple author initials -->
 <?rfc multiple-initials="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="info" docName="draft-ietf-xml2rfc-template-05" ipr="trust200902" tocInclude="true" tocDepth="4" symRefs="true" sortRefs="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="info" docName="draft-ietf-xml2rfc-template-05" ipr="trust200902" obsoletes="" updates="" submissionType="IETF" xml:lang="en" tocInclude="true" tocDepth="4" symRefs="true" sortRefs="true" version="3">
   <!-- xml2rfc v2v3 conversion 3.13.1 -->
   <?v3xml2rfc silence=".*[Pp]ostal address" ?>
   <?v3xml2rfc silence="The document date .*? is more than 3 days away from today's date" ?>
@@ -111,17 +114,17 @@
     </abstract>
   </front>
   <middle>
-    <section>
+    <section numbered="true" toc="default">
       <name>Introduction</name>
-      <t>The original specification of xml2rfc format is in <xref target="RFC2629">RFC 2629</xref>.</t>
-      <section>
+      <t>The original specification of xml2rfc format is in <xref target="RFC2629" format="default">RFC 2629</xref>.</t>
+      <section numbered="true" toc="default">
         <name>Requirements Language</name>
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
+        document are to be interpreted as described in <xref target="RFC2119" format="default">RFC 2119</xref>.</t>
       </section>
     </section>
-    <section anchor="simple_list">
+    <section anchor="simple_list" numbered="true" toc="default">
       <name>Simple List</name>
       <t>List styles: 'empty', 'symbols', 'letters', 'numbers', 'hanging',
       'format'.</t>
@@ -131,22 +134,22 @@
       </ul>
       <t> You can write text here as well.</t>
     </section>
-    <section>
+    <section numbered="true" toc="default">
       <name>Figures</name>
       <t>Figures should not exceed 69 characters wide to allow for the indent
       of sections.</t>
       <t keepWithNext="true">Preamble text - can be omitted or empty.</t>
       <figure anchor="xml_happy">
         <artset>
-          <artwork align="left" type="svg" src="ietf.svg"/>
-          <artwork align="left" type="ascii-art"><![CDATA[
+          <artwork align="left" src="ietf.svg" name="" type="svg" alt=""/>
+          <artwork align="left" name="" type="ascii-art" alt=""><![CDATA[
 +-----------------------+
 | Use XML, be Happy :-) |
 |_______________________|
             ]]></artwork>
         </artset>
       </figure>
-      <t keepWithPrevious="true">Cross-references allowed in pre- and postamble. <xref target="min_ref"/>.</t>
+      <t keepWithPrevious="true">Cross-references allowed in pre- and postamble. <xref target="min_ref" format="default"/>.</t>
       <t>The CDATA means you don't need to escape meta-characters (especially
       &lt; (&amp;lt;) and &amp; (&amp;amp;)) but is not essential.
       Figures may also have a title attribute but it won't be displayed unless
@@ -155,20 +158,20 @@
     </section>
     <!-- This PI places the pagebreak correctly (before the section title) in the text output. -->
 
-    <section>
+    <section numbered="true" toc="default">
       <name>Subsections and Tables</name>
-      <section>
+      <section numbered="true" toc="default">
         <name>A Subsection</name>
         <t>By default 3 levels of nesting show in table of contents but that
         can be adjusted with the value of the "tocdepth" processing
         instruction.</t>
       </section>
-      <section>
+      <section numbered="true" toc="default">
         <name>Tables</name>
         <t>.. are very similar to figures:</t>
         <t keepWithNext="true">Tables use ttcol to define column headers and widths.
           Every cell then has a "c" element for its content.</t>
-        <table anchor="table_example">
+        <table anchor="table_example" align="center">
           <name>A Very Simple Table</name>
           <thead>
             <tr>
@@ -194,7 +197,7 @@
         <t keepWithPrevious="true">which is a very simple example.</t>
       </section>
     </section>
-    <section anchor="nested_lists">
+    <section anchor="nested_lists" numbered="true" toc="default">
       <name>More about Lists</name>
       <t><!-- Comment -->Lists with 'hanging labels': the list item is indented the amount of
       the hangIndent: </t>
@@ -224,7 +227,7 @@
         <li>The quick, brown fox jumped over the lazy dog and lived to fool
           many another hunter in the great wood in the west.</li>
       </ul>
-      <section>
+      <section numbered="true" toc="default">
         <name>Numbering Lists across Lists and Sections</name>
         <t>Numbering items continuously although they are in separate
         &lt;list&gt; elements, maybe in separate sections using the "format"
@@ -242,7 +245,7 @@
           <li>#6</li>
         </ol>
       </section>
-      <section>
+      <section numbered="true" toc="default">
         <name>Where the List Numbering Continues</name>
         <t>List continues here.</t>
         <t>Third list: </t>
@@ -253,7 +256,7 @@
         </ol>
         <t> The end of the list.</t>
       </section>
-      <section>
+      <section numbered="true" toc="default">
         <name>nested lists</name>
         <t>Simulating more than one paragraph in a list item using
 	  &lt;vspace&gt;: 
@@ -280,7 +283,7 @@
           </li>
         </ol>
       </section>
-      <section>
+      <section numbered="true" toc="default">
         <name>List Formats</name>
         <t>many formats
         </t>
@@ -361,7 +364,7 @@
         </ol>
       </section>
     </section>
-    <section anchor="codeExample">
+    <section anchor="codeExample" numbered="true" toc="default">
       <name>Example of Code or MIB Module To Be Extracted</name>
       <t keepWithNext="true">The &lt;artwork&gt; element has a number of extra attributes
         that can be used to substitute a more aesthetically pleasing rendition
@@ -375,7 +378,7 @@
         also be colorized in HTML output to highlight the syntactic
         components. Checking of additional "types" may be provided in future
         versions of xml2rfc.</t>
-      <sourcecode markers="true" name="example.c"><![CDATA[
+      <sourcecode name="example.c" type="" markers="true"><![CDATA[
 
 /**** an example C program */
 
@@ -398,31 +401,31 @@ main(int argc, char *argv[])
 
 ]]></sourcecode>
     </section>
-    <section anchor="Acknowledgements">
+    <section anchor="Acknowledgements" numbered="true" toc="default">
       <name>Acknowledgements</name>
       <t>This template was derived from an initial version written by Pekka
       Savola and contributed by him to the xml2rfc project.</t>
       <t>
-	This document is part of a plan to make xml2rfc indispensable <xref target="DOMINATION"/>.
-	This document may be shared as needed <xref target="SHARING"/>.  If necessary, appeal to <xref target="DOI_10.1145_2975159"/>.
+	This document is part of a plan to make xml2rfc indispensable <xref target="DOMINATION" format="default"/>.
+	This document may be shared as needed <xref target="SHARING" format="default"/>.  If necessary, appeal to <xref target="DOI_10.1145_2975159" format="default"/>.
       </t>
     </section>
     <!-- Possibly a 'Contributors' section ... -->
 
-    <section anchor="IANA">
+    <section anchor="IANA" numbered="true" toc="default">
       <name>IANA Considerations</name>
       <t>This memo includes no request to IANA.</t>
       <t>All drafts are required to have an IANA considerations section (see
-      <xref target="I-D.narten-iana-considerations-rfc2434bis">the update of
+      <xref target="I-D.narten-iana-considerations-rfc2434bis" format="default">the update of
       RFC 2434</xref> for a guide). If the draft does not require IANA to do
       anything, the section contains an explicit statement that this is the
       case (as above). If there are no requirements for IANA, the section will
       be removed during conversion into an RFC by the RFC Editor.</t>
     </section>
-    <section anchor="Security">
+    <section anchor="Security" numbered="true" toc="default">
       <name>Security Considerations</name>
       <t>All drafts are required to have a security considerations section.
-      See <xref target="RFC3552">RFC 3552</xref> for a guide.</t>
+      See <xref target="RFC3552" format="default">RFC 3552</xref> for a guide.</t>
     </section>
   </middle>
   <!--  *****BACK MATTER ***** -->
@@ -446,7 +449,19 @@ main(int argc, char *argv[])
       <references>
         <name>Normative References</name>
         <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
-      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+      <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+          <front>
+            <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+            <author fullname="S. Bradner" initials="S" surname="Bradner"/>
+            <date month="March" year="1997"/>
+            <abstract>
+              <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized.  This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
+            </abstract>
+          </front>
+          <seriesInfo name="BCP" value="14"/>
+          <seriesInfo name="RFC" value="2119"/>
+          <seriesInfo name="DOI" value="10.17487/RFC2119"/>
+        </reference>
         <reference anchor="min_ref">
           <!-- the following is the minimum to make xml2rfc happy -->
 
@@ -463,9 +478,44 @@ main(int argc, char *argv[])
         <name>Informative References</name>
         <!-- Here we use entities that we defined at the beginning. -->
 
-      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml"/>
-        <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-narten-iana-considerations-rfc2434bis.xml"/>
+      <reference anchor="RFC2629" target="https://www.rfc-editor.org/info/rfc2629" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
+          <front>
+            <title>Writing I-Ds and RFCs using XML</title>
+            <author fullname="M. Rose" initials="M" surname="Rose"/>
+            <date month="June" year="1999"/>
+            <abstract>
+              <t>This memo presents a technique for using XML (Extensible Markup Language) as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  This memo provides information for the Internet community.</t>
+            </abstract>
+          </front>
+          <seriesInfo name="RFC" value="2629"/>
+          <seriesInfo name="DOI" value="10.17487/RFC2629"/>
+        </reference>
+        <reference anchor="RFC3552" target="https://www.rfc-editor.org/info/rfc3552" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml">
+          <front>
+            <title>Guidelines for Writing RFC Text on Security Considerations</title>
+            <author fullname="E. Rescorla" initials="E" surname="Rescorla"/>
+            <author fullname="B. Korver" initials="B" surname="Korver"/>
+            <date month="July" year="2003"/>
+            <abstract>
+              <t>All RFCs are required to have a Security Considerations section.  Historically, such sections have been relatively weak.  This document provides guidelines to RFC authors on how to write a good Security Considerations section.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
+            </abstract>
+          </front>
+          <seriesInfo name="BCP" value="72"/>
+          <seriesInfo name="RFC" value="3552"/>
+          <seriesInfo name="DOI" value="10.17487/RFC3552"/>
+        </reference>
+        <reference anchor="I-D.narten-iana-considerations-rfc2434bis" target="https://www.ietf.org/archive/id/draft-narten-iana-considerations-rfc2434bis-09.txt" xml:base="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml">
+          <front>
+            <title>Guidelines for Writing an IANA Considerations Section in RFCs</title>
+            <author fullname="Thomas Narten"/>
+            <author fullname="Harald Alvestrand"/>
+            <date day="26" month="March" year="2008"/>
+            <abstract>
+              <t>Many protocols make use of identifiers consisting of constants and other well-known values. Even after a protocol has been defined and deployment has begun, new values may need to be assigned (e.g., for a new option type in DHCP, or a new encryption or authentication transform for IPsec). To ensure that such quantities have consistent values and interpretations across all implementations, their assignment must be administered by a central authority. For IETF protocols, that role is provided by the Internet Assigned Numbers Authority (IANA). In order for IANA to manage a given namespace prudently, it needs guidelines describing the conditions under which new values can be assigned or when modifications to existing values can be made. If IANA is expected to play a role in the management of a namespace, IANA must be given clear and concise instructions describing that role. This document discusses issues that should be considered in formulating a policy for assigning values to a namespace and provides guidelines for authors on the specific text that must be included in documents that place demands on IANA. This document obsoletes RFC 2434. This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
+            </abstract>
+          </front>
+          <seriesInfo name="Internet-Draft" value="draft-narten-iana-considerations-rfc2434bis-09"/>
+        </reference>
         <!-- Reference with query argument -->
       <reference anchor="DOI_10.1145_2975159" target="http://dx.doi.org/10.1145/2975159" xml:base="https://bib.ietf.org/public/rfc/bibxml-doi/reference.DOI.10.1145/2975159.xml">
           <front>
@@ -564,11 +614,11 @@ main(int argc, char *argv[])
         </reference>
       </references>
     </references>
-    <section anchor="app-additional">
+    <section anchor="app-additional" numbered="true" toc="default">
       <name>Additional Stuff</name>
       <t>This becomes an Appendix.</t>
     </section>
-    <section anchor="contributors" numbered="false">
+    <section anchor="contributors" numbered="false" toc="default">
       <name>Contributors</name>
       <t>This becomes an unnumbered section</t>
     </section>

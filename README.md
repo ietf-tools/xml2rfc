@@ -99,7 +99,7 @@ The initial build may take time because it downloads all required fonts as well.
 [RFC7991]: https://www.rfc-editor.org/info/rfc7991
 [bis draft for 7991]: https://datatracker.ietf.org/doc/draft-iab-rfc7991bis/
 [v3.rng]: xml2rfc/data/v3.rng
-[documentation xml2rfc produces]: https://xml2rfc.tools.ietf.org/xml2rfc-doc.html
+[documentation xml2rfc produces]: https://ietf-tools.github.io/xml2rfc/
 [preptool]: https://www.rfc-editor.org/info/rfc7998
 [WeasyPrint]: https://weasyprint.org/
 [WeasyPrint Docs]: https://doc.courtbouillon.org/weasyprint/stable/first_steps.html
