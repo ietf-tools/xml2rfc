@@ -1,4 +1,4 @@
-FROM xml2rfc-base:latest
+FROM ghcr.io/ietf-tools/xml2rfc-base:latest
 LABEL maintainer="IETF Tools Team <tools-discuss@ietf.org>"
 
 ENV DEBIAN_FRONTEND noninteractive
