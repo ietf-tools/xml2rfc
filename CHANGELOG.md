@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### :bug: Bug Fixes
 - [`95dba00`](https://github.com/ietf-tools/xml2rfc/commit/95dba00e3007ae65af6d1795f5723c0af1db1988) - Fix typo in README file *(PR [#843](https://github.com/ietf-tools/xml2rfc/pull/843) by [@bkmgit](https://github.com/bkmgit))*
 - [`0f06e27`](https://github.com/ietf-tools/xml2rfc/commit/0f06e27ca16272887d64179098c4a9c7262e372b) - Prevent submission date warnings for RFCs  *(PR [#842](https://github.com/ietf-tools/xml2rfc/pull/842) by [@kesara](https://github.com/kesara))*
+- [`e5c45d4`](https://github.com/ietf-tools/xml2rfc/commit/e5c45d41592e6db13af41134f73611ca619b6822) - Add an option to disable rfc-local.css link *(PR [#840](https://github.com/ietf-tools/xml2rfc/pull/840) by [@martinthomson](https://github.com/martinthomson))*
 
 ### :white_check_mark: Tests
 - [`41b177a`](https://github.com/ietf-tools/xml2rfc/commit/41b177a302f0c6c61767cd3c326f20893210602d) - Fix tests to adapt bib.ietf.org *(PR [#852](https://github.com/ietf-tools/xml2rfc/pull/852) by [@kesara](https://github.com/kesara))*
