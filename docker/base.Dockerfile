@@ -2,7 +2,13 @@ FROM ubuntu:jammy
 LABEL maintainer="IETF Tools Team <tools-discuss@ietf.org>"
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV LANG=en_US.UTF-8
+
 WORKDIR /root
+
+# .bashrc configuration
+RUN echo 'xml2rfc --version' >> ~/.bashrc && \
+    echo 'if [ -d ~/xml2rfc ]; then cd ~/xml2rfc; fi' >> ~/.bashrc
 
 # Install dependencies
 RUN apt-get update --fix-missing && \
@@ -22,7 +28,10 @@ RUN apt-get update --fix-missing && \
         python3.10-dev \
         python3-pip \
         python3.10-distutils && \
-    locale-gen en_US.UTF-8
+    locale-gen en_US.UTF-8 && \
+    rm -rf /var/lib/apt/lists/* /var/log/dpkg.log && \
+    apt-get autoremove -y && \
+    apt-get clean -y
 
 # Install required fonts
 RUN mkdir -p ~/.fonts/opentype && \
@@ -50,12 +59,6 @@ COPY xml2rfc ./xml2rfc
 
 # Build xml2rfc & finalize
 RUN make install && \
-    apt-get remove --purge -y software-properties-common wget unzip && \
-    apt-get autoclean && \
-    apt-get clean && \
     pip3 uninstall -y decorator dict2xml pypdf2 && \
     rm setup.py Makefile configtest.py requirements.txt && \
-    rm -r xml2rfc build dist && \
-    echo 'export LANG=en_US.UTF-8' >> ~/.bashrc && \
-    echo 'xml2rfc --version' >> ~/.bashrc && \
-    echo 'if [ -d ~/xml2rfc ]; then cd ~/xml2rfc; fi' >> ~/.bashrc
+    rm -r xml2rfc build dist

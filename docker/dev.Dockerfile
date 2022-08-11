@@ -2,6 +2,7 @@ FROM ghcr.io/ietf-tools/xml2rfc-base:latest
 LABEL maintainer="IETF Tools Team <tools-discuss@ietf.org>"
 
 ENV DEBIAN_FRONTEND noninteractive
+
 WORKDIR /root
 
 # Install dependencies
@@ -27,7 +28,6 @@ RUN pip3 install \
     tox \
     decorator \
     dict2xml \
-    "pypdf2>=2.6.0" && \
-    echo 'xml2rfc --version --verbose' >> ~/.bashrc
+    "pypdf2>=2.6.0"
 
 ENTRYPOINT bash
