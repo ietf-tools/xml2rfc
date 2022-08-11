@@ -21,7 +21,10 @@ RUN apt-get update --fix-missing && \
         python3.8-distutils \
         python3.9 \
         python3.9-dev \
-        python3.9-distutils
+        python3.9-distutils && \
+    rm -rf /var/lib/apt/lists/* /var/log/dpkg.log && \
+    apt-get autoremove -y && \
+    apt-get clean -y
 
 # Install Python dependencies & finalize
 RUN pip3 install \
