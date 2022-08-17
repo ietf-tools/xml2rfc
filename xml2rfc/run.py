@@ -266,6 +266,8 @@ def main():
                            help='with --text and --html: use the legacy output formatters, rather than the v3 ones')
     formatoptions.add_argument('--id-is-work-in-progress', default=True, action='store_true',
                            help='in references, refer to Internet-Drafts as "Work in Progress"')
+    formatoptions.add_argument('--compact-index', action='store_true',
+                           help='Generate a compact index')
 
     textoptions = optionparser.add_argument_group('Text Format Options')
     textoptions.add_argument('--no-headers', dest='omit_headers', action='store_true',
