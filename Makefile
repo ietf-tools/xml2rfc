@@ -116,6 +116,11 @@ tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out
 	@echo -e "\n Processing $<"
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tests/out/ --text --html --strict $<"
 
+tests/out/%.compact_index.text tests/out/%.compact_index.html : tests/input/%.xml install
+	@echo -e "\n Generating with a compact index $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tests/out/ --$(subst .,,$(suffix $@)) --strict --compact-index --no-pagination $< --out $@"
+
+
 tests/out/%.v2v3.xml: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --strict --legacy-date-format $< --out $@"
 	@doc=$(basename $@); printf ' '; xmllint --noout --xinclude --relaxng xml2rfc/data/v3.rng $$doc.xml
@@ -227,12 +232,12 @@ rfcregressiontest: cleantmp install
 drafttest: cleantmp env/bin/python install $(drafttests) dateshifttest
 
 # rfctest: cleantmp env/bin/python install $(rfctests)
-# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc6787.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
-# 	doc=rfc6787 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
-# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc7754.edited.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
-# 	doc=rfc7754.edited ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
-# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc7911.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
-# 	doc=rfc7911 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
+#	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc6787.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
+#	doc=rfc6787 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
+#	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc7754.edited.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
+#	doc=rfc7754.edited ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
+#	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc7911.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
+#	doc=rfc7911 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
 
 unicodetest: cleantmp  env/bin/python install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --no-inline-version --exp --v2v3 --prep tests/input/unicode.xml "
@@ -246,11 +251,11 @@ v3featuretest: tests/out/draft-v3-features.prepped.xml.test tests/out/draft-v3-f
 
 dateshifttest: cleantmp install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --date 2013-02-01 --legacy --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml"
-	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
+	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; }
 
 elementstest: install tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.html.test
 
-indextest: install tests/out/indexes.prepped.xml.test tests/out/indexes.text.test tests/out/indexes.pages.text.test tests/out/indexes.v3.html.test
+indextest: install tests/out/indexes.prepped.xml.test tests/out/indexes.text.test tests/out/indexes.pages.text.test tests/out/indexes.v3.html.test tests/out/indexes.compact_index.text.test
 
 sourcecodetest: install tests/out/sourcecode.prepped.xml.test tests/out/sourcecode.text.test tests/out/sourcecode.pages.text.test tests/out/sourcecode.v3.html.test
 
