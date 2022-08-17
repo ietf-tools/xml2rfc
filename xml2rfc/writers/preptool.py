@@ -2232,7 +2232,7 @@ class PrepToolWriter(BaseV3Writer):
 
         # done defining helpers, resume back_insert_index() flow
         if self.index_entries and self.root.get('indexInclude') == 'true':
-            index = self.element('section', numbered='false', toc='include')
+            index = self.element('section', numbered='false', toc='include', anchor='rfc.index')
             name = self.element('name')
             name.text = 'Index'
             index.append(name)
