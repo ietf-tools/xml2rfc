@@ -1538,7 +1538,7 @@ class HtmlWriter(BaseV3Writer):
         target = x.get('target')
         brackets = x.get('brackets', self.attribute_defaults[x.tag]['brackets'])
         if x.text:
-            hh = add.a(h, x, href=target)            
+            hh = add.a(h, x, href=target)
         else:
             if   brackets == 'none':
                 hh = add.span(h, x, build.a(target, href=target))
@@ -2828,17 +2828,17 @@ class HtmlWriter(BaseV3Writer):
                 target = id_for_pn(target)
             # plain xref
             if in_name:
-                hh = build.em('[', reftext, ']', classes="xref")
+                hh = build.em('[', reftext, ']', classes='xref cite')
             else:
                 if reftext:
                     if format == 'none':
-                        aa = build.a(href='#%s'%target, classes='xref')
+                        aa = build.a(href='#%s'%target, classes='xref plain')
                         self.inline_text_renderer(aa, x)
                         aa.tail = None
                         hh = aa
                     else:
-                        a = build.a(reftext, href='#%s'%target, classes='xref')
                         if target in self.refname_mapping and format != 'title':
+                            a = build.a(reftext, href='#%s'%target, classes='xref cite')
                             if content:
                                 aa = build.a(href='#%s'%target, classes='xref')
                                 self.inline_text_renderer(aa, x)
@@ -2847,6 +2847,7 @@ class HtmlWriter(BaseV3Writer):
                             else:
                                 hh = build.span('[', a, ']')
                         else:
+                            a = build.a(reftext, href='#%s'%target, classes='xref')
                             if content:
                                 aa = build.a(href='#%s'%target, classes='xref')
                                 self.inline_text_renderer(aa, x)
@@ -2890,7 +2891,7 @@ class HtmlWriter(BaseV3Writer):
                 span = add.span(h, None,
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
                     ' of %s[' % exptext,
-                    build.a(reftext, href='#%s'%target, classes='xref'),
+                    build.a(reftext, href='#%s'%target, classes='xref cite'),
                     ']',
                 )
                 span.tail = x.tail
@@ -2917,7 +2918,7 @@ class HtmlWriter(BaseV3Writer):
             elif format == 'comma':
                 span = add.span(h, None,
                     '%s[' % exptext,
-                    build.a(reftext, href='#%s'%target, classes='xref'),
+                    build.a(reftext, href='#%s'%target, classes='xref cite'),
                     '], ',
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
                 )
@@ -2952,7 +2953,7 @@ class HtmlWriter(BaseV3Writer):
             elif format == 'parens':
                 span = add.span(h, None,
                     '%s[' % exptext,
-                    build.a(reftext, href='#%s'%target, classes='xref'),
+                    build.a(reftext, href='#%s'%target, classes='xref cite'),
                     '] (',
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
                     ')',
