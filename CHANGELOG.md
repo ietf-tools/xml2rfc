@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.14.1] - 2022-08-22
+### :bug: Bug Fixes
+- [`c67f5fd`](https://github.com/ietf-tools/xml2rfc/commit/c67f5fd40c605637043c1692974256ebc9f7af41) - Align center aligned ASCII art correctly *(PR [#838](https://github.com/ietf-tools/xml2rfc/pull/838) by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`701d5ce`](https://github.com/ietf-tools/xml2rfc/commit/701d5cedda73befe1341b02842f32d2888c5e860) - Add github issue templates *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.14.0] - 2022-08-10
 ### :sparkles: New Features
 - [`c6343a9`](https://github.com/ietf-tools/xml2rfc/commit/c6343a909dc66887eafe2d4e905cd5134c2d2c95) - Update WeasyPrint *(PR [#802](https://github.com/ietf-tools/xml2rfc/pull/802) by [@kesara](https://github.com/kesara))*
@@ -1868,3 +1876,5 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.13.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.12.10...v3.13.0
 [v3.13.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.13.0...v3.13.1
 [v3.14.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.13.1...v3.14.0
+
+[v3.14.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.0...v3.14.1
