@@ -31,6 +31,7 @@ RUN pip3 install \
     tox \
     decorator \
     dict2xml \
-    "pypdf2>=2.6.0"
+    "pypdf2>=2.6.0" && \
+    git config --global --add safe.directory /root/xml2rfc
 
 ENTRYPOINT bash
