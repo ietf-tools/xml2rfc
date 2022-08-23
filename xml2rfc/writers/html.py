@@ -2381,8 +2381,12 @@ class HtmlWriter(BaseV3Writer):
     #      </p>
     #    </section>
     def render_section(self, h, x):
-        section = add(x.tag, h, x)
         anchor = x.get('anchor')
+        if anchor == 'rfc.index':
+            cls = 'index'
+        else:
+            cls = ''
+        section = add(x.tag, h, x, classes=cls)
         if anchor == 'toc':
             add.a(section, None, "\u25b2", href="#", onclick="scroll(0,0)", classes="toplink")
         for c in x.getchildren():
