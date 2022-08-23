@@ -1608,6 +1608,38 @@ class PrepToolWriter(BaseV3Writer):
                 else:
                     label = '"%s"' % (get_name(t) or target)
                 content = "%s %s" % (type, label)
+        elif format == 'compact':
+            if t.tag in [ 'reference', 'referencegroup' ]:
+                anchor = t.get('anchor')
+                content = '%s' % self.refname_mapping[anchor] if anchor in self.refname_mapping else anchor
+            elif t.tag in [ 't', 'ul', 'ol', 'dl', ]:
+                _, num, para = self.split_pn(pn)
+                content = "\u00a7%s \u204b%s" % (num.title(), para)
+            elif t.tag in [ 'li', ]:
+                _, num, para = self.split_pn(pn)
+                para, item = para.split('.', 1)
+                bullet = "#" if t.getparent().tag == "ol" else "\u2022";
+                content = "\u00a7%s \u204b%s %s%s" % (num.title(), para, bullet, item)
+            elif t.tag == 'u':
+                try:
+                    content = expand_unicode_element(t, bare=True)
+                except (RuntimeError, ValueError) as exc:
+                    self.err(t, '%s' % exc)
+            elif t.tag in ['author', 'contact']:
+                content = full_author_name_expansion(t)
+            elif t.tag in ['abstract']:
+                content = t.tag.capitalize()
+            elif t.tag in ['cref']:
+                content = "\"%s" % target
+            else:
+                # If section is numbered, refer by number, otherwise use section name if available
+                numbered = t.get('numbered') != 'false'
+                if numbered:
+                    _, num, _ = self.split_pn(pn)
+                    label = num.title()
+                else:
+                    label = '"%s"' % (get_name(t) or target)
+                content = "\u00a7%s" % (label)
         elif format == 'title':
             if t.tag in ['u', 'author', 'contact', ]:
                 self.die(e, "Using <xref> format='%s' with a <%s> target is not supported" % (format, t.tag, ))
@@ -2195,6 +2227,7 @@ class PrepToolWriter(BaseV3Writer):
                         self,
                         text='Reference' if ent.anchor_tag in ['reference', 'referencegroup'] else None,
                         target=ent.anchor,
+                        format="compact" if self.options.compact_index else "default",
                     )
                     if ent.iref.get('primary') == 'true':
                         xr_em = self.element('em')
@@ -2203,7 +2236,7 @@ class PrepToolWriter(BaseV3Writer):
                         xr.append(xr_em)
                     t.append(xr)
                     if index < len(anchored_entries) - 1:
-                        xr.tail = '; '
+                        xr.tail = ', ' if self.options.compact_index else '; '
                     xr.tail = (xr.tail or '') + '\n'
             return dt, dd
 

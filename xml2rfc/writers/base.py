@@ -53,6 +53,7 @@ default_options.__dict__ = {
         'cache': None,
         'clear_cache': False,
         'css': None,
+        'compact_index': False,
         'config_file': None,
         'country_help': False,
         'date': None,
