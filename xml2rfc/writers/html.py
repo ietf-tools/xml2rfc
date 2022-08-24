@@ -2808,7 +2808,14 @@ class HtmlWriter(BaseV3Writer):
     #    or
     # 
     #    [<a class="xref" href="#RFC1234">RFC1234</a>]
-    # 
+    #
+    # Regarding HTML class assignment:
+    #   Most links here will get the "xref" class.
+    #   Relative links to sections of citations get "relref", but not "xref".
+    #   Links to citations/references (like "[RFC2119]") get the "cite" class.
+    #   Links to sections (or appendices) of this document get the "internal" class.
+    #   "sref" links with default text (like "Section 1.3") get the "auto" class.
+    #   Links with format="none" get the "plain" class.
     def render_xref(self, h, x):
         # possible attributes:
         target  = x.get('target')
@@ -2830,6 +2837,9 @@ class HtmlWriter(BaseV3Writer):
             if in_name:
                 hh = build.em('[', reftext, ']', classes='xref cite')
             else:
+                srefclass = 'xref internal'
+                if not content and format != 'title':
+                    srefclass = srefclass + ' auto'
                 if reftext:
                     if format == 'none':
                         aa = build.a(href='#%s'%target, classes='xref plain')
@@ -2840,23 +2850,23 @@ class HtmlWriter(BaseV3Writer):
                         if target in self.refname_mapping and format != 'title':
                             a = build.a(reftext, href='#%s'%target, classes='xref cite')
                             if content:
-                                aa = build.a(href='#%s'%target, classes='xref')
+                                aa = build.a(href='#%s'%target, classes=srefclass)
                                 self.inline_text_renderer(aa, x)
                                 aa.tail = None
                                 hh = build.span(aa, ' [', a, ']')
                             else:
                                 hh = build.span('[', a, ']')
                         else:
-                            a = build.a(reftext, href='#%s'%target, classes='xref')
+                            a = build.a(reftext, href='#%s'%target, classes=srefclass)
                             if content:
-                                aa = build.a(href='#%s'%target, classes='xref')
+                                aa = build.a(href='#%s'%target, classes=srefclass)
                                 self.inline_text_renderer(aa, x)
                                 aa.tail = None
                                 hh = build.span(aa, ' (', a, ')')
                             else:
                                 hh = a
                 else:
-                    a = build.a(href='#%s'%target, classes='xref')
+                    a = build.a(href='#%s'%target, classes=srefclass)
                     self.inline_text_renderer(a, x)
                     hh = a
             hh.tail = x.tail
