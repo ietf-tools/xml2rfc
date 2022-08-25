@@ -2814,7 +2814,7 @@ class HtmlWriter(BaseV3Writer):
     #   Relative links to sections of citations get "relref", but not "xref".
     #   Links to citations/references (like "[RFC2119]") get the "cite" class.
     #   Links to sections (or appendices) of this document get the "internal" class.
-    #   "sref" links with default text (like "Section 1.3") get the "auto" class.
+    #   Links with default text (like "Section 1.3") get the "auto" class.
     #   Links with format="none" get the "plain" class.
     def render_xref(self, h, x):
         # possible attributes:
