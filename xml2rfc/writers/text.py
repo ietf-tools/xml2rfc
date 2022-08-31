@@ -4073,7 +4073,10 @@ class TextWriter(BaseV3Writer):
                 cell = cells[i][j]
                 if cell.text:
                     if cell.foldable:
-                        cell.wrapped = fill(cell.text, width=cell.colwidth, fix_sentence_endings=True).splitlines()
+                        if cell.colspan > 1:
+                            cell.wrapped = fill(cell.text, width=cell.minwidth, fix_sentence_endings=True).splitlines()
+                        else:
+                            cell.wrapped = fill(cell.text, width=cell.colwidth, fix_sentence_endings=True).splitlines()
                     else:
                         cell.wrapped = cell.text.splitlines()
 
