@@ -510,7 +510,10 @@ class PrepToolWriter(BaseV3Writer):
                     if not c.get('ascii') and not c.tag in bare_unicode_tags and not is_script(c.text, 'Latin'):
                         self.err(c, 'Found non-ascii content without matching ascii attribute in <%s>: %s' % (c.tag, show))
                 else:
-                    self.err(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
+                    if self.draft:
+                        self.err(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
+                    else:
+                        self.warn(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
                     c.text = downcode(c.text)
             if c.tail and not isascii(c.tail):
                 show = c.tail.encode('ascii', errors='replace')
@@ -518,7 +521,10 @@ class PrepToolWriter(BaseV3Writer):
                     if not p.get('ascii') and not p.tag in ['artwork', 'refcontent', 'u']:
                         self.err(p, 'Found non-unicode content without matching ascii attribute in <%s>: %s' % (p.tag, show))
                 else:
-                    self.err(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
+                    if self.draft:
+                        self.err(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
+                    else:
+                        self.warn(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
                     c.tail = downcode(c.tail)
 
     def normalize_text_items(self, e, p):
