@@ -95,6 +95,9 @@ def is_svg(e):
     else:
         return False
 
+def enable_rfc_mode_rfc7997_treatment():
+    bare_unicode_tags.update(['t'])
+    unicode_content_tags.update(['t'])
 
 for t in bare_unicode_tags:
     assert t in unicode_content_tags

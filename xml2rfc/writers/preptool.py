@@ -512,9 +512,9 @@ class PrepToolWriter(BaseV3Writer):
                 else:
                     if self.draft:
                         self.err(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
+                        c.text = downcode(c.text)
                     else:
                         self.warn(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
-                    c.text = downcode(c.text)
             if c.tail and not isascii(c.tail):
                 show = c.tail.encode('ascii', errors='replace')
                 if p.tag in unicode_content_tags:
@@ -523,9 +523,9 @@ class PrepToolWriter(BaseV3Writer):
                 else:
                     if self.draft:
                         self.err(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
+                        c.tail = downcode(c.tail)
                     else:
                         self.warn(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
-                    c.tail = downcode(c.tail)
 
     def normalize_text_items(self, e, p):
         """
