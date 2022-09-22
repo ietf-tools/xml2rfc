@@ -2,8 +2,6 @@
 
 
 
-
-
 Internet Engineering Task Force (IETF)                         D. Walton
 Request for Comments: 7911                              Cumulus Networks
 Category: Standards Track                                      A. Retana
@@ -49,33 +47,26 @@ Copyright Notice
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
-   include Simplified BSD License text as described in Section 4.e of
-   the Trust Legal Provisions and are provided without warranty as
-   described in the Simplified BSD License.
-
-
-
-Walton, et al.               Standards Track                    [Page 1]
-
-RFC 7911                        ADD-PATH                       July 2016
-
+   include Revised BSD License text as described in Section 4.e of the
+   Trust Legal Provisions and are provided without warranty as described
+   in the Revised BSD License.
 
 Table of Contents
 
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-     1.1.  Specification of Requirements . . . . . . . . . . . . . .   2
-   2.  How to Identify a Path  . . . . . . . . . . . . . . . . . . .   3
-   3.  Extended NLRI Encodings . . . . . . . . . . . . . . . . . . .   3
-   4.  ADD-PATH Capability . . . . . . . . . . . . . . . . . . . . .   4
-   5.  Operation . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   6.  Deployment Considerations . . . . . . . . . . . . . . . . . .   5
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .   7
-   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+   1.  Introduction
+     1.1.  Specification of Requirements
+   2.  How to Identify a Path
+   3.  Extended NLRI Encodings
+   4.  ADD-PATH Capability
+   5.  Operation
+   6.  Deployment Considerations
+   7.  IANA Considerations
+   8.  Security Considerations
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
+   Acknowledgments
+   Authors' Addresses
 
 1.  Introduction
 
@@ -103,18 +94,6 @@ Table of Contents
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
-
-
-
-
-
-
-
-
-Walton, et al.               Standards Track                    [Page 2]
-
-RFC 7911                        ADD-PATH                       July 2016
-
 
 2.  How to Identify a Path
 
@@ -158,20 +137,6 @@ RFC 7911                        ADD-PATH                       July 2016
 
    The usage of the extended NLRI encodings is specified in Section 5.
 
-
-
-
-
-
-
-
-
-
-Walton, et al.               Standards Track                    [Page 3]
-
-RFC 7911                        ADD-PATH                       July 2016
-
-
 4.  ADD-PATH Capability
 
    The ADD-PATH Capability is a BGP capability [RFC5492], with
@@ -191,20 +156,20 @@ RFC 7911                        ADD-PATH                       July 2016
 
       Address Family Identifier (AFI):
 
-         This field is the same as the one used in [RFC4760].
+      -  This field is the same as the one used in [RFC4760].
 
       Subsequent Address Family Identifier (SAFI):
 
-         This field is the same as the one used in [RFC4760].
+      -  This field is the same as the one used in [RFC4760].
 
       Send/Receive:
 
-         This field indicates whether the sender is (a) able to receive
+      -  This field indicates whether the sender is (a) able to receive
          multiple paths from its peer (value 1), (b) able to send
          multiple paths to its peer (value 2), or (c) both (value 3) for
          the <AFI, SAFI>.
 
-         If any other value is received, then the capability SHOULD be
+      -  If any other value is received, then the capability SHOULD be
          treated as not understood and ignored [RFC5492].
 
    A BGP speaker that wishes to indicate support for multiple AFI/SAFIs
@@ -220,14 +185,6 @@ RFC 7911                        ADD-PATH                       July 2016
    not changed.  In particular, a new advertisement for a given address
    prefix and a given Path Identifier replaces a previous advertisement
    for the same address prefix and Path Identifier.  If a BGP speaker
-
-
-
-Walton, et al.               Standards Track                    [Page 4]
-
-RFC 7911                        ADD-PATH                       July 2016
-
-
    receives a message to withdraw a prefix with a Path Identifier not
    seen before, it SHOULD silently ignore it.
 
@@ -275,15 +232,6 @@ RFC 7911                        ADD-PATH                       July 2016
    it may not be able to properly decode the BGP UPDATES because it
    lacks prior knowledge of the exchanged Capabilities.
 
-
-
-
-
-Walton, et al.               Standards Track                    [Page 5]
-
-RFC 7911                        ADD-PATH                       July 2016
-
-
    When deployed as a provider edge router or a peering router that
    interacts with external neighbors, a BGP speaker usually advertises
    at most one path to the internal neighbors in a network.  In the case
@@ -325,29 +273,18 @@ RFC 7911                        ADD-PATH                       July 2016
 9.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", DOI 10.17487/RFC2119, BCP 14,
-              RFC 2119, March 1997,
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-
-
-
-
-
-
-Walton, et al.               Standards Track                    [Page 6]
-
-RFC 7911                        ADD-PATH                       July 2016
-
-
    [RFC4271]  Rekhter, Y., Ed., Li, T., Ed., and S. Hares, Ed., "A
-              Border Gateway Protocol 4 (BGP-4)", DOI 10.17487/RFC4271,
-              RFC 4271, January 2006,
+              Border Gateway Protocol 4 (BGP-4)", RFC 4271,
+              DOI 10.17487/RFC4271, January 2006,
               <https://www.rfc-editor.org/info/rfc4271>.
 
    [RFC4760]  Bates, T., Chandra, R., Katz, D., and Y. Rekhter,
-              "Multiprotocol Extensions for BGP-4",
-              DOI 10.17487/RFC4760, RFC 4760, January 2007,
+              "Multiprotocol Extensions for BGP-4", RFC 4760,
+              DOI 10.17487/RFC4760, January 2007,
               <https://www.rfc-editor.org/info/rfc4760>.
 
    [RFC5492]  Scudder, J. and R. Chandra, "Capabilities Advertisement
@@ -359,11 +296,11 @@ RFC 7911                        ADD-PATH                       July 2016
    [ADDPATH]  Uttaro, J., Francois, P., Patel, K., Haas, J., Simpson,
               A., and R. Fragassi, "Best Practices for Advertisement of
               Multiple Paths in IBGP", Work in Progress, draft-ietf-idr-
-              add-paths-guidelines-08, April 2016.
+              add-paths-guidelines-08, 25 April 2016.
 
    [FAST]     Mohapatra, P., Fernando, R., Filsfils, C., and R. Raszuk,
               "Fast Connectivity Restoration Using BGP Add-path", Work
-              in Progress, draft-pmohapat-idr-fast-conn-restore-03,
+              in Progress, draft-pmohapat-idr-fast-conn-restore-03, 22
               January 2013.
 
    [RFC3345]  McPherson, D., Gill, V., Walton, D., and A. Retana,
@@ -376,25 +313,14 @@ RFC 7911                        ADD-PATH                       July 2016
               <https://www.rfc-editor.org/info/rfc4272>.
 
    [RFC4724]  Sangli, S., Chen, E., Fernando, R., Scudder, J., and Y.
-              Rekhter, "Graceful Restart Mechanism for BGP",
-              DOI 10.17487/RFC4724, RFC 4724, January 2007,
+              Rekhter, "Graceful Restart Mechanism for BGP", RFC 4724,
+              DOI 10.17487/RFC4724, January 2007,
               <https://www.rfc-editor.org/info/rfc4724>.
 
-   [STOP-OSC]
-              Walton, D., Retana, A., Chen, E., and J. Scudder, "BGP
+   [STOP-OSC] Walton, D., Retana, A., Chen, E., and J. Scudder, "BGP
               Persistent Route Oscillation Solutions", Work in
-              Progress, draft-ietf-idr-route-oscillation-stop-03, April
-              2016.
-
-
-
-
-
-
-Walton, et al.               Standards Track                    [Page 7]
-
-RFC 7911                        ADD-PATH                       July 2016
-
+              Progress, draft-ietf-idr-route-oscillation-stop-03, 30
+              April 2016.
 
 Acknowledgments
 
@@ -412,39 +338,30 @@ Authors' Addresses
    Daniel Walton
    Cumulus Networks
    185 E. Dana Street
-   Mountain View, CA  94041
+   Mountain View, CA 94041
    United States of America
-
    Email: dwalton@cumulusnetworks.com
 
 
    Alvaro Retana
    Cisco Systems, Inc.
    Kit Creek Rd.
-   Research Triangle Park, NC  27709
+   Research Triangle Park, NC 27709
    United States of America
-
    Email: aretana@cisco.com
 
 
    Enke Chen
    Cisco Systems, Inc.
    170 W. Tasman Dr.
-   San Jose, CA  95134
+   San Jose, CA 95134
    United States of America
-
    Email: enkechen@cisco.com
 
 
    John Scudder
    Juniper Networks
    1194 N. Mathilda Ave
-   Sunnyvale, CA  94089
+   Sunnyvale, CA 94089
    United States of America
-
    Email: jgs@juniper.net
-
-
-
-
-Walton, et al.               Standards Track                    [Page 8]

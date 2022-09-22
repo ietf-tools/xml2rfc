@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!-- One method to get references from the online citation libraries.
-     There has to be one entity for each item to be referenced. 
-     An alternate method (rfc include) is described in the references. -->
-
-<!ENTITY RFC2119 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY RFC2629 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
-<!ENTITY RFC3552 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml">
-<!ENTITY I-D.narten-iana-considerations-rfc2434bis SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml">
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+  <!-- One method to get references from the online citation libraries.
+       There has to be one entity for each item to be referenced.
+       An alternate method (rfc include) is described in the references. -->
+  <!ENTITY RFC2119 SYSTEM "https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+  <!ENTITY RFC2629 SYSTEM "https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
+  <!ENTITY RFC3552 SYSTEM "https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml">
+  <!ENTITY I-D.narten-iana-considerations-rfc2434bis SYSTEM "https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml">
 ]>
 
-<!-- This template is for creating an Internet Draft using xml2rfc,
-     which is available here: http://xml.resource.org. -->
-
-<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
-<!-- For a complete list and description of processing instructions (PIs), 
-     please see http://xml.resource.org/authoring/README.html. -->
 <!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
      (Here they are set differently than their defaults in xml2rfc v1.32) -->
 <?rfc strict="yes" ?>
@@ -166,11 +163,14 @@
       <figure align="center" anchor="xml_happy">
         <preamble>Preamble text - can be omitted or empty.</preamble>
 
-        <artwork align="left" src="ietf.svg"><![CDATA[
+        <artset> 
+          <artwork align="left" type="svg" src="ietf.svg"></artwork>
+          <artwork align="left" type="ascii-art"><![CDATA[
 +-----------------------+
 | Use XML, be Happy :-) |
 |_______________________|
             ]]></artwork>
+        </artset> 
 
         <postamble>Cross-references allowed in pre- and postamble. <xref
         target="min_ref" />.</postamble>
@@ -453,7 +453,7 @@ main(int argc, char *argv[])
 	This document is part of a plan to make xml2rfc indispensable <xref
 	target="DOMINATION"></xref>.
 	This document may be shared as needed <xref
-	target="SHARING"></xref>.  If necessary, appeal to <xref target="JUPITER"/>.
+	target="SHARING"></xref>.  If necessary, appeal to <xref target="DOI_10.1145_2975159"/>.
       </t>
     </section>
 
@@ -521,7 +521,7 @@ main(int argc, char *argv[])
       &I-D.narten-iana-considerations-rfc2434bis;
 
       <!-- Reference with query argument -->
-      <?rfc include="https://xml2rfc.ietf.org/public/rfc/bibxml-doi/reference.DOI.10.1145/2975159.xml?anchor=JUPITER"?>
+      <?rfc include="https://bib.ietf.org/public/rfc/bibxml-doi/reference.DOI.10.1145/2975159.xml"?>
 
       <!-- A reference written by by an organization not a person. -->
 
@@ -563,21 +563,5 @@ main(int argc, char *argv[])
       <t>This becomes an unnumbered section</t>
     </section>
 
-    <!-- Change Log
-
-v00 2006-03-15  EBD   Initial version
-
-v01 2006-04-03  EBD   Moved PI location back to position 1 -
-                      v3.1 of XMLmind is better with them at this location.
-v02 2007-03-07  AH    removed extraneous nested_list attribute,
-                      other minor corrections
-v03 2007-03-09  EBD   Added comments on null IANA sections and fixed heading capitalization.
-                      Modified comments around figure to reflect non-implementation of
-                      figure indent control.  Put in reference using anchor="DOMINATION".
-                      Fixed up the date specification comments to reflect current truth.
-v04 2007-03-09 AH     Major changes: shortened discussion of PIs,
-                      added discussion of rfc include.
-v05 2007-03-10 EBD    Added preamble to C program example to tell about ABNF and alternative 
-                      images. Removed meta-characters from comments (causes problems).  -->
   </back>
 </rfc>
