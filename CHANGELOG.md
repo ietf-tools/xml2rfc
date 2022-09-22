@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.15.0] - 2022-09-22
+### :sparkles: New Features
+- [`055d64d`](https://github.com/ietf-tools/xml2rfc/commit/055d64d2e5fc1187ef90cfada9446515362695ac) - Add xml2rfc class to HTML body element *(PR [#847](https://github.com/ietf-tools/xml2rfc/pull/847) by [@martinthomson](https://github.com/martinthomson))*
+- [`7fec225`](https://github.com/ietf-tools/xml2rfc/commit/7fec2255b7cf2eefa0a1a6ce770d01a157adce39) - Add classes to xref *(PR [#867](https://github.com/ietf-tools/xml2rfc/pull/867) by [@martinthomson](https://github.com/martinthomson))*
+
+### :bug: Bug Fixes
+- [`cc6b083`](https://github.com/ietf-tools/xml2rfc/commit/cc6b083cdf58be559d8d6011f9adedfa583bbc6f) - Fix table colspan issue in text format  *(PR [#886](https://github.com/ietf-tools/xml2rfc/pull/886) by [@kesara](https://github.com/kesara))*
+- [`2475447`](https://github.com/ietf-tools/xml2rfc/commit/24754473224b2db603f910c0282f90ba013ddcc8) - Include the published date when ipr is none *(PR [#897](https://github.com/ietf-tools/xml2rfc/pull/897) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.14.2] - 2022-08-29
 ### :bug: Bug Fixes
 - [`20cdb44`](https://github.com/ietf-tools/xml2rfc/commit/20cdb4460436a7edbebc9807d1c3305e90d0269d) - Fix odd page break inside rows in PDF output *(PR [#879](https://github.com/ietf-tools/xml2rfc/pull/879) by [@kesara](https://github.com/kesara))*
@@ -1886,3 +1896,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 
 [v3.14.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.0...v3.14.1
 [v3.14.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.1...v3.14.2
+[v3.15.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.2...v3.15.0
