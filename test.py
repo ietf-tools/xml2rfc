@@ -491,6 +491,7 @@ class PdfWriterTests(unittest.TestCase):
         except Exception as e:
             print(e)
             raise
+        cls.pdf_writer = elements_writer
         cls.elements_root   = elements_writer.root
         cls.elements_pdfxml = xmldoc(None, bytes=elements_pdfdoc)
 
@@ -515,6 +516,11 @@ class PdfWriterTests(unittest.TestCase):
             for script in self.root.get('scripts').split(','):
                 family = xml2rfc.util.fonts.get_noto_serif_family_for_script(script)
                 self.assertIn(family, font_families, 'Missing font match for %s' % script)
+
+    def test_flatten_unicode_spans(self):
+        input_html = '<body><p>f<span class="unicode">o</span>o<span class="unicode">ba</span>r</p></body>'
+        output_html = self.pdf_writer.flatten_unicode_spans(input_html)
+        self.assertEqual(output_html, '<body><p>foobar</p></body>')
 
 if __name__ == '__main__':
     unittest.main()

@@ -5,6 +5,7 @@ from __future__ import unicode_literals, print_function, division
 import io
 import logging
 import os
+import re
 
 import warnings
 
@@ -77,6 +78,8 @@ class PdfWriter(BaseV3Writer):
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
 
+        html = self.flatten_unicode_spans(html)
+
         writer = weasyprint.HTML(string=html, base_url="")
 
         cssin  = self.options.css or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'xml2rfc.css')
@@ -146,6 +149,14 @@ class PdfWriter(BaseV3Writer):
         fonts = [ family, ]
         self.note(None, "Found installed font: %s" % ', '.join(fonts))
         return fonts
+
+    def flatten_unicode_spans(self, html):
+        # This is a fix for bug in WeasyPrint that doesn't handle RTL unicode
+        # content correctly.
+        # See #873 & Kozea/WeasyPrint#1711
+        return re.sub(r'<span class="unicode">(?P<unicode_content>.*?)</span>',
+                      r'\g<unicode_content>',
+                      html)
 
 
 page_css_template = """
