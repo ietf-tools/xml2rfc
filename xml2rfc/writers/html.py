@@ -1663,6 +1663,8 @@ class HtmlWriter(BaseV3Writer):
                     if wg.text and wg.text.strip():
                         entry(dl, 'Workgroup', wg.text.strip())
                         found = True
+                # Publication date
+                entry(dl, 'Published', self.render_date(None, x.find('date')))
             else:
                 if self.options.rfc:
                     # Stream
