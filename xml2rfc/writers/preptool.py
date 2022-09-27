@@ -511,7 +511,7 @@ class PrepToolWriter(BaseV3Writer):
                 if c.tag in unicode_content_tags:
                     if c.tag in bare_unicode_tags_with_notice:
                         if self.options.warn_bare_unicode:
-                            self.warn(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
+                            self.warn(c, 'Found non-ascii characters in a element that should be inspected to ensure they are intentional, in <%s>: %s' % (c.tag, show))
                     elif not c.get('ascii') and not c.tag in bare_unicode_tags and not is_script(c.text, 'Latin'):
                         self.err(c, 'Found non-ascii content without matching ascii attribute in <%s>: %s' % (c.tag, show))
                 else:
@@ -522,7 +522,7 @@ class PrepToolWriter(BaseV3Writer):
                 if p.tag in unicode_content_tags:
                     if p.tag in bare_unicode_tags_with_notice:
                         if self.options.warn_bare_unicode:
-                            self.warn(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
+                            self.warn(p, 'Found non-ascii characters in a element that should be inspected to ensure they are intentional, in <%s>: %s' % (p.tag, show))
                     elif not p.get('ascii') and not p.tag in bare_unicode_tags:
                         self.err(p, 'Found non-unicode content without matching ascii attribute in <%s>: %s' % (p.tag, show))
                 else:
