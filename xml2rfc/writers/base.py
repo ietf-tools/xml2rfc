@@ -28,8 +28,11 @@ from xml2rfc import strings, log
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
-from xml2rfc.util.unicode import ( punctuation, unicode_replacements, unicode_content_tags, bare_unicode_tags,
-                                   bare_latin_tags, unicode_attributes, downcode, downcode_punctuation, is_svg, enable_rfc_mode_rfc7997_treatment)
+from xml2rfc.util.unicode import (
+        punctuation, unicode_replacements, unicode_content_tags,
+        bare_unicode_tags, bare_unicode_tags_with_notice,
+        bare_latin_tags, unicode_attributes, downcode, downcode_punctuation,
+        is_svg)
 from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
 
 
@@ -119,6 +122,7 @@ default_options.__dict__ = {
         'v3': True,
         'vocabulary': 'v2',
         'widows': 2,
+        'warn_bare_unicode': False,
     }
 
 class _RfcItem:
@@ -1724,9 +1728,6 @@ class BaseV3Writer(object):
         self.tree = xmlrfc.tree if xmlrfc else None
         self.root = self.tree.getroot() if xmlrfc else None
         self.options = options
-        if options.rfc:
-            enable_rfc_mode_rfc7997_treatment()
-
         self.date = date if date is not None else datetime.date.today()
         self.v3_rnc_file = v3_rnc_file
         self.v3_rng_file = v3_rng_file
@@ -2060,6 +2061,8 @@ class BaseV3Writer(object):
                     except UnicodeEncodeError:
                         e.text = downcode(e.text, replacements=replacements)
                 elif e.tag in bare_unicode_tags:
+                    pass
+                elif e.tag in bare_unicode_tags_with_notice:
                     pass
                 elif e.tag in bare_latin_tags and is_script(e.text, 'Latin'):
                     pass
