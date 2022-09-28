@@ -182,7 +182,7 @@ def main():
     help_options.add_argument('-V', '--version', action='store_true', 
                             help='display the version number and exit')
     help_options.add_argument('--warn-bare-unicode', action='store_true', default=False,
-                            help='Warn use of bare Unicode in tags where bare use of Unicode is not advisable')
+                            help='Warn use of bare Unicode in tags where bare use of Unicode should be closely inspected')
 
     formatgroup = optionparser.add_argument_group('Format selection',
                             'One or more of the following output formats may be specified. '
