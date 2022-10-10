@@ -88,8 +88,7 @@ class PdfWriter(BaseV3Writer):
 
         # fonts and page info
         fonts = self.get_serif_fonts()
-        # Check that we also have mono fonts
-        self.get_mono_fonts()
+        mono_fonts = self.get_mono_fonts()
         page_info = {
             'top-left': self.page_top_left(),
             'top-center': self.full_page_top_center(),
@@ -97,6 +96,7 @@ class PdfWriter(BaseV3Writer):
             'bottom-left': self.page_bottom_left(),
             'bottom-center': self.page_bottom_center(),
             'fonts': ', '.join(fonts),
+            'mono-fonts': ', '.join(mono_fonts),
         }
         for (k,v) in page_info.items():
             page_info[k] = v.replace("'", r"\'")
@@ -142,12 +142,20 @@ class PdfWriter(BaseV3Writer):
 
     def get_mono_fonts(self):
         fonts = set()
-        family = "Roboto Mono"
+        scripts = self.root.get('scripts').split(',')
+        roboto_mono = "Roboto Mono"
+        for script in scripts:
+            family = get_noto_serif_family_for_script(script)
+            fonts.add("%s" % family)
+            if fontconfig:
+                available = fontconfig.query(family=family)
+                if not available:
+                    self.err(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
         if fontconfig:
-            available = fontconfig.query(family=family)
+            available = fontconfig.query(family=roboto_mono)
             if not available:
-                self.err(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
-        fonts = [ family, ]
+                self.err(None, "Needed font family '%s', but didn't find it.  Is it installed?" % roboto_mono)
+        fonts = [ roboto_mono, ] + list(fonts)
         self.note(None, "Found installed font: %s" % ', '.join(fonts))
         return fonts
 
@@ -165,6 +173,9 @@ page_css_template = """
   body {{
     font-family: {fonts};
     width: 100%;
+  }}
+  tt, code, pre, code {{
+    font-family: {mono-fonts};
   }}
   @page {{
     size: A4;
