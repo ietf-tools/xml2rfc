@@ -7,9 +7,6 @@ import logging
 import os
 import re
 
-import warnings
-
-warnings.filterwarnings("ignore", message='@font-face support needs Pango >= 1.38')
 
 try:
     import weasyprint
@@ -50,6 +47,8 @@ class PdfWriter(BaseV3Writer):
             wplogger.setLevel(logging.CRITICAL)
         elif self.options.verbose:
             wplogger.setLevel(logging.WARNING)
+        elif self.options.debug:
+            wplogger.setLevel(logging.DEBUG)
         else:
             wplogger.setLevel(logging.ERROR)
 
@@ -59,6 +58,8 @@ class PdfWriter(BaseV3Writer):
             ftlogger.setLevel(logging.CRITICAL)
         elif self.options.verbose:
             ftlogger.setLevel(logging.WARNING)
+        elif self.options.debug:
+            ftlogger.setLevel(logging.DEBUG)
         else:
             ftlogger.setLevel(logging.ERROR)
 
