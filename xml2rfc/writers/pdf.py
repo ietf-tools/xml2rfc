@@ -15,10 +15,6 @@ except (ImportError, OSError, ValueError) as e:
     import_error = e
     weasyprint = False
 
-try:
-    import fontconfig
-except ImportError:
-    fontconfig = False
 
 import xml2rfc
 from xml2rfc.writers.base import default_options, BaseV3Writer
@@ -131,10 +127,6 @@ class PdfWriter(BaseV3Writer):
         for script in scripts:
             family = get_noto_serif_family_for_script(script)
             fonts.add("%s" % family)
-            if fontconfig:
-                available = fontconfig.query(family=family)
-                if not available:
-                    self.err(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
         fonts -= set([ noto_serif, ])
         fonts = [ noto_serif, ] + list(fonts)
         self.note(None, "Found installed font: %s" % ', '.join(fonts))
@@ -147,14 +139,6 @@ class PdfWriter(BaseV3Writer):
         for script in scripts:
             family = get_noto_serif_family_for_script(script)
             fonts.add("%s" % family)
-            if fontconfig:
-                available = fontconfig.query(family=family)
-                if not available:
-                    self.err(None, "Needed font family '%s', but didn't find it.  Is it installed?" % family)
-        if fontconfig:
-            available = fontconfig.query(family=roboto_mono)
-            if not available:
-                self.err(None, "Needed font family '%s', but didn't find it.  Is it installed?" % roboto_mono)
         fonts = [ roboto_mono, ] + list(fonts)
         self.note(None, "Found installed font: %s" % ', '.join(fonts))
         return fonts
