@@ -4,8 +4,6 @@ import copy
 import difflib
 import lxml
 import re
-import six
-import tempfile
 import unittest
 import xml2rfc
 import xml2rfc.utils
@@ -364,7 +362,7 @@ class WriterRfcTest(WriterRootTest):
         self.set_valid('tests/valid/status_ietf_exp_yes.txt')
         return self.status_test()
 
-    def test_status_ietf_exp_yes(self):
+    def test_status_ietf_exp_no(self):
         self.set_root_attrs('IETF', 'exp', 'no')
         self.set_valid('tests/valid/status_ietf_exp_no.txt')
         return self.status_test()
@@ -521,6 +519,58 @@ class PdfWriterTests(unittest.TestCase):
         input_html = '<body><p>f<span class="unicode">o</span>o<span class="unicode">ba</span>r</p></body>'
         output_html = self.pdf_writer.flatten_unicode_spans(input_html)
         self.assertEqual(output_html, '<body><p>foobar</p></body>')
+
+
+class HtmlWriterTest(unittest.TestCase):
+    '''HtmlWriter tests'''
+
+    def setUp(self):
+        xml2rfc.log.quiet = True
+        path = 'tests/input/elements.xml'
+        self.parser = xml2rfc.XmlRfcParser(path,
+                                           quiet=True,
+                                           options=default_options,
+                                           **options_for_xmlrfcparser)
+        self.xmlrfc = self.parser.parse()
+        self.writer = xml2rfc.HtmlWriter(self.xmlrfc, quiet=True)
+
+    def test_get_font_family(self):
+        font_families = {
+                'serif': 'Noto Serif',
+                'sans-serif': 'Noto Sans',
+                'monospace': 'Roboto Mono',
+                'inherit': 'inherit'}
+
+        for value, font_family in font_families.items():
+            self.assertEqual(self.writer.get_font_family(value), font_family)
+
+    def test_set_font_family(self):
+        input_svg = lxml.etree.fromstring('''
+<svg xmlns="http://www.w3.org/2000/svg">
+  <path />
+  <g>
+    <text>foobar</text>
+    <text font-family="serif">serif</text>
+    <text font-family="inherit">inherit</text>
+    <text font-family="monospace">monospace</text>
+    <text font-family="sans-serif">sans-serif'</text>
+  </g>
+</svg>''')
+        expected_svg = lxml.etree.tostring(lxml.etree.fromstring('''
+<svg xmlns="http://www.w3.org/2000/svg">
+  <path />
+  <g>
+    <text>foobar</text>
+    <text font-family="Noto Serif">serif</text>
+    <text font-family="inherit">inherit</text>
+    <text font-family="Roboto Mono">monospace</text>
+    <text font-family="Noto Sans">sans-serif'</text>
+  </g>
+</svg>'''))
+        result_svg = self.writer.set_font_family(input_svg)
+        result = lxml.etree.tostring(result_svg)
+        self.assertEqual(result, expected_svg)
+
 
 if __name__ == '__main__':
     unittest.main()
