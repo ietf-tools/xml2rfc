@@ -4,8 +4,6 @@ import copy
 import difflib
 import lxml
 import re
-import six
-import tempfile
 import unittest
 import xml2rfc
 import xml2rfc.utils
