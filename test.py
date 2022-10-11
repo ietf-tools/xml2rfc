@@ -362,7 +362,7 @@ class WriterRfcTest(WriterRootTest):
         self.set_valid('tests/valid/status_ietf_exp_yes.txt')
         return self.status_test()
 
-    def test_status_ietf_exp_yes(self):
+    def test_status_ietf_exp_no(self):
         self.set_root_attrs('IETF', 'exp', 'no')
         self.set_valid('tests/valid/status_ietf_exp_no.txt')
         return self.status_test()
