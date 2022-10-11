@@ -910,6 +910,17 @@ class HtmlWriter(BaseV3Writer):
             # For w3.org validator compatibility
             if svg.get('attribute', None):
                 del svg.attrib['version']
+
+            # set correct font families
+            font_family = svg.get('font-family')
+            if font_family:
+                svg.set('font-family', self.get_font_family(font_family))
+            else:
+                # Use Noto Serif as default font
+                svg.set('font-family', 'Noto Serif')
+
+            svg = self.set_font_family(svg)
+
             #
             # Deal with possible svg scaling issues.
             vbox = svg.get('viewBox')
@@ -3043,3 +3054,24 @@ class HtmlWriter(BaseV3Writer):
                 classes = ' '.join(classes_set)
             element.set('class', classes)
         return element
+
+    def get_font_family(self, font_family):
+        if font_family == 'serif':
+            return 'Noto Serif'
+        elif font_family == 'sans-serif':
+            return 'Noto Sans'
+        elif font_family == 'monospace':
+            return 'Roboto Mono'
+        else:
+            return 'inherit'
+
+
+    def set_font_family(self, svg):
+        for child in svg:
+            if child is not None:
+
+                font_family = child.get('font-family')
+                if font_family:
+                    child.set('font-family', self.get_font_family(font_family))
+                self.set_font_family(child)
+        return svg
