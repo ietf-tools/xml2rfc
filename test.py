@@ -520,6 +520,16 @@ class PdfWriterTests(unittest.TestCase):
         output_html = self.pdf_writer.flatten_unicode_spans(input_html)
         self.assertEqual(output_html, '<body><p>foobar</p></body>')
 
+    def test_get_serif_fonts(self):
+        fonts = self.pdf_writer.get_serif_fonts()
+        for font in ['Noto Serif', 'Noto Sans Cherokee', 'Noto Serif CJK SC', 'Noto Serif Hebrew']:
+            self.assertIn(font, fonts)
+
+    def test_get_mono_fonts(self):
+        fonts = self.pdf_writer.get_mono_fonts()
+        for font in ['Roboto Mono', 'Noto Sans Cherokee', 'Noto Serif CJK SC', 'Noto Serif Hebrew']:
+            self.assertIn(font, fonts)
+
 
 class HtmlWriterTest(unittest.TestCase):
     '''HtmlWriter tests'''
