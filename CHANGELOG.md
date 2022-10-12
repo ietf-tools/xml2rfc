@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.15.1] - 2022-10-12
+### :bug: Bug Fixes
+- [`08605de`](https://github.com/ietf-tools/xml2rfc/commit/08605de0a38380d58d77ad9e271096e43c852a10) - Improve PDF generation debug logs *(PR [#907](https://github.com/ietf-tools/xml2rfc/pull/907) by [@kesara](https://github.com/kesara))*
+- [`12a960e`](https://github.com/ietf-tools/xml2rfc/commit/12a960ed3a9829b6770c55be24a6ba0c5ad631b5) - Use specified font families on SVG *(PR [#910](https://github.com/ietf-tools/xml2rfc/pull/910) by [@kesara](https://github.com/kesara))*
+- [`70de803`](https://github.com/ietf-tools/xml2rfc/commit/70de803f9d2774dda2581e87c8b43af6a49d972c) - Use noto fonts for non-latin unicode monospaced characters *(PR [#909](https://github.com/ietf-tools/xml2rfc/pull/909) by [@kesara](https://github.com/kesara))*
+- [`dd2b0fe`](https://github.com/ietf-tools/xml2rfc/commit/dd2b0fe1de487b2b43623cc4669f997a34c7c960) - Add bottom margin to .artwork > pre *(PR [#912](https://github.com/ietf-tools/xml2rfc/pull/912) by [@kesara](https://github.com/kesara))*
+- [`58706b8`](https://github.com/ietf-tools/xml2rfc/commit/58706b80e322e49a9aeacba22a61e9db7ff701b7) - Remove redundant code labels from CSS *(PR [#916](https://github.com/ietf-tools/xml2rfc/pull/916) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.15.0] - 2022-09-22
 ### :sparkles: New Features
 - [`055d64d`](https://github.com/ietf-tools/xml2rfc/commit/055d64d2e5fc1187ef90cfada9446515362695ac) - Add xml2rfc class to HTML body element *(PR [#847](https://github.com/ietf-tools/xml2rfc/pull/847) by [@martinthomson](https://github.com/martinthomson))*
@@ -1897,3 +1906,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.14.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.0...v3.14.1
 [v3.14.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.1...v3.14.2
 [v3.15.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.2...v3.15.0
+[v3.15.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.0...v3.15.1
