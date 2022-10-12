@@ -158,7 +158,7 @@ page_css_template = """
     font-family: {fonts};
     width: 100%;
   }}
-  tt, code, pre, code {{
+  tt, code, pre {{
     font-family: {mono-fonts};
   }}
   @page {{
