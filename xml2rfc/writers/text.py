@@ -11,7 +11,6 @@ import textwrap
 
 from codecs import open
 from collections import namedtuple
-from kitchen.text.display import textual_width as displength
 from lxml import etree
 
 try:
@@ -1797,8 +1796,10 @@ class TextWriter(BaseV3Writer):
             for i in range(t):
                 l = left[i]
                 r = right[i]
-                #assert displength(l)+displength(r)<70
-                w = 72-displength(l)-displength(r)
+                textwidth_l = textwidth(l)
+                textwidth_r = textwidth(r)
+                #assert textwidth_l+textwidth_r< 70
+                w = 72-textwidth_l-textwidth_r
                 lines.append(l+' '*w+r)
             return '\n'.join(lines).rstrip(stripspace)+'\n'
         #
