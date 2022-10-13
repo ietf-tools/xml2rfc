@@ -15,6 +15,7 @@ try:
 except ImportError:
     pass
 
+from wcwidth import wcswidth
 
 unicode_content_tags = set([
     'artwork',
@@ -197,7 +198,7 @@ def isascii(u):
 
 def textwidth(u):
     "Length of string, disregarding zero-width code points"
-    return len(re.sub('[\u200B\u200C\u2060\uE060]', '', u))
+    return wcswidth(u)
 
 def downcode_punctuation(str):
     while True:
