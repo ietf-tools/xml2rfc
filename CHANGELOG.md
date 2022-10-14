@@ -503,7 +503,7 @@ From the commit log:
 
 - Tweaked the preptool handling of `<xref>` in `<toc>`.  Further addresses issue [#466](https://github.com/ietf-tools/xml2rfc/issues/466), fixing an issue that could occur if a section used for instance `<sub>` or `<sup>`.
 - Fixed an off-by-one error in list indexing during text wrapping of first page header content.  Fixes issue [#483](https://github.com/ietf-tools/xml2rfc/issues/483).
-- Tweaked the output for `<xref format='title'>` when refering to Reference  entries.
+- Tweaked the output for `<xref format='title'>` when referring to Reference  entries.
 - Fixed a Py2/Py3 code compatibility issue
 - Tweaked the handling of `<artwork type='ascii-art'>` to insert '(Artwork  only available as ...)' text also for text content which is only whitespace.
 - Changed utils.isblock() to use a list of element tags derived from the  schema instead of a static list, to avoid discrepancies between schema and code.
