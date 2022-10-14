@@ -223,7 +223,7 @@ def main():
     plain_options.add_argument('-N', '--no-network', action='store_true', default=False,
                             help='don\'t use the network to resolve references')
     plain_options.add_argument('-O', '--no-org-info', dest='first_page_author_org', action='store_false', default=True,
-                            help='don\'t show author orgainzation info on page one (legacy only)')
+                            help='don\'t show author organization info on page one (legacy only)')
     plain_options.add_argument('-q', '--quiet', action='store_true',
                             help="don't print anything while working")
     plain_options.add_argument('--skip-config-files', action="store_true", default=False,
