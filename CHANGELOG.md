@@ -325,7 +325,7 @@ There are also a number of other changes. From the commit log:
 - Added a length limitation for the running header title in paginated  text documents, to avoid overwriting other parts of the running header.
 - Changed the schema to permit nested `<sub>` and `<sup>`, as approved by the v3 schema change board.
 - Added support for outdent handling to propagate upwards to parent  elements if the full needed outdent amount could not be done in the local  context, in order to be able to apply artwork outdenting to `<artwork>`  elements which aren't situated immediately under `<section>`.
-- Changed many instances of reference source indications (xml:base) from "xml2rfc.tools.ietf.org" to just "xml2rfc.ietf.org".  Removed the massaging of reference XML to place seriesInfo elements in the backwards-incomplatible location inside reference/front.  Changed the --add-xinclude flag to use datatracker.ietf.org/doc/bibxml3/ as the location of draft reference entries.
+- Changed many instances of reference source indications (xml:base) from "xml2rfc.tools.ietf.org" to just "xml2rfc.ietf.org".  Removed the massaging of reference XML to place seriesInfo elements in the backwards-incompatible location inside reference/front.  Changed the --add-xinclude flag to use datatracker.ietf.org/doc/bibxml3/ as the location of draft reference entries.
 - Added a couple of entries to the test suite reference cache.
 - Improved the handling of missing day information for `<date>` to make sure we  don't pick days outside the acceptable range for the given month and also  pick a reasonable value based on whether the year and month is in the past,  present or future.
 - Improved an error message for a case of disallowed XML text content.   Tweaked the 'block_tags' list.
