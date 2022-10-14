@@ -1508,7 +1508,7 @@ The next release is expected to change this to using `https:` instead of `http:`
 
 This release addresses the known bugs in xml2rfc which has hindered the RFC-Editor staff from consistently using xml2rfc v2 in production (and a number of other bugs, too).  There still remains a number of open issues, and these will be addressed in upcoming releases.  Here are some details about the issues fixed:
 
-- Tweaked the forward-slash part of the word-separator regex to handle IP  address prefix lenght indications better.  Related to issue [#252](https://github.com/ietf-tools/xml2rfc/issues/252). Thanks to Brian Carpenter for pointing this aspect out.
+- Tweaked the forward-slash part of the word-separator regex to handle IP  address prefix length indications better.  Related to issue [#252](https://github.com/ietf-tools/xml2rfc/issues/252). Thanks to Brian Carpenter for pointing this aspect out.
 - Changed the code so as to not blow up on empty section titles.  Fixes issue [#245](https://github.com/ietf-tools/xml2rfc/issues/245).
 - Updated the textwrapping word-separator regex to handle slash-separated words in a similar manner as hyphenated words, to avoid line-breaks that place the forward slash at the start of a line.  Fixes issue [#252](https://github.com/ietf-tools/xml2rfc/issues/252).
 - Updated the regex for end-of-sentence exceptions to treat a single alphabetic character followed by period as end-of-sentence, rather than considering it to be the abbreviation of a given name.  This fixes issue [#251](https://github.com/ietf-tools/xml2rfc/issues/251).
