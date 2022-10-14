@@ -1195,7 +1195,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     # This is the header row, append the header decoration
                     output.append(''.join(borderstring))
                 continue
-            # produce as many outpur rows as the number of wrapped
+            # produce as many output rows as the number of wrapped
             # text lines in the cell with most lines, but at least 1
             for row in range(0, max(map(len, cell_line))):
                 if style == 'headers' or style == 'none':
