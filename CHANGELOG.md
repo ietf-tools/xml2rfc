@@ -1389,7 +1389,7 @@ This introduces the vocabulary v2 to v3 converter, which reads RFC7749-compliant
 
 ## [2.6.1] - 2017-06-03
 
-- Inialised the widow and orphan limit settings from PIs.  Did some related refactoring.
+- Initialised the widow and orphan limit settings from PIs.  Did some related refactoring.
 - Added an option to show the known PIs, and their default values.  Also commented out PIs for which there are no implementations from the internal PI list, and did some refactoring of the option parser setup.
 - Changed a number of numeric constants related to page breaking which occured inline in the code, so that appropriate settings on the writer are used instead: self.page_end_blank_lines, self.orphan_limit, self.widow_limit.  Some refactoring.
 - Restored support for the quiet= argument to writers, as this is used by other tools that invoke writers, and backwards compatibility is desired.
