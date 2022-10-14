@@ -180,7 +180,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updates docker/run command to support Apple M1. Fixes  [#675](https://github.com/ietf-tools/xml2rfc/issues/675). (by [@kesara](https://github.com/kesara))
 - Adds missing line joiner settings for `<ol>` and `<ul>`. Fixes [#673](https://github.com/ietf-tools/xml2rfc/issues/673). (by [@kesara](https://github.com/kesara))
 - Fix Makefile rule precedence and repair canonical.xml test to  work with yestest. Fixes [#671](https://github.com/ietf-tools/xml2rfc/issues/671). (by [@jennifer-richards](https://github.com/jennifer-richards))
-- Changes RFC regression test to be a seperate test. (by [@kesara](https://github.com/kesara)) (by [@kesara](https://github.com/kesara))
+- Changes RFC regression test to be a separate test. (by [@kesara](https://github.com/kesara)) (by [@kesara](https://github.com/kesara))
 - Adds RFC regression tests. Fixes [#667](https://github.com/ietf-tools/xml2rfc/issues/667). (by [@kesara](https://github.com/kesara))
 - Fix for bad PDF breaks. (by [@kesara](https://github.com/kesara))
 - pin weasyprint<53 for tox tests (by [@rjsparks](https://github.com/rjsparks))

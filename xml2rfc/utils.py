@@ -323,7 +323,7 @@ def safeReplaceUnicode(tree):
 
 
 def safeTagSlashedWords(tree):
-    """ Traverses an lxml.etree ElementTree and replace words seperated
+    """ Traverses an lxml.etree ElementTree and replace words separated
         by slashes if they are on the list
     """
     slashList = {}
