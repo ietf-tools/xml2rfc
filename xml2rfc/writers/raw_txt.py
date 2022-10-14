@@ -1272,7 +1272,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if m > w:
                     x = m * fden
                     y = w * fnum
-                    # Seek columns of above average heigth.
+                    # Seek columns of above average height.
                     if x >= y:
                         # Nearly reduce height to average by augmenting width
                         p = 1
