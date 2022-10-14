@@ -812,7 +812,7 @@ This release adds v2v3 support for conversion of v2 code with both text and exte
 
 ## [2.22.3] - 2019-04-08
 
-This release brings further tweaks and imporvements to the v3 text format output in the area of Table of Content formatting, and fixes a number of bugs.
+This release brings further tweaks and improvements to the v3 text format output in the area of Table of Content formatting, and fixes a number of bugs.
 
 - Tweaked the handling of ToC page numbers in the v3 text format.
 - Tweaked the xml inserted by the preptool for the ToC to give ToC indentation and spacing which better match the legacy text format (and also looks better).
