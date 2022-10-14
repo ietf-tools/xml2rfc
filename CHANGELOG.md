@@ -933,7 +933,7 @@ Additionally, this release contains some other fixes and changes.  From the comm
 This release provides additional support for `<referencegroup>` rendering, and adds validation of fetched reference files before they are used or put in the reference cache.  A warning for un-cited references was added to the preptool; this has been present for v2 renderers for a long time, but was absent from the v3 specification.  A number of bugs have also been fixed. From the commit log:
 
 - Fixed an issue with the v3 html renderer when given an author without  an address entry.  Fixes issue [#390](https://github.com/ietf-tools/xml2rfc/issues/390).
-- Fixed a bug in the HTML renderer's SVG reading exception code.  Added support for a `<referencegroup>` target attribute, and suppression of target URLs for indivudual entries within a `<referencegroup>`.
+- Fixed a bug in the HTML renderer's SVG reading exception code.  Added support for a `<referencegroup>` target attribute, and suppression of target URLs for individual entries within a `<referencegroup>`.
 - Adjusted the text rendering of reference annotations to match the html  rendering better.  Added support for `<referencegroup>` target rendering.   Suppressed rendering of target URLs for individual entries in a  referencegroup.
 - Added a preptool check for reference citations, as earlier provided by v2 renderers.  Made the reference section numbering code more general, to support additional levels in the future.
 - Added an attribute 'target' to `<referencegroup>`, in order to be able to link out to for instance IETF STD and BCP documents.
