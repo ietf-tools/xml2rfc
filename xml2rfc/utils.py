@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function, division
 
-# Internal utitlity functions.  Not meant for public usage.
+# Internal utility functions.  Not meant for public usage.
 
 import base64
 import re
