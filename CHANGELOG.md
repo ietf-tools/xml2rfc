@@ -475,7 +475,7 @@ From the commit log:
 
 - Provided a rendering for `<xref>` with reference targets which are part of  a `<referencegroup>` and don't have a reference tag.
 - Added a --pdf-help command-like option, and tweaked the order of some  command-line options in the --help output.
-- Added a new filter for pdf-gneration library warnings, to avoid it  appearing on every xml2rfc invocation.
+- Added a new filter for pdf-generation library warnings, to avoid it  appearing on every xml2rfc invocation.
 - Added a v2v3 converter for dates with non-numeric years.
 - Added an error for attempting to insert a missing XInclude namespace  prefix when 'xi' is already defined as something else.
 - Fixed a bug introduced with the refactoring in [c01225d](https://github.com/ietf-tools/xml2rfc/commit/c01225d06afa7390217c743af2a271e649e2626e).
@@ -484,7 +484,7 @@ From the commit log:
 
 - Provided a rendering for `<xref>` with reference targets which are part of a `<referencegroup>` and don't have a reference tag.
 - Added a --pdf-help command-line option, and tweaked the order of some command-line options in the --help output.
-- Added a new filter for pdf-gneration library warnings, to avoid it  appearing on every xml2rfc invocation.
+- Added a new filter for pdf-generation library warnings, to avoid it  appearing on every xml2rfc invocation.
 - Added a v2v3 converter for dates with non-numeric years.
 - Added an error for attempting to insert a missing XInclude namespace  prefix when 'xi' is already defined as something else.
 - Fixed a bug introduced with the refactoring in [c01225d](https://github.com/ietf-tools/xml2rfc/commit/c01225d06afa7390217c743af2a271e649e2626e).
