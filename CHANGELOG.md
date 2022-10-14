@@ -286,7 +286,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a CSS workaround for an unexpected HTML rendering behaviour in  some browsers, where a `<dt>` following an empty `<dd>` would be indented.   Fixes issue [#545](https://github.com/ietf-tools/xml2rfc/issues/545).
 - Improved error messages and the handling of artwork with no "type"  attribute value when "binary-art" would have been correct. Fixes issue [#535](https://github.com/ietf-tools/xml2rfc/issues/535).
 - Reverted the default value for the --legacy-date-format to false, on  request from the RPC.
-- Fixed table cell padding to not add left paddding for left-aligned  columns if not all lines in the column can be padded in the same manner, and similarly for right-aligned columns.  Fixes issue [#543](https://github.com/ietf-tools/xml2rfc/issues/543).
+- Fixed table cell padding to not add left padding for left-aligned  columns if not all lines in the column can be padded in the same manner, and similarly for right-aligned columns.  Fixes issue [#543](https://github.com/ietf-tools/xml2rfc/issues/543).
 - Tweaked utils.build_dataurl() to give consistent results across Python  versions (tilde was added to the default safe characters in Python 3.7, so the default percentage-escape results of binary content differed if it contained a 0x7e (tilde) character.
 - Fixed a bug in finding the length of the longest word in a table cell,  used to determine minimum cell width for text output.
 - Added a new test case with a tightly constrained table to excercise the  issue in [#543](https://github.com/ietf-tools/xml2rfc/issues/543).
