@@ -169,7 +169,7 @@ def align(lines, how, width):
             if l.text.strip(stripspace):
                 lines[i].text = ' '*(shift)+l.text
     else:
-        # XXX TODO: Raise execption, catch in TextWriter, and emit error
+        # XXX TODO: Raise exception, catch in TextWriter, and emit error
         pass
     return lines
 
