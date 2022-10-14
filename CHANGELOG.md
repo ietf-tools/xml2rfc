@@ -995,7 +995,7 @@ This is a minor release. prompted mostly by a change in the BaseV3Writer class i
 
 This release provides support for generation of xml2rfc PDF output. However, a default pip install will only install the xml2rfc module itself; additional installation work is needed to enable PDF generation:
 
-In order to generate PDFs, xml2rfc uses the WeasyPrint module, which depends on external libaries that must be installed as native packages on your platform, separately from the xml2rfc install.
+In order to generate PDFs, xml2rfc uses the WeasyPrint module, which depends on external libraries that must be installed as native packages on your platform, separately from the xml2rfc install.
 
 First, install the Cairo, Pango, and GDK-PixBuf libs on your system. See installation instructions on the WeasyPrint Docs: https://weasyprint.readthedocs.io/en/stable/install.html
 

@@ -78,7 +78,7 @@ def print_country_help(options, parser):
 def get_pdf_help(missing_libs=""):
     pdf_requirements_info = """
     In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
-    depends on external libaries that must be installed as native packages.
+    depends on external libraries that must be installed as native packages.
 
     1. First, install the Pango, and other required libraries on your
     system.  See installation instructions on the WeasyPrint Docs:
