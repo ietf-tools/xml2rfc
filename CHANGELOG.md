@@ -1587,7 +1587,7 @@ From Jim Schaad <ietf@augustcellars.com>:
 - Left shift artwork that is greater than 69 characters wide and steal space from the left margin. Fixes issue [#129](https://github.com/ietf-tools/xml2rfc/issues/129).
 - ` & 194` which deal with how figures are layout
 - Fixed issue [#132](https://github.com/ietf-tools/xml2rfc/issues/132) - if the artwork has an alignment - then it overrides the figure's version for the purpose of the artwork itself. Fixes issue [#151](https://github.com/ietf-tools/xml2rfc/issues/151).
-- Suppres-title kills the title decoration (i.e. Figure 1:) which matches v1 behavior. Fixes issue [#213](https://github.com/ietf-tools/xml2rfc/issues/213).
+- Suppress-title kills the title decoration (i.e. Figure 1:) which matches v1 behavior. Fixes issue [#213](https://github.com/ietf-tools/xml2rfc/issues/213).
 - Convert all non-ASCII characters to entities when building the HTML body. We now are correct when we advertise it as being a us-ascii file.
 - Mixed two fixes back to the real source tree.
 - Rewrite of the basic low level code to use unicode strings in many places rather than convert the unicode characters into xml entity codes and try to use them.  Doing so cleans up much of the line wrapping problems.
