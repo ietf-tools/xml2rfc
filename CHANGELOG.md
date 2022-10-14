@@ -1334,7 +1334,7 @@ Feedback on the v3 text formatter will be appreciated.  Please send feedback to 
 
 ## [2.9.0] - 2018-02-09
 
-This release introduces preptool functionality, through a --preptool output mode.  With reservation for some points for which issues has been raised, this follows the spedicfication in RFC7998.
+This release introduces preptool functionality, through a --preptool output mode.  With reservation for some points for which issues has been raised, this follows the specification in RFC7998.
 
 The preptool currently takes vocabulary v3 input, and produces prepped output.  When work on the text formatter commences, the idea is that the input xml source will always be run through v2v3 conversion and preptool processing before the output formatting, in order to increase consistency and reduce complexity of the output formatter.
 
