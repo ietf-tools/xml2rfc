@@ -68,7 +68,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             
     def _set_break_hint(self, needLines, type, where=-1):
         """ Use this function to set break hints since it will do all of the
-            necessary checks to see that we don't overridete a stronger hint
+            necessary checks to see that we don't override a stronger hint
         """
         if where == -1:
             where = len(self.buf)
