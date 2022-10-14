@@ -1023,7 +1023,7 @@ For correct PDF output, you also need to install the Noto font set. Download the
 ## [2.15.4] - 2018-12-18
 
 - Tweaked the mkrelease script to prevent inclusion of temporary editor  files.
-- Fixed a problem with string vs byte for referece file output.
+- Fixed a problem with string vs byte for reference file output.
 - Added a limitation on the intervaltree requirements to avoid a broken version.
 
 ## [2.15.3] - 2018-12-05
