@@ -105,7 +105,7 @@ class CachingResolver(lxml.etree.Resolver):
                     # Can't write to this directory, try the next one
                     pass
         if not self.write_cache:
-            xml2rfc.log.warn('Unable to find a suitible cache directory to '
+            xml2rfc.log.warn('Unable to find a suitable cache directory to '
                             'write to, trying the following directories:\n ',
                             '\n  '.join(self.read_caches),
                             '\nTry giving a specific directory with --cache.')
