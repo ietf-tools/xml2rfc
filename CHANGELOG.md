@@ -1121,7 +1121,7 @@ Details from the commit log:
   - Added support for `<referencegroup>` elements.  
   - Added support for the `<rfc>` version attribute.  
   - Fixed a string formatting bug.  
-  - Added attribute valididty checking for integer-valued attributes.  
+  - Added attribute validity checking for integer-valued attributes.  
   - Removed the forced inclusion of day for RFC publication dates, reverting   to permitting publication with only year and month.
   - Added more sophisticated checking and setting of consensus, based on   what is valid for the given stream and category.  
   - Refined the handling when given input that already contains boilerplate,   authors addresses and index.
