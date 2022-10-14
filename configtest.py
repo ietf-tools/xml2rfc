@@ -29,7 +29,7 @@ try:
     import fontconfig
 except ImportError:
     sys.stderr.write("Python-fontconfig not installed, will try to use fontconfig command-line tools\n"
-                     "Install python-fonconfig for better performance.\n")
+                     "Install python-fontconfig for better performance.\n")
     fontconfig = None
 
 for (fname, fcount) in [
