@@ -1705,7 +1705,7 @@ An extract from the commit log is available below:
 - Added generic base conversion code, and used that to generate list  letters which will work for lists with more than 26 items.
 - Reworked code to render roman numerals in lists, to place whitespace  correctly in justification field.  Fixes issue [#94](https://github.com/ietf-tools/xml2rfc/issues/94).
 - Added consensus vs. no-consensus options for IAB RFCs' Status of This  Memo section.  Fixes issue [#88](https://github.com/ietf-tools/xml2rfc/issues/88).
-- Made `<t/>` elements with an anchor attribute generate html with an `<a name='...'/>` elemnt, for linking.  Closes issue [#67](https://github.com/ietf-tools/xml2rfc/issues/67).
+- Made `<t/>` elements with an anchor attribute generate html with an `<a name='...'/>` element, for linking.  Closes issue [#67](https://github.com/ietf-tools/xml2rfc/issues/67).
 - Applied boilerplate URL-splitting prevention only in the raw writer  where later do paragraph line-wrapping, instead of generically.  Fixes  issue [#62](https://github.com/ietf-tools/xml2rfc/issues/62).
 - Now permitting all versions of lxml >= 2.2.8, but notice that there may  be missing build dependencies for lxml 3.x which may cause installation of  lxml to fail.  (That's an lxml issue, rather than an xml2rfc issue,  though...)  This fixes issue [#99](https://github.com/ietf-tools/xml2rfc/issues/99).
 
