@@ -351,7 +351,7 @@ class CachingResolver(lxml.etree.Resolver):
             raise error
         else:
             if not tried_cache:
-                # Haven't printed a verbose messsage yet
+                # Haven't printed a verbose message yet
                 typename = self.include and 'include' or 'entity'
                 xml2rfc.log.note('Resolving ' + typename + '...', result)
             return result
