@@ -1580,7 +1580,7 @@ From Jim Schaad <ietf@augustcellars.com>:
 - Set of fixes that deal with references.
 - We now use the anchor rather than the generated bullet as the id of the reference element. Fixes issue [#209](https://github.com/ietf-tools/xml2rfc/issues/209).
 - The html did not have the same check for symrefs when sorting references that the text version did.  Copy it over so they both only sort if symrefs is yes. Fixes issue [#210](https://github.com/ietf-tools/xml2rfc/issues/210) and [#170](https://github.com/ietf-tools/xml2rfc/issues/170).
-- Anchors on t elements in a section were referencable, but no those in lists.  They are now referencable. Fixes issue [#149](https://github.com/ietf-tools/xml2rfc/issues/149).
+- Anchors on t elements in a section were referenceable, but no those in lists.  They are now referenceable. Fixes issue [#149](https://github.com/ietf-tools/xml2rfc/issues/149).
 - We now generate a warning when we get a target in an xref that we have not created an indexable reference for.  This basically gives us an internal error check.
 - We now generate a warning when a reference is created that is not targeted by an xref in the document.
 - Fixed the centering algorithm so that the nroff and txt output files are more consistent.
