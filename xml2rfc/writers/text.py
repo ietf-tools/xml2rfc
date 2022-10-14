@@ -85,7 +85,7 @@ splitter = utils.TextSplitter(width=67)
 seen = set()
 
 # This is not a complete list of whitespace characters, and isn't intended to be.  It's
-# intended to be whitespace characters commonly occuring in XML input text which should be
+# intended to be whitespace characters commonly occurring in XML input text which should be
 # ignored at the beginning and end of text blocks:
 stripspace = " \t\n\r\f\v"
 

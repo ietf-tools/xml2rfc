@@ -599,7 +599,7 @@ From the commit log:
 ## [2.34.0] - 2019-10-23
 
 - Made preptool reference sorting honour the sortRefs `<rfc>` attribute when symRefs is true.
-- Fixed an issue with v2v3 conversion of PIs to `<xml>` attributes, where  PIs occuring before `<rfc>` would not be processed.
+- Fixed an issue with v2v3 conversion of PIs to `<xml>` attributes, where  PIs occurring before `<rfc>` would not be processed.
 - Fixed the v3 text output for authors with no organization to output  blank lines, as for v2.
 - Changed the rendering of `<xref>` with section reference and text  content, based on input from the RPC.
 - Fixed an issue with `&nbsp;` in section headers not being handled properly by PDF viewers, by using plain space instead of non-breaking space.
