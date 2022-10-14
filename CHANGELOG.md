@@ -1458,7 +1458,7 @@ This release uses different installation settings than previous releases, which 
 - Modified the nroff table output for PI subcompact=yes so as to produce  a list, rather than a paragraph of run-together list entries.  Fixes issue  [#287](https://github.com/ietf-tools/xml2rfc/issues/287).
 - Fixed a bug where a local variable would not always be set.
 - Fixed the bug in 2.4.10 where xml2rfc wouldn't fetch references.
-- Changed the cachetest so it exposes the bug found in 2.4.10 where  reference resulution would fail without even attempting network access.
+- Changed the cachetest so it exposes the bug found in 2.4.10 where  reference resolution would fail without even attempting network access.
 
 ## [2.4.11] - 2015-04-10
 
