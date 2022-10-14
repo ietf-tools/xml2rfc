@@ -987,7 +987,7 @@ This is a minor release. prompted mostly by a change in the BaseV3Writer class i
 
 - Updated docker files.
 - Refactored some logging functionality.
-- Tweaked BaseV3Writer to make it possbile to override all error output.
+- Tweaked BaseV3Writer to make it possible to override all error output.
 - Added a `__str__` method for an exception class, and fixed an error case  return value.
 - Tweaked the mkrelease script
 
