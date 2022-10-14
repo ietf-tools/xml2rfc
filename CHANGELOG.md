@@ -1221,7 +1221,7 @@ This release is a result of the issue discussions on xml2rfc-dev, and attempt to
 - Corrected the handling of the align attribute on `<artwork>` and `<figure>`.
 - Changed `<prepTime>` to hold an RFC 3339 timestamp with seconds  resolution.
 - Fixed a couple of issues with v2v3 conversion warnings, and added  source line information for all elements created during conversion.
-- Fixed a buglet in sourcode rendering.
+- Fixed a buglet in sourcecode rendering.
 - Added a warning about lxml versions that lack validation error xpath  information, and tweaked the warn() method.
 
 ## [2.10.3] - 2018-09-22
@@ -1230,7 +1230,7 @@ This bugfix release works around a problem with lxml versions before 3.8.0, and 
 
 - Tweaked validation output to not break if validation error log elements lack xpath information. Fixes issue [#376](https://github.com/ietf-tools/xml2rfc/issues/376).  (lxml<3.8.0 does not provide the xpath of the offending element in error.path).
 - Fixed a couple of issues with v2v3 conversion warnings, and added  element sourceline information for all elements created during conversion.
-- Fixed a buglet in sourcode rendering.
+- Fixed a buglet in sourcecode rendering.
 - Added a warning about lxml versions that lack validation error xpath  information, and tweaked the warn() method.
 - Tweaked the rendering of `<eref>`.
 - Added `<blockquote>` to the list of block level elements in isblock().
