@@ -1246,10 +1246,10 @@ class RawTextRfcWriter(BaseRfcWriter):
     def expand_cols_by_height(self, cols, target, bound):
         # cols - current column width
         # target - expand by this amount 
-        # bound - this is the lower boundry of the column width
+        # bound - this is the lower boundary of the column width
 
         while target > 0:
-            # Compute the current width and boundry width for those where current is less than boundry
+            # Compute the current width and boundary width for those where current is less than boundary
             m_width = 0
             w_width = 0
             for m,w in zip(bound, cols):
