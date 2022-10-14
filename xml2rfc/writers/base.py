@@ -1616,7 +1616,7 @@ deprecated_element_tags = set([
 ])
 
 deprecated_attributes = [
-    # element, attrbute
+    # element, attribute
     ('artwork', 'height'),
     ('artwork', 'width'),
     ('artwork', 'xml:space'),

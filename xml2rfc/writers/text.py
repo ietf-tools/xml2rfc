@@ -4955,7 +4955,7 @@ class TextWriter(BaseV3Writer):
     ]
     all_element_tags = element_tags + deprecated_element_tags + unused_front_element_renderers
     deprecated_attributes = [
-        # element, attrbute
+        # element, attribute
         ('figure', 'align'),
         ('section', 'title'),
         ('note', 'title'),
