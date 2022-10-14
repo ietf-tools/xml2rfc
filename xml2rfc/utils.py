@@ -138,7 +138,7 @@ class TextWrapper(textwrap.TextWrapper):
         # prevent breaking "Section N.N" and "Appendix X.X"
         text = re.sub("(Section|Appendix|Figure|Table) ", u"\\1\u00A0", text)
 
-        # Replace some characters after splitting has occured
+        # Replace some characters after splitting has occurred
         # --- Original implementation ----------------------------------
         chunks = self._split(text)
         # --- End original implementation ------------------------------
