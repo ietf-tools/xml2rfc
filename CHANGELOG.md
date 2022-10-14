@@ -798,7 +798,7 @@ This release adds v2v3 support for conversion of v2 code with both text and exte
 - Changed `<reference>` rendering when part of a `<referencegroup>` to not  include the DOI.
 - Fixed a crash that could occur during index building with multiple levels of `<references>`.
 - Tweaked the text format `<artwork>` placeholder (when no text format  artwork is present) to look at both 'src' and 'originalSrc' for an URL for alternative artwork.
-- Changed the handling of pilcrow links at end of paragraphs and similar  to follow immediately after the content, without wrappable space, to avoid  the appearence of having double blandk lines when the pilcrow would be  wrapped to sit by itself on a line.
+- Changed the handling of pilcrow links at end of paragraphs and similar  to follow immediately after the content, without wrappable space, to avoid  the appearance of having double blandk lines when the pilcrow would be  wrapped to sit by itself on a line.
 - Added a HTML div to hold artset anchor, fixing an issue where artset anchors would not always be present.
 - Refined the preptool warnings regarding artset/artwork anchor handling.
 - Eliminated toc update work when tocInclude is false.
