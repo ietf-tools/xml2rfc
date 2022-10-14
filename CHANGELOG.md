@@ -1744,7 +1744,7 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 ## [2.3.10] - 2013-01-03
 
 - Changed the output text for Internet-Draft references to omit the  series name, but add (work in progress).  Updated the test case to match  draft revision number.
-- Updated all the rfc editor boilerplate in valid test facits to match the  correct outcome (which is also what the code actually produces).
+- Updated all the rfc editor boilerplate in valid test facets to match the  correct outcome (which is also what the code actually produces).
 - Changed the diff test error message so that the valid text is output as  the original, not as the changed text of a diff.
 - Corrected test cases to match correct expiry using 185 days instead of  183 days from document date.
 - Added missing attributes to the XmlRfcError Exception subclass,  necessary in order to make it resemble lxml's error class and provide  consistent error messages to the user whether they come from lxml or our  own code.
