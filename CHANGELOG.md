@@ -1250,7 +1250,7 @@ This bugfix release works around a problem with lxml versions before 3.8.0, and 
 This is primarily a bugfix release, to handle issues people have reported with the new vocabulary v3 text formatter:
 
 - Fixed an issue where the v2 text formatter could blow up for some v3 documents, rather than exit with a message.
-- Fixed a problem in the v2v3 converter that could cause an Internet-Draft `<seriesInfo>` element to be inserted even if one was alredy present.
+- Fixed a problem in the v2v3 converter that could cause an Internet-Draft `<seriesInfo>` element to be inserted even if one was already present.
 - Tweaked the `<seriesInfo>` insertion code slightly, and expanded an error message slightly.
 - Fixed a couple of places where bad input could cause exceptions.  Fixes  issue [#366](https://github.com/ietf-tools/xml2rfc/issues/366).
 - Fixed a case where max() could be given an empty sequence.
@@ -1262,7 +1262,7 @@ This is primarily a bugfix release, to handle issues people have reported with t
 - Moved the reading of input files to avoid multiple reads.  Fixes issue  [#352](https://github.com/ietf-tools/xml2rfc/issues/352).
 - Added a renderer for `<bcp14>` elements.
 - Added error messages for empty artwork files.  Tweaked the error  message for missing artwork text.  Addresses issue [#370](https://github.com/ietf-tools/xml2rfc/issues/370)
-- Forced no_dtd when running v2v3 to avoid complaints when converting an  alredy converted file, and also with the v3 text formatter.
+- Forced no_dtd when running v2v3 to avoid complaints when converting an  already converted file, and also with the v3 text formatter.
 - Added a try/except around xinclude in order to provide error message   without traceback on missing include files.
 - Removed an assert that prevented rendering of document top when some  elements are so long that the line width will be more than 72 characters.   Added support for `<note>` with `<name>`.  Added `<xref>` format default for  included references.  Added a warning for `<xref>`s without 'pn' attribute  (which can happen if the `<xref>` is pointing at an element for which pn is  not generated (this is probably an error in RFC 7998).  Fixes issue [#346](https://github.com/ietf-tools/xml2rfc/issues/346)
 - Tweaked the preptool to handle removeInRFC='true' elements that lacks `<t>`  children.
