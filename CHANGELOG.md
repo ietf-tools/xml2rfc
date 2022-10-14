@@ -427,7 +427,7 @@ From the commit log:
 - Added text formatter support for 'keepWithPrevious', even if the preptool generally converts 'keepWithPrevious' to 'keepWithNext' on the previous element.
 - Added setting '.keepWithPrevious' on html elements when set on the precursor xml element.
 - Added v2v3 converter code to set 'keepWithNext' and 'keepWithPrevious' when converting `<preamble>` and `<postamble>` elements to `<t>` elements, to keep the grouping.
-- Added code to the command-line runner to set some option default values that don't have matchinb command-line switches.
+- Added code to the command-line runner to set some option default values that don't have matching command-line switches.
 - Added default settings for orphans and widows during text rendering.
 - Reduced the CSS font-family for body to only Noto Serif.  Addresses issue [#500](https://github.com/ietf-tools/xml2rfc/issues/500).
 
