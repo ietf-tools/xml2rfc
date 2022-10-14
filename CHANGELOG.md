@@ -1723,7 +1723,7 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 - Tweaked the nroff generation to not break on hyphens, in order to avoid  hyphenated words ending up with embedded spaces: 'pre-processing' becoming  'pre- processing' if 'pre-' occurred at the end of an nroff text line.   Also tweaked the line-width used in line-breaking to have matching  line-breaks between .txt and .nroff output (with exception for lines ending  in hyphens).
 - Tweaked roman number list counter to output roman numbers in a field 5  spaces wide, instead of having varied widths.  This is different from  version 1, so may have to be reverted, depending on how people react.
 - Added a warning for too long lines in figures and tables.  No  outdenting for now; I'd like to consult some about that. Fixes issue [#76](https://github.com/ietf-tools/xml2rfc/issues/76).
-- Updated tests showing that all list format specifiers mentioned in  issue #70 now works.  Closes isssue [#70](https://github.com/ietf-tools/xml2rfc/issues/70).
+- Updated tests showing that all list format specifiers mentioned in  issue #70 now works.  Closes issue [#70](https://github.com/ietf-tools/xml2rfc/issues/70).
 - Changed spanx emphasis back to `_this_` instead of `-this-`, matching the v1  behaviour.  Addresses issue [#70](https://github.com/ietf-tools/xml2rfc/issues/70).
 - Make `<vspace/>` in a hangindent list reset the indentation to the  hang-indent, even if the bullet text is longer than the hang-indent.   Addresses issue [#70](https://github.com/ietf-tools/xml2rfc/issues/70).
 - Refined the page-breaking to not insert an extra page break for artwork that won't fit on a page anyway.
