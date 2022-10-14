@@ -1451,7 +1451,7 @@ This release uses different installation settings than previous releases, which 
 - Changed setup.py to use the entry_points option instead of the scripts  option, in order to work better on mswin systems.  Fixes issue [#291](https://github.com/ietf-tools/xml2rfc/issues/291).
 - Made the reference sorting when using symrefs=yes and sortrefs=yes  case-insensitive by mapping the reference keys to lowercase.  This is  correct for ASCII keys but not necessarily for non-ASCII keys, depending on  locale.  Fixes issue [#295](https://github.com/ietf-tools/xml2rfc/issues/295) (for now).
 - Changed the path through reference resolution so that too old cached references will be updated in the same block where it was discovered that they were too old, rather than (erroneously) relying on this happening on a later attempt.
-- Set things up so that the processing instrunction dictionary isn't shared between the index-building and the document-building runs, which they were earlier, with the result that pi values could be different at the start of the document-building than they should have been.  Fixes issue [#292](https://github.com/ietf-tools/xml2rfc/issues/292).
+- Set things up so that the processing instruction dictionary isn't shared between the index-building and the document-building runs, which they were earlier, with the result that pi values could be different at the start of the document-building than they should have been.  Fixes issue [#292](https://github.com/ietf-tools/xml2rfc/issues/292).
 
 ## [2.4.12] - 2015-04-19
 
