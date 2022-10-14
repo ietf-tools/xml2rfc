@@ -41,7 +41,7 @@ Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'do_out
 # Joiner parts:
 #   join    string used to join a rendered element to preceding text or lines
 #   indent  indentation of rendered element
-#   hang    additional indentation of second and follwoing lines
+#   hang    additional indentation of second and following lines
 #   overlap Join the last preceding and the first new line on one line, rather
 #           than simply appending new lines (when processing lines).
 #           Used to handle <dl newline="false"/"true"> and multiple emails
