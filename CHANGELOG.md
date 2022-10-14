@@ -971,7 +971,7 @@ This release fixes a number of bugs in the v3 output formats, found thanks to re
 - Removed stripping of leading and trailing whitespace from `<sourcecode>` content.
 - Added 'RFC NNNN: ' to the HTML document title for RFCs.
 - Added code to prevent line-breaking of reference tags containing dash in the text format.
-- Fixed rendering of author names in authors' addressses section when the `<address>` element does not have a `<postal>` child element.
+- Fixed rendering of author names in authors' addresses section when the `<address>` element does not have a `<postal>` child element.
 - Fixed an issue with missing whitespace in text rendering of references  with reference tags of length 9.
 - Fixed an issue where TLP version 4.0 was used instead of 5.0 used by preptool when inserting boilerplate text, causing the use of http:// instead of https:// URLs in modern document boilerplate.
 - Silenced some warnings that could occur during xml2rfc startup, triggered by pdf lib imports when the available external libs have old versions.
