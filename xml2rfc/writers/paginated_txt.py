@@ -40,10 +40,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.page_line = 0
         self.omit_headers = omit_headers
         self.page_end_blank_lines = 2
-        # Don't permit less than this many lines of a broken paragrah at the
+        # Don't permit less than this many lines of a broken paragraph at the
         # top of a page:
         self.widow_limit = self.get_numeric_pi('widowlimit', default=2)
-        # Don't permit less than this many lines of a broken paragrah at the
+        # Don't permit less than this many lines of a broken paragraph at the
         # bottom of a page:
         self.orphan_limit = self.get_numeric_pi('orphanlimit', default=2)
 
