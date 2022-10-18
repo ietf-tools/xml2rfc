@@ -72,19 +72,19 @@ Table of Contents
    4.  Ordered list with sub-elements  . . . . . . . . . . . . . . .   7
    5.  Definition list with sub-elements . . . . . . . . . . . . . .   9
    6.  Table . . . . . . . . . . . . . . . . . . . . . . . . . . . .  11
-   7.  Unicode Literals  . . . . . . . . . . . . . . . . . . . . . .  13
-     7.1.  Single Characters . . . . . . . . . . . . . . . . . . . .  13
+   7.  Unicode Literals  . . . . . . . . . . . . . . . . . . . . . .  14
+     7.1.  Single Characters . . . . . . . . . . . . . . . . . . . .  14
      7.2.  Character Strings . . . . . . . . . . . . . . . . . . . .  15
-   8.  Irregular date specifications . . . . . . . . . . . . . . . .  17
+   8.  Irregular date specifications . . . . . . . . . . . . . . . .  18
    9.  Aside, Word Joiner, and Break . . . . . . . . . . . . . . . .  18
    10. Section title test 1  . . . . . . . . . . . . . . . . . . . .  20
    11. Section level h2  . . . . . . . . . . . . . . . . . . . . . .  20
      11.1.  Section level h3 . . . . . . . . . . . . . . . . . . . .  20
        11.1.1.  Section level h4 . . . . . . . . . . . . . . . . . .  20
-   12. Eref brackets . . . . . . . . . . . . . . . . . . . . . . . .  20
+   12. Eref brackets . . . . . . . . . . . . . . . . . . . . . . . .  21
    13. Sourcecode indentation  . . . . . . . . . . . . . . . . . . .  21
-   14. Tables inside lists . . . . . . . . . . . . . . . . . . . . .  21
-   15. Wide artwork  . . . . . . . . . . . . . . . . . . . . . . . .  22
+   14. Tables inside lists . . . . . . . . . . . . . . . . . . . . .  22
+   15. Wide artwork  . . . . . . . . . . . . . . . . . . . . . . . .  23
    16. Sup and sub . . . . . . . . . . . . . . . . . . . . . . . . .  23
    Unnumbered section  . . . . . . . . . . . . . . . . . . . . . . .  23
    References  . . . . . . . . . . . . . . . . . . . . . . . . . . .  24
@@ -93,7 +93,7 @@ Table of Contents
        CMS References  . . . . . . . . . . . . . . . . . . . . . . .  24
        ESS References  . . . . . . . . . . . . . . . . . . . . . . .  25
        MIME-SPEC References  . . . . . . . . . . . . . . . . . . . .  25
-       Other References  . . . . . . . . . . . . . . . . . . . . . .  25
+       Other References  . . . . . . . . . . . . . . . . . . . . . .  26
    Appendix A.  Some Back Matter . . . . . . . . . . . . . . . . . .  26
      A.1.  Contributors  . . . . . . . . . . . . . . . . . . . . . .  26
      A.2.  Arbitrary^superscript in section _title_  . . . . . . . .  27
@@ -618,23 +618,39 @@ Author, et al.          Expires January 13, 2019               [Page 11]
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
 
-   +========+========+=================+=====+=====+=========+=========+
-   |Column  |Column  |Column           |TC   |TC   | TC      | TC      |
-   |Title 1 |Tilte 2 |Title            |4    |5    | 6       | 7       |
-   |        |        |3                |     |     |         |         |
-   |        |        +==+==+==+==+==+==+==+==+==+==+====+====+====+====+
-   |        |        |C1|C2|C3|C4|C5|C6|C1|C2|C1|C2| C1 | C2 | C1 | C2 |
-   +========+========+==+==+==+==+==+==+==+==+==+==+====+====+====+====+
-   |Major   |Minor   |x |x |x |x |x |x |x |x |x |x | x  | x  | x  | x  |
-   |Row 1,  |Row 1,  |  |  |  |  |  |  |  |  |  |  |    |    |    |    |
-   |Column 1|Column 2|  |  |  |  |  |  |  |  |  |  |    |    |    |    |
-   |        +--------+--+--+--+--+--+--+--+--+--+--+----+----+----+----+
-   |        |Minor   |x |x |x |x |x |x |x |x |x |x | x  | x  | x  | x  |
-   |        |Row 2,  |  |  |  |  |  |  |  |  |  |  |    |    |    |    |
-   |        |Column 2|  |  |  |  |  |  |  |  |  |  |    |    |    |    |
-   +--------+--------+--+--+--+--+--+--+--+--+--+--+----+----+----+----+
+   +==========+========+=================+=====+=====+=======+=========+
+   | Column   | Column |Column Title 3   |TC 4 |TC 5 |TC 6   | TC 7    |
+   | Title    | Tilte  +==+==+==+==+==+==+==+==+==+==+==+====+====+====+
+   | 1        | 2      |C1|C2|C3|C4|C5|C6|C1|C2|C1|C2|C1| C2 | C1 | C2 |
+   +==========+========+==+==+==+==+==+==+==+==+==+==+==+====+====+====+
+   | Major    | Minor  |x |x |x |x |x |x |x |x |x |x |x | x  | x  | x  |
+   | Row 1,   | Row 1, |  |  |  |  |  |  |  |  |  |  |  |    |    |    |
+   | Column   | Column |  |  |  |  |  |  |  |  |  |  |  |    |    |    |
+   | 1        | 2      |  |  |  |  |  |  |  |  |  |  |  |    |    |    |
+   |          +--------+--+--+--+--+--+--+--+--+--+--+--+----+----+----+
+   |          | Minor  |x |x |x |x |x |x |x |x |x |x |x | x  | x  | x  |
+   |          | Row 2, |  |  |  |  |  |  |  |  |  |  |  |    |    |    |
+   |          | Column |  |  |  |  |  |  |  |  |  |  |  |    |    |    |
+   |          | 2      |  |  |  |  |  |  |  |  |  |  |  |    |    |    |
+   +----------+--------+--+--+--+--+--+--+--+--+--+--+--+----+----+----+
 
                            Table 2: Large colspan
+
+    +===========+=======+=============================================+
+    | Column1:  |Column2| Column3: Column with a very long title      |
+    | Foobar!!! |       |                                             |
+    +===========+=======+=============================================+
+    |                     Row A: Centered colspan                     |
+    +-----------+-------+---------------------------------------------+
+    | Row B,    |Row B, | ThisLineTakesWholeColumnWithoutBreaking!!!! |
+    | Col 1     |Col 2  |                                             |
+    +-----------+-------+---------------------------------------------+
+    | Row C: Left aligned colspan                                     |
+    +-----------------------------------------------------------------+
+    |                                    Row D: Right aligned colspan |
+    +-----------------------------------------------------------------+
+
+                         Table 3: Row wide colspan
 
      +=======+======+
      | One   | Two  |
@@ -642,26 +658,10 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
      | Alpha | Beta |
      +-------+------+
 
-   Table 3: Aligned left
+   Table 4: Aligned left
 
-                             +=======+======+
-                             | One   | Two  |
-                             +=======+======+
-                             | Alpha | Beta |
-                             +-------+------+
 
-                          Table 4: Aligned center
 
-                                                     +=======+======+
-                                                     | One   | Two  |
-                                                     +=======+======+
-                                                     | Alpha | Beta |
-                                                     +-------+------+
-
-                                                  Table 5: Aligned right
-
-   A really tight table where left padding cannot be applied as it would
-   throw the left-alignment of the text off.
 
 
 
@@ -674,32 +674,61 @@ Author, et al.          Expires January 13, 2019               [Page 12]
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
 
-   +======+===========+======+========+=================+======+=======+
-   |Method|Definition |ptype |property|Value            |Status|Version|
-   +======+===========+======+========+=================+======+=======+
-   |dnswl |RFC 8904   |dns   |zone    |DNSWL publicly   |active|1      |
-   |      |           |      |        |accessible query |      |       |
-   |      |           |      |        |root domain      |      |       |
-   +------+-----------+------+--------+-----------------+------+-------+
-   |dnswl |RFC 8904   |policy|ip      |type A response  |active|1      |
-   |      |           |      |        |received (or a   |      |       |
-   |      |           |      |        |quoted, comma-   |      |       |
-   |      |           |      |        |separated list   |      |       |
-   |      |           |      |        |thereof)         |      |       |
-   +------+-----------+------+--------+-----------------+------+-------+
-   |dnswl |RFC 8904   |policy|txt     |type TXT query   |active|1      |
-   |      |           |      |        |response         |      |       |
-   +------+-----------+------+--------+-----------------+------+-------+
-   |dnswl |RFC 8904   |dns   |sec     |one of "yes" for |active|1      |
-   |      |           |      |        |DNSSEC           |      |       |
-   |      |           |      |        |authenticated    |      |       |
-   |      |           |      |        |data, "no" for   |      |       |
-   |      |           |      |        |not signed, or   |      |       |
-   |      |           |      |        |"na" for not     |      |       |
-   |      |           |      |        |applicable       |      |       |
-   +------+-----------+------+--------+-----------------+------+-------+
+                             +=======+======+
+                             | One   | Two  |
+                             +=======+======+
+                             | Alpha | Beta |
+                             +-------+------+
 
-                                  Table 6
+                          Table 5: Aligned center
+
+                                                     +=======+======+
+                                                     | One   | Two  |
+                                                     +=======+======+
+                                                     | Alpha | Beta |
+                                                     +-------+------+
+
+                                                  Table 6: Aligned right
+
+   A really tight table where left padding cannot be applied as it would
+   throw the left-alignment of the text off.
+
+   +======+==========+======+========+=================+======+=======+
+   |Method|Definition|ptype |property| Value           |Status|Version|
+   +======+==========+======+========+=================+======+=======+
+   |dnswl |RFC 8904  |dns   |zone    | DNSWL publicly  |active|1      |
+   |      |          |      |        | accessible      |      |       |
+   |      |          |      |        | query root      |      |       |
+   |      |          |      |        | domain          |      |       |
+   +------+----------+------+--------+-----------------+------+-------+
+   |dnswl |RFC 8904  |policy|ip      | type A response |active|1      |
+   |      |          |      |        | received (or a  |      |       |
+   |      |          |      |        | quoted, comma-  |      |       |
+   |      |          |      |        | separated list  |      |       |
+   |      |          |      |        | thereof)        |      |       |
+   +------+----------+------+--------+-----------------+------+-------+
+   |dnswl |RFC 8904  |policy|txt     | type TXT query  |active|1      |
+   |      |          |      |        | response        |      |       |
+   +------+----------+------+--------+-----------------+------+-------+
+   |dnswl |RFC 8904  |dns   |sec     | one of "yes"    |active|1      |
+   |      |          |      |        | for DNSSEC      |      |       |
+   |      |          |      |        | authenticated   |      |       |
+   |      |          |      |        | data, "no" for  |      |       |
+   |      |          |      |        | not signed, or  |      |       |
+   |      |          |      |        | "na" for not    |      |       |
+   |      |          |      |        | applicable      |      |       |
+   +------+----------+------+--------+-----------------+------+-------+
+
+                                 Table 7
+
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 13]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
 
 7.  Unicode Literals
 
@@ -721,14 +750,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       Use the character <u format="name-num">Δ</u>.
 
       expands to:
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 13]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
       Use the character GREEK CAPITAL LETTER DELTA (U+0394).
 
@@ -757,6 +778,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Expansion "num-lit-name":
       Example XML:
 
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 14]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
       Use the character <u format="num-lit-name">Δ</u>.
 
       expands to:
@@ -777,14 +806,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
       Use the character
         <u ascii="Delta" format="ascii-lit-num" ascii="Delta">Δ</u>.
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 14]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
       expands to:
 
@@ -813,6 +834,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Expansion "num-lit":
       Example XML:
 
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 15]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
       For example, the characters
         <u ascii="STPETER" format="num-lit">ᏚᎢᎵᎬᎢᎬᏒ</u>
       from the Cherokee block look similar to the ASCII characters
@@ -833,14 +862,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       "STPETER".
 
       expands to:
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 15]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
       For example, the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2
       U+13AC U+13D2 (CHEROKEE LETTER DU, CHEROKEE LETTER I, CHEROKEE
@@ -867,6 +888,16 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Expansion "num-name-lit":
       Example XML:
 
+
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 16]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
       For example, the characters
         <u ascii="STPETER" format="num-name-lit">ᏚᎢᎵᎬᎢᎬᏒ</u>
       from the Cherokee block look similar to the ASCII characters
@@ -889,14 +920,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       "STPETER".
 
       expands to:
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 16]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
       For example, the characters "STPETER" ("ᏚᎢᎵᎬᎢᎬᏒ", U+13DA U+13A2
       U+13B5 U+13AC U+13A2 U+13AC U+13D2) from the Cherokee block look
@@ -922,6 +945,15 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Expansion "lit-num":
       Example XML:
 
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 17]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
       For example, the
         <u ascii="STPETER" format="{lit} characters ({num})">ᏚᎢᎵᎬᎢᎬᏒ</u>
       from the Cherokee block look similar to the ASCII characters
@@ -939,20 +971,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    fuzzy dates such as "Spring 1814" (See [FUZZY-DATE]) by omitting the
    year/month/day attributes of <date>, and instead provide text
    content.
-
-
-
-
-
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 17]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
 9.  Aside, Word Joiner, and Break
 
@@ -984,6 +1002,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       |     *  In scelerisque commodo ex, sit amet tincidunt metus
       |        porttitor sed.  Sed eget lorem eget felis lacinia auctor
       |        non dignissim nisi.
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 18]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
       |  
       |     *  Phasellus quis sapien varius, sollicitudin nisi eget,
       |        venenatis turpis.  In tincidunt aliquet felis, vel
@@ -1002,14 +1028,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       |  
       |     *  Nullam ex elit, maximus at turpis a, porttitor fringilla
       |        felis.  Sed ut sodales elit, sit amet dictum sapien.
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 18]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
       |  
       |     |  Tell me and I forget.  Teach me and I remember.  Involve
       |     |  me and I learn.
@@ -1040,6 +1058,14 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
       |  This sentence has no 'nbsp' in the double word.
       |  
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 19]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
       |  This sentence has a 'nbsp' in this double word.
       |  
       |  This longer sentence has no 'nbsp' in the double word.
@@ -1058,14 +1084,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
       |  
       |  This longer longer longer longer sentence has no 'nbsp' in the
       |  double word.
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 19]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
-
       |  
       |  This longer longer longer longer sentence has a 'nbsp' in this
       |  double word.
@@ -1095,6 +1113,15 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
+
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 20]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
 11.1.1.1.  Section level h5
 
    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -1112,15 +1139,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    *  <https://www.ietf.org>
 
    *  IETF <https://www.ietf.org>
-
-
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 20]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
 13.  Sourcecode indentation
 
@@ -1150,24 +1168,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
                      Figure 4: Sourcecode within figure
 
-14.  Tables inside lists
-
-   Step 1:  (This example is excerpted from pre-RFC8677) Indent="9"
-
-            At nSFF1, the following nNLM is assumed:
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1177,6 +1177,12 @@ Author, et al.          Expires January 13, 2019               [Page 21]
 
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
+
+14.  Tables inside lists
+
+   Step 1:  (This example is excerpted from pre-RFC8677) Indent="9"
+
+            At nSFF1, the following nNLM is assumed:
 
                +=====+=====+===================+====================+
                | SPI | SI  | Next Hop(s)       | Transport          |
@@ -1198,7 +1204,7 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
                |     |     | path)             |                    |
                +-----+-----+-------------------+--------------------+
 
-                               Table 7: nNLM at nSFF1
+                               Table 8: nNLM at nSFF1
 
    This is an arbitrary term:
       And this is some text with a table.
@@ -1219,13 +1225,7 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
                     | Cell B10 | Empty Cell: |          |
                     +----------+-------------+----------+
 
-                                   Table 8
-
-15.  Wide artwork
-
-0        1         2         3         4         5         6         7
-123456789012345678901234567890123456789012345678901234567890123456789012
-
+                                   Table 9
 
 
 
@@ -1233,6 +1233,11 @@ Author, et al.          Expires January 13, 2019               [Page 22]
 
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
+
+15.  Wide artwork
+
+0        1         2         3         4         5         6         7
+123456789012345678901234567890123456789012345678901234567890123456789012
 
 16.  Sup and sub
 
@@ -1273,14 +1278,9 @@ Unnumbered section
    pulvinar, quam nec eleifend ultricies, nisi elit rhoncus risus, in
    commodo mi leo in lorem.
 
-        Indented paragraph.  Indent="5".  Aenean ornare elit at urna
-        molestie fermentum.  Donec erat purus, vestibulum in venenatis
-        tempor, feugiat nec neque.  Fusce luctus sem neque, id venenatis
-        turpis vulputate nec.  Nulla tincidunt pretium ex fringilla
-        posuere.  Cras quis massa neque.
 
-   1.   Indent="5".  Lorem ipsum dolor sit amet, consectetur adipiscing
-        elit.  Ut pharetra neque vulputate dolor elementum sodales.
+
+
 
 
 
@@ -1289,6 +1289,15 @@ Author, et al.          Expires January 13, 2019               [Page 23]
 
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
+
+        Indented paragraph.  Indent="5".  Aenean ornare elit at urna
+        molestie fermentum.  Donec erat purus, vestibulum in venenatis
+        tempor, feugiat nec neque.  Fusce luctus sem neque, id venenatis
+        turpis vulputate nec.  Nulla tincidunt pretium ex fringilla
+        posuere.  Cras quis massa neque.
+
+   1.   Indent="5".  Lorem ipsum dolor sit amet, consectetur adipiscing
+        elit.  Ut pharetra neque vulputate dolor elementum sodales.
 
    2.   Item 2
 
@@ -1330,6 +1339,13 @@ CMS References
               <https://www.ietf.org/archive/id/draft-levkowetz-xml2rfc-
               v3-implementation-notes-13.txt>.
 
+
+
+Author, et al.          Expires January 13, 2019               [Page 24]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
    [RFC5083]  Housley, R., "Cryptographic Message Syntax (CMS)
               Authenticated-Enveloped-Data Content Type", RFC 5083,
               DOI 10.17487/RFC5083, November 2007,
@@ -1338,13 +1354,6 @@ CMS References
    [RFC5652]  Housley, R., "Cryptographic Message Syntax (CMS)", STD 70,
               RFC 5652, DOI 10.17487/RFC5652, September 2009,
               <https://www.rfc-editor.org/info/rfc5652>.
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 24]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
 ESS References
 
@@ -1384,15 +1393,6 @@ MIME-SPEC References
               BCP 13, RFC 4289, DOI 10.17487/RFC4289, December 2005,
               <https://www.rfc-editor.org/info/rfc4289>.
 
-   [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
-              Specifications and Registration Procedures", BCP 13,
-              RFC 6838, DOI 10.17487/RFC6838, January 2013,
-              <https://www.rfc-editor.org/info/rfc6838>.
-
-Other References
-
-
-
 
 
 
@@ -1401,6 +1401,13 @@ Author, et al.          Expires January 13, 2019               [Page 25]
 
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
+
+   [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
+              Specifications and Registration Procedures", BCP 13,
+              RFC 6838, DOI 10.17487/RFC6838, January 2013,
+              <https://www.rfc-editor.org/info/rfc6838>.
+
+Other References
 
    [AUTHORS]  Πυθαγόρας ὁ Σάμιος (Samos, P. O.), Doe, J., Bergström, A.,
               and J. Doe, "Lots of authors", RFC 7539,
@@ -1441,13 +1448,6 @@ A.1.  Contributors
 
    We'd like to thank these contributors:
 
-   Roni Even
-   Huawei
-   David Hamelech 14
-   Tel Aviv 64953
-   Israel
-
-   Additional contact information:
 
 
 
@@ -1457,6 +1457,14 @@ Author, et al.          Expires January 13, 2019               [Page 26]
 
 Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
 
+
+   Roni Even
+   Huawei
+   David Hamelech 14
+   Tel Aviv 64953
+   Israel
+
+   Additional contact information:
 
       רוני אבן
       וואווי
@@ -1498,6 +1506,14 @@ Authors' Addresses
       ישראל
 
 
+
+
+
+Author, et al.          Expires January 13, 2019               [Page 27]
+
+Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
+
+
    Hanako Tanaka
    3-kai B-goshitsu
    4-3-2 Hakusan, Bunkyo-ku, Tokyo
@@ -1506,13 +1522,6 @@ Authors' Addresses
    Email: hanako.tanaka@nihon.example
 
    Additional contact information:
-
-
-
-Author, et al.          Expires January 13, 2019               [Page 27]
-
-Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
-
 
       田中花子 様
       日本
@@ -1544,15 +1553,6 @@ Internet-Draft       Xml2rfc Vocabulary V3 Elements            July 2018
    Sevedstorp 125
    Mariannelund
    Sweden
-
-
-
-
-
-
-
-
-
 
 
 
