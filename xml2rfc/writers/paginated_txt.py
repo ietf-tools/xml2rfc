@@ -137,7 +137,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.write_with_break_hint(RawTextRfcWriter.write_text, 'txt', *args, **kwargs)
 
     def write_ref_element(self, *args, **kwargs):
-        """ Override text writr to add a marking """
+        """ Override text writer to add a marking """
         self.write_with_break_hint(RawTextRfcWriter.write_ref_element, 'raw', *args, **kwargs)
         
     def _force_break(self):
