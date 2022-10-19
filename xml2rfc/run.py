@@ -385,7 +385,7 @@ def main():
         sys.exit()
 
     # --- Parse and validate arguments ---------------------------------
-    # tempates_dir
+    # template_dir
     options.template_dir = options.template_dir or default_options.template_dir
 
     if (options.docfile or options.manpage) and not options.list_symbols:
