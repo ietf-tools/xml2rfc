@@ -646,7 +646,7 @@ This release adds a feature to help with conditional line breaking inside table 
 - Modified the text formatter to accept `&zwsp;` as a potential line-break  point.
 - Included zwsp in allowed special characters (in addition to nbsp, nbhy,  word-joiner and line-separator).
 - Fixed the line-breaking and second-line indentation of section titles  in v3 text output.
-- The start of an emacs nXML mode schema which explicitly mentions  xinclud in a couple of places.
+- The start of an emacs nXML mode schema which explicitly mentions xinclude in a couple of places.
 - Removed code left in pdf.py by mistake, and set options.pdf=True when  in the PdfWriter.
 
 ## [2.30.0] - 2019-09-19
