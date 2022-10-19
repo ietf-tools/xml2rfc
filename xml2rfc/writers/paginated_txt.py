@@ -40,10 +40,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.page_line = 0
         self.omit_headers = omit_headers
         self.page_end_blank_lines = 2
-        # Don't permit less than this many lines of a broken paragrah at the
+        # Don't permit less than this many lines of a broken paragraph at the
         # top of a page:
         self.widow_limit = self.get_numeric_pi('widowlimit', default=2)
-        # Don't permit less than this many lines of a broken paragrah at the
+        # Don't permit less than this many lines of a broken paragraph at the
         # bottom of a page:
         self.orphan_limit = self.get_numeric_pi('orphanlimit', default=2)
 
@@ -68,7 +68,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             
     def _set_break_hint(self, needLines, type, where=-1):
         """ Use this function to set break hints since it will do all of the
-            necessary checks to see that we don't overridete a stronger hint
+            necessary checks to see that we don't override a stronger hint
         """
         if where == -1:
             where = len(self.buf)
@@ -137,7 +137,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.write_with_break_hint(RawTextRfcWriter.write_text, 'txt', *args, **kwargs)
 
     def write_ref_element(self, *args, **kwargs):
-        """ Override text writr to add a marking """
+        """ Override text writer to add a marking """
         self.write_with_break_hint(RawTextRfcWriter.write_ref_element, 'raw', *args, **kwargs)
         
     def _force_break(self):

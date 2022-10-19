@@ -692,7 +692,7 @@ class PrepToolWriter(BaseV3Writer):
     def insert_preptime(self, e, p):
         if 'prepTime' in e.attrib:
             if self.liberal:
-                self.note(e, "Scanning alredy prepped source dated %s" % (e.get('prepTime'), ))
+                self.note(e, "Scanning already prepped source dated %s" % (e.get('prepTime'), ))
             else:
                 self.die(e, "Did not expect a prepTime= attribute for <rfc>, but found '%s'" % (e.get('prepTime')))
         else:

@@ -1653,7 +1653,7 @@ class HtmlWriter(BaseV3Writer):
             #   * (STD|BCP|FYI: <Number> (if approved))
             #   * (Obsoletes: <Number>[, <Number>]*)
             #   * (Updates: <Number>[, <Number>]*)
-            #   * Intended Status: <Cagegory Name>
+            #   * Intended Status: <Category Name>
             #   * Expires: <Date>
 
             def entry(dl, name, *values):

@@ -41,7 +41,7 @@ Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'do_out
 # Joiner parts:
 #   join    string used to join a rendered element to preceding text or lines
 #   indent  indentation of rendered element
-#   hang    additional indentation of second and follwoing lines
+#   hang    additional indentation of second and following lines
 #   overlap Join the last preceding and the first new line on one line, rather
 #           than simply appending new lines (when processing lines).
 #           Used to handle <dl newline="false"/"true"> and multiple emails
@@ -85,7 +85,7 @@ splitter = utils.TextSplitter(width=67)
 seen = set()
 
 # This is not a complete list of whitespace characters, and isn't intended to be.  It's
-# intended to be whitespace characters commonly occuring in XML input text which should be
+# intended to be whitespace characters commonly occurring in XML input text which should be
 # ignored at the beginning and end of text blocks:
 stripspace = " \t\n\r\f\v"
 
@@ -169,7 +169,7 @@ def align(lines, how, width):
             if l.text.strip(stripspace):
                 lines[i].text = ' '*(shift)+l.text
     else:
-        # XXX TODO: Raise execption, catch in TextWriter, and emit error
+        # XXX TODO: Raise exception, catch in TextWriter, and emit error
         pass
     return lines
 
@@ -4955,7 +4955,7 @@ class TextWriter(BaseV3Writer):
     ]
     all_element_tags = element_tags + deprecated_element_tags + unused_front_element_renderers
     deprecated_attributes = [
-        # element, attrbute
+        # element, attribute
         ('figure', 'align'),
         ('section', 'title'),
         ('note', 'title'),

@@ -105,7 +105,7 @@ class CachingResolver(lxml.etree.Resolver):
                     # Can't write to this directory, try the next one
                     pass
         if not self.write_cache:
-            xml2rfc.log.warn('Unable to find a suitible cache directory to '
+            xml2rfc.log.warn('Unable to find a suitable cache directory to '
                             'write to, trying the following directories:\n ',
                             '\n  '.join(self.read_caches),
                             '\nTry giving a specific directory with --cache.')
@@ -184,7 +184,7 @@ class CachingResolver(lxml.etree.Resolver):
                   Try each directory in LOCAL_LIB_DIRS + REQUEST, otherwise
                   Try NETWORK + REQUEST
                 Else (REQUEST is simply a filename)
-                  [Recursively] Try each directory in LOCAL_LIB_DIRS + REQUEST, otherise
+                  [Recursively] Try each directory in LOCAL_LIB_DIRS + REQUEST, otherwise
                   Try each explicit (bibxml, bibxml2...) subdirectory in NETWORK + REQUEST
 
             Finally if the path returned is a network URL, use the cached
@@ -351,7 +351,7 @@ class CachingResolver(lxml.etree.Resolver):
             raise error
         else:
             if not tried_cache:
-                # Haven't printed a verbose messsage yet
+                # Haven't printed a verbose message yet
                 typename = self.include and 'include' or 'entity'
                 xml2rfc.log.note('Resolving ' + typename + '...', result)
             return result

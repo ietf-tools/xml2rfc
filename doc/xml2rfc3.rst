@@ -530,7 +530,7 @@ Now, given that the entity references mentioned above are converted to code
 points on parsing, they won't be visible as entity references after v2v3
 conversion.  The RPC has found this a bit problematic, as their editor only
 shows a placeholder square for all of them.  Even if the v2 input received by
-the RPC from an author containes '&nbsp;' they would not see '&nbsp;' after
+the RPC from an author contains '&nbsp;' they would not see '&nbsp;' after
 v2v3 conversion.  For this reason, there is a step to convert these 5 code
 points back to the entity references listed above before writing out a v2v3
 conversion result to file.

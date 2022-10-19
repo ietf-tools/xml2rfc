@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function, division
 
-# Internal utitlity functions.  Not meant for public usage.
+# Internal utility functions.  Not meant for public usage.
 
 import base64
 import re
@@ -138,7 +138,7 @@ class TextWrapper(textwrap.TextWrapper):
         # prevent breaking "Section N.N" and "Appendix X.X"
         text = re.sub("(Section|Appendix|Figure|Table) ", u"\\1\u00A0", text)
 
-        # Replace some characters after splitting has occured
+        # Replace some characters after splitting has occurred
         # --- Original implementation ----------------------------------
         chunks = self._split(text)
         # --- End original implementation ------------------------------
@@ -323,7 +323,7 @@ def safeReplaceUnicode(tree):
 
 
 def safeTagSlashedWords(tree):
-    """ Traverses an lxml.etree ElementTree and replace words seperated
+    """ Traverses an lxml.etree ElementTree and replace words separated
         by slashes if they are on the list
     """
     slashList = {}

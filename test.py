@@ -45,7 +45,7 @@ def diff_test(case, valid, test, failpath, format):
     # The following 2 lines does the right thing for both python 2.x and 3.x
     test  = str(test)
     valid = str(valid)
-    # replace the current version with someting static, if present
+    # replace the current version with something static, if present
     test  =  str(test.replace(xml2rfc.__version__, 'N.N.N'))
     validarr = [line.rstrip() for line in valid.splitlines()]
     testarr = [line.rstrip() for line in test.splitlines()]

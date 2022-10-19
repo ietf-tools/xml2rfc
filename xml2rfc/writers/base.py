@@ -1616,7 +1616,7 @@ deprecated_element_tags = set([
 ])
 
 deprecated_attributes = [
-    # element, attrbute
+    # element, attribute
     ('artwork', 'height'),
     ('artwork', 'width'),
     ('artwork', 'xml:space'),
@@ -2216,7 +2216,7 @@ class BaseV3Writer(object):
     def validate_after(self, e, p):
         # XXX: There is an issue with exponential increase in validation time
         # as a function of the number of attributes on the root element, on
-        # the order of minutes for the full set of possble attribute values.
+        # the order of minutes for the full set of possible attribute values.
         # See https://bugzilla.gnome.org/show_bug.cgi?id=133736 .  In our
         # schema, there is no dependency in the underlying schema on the root
         # element attributes.  In order to avoid very long validation times, we

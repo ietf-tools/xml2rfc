@@ -78,7 +78,7 @@ def print_country_help(options, parser):
 def get_pdf_help(missing_libs=""):
     pdf_requirements_info = """
     In order to generate PDFs, xml2rfc uses the WeasyPrint library, which
-    depends on external libaries that must be installed as native packages.
+    depends on external libraries that must be installed as native packages.
 
     1. First, install the Pango, and other required libraries on your
     system.  See installation instructions on the WeasyPrint Docs:
@@ -223,7 +223,7 @@ def main():
     plain_options.add_argument('-N', '--no-network', action='store_true', default=False,
                             help='don\'t use the network to resolve references')
     plain_options.add_argument('-O', '--no-org-info', dest='first_page_author_org', action='store_false', default=True,
-                            help='don\'t show author orgainzation info on page one (legacy only)')
+                            help='don\'t show author organization info on page one (legacy only)')
     plain_options.add_argument('-q', '--quiet', action='store_true',
                             help="don't print anything while working")
     plain_options.add_argument('--skip-config-files', action="store_true", default=False,
@@ -385,7 +385,7 @@ def main():
         sys.exit()
 
     # --- Parse and validate arguments ---------------------------------
-    # tempates_dir
+    # template_dir
     options.template_dir = options.template_dir or default_options.template_dir
 
     if (options.docfile or options.manpage) and not options.list_symbols:
@@ -544,7 +544,7 @@ def main():
         options.vocabulary = 'v3'
 
     # ------------------------------------------------------------------
-    # Additional option checks that depend on the option.legacy settin which
+    # Additional option checks that depend on the option.legacy setting which
     # we may have adjusted as a result of the <rfc version="..."> setting:
     if options.text and not options.legacy:
         if options.legacy_list_symbols and options.list_symbols:

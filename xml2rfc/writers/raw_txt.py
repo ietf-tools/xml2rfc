@@ -1195,7 +1195,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     # This is the header row, append the header decoration
                     output.append(''.join(borderstring))
                 continue
-            # produce as many outpur rows as the number of wrapped
+            # produce as many output rows as the number of wrapped
             # text lines in the cell with most lines, but at least 1
             for row in range(0, max(map(len, cell_line))):
                 if style == 'headers' or style == 'none':
@@ -1246,10 +1246,10 @@ class RawTextRfcWriter(BaseRfcWriter):
     def expand_cols_by_height(self, cols, target, bound):
         # cols - current column width
         # target - expand by this amount 
-        # bound - this is the lower boundry of the column width
+        # bound - this is the lower boundary of the column width
 
         while target > 0:
-            # Compute the current width and boundry width for those where current is less than boundry
+            # Compute the current width and boundary width for those where current is less than boundary
             m_width = 0
             w_width = 0
             for m,w in zip(bound, cols):
@@ -1272,7 +1272,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if m > w:
                     x = m * fden
                     y = w * fnum
-                    # Seek columns of above average heigth.
+                    # Seek columns of above average height.
                     if x >= y:
                         # Nearly reduce height to average by augmenting width
                         p = 1
