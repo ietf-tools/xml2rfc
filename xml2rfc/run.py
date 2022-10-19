@@ -544,7 +544,7 @@ def main():
         options.vocabulary = 'v3'
 
     # ------------------------------------------------------------------
-    # Additional option checks that depend on the option.legacy settin which
+    # Additional option checks that depend on the option.legacy setting which
     # we may have adjusted as a result of the <rfc version="..."> setting:
     if options.text and not options.legacy:
         if options.legacy_list_symbols and options.list_symbols:
