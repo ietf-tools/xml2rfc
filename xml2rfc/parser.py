@@ -184,7 +184,7 @@ class CachingResolver(lxml.etree.Resolver):
                   Try each directory in LOCAL_LIB_DIRS + REQUEST, otherwise
                   Try NETWORK + REQUEST
                 Else (REQUEST is simply a filename)
-                  [Recursively] Try each directory in LOCAL_LIB_DIRS + REQUEST, otherise
+                  [Recursively] Try each directory in LOCAL_LIB_DIRS + REQUEST, otherwise
                   Try each explicit (bibxml, bibxml2...) subdirectory in NETWORK + REQUEST
 
             Finally if the path returned is a network URL, use the cached
