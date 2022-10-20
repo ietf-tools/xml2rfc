@@ -4060,11 +4060,12 @@ class TextWriter(BaseV3Writer):
             widths.sort()
             widths.reverse()
             for j in [ k for w, k in widths ]:
-                pad = min(2, excess)
-                excess -= pad
-                for i in range(rows):
-                    cells[i][j].colwidth += pad
-                    cells[i][j].padding   = pad
+                if excess > 2:
+                    pad = min(2, excess)
+                    excess -= pad
+                    for i in range(rows):
+                        cells[i][j].colwidth += pad
+                        cells[i][j].padding   = pad
         #show(cells, 'colwidth', 'after padding')
 
         # ----------------------------------------------------------------------
@@ -4074,10 +4075,7 @@ class TextWriter(BaseV3Writer):
                 cell = cells[i][j]
                 if cell.text:
                     if cell.foldable:
-                        if cell.colspan > 1:
-                            cell.wrapped = fill(cell.text, width=cell.minwidth, fix_sentence_endings=True).splitlines()
-                        else:
-                            cell.wrapped = fill(cell.text, width=cell.colwidth, fix_sentence_endings=True).splitlines()
+                        cell.wrapped = fill(cell.text, width=cell.colwidth, fix_sentence_endings=True).splitlines()
                     else:
                         cell.wrapped = cell.text.splitlines()
 
