@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.15.2] - 2022-10-28
+### :bug: Bug Fixes
+- [`908365f`](https://github.com/ietf-tools/xml2rfc/commit/908365f065fa54a4ce43472e72542bea4aa79730) - Use wcwidth to determine the monospace textual length of a string *(PR [#914](https://github.com/ietf-tools/xml2rfc/pull/914) by [@Flowdalic](https://github.com/Flowdalic))*
+- [`0b42319`](https://github.com/ietf-tools/xml2rfc/commit/0b42319ce70b2f5d4d58b271973b291a75f02aa7) - Drop dependency on kitchen *(PR [#913](https://github.com/ietf-tools/xml2rfc/pull/913) by [@Flowdalic](https://github.com/Flowdalic))*
+- [`1a910d9`](https://github.com/ietf-tools/xml2rfc/commit/1a910d986fe891bed467c493877cfac3abae57ba) - Expand table columns in text output  *(PR [#919](https://github.com/ietf-tools/xml2rfc/pull/919) by [@kesara](https://github.com/kesara))*
+- [`4f9e700`](https://github.com/ietf-tools/xml2rfc/commit/4f9e700d35e26ac12e1b7bd5a803148ea091a2c3) - Add Noto Sans Symbols 2 font to PDF template *(PR [#926](https://github.com/ietf-tools/xml2rfc/pull/926) by [@kesara](https://github.com/kesara))*
+
+### :white_check_mark: Tests
+- [`18b34d8`](https://github.com/ietf-tools/xml2rfc/commit/18b34d8e744ef47cbac3ee11c98bb86622856f9b) - Fix PDF tests *(PR [#920](https://github.com/ietf-tools/xml2rfc/pull/920) by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`7337517`](https://github.com/ietf-tools/xml2rfc/commit/7337517aa28168d69f14de84073eaa5c11d0a399) - Correct spelling mistakes *(PR [#917](https://github.com/ietf-tools/xml2rfc/pull/917) by [@jsoref](https://github.com/jsoref))*
+
+
 ## [v3.15.1] - 2022-10-12
 ### :bug: Bug Fixes
 - [`08605de`](https://github.com/ietf-tools/xml2rfc/commit/08605de0a38380d58d77ad9e271096e43c852a10) - Improve PDF generation debug logs *(PR [#907](https://github.com/ietf-tools/xml2rfc/pull/907) by [@kesara](https://github.com/kesara))*
@@ -1907,3 +1921,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.14.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.1...v3.14.2
 [v3.15.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.2...v3.15.0
 [v3.15.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.0...v3.15.1
+[v3.15.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.1...v3.15.2
