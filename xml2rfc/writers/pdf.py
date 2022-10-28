@@ -122,7 +122,7 @@ class PdfWriter(BaseV3Writer):
 
     def get_serif_fonts(self):
         fonts = set()
-        scripts = self.root.get('scripts').split(',')
+        scripts = self.root.get("scripts").split(",")
         noto_serif = "Noto Serif"
         noto_symbols = "NotoSansSymbols2"
         for script in scripts:
@@ -130,7 +130,7 @@ class PdfWriter(BaseV3Writer):
             fonts.add("%s" % family)
         fonts -= set([ noto_serif, ])
         fonts = [noto_serif, noto_symbols] + list(fonts)
-        self.note(None, "Found installed font: %s" % ', '.join(fonts))
+        self.note(None, "Found installed font: %s" % ", ".join(fonts))
         return fonts
 
     def get_mono_fonts(self):
