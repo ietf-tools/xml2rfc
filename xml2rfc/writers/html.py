@@ -2469,9 +2469,9 @@ class HtmlWriter(BaseV3Writer):
             classes += ' lang-%s' % type
         if (len(x.text.split('\n')) > 50):
             classes += ' breakable'
-        div = add.div(h, x)
+        div = add.div(h, x, classes=classes)
         div.text = None
-        pre = add.pre(div, None, x.text, classes=classes)
+        pre = add.pre(div, None, x.text)
         if mark:
             text = pre.text
             if file:
