@@ -73,15 +73,17 @@ env/bin/python:
 .PHONY: install
 install:
 	python3 --version
-	python3 setup.py --quiet install
-	python3 configtest.py
+	python3 -m pip install . --quiet
 	rm -rf xml2rfc.egg-info/
 
-test:	install flaketest xml2rfc/data/v3.rng pytests
+test:	install flaketest xml2rfc/data/v3.rng pytests configtest
 
 flaketest:
 	pyflakes xml2rfc
 	@[ -d tests/failed/ ] && rm -f tests/failed/*
+
+configtest:
+	python3 configtest.py
 
 pytests:
 	python3 test.py --verbose
