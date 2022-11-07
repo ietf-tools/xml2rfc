@@ -21,8 +21,8 @@ def walk(obj, seen):
             d, i = walk(obj[key], seen)
             dobj[k] = d
             iobj += i
-        if hasattr(obj, 'extractText'):
-            dobj['text'] = obj.extractText()
+        if hasattr(obj, 'extract_text'):
+            dobj['text'] = obj.extract_text()
     elif isinstance(obj, pypdf2.generic.ArrayObject):
         dobj = []
         for o in obj:
@@ -41,7 +41,7 @@ def walk(obj, seen):
         dobj = str(obj)
         if (obj.idnum, obj.generation) not in seen:
             seen.add((obj.idnum, obj.generation))
-            d, i = walk(obj.getObject(), seen)
+            d, i = walk(obj.get_object(), seen)
             if isinstance(d, dict):
                 d['IdNum'] = obj.idnum
                 d['Generation'] = obj.generation
@@ -63,17 +63,17 @@ def pyobj(filename=None, bytes=None):
     seen = set()
     #
     pdffile = io.BytesIO(bytes) if bytes else io.open(filename, 'br')
-    reader = pypdf2.PdfFileReader(pdffile, strict=False)
-    info = reader.getDocumentInfo()
+    reader = pypdf2.PdfReader(pdffile, strict=False)
+    info = reader.metadata
     doc = {}
     for key in info.keys():
         k = key[1:] if key.startswith('/') else key
         doc[k] = info[key]
     iobj = []
     pages = []
-    for num in range(reader.getNumPages()):
-        page = reader.getPage(num)
-        obj = page.getObject()
+    for num in range(len(reader.pages)):
+        page = reader.pages[num]
+        obj = page.get_object()
         d, i = walk(obj, seen)
         #pages[num+1] = d
         pages.append(d)
