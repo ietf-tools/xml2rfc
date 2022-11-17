@@ -911,15 +911,11 @@ class HtmlWriter(BaseV3Writer):
             if svg.get('attribute', None):
                 del svg.attrib['version']
 
-            # set correct font families
-            font_family = svg.get('font-family')
-            if font_family:
+            if self.options.pdf:
+                # Correct font families
+                font_family = svg.get('font-family')
                 svg.set('font-family', self.get_font_family(font_family))
-            else:
-                # Use Noto Serif as default font
-                svg.set('font-family', 'Noto Serif')
-
-            svg = self.set_font_family(svg)
+                svg = self.set_font_family(svg)
 
             #
             # Deal with possible svg scaling issues.
@@ -3056,7 +3052,7 @@ class HtmlWriter(BaseV3Writer):
         return element
 
     def get_font_family(self, font_family):
-        if font_family == 'serif':
+        if font_family is None or font_family == 'serif':
             return 'Noto Serif'
         elif font_family == 'sans-serif':
             return 'Noto Sans'
