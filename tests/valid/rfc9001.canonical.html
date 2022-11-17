@@ -11,7 +11,7 @@
        This document describes how Transport Layer Security (TLS) is used to secure
 QUIC. 
     " name="description">
-<meta content="xml2rfc 3.14.2" name="generator">
+<meta content="xml2rfc 3.15.2" name="generator">
 <meta content="crypto" name="keyword">
 <meta content="opportunistic encryption" name="keyword">
 <meta content="plaintext quic" name="keyword">
@@ -1457,8 +1457,8 @@ header protection only differs in the order in which the packet number length
 (pn_length) is determined (here "^" is used to represent exclusive OR).<a href="#section-5.4.1-3" class="pilcrow">¶</a></p>
 <span id="name-header-protection-pseudocod"></span><div id="pseudo-hp">
 <figure id="figure-6">
-            <div id="section-5.4.1-4.1">
-<pre class="lang-pseudocode sourcecode">
+            <div class="lang-pseudocode sourcecode" id="section-5.4.1-4.1">
+<pre>
 mask = header_protection(hp_key, sample)
 
 pn_length = (packet[0] &amp; 0x03) + 1
@@ -1560,8 +1560,8 @@ least 3 bytes of frames in the unprotected payload if the packet number is
 encoded on a single byte, or 2 bytes of frames for a 2-byte packet number
 encoding.<a href="#section-5.4.2-4" class="pilcrow">¶</a></p>
 <p id="section-5.4.2-5">The sampled ciphertext can be determined by the following pseudocode:<a href="#section-5.4.2-5" class="pilcrow">¶</a></p>
-<div id="section-5.4.2-6">
-<pre class="lang-pseudocode sourcecode">
+<div class="lang-pseudocode sourcecode" id="section-5.4.2-6">
+<pre>
 # pn_offset is the start of the Packet Number field.
 sample_offset = pn_offset + 4
 
@@ -1569,14 +1569,14 @@ sample = packet[sample_offset..sample_offset+sample_length]
 </pre><a href="#section-5.4.2-6" class="pilcrow">¶</a>
 </div>
 <p id="section-5.4.2-7">Where the packet number offset of a short header packet can be calculated as:<a href="#section-5.4.2-7" class="pilcrow">¶</a></p>
-<div id="section-5.4.2-8">
-<pre class="lang-pseudocode sourcecode">
+<div class="lang-pseudocode sourcecode" id="section-5.4.2-8">
+<pre>
 pn_offset = 1 + len(connection_id)
 </pre><a href="#section-5.4.2-8" class="pilcrow">¶</a>
 </div>
 <p id="section-5.4.2-9">And the packet number offset of a long header packet can be calculated as:<a href="#section-5.4.2-9" class="pilcrow">¶</a></p>
-<div id="section-5.4.2-10">
-<pre class="lang-pseudocode sourcecode">
+<div class="lang-pseudocode sourcecode" id="section-5.4.2-10">
+<pre>
 pn_offset = 7 + len(destination_connection_id) +
                 len(source_connection_id) +
                 len(payload_length)
@@ -1604,8 +1604,8 @@ use 128-bit AES in Electronic Codebook (ECB) mode. AEAD_AES_256_GCM uses
 <p id="section-5.4.3-2">This algorithm samples 16 bytes from the packet ciphertext. This value is used
 as the input to AES-ECB.  In pseudocode, the header protection function is
 defined as:<a href="#section-5.4.3-2" class="pilcrow">¶</a></p>
-<div id="section-5.4.3-3">
-<pre class="lang-pseudocode sourcecode">
+<div class="lang-pseudocode sourcecode" id="section-5.4.3-3">
+<pre>
 header_protection(hp_key, sample):
   mask = AES-ECB(hp_key, sample)
 </pre><a href="#section-5.4.3-3" class="pilcrow">¶</a>
@@ -1629,8 +1629,8 @@ case, the nonce bytes are interpreted as a sequence of 32-bit little-endian
 integers.<a href="#section-5.4.4-3" class="pilcrow">¶</a></p>
 <p id="section-5.4.4-4">The encryption mask is produced by invoking ChaCha20 to protect 5 zero bytes. In
 pseudocode, the header protection function is defined as:<a href="#section-5.4.4-4" class="pilcrow">¶</a></p>
-<div id="section-5.4.4-5">
-<pre class="lang-pseudocode sourcecode">
+<div class="lang-pseudocode sourcecode" id="section-5.4.4-5">
+<pre>
 header_protection(hp_key, sample):
   counter = sample[0..3]
   nonce = sample[4..15]
@@ -1896,8 +1896,8 @@ uses the KDF function provided by TLS with a label of "quic ku".  The
 corresponding key and IV are created from that secret as defined in
 <a href="#protection-keys" class="auto internal xref">Section 5.1</a>.  The header protection key is not updated.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">For example, to update write keys with TLS 1.3, HKDF-Expand-Label is used as:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
-<div id="section-6.1-3">
-<pre class="lang-pseudocode sourcecode">
+<div class="lang-pseudocode sourcecode" id="section-6.1-3">
+<pre>
 secret_&lt;n+1&gt; = HKDF-Expand-Label(secret_&lt;n&gt;, "quic ku",
                                  "", Hash.length)
 </pre><a href="#section-6.1-3" class="pilcrow">¶</a>
@@ -2187,8 +2187,8 @@ incompatible application protocol by a server as a connection error of type
 QUIC might define a different method for negotiating transport configuration.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">Including transport parameters in the TLS handshake provides integrity
 protection for these values.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
-<div id="section-8.2-3">
-<pre class="lang-tls-presentation sourcecode">
+<div class="lang-tls-presentation sourcecode" id="section-8.2-3">
+<pre>
    enum {
       quic_transport_parameters(0x39), (65535)
    } ExtensionType;
@@ -2336,8 +2336,8 @@ transforms. The general header protection construction in this document is
 one of those algorithms (HN1). Header protection is applied after the packet
 protection AEAD, sampling a set of bytes (<code>sample</code>) from the AEAD output and
 encrypting the header field using a pseudorandom function (PRF) as follows:<a href="#section-9.4-1" class="pilcrow">¶</a></p>
-<div id="section-9.4-2">
-<pre class="lang-pseudocode sourcecode">
+<div class="lang-pseudocode sourcecode" id="section-9.4-2">
+<pre>
 protected_field = field XOR PRF(hp_key, sample)
 </pre><a href="#section-9.4-2" class="pilcrow">¶</a>
 </div>

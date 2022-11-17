@@ -16,7 +16,7 @@
             This version is adapted to work with "xml2rfc" version 2.x.  
        
     ' name="description">
-<meta content="xml2rfc 3.15.1" name="generator">
+<meta content="xml2rfc 3.15.2" name="generator">
 <meta content="RFC" name="keyword">
 <meta content="Request for Comments" name="keyword">
 <meta content="I-D" name="keyword">
@@ -26,8 +26,8 @@
 <meta content="Extensible Markup Language" name="keyword">
 <meta content="draft-gieben-writing-rfcs-pandoc-02" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.15.1
-    Python 3.9.13
+  xml2rfc 3.15.2
+    Python 3.10.4
     appdirs 1.4.4
     ConfigArgParse 1.5.3
     google-i18n-address 2.5.2
@@ -39,10 +39,10 @@
     pycountry 22.3.5
     PyYAML 6.0
     requests 2.28.1
-    setuptools 65.3.0
+    setuptools 63.4.1
     six 1.16.0
     wcwidth 0.2.5
-    weasyprint 56.1
+    weasyprint 57.1
 -->
 <link href="tests/input/draft-miek-test.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -64,6 +64,12 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
 
+:root {
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Noto Serif', 'Times', 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', Courier, 'Courier New', monospace;
+}
+
 @viewport {
   zoom: 1.0;
   width: extend-to-zoom;
@@ -81,7 +87,7 @@ body {
   color: #222;
   background-color: #fff;
   font-size: 14px;
-  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
   scroll-behavior: smooth;
 }
@@ -169,6 +175,15 @@ div {
 }
 svg {
   display: block;
+}
+svg[font-family~="serif" i], svg [font-family~="serif" i] {
+  font-family: var(--font-serif);
+}
+svg[font-family~="sans-serif" i], svg [font-family~="sans-serif" i] {
+  font-family: var(--font-sans);
+}
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
 }
 .alignCenter.art-text {
   background-color: #f9f9f9;
@@ -265,7 +280,7 @@ a.selfRef:hover {
 /* Figures */
 tt, code, pre {
   background-color: #f9f9f9;
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
 }
 pre {
   border: 1px solid #eee;
@@ -502,7 +517,7 @@ address.vcard .nameRole {
   margin-left: 0;
 }
 address.vcard .label {
-  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  font-family: var(--font-sans);
   margin: 0.5em 0;
 }
 address.vcard .type {
@@ -665,7 +680,7 @@ hr.addr {
   figure {
     overflow: scroll;
   }
-  pre.breakable {
+  .breakable pre {
     break-inside: auto;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -840,7 +855,7 @@ tt, code, pre {
 }
 
 /* Fix the height/width aspect for ascii art*/
-pre.sourcecode,
+.sourcecode pre,
 .art-text pre {
   line-height: 1.12;
 }
@@ -1176,7 +1191,7 @@ dd > div.artwork:first-child,
 dd > aside:first-child,
 dd > figure:first-child,
 dd > ol:first-child,
-dd > div:first-child > pre.sourcecode,
+dd > div.sourcecode:first-child,
 dd > table:first-child,
 dd > ul:first-child {
   clear: left;

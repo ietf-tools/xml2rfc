@@ -11,12 +11,12 @@
        Insert an abstract: MANDATORY. This template is for creating an
       Internet Draft. 
     " name="description">
-<meta content="xml2rfc 3.15.1" name="generator">
+<meta content="xml2rfc 3.15.2" name="generator">
 <meta content="template" name="keyword">
 <meta content="draft-ietf-xml2rfc-template-05" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.15.1
-    Python 3.9.13
+  xml2rfc 3.15.2
+    Python 3.10.4
     appdirs 1.4.4
     ConfigArgParse 1.5.3
     google-i18n-address 2.5.2
@@ -28,10 +28,10 @@
     pycountry 22.3.5
     PyYAML 6.0
     requests 2.28.1
-    setuptools 65.3.0
+    setuptools 63.4.1
     six 1.16.0
     wcwidth 0.2.5
-    weasyprint 56.1
+    weasyprint 57.1
 -->
 <link href="tests/input/draft-template.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -53,6 +53,12 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
 
+:root {
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Noto Serif', 'Times', 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', Courier, 'Courier New', monospace;
+}
+
 @viewport {
   zoom: 1.0;
   width: extend-to-zoom;
@@ -70,7 +76,7 @@ body {
   color: #222;
   background-color: #fff;
   font-size: 14px;
-  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
   scroll-behavior: smooth;
 }
@@ -158,6 +164,15 @@ div {
 }
 svg {
   display: block;
+}
+svg[font-family~="serif" i], svg [font-family~="serif" i] {
+  font-family: var(--font-serif);
+}
+svg[font-family~="sans-serif" i], svg [font-family~="sans-serif" i] {
+  font-family: var(--font-sans);
+}
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
 }
 .alignCenter.art-text {
   background-color: #f9f9f9;
@@ -254,7 +269,7 @@ a.selfRef:hover {
 /* Figures */
 tt, code, pre {
   background-color: #f9f9f9;
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
 }
 pre {
   border: 1px solid #eee;
@@ -491,7 +506,7 @@ address.vcard .nameRole {
   margin-left: 0;
 }
 address.vcard .label {
-  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  font-family: var(--font-sans);
   margin: 0.5em 0;
 }
 address.vcard .type {
@@ -654,7 +669,7 @@ hr.addr {
   figure {
     overflow: scroll;
   }
-  pre.breakable {
+  .breakable pre {
     break-inside: auto;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -829,7 +844,7 @@ tt, code, pre {
 }
 
 /* Fix the height/width aspect for ascii art*/
-pre.sourcecode,
+.sourcecode pre,
 .art-text pre {
   line-height: 1.12;
 }
@@ -1165,7 +1180,7 @@ dd > div.artwork:first-child,
 dd > aside:first-child,
 dd > figure:first-child,
 dd > ol:first-child,
-dd > div:first-child > pre.sourcecode,
+dd > div.sourcecode:first-child,
 dd > table:first-child,
 dd > ul:first-child {
   clear: left;
@@ -1398,7 +1413,7 @@ li > p:last-of-type {
 <figure id="figure-1">
         <div id="section-3-3.1">
           <div class="alignLeft art-svg artwork" id="section-3-3.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57" font-family="Noto Serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="175" height="57" viewBox="0 0 175 57">
               <path d="M60,2l12,12l-12,12l-12-12zM88,2l12,12l-12,12l-12-12zM116,2l12,12l-12,12l-12-12zM18,16l12,12l-12,12l-12-12zM46,16l12,12l-12,12l-12-12zM74,16l12,12l-12,12l-12-12zM102,16l12,12l-12,12l-12-12zM130,16l12,12l-12,12l-12-12zM158,16l12,12l-12,12l-12-12zM60,30l12,12l-12,12l-12-12zM88,30l12,12l-12,12l-12-12zM116,30l12,12l-12,12l-12-12z" fill="black"></path>
               <path stroke="black" stroke-width="0.5" d="M7,27h26l13,13l14-14l14,14l28-28l14,14l14-14l15,15h26v3h-27l-14-14l-14,14l-14-14l-28,28l-14-14l-14,14l-14-14h-25z" fill="white"></path>
               <path d="M3,26h5v5h-5zM168,26h5v5h-5z"></path>
@@ -1913,8 +1928,8 @@ li > p:last-of-type {
         also be colorized in HTML output to highlight the syntactic
         components. Checking of additional "types" may be provided in future
         versions of xml2rfc.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<div id="section-6-2">
-<pre class="sourcecode">&lt;CODE BEGINS&gt; file "example.c"
+<div class="sourcecode" id="section-6-2">
+<pre>&lt;CODE BEGINS&gt; file "example.c"
 
 
 /**** an example C program */
@@ -1991,7 +2006,7 @@ main(int argc, char *argv[])
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
       <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<span class="refAuthor">Bradner, S.</span> and <span class="refAuthor">RFC Publisher</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
