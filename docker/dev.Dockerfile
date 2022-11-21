@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 WORKDIR /root
 
 # Install dependencies
+# libxml2-dev and libxslt-dev are requirements for lxml under Python 3.11
 RUN apt-get update --fix-missing && \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa && \
@@ -21,7 +22,12 @@ RUN apt-get update --fix-missing && \
         python3.8-distutils \
         python3.9 \
         python3.9-dev \
-        python3.9-distutils && \
+        python3.9-distutils \
+        libxml2-dev \
+        libxslt-dev \
+        python3.11 \
+        python3.11-dev \
+        python3.11-distutils && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log && \
     apt-get autoremove -y && \
     apt-get clean -y
