@@ -35,7 +35,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
         
     steps:
     - name: Checkout repository
@@ -86,7 +86,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -qy groff html2text python3-cffi python3-brotli libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 libxml2-dev libxml2-utils
+        sudo apt-get install -qy groff html2text python3-cffi python3-brotli libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 libxml2-dev libxml2-utils libxslt-dev
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing requirements.txt + test dependencies..."
@@ -109,7 +109,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
         
     steps:
     - name: Checkout repository
