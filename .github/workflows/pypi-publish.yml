@@ -97,8 +97,7 @@ jobs:
       run: |
         echo "Using version $PKG_VERSION_STRICT"
         sed -i -r -e "s/^__version__ += '.*'$/__version__ = '$PKG_VERSION_STRICT'/" xml2rfc/__init__.py
-        python ./setup.py setopt --command=metadata --option=version --set-value=$PKG_VERSION_STRICT
-        python ./setup.py sdist --dist-dir dist
+        python -m build --sdist
         
     - name: Publish to Test PyPI
       if: env.SHOULD_DEPLOY != 'true'
