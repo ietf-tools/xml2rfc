@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.15.3] - 2022-11-24
+### :bug: Bug Fixes
+- [`1381bb8`](https://github.com/ietf-tools/xml2rfc/commit/1381bb86056d56c86624e5483926878a274ee137) - Move sourcecode classes *(PR [#839](https://github.com/ietf-tools/xml2rfc/pull/839) by [@martinthomson](https://github.com/martinthomson))*
+- [`592ab81`](https://github.com/ietf-tools/xml2rfc/commit/592ab81a6fba182c7cdee3ce340b130b3d362ced) - Only overwrite font-family when producing PDFs *(PR [#937](https://github.com/ietf-tools/xml2rfc/pull/937) by [@martinthomson](https://github.com/martinthomson))*
+- [`a3adb84`](https://github.com/ietf-tools/xml2rfc/commit/a3adb840848b6e6f6585310055b7013277a014a2) - Fix margin issue with dl after p inside a li  *(PR [#941](https://github.com/ietf-tools/xml2rfc/pull/941) by [@kesara](https://github.com/kesara))*
+
+### :white_check_mark: Tests
+- [`9308e40`](https://github.com/ietf-tools/xml2rfc/commit/9308e402b6658a36bffaddaff6131226f622f119) - Update walkpdf to fix PyPDF deprecation warnings *(PR [#934](https://github.com/ietf-tools/xml2rfc/pull/934) by [@kesara](https://github.com/kesara))*
+
+### :construction_worker: Build System
+- [`0d3958c`](https://github.com/ietf-tools/xml2rfc/commit/0d3958c0f55e9329e6d0c19364f73c7d2a4b003d) - Include OpenPGP certificates for signing the project in each release *(PR [#931](https://github.com/ietf-tools/xml2rfc/pull/931) by [@dkg](https://github.com/dkg))*
+- [`b451ded`](https://github.com/ietf-tools/xml2rfc/commit/b451deda56d8d38276d6554043adb8c3325dcdd2) - Add support for Python 3.11 *(PR [#942](https://github.com/ietf-tools/xml2rfc/pull/942) by [@kesara](https://github.com/kesara))*
+- [`9ff2476`](https://github.com/ietf-tools/xml2rfc/commit/9ff247654048593eedf1dcd847a0764ed1c80973) - Include all changes in Changelog *(PR [#944](https://github.com/ietf-tools/xml2rfc/pull/944) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`d86b1f2`](https://github.com/ietf-tools/xml2rfc/commit/d86b1f24fce077b967c0ed480f93143ff81eecb0) - update CHANGELOG.md + py file versions for v3.15.2 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`af9d83e`](https://github.com/ietf-tools/xml2rfc/commit/af9d83ed49c30303dab52e5240d19d324dbd8adc) - Skip Weasyprint 57.0 in tests *(PR [#932](https://github.com/ietf-tools/xml2rfc/pull/932) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.15.2] - 2022-10-28
 ### :bug: Bug Fixes
 - [`908365f`](https://github.com/ietf-tools/xml2rfc/commit/908365f065fa54a4ce43472e72542bea4aa79730) - Use wcwidth to determine the monospace textual length of a string *(PR [#914](https://github.com/ietf-tools/xml2rfc/pull/914) by [@Flowdalic](https://github.com/Flowdalic))*
@@ -1922,3 +1943,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.15.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.14.2...v3.15.0
 [v3.15.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.0...v3.15.1
 [v3.15.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.1...v3.15.2
+[v3.15.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.2...v3.15.3
