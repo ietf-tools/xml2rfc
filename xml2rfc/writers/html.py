@@ -2866,13 +2866,16 @@ class HtmlWriter(BaseV3Writer):
                             else:
                                 hh = build.span('[', a, ']')
                         else:
-                            a = build.a(reftext, href='#%s'%target, classes=srefclass)
                             if content:
                                 aa = build.a(href='#%s'%target, classes=srefclass)
                                 self.inline_text_renderer(aa, x)
                                 aa.tail = None
+                                if format != 'title':
+                                    srefclass = srefclass + ' auto'
+                                a = build.a(reftext, href='#%s'%target, classes=srefclass)
                                 hh = build.span(aa, ' (', a, ')')
                             else:
+                                a = build.a(reftext, href='#%s'%target, classes=srefclass)
                                 hh = a
                 else:
                     a = build.a(href='#%s'%target, classes=srefclass)
