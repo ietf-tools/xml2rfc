@@ -9,7 +9,7 @@ import io
 import json
 import lxml
 import os
-import PyPDF2 as pypdf2
+import pypdf
 import sys
 
 def walk(obj, seen):
@@ -23,21 +23,21 @@ def walk(obj, seen):
             iobj += i
         if hasattr(obj, 'extract_text'):
             dobj['text'] = obj.extract_text()
-    elif isinstance(obj, pypdf2.generic.ArrayObject):
+    elif isinstance(obj, pypdf.generic.ArrayObject):
         dobj = []
         for o in obj:
             d, i = walk(o, seen)
             dobj.append(d)
             iobj += i
-    elif isinstance(obj, pypdf2.generic.BooleanObject):
+    elif isinstance(obj, pypdf.generic.BooleanObject):
         dobj = obj.value
-    elif isinstance(obj, pypdf2.generic.NameObject):
+    elif isinstance(obj, pypdf.generic.NameObject):
         dobj = str(obj)
-    elif isinstance(obj, pypdf2.generic.NumberObject):
+    elif isinstance(obj, pypdf.generic.NumberObject):
         dobj = int(obj)
-    elif isinstance(obj, pypdf2.generic.FloatObject):
+    elif isinstance(obj, pypdf.generic.FloatObject):
         dobj = float(obj)
-    elif isinstance(obj, pypdf2.generic.IndirectObject):
+    elif isinstance(obj, pypdf.generic.IndirectObject):
         dobj = str(obj)
         if (obj.idnum, obj.generation) not in seen:
             seen.add((obj.idnum, obj.generation))
@@ -49,7 +49,7 @@ def walk(obj, seen):
                 dobj = d
             iobj += i
             iobj.append(d)
-    elif isinstance(obj, pypdf2.generic.TextStringObject):
+    elif isinstance(obj, pypdf.generic.TextStringObject):
         dobj = str(obj)
     else:
         raise RuntimeError("Unexpected object type: %s" % type(obj))
@@ -63,7 +63,7 @@ def pyobj(filename=None, bytes=None):
     seen = set()
     #
     pdffile = io.BytesIO(bytes) if bytes else io.open(filename, 'br')
-    reader = pypdf2.PdfReader(pdffile, strict=False)
+    reader = pypdf.PdfReader(pdffile, strict=False)
     info = reader.metadata
     doc = {}
     for key in info.keys():

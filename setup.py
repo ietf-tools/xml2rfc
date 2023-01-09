@@ -81,7 +81,7 @@ setup(
         'decorator',
         'dict2xml',
         'pycairo',
-        'pypdf2',
+        'pypdf',
         'tox',
         'weasyprint',
     ],

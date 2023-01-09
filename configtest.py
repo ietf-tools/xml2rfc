@@ -12,7 +12,7 @@ sys.stderr.write("Checking installation of test and development packages:\n")
 for (pname, mname) in [
             ('decorator', 'decorator'),
             ('dict2xml', 'dict2xml'),
-            ('PyPDF2', 'PyPDF2'),
+            ('pypdf', 'pypdf'),
         ]:
     try:
         sys.stderr.write("  '%s'...\n" % pname)
