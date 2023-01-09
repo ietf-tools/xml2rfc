@@ -52,13 +52,13 @@ RUN pip3 install -r requirements.txt \
     "weasyprint>=53.0" \
     decorator \
     dict2xml \
-    "pypdf2>=2.6.0"
+    "pypdf>=3.2.1"
 
 
 COPY xml2rfc ./xml2rfc
 
 # Build xml2rfc & finalize
 RUN make install && \
-    pip3 uninstall -y decorator dict2xml pypdf2 && \
+    pip3 uninstall -y decorator dict2xml pypdf && \
     rm setup.py Makefile configtest.py requirements.txt && \
     rm -r xml2rfc build dist
