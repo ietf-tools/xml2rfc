@@ -549,4 +549,27 @@ boilerplate_rfc_status_of_memo = {
             ],
         },
     },
+    'editorial': {
+        'info': {
+            'n/a' : [ """<t>
+            This document is not an Internet Standards Track specification; it is
+            published for informational purposes.
+            </t>""",
+
+            """<t>
+            This document is a product of the RFC Series Policy Definition
+            Process.  It represents the consensus of the RFC Series Working
+            Group approved by the RFC Series Approval Board.  Such documents
+            are not candidates for any level of Internet Standard; see
+            Section 2 of RFC 7841.
+            </t>""",
+
+            """<t>
+            Information about the current status of this document, any errata,
+            and how to provide feedback on it may be obtained at
+            <eref target="{scheme}://www.rfc-editor.org/info/rfc{rfc_number}" />.
+            </t>""",
+            ],
+        },
+    },
 }

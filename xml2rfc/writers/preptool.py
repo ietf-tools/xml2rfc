@@ -257,7 +257,7 @@ class PrepToolWriter(BaseV3Writer):
         './front;insert_boilerplate()',     # 5.4.2.  <boilerplate> Insertion
         './front;insert_toc()',
         '.;check_series_and_submission_type()', # 5.4.2.1.  Compare <rfc> "submissionType" and <seriesInfo> "stream"
-        './/boilerplate;insert_status_of_memo()',  # 5.4.2.2.  "Status of this Memo" Insertion
+        './/boilerplate;insert_status_of_memo()',  # 5.4.2.2.  "Status of This Memo" Insertion
         './/boilerplate;insert_copyright_notice()', # 5.4.2.3.  "Copyright Notice" Insertion
         './/boilerplate//section',          # 5.2.7.  Section "toc" attribute
         './/reference;insert_target()',     # 5.4.3.  <reference> "target" Insertion
@@ -476,9 +476,9 @@ class PrepToolWriter(BaseV3Writer):
             if consensus:
                 self.err(self.root, "Expected no consensus setting for IRTF stream and no workgroup, but found '%s'.  Ignoring it." % consensus)
             consensus = 'n/a'
-        elif stream == 'independent':
+        elif stream == 'independent' or stream == 'editorial':
             if consensus:
-                self.err(self.root, "Expected no consensus setting for independent stream, but found '%s'.  Ignoring it." % consensus)
+                self.err(self.root, "Expected no consensus setting for %s stream, but found '%s'.  Ignoring it." % (stream, consensus))
             consensus = 'n/a'
         elif consensus != None:
             pass
@@ -1023,9 +1023,9 @@ class PrepToolWriter(BaseV3Writer):
                 for i in series_info_list:
                     i.set('stream', stream)
 
-    # 5.4.2.2.  "Status of this Memo" Insertion
+    # 5.4.2.2.  "Status of This Memo" Insertion
     # 
-    #    Add the "Status of this Memo" section to the <boilerplate> element
+    #    Add the "Status of This Memo" section to the <boilerplate> element
     #    with current values.  The application will use the "submissionType",
     #    and "consensus" attributes of the <rfc> element, the <workgroup>
     #    element, and the "status" and "stream" attributes of the <seriesInfo>
@@ -1036,10 +1036,10 @@ class PrepToolWriter(BaseV3Writer):
             return
         if self.root.get('ipr') == 'none':
             return
-        # submissionType: "IETF" | "IAB" | "IRTF" | "independent"
+        # submissionType: "IETF" | "IAB" | "IRTF" | "independent" | "editorial"
         # consensus: "false" | "true"
         # category: "std" | "bcp" | "exp" | "info" | "historic"
-        b = e.xpath('./section/name[text()="Status of this Memo"]')
+        b = e.xpath('./section/name[text()="Status of This Memo"]')
         existing_status_of_memo = b[0] if b else None
         if existing_status_of_memo:
             if self.liberal:
@@ -1070,7 +1070,7 @@ class PrepToolWriter(BaseV3Writer):
             #
             if stream == 'IRTF' and workgroup == None:
                 consensus = 'n/a'
-            elif stream == 'independent':
+            elif stream == 'independent' or stream == 'editorial':
                 consensus = 'n/a'
             try:
                 for para in boilerplate_rfc_status_of_memo[stream][category][consensus]:
@@ -1080,7 +1080,7 @@ class PrepToolWriter(BaseV3Writer):
             except KeyError as exception:
                 if str(exception) in ["'rfc_number'", "'group_name'"]:
                     # Error in string expansion
-                    self.die(p, 'Expected to have a value for %s when expanding the "Status of this Memo" boilerplate, but found none.' % str(exception))
+                    self.die(p, 'Expected to have a value for %s when expanding the "Status of This Memo" boilerplate, but found none.' % str(exception))
                 else:
                     # Error in boilerplate dictionary indexes
                     self.die(self.root, 'Unexpected attribute combination(%s): <rfc submissionType="%s" category="%s" consensus="%s">' % (exception, stream, category, consensus))

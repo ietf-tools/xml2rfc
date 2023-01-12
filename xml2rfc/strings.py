@@ -22,4 +22,5 @@ stream_name = {
     'IAB':          'Internet Architecture Board (IAB)',
     'IRTF':         'Internet Research Task Force (IRTF)',
     'independent':  'Independent Submission',
+    'editorial':    'Editorial Stream',
 }

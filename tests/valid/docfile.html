@@ -2540,7 +2540,7 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
           </h4>
 <span class="break"></span><dl class="dlCompact dlParallel" id="section-2.49.12-1">
             <dt id="section-2.49.12-1.1">Possible values:</dt>
-            <dd style="margin-left: 1.5em" id="section-2.49.12-1.2">( "IETF" | "IAB" | "IRTF" | "independent" )<a href="#section-2.49.12-1.2" class="pilcrow">¶</a>
+            <dd style="margin-left: 1.5em" id="section-2.49.12-1.2">( "IETF" | "IAB" | "IRTF" | "independent" | "editorial" )<a href="#section-2.49.12-1.2" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
 <dt id="section-2.49.12-1.3">Default value:</dt>
@@ -2778,7 +2778,7 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
           </h4>
 <span class="break"></span><dl class="dlCompact dlParallel" id="section-2.51.5-1">
             <dt id="section-2.51.5-1.1">Possible values:</dt>
-            <dd style="margin-left: 1.5em" id="section-2.51.5-1.2">( "IETF" | "IAB" | "IRTF" | "independent" )<a href="#section-2.51.5-1.2" class="pilcrow">¶</a>
+            <dd style="margin-left: 1.5em" id="section-2.51.5-1.2">( "IETF" | "IAB" | "IRTF" | "independent" | "editorial" )<a href="#section-2.51.5-1.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 </dl>
@@ -2925,7 +2925,7 @@ src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww..."&gt;
 <p id="section-2.54-2">This element can be a child element of &lt;<a href="#element-reference" class="internal xref">reference</a>&gt;.<a href="#section-2.54-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-2.54-3">
           <dt id="section-2.54-3.1">Content schema:</dt>
-          <dd style="margin-left: 1.5em" id="section-2.54-3.2"> ( "IETF" | "IAB" | "IRTF" | "independent" )?<a href="#section-2.54-3.2" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-2.54-3.2"> ( "IETF" | "IAB" | "IRTF" | "independent" | "editorial" )?<a href="#section-2.54-3.2" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -4340,7 +4340,7 @@ rfc =
     attribute iprExtract { xsd:IDREF }?,
     [ a:defaultValue = "IETF" ]
     attribute submissionType {
-      "IETF" | "IAB" | "IRTF" | "independent"
+      "IETF" | "IAB" | "IRTF" | "independent" | "editorial"
     }?,
     attribute docName { text }?,
     [ a:defaultValue = "false" ]
@@ -5386,7 +5386,7 @@ reference =
 
 stream =
   element stream {
-    ( "IETF" | "IAB" | "IRTF" | "independent" )?
+    ( "IETF" | "IAB" | "IRTF" | "independent" | "editorial" )?
 }
 
 referencegroup =
@@ -5408,7 +5408,9 @@ seriesInfo =
     attribute asciiName { text }?,
     attribute asciiValue { text }?,
     attribute status { text }?,
-    attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
+    attribute stream {
+      "IETF" | "IAB" | "IRTF" | "independent"  | "editorial"
+    }?,
     empty
   }
 
