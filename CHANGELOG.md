@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.16.0] - 2023-01-18
+### :sparkles: New Features
+- [`ad2e035`](https://github.com/ietf-tools/xml2rfc/commit/ad2e0359fde4687e07491a1ada0ec0d4f6ee5fcc) - Permit non-ASCII within <t> without the use of <u> *(PR [#895](https://github.com/ietf-tools/xml2rfc/pull/895) by [@cabo](https://github.com/cabo))*
+- [`6b9aede`](https://github.com/ietf-tools/xml2rfc/commit/6b9aede79e25665c199064c362fc6524f8292882) - Add editorial stream *(PR [#958](https://github.com/ietf-tools/xml2rfc/pull/958) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#896](undefined) opened by [@alicerusso](https://github.com/alicerusso)*
+
+### :bug: Bug Fixes
+- [`5b687b1`](https://github.com/ietf-tools/xml2rfc/commit/5b687b12053a5607cff4e83fd6a6ab767668c5a8) - Add 'auto' class for (most) parenthesized xref links *(PR [#948](https://github.com/ietf-tools/xml2rfc/pull/948) by [@martinthomson](https://github.com/martinthomson))*
+- [`388d4b9`](https://github.com/ietf-tools/xml2rfc/commit/388d4b9b1521c7b7a5bb27a6f64b1c74f39433b2) - Update to pypdf>=3.2.1 on base docker file *(PR [#954](https://github.com/ietf-tools/xml2rfc/pull/954) by [@kesara](https://github.com/kesara))*
+
+### :white_check_mark: Tests
+- [`6c9be77`](https://github.com/ietf-tools/xml2rfc/commit/6c9be77f09fa23d6d9c46652582328027cd962f5) - Expand a problematic reference *(PR [#959](https://github.com/ietf-tools/xml2rfc/pull/959) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`b811bfd`](https://github.com/ietf-tools/xml2rfc/commit/b811bfda5d8215b0d4060ba7a7e42558fb373b36) - update CHANGELOG.md + py file versions for v3.15.3 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`5bbf3f7`](https://github.com/ietf-tools/xml2rfc/commit/5bbf3f74bbf3568f79aa8c4293ce3a2d73f3bf48) - **deps**: Move from PyPDF2 to pypdf>=3.2.1 *(PR [#953](https://github.com/ietf-tools/xml2rfc/pull/953) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.15.3] - 2022-11-24
 ### :bug: Bug Fixes
 - [`1381bb8`](https://github.com/ietf-tools/xml2rfc/commit/1381bb86056d56c86624e5483926878a274ee137) - Move sourcecode classes *(PR [#839](https://github.com/ietf-tools/xml2rfc/pull/839) by [@martinthomson](https://github.com/martinthomson))*
@@ -1944,3 +1964,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.15.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.0...v3.15.1
 [v3.15.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.1...v3.15.2
 [v3.15.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.2...v3.15.3
+[v3.16.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.3...v3.16.0
