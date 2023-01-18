@@ -40,8 +40,10 @@ from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import get_expiry_date, format_date, normalize_month
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
-from xml2rfc.util.unicode import ( unicode_content_tags, unicode_attributes, bare_unicode_tags,
-    expand_unicode_element, isascii, downcode, latinscript_attributes, is_svg)
+from xml2rfc.util.unicode import (
+        unicode_content_tags, unicode_attributes, bare_unicode_tags,
+        bare_unicode_tags_with_notice, expand_unicode_element, isascii,
+        downcode, latinscript_attributes, is_svg)
 from xml2rfc.utils import build_dataurl, namespaces, sdict, clean_text
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 
@@ -507,7 +509,10 @@ class PrepToolWriter(BaseV3Writer):
             if c.text and not isascii(c.text):
                 show = c.text.encode('ascii', errors='replace')
                 if c.tag in unicode_content_tags:
-                    if not c.get('ascii') and not c.tag in bare_unicode_tags and not is_script(c.text, 'Latin'):
+                    if c.tag in bare_unicode_tags_with_notice:
+                        if self.options.warn_bare_unicode:
+                            self.warn(c, 'Found non-ascii characters in an element that should be inspected to ensure they are intentional, in <%s>: %s' % (c.tag, show))
+                    elif not c.get('ascii') and not c.tag in bare_unicode_tags and not is_script(c.text, 'Latin'):
                         self.err(c, 'Found non-ascii content without matching ascii attribute in <%s>: %s' % (c.tag, show))
                 else:
                     self.err(c, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (c.tag, show))
@@ -515,7 +520,10 @@ class PrepToolWriter(BaseV3Writer):
             if c.tail and not isascii(c.tail):
                 show = c.tail.encode('ascii', errors='replace')
                 if p.tag in unicode_content_tags:
-                    if not p.get('ascii') and not p.tag in ['artwork', 'refcontent', 'u']:
+                    if p.tag in bare_unicode_tags_with_notice:
+                        if self.options.warn_bare_unicode:
+                            self.warn(p, 'Found non-ascii characters in an element that should be inspected to ensure they are intentional, in <%s>: %s' % (p.tag, show))
+                    elif not p.get('ascii') and not p.tag in bare_unicode_tags:
                         self.err(p, 'Found non-unicode content without matching ascii attribute in <%s>: %s' % (p.tag, show))
                 else:
                     self.err(p, 'Found non-ascii characters outside of elements that can have non-ascii content, in <%s>: %s' % (p.tag, show))
