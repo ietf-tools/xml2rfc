@@ -20,7 +20,7 @@
        attribute iprExtract { xsd:IDREF }?,
        [ a:defaultValue = "IETF" ]
        attribute submissionType {
-         "IETF" | "IAB" | "IRTF" | "independent"
+         "IETF" | "IAB" | "IRTF" | "independent" | "editorial"
        }?,
        attribute docName { text }?,
        [ a:defaultValue = "false" ]
@@ -1066,7 +1066,7 @@
 
    stream = 
      element stream {
-       ( "IETF" | "IAB" | "IRTF" | "independent" )?
+       ( "IETF" | "IAB" | "IRTF" | "independent" | "editorial" )?
    }
 
    referencegroup =
@@ -1088,7 +1088,9 @@
        attribute asciiName { text }?,
        attribute asciiValue { text }?,
        attribute status { text }?,
-       attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
+       attribute stream {
+         "IETF" | "IAB" | "IRTF" | "independent"  | "editorial"
+       }?,
        empty
      }
 

@@ -8,6 +8,7 @@ import unittest
 import xml2rfc
 import xml2rfc.utils
 
+from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.walkpdf import xmldoc
 from xml2rfc.writers.base import default_options
 
@@ -580,6 +581,59 @@ class HtmlWriterTest(unittest.TestCase):
         result_svg = self.writer.set_font_family(input_svg)
         result = lxml.etree.tostring(result_svg)
         self.assertEqual(result, expected_svg)
+
+
+class PrepToolWriterTest(unittest.TestCase):
+    '''PrepToolWriter tests'''
+
+    def setUp(self):
+        xml2rfc.log.quiet = True
+        path = 'tests/input/elements.xml'
+        self.parser = xml2rfc.XmlRfcParser(path,
+                                           quiet=True,
+                                           options=default_options,
+                                           **options_for_xmlrfcparser)
+        self.xmlrfc = self.parser.parse()
+        self.writer = xml2rfc.PrepToolWriter(self.xmlrfc, quiet=True)
+
+    def test_rfc_check_attribute_values_editorial(self):
+        rfc = lxml.etree.fromstring('''
+<rfc
+    submissionType="editorial"
+    category="info">
+</rfc>''')
+        self.writer.root = rfc
+
+        self.writer.check_attribute_values(rfc, None)
+        self.assertEqual(len(self.writer.errors), 0)
+
+    def test_boilerplate_insert_status_of_memo_editorial(self):
+        rfc = lxml.etree.fromstring('''
+<rfc
+    number="9280"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+</rfc>''')
+        self.writer.options.rfc = True
+        self.writer.root = rfc
+        self.writer.rfcnumber = 9280
+
+        self.writer.boilerplate_insert_status_of_memo(rfc, rfc)
+        self.assertEqual(len(self.writer.errors), 0)
+        self.assertEqual(len(rfc.xpath('./section/name[text()="Status of This Memo"]')), 1)
+        paras = rfc.xpath('./section/t')
+        boilerplate_text = boilerplate_rfc_status_of_memo['editorial']['info']['n/a']
+        self.assertEqual(len(paras), len(boilerplate_text))
+        index = 0
+        for boilerplate in boilerplate_text[-1]:
+            for line in boilerplate.split('\n')[1:-1]:
+                self.assertIn(line.strip(), paras[index].text)
+            index += 1
+
+        # test eref element
+        target = 'https://www.rfc-editor.org/info/rfc9280'
+        self.assertEqual(target, rfc.xpath('./section/t/eref')[0].get('target'))
 
 
 if __name__ == '__main__':

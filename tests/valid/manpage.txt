@@ -1505,7 +1505,8 @@ Table of Contents
 
 2.49.12.  "submissionType" Attribute
 
-   Possible values:  ( "IETF" | "IAB" | "IRTF" | "independent" )
+   Possible values:  ( "IETF" | "IAB" | "IRTF" | "independent" |
+      "editorial" )
    Default value:  "IETF"
 
    The document stream, as described in [RFC7841].  (The RFC Series
@@ -1648,7 +1649,8 @@ Table of Contents
 
 2.51.5.  "stream" Attribute
 
-   Possible values:  ( "IETF" | "IAB" | "IRTF" | "independent" )
+   Possible values:  ( "IETF" | "IAB" | "IRTF" | "independent" |
+      "editorial" )
 
    Deprecated.  Use the <stream (Section 2.54)> element instead.
 
@@ -1765,7 +1767,8 @@ Table of Contents
 
    This element can be a child element of <reference>.
 
-   Content schema:  ( "IETF" | "IAB" | "IRTF" | "independent" )?
+   Content schema:  ( "IETF" | "IAB" | "IRTF" | "independent" |
+      "editorial" )?
 
 2.55.  <street>
 
@@ -2753,7 +2756,7 @@ Appendix A.  RELAX NG Schema
        attribute iprExtract { xsd:IDREF }?,
        [ a:defaultValue = "IETF" ]
        attribute submissionType {
-         "IETF" | "IAB" | "IRTF" | "independent"
+         "IETF" | "IAB" | "IRTF" | "independent" | "editorial"
        }?,
        attribute docName { text }?,
        [ a:defaultValue = "false" ]
@@ -3799,7 +3802,7 @@ Appendix A.  RELAX NG Schema
 
    stream =
      element stream {
-       ( "IETF" | "IAB" | "IRTF" | "independent" )?
+       ( "IETF" | "IAB" | "IRTF" | "independent" | "editorial" )?
    }
 
    referencegroup =
@@ -3821,7 +3824,9 @@ Appendix A.  RELAX NG Schema
        attribute asciiName { text }?,
        attribute asciiValue { text }?,
        attribute status { text }?,
-       attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
+       attribute stream {
+         "IETF" | "IAB" | "IRTF" | "independent"  | "editorial"
+       }?,
        empty
      }
 
