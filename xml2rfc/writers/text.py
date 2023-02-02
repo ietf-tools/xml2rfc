@@ -1737,11 +1737,20 @@ class TextWriter(BaseV3Writer):
         pn = e.get('pn')
         num = pn.split('-')[1].capitalize()
         children = e.getchildren()
-        title = "Figure %s" % (num, )
+        title = "Figure {}".format(num)
         if len(children) and children[0].tag == 'name':
             name = children[0]
+            if name.text:
+                name.text = "{prefix}{joiner} {text}".format(
+                                prefix=title,
+                                joiner=kwargs["joiners"]["name"].join,
+                                text=name.text)
+            else:
+                name.text = "{prefix}{joiner} ".format(
+                                prefix=title,
+                                joiner=kwargs["joiners"]["name"].join)
             children = children[1:]
-            title = self.tjoin(title, name, width, **kwargs)
+            title = self.render(name, width, **kwargs)
         lines = []
         for c in children:
             lines = self.ljoin(lines, c, width, **kwargs)
