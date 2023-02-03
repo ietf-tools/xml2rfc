@@ -529,9 +529,14 @@ class TextWriter(BaseV3Writer):
         if width < minwidth(text):
             self.die(e, "Trying to render text in a too narrow column: width: %s, text: '%s'" % (width, text))
         kwargs['hang'] = j.hang
-        etext = self.render(e, width, **kwargs)
-        itext = indent(etext, j.indent, j.hang)
-        if text:
+
+        if e.tag == "name":
+            e.text = f"{text}{j.join if e.text or len(e.getchildren()) > 0 else ''} {e.text or ''}"
+            etext = self.render(e, width, **kwargs)
+            text = indent(etext, j.indent, j.hang).lstrip(stripspace)
+        elif text:
+            etext = self.render(e, width, **kwargs)
+            itext = indent(etext, j.indent, j.hang)
             if '\n' in j.join:
                 text += j.join + itext
             elif j.join.strip(stripspace) and not itext.strip(stripspace):
@@ -540,7 +545,10 @@ class TextWriter(BaseV3Writer):
             else:
                 text += j.join + itext.lstrip(stripspace)
         else:
+            etext = self.render(e, width, **kwargs)
+            itext = indent(etext, j.indent, j.hang)
             text  = itext
+
         return text
 
     def ljoin(self, lines, e, width, **kwargs):
@@ -1737,20 +1745,11 @@ class TextWriter(BaseV3Writer):
         pn = e.get('pn')
         num = pn.split('-')[1].capitalize()
         children = e.getchildren()
-        title = "Figure {}".format(num)
+        title = f"Figure {num}"
         if len(children) and children[0].tag == 'name':
             name = children[0]
-            if name.text:
-                name.text = "{prefix}{joiner} {text}".format(
-                                prefix=title,
-                                joiner=kwargs["joiners"]["name"].join,
-                                text=name.text)
-            else:
-                name.text = "{prefix}{joiner} ".format(
-                                prefix=title,
-                                joiner=kwargs["joiners"]["name"].join)
             children = children[1:]
-            title = self.render(name, width, **kwargs)
+            title = self.tjoin(title, name, width, **kwargs)
         lines = []
         for c in children:
             lines = self.ljoin(lines, c, width, **kwargs)
