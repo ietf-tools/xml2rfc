@@ -101,8 +101,12 @@ def get_pdf_help(missing_libs=""):
          https://www.google.com/get/noto/help/install/
 
        * Go to https://fonts.google.com/specimen/Roboto+Mono, and download the
-         font.  Follow the installation instructions above, as applied to this
+         font. Follow the installation instructions above, as applied to this
          download.
+
+       * Go to https://fonts.google.com/noto/specimen/Noto+Sans+Math, and
+         download the font. Follow the installation instructions above, as
+         applied to this download.
     
     With these libraries, modules, and fonts installed and available to
     xml2rfc, the --pdf switch will be enabled.

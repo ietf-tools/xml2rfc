@@ -523,12 +523,12 @@ class PdfWriterTests(unittest.TestCase):
 
     def test_get_serif_fonts(self):
         fonts = self.pdf_writer.get_serif_fonts()
-        for font in ['Noto Serif', 'Noto Sans Cherokee', 'Noto Serif CJK SC', 'Noto Serif Hebrew']:
+        for font in ['Noto Serif', 'Noto Sans Cherokee', 'Noto Serif CJK SC', 'Noto Serif Hebrew', 'NotoSansSymbols2', 'NotoSansMath']:
             self.assertIn(font, fonts)
 
     def test_get_mono_fonts(self):
         fonts = self.pdf_writer.get_mono_fonts()
-        for font in ['Roboto Mono', 'Noto Sans Cherokee', 'Noto Serif CJK SC', 'Noto Serif Hebrew']:
+        for font in ['Roboto Mono', 'Noto Sans Cherokee', 'Noto Serif CJK SC', 'Noto Serif Hebrew', 'NotoSansSymbols2', 'NotoSansMath']:
             self.assertIn(font, fonts)
 
 

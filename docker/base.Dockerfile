@@ -41,6 +41,9 @@ RUN mkdir -p ~/.fonts/opentype && \
     wget -q https://fonts.google.com/download?family=Roboto%20Mono -O roboto-mono.zip && \
     unzip -q roboto-mono.zip -d ~/.fonts/opentype/ && \
     rm roboto-mono.zip && \
+    wget -q https://fonts.google.com/download?family=Noto%20Sans%20Math -O noto-sans-math.zip && \
+    unzip -q noto-sans-math.zip -d ~/.fonts/opentype/ && \
+    rm noto-sans-math.zip && \
     ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/ && \
     fc-cache -f
 

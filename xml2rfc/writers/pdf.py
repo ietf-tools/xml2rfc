@@ -21,11 +21,16 @@ from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.html import HtmlWriter
 from xml2rfc.util.fonts import get_noto_serif_family_for_script
 
+
 try:
     from xml2rfc import debug
     debug.debug = True
 except ImportError:
     pass
+
+
+NOTO_SYMBOLS = ["NotoSansSymbols2", "NotoSansMath",]
+
 
 class PdfWriter(BaseV3Writer):
 
@@ -124,12 +129,11 @@ class PdfWriter(BaseV3Writer):
         fonts = set()
         scripts = self.root.get("scripts").split(",")
         noto_serif = "Noto Serif"
-        noto_symbols = "NotoSansSymbols2"
         for script in scripts:
             family = get_noto_serif_family_for_script(script)
             fonts.add("%s" % family)
         fonts -= set([ noto_serif, ])
-        fonts = [noto_serif, noto_symbols] + list(fonts)
+        fonts = [noto_serif,] + NOTO_SYMBOLS + list(fonts)
         self.note(None, "Found installed font: %s" % ", ".join(fonts))
         return fonts
 
@@ -140,7 +144,7 @@ class PdfWriter(BaseV3Writer):
         for script in scripts:
             family = get_noto_serif_family_for_script(script)
             fonts.add("%s" % family)
-        fonts = [ roboto_mono, ] + list(fonts)
+        fonts = [ roboto_mono, ] + NOTO_SYMBOLS + list(fonts)
         self.note(None, "Found installed font: %s" % ', '.join(fonts))
         return fonts
 
