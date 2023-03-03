@@ -848,6 +848,8 @@ class V2v3XmlWriter(BaseV3Writer):
         stripattr(l, ['hangIndent'])
         if tag in ['ol', 'ul']:
             for t in l.findall('./t'):
+                new = self.element('t', line=t.sourceline)
+                self.wrap_content(t, new)
                 self.replace(t, 'li')
         elif tag == 'dl':
             if indent:
