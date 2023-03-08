@@ -50,7 +50,10 @@ pip install 'weasyprint==55.0'
   * Follow the installation instructions at
     https://www.google.com/get/noto/help/install/
   * Go to https://fonts.google.com/specimen/Roboto+Mono, and download the
-    font.  Follow the installation instructions above, as applied to this download.
+    font. Follow the installation instructions above, as applied to this download.
+  * Go to https://fonts.google.com/noto/specimen/Noto+Sans+Math, and
+    download the font. Follow the installation instructions above, as
+    applied to this download.
 
 With these installed and available to **xml2rfc**, the `--pdf` switch will be enabled.
 
