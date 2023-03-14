@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.17.0] - 2023-03-14
+### :sparkles: New Features
+- [`dbdda51`](https://github.com/ietf-tools/xml2rfc/commit/dbdda51a16083da0762355ebe0902c3bc2a78a39) - Lighter styling on internal iref links *(PR [#963](https://github.com/ietf-tools/xml2rfc/pull/963) by [@martinthomson](https://github.com/martinthomson))*
+- [`ff1c061`](https://github.com/ietf-tools/xml2rfc/commit/ff1c0610ef67cab21e80fc2106137b103dabb30b) - Add support for Noto Math font *(PR [#971](https://github.com/ietf-tools/xml2rfc/pull/971) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`636dd08`](https://github.com/ietf-tools/xml2rfc/commit/636dd08cf10d61fc7354dfc0575a61714270b4c6) - update CHANGELOG.md + py file versions for v3.16.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`7cae8ad`](https://github.com/ietf-tools/xml2rfc/commit/7cae8add36feaf9d1eed08c820708748ac9ec868) - Remove mt.css and mt.js *(PR [#976](https://github.com/ietf-tools/xml2rfc/pull/976) by [@martinthomson](https://github.com/martinthomson))*
+
+
 ## [v3.16.0] - 2023-01-18
 ### :sparkles: New Features
 - [`ad2e035`](https://github.com/ietf-tools/xml2rfc/commit/ad2e0359fde4687e07491a1ada0ec0d4f6ee5fcc) - Permit non-ASCII within <t> without the use of <u> *(PR [#895](https://github.com/ietf-tools/xml2rfc/pull/895) by [@cabo](https://github.com/cabo))*
@@ -1965,3 +1977,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.15.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.1...v3.15.2
 [v3.15.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.2...v3.15.3
 [v3.16.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.3...v3.16.0
+[v3.17.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.16.0...v3.17.0
