@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.17.1] - 2023-04-13
+### :bug: Bug Fixes
+- [`87e206e`](https://github.com/ietf-tools/xml2rfc/commit/87e206e09271bd9c9771b4d00d5ec7f61fbe8ea1) - Remove extend-to-zoom from viewport in CSS *(PR [#980](https://github.com/ietf-tools/xml2rfc/pull/980) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#974](undefined) opened by [@kesara](https://github.com/kesara)*
+
+### :construction_worker: Build System
+- [`2b112e2`](https://github.com/ietf-tools/xml2rfc/commit/2b112e21474c77f84c492e1c399e7d9cb4e480b8) - Migrate to setup.cfg *(PR [#979](https://github.com/ietf-tools/xml2rfc/pull/979) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#781](undefined) opened by [@kesara](https://github.com/kesara)*
+- [`c014b7a`](https://github.com/ietf-tools/xml2rfc/commit/c014b7a1ad87ac8f3d9526fac0dcb0ffbe83d05f) - Update package version in setup.cfg *(PR [#981](https://github.com/ietf-tools/xml2rfc/pull/981) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`5f90492`](https://github.com/ietf-tools/xml2rfc/commit/5f904921201f7080681c03190a7f945e48299ee0) - update CHANGELOG.md + py file versions for v3.17.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.17.0] - 2023-03-14
 ### :sparkles: New Features
 - [`dbdda51`](https://github.com/ietf-tools/xml2rfc/commit/dbdda51a16083da0762355ebe0902c3bc2a78a39) - Lighter styling on internal iref links *(PR [#963](https://github.com/ietf-tools/xml2rfc/pull/963) by [@martinthomson](https://github.com/martinthomson))*
@@ -1978,3 +1992,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.15.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.2...v3.15.3
 [v3.16.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.3...v3.16.0
 [v3.17.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.16.0...v3.17.0
+[v3.17.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.0...v3.17.1
