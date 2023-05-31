@@ -2178,7 +2178,9 @@ class BaseV3Writer(object):
             self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
 
         try:
-            self.v3_rng.assertValid(self.tree)
+            # Use a deepcopy to avoid any memory issues.
+            tree = copy.deepcopy(self.tree)
+            self.v3_rng.assertValid(tree)
             return True
         except Exception as e:
             lxmlver = lxml.etree.LXML_VERSION[:3]
@@ -2227,13 +2229,9 @@ class BaseV3Writer(object):
         # schema, there is no dependency in the underlying schema on the root
         # element attributes.  In order to avoid very long validation times, we
         # strip the root attributes before validation, and put them back
-        # afterwards.  
-        for k in e.keys():
-            if not e.get(k):
-                del e.attrib[k]
-        attrib = copy.deepcopy(e.attrib) 
-        for k in attrib.keys():
-            del e.attrib[k]
+        # afterwards.
+        attrib = copy.deepcopy(e.attrib)
+        e.attrib.clear()
         #
         if not self.validate('after', warn=True):
             self.note(None, "Schema validation failed for input document")
@@ -2242,8 +2240,7 @@ class BaseV3Writer(object):
         #
         keys = list(attrib.keys())
         keys.sort()
-        for k in keys:
-            e.set(k, attrib[k])
+        e.attrib.update(attrib)
 
     def remove(self, p, e):
         # Element.remove(child) removes both the child and its tail, so in
