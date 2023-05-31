@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.17.2] - 2023-05-31
+### :bug: Bug Fixes
+- [`f902725`](https://github.com/ietf-tools/xml2rfc/commit/f90272530b9e93f98e42c73fd1b6b8eabdf58eab) - Avoid memory issues in BaseV3Writer validator process *(PR [#995](https://github.com/ietf-tools/xml2rfc/pull/995) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#994](undefined) opened by [@kesara](https://github.com/kesara)*
+
+### :memo: Documentation Changes
+- [`be9682f`](https://github.com/ietf-tools/xml2rfc/commit/be9682f10ed4cbcced3907d66207dcaa1918fcfa) - update CHANGELOG.md + py file versions for v3.17.1 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.17.1] - 2023-04-13
 ### :bug: Bug Fixes
 - [`87e206e`](https://github.com/ietf-tools/xml2rfc/commit/87e206e09271bd9c9771b4d00d5ec7f61fbe8ea1) - Remove extend-to-zoom from viewport in CSS *(PR [#980](https://github.com/ietf-tools/xml2rfc/pull/980) by [@kesara](https://github.com/kesara))*
@@ -1993,3 +2002,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.16.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.15.3...v3.16.0
 [v3.17.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.16.0...v3.17.0
 [v3.17.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.0...v3.17.1
+[v3.17.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.1...v3.17.2
