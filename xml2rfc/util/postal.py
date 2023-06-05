@@ -187,7 +187,7 @@ def get_normalized_address_info(writer, x, latin=False):
                                " Available elements for %s are: %s" % (address_field_elements[e], adr[e], country_info.name, ', '.join(elements)))
         try:
             i18naddress.normalize_address(adr)
-        except i18naddress.InvalidAddress as e:
+        except i18naddress.InvalidAddressError as e:
             list_parts = True
             writer.note(x, "Postal address check failed for author %s." % full_author_name(author, latin))
             for item in e.errors:
