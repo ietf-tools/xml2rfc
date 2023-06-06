@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.17.3] - 2023-06-06
+### :bug: Bug Fixes
+- [`9a8c2f0`](https://github.com/ietf-tools/xml2rfc/commit/9a8c2f0decf2efcd59cfe5c5f7ae2f25892c73d6) - Update for google-i18n-address 3.0.0 *(PR [#998](https://github.com/ietf-tools/xml2rfc/pull/998) by [@jennifer-richards](https://github.com/jennifer-richards))*
+  - :arrow_lower_right: *fixes issue [#997](undefined) opened by [@jennifer-richards](https://github.com/jennifer-richards)*
+
+### :memo: Documentation Changes
+- [`897404d`](https://github.com/ietf-tools/xml2rfc/commit/897404dcbd437a56130337b8a723c3cb8779950c) - update CHANGELOG.md + py file versions for v3.17.2 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.17.2] - 2023-05-31
 ### :bug: Bug Fixes
 - [`f902725`](https://github.com/ietf-tools/xml2rfc/commit/f90272530b9e93f98e42c73fd1b6b8eabdf58eab) - Avoid memory issues in BaseV3Writer validator process *(PR [#995](https://github.com/ietf-tools/xml2rfc/pull/995) by [@kesara](https://github.com/kesara))*
@@ -2003,3 +2012,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.17.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.16.0...v3.17.0
 [v3.17.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.0...v3.17.1
 [v3.17.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.1...v3.17.2
+[v3.17.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.2...v3.17.3
