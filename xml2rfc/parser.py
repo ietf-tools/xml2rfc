@@ -55,7 +55,6 @@ class CachingResolver(lxml.etree.Resolver):
                  templates_path=base.default_options.template_dir, verbose=None, quiet=None,
                  no_network=None, network_locs= [
                      'https://bib.ietf.org/public/rfc/',
-                     'http://bib.ietf.org/public/rfc/',
                  ],
                  rfc_number=None, options=base.default_options):
         self.quiet = quiet if quiet != None else options.quiet
@@ -475,7 +474,6 @@ class XmlRfcParser:
                  cache_path=None, templates_path=base.default_options.template_dir, library_dirs=None, add_xmlns=False,
                  no_network=None, network_locs=[
                      'https://bib.ietf.org/public/rfc/',
-                     'http://bib.ietf.org/public/rfc/',
                  ]
                  ):
         self.options = options
