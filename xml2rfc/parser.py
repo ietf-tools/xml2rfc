@@ -55,11 +55,7 @@ class CachingResolver(lxml.etree.Resolver):
                  templates_path=base.default_options.template_dir, verbose=None, quiet=None,
                  no_network=None, network_locs= [
                      'https://bib.ietf.org/public/rfc/',
-                     'https://xml2rfc.ietf.org/public/rfc/',
-                     'https://xml2rfc.tools.ietf.org/public/rfc/',
                      'http://bib.ietf.org/public/rfc/',
-                     'http://xml2rfc.ietf.org/public/rfc/',
-                     'http://xml2rfc.tools.ietf.org/public/rfc/',
                  ],
                  rfc_number=None, options=base.default_options):
         self.quiet = quiet if quiet != None else options.quiet
@@ -197,9 +193,7 @@ class CachingResolver(lxml.etree.Resolver):
               on the CLI this is set by $XML_LIBRARY, defaulting to 
               ['/usr/share/xml2rfc'].  On the GUI this can be configured
               manually but has the same initial defaults.
-            - NETWORK refers to the online citation library.  On the CLI this
-              is http://xml2rfc.ietf.org/public/rfc/.  On the GUI this 
-              can be configured manually but has the same initial default.
+            - NETWORK refers to the online citation library.
 
             The caches in read_dirs are consulted in sequence order to find the
             request.  If not found, the request will be cached at write_dir.
@@ -481,11 +475,7 @@ class XmlRfcParser:
                  cache_path=None, templates_path=base.default_options.template_dir, library_dirs=None, add_xmlns=False,
                  no_network=None, network_locs=[
                      'https://bib.ietf.org/public/rfc/',
-                     'https://xml2rfc.ietf.org/public/rfc/',
-                     'https://xml2rfc.tools.ietf.org/public/rfc/',
                      'http://bib.ietf.org/public/rfc/',
-                     'http://xml2rfc.ietf.org/public/rfc/',
-                     'http://xml2rfc.tools.ietf.org/public/rfc/',
                  ]
                  ):
         self.options = options
