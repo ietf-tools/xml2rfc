@@ -227,12 +227,10 @@ class CachingResolver(lxml.etree.Resolver):
                     result = os.path.join(self.source_dir, basename)
                     attempts.append(result)
         else:
-            if self.options and self.options.vocabulary == 'v3':
-                paths = [ request ]
-            elif not request.endswith('.xml'):
-                paths = [ request, request + '.xml' ]
+            if not request.endswith('.xml'):
+                paths = [ request + '.xml', request ]
             else:
-                paths = [ request ]                
+                paths = [ request ]
             if os.path.isabs(paths[0]):
                 # Absolute path, return as-is
                 for path in paths:
