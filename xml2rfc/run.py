@@ -2,7 +2,7 @@
 
 from __future__ import print_function, unicode_literals
 
-import appdirs
+import platformdirs
 import configargparse
 import datetime
 import io
@@ -150,7 +150,7 @@ def main():
     global optionparser
     # Populate options
     config_paths = ['/etc/xml2rfc.conf', '~/.xml2rfc.conf']
-    user_conf = os.path.join(appdirs.user_config_dir(), 'xml2rfc.conf')
+    user_conf = os.path.join(platformdirs.user_config_dir(), 'xml2rfc.conf')
     if not user_conf in config_paths:
         config_paths.append(user_conf)
 
