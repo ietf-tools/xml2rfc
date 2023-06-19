@@ -645,6 +645,8 @@ class XmlRfcParser:
                 pis = xmlrfc.pis.copy() 
                 if 'include' in pidict and pidict['include']:
                     request = pidict['include']
+                    if xmlrfc.getroot().get('version', '3') in ['3', ]:
+                        xml2rfc.log.warn(f'XInclude should be used instead of PI include for {request}')
                     path = self.cachingResolver.getReferenceRequest(request,
                            # Pass the line number in XML for error bubbling
                            include=True, line_no=getattr(element, 'sourceline', 0))
