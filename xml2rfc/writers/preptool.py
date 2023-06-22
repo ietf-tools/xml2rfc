@@ -211,6 +211,7 @@ class PrepToolWriter(BaseV3Writer):
         e.text = '\n'.join(lines)
 
     def prep(self):
+        self._seen_slugs = set()  # Reset cache before prepping
         self.xinclude()
         # Set up reference mapping for later use.  Done here, and not earlier,
         # to capture any references pulled in by the XInclude we just did.
