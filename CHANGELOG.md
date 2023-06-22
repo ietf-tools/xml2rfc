@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.17.4] - 2023-06-22
+### :bug: Bug Fixes
+- [`fb360a1`](https://github.com/ietf-tools/xml2rfc/commit/fb360a1cb08f9f8b6d929018ae12844f6b4b9960) - Remove old tools server from BibXML lookup locations *(PR [#1004](https://github.com/ietf-tools/xml2rfc/pull/1004) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1002](undefined) opened by [@kesara](https://github.com/kesara)*
+- [`8cbc6c6`](https://github.com/ietf-tools/xml2rfc/commit/8cbc6c6e44ed88cf82ba9f0cb21c9bc0dc1c6742) - Switch from appdirs to platformdirs, since it is maintained *(PR [#1009](https://github.com/ietf-tools/xml2rfc/pull/1009) by [@kitterma](https://github.com/kitterma))*
+- [`f92f551`](https://github.com/ietf-tools/xml2rfc/commit/f92f5512473990fa17516d291c6a29e3042c8b64) - Warn when reference uses PIs *(PR [#1007](https://github.com/ietf-tools/xml2rfc/pull/1007) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1006](undefined) opened by [@kesara](https://github.com/kesara)*
+- [`393b68b`](https://github.com/ietf-tools/xml2rfc/commit/393b68bc2439f019690f5679ecd7893caa6e624a) - Reset seen_slugs cache on every prep run *(PR [#1011](https://github.com/ietf-tools/xml2rfc/pull/1011) by [@jennifer-richards](https://github.com/jennifer-richards))*
+- [`aef14d2`](https://github.com/ietf-tools/xml2rfc/commit/aef14d28754d5a76e8d737e76e964e4a87efdfda) - Add xml extension to BibXML requests *(PR [#1005](https://github.com/ietf-tools/xml2rfc/pull/1005) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1003](undefined) opened by [@kesara](https://github.com/kesara)*
+
+### :memo: Documentation Changes
+- [`5fbc3ce`](https://github.com/ietf-tools/xml2rfc/commit/5fbc3ceffa6c4713b425472111b746ef9f675cf5) - update CHANGELOG.md + py file versions for v3.17.3 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.17.3] - 2023-06-06
 ### :bug: Bug Fixes
 - [`9a8c2f0`](https://github.com/ietf-tools/xml2rfc/commit/9a8c2f0decf2efcd59cfe5c5f7ae2f25892c73d6) - Update for google-i18n-address 3.0.0 *(PR [#998](https://github.com/ietf-tools/xml2rfc/pull/998) by [@jennifer-richards](https://github.com/jennifer-richards))*
@@ -2013,3 +2028,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.17.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.0...v3.17.1
 [v3.17.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.1...v3.17.2
 [v3.17.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.2...v3.17.3
+[v3.17.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.3...v3.17.4
