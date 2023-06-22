@@ -73,28 +73,6 @@ def uniq(l):
             ll.append(i)
     return ll
 
-# This is used to enforce global uniqueness on slugs:
-seen_slugs = set([])
-
-def slugify_name(name):
-    name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode('ascii')
-    slug = re.sub(r'[^\w\s/-]', '', name).strip().lower()
-    slug = re.sub(r'[-\s/]+', '-', slug)
-    # limit slug length
-    n = 32
-    m = 2
-    while slug[:n] in seen_slugs and n < len(slug) and n<40:
-        n += 1
-    while slug[:n]+'-%s'%m in seen_slugs and m < 99:
-        m += 1
-    if m == 99 and slug[:n]+'-%s'%m in seen_slugs:
-        raise RuntimeError("Too many overlapping <name> content instances; cannot create a sensible slugifiedName attribute")
-    if slug[:n] in seen_slugs:
-        slug = slug[:n]+'-%s'%m
-    else:
-        slug = slug[:n]
-    seen_slugs.add(slug)
-    return slug
 
 class PrepToolWriter(BaseV3Writer):
     """ Writes an XML file where the input has been modified according to RFC 7998"""
@@ -133,6 +111,8 @@ class PrepToolWriter(BaseV3Writer):
         self.spacer = '\u00a0\u00a0'
         #
         self.boilerplate_https_date = datetime.date(year=2017, month=8, day=21)
+        #
+        self._seen_slugs = set()  # This is used to enforce global uniqueness on slugs:
 
     def get_attribute_names(self, tag):
         attr = self.schema.xpath("/x:grammar/x:define/x:element[@name='%s']//x:attribute" % tag, namespaces=namespaces)
@@ -168,6 +148,27 @@ class PrepToolWriter(BaseV3Writer):
             e.base = os.path.basename(filename)
             e.sourceline = lineno
         return e
+
+    def slugify_name(self, name):
+        name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode('ascii')
+        slug = re.sub(r'[^\w\s/-]', '', name).strip().lower()
+        slug = re.sub(r'[-\s/]+', '-', slug)
+        # limit slug length
+        n = 32
+        m = 2
+        while slug[:n] in self._seen_slugs and n < len(slug) and n < 40:
+            n += 1
+        while slug[:n] + '-%s' % m in self._seen_slugs and m < 99:
+            m += 1
+        if m == 99 and slug[:n] + '-%s' % m in self._seen_slugs:
+            raise RuntimeError(
+                "Too many overlapping <name> content instances; cannot create a sensible slugifiedName attribute")
+        if slug[:n] in self._seen_slugs:
+            slug = slug[:n] + '-%s' % m
+        else:
+            slug = slug[:n]
+        self._seen_slugs.add(slug)
+        return slug
 
     def validate(self, when, warn=False):
         return super(PrepToolWriter, self).validate(when='%s running preptool'%when, warn=warn)
@@ -1242,7 +1243,7 @@ class PrepToolWriter(BaseV3Writer):
     #    with "n-".
     def name_insert_slugified_name(self, e, p):
         text = ' '.join(list(e.itertext()))
-        slug = slugify_name('name-'+text) if text else None
+        slug = self.slugify_name('name-'+text) if text else None
         if slug:
             e.set('slugifiedName', slug)
         
@@ -1439,9 +1440,9 @@ class PrepToolWriter(BaseV3Writer):
             self.err(e, "Expected <iref> to have an item= attribute, but found none")
         else:
             if sub:
-                pn = slugify_name('%s-%s-%s-%s' % (pnprefix[e.tag], item, sub, self.iref_number))
+                pn = self.slugify_name('%s-%s-%s-%s' % (pnprefix[e.tag], item, sub, self.iref_number))
             else:
-                pn = slugify_name('%s-%s-%s' % (pnprefix[e.tag], item, self.iref_number))
+                pn = self.slugify_name('%s-%s-%s' % (pnprefix[e.tag], item, self.iref_number))
             self.set_element_pn(e, pn)
             anchor, anchor_tag = get_anchor(p)
             if not anchor:
@@ -2027,7 +2028,7 @@ class PrepToolWriter(BaseV3Writer):
                 slug = name.get('slugifiedName')
                 if not slug:
                     self.warn(name, "Internal error: missing slugifiedName for %s" % (etree.tostring(name)))
-                    slug = slugify_name('name-'+text)
+                    slug = self.slugify_name('name-'+text)
                     name.set('slugifiedName', slug)
                 xref = self.element('xref', target=slug, format='title', derivedContent='')
                 cc = copy_reduce(name)
@@ -2289,7 +2290,7 @@ class PrepToolWriter(BaseV3Writer):
             n.text = "Authors' Addresses"
         else:
             n.text = "Author's Address"
-        n.set('slugifiedName', slugify_name('name-'+n.text))
+        n.set('slugifiedName', self.slugify_name('name-'+n.text))
         s.append(n)
         for e in self.root.find('./front'):
             if e.tag in ['author', etree.PI, ]:
