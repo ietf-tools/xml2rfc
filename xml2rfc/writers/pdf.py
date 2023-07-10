@@ -215,6 +215,12 @@ page_css_template = """
       margin-top: 1em;
     }}
   }}
+  #toc nav ul li p a:nth-child(2)::after {{
+    content: target-counter(attr(href), page);
+    position: absolute;
+    right: 0px;
+    text-indent: 0px;
+  }}
 }}
 """
 
