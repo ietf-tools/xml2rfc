@@ -35,7 +35,6 @@ unicode_content_tags = set([
     'street',
     'title',
     'u',
-    't',
 ])
 
 # Attribute values should not contain unicode, with some exceptions
@@ -84,10 +83,6 @@ bare_latin_tags = set([
     'street',
     'title',
     ])
-
-bare_unicode_tags_with_notice = set([
-    't',
-])
 
 def is_svg(e):
     '''

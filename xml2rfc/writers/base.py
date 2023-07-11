@@ -25,14 +25,9 @@ except ImportError:
     pass
 
 from xml2rfc import strings, log
-from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, format_date, get_expiry_date
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
-from xml2rfc.util.unicode import (
-        punctuation, unicode_replacements, unicode_content_tags,
-        bare_unicode_tags, bare_unicode_tags_with_notice,
-        bare_latin_tags, unicode_attributes, downcode, downcode_punctuation,
-        is_svg)
+from xml2rfc.util.unicode import is_svg
 from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
 
 
@@ -2038,63 +2033,6 @@ class BaseV3Writer(object):
             parts = date.year, date.month, date.day
             text = 'Expires %s' % format_date(*parts, legacy=self.options.legacy_date_format)
         return text
-
-    def downcode_punctuation(self):
-        self.downcode(replacements=punctuation)
-        self.downcode_reference_punctuation()
-
-    def downcode(self, replacements=unicode_replacements):
-        """
-
-        Traverses an lxml.etree and replaces unicode characters with the proper
-        equivalents specified in rfc2629-xhtml.ent, resulting in no non-ascii
-        characters except in elements that explicitly permit non-ascii content.
-
-        """
-        for e in self.tree.iter():
-            if is_svg(e):
-                continue
-            if e.text:
-                if not e.tag in unicode_content_tags:
-                    try:
-                        e.text.encode('ascii')
-                    except UnicodeEncodeError:
-                        e.text = downcode(e.text, replacements=replacements)
-                elif e.tag in bare_unicode_tags:
-                    pass
-                elif e.tag in bare_unicode_tags_with_notice:
-                    pass
-                elif e.tag in bare_latin_tags and is_script(e.text, 'Latin'):
-                    pass
-                elif not e.get('ascii'):
-                    try:
-                        e.text.encode('ascii')
-                    except UnicodeEncodeError:
-                        e.text = downcode(e.text, replacements=replacements)
-            if e.tail:
-                if not e.getparent().tag in unicode_content_tags:
-                    try:
-                        e.tail.encode('ascii')
-                    except UnicodeEncodeError:
-                        e.tail = downcode(e.tail, replacements=replacements)
-
-    def downcode_attributes(self, replacements=unicode_replacements):
-        for e in self.tree.iter():
-            for key in e.attrib.keys():
-                if not (e.tag, key) in unicode_attributes:
-                    try:
-                        e.get(key).encode('ascii')
-                    except UnicodeEncodeError:
-                        e.set(key, downcode(e.get(key), replacements=replacements))
-
-    def downcode_reference_punctuation(self):
-        for r in self.tree.xpath('.//references'):
-            for e in r.iter():
-                for key in e.attrib.keys():
-                    try:
-                        e.get(key).encode('ascii')
-                    except UnicodeEncodeError:
-                        e.set(key, downcode_punctuation(e.get(key)))
 
     def pretty_print_prep(self, e, p):
         ind = self.options.indent
