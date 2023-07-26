@@ -445,8 +445,9 @@ class TextWriter(BaseV3Writer):
                             break_lineno -= adj
                         else:
                             pass
-                    elif ( (olen in range(1, self.options.orphans+1) and blen > olen)
-                        or (wlen in range(1, self.options.widows+1) and blen > wlen)):
+                    elif (( (olen in range(1, self.options.orphans+1) and blen > olen)
+                        or (wlen in range(1, self.options.widows+1) and blen > wlen))
+                        and (start_lineno < break_lineno - olen)):
                         break_lineno -= olen
                         pad += olen
                     else:
