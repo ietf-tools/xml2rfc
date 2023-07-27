@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.17.5] - 2023-07-27
+### :bug: Bug Fixes
+- [`656a6ba`](https://github.com/ietf-tools/xml2rfc/commit/656a6ba65749c7c869e647134a2ff749aa10cf05) - Include page numbers in the TOC when generating PDF. *(PR [#993](https://github.com/ietf-tools/xml2rfc/pull/993) by [@teythoon](https://github.com/teythoon))*
+- [`fa1ad02`](https://github.com/ietf-tools/xml2rfc/commit/fa1ad029e9dc011f4dc253687b0b4de2842e8e8a) - Improve pagination in text output *(PR [#1019](https://github.com/ietf-tools/xml2rfc/pull/1019) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`4971ae2`](https://github.com/ietf-tools/xml2rfc/commit/4971ae2d3f3b091150e0a14515b9bc24791b22df) - update CHANGELOG.md + py file versions for v3.17.4 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.17.4] - 2023-06-22
 ### :bug: Bug Fixes
 - [`fb360a1`](https://github.com/ietf-tools/xml2rfc/commit/fb360a1cb08f9f8b6d929018ae12844f6b4b9960) - Remove old tools server from BibXML lookup locations *(PR [#1004](https://github.com/ietf-tools/xml2rfc/pull/1004) by [@kesara](https://github.com/kesara))*
@@ -2029,3 +2038,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.17.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.1...v3.17.2
 [v3.17.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.2...v3.17.3
 [v3.17.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.3...v3.17.4
+[v3.17.5]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.4...v3.17.5
