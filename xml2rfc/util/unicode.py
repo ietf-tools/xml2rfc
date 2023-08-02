@@ -100,7 +100,6 @@ for t in bare_unicode_tags:
 def expand_unicode_element(e, bare=False):
     if not e.text:
         return ''
-    ascii = e.get('ascii')
     format = e.get('format', 'lit-name-num')
     size = len(e.text)
     permitted = ('name', 'num', 'char', 'lit', 'ascii')
