@@ -720,10 +720,11 @@ def main():
             if not filename:
                 filename = basename + '.txt'
                 options.output_filename = filename
-            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
-            xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
-            xmlrfc.tree = prep.prep()
+            if not xmlrfc.tree.getroot().get('prepTime'):
+                v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+                xmlrfc.tree = v2v3.convert2to3()
+                prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
+                xmlrfc.tree = prep.prep()
             if xmlrfc.tree:
                 writer = xml2rfc.TextWriter(xmlrfc, options=options, date=options.date)
                 writer.write(filename)
@@ -735,10 +736,11 @@ def main():
             if not filename:
                 filename = basename + '.html'
                 options.output_filename = filename
-            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
-            xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
-            xmlrfc.tree = prep.prep()
+            if not xmlrfc.tree.getroot().get('prepTime'):
+                v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+                xmlrfc.tree = v2v3.convert2to3()
+                prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
+                xmlrfc.tree = prep.prep()
             if xmlrfc.tree:
                 writer = xml2rfc.HtmlWriter(xmlrfc, options=options, date=options.date)
                 writer.write(filename)
@@ -750,10 +752,11 @@ def main():
             if not filename:
                 filename = basename + '.pdf'
                 options.output_filename = filename
-            v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
-            xmlrfc.tree = v2v3.convert2to3()
-            prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
-            xmlrfc.tree = prep.prep()
+            if not xmlrfc.tree.getroot().get('prepTime'):
+                v2v3 = xml2rfc.V2v3XmlWriter(xmlrfc, options=options, date=options.date)
+                xmlrfc.tree = v2v3.convert2to3()
+                prep = xml2rfc.PrepToolWriter(xmlrfc, options=options, date=options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
+                xmlrfc.tree = prep.prep()
             if xmlrfc.tree:
                 writer = xml2rfc.PdfWriter(xmlrfc, options=options, date=options.date)
                 writer.write(filename)
