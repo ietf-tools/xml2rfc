@@ -140,6 +140,7 @@ jobs:
         body: ${{ steps.changelog.outputs.changes }}
         artifacts: "dist/**"
         token: ${{ secrets.GITHUB_TOKEN }}
+        makeLatest: true
         
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v2.3.1
