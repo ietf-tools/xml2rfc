@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.18.0] - 2023-08-04
+### :sparkles: New Features
+- [`46aecfb`](https://github.com/ietf-tools/xml2rfc/commit/46aecfb64d3ef678c17e85f8d7b9de362a7ee07b) - Allow Unicode characters everywhere  *(PR [#1017](https://github.com/ietf-tools/xml2rfc/pull/1017) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#960](undefined) opened by [@kesara](https://github.com/kesara)*
+
+### :bug: Bug Fixes
+- [`47ff383`](https://github.com/ietf-tools/xml2rfc/commit/47ff3830349884387b78517194a8d856721efb05) - Avoid running v2v3 conversion and preptool on prepped documents *(PR [#1014](https://github.com/ietf-tools/xml2rfc/pull/1014) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1013](undefined) opened by [@kesara](https://github.com/kesara)*
+- [`43c82f0`](https://github.com/ietf-tools/xml2rfc/commit/43c82f02fac8176c0a8ecaa6984f6f7511ab916c) - Break word when line overflows *(PR [#1021](https://github.com/ietf-tools/xml2rfc/pull/1021) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#687](undefined) opened by [@ietf-svn-bot](https://github.com/ietf-svn-bot)*
+
+### :construction_worker: Build System
+- [`5662408`](https://github.com/ietf-tools/xml2rfc/commit/56624086a80de13847fa27b3f80a160a0b2c0d9f) - Mark the released version as the latest *(commit by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`a5d5532`](https://github.com/ietf-tools/xml2rfc/commit/a5d5532833fca867fe4f54f234df1b93a6bfa6cc) - update CHANGELOG.md + py file versions for v3.17.5 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`b0d198c`](https://github.com/ietf-tools/xml2rfc/commit/b0d198c868911c5fbf9bf0f43e879386209aa8fb) - Remove unused variable *(PR [#1020](https://github.com/ietf-tools/xml2rfc/pull/1020) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.17.5] - 2023-07-27
 ### :bug: Bug Fixes
 - [`656a6ba`](https://github.com/ietf-tools/xml2rfc/commit/656a6ba65749c7c869e647134a2ff749aa10cf05) - Include page numbers in the TOC when generating PDF. *(PR [#993](https://github.com/ietf-tools/xml2rfc/pull/993) by [@teythoon](https://github.com/teythoon))*
@@ -2039,3 +2060,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.17.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.2...v3.17.3
 [v3.17.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.3...v3.17.4
 [v3.17.5]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.4...v3.17.5
+[v3.18.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.5...v3.18.0
