@@ -6,7 +6,7 @@
   <!ENTITY wj     "&#8288;">
 ]>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" category="info" docName="draft-gieben-writing-rfcs-pandoc-02" obsoletes="" updates="" submissionType="IETF" xml:lang="en" tocInclude="true" symRefs="true" sortRefs="true" version="3">
-  <!-- xml2rfc v2v3 conversion 3.12.10 -->
+  <!-- xml2rfc v2v3 conversion 3.18.0 -->
   <!--generate a table of contents -->
    <!--use anchors instead of numbers for references -->
    <!--alphabetize the references -->
@@ -72,17 +72,21 @@
       </t>
       <ul empty="true" spacing="normal">
         <li>
+          <t>
                   Note: this document is typeset in Pandoc and does not render
                   completely correct when reading it on github.  
-               </li>
+          </t>
+        </li>
       </ul>
     </section>
     <section anchor="pandoc-to-rfc" toc="default" numbered="true">
       <name>Pandoc to RFC</name>
       <ul empty="true" spacing="normal">
         <li>
+          <t>
                   Pandoc2rfc -- designed to do the right thing, until it doesn't.  
-               </li>
+          </t>
+        </li>
       </ul>
       <t>
             When writing <xref target="RFC4641" format="default"/>
@@ -171,14 +175,20 @@ non-existent  |                       | xsltproc
             edit 3 documents: 
       </t>
       <ol spacing="normal" type="1"><li>
+          <t>
                   middle.pdc - contains the main body of text; 
-               </li>
+          </t>
+        </li>
         <li>
+          <t>
                   back.pdc - holds appendices and references; 
-               </li>
+          </t>
+        </li>
         <li>
+          <t>
                   template.xml (probably a fairly static file).  
-               </li>
+          </t>
+        </li>
       </ol>
       <t>
             The draft
@@ -218,23 +228,33 @@ non-existent  |                       | xsltproc
       </t>
       <ul spacing="normal">
         <li>
-          <tt>Makefile</tt>
+          <t>
+                  <tt>Makefile</tt>
+          </t>
         </li>
         <li>
-          <tt>transform.xslt</tt>
+          <t>
+                  <tt>transform.xslt</tt>
+          </t>
         </li>
         <li>
           <t>
                   And the above mentioned files: </t>
           <ul spacing="normal">
             <li>
-              <tt>middle.pdc</tt>
+              <t>
+                        <tt>middle.pdc</tt>
+              </t>
             </li>
             <li>
-              <tt>back.pdc</tt>
+              <t>
+                        <tt>back.pdc</tt>
+              </t>
             </li>
             <li>
-              <tt>template.xml</tt>
+              <t>
+                        <tt>template.xml</tt>
+              </t>
             </li>
           </ul>
         </li>
@@ -247,94 +267,136 @@ non-existent  |                       | xsltproc
       <name>Supported Features</name>
       <ul spacing="normal">
         <li>
+          <t>
                   Sections with an anchor and title attributes
 		  (<xref target="section" format="default"/>); 
-               </li>
+          </t>
+        </li>
         <li>
           <t>
                   Lists </t>
           <ul spacing="normal">
             <li>
+              <t>
                         style=symbols (<xref target="symbol" format="default"/>); 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         style=numbers (<xref target="number" format="default"/>); 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         style=empty (<xref target="empty" format="default"/>); 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         style=format %i, use roman lowercase numerals, (<xref target="roman" format="default"/>); 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         style=format (%d), use roman uppercase numerals (<xref target="roman" format="default"/>); 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         style=letters (lower- and uppercase, <xref target="letter" format="default"/>); 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         style=hanging (<xref target="hanging" format="default"/>); 
-                     </li>
+              </t>
+            </li>
           </ul>
         </li>
         <li>
+          <t>
                   Figure/artwork with a title (<xref target="figureartwork" format="default"/>); 
-               </li>
+          </t>
+        </li>
         <li>
+          <t>
                   Block quote this is converted to
                   <tt>&lt;list style="empty"&gt;</tt>
                   paragraph (<xref target="block-quote" format="default"/>); 
-               </li>
+          </t>
+        </li>
         <li>
           <t>
                   References </t>
           <ul spacing="normal">
             <li>
+              <t>
                         external (eref) (<xref target="external" format="default"/>); 
-                     </li>
+              </t>
+            </li>
             <li>
               <t>
                         internal (xref) (<xref target="internal" format="default"/>), you can refer to: </t>
               <ul spacing="normal">
                 <li>
+                  <t>
                               section (handled by Pandoc, see <xref target="references-1" format="default"/>)); 
-                           </li>
+                  </t>
+                </li>
                 <li>
+                  <t>
                               figures (handled by XSLT, see <xref target="references" format="default"/>); 
-                           </li>
+                  </t>
+                </li>
                 <li>
+                  <t>
                               tables (handled by XSLT, see <xref target="references-2" format="default"/>).  
-                           </li>
+                  </t>
+                </li>
               </ul>
             </li>
           </ul>
         </li>
         <li>
+          <t>
                   Citations, by using internal references; 
-               </li>
+          </t>
+        </li>
         <li>
+          <t>
                   Spanx style=verb, style=emph and style=strong (<xref target="spanx-styles" format="default"/>); 
-               </li>
+          </t>
+        </li>
         <li>
+          <t>
                   Tables with an anchor and title (<xref target="tables" format="default"/>); 
-               </li>
+          </t>
+        </li>
         <li>
+          <t>
                   Indexes, by using footnotes (<xref target="indexes" format="default"/>).  
-               </li>
+          </t>
+        </li>
       </ul>
     </section>
     <section anchor="unsupported-features" toc="default" numbered="true">
       <name>Unsupported Features</name>
       <ul spacing="normal">
         <li>
+          <t>
                   Lists inside a table (<tt>xml2rfc</tt> doesn't handle this); 
-               </li>
+          </t>
+        </li>
         <li>
+          <t>
                   Pandoc markup in the caption for figures/artwork. Pandoc markup for table captions <em>is</em> supported; 
-               </li>
+          </t>
+        </li>
         <li>
+          <t>
                   crefs: for comments (no input syntax available), use HTML comments: <tt>&lt;!-- ... --&gt;</tt>; 
-               </li>
+          </t>
+        </li>
       </ul>
     </section>
     <section anchor="acknowledgements" toc="default" numbered="true">
@@ -402,11 +464,15 @@ A symbol list.
           </t>
           <ul spacing="normal">
             <li>
+              <t>
                         Item one; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Item two.  
-                     </li>
+              </t>
+            </li>
           </ul>
         </section>
         <section anchor="number" toc="default" numbered="true">
@@ -421,11 +487,15 @@ A numbered list.
                   Converts to <tt>&lt;list style="numbers"&gt;</tt>: 
           </t>
           <ol spacing="normal" type="1"><li>
+              <t>
                         Item one; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Item two.  
-                     </li>
+              </t>
+            </li>
           </ol>
         </section>
         <section anchor="empty" toc="default" numbered="true">
@@ -444,11 +514,15 @@ A list using the default list markers.
           </t>
           <ul empty="true" spacing="normal">
             <li>
+              <t>
                         Item one; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Item two.  
-                     </li>
+              </t>
+            </li>
           </ul>
         </section>
         <section anchor="roman" toc="default" numbered="true">
@@ -464,11 +538,15 @@ ii. Item two.
                   Converts to <tt>&lt;list style="format %i."&gt;</tt>: 
           </t>
           <ol spacing="normal" type="%i."><li>
+              <t>
                         Item one; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Item two.  
-                     </li>
+              </t>
+            </li>
           </ol>
           <t>
                   If you use uppercase Roman numerals, they convert to a different style: 
@@ -481,11 +559,15 @@ II. Item two.
                   Yields <tt>&lt;list style="format (%d) "&gt;</tt>: 
           </t>
           <ol spacing="normal" type="(%d)"><li>
+              <t>
                         Item one; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Item two.  
-                     </li>
+              </t>
+            </li>
           </ol>
         </section>
         <section anchor="letter" toc="default" numbered="true">
@@ -501,11 +583,15 @@ b.  Item two.
                   Converts to <tt>&lt;list style="letters"&gt;</tt>: 
           </t>
           <ol spacing="normal" type="a"><li>
+              <t>
                         Item one; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Item two.  
-                     </li>
+              </t>
+            </li>
           </ol>
           <t>
                   Uppercasing the letters works too (note two spaces after the letter.  
@@ -518,11 +604,15 @@ B.  Item two.
                   Becomes: 
           </t>
           <ol spacing="normal" type="%C."><li>
+              <t>
                         Item one; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Item two.  
-                     </li>
+              </t>
+            </li>
           </ol>
         </section>
         <section anchor="hanging" toc="default" numbered="true">
@@ -582,17 +672,23 @@ Like this
           </t>
           <ul spacing="normal">
             <li>
+              <t>
                         Take the first 10 characters of the caption (i.e. this is the text
                         <em>after</em> the string
                         <tt>@Figure:</tt>); 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Spaces and single quotes (') are translated to a minus
                         <tt>-</tt>; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Uppercase letters translated to lowercase.  
-                     </li>
+              </t>
+            </li>
           </ul>
           <t>
                   So the first artwork with a caption will get
@@ -727,17 +823,23 @@ See [](#pandoc-constructs)
           </t>
           <ul spacing="normal">
             <li>
+              <t>
                         Take the first 10 characters of the caption (i.e. this is the text
                         <em>after</em> the string
                         <tt>Table:</tt>); 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Spaces and single quotes (') are translated to a minus
                         <tt>-</tt>; 
-                     </li>
+              </t>
+            </li>
             <li>
+              <t>
                         Uppercase letters translated to lowercase.  
-                     </li>
+              </t>
+            </li>
           </ul>
           <t>
                   So the first table with a caption will get
@@ -898,8 +1000,10 @@ draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
         <name>Blockquote</name>
         <ul empty="true" spacing="normal">
           <li>
+            <t>
                      This is a blockquote, how does it look? 
-                  </li>
+            </t>
+          </li>
         </ul>
       </section>
       <section anchor="verbatim-code-blocks" toc="default" numbered="true">
@@ -919,34 +1023,48 @@ jkasjksajassjasjsajsajkas
         <name>Spanx Tests</name>
         <ul empty="true" spacing="normal">
           <li>
+            <t>
                      underscores: <em>underscores</em>
+            </t>
           </li>
           <li>
+            <t>
                      asterisks: <em>asterisks</em>
+            </t>
           </li>
           <li>
+            <t>
                      double asterisks: <strong>double asterisks</strong>
+            </t>
           </li>
           <li>
+            <t>
                      backticks: <tt>backticks</tt>
+            </t>
           </li>
         </ul>
       </section>
       <section anchor="list-tests" toc="default" numbered="true">
         <name>List Tests</name>
         <ol spacing="normal" type="1"><li>
+            <t>
                      First we do 
-                  </li>
+            </t>
+          </li>
           <li>
             <t>
                      And then </t>
             <ul spacing="normal">
               <li>
+                <t>
                            item 1 
-                        </li>
+                </t>
+              </li>
               <li>
+                <t>
                            item 2 
-                        </li>
+                </t>
+              </li>
             </ul>
           </li>
         </ol>
@@ -955,17 +1073,23 @@ jkasjksajassjasjsajsajkas
         </t>
         <ul spacing="normal">
           <li>
+            <t>
                      First we do 
-                  </li>
+            </t>
+          </li>
           <li>
             <t>
                      Then </t>
             <ol spacing="normal" type="1"><li>
+                <t>
                            Something 
-                        </li>
+                </t>
+              </li>
               <li>
+                <t>
                            Another thing 
-                        </li>
+                </t>
+              </li>
             </ol>
           </li>
         </ul>
@@ -991,11 +1115,15 @@ jkasjksajassjasjsajsajkas
           <dd>
             <t>It works because of </t>
             <ol spacing="normal" type="1"><li>
+                <t>
                         One 
-                     </li>
+                </t>
+              </li>
               <li>
+                <t>
                         Two 
-                     </li>
+                </t>
+              </li>
             </ol>
           </dd>
           <dt>Another item to explain:</dt>
@@ -1005,18 +1133,24 @@ jkasjksajassjasjsajsajkas
           <dd>
             <t>It works because of </t>
             <ol spacing="normal" type="1"><li>
+                <t>
                         One1 
-                     </li>
+                </t>
+              </li>
               <li>
                 <t>
                         Two1 </t>
                 <ul spacing="normal">
                   <li>
+                    <t>
                               Itemize list 
-                           </li>
+                    </t>
+                  </li>
                   <li>
+                    <t>
                               Another item 
-                           </li>
+                    </t>
+                  </li>
                 </ul>
               </li>
             </ol>
@@ -1041,8 +1175,10 @@ jkasjksajassjasjsajsajkas
             </dl>
           </li>
           <li>
+            <t>
                      Go'bye 
-                  </li>
+            </t>
+          </li>
         </ol>
         <t>
                Multiple paragraphs in a list.  
@@ -1055,8 +1191,10 @@ jkasjksajassjasjsajsajkas
             </t>
           </li>
           <li>
+            <t>
                      This is the next bullet. New paragraphs should be indented with 4 four spaces.  
-                  </li>
+            </t>
+          </li>
           <li>
             <t>
                      Another item with some artwork, indented by 8 spaces.
@@ -1066,8 +1204,10 @@ Artwork
                         ]]></artwork>
           </li>
           <li>
+            <t>
                      Final item.  
-                  </li>
+            </t>
+          </li>
         </ol>
         <t>
                xml2rfc does not allow this, so the second paragraph is faked with a 
@@ -1079,34 +1219,48 @@ Artwork
                Ordered lists.  
         </t>
         <ol spacing="normal" type="1"><li>
+            <t>
                      First item 
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Second item 
-                  </li>
+            </t>
+          </li>
         </ol>
         <t>
                A lowercase roman list: 
         </t>
         <ol spacing="normal" type="%i."><li>
+            <t>
                      Item 1 
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Item 2 
-                  </li>
+            </t>
+          </li>
         </ol>
         <t>
                An uppercase roman list.  
         </t>
         <ol spacing="normal" type="(%d)"><li>
+            <t>
                      Item1 
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Item2 
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Item 3 
-                  </li>
+            </t>
+          </li>
         </ol>
         <t>
                And default list markers.<iref item="list" subitem="default markers" primary="false"/>
@@ -1116,17 +1270,23 @@ Artwork
         </t>
         <ul empty="true" spacing="normal">
           <li>
+            <t>
                      First item. Use lot of text to get a real paragraphs sense.
 		     First item. Use lot of text to get a real paragraphs sense.
 		     First item. Use lot of text to get a real paragraphs sense.
 		     First item. Use lot of text to get a real paragraphs sense.  
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Second item. So this is the second para in your list. Enjoy; 
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Another item.  
-                  </li>
+            </t>
+          </li>
         </ul>
         <t>
                Text at the end.  
@@ -1135,21 +1295,29 @@ Artwork
                Lowercase letters list.  
         </t>
         <ol spacing="normal" type="a"><li>
+            <t>
                      First item 
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Second item 
-                  </li>
+            </t>
+          </li>
         </ol>
         <t>
                Uppercase letters list.  
         </t>
         <ol spacing="normal" type="%C."><li>
+            <t>
                      First item 
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Second item 
-                  </li>
+            </t>
+          </li>
         </ol>
         <t>
                <iref item="list" subitem="Uppercase Letters" primary="false"/>
@@ -1180,21 +1348,29 @@ a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
                List with a sublist with a paragraph above the sublist 
         </t>
         <ol spacing="normal" type="1"><li>
+            <t>
                      First Item 
-                  </li>
+            </t>
+          </li>
           <li>
+            <t>
                      Second item 
-                  </li>
+            </t>
+          </li>
           <li>
             <t>
                      Third item </t>
             <t> A paragraph that comes first </t>
             <ol spacing="normal" type="a"><li>
+                <t>
                            But what do you know 
-                        </li>
+                </t>
+              </li>
               <li>
+                <t>
                            This is another list 
-                        </li>
+                </t>
+              </li>
             </ol>
           </li>
         </ol>
@@ -1334,8 +1510,10 @@ See [](#tab-here-s-the)
                This is another example: 
         </t>
         <ol spacing="normal" type="1"><li>
+            <t>
                      Another bla bla..  
-                  </li>
+            </t>
+          </li>
         </ol>
         <t>
                as (1) shows...  
