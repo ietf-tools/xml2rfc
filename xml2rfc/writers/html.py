@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function, division
 
+import datetime
 import lxml
 import os
 import re
@@ -473,6 +474,11 @@ class HtmlWriter(BaseV3Writer):
 
         generator = "%s %s" % (xml2rfc.NAME, xml2rfc.__version__)
         add.meta(head, None, name='generator', content=generator)
+
+    #    o  created - date created in UTC timezone using ISO format
+        current_time = datetime.datetime.now(datetime.timezone.utc)
+        created = current_time.isoformat(timespec="minutes").replace('+00:00', 'Z')
+        add.meta(head, None, name='created', content=created)
         
     #    o  keywords - comma-separated <keyword>s from the XML source
 
