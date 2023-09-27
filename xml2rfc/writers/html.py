@@ -2888,7 +2888,9 @@ class HtmlWriter(BaseV3Writer):
             label = 'Section' if section[0].isdigit() else 'Appendix' if re.search(r'^[A-Z](\.|$)', section) else 'Part'
             link    = x.get('derivedLink')
             format  = x.get('sectionFormat')
-            exptext = ("%s " % x.text.strip()) if (x.text and x.text.strip()) else ''
+            exptext = f'{x.text.lstrip()}' if x.text else ''
+            expchildren = list(x.getchildren())
+            separator = ' ' if exptext != '' or len(expchildren) > 0 else ''
             # 9.44.1.  displayFormat='of'
             # 
             #    The output is an <a class='relref'> HTML tag, with contents of
@@ -2912,7 +2914,11 @@ class HtmlWriter(BaseV3Writer):
             if format == 'of':
                 span = add.span(h, None,
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
-                    ' of %s[' % exptext,
+                    ' of ',
+                    exptext,
+                    *expchildren,
+                    separator,
+                    '[',
                     build.a(reftext, href='#%s'%target, classes='xref cite'),
                     ']',
                 )
@@ -2939,7 +2945,10 @@ class HtmlWriter(BaseV3Writer):
             #    for an overview.
             elif format == 'comma':
                 span = add.span(h, None,
-                    '%s[' % exptext,
+                    exptext,
+                    *expchildren,
+                    separator,
+                    '[',
                     build.a(reftext, href='#%s'%target, classes='xref cite'),
                     '], ',
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
@@ -2974,7 +2983,10 @@ class HtmlWriter(BaseV3Writer):
             #    2.3</a>) for an overview.
             elif format == 'parens':
                 span = add.span(h, None,
-                    '%s[' % exptext,
+                    exptext,
+                    *expchildren,
+                    separator,
+                    '[',
                     build.a(reftext, href='#%s'%target, classes='xref cite'),
                     '] (',
                     build.a('%s %s'%(label, section), href=link, classes='relref'),
@@ -3003,9 +3015,13 @@ class HtmlWriter(BaseV3Writer):
             #    2.3</a> and ...
             elif format == 'bare':
                 a = build.a(section, href=link, classes='relref')
-                if x.text and x.text.strip() and x.text.strip() != section:
-                    aa = build.a(x.text, href=link, classes='relref')
-                    hh = build.span(a, ' (', aa, ')')
+                if content:
+                    hh = build.span(
+                        a,
+                        ' (',
+                        build.a(exptext, *expchildren, href=link, classes='relref'),
+                        ')',
+                    )
                 else:
                     hh = a
                 hh.tail = x.tail
