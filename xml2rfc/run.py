@@ -39,6 +39,7 @@ def get_missing_pdf_libs():
 
 
 def print_pi_help(options, parser):
+    print('Hello World!')
     pis = xml2rfc.parser.XmlRfc(None, None).pis.items()
     pis.sort()
     print("Available processing instructions (PIs), with defaults:\n")
