@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.18.1] - 2023-09-29
+### :bug: Bug Fixes
+- [`02253d8`](https://github.com/ietf-tools/xml2rfc/commit/02253d8c7dbd8c3bcf2a7d60ae7dc0c71c78d73d) - **text**: Preserve NBSP in dd *(PR [#1023](https://github.com/ietf-tools/xml2rfc/pull/1023) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1022](undefined) opened by [@d3e3e3](https://github.com/d3e3e3)*
+- [`0704155`](https://github.com/ietf-tools/xml2rfc/commit/070415586f37914b5bbe7a1379f33f2c9ff00258) - **v2v3**: Preserve t element in ol and li  *(PR [#972](https://github.com/ietf-tools/xml2rfc/pull/972) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#850](undefined) opened by [@cabo](https://github.com/cabo)*
+- [`c10a50c`](https://github.com/ietf-tools/xml2rfc/commit/c10a50c427f8b4002d51f020e506dd2c317e615a) - Make block quotes symmetric *(PR [#1027](https://github.com/ietf-tools/xml2rfc/pull/1027) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1018](undefined) opened by [@cabo](https://github.com/cabo)*
+- [`9ea862c`](https://github.com/ietf-tools/xml2rfc/commit/9ea862cae29ed2c4f750ca82cb6c01c42d9cb094) - Render child elements in the xref element *(PR [#1036](https://github.com/ietf-tools/xml2rfc/pull/1036) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1034](undefined) opened by [@cabo](https://github.com/cabo)*
+
+### :memo: Documentation Changes
+- [`31059d5`](https://github.com/ietf-tools/xml2rfc/commit/31059d5adbdb36c9407e63535208e6c51af1ff94) - update CHANGELOG.md + py file versions for v3.18.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`b6bdd70`](https://github.com/ietf-tools/xml2rfc/commit/b6bdd700fe9e62de7682847a288e3eed63900737) - Restrict WeasyPrint versions *(PR [#1038](https://github.com/ietf-tools/xml2rfc/pull/1038) by [@kesara](https://github.com/kesara))*
+- [`4f52a7b`](https://github.com/ietf-tools/xml2rfc/commit/4f52a7b552086db144092a311a64f1abbad3eacf) - Allow WeasyPrint v60.1 *(PR [#1040](https://github.com/ietf-tools/xml2rfc/pull/1040) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.18.0] - 2023-08-04
 ### :sparkles: New Features
 - [`46aecfb`](https://github.com/ietf-tools/xml2rfc/commit/46aecfb64d3ef678c17e85f8d7b9de362a7ee07b) - Allow Unicode characters everywhere  *(PR [#1017](https://github.com/ietf-tools/xml2rfc/pull/1017) by [@kesara](https://github.com/kesara))*
@@ -2061,3 +2080,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.17.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.3...v3.17.4
 [v3.17.5]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.4...v3.17.5
 [v3.18.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.5...v3.18.0
+[v3.18.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.0...v3.18.1
