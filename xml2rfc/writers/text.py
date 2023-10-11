@@ -1507,19 +1507,30 @@ class TextWriter(BaseV3Writer):
             ])
         # rendering
         lines = []
-        text = ''
         dtwidth = indent
         for c in e.getchildren():
-            if ((not newline and c.tag == 'dd' and c.text and c.text.strip(stripspace)
-                 and (width - len('  ') - len(text)) < len(c.text.split(stripspace, 1)[0]))
-                or (len(c) and c[0].tag in newline_tags)):
-                # Add a newline if first word of dd text won't fit to the right of dt
+            # Set kwargs['joiners']['dd']
+            kwargs['joiners']['dd'] = ddjoin  # default
+            if len(c) and c[0].tag in newline_tags:
+                # c has a child in the newline_tags set
                 kwargs['joiners']['dd'] = nljoin
-            else:
-                kwargs['joiners']['dd'] = ddjoin
-            #
+            elif not newline and c.tag == 'dd':
+                # newline is False for this <dl> and we are processing a <dd>
+                if c.text:
+                    child_text = c.text.strip(stripspace)
+                    child_words = child_text.split(None, 1)
+                    first_child_word_len = len(child_words[0]) if child_words else 0
+                else:
+                    first_child_word_len = 0  # no child text at all!
+                # Add a newline if first word of dd text won't fit to the right of dt
+                width_for_dd = width - len('  ') - dtwidth 
+                if first_child_word_len > width_for_dd:
+                    kwargs['joiners']['dd'] = nljoin
+
+            # Join lines from child to existing lines 
             lines = self.ljoin(lines, c, width, dtwidth=dtwidth, **kwargs)
-            #
+
+            # Update dtwidth if this was a <dt>
             if c.tag == 'dt':
                 dtwidth = len(lines[-1].text)
         return lines
