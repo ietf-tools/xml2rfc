@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.18.2] - 2023-10-12
+### :bug: Bug Fixes
+- [`cb10344`](https://github.com/ietf-tools/xml2rfc/commit/cb103440813166343ded946f3a6c007497da12bf) - Respect newline attr on dl tag *(PR [#1047](https://github.com/ietf-tools/xml2rfc/pull/1047) by [@jennifer-richards](https://github.com/jennifer-richards))*
+  - :arrow_lower_right: *fixes issue [#1045](undefined) opened by [@lbartholomew-rpc](https://github.com/lbartholomew-rpc)*
+
+### :memo: Documentation Changes
+- [`ff2ceff`](https://github.com/ietf-tools/xml2rfc/commit/ff2ceff11459cf39296988e0cd4db4cd4f0149dd) - update CHANGELOG.md + py file versions for v3.18.1 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.18.1] - 2023-09-29
 ### :bug: Bug Fixes
 - [`02253d8`](https://github.com/ietf-tools/xml2rfc/commit/02253d8c7dbd8c3bcf2a7d60ae7dc0c71c78d73d) - **text**: Preserve NBSP in dd *(PR [#1023](https://github.com/ietf-tools/xml2rfc/pull/1023) by [@kesara](https://github.com/kesara))*
@@ -2081,3 +2090,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.17.5]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.4...v3.17.5
 [v3.18.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.5...v3.18.0
 [v3.18.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.0...v3.18.1
+[v3.18.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.1...v3.18.2
