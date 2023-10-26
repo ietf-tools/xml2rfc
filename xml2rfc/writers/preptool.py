@@ -2221,6 +2221,13 @@ class PrepToolWriter(BaseV3Writer):
 
         # done defining helpers, resume back_insert_index() flow
         if self.index_entries and self.root.get('indexInclude') == 'true':
+            # remove duplicate entries
+            entries = {}
+            for entry in self.index_entries:
+                uniq_key = (entry.item, entry.anchor)
+                entries.setdefault(uniq_key, entry)  # keeps only the first for each key
+            self.index_entries = list(entries.values())
+            #
             index = self.element('section', numbered='false', toc='include')
             name = self.element('name')
             name.text = 'Index'
