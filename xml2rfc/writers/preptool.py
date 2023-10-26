@@ -63,6 +63,8 @@ pnprefix = {
 
 index_item = namedtuple('index_item', ['item', 'sub', 'anchor', 'anchor_tag', 'iref', ])
 
+re_spaces = re.compile(r'\s+')
+
 def uniq(l):
     seen = set()
     ll = []
@@ -1428,7 +1430,7 @@ class PrepToolWriter(BaseV3Writer):
             if not anchor:
                 self.err(e, "Did not find an anchor to use for <iref item='%s'> in <%s>" % (item, p.tag))
             else:
-                self.index_entries.append(index_item(item, sub, anchor, anchor_tag, e))
+                self.index_entries.append(index_item(re_spaces.sub(' ', item), sub, anchor, anchor_tag, e))
 
     def ol_add_counter(self, e, p):
         start = e.get('start')
