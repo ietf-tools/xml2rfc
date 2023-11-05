@@ -24,7 +24,10 @@ RUN apt-get update --fix-missing && \
         libxslt-dev \
         python3.11 \
         python3.11-dev \
-        python3.11-distutils && \
+        python3.11-distutils \
+        python3.12 \
+        python3.12-dev \
+        python3.12-distutils && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log && \
     apt-get autoremove -y && \
     apt-get clean -y
