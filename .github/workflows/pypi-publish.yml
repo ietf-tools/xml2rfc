@@ -97,8 +97,6 @@ jobs:
         source venv/bin/activate
         echo "Using version $PKG_VERSION_STRICT"
         sed -i -r -e "s/^__version__ += '.*'$/__version__ = '$PKG_VERSION_STRICT'/" xml2rfc/__init__.py
-        python -m build --config-setting=--build-option="setopt --command=metadata --option=version --set-value=$PKG_VERSION_STRICT"
-        rm -rf dist
         python -m build --sdist
         
     - name: Publish to Test PyPI
