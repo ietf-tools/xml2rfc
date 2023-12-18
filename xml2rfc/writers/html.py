@@ -2844,7 +2844,19 @@ class HtmlWriter(BaseV3Writer):
                 target = id_for_pn(target)
             # plain xref
             if in_name:
-                hh = build.em('[', reftext, ']', classes='xref cite')
+                if format == 'none':
+                    reftext = content
+                    hh = build.span(reftext, classes='xref cite')
+                elif target in self.refname_mapping and format != 'title':
+                    if content:
+                        hh = build.span(content, ' ', '[', reftext, ']', classes='xref cite')
+                    else:
+                        hh = build.span('[', reftext, ']', classes='xref cite')
+                else:
+                    if content:
+                        hh = build.span(content, ' ', '(', reftext, ')', classes='xref cite')
+                    else:
+                        hh = build.span(reftext, classes='xref cite')
             else:
                 srefclass = 'xref internal'
                 if not content and format != 'title':
