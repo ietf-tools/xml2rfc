@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.19.0] - 2023-12-18
+### :sparkles: New Features
+- [`18c45a9`](https://github.com/ietf-tools/xml2rfc/commit/18c45a9f0804d05d998fe981abfc66d33e06d466) - Drop support for Python 3.7 *(PR [#1051](https://github.com/ietf-tools/xml2rfc/pull/1051) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1037](undefined) opened by [@kesara](https://github.com/kesara)*
+- [`f3152b0`](https://github.com/ietf-tools/xml2rfc/commit/f3152b087250bb74903d9151ff24cc7299cc6dc7) - Add support for Python 3.12 *(PR [#1052](https://github.com/ietf-tools/xml2rfc/pull/1052) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1044](undefined) opened by [@kesara](https://github.com/kesara)*
+
+### :bug: Bug Fixes
+- [`a5d46ad`](https://github.com/ietf-tools/xml2rfc/commit/a5d46ad3af92dd01ffaff13318ac9030002a78ea) - Deduplicate index entries *(PR [#1050](https://github.com/ietf-tools/xml2rfc/pull/1050) by [@jennifer-richards](https://github.com/jennifer-richards))*
+  - :arrow_lower_right: *fixes issue [#988](undefined) opened by [@martinthomson](https://github.com/martinthomson)*
+- [`161abdf`](https://github.com/ietf-tools/xml2rfc/commit/161abdf9c40fff2a05fcc53d39edb7f934131621) - Follow HTML presentational hints in PDF *(PR [#1055](https://github.com/ietf-tools/xml2rfc/pull/1055) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1054](undefined) opened by [@rvanrheenen](https://github.com/rvanrheenen)*
+- [`e067417`](https://github.com/ietf-tools/xml2rfc/commit/e067417f3533d2a42075940aae56b7579830ec52) - Remove emphasis from xref in headings and fix xrefs in headings  *(PR [#1029](https://github.com/ietf-tools/xml2rfc/pull/1029) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#683](undefined) opened by [@ietf-svn-bot](https://github.com/ietf-svn-bot)*
+
+### :memo: Documentation Changes
+- [`0a5b463`](https://github.com/ietf-tools/xml2rfc/commit/0a5b463c5af9763dae25d7c706c236e3aa3cdd74) - update CHANGELOG.md + py file versions for v3.18.2 [skip ci] *(commit by [@rjsparks](https://github.com/rjsparks))*
+
+### :wrench: Chores
+- [`880d20d`](https://github.com/ietf-tools/xml2rfc/commit/880d20d16957f75a211ea24f71a72a5b3866a3a8) - List required dependencies *(PR [#1057](https://github.com/ietf-tools/xml2rfc/pull/1057) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1049](undefined) opened by [@yaronf](https://github.com/yaronf)*
+- [`ea5f4cf`](https://github.com/ietf-tools/xml2rfc/commit/ea5f4cfd058217b6922174ce34efef16efd19bcf) - Get version for setup from xml2rfc source *(PR [#1062](https://github.com/ietf-tools/xml2rfc/pull/1062) by [@kesara](https://github.com/kesara))*
+- [`23d51a1`](https://github.com/ietf-tools/xml2rfc/commit/23d51a12dc72308ac9647ab57cc60035b4397b95) - Update docs-publish GHA *(PR [#1064](https://github.com/ietf-tools/xml2rfc/pull/1064) by [@kesara](https://github.com/kesara))*
+- [`77a83dc`](https://github.com/ietf-tools/xml2rfc/commit/77a83dc1e199a728e1c24776246f3b776c8ecc44) - Update docs-publish.yml *(commit by [@kesara](https://github.com/kesara))*
+- [`73a758a`](https://github.com/ietf-tools/xml2rfc/commit/73a758a3504484b62be3bc74939e88a0889f55f7) - Update docs-publish.yml *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.18.2] - 2023-10-12
 ### :bug: Bug Fixes
 - [`cb10344`](https://github.com/ietf-tools/xml2rfc/commit/cb103440813166343ded946f3a6c007497da12bf) - Respect newline attr on dl tag *(PR [#1047](https://github.com/ietf-tools/xml2rfc/pull/1047) by [@jennifer-richards](https://github.com/jennifer-richards))*
@@ -2091,3 +2118,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.18.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.17.5...v3.18.0
 [v3.18.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.0...v3.18.1
 [v3.18.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.1...v3.18.2
+[v3.19.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.2...v3.19.0
