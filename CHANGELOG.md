@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.19.1] - 2024-01-09
+### :construction_worker: Build System
+- [`6024a93`](https://github.com/ietf-tools/xml2rfc/commit/6024a93f1afd18cb233331b09ebd00ac37653485) - Update pypi-publish.yml *(PR [#1076](https://github.com/ietf-tools/xml2rfc/pull/1076) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`70e7148`](https://github.com/ietf-tools/xml2rfc/commit/70e714813eb0bec157db58000aa19d16859b4a6b) - update CHANGELOG.md + py file versions for v3.19.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`161487d`](https://github.com/ietf-tools/xml2rfc/commit/161487da6bd89e980435eee426b1f549be84fbc8) - Restrict lxml *(PR [#1075](https://github.com/ietf-tools/xml2rfc/pull/1075) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.19.0] - 2023-12-18
 ### :sparkles: New Features
 - [`18c45a9`](https://github.com/ietf-tools/xml2rfc/commit/18c45a9f0804d05d998fe981abfc66d33e06d466) - Drop support for Python 3.7 *(PR [#1051](https://github.com/ietf-tools/xml2rfc/pull/1051) by [@kesara](https://github.com/kesara))*
@@ -2119,3 +2130,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.18.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.0...v3.18.1
 [v3.18.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.1...v3.18.2
 [v3.19.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.2...v3.19.0
+[v3.19.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.0...v3.19.1
