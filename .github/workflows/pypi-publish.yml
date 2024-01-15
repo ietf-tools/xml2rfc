@@ -22,7 +22,10 @@ on:
 
 jobs:
   publish:
+    environment: release
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     outputs:
       pkg_version: ${{ steps.semver.outputs.next }}
 
@@ -99,18 +102,7 @@ jobs:
         echo "Using version $PKG_VERSION_STRICT"
         sed -i -r -e "s/^__version__ += '.*'$/__version__ = '$PKG_VERSION_STRICT'/" xml2rfc/__init__.py
         python -m build --sdist
-        
-    - name: Publish to Test PyPI
-      if: env.SHOULD_DEPLOY != 'true'
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_TOKEN }}
-        TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
-      run: |
-        echo "Using repository $TWINE_REPOSITORY_URL"
-        twine check dist/*
-        twine upload --verbose dist/*
-        
+
     - name: Update CHANGELOG
       id: changelog
       uses: Requarks/changelog-action@v1
@@ -149,6 +141,15 @@ jobs:
           CHANGELOG.md
           setup.cfg
           xml2rfc/__init__.py
+
+    - name: Publish to Test PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+
+    - name: Publish to PyPI
+      if: env.SHOULD_DEPLOY == 'true'
+      uses: pypa/gh-action-pypi-publish@release/v1
 
   build-base:
     runs-on: ubuntu-latest
