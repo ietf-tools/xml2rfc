@@ -2,13 +2,6 @@
 # Simple makefile which mostly encapsulates setup.py invocations.  Useful as
 # much as documentation as it is for invocation.
 
-#svnrev	:= $(shell svn info | grep ^Revision | awk '{print $$2}' )
-
-# This is needed to avoid randomised order of html element attributes under
-# py27 - py35.  For py36 and later, dictionary key order is insertion order,
-# so the test masters for lxml-generated html output have to be different for
-# python 3 versions 3.6 and higher, compared to 2.7 - 3.5
-
 # Regarding PDF testing: This is mainly done when running test.py, which not
 # only generates a test PDF file, but deconstructs it and looks at some of
 # the content.  Generating PDF files for each input file and just making
@@ -183,7 +176,7 @@ tests/out/%.exp.xml: tests/input/%.xml install
 	@if [ "$(findstring /rfc,$<)" = "/rfc" ]; then groff -ms -Kascii -Tascii $< | ./fix.pl > $@; else groff -ms -Kascii -Tascii $< | ./fix.pl | sed 1,2d > $@; fi
 
 %.test: %
-	@echo " Diffing $< against master"
+	@echo " Diffing $< against original"
 	@diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 0 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.min.js: %.js
