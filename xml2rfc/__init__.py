@@ -46,24 +46,15 @@ except (ImportError, OSError, AttributeError):
 def get_versions():
     import sys
     versions = []
-    extras = set(['weasyprint'])
     try:
-        import pkg_resources
-        this = pkg_resources.working_set.by_key[NAME]
-        for p in this.requires():
-            if p.key in extras:
-                extras -= p.key
+        from importlib import metadata
+        this = metadata.distribution(NAME)
+        for p in [x.split()[0] for x in this.requires]:
             try:
-                dist = pkg_resources.get_distribution(p.key)
-                versions.append((dist.project_name, dist.version))
+                dist = metadata.distribution(p)
+                versions.append((dist.metadata['name'], dist.metadata['version']))
             except Exception as e:
                 print(e)
-                pass
-        for key in extras:
-            try:
-                dist = pkg_resources.get_distribution(key)
-                versions.append((dist.project_name, dist.version))
-            except:
                 pass
     except:
         pass
