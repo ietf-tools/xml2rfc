@@ -176,7 +176,7 @@ tests/out/%.exp.xml: tests/input/%.xml install
 	@if [ "$(findstring /rfc,$<)" = "/rfc" ]; then groff -ms -Kascii -Tascii $< | ./fix.pl > $@; else groff -ms -Kascii -Tascii $< | ./fix.pl | sed 1,2d > $@; fi
 
 %.test: %
-	@echo " Diffing $< against original"
+	@echo " Diffing $< against previously generated and merged output"
 	@diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 0 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
 %.min.js: %.js
