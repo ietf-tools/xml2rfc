@@ -268,9 +268,9 @@ def urlkeep(text, max=72):
                         .replace(':', ':' + wj_char)
                     )
     if 'http://' in text:
-        text = re.sub('http:\S*', replacer, text)
+        text = re.sub(r'http:\S*', replacer, text)
     if 'https://' in text:
-        text = re.sub('https:\S*', replacer, text)
+        text = re.sub(r'https:\S*', replacer, text)
     return text
 
 # ----------------------------------------------------------------------
@@ -286,13 +286,13 @@ def formatXmlWhitespace(tree):
         # Preserve formatting on artwork
         if element.tag != 'artwork':
             if element.text is not None:
-                element.text = re.sub('\s*\n\s*', ' ', \
-                               re.sub('\.\s*\n\s*', '.  ', \
+                element.text = re.sub(r'\s*\n\s*', ' ', \
+                               re.sub(r'\.\s*\n\s*', '.  ', \
                                element.text.lstrip()))
 
             if element.tail is not None:
-                element.tail = re.sub('\s*\n\s*', ' ', \
-                               re.sub('\.\s*\n\s*', '.  ', \
+                element.tail = re.sub(r'\s*\n\s*', ' ', \
+                               re.sub(r'\.\s*\n\s*', '.  ', \
                                element.tail))
 
 
@@ -580,7 +580,7 @@ def _replace_slashed_words(str, slashList):
     """ replace slashed separated words the list with
         <word1> &nbsp; / &nbsp; <word 2>
     """
-    match = re.findall(u'(\w+(/\w+)+)', str)
+    match = re.findall(r'(\w+(/\w+)+)', str)
     for item in match:
         if item[0] in slashList:
             str = re.sub(item[0], slashList[item[0]], str)
