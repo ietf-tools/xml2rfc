@@ -609,7 +609,7 @@ class BaseRfcWriter:
                 # period
                 initials = initials.strip()
                 initials += '.' if not initials.endswith('.') else ''
-                initials = re.sub('([^.]) ', '\g<1>. ', initials)
+                initials = re.sub(r'([^.]) ', r'\g<1>. ', initials)
             else:
                 initials = initials_list[0] + "."
         return initials
@@ -1347,7 +1347,7 @@ class BaseRfcWriter:
                 xml2rfc.log.warn("No (or empty) 'docName' attribute in the <rfc/> element -- can't insert draft name on first page.")
             if docName and '.' in docName:
                 xml2rfc.log.warn("The 'docName' attribute of the <rfc/> element should not contain any filename extension: docName=\"draft-foo-bar-02\".")
-            if docName and not rfcnum and not re.search('-\d\d$', docName):
+            if docName and not rfcnum and not re.search(r'-\d\d$', docName):
                 xml2rfc.log.warn("The 'docName' attribute of the <rfc/> element should have a revision number as the last component: docName=\"draft-foo-bar-02\".")
             self.write_title(title.text, docName, title.sourceline)
 
