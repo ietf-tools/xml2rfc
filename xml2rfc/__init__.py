@@ -48,8 +48,9 @@ def get_versions():
     versions = []
     try:
         from importlib import metadata
+        from re import split
         this = metadata.distribution(NAME)
-        for p in [x.split()[0] for x in this.requires]:
+        for p in [split(r'[\s=<>!]', x)[0] for x in this.requires]:
             try:
                 dist = metadata.distribution(p)
                 versions.append((dist.metadata['name'], dist.metadata['version']))
