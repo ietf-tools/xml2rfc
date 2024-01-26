@@ -2726,12 +2726,11 @@ class TextWriter(BaseV3Writer):
         for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date',):
             for c in e.iterdescendants(ctag):
                 elements.append(c)
-        if p.tag != 'referencegroup':
-            target = e.get('target')
-            if target:
-                url = self.element('refcontent')
-                url.text = '<%s>' % target
-                elements.append(url)
+        target = e.get('target')
+        if target:
+            url = self.element('refcontent')
+            url.text = '<%s>' % target
+            elements.append(url)
         set_joiners(kwargs, {
             None:           Joiner(', ', 0, 0, False, False),
             'annotation':   Joiner('  ', 0, 0, False, False),
