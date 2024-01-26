@@ -2725,9 +2725,6 @@ class TextWriter(BaseV3Writer):
         elements = []
         for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date',):
             for c in e.iterdescendants(ctag):
-                if p.tag == 'referencegroup' and c.tag == 'seriesInfo' and c.get('name') == 'DOI':
-                    # Don't render DOI within a reference group
-                    continue              
                 elements.append(c)
         if p.tag != 'referencegroup':
             target = e.get('target')
