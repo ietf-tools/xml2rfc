@@ -60,9 +60,8 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.templates = {}
         for filename in ['base.html',
                          'address_card.html']:
-            file = open(os.path.join(self.template_dir, filename), 'r')
-            self.templates[filename] = string.Template(file.read())
-            file.close()
+            with open(os.path.join(self.template_dir, filename), 'r') as file:
+                self.templates[filename] = string.Template(file.read())
         # Buffers to aggregate various elements before processing template
         self.buffers = {'front': [],
                         'body': [],

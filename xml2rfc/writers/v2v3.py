@@ -113,18 +113,18 @@ class V2v3XmlWriter(BaseV3Writer):
   <!ENTITY nbhy   "&#8209;">
   <!ENTITY wj     "&#8288;">
 ]>"""
-        # Use lxml's built-in serialization
-        file = open(filename, 'w', encoding='utf-8')
-        text = lxml.etree.tostring(self.root.getroottree(), 
-                                   encoding='unicode',
-                                   doctype=doctype_string,
-                                   pretty_print=True)
+        with open(filename, 'w', encoding='utf-8') as file:
+            # Use lxml's built-in serialization
+            text = lxml.etree.tostring(self.root.getroottree(),
+                                       encoding='unicode',
+                                       doctype=doctype_string,
+                                       pretty_print=True)
 
-        file.write(u"<?xml version='1.0' encoding='utf-8'?>\n")
-        file.write(text)
+            file.write(u"<?xml version='1.0' encoding='utf-8'?>\n")
+            file.write(text)
 
-        if not self.options.quiet:
-            self.log(' Created file %s' % filename)
+            if not self.options.quiet:
+                self.log(' Created file %s' % filename)
 
     # --- Element Operations -------------------------------------------
 

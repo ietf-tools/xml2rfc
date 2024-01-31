@@ -16,25 +16,25 @@ class ExpandV3XmlWriter(PrepToolWriter):
     def write(self, filename):
         """ Public method to write the XML document to a file """
         self.expand()
-        # Use lxml's built-in serialization
-        file = open(filename, 'w', encoding='utf-8')
-        text = etree.tostring(self.tree,
-                                encoding='unicode',
-                                doctype='<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">',
-                                pretty_print=True)
+        with open(filename, 'w', encoding='utf-8') as file:
+            # Use lxml's built-in serialization
+            text = etree.tostring(self.tree,
+                                    encoding='unicode',
+                                    doctype='<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">',
+                                    pretty_print=True)
 
-        # Use entities for some selected unicode code points, for later
-        # editing readability and convenience
-        text = text.replace(u'\u00A0', u'&nbsp;')
-        text = text.replace(u'\u200B', u'&zwsp;')
-        text = text.replace(u'\u2011', u'&nbhy;')
-        text = text.replace(u'\u2028', u'&br;')
-        text = text.replace(u'\u2060', u'&wj;')
+            # Use entities for some selected unicode code points, for later
+            # editing readability and convenience
+            text = text.replace(u'\u00A0', u'&nbsp;')
+            text = text.replace(u'\u200B', u'&zwsp;')
+            text = text.replace(u'\u2011', u'&nbhy;')
+            text = text.replace(u'\u2028', u'&br;')
+            text = text.replace(u'\u2060', u'&wj;')
 
-        file.write(u"<?xml version='1.0' encoding='utf-8'?>\n")
-        file.write(text)
-        if not self.options.quiet:
-            self.log(' Created file %s' % filename)
+            file.write(u"<?xml version='1.0' encoding='utf-8'?>\n")
+            file.write(text)
+            if not self.options.quiet:
+                self.log(' Created file %s' % filename)
 
     def expand(self):
         version = self.root.get('version', '3')

@@ -26,14 +26,14 @@ class ExpandedXmlWriter:
     def write(self, filename):
         """ Public method to write the XML document to a file """
 
-        # Use lxml's built-in serialization
-        file = open(filename, 'w', encoding='ascii')
-        text = lxml.etree.tostring(self.root.getroottree(), 
-                                       xml_declaration=True, 
-                                       encoding='ascii',
-                                       doctype='<!DOCTYPE rfc SYSTEM "rfc2629.dtd">',
-                                       pretty_print=True)
-        file.write(text.decode('ascii'))
+        with open(filename, 'w', encoding='ascii') as file:
+            # Use lxml's built-in serialization
+            text = lxml.etree.tostring(self.root.getroottree(),
+                                           xml_declaration=True,
+                                           encoding='ascii',
+                                           doctype='<!DOCTYPE rfc SYSTEM "rfc2629.dtd">',
+                                           pretty_print=True)
+            file.write(text.decode('ascii'))
 
-        if not self.options.quiet:
-            xml2rfc.log.write(' Created file', filename)
+            if not self.options.quiet:
+                xml2rfc.log.write(' Created file', filename)
