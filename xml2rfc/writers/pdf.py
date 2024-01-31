@@ -15,7 +15,6 @@ except (ImportError, OSError, ValueError) as e:
     import_error = e
     weasyprint = False
 
-
 import xml2rfc
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.html import HtmlWriter
@@ -77,6 +76,7 @@ class PdfWriter(BaseV3Writer):
         self.options.no_css = True
         self.options.image_svg = True
         self.options.pdf = True
+        self.options.attach_xml = True
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
 

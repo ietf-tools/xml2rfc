@@ -45,6 +45,7 @@ default_options = Namespace()
 default_options.__dict__ = {
         'accept_prepped': None,
         'add_xinclude': None,
+        'attach_xml': False,
         'allow_local_file_access': False,
         'basename': None,
         'bom': False,

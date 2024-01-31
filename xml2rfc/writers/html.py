@@ -515,6 +515,10 @@ class HtmlWriter(BaseV3Writer):
 
         add.link(head, None, href=self.xmlrfc.source, rel='alternate', type='application/rfc+xml')
 
+        if self.options.attach_xml:
+            # add attachment for PDF
+            add.link(head, None, href=self.xmlrfc.source, rel='attachment', type='application/xml', title='Source')
+
     # 6.3.5.  Link to License
     # 
     #    The <head> element contains a <link> tag, with "rel" attribute of
