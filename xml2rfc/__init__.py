@@ -54,8 +54,7 @@ def get_versions():
             try:
                 dist = metadata.distribution(p)
                 versions.append((dist.metadata['name'], dist.metadata['version']))
-            except Exception as e:
-                print(e)
+            except:
                 pass
     except:
         pass
