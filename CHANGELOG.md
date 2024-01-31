@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.19.2] - 2024-01-31
+### :bug: Bug Fixes
+- [`f33c697`](https://github.com/ietf-tools/xml2rfc/commit/f33c6972a95eed84bc406fe0ae256c48bf25e45c) - Use importlib.metadata *(PR [#1079](https://github.com/ietf-tools/xml2rfc/pull/1079) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1072](undefined) opened by [@kitterma](https://github.com/kitterma)*
+- [`007abf6`](https://github.com/ietf-tools/xml2rfc/commit/007abf625d2f7d626687d94c1dacaec9e660b77f) - Use raw string notation for regex *(PR [#1083](https://github.com/ietf-tools/xml2rfc/pull/1083) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1073](undefined) opened by [@kitterma](https://github.com/kitterma)*
+- [`9c47d64`](https://github.com/ietf-tools/xml2rfc/commit/9c47d64ac0b2d090e68a47e9497935bebe8ac875) - Improve xml2rfc version information logic *(PR [#1084](https://github.com/ietf-tools/xml2rfc/pull/1084) by [@kesara](https://github.com/kesara))*
+- [`8f14554`](https://github.com/ietf-tools/xml2rfc/commit/8f14554c289f5e0a968665fa414ba706cd590400) - Treat referencegroup entries similarly to reference entries *(PR [#1089](https://github.com/ietf-tools/xml2rfc/pull/1089) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1067](undefined) opened by [@cabo](https://github.com/cabo)*
+
+### :construction_worker: Build System
+- [`3c26a7d`](https://github.com/ietf-tools/xml2rfc/commit/3c26a7db39c528863db38f9ead8914752e920f1c) - Use PyPI trusted publishing *(PR [#1077](https://github.com/ietf-tools/xml2rfc/pull/1077) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1041](undefined) opened by [@kesara](https://github.com/kesara)*
+- [`2893d3d`](https://github.com/ietf-tools/xml2rfc/commit/2893d3d03f73ec25c489859c09fb6174872f7876) - Remove redundant doc publish job *(PR [#1078](https://github.com/ietf-tools/xml2rfc/pull/1078) by [@kesara](https://github.com/kesara))*
+- [`08a54f6`](https://github.com/ietf-tools/xml2rfc/commit/08a54f6a50c6447316ab7db9f9180068881eaa73) - Give permission to write packages and content to pypi-publish GHA. *(commit by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`cd66aec`](https://github.com/ietf-tools/xml2rfc/commit/cd66aece9db0079a320203ea87cedfe04517fc5f) - update CHANGELOG.md + py file versions for v3.19.1 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`ef1b3a2`](https://github.com/ietf-tools/xml2rfc/commit/ef1b3a2cf166578b81cec462f4e73e16f7127b65) - Remove stale bin directory *(PR [#1082](https://github.com/ietf-tools/xml2rfc/pull/1082) by [@kesara](https://github.com/kesara))*
+- [`986fe07`](https://github.com/ietf-tools/xml2rfc/commit/986fe07cd24a6da453fb377d2420482035eef057) - Remove stale doc directory *(PR [#1081](https://github.com/ietf-tools/xml2rfc/pull/1081) by [@kesara](https://github.com/kesara))*
+- [`4c7e638`](https://github.com/ietf-tools/xml2rfc/commit/4c7e63828766cf722a73fb736899a0878b72498b) - Use inclusive language *(PR [#1080](https://github.com/ietf-tools/xml2rfc/pull/1080) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.19.1] - 2024-01-09
 ### :construction_worker: Build System
 - [`6024a93`](https://github.com/ietf-tools/xml2rfc/commit/6024a93f1afd18cb233331b09ebd00ac37653485) - Update pypi-publish.yml *(PR [#1076](https://github.com/ietf-tools/xml2rfc/pull/1076) by [@kesara](https://github.com/kesara))*
@@ -2131,3 +2156,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.18.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.1...v3.18.2
 [v3.19.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.2...v3.19.0
 [v3.19.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.0...v3.19.1
+[v3.19.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.1...v3.19.2
