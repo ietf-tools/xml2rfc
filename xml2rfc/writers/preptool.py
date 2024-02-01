@@ -186,17 +186,16 @@ class PrepToolWriter(BaseV3Writer):
         # remove the processing instructions
         self.remove_pis()
 
-        # Use lxml's built-in serialization
-        file = open(filename, 'w', encoding='utf-8')
+        with open(filename, 'w', encoding='utf-8') as file:
+            # Use lxml's built-in serialization
+            text = etree.tostring(self.root.getroottree(),
+                                            xml_declaration=True,
+                                            encoding='utf-8',
+                                            pretty_print=True)
+            file.write(text.decode('utf-8'))
 
-        text = etree.tostring(self.root.getroottree(), 
-                                        xml_declaration=True, 
-                                        encoding='utf-8',
-                                        pretty_print=True)
-        file.write(text.decode('utf-8'))
-
-        if not self.options.quiet:
-            self.log(' Created file %s' % filename)
+            if not self.options.quiet:
+                self.log(' Created file %s' % filename)
 
     def normalize_whitespace(self, e):
         lines = e.text.split('\n')

@@ -894,9 +894,9 @@ class HtmlWriter(BaseV3Writer):
                 if not src.startswith('data:'):
                     self.err(x, "Internal error: Got an <artwork> src: attribute that did not start with 'data:' after prepping")
                 try:
-                    f = urlopen(src)
-                    data = f.read()
-                    svg = lxml.etree.fromstring(data)
+                    with closing(urlopen(src)) as f:
+                        data = f.read()
+                        svg = lxml.etree.fromstring(data)
                 except IOError as e:
                     self.err(x, str(e))
                     svg = None
