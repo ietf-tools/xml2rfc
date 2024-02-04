@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.19.3] - 2024-02-04
+### :bug: Bug Fixes
+- [`1652d99`](https://github.com/ietf-tools/xml2rfc/commit/1652d99054928f9b218079db6788a2b5d0aa328a) - Silently pass when weasyprint is not installed *(PR [#1092](https://github.com/ietf-tools/xml2rfc/pull/1092) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1091](undefined) opened by [@kesara](https://github.com/kesara)*
+
+### :recycle: Refactors
+- [`534b366`](https://github.com/ietf-tools/xml2rfc/commit/534b36623382be8fe22bffd552d03b8ea3b81da9) - Use context managers when opening files *(PR [#1093](https://github.com/ietf-tools/xml2rfc/pull/1093) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`a26d266`](https://github.com/ietf-tools/xml2rfc/commit/a26d26612aa164be4e37638a30b0af6a45b47f49) - update CHANGELOG.md + py file versions for v3.19.2 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+- [`f7e4e7e`](https://github.com/ietf-tools/xml2rfc/commit/f7e4e7e2978aaf4b5c14521e020bf7470a5117e1) - Update README.md *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.19.2] - 2024-01-31
 ### :bug: Bug Fixes
 - [`f33c697`](https://github.com/ietf-tools/xml2rfc/commit/f33c6972a95eed84bc406fe0ae256c48bf25e45c) - Use importlib.metadata *(PR [#1079](https://github.com/ietf-tools/xml2rfc/pull/1079) by [@kesara](https://github.com/kesara))*
@@ -2157,3 +2170,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.19.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.18.2...v3.19.0
 [v3.19.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.0...v3.19.1
 [v3.19.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.1...v3.19.2
+[v3.19.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.2...v3.19.3
