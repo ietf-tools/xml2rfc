@@ -2725,12 +2725,16 @@ class TextWriter(BaseV3Writer):
         elements = []
         for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date',):
             for c in e.iterdescendants(ctag):
+                if p.tag == 'referencegroup' and c.tag == 'seriesInfo' and c.get('name') == 'DOI':
+                    # Don't render DOI within a reference group
+                    continue              
                 elements.append(c)
-        target = e.get('target')
-        if target:
-            url = self.element('refcontent')
-            url.text = '<%s>' % target
-            elements.append(url)
+        if p.tag != 'referencegroup':
+            target = e.get('target')
+            if target:
+                url = self.element('refcontent')
+                url.text = '<%s>' % target
+                elements.append(url)
         set_joiners(kwargs, {
             None:           Joiner(', ', 0, 0, False, False),
             'annotation':   Joiner('  ', 0, 0, False, False),
