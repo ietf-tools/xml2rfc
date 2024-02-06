@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.19.4] - 2024-02-06
+### :construction_worker: Build System
+- [`8125806`](https://github.com/ietf-tools/xml2rfc/commit/8125806f3764ffcbb3bffb68111022d913870765) - Add revert to version bump list. *(commit by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`4cdfbbf`](https://github.com/ietf-tools/xml2rfc/commit/4cdfbbfd691736ce81edbd6c676528062e84e4f5) - update CHANGELOG.md + py file versions for v3.19.3 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.19.3] - 2024-02-04
 ### :bug: Bug Fixes
 - [`1652d99`](https://github.com/ietf-tools/xml2rfc/commit/1652d99054928f9b218079db6788a2b5d0aa328a) - Silently pass when weasyprint is not installed *(PR [#1092](https://github.com/ietf-tools/xml2rfc/pull/1092) by [@kesara](https://github.com/kesara))*
@@ -2171,3 +2179,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.19.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.0...v3.19.1
 [v3.19.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.1...v3.19.2
 [v3.19.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.2...v3.19.3
+[v3.19.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.3...v3.19.4
