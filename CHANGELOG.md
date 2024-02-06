@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v3.19.4] - 2024-02-06
+
+### :bug: Bug Fixes
+- [`f319275`](https://github.com/ietf-tools/xml2rfc/commit/f319275b97bf9c0223d7b298404d7c00eb3b16cb) - revert: #1089 (Treat referencegroup entries similarly to reference entries) *(PR #1098 by @kesara)*
+  - :arrow_lower_right: *fixes issue #1097 opened by @ajeanmahoney*
+
 ### :construction_worker: Build System
 - [`8125806`](https://github.com/ietf-tools/xml2rfc/commit/8125806f3764ffcbb3bffb68111022d913870765) - Add revert to version bump list. *(commit by [@kesara](https://github.com/kesara))*
 
