@@ -42,7 +42,7 @@ In order to generate PDFs, **xml2rfc** uses the [WeasyPrint] module, which depen
 2. Next, install WeasyPrint python modules using pip.
 
 ```sh
-pip install 'weasyprint>=53.0,!=57.0,!=60.0'
+pip install 'weasyprint>=61.0'
 ```
 3. Finally, install the full **Noto Font** and **Roboto Mono** packages:
   * Download the full font file from:
