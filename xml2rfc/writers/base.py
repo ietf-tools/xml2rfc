@@ -31,6 +31,12 @@ from xml2rfc.util.unicode import is_svg
 from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
 
 
+SUBSERIES = {
+        'STD': 'Internet Standard',
+        'BCP': 'Best Current Practice',
+        'FYI': 'For Your Information',
+}
+
 DEADLY_ERRORS = [
     'Element svg has extra content: script',
     'Did not expect element script there',

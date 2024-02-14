@@ -22,7 +22,7 @@ except ImportError:
 
 
 from xml2rfc import strings
-from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
+from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError, SUBSERIES
 from xml2rfc import utils
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, get_expiry_date, format_date
@@ -2725,16 +2725,12 @@ class TextWriter(BaseV3Writer):
         elements = []
         for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date',):
             for c in e.iterdescendants(ctag):
-                if p.tag == 'referencegroup' and c.tag == 'seriesInfo' and c.get('name') == 'DOI':
-                    # Don't render DOI within a reference group
-                    continue              
                 elements.append(c)
-        if p.tag != 'referencegroup':
-            target = e.get('target')
-            if target:
-                url = self.element('refcontent')
-                url.text = '<%s>' % target
-                elements.append(url)
+        target = e.get('target')
+        if target:
+            url = self.element('refcontent')
+            url.text = '<%s>' % target
+            elements.append(url)
         set_joiners(kwargs, {
             None:           Joiner(', ', 0, 0, False, False),
             'annotation':   Joiner('  ', 0, 0, False, False),
@@ -2789,10 +2785,33 @@ class TextWriter(BaseV3Writer):
         label = self.refname_mapping[e.get('anchor')]
         label = ('[%s]' % label).ljust(11)
         lines = []
+        target = e.get('target')
+        subseries = False
+        for series in e.xpath('.//seriesInfo'):
+            if series.get('name') in SUBSERIES.keys():
+                kwargs['joiners'].update({
+                    None:   Joiner(', ', 11, 0, False, False),
+                    't':    Joiner('\n', 11, 0, False, False),
+                })
+                text = f"{SUBSERIES[series.get('name')]} {series.get('value')}"
+                if target:
+                    url = self.element('refcontent')
+                    url.text = f'<{target}>.'
+                    text = self.tjoin(text, url, width, **kwargs)
+                else:
+                    text += '.'
+                subseries_width = width - 11
+                text = fill(text, width=subseries_width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip(stripspace)
+                text = indent(text, 11, 0)
+                lines = mklines(text, e)
+                t = self.element('t')
+                t.text = f"At the time of writing, this {series.get('name')} comprises the following:"
+                lines = self.ljoin(lines, t, width, **kwargs)
+                subseries = True
+                break
         for c in e.getchildren():
             lines = self.ljoin(lines, c, width, **kwargs)
-        target = e.get('target')
-        if target:
+        if target and not subseries:
             t = self.element('t')
             t.text = '<%s>' % target
             lines = self.ljoin(lines, t, width, **kwargs)
