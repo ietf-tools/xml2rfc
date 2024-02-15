@@ -79,6 +79,7 @@ default_options.__dict__ = {
         'image_svg': False,
         'indent': 2,
         'info': False,
+        'info_base_url': 'https://www.rfc-editor.org/info/',
         'inline_version_info': True,
         'legacy': False,
         'legacy_date_format': False,

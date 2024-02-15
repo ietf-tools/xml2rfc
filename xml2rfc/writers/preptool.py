@@ -263,6 +263,7 @@ class PrepToolWriter(BaseV3Writer):
         './/boilerplate;insert_copyright_notice()', # 5.4.2.3.  "Copyright Notice" Insertion
         './/boilerplate//section',          # 5.2.7.  Section "toc" attribute
         './/reference;insert_target()',     # 5.4.3.  <reference> "target" Insertion
+        './/referencegroup;insert_target()',        # <referencegroup> "target" Insertion
         './/reference;insert_work_in_progress()',
         './/reference;sort_series_info()',  #         <reference> sort <seriesInfo>
         './/name;insert_slugified_name()',  # 5.4.4.  <name> Slugification
@@ -1215,6 +1216,24 @@ class PrepToolWriter(BaseV3Writer):
         for s in series_info:
             front.insert(pos, s)
             pos += 1
+
+    def referencegroup_insert_target(self, e, p):
+        target_pattern = {
+            "BCP": os.path.join(self.options.info_base_url, 'bcp{value}'),
+            "STD": os.path.join(self.options.info_base_url, 'std{value}'),
+            "FYI": os.path.join(self.options.info_base_url, 'fyi{value}'),
+        }
+
+        if not e.get('target'):
+            for c in e.xpath('.//seriesInfo'):
+                series_name = c.get('name')
+                if series_name in target_pattern.keys():
+                    series_value=c.get('value')
+                    if series_value:
+                        e.set('target', target_pattern[series_name].format(value=series_value))
+                        break
+                    else:
+                        self.err(c, 'Expected a value= attribute value for <seriesInfo name="%s">, but found none' % (series_name, ))
 
     # 
     # 5.4.4.  <name> Slugification
