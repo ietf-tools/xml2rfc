@@ -37,6 +37,7 @@ from xml2rfc.utils import justify_inline, clean_text
 
 
 MAX_WIDTH = 72
+SPLITTER_WIDTH = 67
 
 IndexItem   = namedtuple('indexitem', ['item', 'subitem', 'anchor', 'page', ])
 Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'do_outdent'])
@@ -83,7 +84,7 @@ class Block(object):
         self.end  = end                 # ending line of block
 
 wrapper = utils.TextWrapper(width=MAX_WIDTH)
-splitter = utils.TextSplitter(width=67)
+splitter = utils.TextSplitter(width=SPLITTER_WIDTH)
 seen = set()
 
 # This is not a complete list of whitespace characters, and isn't intended to be.  It's
@@ -3959,7 +3960,7 @@ class TextWriter(BaseV3Writer):
             Find the minimum column widths of regular cells
             """
             i = 0
-            splitter = utils.TextSplitter(width=67, hyphen_split=hyphen_split)
+            splitter = utils.TextSplitter(width=SPLITTER_WIDTH, hyphen_split=hyphen_split)
             for p in e.iterchildren(['thead', 'tbody', 'tfoot']):
                 for r in list(p.iterchildren('tr')):
                     j = 0
