@@ -2749,7 +2749,8 @@ class TextWriter(BaseV3Writer):
         text += '.'
         for ctag in ('annotation', ):
             for c in e.iterdescendants(ctag):
-                text = self.tjoin(text, c, width, **kwargs)
+                # use MAX_WIDTH here since text gets formatted later
+                text = self.tjoin(text, c, MAX_WIDTH, keep_url=True, **kwargs)
         text = fill(text, width=width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip(stripspace)
         
         text = indent(text, 11, 0)
