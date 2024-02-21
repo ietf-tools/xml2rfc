@@ -439,9 +439,9 @@ class PrepToolWriter(BaseV3Writer):
                     if (c.tag, a) in latinscript_attributes:
                         if not is_script(v, 'Latin'):
                             self.err(c, 'Found non-Latin-script content in <%s> attribute value %s="%s"' % (c.tag, a, v))
-                    else:
+                    if self.options.warn_bare_unicode:
                         if not isascii(v):
-                            self.err(c, 'Found non-ASCII content in <%s> attribute value %s="%s"' % (c.tag, a, v))
+                            self.warn(c, f'Found non-ASCII content in {c.tag} attribute value {a}="{v}" that should be inspected to ensure it is intentional.')
                 if not (c.tag, a) in space_attributes:
                     vv = v.strip()
                     if vv != v:
