@@ -29,7 +29,7 @@ except ImportError:
     pass
 
 from xml2rfc import log, strings
-from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
+from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError, SUBSERIES
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import extract_date, augment_date, format_date, format_date_iso, get_expiry_date
 from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
@@ -2158,18 +2158,14 @@ class HtmlWriter(BaseV3Writer):
             self.render(inner, c)
         for ctag in ('title', 'refcontent', 'stream', 'seriesInfo', 'date', ):
             for c in x.iterdescendants(ctag):
-                if p.tag == 'referencegroup' and c.tag == 'seriesInfo' and c.get('name') == 'DOI':
-                    # Don't render DOI within a reference group
-                    continue              
                 if len(inner):
                     inner[-1].tail = ', '
                 self.render(inner, c)
-        if p.tag != 'referencegroup':
-            target = x.get('target')
-            if len(inner):
-                inner[-1].tail = ', '
-            if target:
-                inner.append( build.span('<', build.a(target, href=target), '>') )
+        target = x.get('target')
+        if len(inner):
+            inner[-1].tail = ', '
+        if target:
+            inner.append( build.span('<', build.a(target, href=target), '>') )
         if len(inner):
             inner[-1].tail = '. '
         for ctag in ('annotation', ):
@@ -2200,13 +2196,29 @@ class HtmlWriter(BaseV3Writer):
     def render_referencegroup(self, h, x):
         dt = add.dt(h, x, '[%s]'%x.get('derivedAnchor'))
         dd = add.dd(h, None)
+        target = x.get('target')
+        subseries = False
         # workaround for weasyprint's unwillingness to break between <dd> and
         # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
         add.dd(h, None, classes='break')
+        for series in x.xpath('.//seriesInfo'):
+            if series.get('name') in SUBSERIES.keys():
+                text = f"{SUBSERIES[series.get('name')]} {series.get('value')}"
+                subdiv = build.div(text, classes='refInstance')
+                if target:
+                    subdiv.text += ', '
+                    subdiv.append(build.span('<', build.a(target, href=target), '>'))
+                    subdiv[0].tail = '.'
+                else:
+                    subdiv.text += '.'
+                subdiv.append(build.br())
+                subdiv.append(build.span(f"At the time of writing, this {series.get('name')} comprises the following:"))
+                dd.append(subdiv)
+                subseries = True
+                break
         for c in x.getchildren():
             self.render(dd, c)
-        target = x.get('target')
-        if target:
+        if target and not subseries:
             dd.append( build.span('<', build.a(target, href=target), '>') )
         return dt, dd
 

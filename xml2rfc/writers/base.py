@@ -31,6 +31,12 @@ from xml2rfc.util.unicode import is_svg
 from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
 
 
+SUBSERIES = {
+        'STD': 'Internet Standard',
+        'BCP': 'Best Current Practice',
+        'FYI': 'For Your Information',
+}
+
 DEADLY_ERRORS = [
     'Element svg has extra content: script',
     'Did not expect element script there',
@@ -73,6 +79,7 @@ default_options.__dict__ = {
         'image_svg': False,
         'indent': 2,
         'info': False,
+        'info_base_url': 'https://www.rfc-editor.org/info/',
         'inline_version_info': True,
         'legacy': False,
         'legacy_date_format': False,
