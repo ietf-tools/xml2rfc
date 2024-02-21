@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.20.0] - 2024-02-21
+### :sparkles: New Features
+- [`e4542c2`](https://github.com/ietf-tools/xml2rfc/commit/e4542c29e217f09aeca5a0ae423fc45c73dee8a2) - Update subseries presentation *(PR [#1102](https://github.com/ietf-tools/xml2rfc/pull/1102) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1100](https://github.com/ietf-tools/xml2rfc/issues/1100) opened by [@ajeanmahoney](https://github.com/ajeanmahoney)*
+
+### :bug: Bug Fixes
+- [`20a5b30`](https://github.com/ietf-tools/xml2rfc/commit/20a5b30d9e08bd21184335fb12918ed0d4fe7c4c) - Allow non-ASCII values in all attributes *(PR [#1106](https://github.com/ietf-tools/xml2rfc/pull/1106) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1105](https://github.com/ietf-tools/xml2rfc/issues/1105) opened by [@cabo](https://github.com/cabo)*
+- [`4278f7b`](https://github.com/ietf-tools/xml2rfc/commit/4278f7b7e0b64293646ac13d0c5dceb946927c5c) - **text**: Don't break URLs in annotation *(PR [#1104](https://github.com/ietf-tools/xml2rfc/pull/1104) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1101](https://github.com/ietf-tools/xml2rfc/issues/1101) opened by [@apaloma-rpc](https://github.com/apaloma-rpc)*
+
+### :construction_worker: Build System
+- [`75971ca`](https://github.com/ietf-tools/xml2rfc/commit/75971ca5d980a7ee90fa25f82720706927750dda) - PyPI publish GHA should not run on push to main branch *(PR [#1107](https://github.com/ietf-tools/xml2rfc/pull/1107) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`c7dd9a1`](https://github.com/ietf-tools/xml2rfc/commit/c7dd9a1548bffcbcdebf109eb6def1a1f680a085) - update CHANGELOG.md + py file versions for v3.19.4 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+- [`ec6d921`](https://github.com/ietf-tools/xml2rfc/commit/ec6d92162ba57cd9fb65a5cd91d4e7948c330f7f) - Update CHANGELOG.md *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.19.4] - 2024-02-06
 
 ### :bug: Bug Fixes
@@ -2185,3 +2204,5 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.19.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.1...v3.19.2
 [v3.19.3]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.2...v3.19.3
 [v3.19.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.3...v3.19.4
+
+[v3.20.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.4...v3.20.0
