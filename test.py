@@ -11,6 +11,7 @@ import xml2rfc.utils
 from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.walkpdf import xmldoc
 from xml2rfc.writers.base import default_options
+from xml2rfc.writers.text import MAX_WIDTH
 
 try:
     from xml2rfc import debug
@@ -634,6 +635,67 @@ class PrepToolWriterTest(unittest.TestCase):
         # test eref element
         target = 'https://www.rfc-editor.org/info/rfc9280'
         self.assertEqual(target, rfc.xpath('./section/t/eref')[0].get('target'))
+
+class TextWriterTest(unittest.TestCase):
+    '''TextWriter tests'''
+
+    def setUp(self):
+        xml2rfc.log.quiet = True
+        path = 'tests/input/elements.xml'
+        self.parser = xml2rfc.XmlRfcParser(path,
+                                           quiet=True,
+                                           options=default_options,
+                                           **options_for_xmlrfcparser)
+        self.xmlrfc = self.parser.parse()
+        self.writer = xml2rfc.TextWriter(self.xmlrfc, quiet=True)
+
+    def test_render_reference(self):
+        # test annotations
+        reference = '''
+<references>
+  <reference anchor="REFTEST">
+    <front>
+      <title>Reference Test</title>
+      <author initials="J." surname="Doe" fullname="Jane Doe">
+        <organization>ACMI Corp.</organization>
+      </author>
+      <date month="February" year="2024"/>
+    </front>
+    <annotation>{annotation}</annotation>
+  </reference>
+</references>'''
+        self.writer.refname_mapping['REFTEST'] = 'REFTEST'
+
+        # single line annotation
+        annotation = 'foobar'
+        references = lxml.etree.fromstring(reference.format(annotation=annotation))
+        lines = self.writer.render_reference(references.getchildren()[0], width=60)
+        self.assertEqual(len(lines), 1)
+        self.assertIn(annotation, lines[0].text)
+
+        # multi line annotation
+        annotation = '''Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+               Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.'''
+        references = lxml.etree.fromstring(reference.format(annotation=annotation))
+        lines = self.writer.render_reference(references.getchildren()[0], width=60)
+        self.assertGreater(len(lines), 1)
+        self.assertIn(annotation[:5], lines[0].text)
+
+        # single line annotation (larger than width and smaller than MAX_WIDTH)
+        annotation = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commo'
+        references = lxml.etree.fromstring(reference.format(annotation=annotation))
+        lines = self.writer.render_reference(references.getchildren()[0], width=len(annotation)-5)
+        self.assertGreater(MAX_WIDTH, len(annotation))
+        self.assertGreater(len(lines), 1)
+        self.assertIn(annotation[:5], lines[0].text)
+
+        # annotation with URL
+        url = 'https://example.org'
+        annotation = f'Example: <eref target="{url}" />'
+        references = lxml.etree.fromstring(reference.format(annotation=annotation))
+        lines = self.writer.render_reference(references.getchildren()[0], width=60)
+        self.assertEqual(len(lines), 2)
+        self.assertIn(url, lines[1].text)
 
 
 if __name__ == '__main__':

@@ -36,6 +36,9 @@ from xml2rfc.util.postal import get_normalized_address_info, get_address_format_
 from xml2rfc.utils import justify_inline, clean_text
 
 
+MAX_WIDTH = 72
+SPLITTER_WIDTH = 67
+
 IndexItem   = namedtuple('indexitem', ['item', 'subitem', 'anchor', 'page', ])
 Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'do_outdent'])
 # Joiner parts:
@@ -80,8 +83,8 @@ class Block(object):
         self.beg  = beg                 # beginning line of block
         self.end  = end                 # ending line of block
 
-wrapper = utils.TextWrapper(width=72)
-splitter = utils.TextSplitter(width=67)
+wrapper = utils.TextWrapper(width=MAX_WIDTH)
+splitter = utils.TextSplitter(width=SPLITTER_WIDTH)
 seen = set()
 
 # This is not a complete list of whitespace characters, and isn't intended to be.  It's
@@ -299,7 +302,7 @@ class TextWriter(BaseV3Writer):
             joiners = base_joiners
             if self.options.pagination:
                 self.add_pageno_placeholders()
-            lines = self.render(self.root, width=72, joiners=joiners)
+            lines = self.render(self.root, width=MAX_WIDTH, joiners=joiners)
 
             if self.options.pagination:
                 lines = findblocks(lines)
@@ -321,8 +324,8 @@ class TextWriter(BaseV3Writer):
                             sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)))
             for i, l in enumerate(lines):
                 length = len(l.text)
-                if length > 72:
-                    self.warn(l.elem, "Too long line found (L%s), %s characters longer than 72 characters: \n%s" %(i+1, length-72, l.text))
+                if length > MAX_WIDTH:
+                    self.warn(l.elem, f"Too long line found (L{i + 1}), {length - MAX_WIDTH} characters longer than {MAX_WIDTH} characters: \n{l.text}")
 
             text = ('\n'.join( l.text for l in lines )).rstrip(stripspace) + '\n'
 
@@ -505,7 +508,7 @@ class TextWriter(BaseV3Writer):
             else:
                 pass
         # new toc, to be used to replace the old one
-        toclines = self.render(toc, width=72, joiners=base_joiners)
+        toclines = self.render(toc, width=MAX_WIDTH, joiners=base_joiners)
         if toc_start and toc_end:
             j = 2
             for i in range(toc_start+2, toc_end):
@@ -1811,7 +1814,7 @@ class TextWriter(BaseV3Writer):
                 textwidth_l = textwidth(l)
                 textwidth_r = textwidth(r)
                 #assert textwidth_l+textwidth_r< 70
-                w = 72-textwidth_l-textwidth_r
+                w = MAX_WIDTH-textwidth_l-textwidth_r
                 lines.append(l+' '*w+r)
             return '\n'.join(lines).rstrip(stripspace)+'\n'
         #
@@ -1819,7 +1822,7 @@ class TextWriter(BaseV3Writer):
             line = '%s%s%s' % (label, items, suffix)
             ll = len(left)
             lr = len(right)
-            width = 48 if ll >= lr else min(48, 72-4-len(right[ll]))
+            width = 48 if ll >= lr else min(48, MAX_WIDTH-4-len(right[ll]))
             wrapper = textwrap.TextWrapper(width=width, subsequent_indent=' '*len(label))
             return wrapper.wrap(line)
         #
@@ -2746,7 +2749,8 @@ class TextWriter(BaseV3Writer):
         text += '.'
         for ctag in ('annotation', ):
             for c in e.iterdescendants(ctag):
-                text = self.tjoin(text, c, width, **kwargs)
+                # use MAX_WIDTH here since text gets formatted later
+                text = self.tjoin(text, c, MAX_WIDTH, keep_url=True, **kwargs)
         text = fill(text, width=width, fix_sentence_endings=False, keep_url=True, **kwargs).lstrip(stripspace)
         
         text = indent(text, 11, 0)
@@ -3957,7 +3961,7 @@ class TextWriter(BaseV3Writer):
             Find the minimum column widths of regular cells
             """
             i = 0
-            splitter = utils.TextSplitter(width=67, hyphen_split=hyphen_split)
+            splitter = utils.TextSplitter(width=SPLITTER_WIDTH, hyphen_split=hyphen_split)
             for p in e.iterchildren(['thead', 'tbody', 'tfoot']):
                 for r in list(p.iterchildren('tr')):
                     j = 0
