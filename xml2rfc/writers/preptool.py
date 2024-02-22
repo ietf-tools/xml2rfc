@@ -650,7 +650,7 @@ class PrepToolWriter(BaseV3Writer):
                 year = str(today.year)
             if not month:
                 if year != str(today.year):
-                    self.die(e, "Expected <date> to have the current year when month is missing, but found '%s'" % (d.get('year')))
+                    self.warn(e, "Expected <date> to have the current year when month is missing, but found '%s'" % (d.get('year')))
                 month = today.strftime('%m')
                 day = today.strftime('%d')
             datestr = "%s-%s-%s" %(year, month, day or '01')
