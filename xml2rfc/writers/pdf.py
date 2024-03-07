@@ -15,7 +15,6 @@ except (ImportError, OSError, ValueError) as e:
     import_error = e
     weasyprint = False
 
-
 import xml2rfc
 from xml2rfc.writers.base import default_options, BaseV3Writer
 from xml2rfc.writers.html import HtmlWriter
@@ -77,6 +76,7 @@ class PdfWriter(BaseV3Writer):
         self.options.no_css = True
         self.options.image_svg = True
         self.options.pdf = True
+        self.options.attach_xml = True
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
 
@@ -104,7 +104,7 @@ class PdfWriter(BaseV3Writer):
         page_css_text = page_css_template.format(**page_info)
         page_css = weasyprint.CSS(string=page_css_text)
 
-        pdf = writer.write_pdf(None, stylesheets=[ css, page_css ], presentational_hints=True)
+        pdf = writer.write_pdf(None, stylesheets=[ css, page_css ], presentational_hints=True, pdf_variant='pdf/a-3b', pdf_identifier='xml2rfc')
 
         return pdf
 
@@ -159,6 +159,7 @@ class PdfWriter(BaseV3Writer):
 
 page_css_template = """
 @media print {{
+  html {{ image-rendering: crisp-edges }}
   body {{
     font-family: {fonts};
     width: 100%;
