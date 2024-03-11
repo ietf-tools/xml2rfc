@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.20.1] - 2024-03-11
+### :bug: Bug Fixes
+- [`f58e052`](https://github.com/ietf-tools/xml2rfc/commit/f58e052ebc5a6b07cd0cd51f82f470a0af8d61bd) - Change non-current year error to a warning *(PR [#1109](https://github.com/ietf-tools/xml2rfc/pull/1109) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#704](https://github.com/ietf-tools/xml2rfc/issues/704) opened by [@ietf-svn-bot](https://github.com/ietf-svn-bot)*
+
+### :white_check_mark: Tests
+- [`a809924`](https://github.com/ietf-tools/xml2rfc/commit/a809924d8ff627bfd0493a3067d0f1780ca5794f) - Fix recursion issue in walkpdf *(PR [#1112](https://github.com/ietf-tools/xml2rfc/pull/1112) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1111](https://github.com/ietf-tools/xml2rfc/issues/1111) opened by [@kitterma](https://github.com/kitterma)*
+
+### :memo: Documentation Changes
+- [`37f406c`](https://github.com/ietf-tools/xml2rfc/commit/37f406c5e1e036eab9162940e563bf349c1bd1b2) - update CHANGELOG.md + py file versions for v3.20.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.20.0] - 2024-02-21
 ### :sparkles: New Features
 - [`e4542c2`](https://github.com/ietf-tools/xml2rfc/commit/e4542c29e217f09aeca5a0ae423fc45c73dee8a2) - Update subseries presentation *(PR [#1102](https://github.com/ietf-tools/xml2rfc/pull/1102) by [@kesara](https://github.com/kesara))*
@@ -2206,3 +2219,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.19.4]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.3...v3.19.4
 
 [v3.20.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.4...v3.20.0
+[v3.20.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.20.0...v3.20.1
