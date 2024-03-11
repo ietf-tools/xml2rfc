@@ -15,7 +15,7 @@ import sys
 def walk(obj, seen):
     dobj = {}                            # Direct objects
     iobj = []                            # Indirect objects
-    if hasattr(obj, 'keys'):
+    if isinstance(obj, pypdf.generic.DictionaryObject):
         for key in obj.keys():
             k = key[1:] if key.startswith('/') else key
             d, i = walk(obj[key], seen)
