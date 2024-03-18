@@ -10,7 +10,7 @@ import xml2rfc.utils
 
 from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.walkpdf import xmldoc
-from xml2rfc.writers.base import default_options
+from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc.writers.text import MAX_WIDTH
 
 try:
@@ -696,6 +696,67 @@ class TextWriterTest(unittest.TestCase):
         lines = self.writer.render_reference(references.getchildren()[0], width=60)
         self.assertEqual(len(lines), 2)
         self.assertIn(url, lines[1].text)
+
+class BaseV3WriterTest(unittest.TestCase):
+    '''BaseV3Writer tests'''
+
+    def setUp(self):
+        xml2rfc.log.quiet = True
+        path = 'tests/input/elements.xml'
+        self.parser = xml2rfc.XmlRfcParser(path,
+                                           quiet=True,
+                                           options=default_options,
+                                           **options_for_xmlrfcparser)
+        self.xmlrfc = self.parser.parse()
+        self.writer = BaseV3Writer(self.xmlrfc, quiet=True)
+
+    def test_validate_draft_name(self):
+        # Draft with only docName
+        self.assertTrue(self.writer.validate_draft_name())
+
+        # RFC
+        rfc = lxml.etree.fromstring('''
+<rfc
+    number="9280"
+    docName = "draft-ietf-foobar-23"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foobar-23" />
+    </front>
+</rfc>''')
+        self.writer.root = rfc
+        self.assertTrue(self.writer.validate_draft_name())
+
+        # Valid draft
+        valid_draft = lxml.etree.fromstring('''
+<rfc
+    docName = "draft-ietf-foobar-23"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foobar-23" />
+    </front>
+</rfc>''')
+        self.writer.root = valid_draft
+        self.assertTrue(self.writer.validate_draft_name())
+
+        # Invalid draft
+        invalid_draft = lxml.etree.fromstring('''
+<rfc
+    docName = "draft-ietf-foobar-23"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foobar-3" />
+    </front>
+</rfc>''')
+        self.writer.root = invalid_draft
+        with self.assertRaises(RfcWriterError):
+            self.writer.validate_draft_name()
 
 
 if __name__ == '__main__':

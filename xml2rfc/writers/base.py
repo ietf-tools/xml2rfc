@@ -2158,6 +2158,19 @@ class BaseV3Writer(object):
         if not self.validate('before'):
             self.note(None, "Schema validation failed for input document")
 
+        self.validate_draft_name()
+
+    def validate_draft_name(self):
+        if not self.root.attrib.get('number', False):
+            docName = self.root.attrib.get('docName', None)
+            info = self.root.find('./front/seriesInfo[@name="Internet-Draft"]')
+            si_draft_name = info.get('value') if info != None else None
+
+            if all([docName, si_draft_name]) and docName != si_draft_name:
+                self.die(self.root, 'docName and value in <seriesInfo name="Internet-Draft" ..> must match.')
+
+        return True
+
     def validate_after(self, e, p):
         # XXX: There is an issue with exponential increase in validation time
         # as a function of the number of attributes on the root element, on
