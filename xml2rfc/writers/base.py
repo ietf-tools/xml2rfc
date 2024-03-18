@@ -2127,13 +2127,6 @@ class BaseV3Writer(object):
             self.v3_rng.assertValid(tree)
             return True
         except Exception as e:
-            lxmlver = etree.LXML_VERSION[:3]
-            if lxmlver < (3, 8, 0):
-                self.warn(None, "The available version of the lxml library (%s) does not provide xpath "
-                          "information as part of validation errors.  Upgrade to version 3.8.0 or "
-                          "higher for better error messages." % ('.'.join(str(v) for v in lxmlver), ))
-            # These warnings are occasionally incorrect -- disable this
-            # output for now:
             deadly = False
             if hasattr(e, 'error_log'):
                 for error in e.error_log:
