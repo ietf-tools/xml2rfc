@@ -7,7 +7,6 @@ import codecs
 import copy
 import datetime
 import textwrap
-import lxml
 import os
 import re
 import xml2rfc.log
@@ -1057,7 +1056,7 @@ class BaseRfcWriter:
         p_count = 1  # Paragraph counter
         for element in section:
             # Check for a PI
-            if element.tag is lxml.etree.PI:
+            if element.tag is etree.PI:
                 pidict = self.parse_pi(element)
                 if pidict and "needLines" in pidict:
                     self.needLines(pidict["needLines"])
@@ -1297,7 +1296,7 @@ class BaseRfcWriter:
                     if 'anchor' in ref.attrib:
                         self._indexRef(ref_counter, title=title.text, anchor=ref.attrib["anchor"])
                     else:
-                        raise RfcWriterError("Reference is missing an anchor: %s" % lxml.etree.tostring(ref))
+                        raise RfcWriterError("Reference is missing an anchor: %s" % etree.tostring(ref))
                         
         # Appendix sections
         back = self.r.find('back')
@@ -1646,7 +1645,7 @@ deprecated_attributes = [
 
 v3_rnc_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rnc')
 v3_rng_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'v3.rng')
-v3_schema = lxml.etree.ElementTree(file=v3_rng_file)
+v3_schema = etree.ElementTree(file=v3_rng_file)
 
 def get_element_tags():
     tags = set()
@@ -1733,7 +1732,7 @@ class BaseV3Writer(object):
         self.date = date if date is not None else datetime.date.today()
         self.v3_rnc_file = v3_rnc_file
         self.v3_rng_file = v3_rng_file
-        self.v3_rng = lxml.etree.RelaxNG(file=self.v3_rng_file)
+        self.v3_rng = etree.RelaxNG(file=self.v3_rng_file)
         self.v3_schema = v3_schema
         self.schema = v3_schema
         self.index_items = []
@@ -1780,21 +1779,21 @@ class BaseV3Writer(object):
         if e != None:
             # directly inside element
             for c in e.getchildren():
-                if c.tag == lxml.etree.PI and c.target == xml2rfc.V3_PI_TARGET:
+                if c.tag == etree.PI and c.target == xml2rfc.V3_PI_TARGET:
                     pis.append(c)
             # siblings before element
             for s in e.itersiblings(preceding=True):
-                if s.tag == lxml.etree.PI and s.target == xml2rfc.V3_PI_TARGET:
+                if s.tag == etree.PI and s.target == xml2rfc.V3_PI_TARGET:
                     pis.append(s)
             # ancestor's earlier siblings
             for a in e.iterancestors():
                 for s in a.itersiblings(preceding=True):
-                    if s.tag == lxml.etree.PI and s.target == xml2rfc.V3_PI_TARGET:
+                    if s.tag == etree.PI and s.target == xml2rfc.V3_PI_TARGET:
                         pis.append(s)
             # before root elements
             p = self.root.getprevious()
             while p != None:
-                if p.tag == lxml.etree.PI and p.target == xml2rfc.V3_PI_TARGET:
+                if p.tag == etree.PI and p.target == xml2rfc.V3_PI_TARGET:
                     pis.append(p)
                 p = p.getprevious()
         return pis
@@ -2045,9 +2044,9 @@ class BaseV3Writer(object):
         ind = self.options.indent
         ## The actual printing is done in self.write()
         def indent(e, i):
-            if e.tag in (lxml.etree.CDATA, ):
+            if e.tag in (etree.CDATA, ):
                 return
-            if e.tag in (lxml.etree.Comment, lxml.etree.PI, ):
+            if e.tag in (etree.Comment, etree.PI, ):
                 if not e.tail:
                     if e.getnext() != None:
                         e.tail = '\n'+' '*i
@@ -2128,7 +2127,7 @@ class BaseV3Writer(object):
             self.v3_rng.assertValid(tree)
             return True
         except Exception as e:
-            lxmlver = lxml.etree.LXML_VERSION[:3]
+            lxmlver = etree.LXML_VERSION[:3]
             if lxmlver < (3, 8, 0):
                 self.warn(None, "The available version of the lxml library (%s) does not provide xpath "
                           "information as part of validation errors.  Upgrade to version 3.8.0 or "
