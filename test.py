@@ -10,7 +10,7 @@ import xml2rfc.utils
 
 from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.walkpdf import xmldoc
-from xml2rfc.writers.base import default_options
+from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc.writers.text import MAX_WIDTH
 
 try:
@@ -696,6 +696,81 @@ class TextWriterTest(unittest.TestCase):
         lines = self.writer.render_reference(references.getchildren()[0], width=60)
         self.assertEqual(len(lines), 2)
         self.assertIn(url, lines[1].text)
+
+class BaseV3WriterTest(unittest.TestCase):
+    '''BaseV3Writer tests'''
+
+    def setUp(self):
+        xml2rfc.log.quiet = True
+        path = 'tests/input/elements.xml'
+        self.parser = xml2rfc.XmlRfcParser(path,
+                                           quiet=True,
+                                           options=default_options,
+                                           **options_for_xmlrfcparser)
+        self.xmlrfc = self.parser.parse()
+        self.writer = BaseV3Writer(self.xmlrfc, quiet=True)
+
+    def test_validate_draft_name(self):
+        # Valid documents
+        valid_docs = []
+        valid_docs.append(lxml.etree.fromstring('''
+<rfc
+    number="9280"
+    docName = "draft-ietf-foo-bar-23"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <link href="https://datatracker.ietf.org/doc/draft-ietf-foo-bar-23" rel="prev"/>
+    <front>
+        <seriesInfo name="RFC" value="9280" stream="IETF" />
+    </front>
+</rfc>'''))
+        valid_docs.append(lxml.etree.fromstring('''
+<rfc
+    docName = "draft-ietf-foo-bar-23"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foo-bar-23" />
+    </front>
+</rfc>'''))
+        valid_docs.append(lxml.etree.fromstring('''
+<rfc
+    docName = "draft-ietf-foo-bar-23"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+    </front>
+</rfc>'''))
+        valid_docs.append(lxml.etree.fromstring('''
+<rfc
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foo-bar-23" />
+    </front>
+</rfc>'''))
+        for valid_doc in valid_docs:
+            self.writer.root = valid_doc
+            self.assertTrue(self.writer.validate_draft_name())
+
+        # Invalid document
+        invalid_doc = lxml.etree.fromstring('''
+<rfc
+    docName = "draft-ietf-foo-bar-23"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foo-bar-3" />
+    </front>
+</rfc>''')
+        self.writer.root = invalid_doc
+        with self.assertRaises(RfcWriterError):
+            self.writer.validate_draft_name()
 
 
 if __name__ == '__main__':
