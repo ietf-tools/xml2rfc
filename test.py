@@ -711,11 +711,9 @@ class BaseV3WriterTest(unittest.TestCase):
         self.writer = BaseV3Writer(self.xmlrfc, quiet=True)
 
     def test_validate_draft_name(self):
-        # Draft with only docName
-        self.assertTrue(self.writer.validate_draft_name())
-
-        # RFC
-        rfc = lxml.etree.fromstring('''
+        # Valid documents
+        valid_docs = []
+        valid_docs.append(lxml.etree.fromstring('''
 <rfc
     number="9280"
     docName = "draft-ietf-foo-bar-23"
@@ -726,12 +724,8 @@ class BaseV3WriterTest(unittest.TestCase):
     <front>
         <seriesInfo name="RFC" value="9280" stream="IETF" />
     </front>
-</rfc>''')
-        self.writer.root = rfc
-        self.assertTrue(self.writer.validate_draft_name())
-
-        # Valid draft
-        valid_draft = lxml.etree.fromstring('''
+</rfc>'''))
+        valid_docs.append(lxml.etree.fromstring('''
 <rfc
     docName = "draft-ietf-foo-bar-23"
     ipr="trust200902"
@@ -740,12 +734,31 @@ class BaseV3WriterTest(unittest.TestCase):
     <front>
         <seriesInfo name="Internet-Draft" value="draft-ietf-foo-bar-23" />
     </front>
-</rfc>''')
-        self.writer.root = valid_draft
-        self.assertTrue(self.writer.validate_draft_name())
+</rfc>'''))
+        valid_docs.append(lxml.etree.fromstring('''
+<rfc
+    docName = "draft-ietf-foo-bar-23"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+    </front>
+</rfc>'''))
+        valid_docs.append(lxml.etree.fromstring('''
+<rfc
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foo-bar-23" />
+    </front>
+</rfc>'''))
+        for valid_doc in valid_docs:
+            self.writer.root = valid_doc
+            self.assertTrue(self.writer.validate_draft_name())
 
-        # Invalid draft
-        invalid_draft = lxml.etree.fromstring('''
+        # Invalid document
+        invalid_doc = lxml.etree.fromstring('''
 <rfc
     docName = "draft-ietf-foo-bar-23"
     ipr="trust200902"
@@ -755,7 +768,7 @@ class BaseV3WriterTest(unittest.TestCase):
         <seriesInfo name="Internet-Draft" value="draft-ietf-foo-bar-3" />
     </front>
 </rfc>''')
-        self.writer.root = invalid_draft
+        self.writer.root = invalid_doc
         with self.assertRaises(RfcWriterError):
             self.writer.validate_draft_name()
 
