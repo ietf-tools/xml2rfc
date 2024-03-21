@@ -718,12 +718,13 @@ class BaseV3WriterTest(unittest.TestCase):
         rfc = lxml.etree.fromstring('''
 <rfc
     number="9280"
-    docName = "draft-ietf-foobar-23"
+    docName = "draft-ietf-foo-bar-23"
     ipr="trust200902"
     submissionType="editorial"
     category="info">
+    <link href="https://datatracker.ietf.org/doc/draft-ietf-foo-bar-23" rel="prev"/>
     <front>
-        <seriesInfo name="Internet-Draft" value="draft-ietf-foobar-23" />
+        <seriesInfo name="RFC" value="9280" stream="IETF" />
     </front>
 </rfc>''')
         self.writer.root = rfc
@@ -732,12 +733,12 @@ class BaseV3WriterTest(unittest.TestCase):
         # Valid draft
         valid_draft = lxml.etree.fromstring('''
 <rfc
-    docName = "draft-ietf-foobar-23"
+    docName = "draft-ietf-foo-bar-23"
     ipr="trust200902"
     submissionType="editorial"
     category="info">
     <front>
-        <seriesInfo name="Internet-Draft" value="draft-ietf-foobar-23" />
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foo-bar-23" />
     </front>
 </rfc>''')
         self.writer.root = valid_draft
@@ -746,12 +747,12 @@ class BaseV3WriterTest(unittest.TestCase):
         # Invalid draft
         invalid_draft = lxml.etree.fromstring('''
 <rfc
-    docName = "draft-ietf-foobar-23"
+    docName = "draft-ietf-foo-bar-23"
     ipr="trust200902"
     submissionType="editorial"
     category="info">
     <front>
-        <seriesInfo name="Internet-Draft" value="draft-ietf-foobar-3" />
+        <seriesInfo name="Internet-Draft" value="draft-ietf-foo-bar-3" />
     </front>
 </rfc>''')
         self.writer.root = invalid_draft
