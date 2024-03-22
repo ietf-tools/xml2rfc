@@ -34,16 +34,12 @@ RUN apt-get update --fix-missing && \
     apt-get clean -y
 
 # Install required fonts
-RUN mkdir -p ~/.fonts/opentype && \
-    wget -q https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip && \
-    unzip -q Noto-unhinted.zip -d ~/.fonts/opentype/ && \
-    rm Noto-unhinted.zip && \
-    wget -q https://fonts.google.com/download?family=Roboto%20Mono -O roboto-mono.zip && \
-    unzip -q roboto-mono.zip -d ~/.fonts/opentype/ && \
-    rm roboto-mono.zip && \
-    wget -q https://fonts.google.com/download?family=Noto%20Sans%20Math -O noto-sans-math.zip && \
-    unzip -q noto-sans-math.zip -d ~/.fonts/opentype/ && \
-    rm noto-sans-math.zip && \
+RUN mkdir -p ~/.fonts/opentype /tmp/fonts && \
+    wget -q -O /tmp/fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.18.0.tar.gz && \
+    tar zxf /tmp/fonts.tar.gz -C /tmp/fonts && \
+    mv /tmp/fonts/*/noto/* ~/.fonts/opentype/ && \
+    mv /tmp/fonts/*/roboto_mono/* ~/.fonts/opentype/ && \
+    rm -rf /tmp/fonts.tar.gz /tmp/fonts/ && \
     ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/ && \
     fc-cache -f
 

@@ -45,44 +45,19 @@ jobs:
       uses: actions/setup-python@v2.3.1
       with:
         python-version: ${{ matrix.python-version }}
-        
-    - name: Fonts Cache
-      id: cache-fonts-linux
-      uses: pat-s/always-upload-cache@v2.1.5
-      with:
-        path: ~/.fonts/opentype
-        key: fonts-linux
 
     - name: Download Fonts
-      if: steps.cache-fonts-linux.outputs.cache-hit != 'true'
       run: |
-        echo "Downloading Noto Font..."
-        mkdir -p ~/.fonts/opentype/noto
-        wget -q https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
-        unzip -q Noto-unhinted.zip -d ~/.fonts/opentype/noto/
-        mkdir -p /usr/share/fonts/truetype/noto/
-        ln -sf ~/.fonts/opentype/noto/*.[to]tf /usr/share/fonts/truetype/noto/
-        echo "Downloading Roboto Mono Font..."
-        mkdir -p ~/.fonts/opentype/roboto
-        wget -q https://fonts.google.com/download?family=Roboto%20Mono -O roboto-mono.zip
-        unzip -q roboto-mono.zip -d ~/.fonts/opentype/roboto/
-        mkdir -p /usr/share/fonts/truetype/roboto/
-        ln -sf ~/.fonts/opentype/roboto/*.[to]tf /usr/share/fonts/truetype/roboto/
+        echo "Downloading xml2rfc-fonts..."
+        mkdir -p ~/.fonts/opentype /usr/share/fonts/truetype /tmp/fonts
+        wget -q -O /tmp/fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.18.0.tar.gz
+        tar zxf /tmp/fonts.tar.gz -C /tmp/fonts
+        mv /tmp/fonts/*/noto/* ~/.fonts/opentype/
+        mv /tmp/fonts/*/roboto_mono/* ~/.fonts/opentype/
+        ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
         echo "Reloading Font Cache..."
         fc-cache -f -v
-        
-    - name: Link Fonts
-      if: steps.cache-fonts-linux.outputs.cache-hit == 'true'
-      run: |
-        echo "Linking Noto Font..."
-        mkdir -p /usr/share/fonts/truetype/noto/
-        ln -sf ~/.fonts/opentype/noto/*.[to]tf /usr/share/fonts/truetype/noto/
-        echo "Linking Roboto Mono Font..."
-        mkdir -p /usr/share/fonts/truetype/roboto/
-        ln -sf ~/.fonts/opentype/roboto/*.[to]tf /usr/share/fonts/truetype/roboto/
-        echo "Reloading Font Cache..."
-        fc-cache -f -v
-        
+
     - name: Install dependencies
       run: |
         sudo apt-get update
@@ -119,32 +94,19 @@ jobs:
       uses: actions/setup-python@v2.3.1
       with:
         python-version: ${{ matrix.python-version }}
-        
-    - name: Fonts Cache
-      id: cache-fonts-mac
-      uses: pat-s/always-upload-cache@v2.1.5
-      with:
-        path: ~/new-fonts
-        key: fonts-macos
 
     - name: Download Fonts
-      if: steps.cache-fonts-mac.outputs.cache-hit != 'true'
       run: |
-        mkdir -p ~/new-fonts
-        cd ~/new-fonts
-        echo "Downloading Noto Font..."
-        wget -q https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
-        unzip -o -q Noto-unhinted.zip -d /Library/Fonts/
-        echo "Downloading Roboto Mono Font..."
-        wget -q https://fonts.google.com/download?family=Roboto%20Mono -O roboto-mono.zip
-        unzip -o -q roboto-mono.zip -d /Library/Fonts/
-        
-    - name: Extract Fonts
-      if: steps.cache-fonts-mac.outputs.cache-hit == 'true'
-      run: |
-        unzip -o -q ~/new-fonts/Noto-unhinted.zip -d /Library/Fonts/
-        unzip -o -q ~/new-fonts/roboto-mono.zip -d /Library/Fonts/
-        
+        echo "Downloading xml2rfc-fonts..."
+        mkdir -p ~/.fonts/opentype /Library/Fonts/ /tmp/fonts
+        wget -q -O /tmp/fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.18.0.tar.gz
+        tar zxf /tmp/fonts.tar.gz -C /tmp/fonts
+        mv /tmp/fonts/*/noto/* ~/.fonts/opentype/
+        mv /tmp/fonts/*/roboto_mono/* ~/.fonts/opentype/
+        ln -sf ~/.fonts/opentype/*.[to]tf /Library/Fonts/
+        echo "Reloading Font Cache..."
+        fc-cache -f -v
+
     - name: Install dependencies
       run: |
         brew install pango libffi groff make diffutils
