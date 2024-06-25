@@ -90,12 +90,15 @@ def get_pdf_help(missing_libs=""):
         pip install 'weasyprint>=53.0,!=57.0,!=60.0'
 
     3. Finally, install the required fonts:
-       * Download xml2rfc-fonts v3.22.0.
-         https://github.com/ietf-tools/xml2rfc-fonts/releases/tag/3.22.0
+       * Download latest fonts from xml2rfc-fonts.
+         https://github.com/ietf-tools/xml2rfc-fonts/releases/latest
+
+       * In the "Assets" section, download either the tar.gz or
+         the zip archive.
 
        * Extract the contents of the downloaded xml2rfc-fonts archive.
 
-       * Install the fonts found in the `noto` and `roboto_mono` directories
+       * Install the fonts found in the noto and roboto_mono directories
          to your operating system.
 
     With these libraries, modules, and fonts installed and available to
