@@ -22,7 +22,7 @@ def walk(obj, seen):
             dobj[k] = d
             iobj += i
         if hasattr(obj, 'extract_text'):
-            dobj['text'] = obj.extract_text()
+            dobj['text'] = obj.extract_text(extraction_mode="layout")
     elif isinstance(obj, pypdf.generic.ArrayObject):
         dobj = []
         for o in obj:
