@@ -89,25 +89,15 @@ def get_pdf_help(missing_libs=""):
 
         pip install 'weasyprint>=53.0,!=57.0,!=60.0'
 
+    3. Finally, install the required fonts:
+       * Download xml2rfc-fonts v3.22.0.
+         https://github.com/ietf-tools/xml2rfc-fonts/releases/tag/3.22.0
 
-    3. Finally, install the full Noto Font and Roboto Mono packages:
+       * Extract the contents of the downloaded xml2rfc-fonts archive.
 
-       * Download the full font file from:
-         https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
-         or follow the 'DOWNLOAD ALL FONTS' link on this page:
-         https://www.google.com/get/noto/
+       * Install the fonts found in the `noto` and `roboto_mono` directories
+         to your operating system.
 
-       * Follow the installation instructions at
-         https://www.google.com/get/noto/help/install/
-
-       * Go to https://fonts.google.com/specimen/Roboto+Mono, and download the
-         font. Follow the installation instructions above, as applied to this
-         download.
-
-       * Go to https://fonts.google.com/noto/specimen/Noto+Sans+Math, and
-         download the font. Follow the installation instructions above, as
-         applied to this download.
-    
     With these libraries, modules, and fonts installed and available to
     xml2rfc, the --pdf switch will be enabled.
     """
