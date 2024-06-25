@@ -35,7 +35,7 @@ RUN apt-get update --fix-missing && \
 
 # Install required fonts
 RUN mkdir -p ~/.fonts/opentype /tmp/fonts && \
-    wget -q -O /tmp/fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.21.0.tar.gz && \
+    wget -q -O /tmp/fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.tar.gz && \
     tar zxf /tmp/fonts.tar.gz -C /tmp/fonts && \
     mv /tmp/fonts/*/noto/* ~/.fonts/opentype/ && \
     mv /tmp/fonts/*/roboto_mono/* ~/.fonts/opentype/ && \
