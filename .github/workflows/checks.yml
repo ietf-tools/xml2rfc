@@ -18,7 +18,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
@@ -39,10 +39,10 @@ jobs:
         
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       
     - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2.3.1
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         
@@ -56,30 +56,23 @@ jobs:
     - name: Download Fonts
       if: steps.cache-fonts-linux.outputs.cache-hit != 'true'
       run: |
-        echo "Downloading Noto Font..."
-        mkdir -p ~/.fonts/opentype/noto
-        wget -q https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
-        unzip -q Noto-unhinted.zip -d ~/.fonts/opentype/noto/
-        mkdir -p /usr/share/fonts/truetype/noto/
-        ln -sf ~/.fonts/opentype/noto/*.[to]tf /usr/share/fonts/truetype/noto/
-        echo "Downloading Roboto Mono Font..."
-        mkdir -p ~/.fonts/opentype/roboto
-        wget -q https://fonts.google.com/download?family=Roboto%20Mono -O roboto-mono.zip
-        unzip -q roboto-mono.zip -d ~/.fonts/opentype/roboto/
-        mkdir -p /usr/share/fonts/truetype/roboto/
-        ln -sf ~/.fonts/opentype/roboto/*.[to]tf /usr/share/fonts/truetype/roboto/
+        echo "Downloading xml2rfc-fonts"
+        mkdir -p ~/.fonts/opentype ~/fonts
+        wget -q -O fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.tar.gz
+        tar zxf fonts.tar.gz -C ~/fonts
+        mv ~/fonts/*/noto/* ~/.fonts/opentype/
+        mv ~/fonts/*/roboto_mono/* ~/.fonts/opentype/
+        mkdir -p /usr/share/fonts/truetype
+        ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
         echo "Reloading Font Cache..."
         fc-cache -f -v
         
     - name: Link Fonts
       if: steps.cache-fonts-linux.outputs.cache-hit == 'true'
       run: |
-        echo "Linking Noto Font..."
-        mkdir -p /usr/share/fonts/truetype/noto/
-        ln -sf ~/.fonts/opentype/noto/*.[to]tf /usr/share/fonts/truetype/noto/
-        echo "Linking Roboto Mono Font..."
-        mkdir -p /usr/share/fonts/truetype/roboto/
-        ln -sf ~/.fonts/opentype/roboto/*.[to]tf /usr/share/fonts/truetype/roboto/
+        echo "Linking Fonts..."
+        mkdir -p /usr/share/fonts/truetype/
+        ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
         echo "Reloading Font Cache..."
         fc-cache -f -v
         
@@ -104,7 +97,7 @@ jobs:
 
   tests-macos:
     name: Unit Tests (macOS)
-    runs-on: macos-latest
+    runs-on: macos-12
     if: github.event_name == 'pull_request'
     
     strategy:
@@ -113,10 +106,10 @@ jobs:
         
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       
     - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2.3.1
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         
@@ -124,30 +117,21 @@ jobs:
       id: cache-fonts-mac
       uses: pat-s/always-upload-cache@v2.1.5
       with:
-        path: ~/new-fonts
+        path: ~/fonts
         key: fonts-macos
 
     - name: Download Fonts
-      if: steps.cache-fonts-mac.outputs.cache-hit != 'true'
       run: |
-        mkdir -p ~/new-fonts
-        cd ~/new-fonts
-        echo "Downloading Noto Font..."
-        wget -q https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
-        unzip -o -q Noto-unhinted.zip -d /Library/Fonts/
-        echo "Downloading Roboto Mono Font..."
-        wget -q https://fonts.google.com/download?family=Roboto%20Mono -O roboto-mono.zip
-        unzip -o -q roboto-mono.zip -d /Library/Fonts/
-        
-    - name: Extract Fonts
-      if: steps.cache-fonts-mac.outputs.cache-hit == 'true'
-      run: |
-        unzip -o -q ~/new-fonts/Noto-unhinted.zip -d /Library/Fonts/
-        unzip -o -q ~/new-fonts/roboto-mono.zip -d /Library/Fonts/
+        echo "Downloading xml2rfc-fonts"
+        mkdir -p ~/fonts /Library/Fonts
+        wget -q -O fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.tar.gz
+        tar zxf fonts.tar.gz -C ~/fonts
+        mv ~/fonts/*/noto/* /Library/Fonts/
+        mv ~/fonts/*/roboto_mono/* /Library/Fonts/
         
     - name: Install dependencies
       run: |
-        brew install pango libffi groff make diffutils
+        brew install pango pillow libffi groff make diffutils
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing requirements.txt + test dependencies..."
@@ -177,10 +161,10 @@ jobs:
         
 #     steps:
 #     - name: Checkout repository
-#       uses: actions/checkout@v2
+#       uses: actions/checkout@v4
       
 #     - name: Setup Python ${{ matrix.python-version }}
-#       uses: actions/setup-python@v2.3.1
+#       uses: actions/setup-python@v5
 #       with:
 #         python-version: ${{ matrix.python-version }}
         
