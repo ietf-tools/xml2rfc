@@ -574,16 +574,11 @@ class XmlRfcParser:
             # later resolve the "&rfc.number;" entity.
             self.rfc_number = None
             self.format_version = None
-            try:
-                for action, element in context:
-                    if element.tag == "rfc":
-                        self.rfc_number = element.attrib.get("number", None)
-                        self.format_version = element.attrib.get("version", None)
-                        break
-            except ValueError as e:
-                if e.message=="I/O operation on closed file":
-                    pass
-
+            for action, element in context:
+                if element.tag == "rfc":
+                    self.rfc_number = element.attrib.get("number", None)
+                    self.format_version = element.attrib.get("version", None)
+                    break
         if self.format_version == "3":
             self.default_dtd_path = None
 
