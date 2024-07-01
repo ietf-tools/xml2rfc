@@ -5,8 +5,6 @@ from __future__ import unicode_literals, print_function, division
 import lxml
 import os
 import re
-#import sys
-import six
 import unicodedata
 import xml2rfc
 
@@ -15,12 +13,8 @@ from io import open
 from lxml.html import html_parser
 from lxml.html.builder import ElementMaker
 
-if six.PY2:
-    from urllib import urlopen
-    from urlparse import urlparse, urljoin
-elif six.PY3:
-    from urllib.request import urlopen
-    from urllib.parse import urlparse, urljoin
+from urllib.request import urlopen
+from urllib.parse import urlparse, urljoin
 
 try:
     from xml2rfc import debug
@@ -221,7 +215,7 @@ def get_bidi_alignment(address):
         line = address[field]
         if line:
             for ch in line:
-                if isinstance(ch, six.text_type):
+                if isinstance(ch, str):
                     dir = unicodedata.bidirectional(ch)
                     if dir in ['R', 'AL']:
                         return 'right'

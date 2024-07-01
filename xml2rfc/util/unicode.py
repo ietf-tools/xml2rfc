@@ -6,7 +6,6 @@ from __future__ import unicode_literals, print_function, division
 # Unicode operations
 
 import re
-import six
 import unicodedata
 
 try:
@@ -117,8 +116,8 @@ def expand_unicode_element(e, bare=False):
         try:
             names = []
             for c in e.text:
-                if isinstance(c, six.binary_type):
-                    c = six.text_type(c, encoding='latin1')
+                if isinstance(c, bytes):
+                    c = c.decode('latin1')
                 names.append(unicodedata.name(c, 'U+%04x'%ord(c)))
             return ', '.join(names)
         except ValueError as exc:
@@ -180,7 +179,7 @@ def expand_unicode_element(e, bare=False):
 def isascii(u):
     if u is None:
         return True
-    if isinstance(u, six.text_type):
+    if isinstance(u, str):
         t = u+''
         for ch in [ '\u00a0', '\u200B', '\u2011', '\u2028', '\u2060', ]:
             if ch in t:
@@ -438,5 +437,5 @@ unicode_replacements = {
     u'\u2010': '-',
 }
 
-controlchars = dict( (six.text_type(chr(i)), ' ') for i in range(0, 32) if not i in [ 9, 10, 13 ] )
+controlchars = dict( (str(chr(i)), ' ') for i in range(0, 32) if not i in [ 9, 10, 13 ] )
     

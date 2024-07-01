@@ -10,7 +10,6 @@ import json
 import lxml.etree
 import os
 import pycountry
-import six
 import sys
 
 # If this script is renamed to 'xml2rfc.py' on a Windows system, the import
@@ -68,10 +67,7 @@ def print_country_help(options, parser):
     ids = list(country_ids.values())
     ids.sort()
     print('Known country codes and country names for use with <country>:\n')
-    if six.PY3:
-        print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])))
-    else:
-        print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])).encode('utf-8'))
+    print(('\n'.join([ '  '+'  -  '.join(v) for v in ids])))
     sys.exit()
 
 
@@ -767,12 +763,8 @@ def main():
             xmlrfc.tree = prep.prep()
             if xmlrfc.tree:
                 info = extract_anchor_info(xmlrfc.tree)
-                if six.PY2:
-                    with open(filename, 'w') as fp:
-                        json.dump(info, fp, indent=2, ensure_ascii=False, encoding='utf-8')
-                else:
-                    with io.open(filename, 'w', encoding='utf-8') as fp:
-                        json.dump(info, fp, indent=2, ensure_ascii=False)
+                with io.open(filename, 'w', encoding='utf-8') as fp:
+                    json.dump(info, fp, indent=2, ensure_ascii=False)
                 if not options.quiet:
                     xml2rfc.log.write('Created file', filename)
 

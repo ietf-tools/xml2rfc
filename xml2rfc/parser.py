@@ -12,7 +12,6 @@ import os
 import re
 import requests
 import shutil
-import six
 import time
 import xml2rfc.log
 import xml2rfc.utils
@@ -72,7 +71,7 @@ class CachingResolver(lxml.etree.Resolver):
 
         # Get directory of source
         if self.source:
-            if isinstance(self.source, six.string_types):
+            if isinstance(self.source, str):
                 self.source_dir = os.path.abspath(os.path.dirname(self.source))
             else:
                 self.source_dir = os.path.abspath(os.path.dirname(self.source.name))                
@@ -458,7 +457,7 @@ class AnnotatedElement(lxml.etree.ElementBase):
         if value == default:
             return value
         else:
-            return six.text_type(value)
+            return str(value)
 
 class XmlRfcParser:
 
@@ -543,48 +542,43 @@ class XmlRfcParser:
                 text = text.replace(b'<rfc ', b'<rfc xmlns:%s="%s" ' % (b'xi', self.nsmap[b'xi']), 1)
 
         # Get an iterating parser object
-        file = six.BytesIO(text)
-        file.name = self.source
-        context = lxml.etree.iterparse(file,
-                                      dtd_validation=False,
-                                      load_dtd=True,
-                                      attribute_defaults=True,
-                                      no_network=self.no_network,
-                                      remove_comments=remove_comments,
-                                      remove_pis=remove_pis,
-                                      remove_blank_text=True,
-                                      resolve_entities=False,
-                                      strip_cdata=strip_cdata,
-                                      events=("start",),
-                                      tag="rfc",
-                                  )
-        # resolver without knowledge of rfc_number:
-        caching_resolver = CachingResolver(cache_path=self.cache_path,
-                                        library_dirs=self.library_dirs,
-                                        templates_path=self.templates_path,
-                                        source=self.source,
-                                        no_network=self.no_network,
-                                        network_locs=self.network_locs,
-                                        verbose=self.verbose,
-                                        quiet=self.quiet,
-                                        options=self.options,
-                                     )
-        context.resolvers.add(caching_resolver)
+        with io.BytesIO(text) as file:
+            file.name = self.source
+            context = lxml.etree.iterparse(file,
+                                          dtd_validation=False,
+                                          load_dtd=True,
+                                          attribute_defaults=True,
+                                          no_network=self.no_network,
+                                          remove_comments=remove_comments,
+                                          remove_pis=remove_pis,
+                                          remove_blank_text=True,
+                                          resolve_entities=False,
+                                          strip_cdata=strip_cdata,
+                                          events=("start",),
+                                          tag="rfc",
+                                      )
+            # resolver without knowledge of rfc_number:
+            caching_resolver = CachingResolver(cache_path=self.cache_path,
+                                            library_dirs=self.library_dirs,
+                                            templates_path=self.templates_path,
+                                            source=self.source,
+                                            no_network=self.no_network,
+                                            network_locs=self.network_locs,
+                                            verbose=self.verbose,
+                                            quiet=self.quiet,
+                                            options=self.options,
+                                         )
+            context.resolvers.add(caching_resolver)
 
-        # Get hold of the rfc number (if any) in the rfc element, so we can
-        # later resolve the "&rfc.number;" entity.
-        self.rfc_number = None
-        self.format_version = None
-        try:
+            # Get hold of the rfc number (if any) in the rfc element, so we can
+            # later resolve the "&rfc.number;" entity.
+            self.rfc_number = None
+            self.format_version = None
             for action, element in context:
                 if element.tag == "rfc":
                     self.rfc_number = element.attrib.get("number", None)
                     self.format_version = element.attrib.get("version", None)
                     break
-        except ValueError as e:
-            if e.message=="I/O operation on closed file":
-                pass
-
         if self.format_version == "3":
             self.default_dtd_path = None
 
@@ -621,9 +615,9 @@ class XmlRfcParser:
         parser.set_element_class_lookup(element_lookup)
 
         # Parse the XML file into a tree and create an rfc instance
-        file = six.BytesIO(text)
-        file.name = self.source
-        tree = lxml.etree.parse(file, parser)
+        with io.BytesIO(text) as file:
+            file.name = self.source
+            tree = lxml.etree.parse(file, parser)
         xmlrfc = XmlRfc(tree, self.default_dtd_path, nsmap=self.nsmap)
         xmlrfc.source = self.source
 
