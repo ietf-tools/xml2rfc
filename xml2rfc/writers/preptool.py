@@ -6,7 +6,6 @@ import copy
 import datetime
 import os
 import re
-import six
 import sys
 import traceback as tb
 import unicodedata
@@ -21,12 +20,8 @@ try:
 except ImportError:
     pass
 
-if six.PY2:
-    from urlparse import urlsplit, urlunsplit, urljoin, urlparse
-    from urllib import urlopen
-elif six.PY3:
-    from urllib.parse import urlsplit, urlunsplit, urljoin, urlparse
-    from urllib.request import urlopen
+from urllib.parse import urlsplit, urlunsplit, urljoin, urlparse
+from urllib.request import urlopen
 
 from lxml import etree
 
@@ -1851,10 +1846,7 @@ class PrepToolWriter(BaseV3Writer):
                     if scheme in ['http', 'https']:
                         with closing(urlopen(src)) as f:
                             data = f.read()
-                            if six.PY2:
-                                mediatype = f.info().gettype()
-                            else:
-                                mediatype = f.info().get_content_type()
+                            mediatype = f.info().get_content_type()
                         src = build_dataurl(mediatype, data)
                         e.set('src', src)
                     elif scheme == 'file':

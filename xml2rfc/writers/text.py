@@ -6,7 +6,6 @@ import copy
 import inspect
 import re
 import sys
-import six
 import textwrap
 
 from codecs import open
@@ -54,7 +53,7 @@ Joiner      = namedtuple('joiner', ['join', 'indent', 'hang', 'overlap', 'do_out
 # We don't use namedtuple for Line, because the resulting objects would be immutable:
 class Line(object):
     def __init__(self, text, elem):
-        assert isinstance(text, six.text_type)
+        assert isinstance(text, str)
         self.text = text
         self.elem = elem
         self.page = None
@@ -177,7 +176,7 @@ def align(lines, how, width):
     return lines
 
 def mklines(arg, e):
-    if isinstance(arg, six.text_type):
+    if isinstance(arg, str):
         # \u2028 and \u2029 are eliminated here, through splitlines()
         lines = [ Line(t, e) for t in arg.splitlines() ]
     else:
@@ -185,14 +184,14 @@ def mklines(arg, e):
     return lines
 
 def mktextblock(arg):
-    if isinstance(arg, six.text_type):
+    if isinstance(arg, str):
         text = arg
     else:
         text = '\u2028'.join([ l.text for l in arg ])
     return text
 
 def mktext(arg):
-    if isinstance(arg, six.text_type):
+    if isinstance(arg, str):
         text = arg
     else:
         text = '\n'.join([ l.text for l in arg ])
@@ -313,15 +312,9 @@ class TextWriter(BaseV3Writer):
                     tag  = l.elem.tag  if l.elem!=None else '-'
                     page = l.elem.page if l.elem!=None else '-'
                     if l.block:
-                        if six.PY2:
-                            sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)).encode('utf8'))
-                        else:
-                            sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)))
+                        sys.stderr.write(("%3d %10s %3d-%3d [%4s] %s\n" % (i, tag, l.block.beg, l.block.end, page, l.text)))
                     else:
-                        if six.PY2:
-                            sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)).encode('utf8'))
-                        else:
-                            sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)))
+                        sys.stderr.write(("%3d %10s         [%4s] %s\n" % (i, tag,                           page, l.text)))
             for i, l in enumerate(lines):
                 length = len(l.text)
                 if length > MAX_WIDTH:
@@ -525,7 +518,7 @@ class TextWriter(BaseV3Writer):
         Render element e, then format and join it to text using the
         appropriate settings in joiners.
         '''
-        assert isinstance(text, six.text_type)
+        assert isinstance(text, str)
         joiners = kwargs['joiners']
         j = joiners[e.tag] if e.tag in joiners else joiners[None]
         width -= j.indent + j.hang
@@ -3792,7 +3785,7 @@ class TextWriter(BaseV3Writer):
             text = fill(text, width=width, **kwargs)
             lines = mklines(text, e)
         else:
-            if isinstance(text, six.binary_type):
+            if isinstance(text, bytes):
                 text = text.decode('utf-8')
             lines = [ Line(text, e) ]
         return lines

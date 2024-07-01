@@ -12,7 +12,6 @@ import os
 import re
 import requests
 import shutil
-import six
 import time
 import xml2rfc.log
 import xml2rfc.utils
@@ -72,7 +71,7 @@ class CachingResolver(lxml.etree.Resolver):
 
         # Get directory of source
         if self.source:
-            if isinstance(self.source, six.string_types):
+            if isinstance(self.source, str):
                 self.source_dir = os.path.abspath(os.path.dirname(self.source))
             else:
                 self.source_dir = os.path.abspath(os.path.dirname(self.source.name))                
@@ -458,7 +457,7 @@ class AnnotatedElement(lxml.etree.ElementBase):
         if value == default:
             return value
         else:
-            return six.text_type(value)
+            return str(value)
 
 class XmlRfcParser:
 
@@ -543,7 +542,7 @@ class XmlRfcParser:
                 text = text.replace(b'<rfc ', b'<rfc xmlns:%s="%s" ' % (b'xi', self.nsmap[b'xi']), 1)
 
         # Get an iterating parser object
-        file = six.BytesIO(text)
+        file = io.BytesIO(text)
         file.name = self.source
         context = lxml.etree.iterparse(file,
                                       dtd_validation=False,
@@ -621,7 +620,7 @@ class XmlRfcParser:
         parser.set_element_class_lookup(element_lookup)
 
         # Parse the XML file into a tree and create an rfc instance
-        file = six.BytesIO(text)
+        file = io.BytesIO(text)
         file.name = self.source
         tree = lxml.etree.parse(file, parser)
         xmlrfc = XmlRfc(tree, self.default_dtd_path, nsmap=self.nsmap)

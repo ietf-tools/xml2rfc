@@ -4,7 +4,6 @@
 
 # Python libs
 import calendar
-import six
 
 try:
     import debug
@@ -100,7 +99,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
     def needLines(self, count):
         """Deal with the PI directive needLines"""
-        if isinstance(count, six.string_types):
+        if isinstance(count, str):
             if count.isdigit():
                 count = int(count)
             else:

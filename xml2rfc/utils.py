@@ -6,17 +6,13 @@ from __future__ import unicode_literals, print_function, division
 
 import base64
 import re
-import six
 import sys
 import textwrap
 
 from collections import OrderedDict
 from lxml.etree import _Comment, _ProcessingInstruction
 
-if six.PY2:
-    from urllib import quote
-else:
-    from urllib.request import quote
+from urllib.request import quote
 
 try:
     from xml2rfc import debug
