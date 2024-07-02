@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.22.0] - 2024-07-02
+### :sparkles: New Features
+- [`b6391a1`](https://github.com/ietf-tools/xml2rfc/commit/b6391a163dbaba0818f634a33ebafd01a5095b77) - Use fonts from xml2rfc-fonts *(PR [#1124](https://github.com/ietf-tools/xml2rfc/pull/1124) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1030](https://github.com/ietf-tools/xml2rfc/issues/1030) opened by [@kesara](https://github.com/kesara)*
+  - :arrow_lower_right: *addresses issue [#1121](https://github.com/ietf-tools/xml2rfc/issues/1121) opened by [@kesara](https://github.com/kesara)*
+- [`14cf536`](https://github.com/ietf-tools/xml2rfc/commit/14cf53656fb7e7a0115bf224c768b38c502d9476) - Remove dependency on six *(PR [#1134](https://github.com/ietf-tools/xml2rfc/pull/1134) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1130](https://github.com/ietf-tools/xml2rfc/issues/1130) opened by [@kesara](https://github.com/kesara)*
+
+### :bug: Bug Fixes
+- [`7a30635`](https://github.com/ietf-tools/xml2rfc/commit/7a306352588c4ae3ff5826b7d2848016c4e022d6) - Use correct list style for upper case roman *(PR [#1123](https://github.com/ietf-tools/xml2rfc/pull/1123) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1122](https://github.com/ietf-tools/xml2rfc/issues/1122) opened by [@cabo](https://github.com/cabo)*
+
+### :construction_worker: Build System
+- [`a768f39`](https://github.com/ietf-tools/xml2rfc/commit/a768f39ac4c51e24d3d9516407513324b795fa18) - Update CodeQL Action to v2 *(PR [#1132](https://github.com/ietf-tools/xml2rfc/pull/1132) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`01661ae`](https://github.com/ietf-tools/xml2rfc/commit/01661ae9c88c948586f70c011d372968ffface6b) - update CHANGELOG.md + py file versions for v3.21.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.21.0] - 2024-04-08
 ### :sparkles: New Features
 - [`ca39326`](https://github.com/ietf-tools/xml2rfc/commit/ca3932629457a441d2a8797a4d28aa42c1521dce) - Validate docName and seriesInfo value for I-D *(PR [#1116](https://github.com/ietf-tools/xml2rfc/pull/1116) by [@kesara](https://github.com/kesara))*
@@ -2234,3 +2253,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.20.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.19.4...v3.20.0
 [v3.20.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.20.0...v3.20.1
 [v3.21.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.20.1...v3.21.0
+[v3.22.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.21.0...v3.22.0
