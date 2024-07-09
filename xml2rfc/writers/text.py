@@ -2152,7 +2152,11 @@ class TextWriter(BaseV3Writer):
         tt, __ = self.text_or_block_renderer(e, width, **kwargs)
         if isinstance(tt, list):
             lines = stripl(tt)
-            if lines and lines[0].elem.tag not in ['artwork', 'figure', 'sourcecode', 'li', ]:
+            if (
+                lines
+                and lines[0].elem.tag not in ["artwork", "figure", "sourcecode"]
+                and not (p.tag == "ul" and lines[0].elem.tag == "li")
+            ):
                 lines[0].text = text + lines[0].text.lstrip(stripspace)
         else:
             text += tt.lstrip(stripspace)
