@@ -809,10 +809,13 @@ class TextWriter(BaseV3Writer):
         return lines
 
     def render_artwork(self, e, width, **kwargs):
-        msg  = ( "(Artwork only available as %s: %s)"
-                    % ( e.get('type', '(unknown type)'),
-                        e.get('originalSrc') or e.get('src') or 'No external link available, see %s.html for artwork.'%self.root.get('docName')))
-        msg  = fill(msg, width=width, **kwargs)
+        artwork_url = (
+            f"{self.options.rfc_html_archive_url}rfc{self.root.get('number')}.html"
+            if self.options.rfc
+            else f"{self.options.id_html_archive_url}{self.root.get('docName')}.html"
+        )
+        msg  = f"(Artwork only available as {e.get('type', '(unknown type)')}: see {artwork_url})"
+        msg  = fill(msg, width=width, keep_url=True, **kwargs)
 #        text = (e.text.strip(stripspace) and e.text.expandtabs()) or msg
 #         text = text.strip('\n')
 #         text = '\n'.join( [ l.rstrip(stripspace) for l in text.split('\n') ] )
