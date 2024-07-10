@@ -697,6 +697,35 @@ class TextWriterTest(unittest.TestCase):
         self.assertEqual(len(lines), 2)
         self.assertIn(url, lines[1].text)
 
+    def test_render_artwork_svg_only(self):
+        artwork_str = '''
+<artwork type="svg">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <text x="10" y="15">foobar</text>
+    </svg>
+</artwork>'''
+        artwork = lxml.etree.fromstring(artwork_str)
+
+        # for RFC
+        self.writer.root = lxml.etree.fromstring(f'<rfc number="1234"></rfc>')
+        self.writer.options.rfc = True
+        self.writer.rfcnumber = 1234
+        lines = self.writer.render_artwork(artwork, width=60)
+        text = ''.join(line.text for line in lines)
+        self.assertIn("Artwork only available as svg", text)
+        self.assertIn(default_options.rfc_html_archive_url, text)
+        self.assertIn('rfc1234.html', text)
+
+        # for Draft
+        self.writer.options.rfc = None
+        lines = self.writer.render_artwork(artwork, width=60)
+        text = ' '.join(line.text for line in lines)
+        self.assertIn("Artwork only available as svg", text)
+        self.assertIn(default_options.id_html_archive_url, text)
+        self.assertIn(".html", text)
+
+
+
 class BaseV3WriterTest(unittest.TestCase):
     '''BaseV3Writer tests'''
 
