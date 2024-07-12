@@ -2151,10 +2151,20 @@ class TextWriter(BaseV3Writer):
         if isinstance(tt, list):
             lines = stripl(tt)
             children = e.getchildren()
-            if children and children[0].tag in ["artwork", "figure", "sourcecode", "ol", "ul"]:
-                lines.insert(0, Line(text.rstrip(stripspace), e))
+            if (
+                children
+                and children[0].tag in ["artwork", "figure", "sourcecode", "ol", "ul"]
+                and not (p.tag == "ul" and p.get("empty", "false").lower() == "true")
+            ):
+                 lines.insert(0, Line(text.rstrip(stripspace), e))
             else:
-                lines[0].text = text + lines[0].text.lstrip(stripspace)
+                if lines and lines[0].elem.tag not in [
+                    "artwork",
+                    "figure",
+                    "sourcecode",
+                    "li",
+                ]:
+                    lines[0].text = text + lines[0].text.lstrip(stripspace)
         else:
             text += tt.lstrip(stripspace)
             lines = mklines(text, e)
