@@ -42,7 +42,7 @@ In order to generate PDFs, **xml2rfc** uses the [WeasyPrint] module, which depen
 2. Next, install WeasyPrint python modules using pip.
 
 ```sh
-pip install 'weasyprint>=53.0,!=57.0,!=60.0'
+pip install xml2rfc[pdf]
 ```
 3. Finally, install the required fonts:
   * Download latest fonts from [xml2rfc-fonts](https://github.com/ietf-tools/xml2rfc-fonts/releases/latest).
