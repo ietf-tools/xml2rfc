@@ -284,6 +284,10 @@ def main():
                             help='More easily do line breaks after hyphens in table cells to give a more compact table')
     textoptions.add_argument('--table-borders', default='full', choices=['full', 'light', 'minimal', 'min', ],
                             help='The style of table borders to use for text output; one of full/light/minimal')
+    textoptions.add_argument('--rfc-html-archive-url', default="https://www.rfc-editor.org/rfc/",
+                           help='URL for HTML file archive of RFCs')
+    textoptions.add_argument('--id-html-archive-url', default="https://www.ietf.org/archive/id/",
+                           help='URL for HTML file archive Internet-Drafts')
 
     htmloptions = optionparser.add_argument_group('Html Format Options')
     htmloptions.add_argument('--css', default=None, metavar="FILE",
