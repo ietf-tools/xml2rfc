@@ -55,6 +55,7 @@ RUN pip3 install --upgrade \
 # Install Python dependencies
 RUN pip3 install -r requirements.txt \
     "weasyprint==61.2" \
+    "pydyf<0.11.0" \
     decorator \
     dict2xml \
     "pypdf>=3.2.1"
