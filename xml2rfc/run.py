@@ -83,7 +83,7 @@ def get_pdf_help(missing_libs=""):
 
     2. Next, install weasyprint python modules using pip.
 
-        pip install 'weasyprint>=53.0,!=57.0,!=60.0'
+        pip install xml2rfc[pdf]
 
     3. Finally, install the required fonts:
        * Download latest fonts from xml2rfc-fonts.
