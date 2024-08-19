@@ -655,7 +655,7 @@ class TextWriter(BaseV3Writer):
 
     def quote_renderer(self, e, width, prefix, by, cite, **kwargs):
         set_joiners(kwargs, {
-            None:      Joiner('\n', 0, 0, False, False),
+            None:      Joiner('\n\n', 0, 0, False, False),
             't':       Joiner('\n\n', 0, 0, False, False),
             'artset':   Joiner('\n\n', 0, 0, False, False),
             'artwork':  Joiner('\n\n', 3, 0, False, True),
