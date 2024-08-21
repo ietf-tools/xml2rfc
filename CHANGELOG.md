@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.23.0] - 2024-08-21
+### :sparkles: New Features
+- [`f743092`](https://github.com/ietf-tools/xml2rfc/commit/f7430927ee4d7e8c71bea6b7d76411e5b40cbde5) - Pin WeasyPrint 61.2 *(PR [#1147](https://github.com/ietf-tools/xml2rfc/pull/1147) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1131](https://github.com/ietf-tools/xml2rfc/issues/1131) opened by [@kesara](https://github.com/kesara)*
+
+### :bug: Bug Fixes
+- [`058479b`](https://github.com/ietf-tools/xml2rfc/commit/058479bf3a8ebcc2b37a145edf246c3417ead5e5) - **text**: Render ol and ul inside blockquote correctly *(PR [#1150](https://github.com/ietf-tools/xml2rfc/pull/1150) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1148](https://github.com/ietf-tools/xml2rfc/issues/1148) opened by [@rvanrheenen](https://github.com/rvanrheenen)*
+- [`bdafb27`](https://github.com/ietf-tools/xml2rfc/commit/bdafb274b276e875a6f7c55e1c11f03af902022b) - Add background to tt and code inside dt *(PR [#1144](https://github.com/ietf-tools/xml2rfc/pull/1144) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1142](https://github.com/ietf-tools/xml2rfc/issues/1142) opened by [@ajeanmahoney](https://github.com/ajeanmahoney)*
+
+### :memo: Documentation Changes
+- [`7776234`](https://github.com/ietf-tools/xml2rfc/commit/7776234396bc7b823e81b7d1a08d453f689f0561) - update CHANGELOG.md + py file versions for v3.22.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.22.0] - 2024-07-02
 ### :sparkles: New Features
 - [`b6391a1`](https://github.com/ietf-tools/xml2rfc/commit/b6391a163dbaba0818f634a33ebafd01a5095b77) - Use fonts from xml2rfc-fonts *(PR [#1124](https://github.com/ietf-tools/xml2rfc/pull/1124) by [@kesara](https://github.com/kesara))*
@@ -2254,3 +2269,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.20.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.20.0...v3.20.1
 [v3.21.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.20.1...v3.21.0
 [v3.22.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.21.0...v3.22.0
+[v3.23.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.22.0...v3.23.0
