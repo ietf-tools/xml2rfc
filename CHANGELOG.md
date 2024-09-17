@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.23.1] - 2024-09-17
+### :bug: Bug Fixes
+- [`e2b8734`](https://github.com/ietf-tools/xml2rfc/commit/e2b87343c5341d521f3dceb4976fad8054ac7efd) - **text**: Update non-ASCII art text *(PR [#1140](https://github.com/ietf-tools/xml2rfc/pull/1140) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#617](https://github.com/ietf-tools/xml2rfc/issues/617) opened by [@ietf-svn-bot](https://github.com/ietf-svn-bot)*
+
+### :construction_worker: Build System
+- [`3dfb04c`](https://github.com/ietf-tools/xml2rfc/commit/3dfb04cac22302d3c36cc3580e6bab1ec754e337) - Update pydyf version requirement *(PR [#1159](https://github.com/ietf-tools/xml2rfc/pull/1159) by [@kesara](https://github.com/kesara))*
+- [`e589691`](https://github.com/ietf-tools/xml2rfc/commit/e589691629377444c499dcb248ef8fef0f84c6e9) - Remove upload artifacts step *(PR [#1161](https://github.com/ietf-tools/xml2rfc/pull/1161) by [@kesara](https://github.com/kesara))*
+- [`50c3a44`](https://github.com/ietf-tools/xml2rfc/commit/50c3a44a6131258580064ffe437732f2ae3a266b) - Update GHAs *(PR [#1163](https://github.com/ietf-tools/xml2rfc/pull/1163) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`cbf4137`](https://github.com/ietf-tools/xml2rfc/commit/cbf41377d20295410a09fd8c62fd664632339e7a) - update CHANGELOG.md + py file versions for v3.23.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.23.0] - 2024-08-21
 ### :sparkles: New Features
 - [`f743092`](https://github.com/ietf-tools/xml2rfc/commit/f7430927ee4d7e8c71bea6b7d76411e5b40cbde5) - Pin WeasyPrint 61.2 *(PR [#1147](https://github.com/ietf-tools/xml2rfc/pull/1147) by [@kesara](https://github.com/kesara))*
@@ -2270,3 +2284,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.21.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.20.1...v3.21.0
 [v3.22.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.21.0...v3.22.0
 [v3.23.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.22.0...v3.23.0
+[v3.23.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.0...v3.23.1
