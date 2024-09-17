@@ -123,15 +123,6 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         makeLatest: true
         
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v2.3.1
-      with:
-        name: artifacts
-        path: |
-          CHANGELOG.md
-          setup.cfg
-          xml2rfc/__init__.py
-
     - name: Publish to Test PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
