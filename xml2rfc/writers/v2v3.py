@@ -78,13 +78,13 @@ class V2v3XmlWriter(BaseV3Writer):
                             xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                         nsmap=self.xmlrfc.nsmap,
                                         line=e.sourceline,
-                                        href="https://datatracker.ietf.org/doc/bibxml3/draft-%s.xml"%tag)
+                                        href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.draft-%s.xml"%tag)
                         else:
                             tag = re.sub(r'-\d\d$', '', tag)
                             xi = self.element('{http://www.w3.org/2001/XInclude}include',
                                         nsmap=self.xmlrfc.nsmap,
                                         line=e.sourceline,
-                                        href="https://datatracker.ietf.org/doc/bibxml3/draft-%s.xml"%tag)
+                                        href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.%s.xml"%tag)
                         xi.tail = e.tail
                         i = p.index(e)
                         p.remove(e)
