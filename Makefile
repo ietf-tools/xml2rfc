@@ -96,7 +96,7 @@ CHECKOUTPUT=	\
 %.rng: %.rnc
 	trang $< $@
 
-%.tests: %.txt.test %.html.test %.exp.xml.test %.v2v3.xml.test %.v3add-xinclude.xml.test %.text.test %.pages.text.test %.v3.html.test %.prepped.xml.test %.plain.text
+%.tests: %.txt.test %.html.test %.exp.xml.test %.v2v3.xml.test %.v3add-xinclude.xml.test %.v3add-xinclude-w-revision.xml.test %.text.test %.pages.text.test %.v3.html.test %.prepped.xml.test %.plain.text
 	@echo " Checking v3 validity"
 	@doc=$(basename $@); printf ' '; xmllint --noout --relaxng xml2rfc/data/v3.rng $$doc.prepped.xml
 	@echo " Diffing .plain.text against regular .text"
@@ -119,6 +119,9 @@ tests/out/%.v2v3.xml: tests/input/%.xml install
 
 tests/out/%.v3add-xinclude.xml: tests/input/draft-miek-test.v3.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --add-xinclude $< --out $@"
+
+tests/out/%.v3add-xinclude-w-revision.xml: tests/input/draft-template.xml install
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --add-xinclude --draft-revisions $< --out $@"
 
 tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.html tests/out/%.text install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --prep $<"
