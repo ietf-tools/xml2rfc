@@ -117,6 +117,7 @@ default_options.__dict__ = {
         'template_dir': os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates'),
         'text': True,
         'unprep': False,
+        'use_bib': False,
         'utf8': False,
         'values': False,
         'verbose': False,
