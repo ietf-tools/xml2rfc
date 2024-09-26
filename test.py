@@ -12,6 +12,7 @@ import xml2rfc.utils
 from xml2rfc.boilerplate_rfc_7841 import boilerplate_rfc_status_of_memo
 from xml2rfc.walkpdf import xmldoc
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
+from xml2rfc.writers import DatatrackerToBibConverter
 from xml2rfc.writers.text import MAX_WIDTH
 
 try:
@@ -845,6 +846,40 @@ class BaseV3WriterTest(unittest.TestCase):
         self.writer.root = invalid_doc
         with self.assertRaises(RfcWriterError):
             self.writer.validate_draft_name()
+
+
+class DatatrackerToBibConverterTest(unittest.TestCase):
+    """DatatrackerToBibConverter tests"""
+
+    def setUp(self):
+        xml2rfc.log.quiet = True
+        path = "tests/input/elements.xml"
+        self.parser = xml2rfc.XmlRfcParser(path,
+                                           quiet=True,
+                                           options=default_options,
+                                           **options_for_xmlrfcparser)
+        self.xmlrfc = self.parser.parse()
+        self.writer = xml2rfc.DatatrackerToBibConverter(self.xmlrfc, quiet=True)
+
+    def test_convert(self):
+        reference_a = "reference.I-D.ietf-sipcore-multiple-reasons.xml"
+        reference_b = "reference.I-D.draft-ietf-sipcore-multiple-reasons-01.xml"
+        rfc = lxml.etree.fromstring(f"""
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="https://datatracker.ietf.org/doc/bibxml3/{reference_a}"/>
+    <xi:include href="https://datatracker.ietf.org/doc/bibxml3/{reference_b}"/>
+</rfc>""")
+        self.writer.root = rfc
+        self.writer.convert_xincludes()
+
+        ns = {"xi": b"http://www.w3.org/2001/XInclude"}
+        xincludes = self.writer.root.xpath("//xi:include", namespaces=ns)
+
+        # reference without revision
+        self.assertEqual(xincludes[0].get("href"), f"https://bib.ietf.org/public/rfc/bibxml-ids/{reference_a}")
+
+        # reference with revision
+        self.assertEqual(xincludes[1].get("href"), f"https://bib.ietf.org/public/rfc/bibxml-ids/{reference_b}")
 
 
 if __name__ == '__main__':
