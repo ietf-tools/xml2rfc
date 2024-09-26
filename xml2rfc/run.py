@@ -198,6 +198,8 @@ def main():
                            help='outputs formatted text to file, unpaginated (only v2 input)')
     formatgroup.add_argument('--expand', action='store_true',
                            help='outputs XML to file with all references expanded')
+    formatgroup.add_argument('--use-bib', action='store_true',
+                           help='update all datatracker references with bib.ietf.org')
     formatgroup.add_argument('--v2v3', action='store_true',
                            help='convert vocabulary version 2 XML to version 3')
     formatgroup.add_argument('--preptool', action='store_true',
@@ -456,7 +458,7 @@ def main():
             options.output_path = options.basename
             options.basename = None
     #
-    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.v2v3, options.preptool, options.info, options.pdf, options.unprep ] if o])
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.expand, options.use_bib, options.v2v3, options.preptool, options.info, options.pdf, options.unprep ] if o])
     if num_formats > 1 and (options.filename or options.output_filename):
         sys.exit('Cannot use an explicit output filename when generating more than one format, '
                  'use --path instead.')
@@ -662,6 +664,15 @@ def main():
             options.output_filename = None
 
         # --- End of legacy formatter invocations ---
+        if options.use_bib:
+            xmlrfc = parser.parse(remove_comments=False, quiet=True, normalize=False, strip_cdata=False, add_xmlns=True)
+            filename = options.output_filename
+            if not filename:
+                filename = basename + '.bib.xml'
+                options.output_filename = filename
+            expander = xml2rfc.DatatrackerToBibConverter(xmlrfc, options=options, date=options.date)
+            expander.write(filename)
+            options.output_filename = None
 
         if options.expand and not options.legacy:
             xmlrfc = parser.parse(remove_comments=False, quiet=True, normalize=False, strip_cdata=False, add_xmlns=True)
