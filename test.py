@@ -712,7 +712,7 @@ class TextWriterTest(unittest.TestCase):
         self.writer.rfcnumber = 1234
         lines = self.writer.render_artwork(artwork, width=60)
         text = ''.join(line.text for line in lines)
-        self.assertIn("Artwork only available as svg", text)
+        self.assertIn("Artwork only available as SVG", text)
         self.assertIn(default_options.rfc_html_archive_url, text)
         self.assertIn('rfc1234.html', text)
 
@@ -720,10 +720,53 @@ class TextWriterTest(unittest.TestCase):
         self.writer.options.rfc = None
         lines = self.writer.render_artwork(artwork, width=60)
         text = ' '.join(line.text for line in lines)
-        self.assertIn("Artwork only available as svg", text)
+        self.assertIn("Artwork only available as SVG", text)
         self.assertIn(default_options.id_html_archive_url, text)
         self.assertIn(".html", text)
 
+    def test_render_artwork_binary_art_only(self):
+        artwork_str = '<artwork type="binary-art" src="foot.bin" />'
+        artwork = lxml.etree.fromstring(artwork_str)
+
+        # for RFC
+        self.writer.root = lxml.etree.fromstring(f'<rfc number="1234"></rfc>')
+        self.writer.options.rfc = True
+        self.writer.rfcnumber = 1234
+        lines = self.writer.render_artwork(artwork, width=60)
+        text = ''.join(line.text for line in lines)
+        self.assertIn("Artwork only available as BINARY-ART", text)
+        self.assertIn(default_options.rfc_html_archive_url, text)
+        self.assertIn('rfc1234.html', text)
+
+        # for Draft
+        self.writer.options.rfc = None
+        lines = self.writer.render_artwork(artwork, width=60)
+        text = ' '.join(line.text for line in lines)
+        self.assertIn("Artwork only available as BINARY-ART", text)
+        self.assertIn(default_options.id_html_archive_url, text)
+        self.assertIn(".html", text)
+
+    def test_render_artwork_non_ascii_unknown(self):
+        artwork_str = '<artwork src="foot.bin" />'
+        artwork = lxml.etree.fromstring(artwork_str)
+
+        # for RFC
+        self.writer.root = lxml.etree.fromstring(f'<rfc number="1234"></rfc>')
+        self.writer.options.rfc = True
+        self.writer.rfcnumber = 1234
+        lines = self.writer.render_artwork(artwork, width=60)
+        text = ''.join(line.text for line in lines)
+        self.assertIn("Artwork only available as (unknown type)", text)
+        self.assertIn(default_options.rfc_html_archive_url, text)
+        self.assertIn('rfc1234.html', text)
+
+        # for Draft
+        self.writer.options.rfc = None
+        lines = self.writer.render_artwork(artwork, width=60)
+        text = ' '.join(line.text for line in lines)
+        self.assertIn("Artwork only available as (unknown type)", text)
+        self.assertIn(default_options.id_html_archive_url, text)
+        self.assertIn(".html", text)
 
 
 class BaseV3WriterTest(unittest.TestCase):

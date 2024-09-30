@@ -814,7 +814,8 @@ class TextWriter(BaseV3Writer):
             if self.options.rfc
             else f"{self.options.id_html_archive_url}{self.root.get('docName')}.html"
         )
-        msg  = f"(Artwork only available as {e.get('type', '(unknown type)')}: see {artwork_url})"
+        artwork_type = e.get("type", "").upper() or "(unknown type)"
+        msg  = f"(Artwork only available as {artwork_type}: see {artwork_url})"
         msg  = fill(msg, width=width, keep_url=True, **kwargs)
 #        text = (e.text.strip(stripspace) and e.text.expandtabs()) or msg
 #         text = text.strip('\n')
