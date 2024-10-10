@@ -190,7 +190,7 @@ class BaseRfcWriter:
         'table_align':              'center',
         'table_style':              'full',
         'ttcol_align':              'left',
-        'ipr':                      'trust200902',
+        'ipr':                      'tlp202412',
         'submissionType':           'IETF',
         'consensus':                'no',
     }
@@ -438,6 +438,10 @@ class BaseRfcWriter:
 
     # Valid IPR attributes
     supported_ipr = [
+        'tlp202412',
+        'noModificationTlp202412',
+        'noDerivativesTlp202412',
+        'pre5378Tlp202412',
         'trust200902',
         'noModificationTrust200902',
         'noDerivativesTrust200902',
