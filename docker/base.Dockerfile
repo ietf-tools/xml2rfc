@@ -1,7 +1,7 @@
 FROM ubuntu:jammy
 LABEL maintainer="IETF Tools Team <tools-discuss@ietf.org>"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
 
 WORKDIR /root

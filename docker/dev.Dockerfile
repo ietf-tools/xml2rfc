@@ -1,7 +1,7 @@
 FROM ghcr.io/ietf-tools/xml2rfc-base:latest
 LABEL maintainer="IETF Tools Team <tools-discuss@ietf.org>"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /root
 
@@ -40,4 +40,4 @@ RUN pip3 install \
     "pypdf>=3.2.1" && \
     git config --global --add safe.directory /root/xml2rfc
 
-ENTRYPOINT bash
+ENTRYPOINT ["bash"]
