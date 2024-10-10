@@ -27,7 +27,9 @@ RUN apt-get update --fix-missing && \
         python3.11-distutils \
         python3.12 \
         python3.12-dev \
-        python3.12-distutils && \
+        python3.12-distutils \
+        python3.13 \
+        python3.13-dev && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log && \
     apt-get autoremove -y && \
     apt-get clean -y
