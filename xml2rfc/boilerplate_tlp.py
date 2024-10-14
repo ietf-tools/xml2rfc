@@ -265,11 +265,11 @@ boilerplate_tlp = {
         ],
         "IETF": [
             """<t>
-            Copyright (c) {year} IETF Intellectual Property Management (IPM)
+            Copyright (c) {year} IETF Intellectual Property Management Corporation
             and the persons identified as the document authors. All rights reserved.
             </t>""",
             """<t>
-            This document is subject to BCP 78 and the IETF IPM's Legal
+            This document is subject to BCP 78 and the  IETF IPM Technical
             Provisions Relating to IETF Documents
             (<eref target="{scheme}://trustee.ietf.org/license-info"/>) in effect on the date of
             publication of this document. Please review these documents
@@ -282,11 +282,11 @@ boilerplate_tlp = {
         ],
         "alt": [
             """<t>
-            Copyright (c) {year} IETF Intellectual Property Management (IPM)
+            Copyright (c) {year} IETF Intellectual Property Management Corporation
             and the persons identified as the document authors. All rights reserved.
             </t>""",
             """<t>
-            This document is subject to BCP 78 and the IETF IPM's Legal
+            This document is subject to BCP 78 and the  IETF IPM Technical
             Provisions Relating to IETF Documents
             (<eref target="{scheme}://trustee.ietf.org/license-info"/>) in effect on the date of
             publication of this document. Please review these documents
