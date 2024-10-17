@@ -172,8 +172,8 @@ jobs:
        shell: pwsh
        working-directory: .github/scripts
        run: |
-         Invoke-WebRequest -Uri 'https://github.com/ietf-tools/common/raw/main/scripts/font-install/font-install.exe' -OutFile font-install.exe
-         & ./font-install.exe -debug https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.zip
+         go install github.com/Crosse/font-install@latest
+         font-install https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.zip
 
      - name: Install dependencies
        shell: pwsh
