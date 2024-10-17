@@ -131,7 +131,9 @@ jobs:
         
     - name: Install dependencies
       run: |
-        brew install "https://github.com/Homebrew/homebrew-core/raw/edb83fc7c8bb9987bdecb810e61281c5adc47c73/Formula/w/weasyprint.rb"
+        brew tap-new --no-git custom/weasyprint
+        brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 weasyprint custom/weasyprint
+        brew install weasyprint@61.2
         brew install pango pillow libffi groff make diffutils
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
