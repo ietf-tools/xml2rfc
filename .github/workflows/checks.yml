@@ -135,8 +135,9 @@ jobs:
         brew tap-new --no-git custom/weasyprint
         brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 pango custom/weasyprint
         brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 pillow custom/weasyprint
-        brew install pango@1.52.1 pillow@10.2.0
-        brew install libffi groff make diffutils
+        brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 groff custom/weasyprint
+        brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 libffi custom/weasyprint
+        brew install pango@1.52.1 pillow@10.2.0 groff@1.23.0 libffi@3.4.6 make diffutils
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing requirements.txt + test dependencies..."
