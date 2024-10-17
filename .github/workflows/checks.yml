@@ -131,14 +131,17 @@ jobs:
         
     - name: Install dependencies
       run: |
+        # Install dependencies required for WeasyPrint 61.2
         brew tap-new --no-git custom/weasyprint
         brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 weasyprint custom/weasyprint
-        brew install weasyprint@61.2
-        brew install pango pillow libffi groff make diffutils
+        brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 pango custom/weasyprint
+        brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 pillow custom/weasyprint
+        brew install pango@1.52.1 pillow@10.2.0 weasyprint@61.2
+        brew install libffi groff make diffutils
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing requirements.txt + test dependencies..."
-        python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "pydyf<0.10.0"
+        python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
         
     - name: Generate Valid Tests
       run: |
