@@ -271,7 +271,7 @@ boilerplate_tlp = {
             """<t>
             This document is subject to BCP 78 and the  IETF IPM Technical Legal
             Provisions Relating to IETF Documents
-            (<eref target="{scheme}://trustee.ietf.org/license-info"/>) in effect on the date of
+            (<eref target="{scheme}://www.ietf-ipm.org/license-info"/>) in effect on the date of
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document. Code Components extracted from this
@@ -288,7 +288,7 @@ boilerplate_tlp = {
             """<t>
             This document is subject to BCP 78 and the  IETF IPM Technical Legal
             Provisions Relating to IETF Documents
-            (<eref target="{scheme}://trustee.ietf.org/license-info"/>) in effect on the date of
+            (<eref target="{scheme}://www.ietf-ipm.org/license-info"/>) in effect on the date of
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document.
