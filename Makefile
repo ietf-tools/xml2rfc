@@ -25,8 +25,7 @@ libversion_regex = \(pyflakes\|PyYAML\|requests\|setuptools\|six\|Weasyprint\) [
 
 rfcxml= \
 	rfc7911.xml		\
-#	rfc6787.xml		\
-#	rfc7754.edited.xml	\
+	rfc99999.xml	\
 
 rfcxmlfiles = $(addprefix tests/input/, $(rfcxml))
 rfctxt      = $(addsuffix .txt, $(basename $(rfcxml)))
