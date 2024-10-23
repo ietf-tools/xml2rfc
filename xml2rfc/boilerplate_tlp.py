@@ -269,7 +269,7 @@ boilerplate_tlp = {
             and the persons identified as the document authors. All rights reserved.
             </t>""",
             """<t>
-            This document is subject to BCP 78 and the  IETF IPM Technical Legal
+            This document is subject to BCP 78 and the IETF IPM Technical Legal
             Provisions Relating to IETF Documents
             (<eref target="{scheme}://www.ietf-ipm.org/license-info"/>) in effect on the date of
             publication of this document. Please review these documents
@@ -286,7 +286,7 @@ boilerplate_tlp = {
             and the persons identified as the document authors. All rights reserved.
             </t>""",
             """<t>
-            This document is subject to BCP 78 and the  IETF IPM Technical Legal
+            This document is subject to BCP 78 and the IETF IPM Technical Legal
             Provisions Relating to IETF Documents
             (<eref target="{scheme}://www.ietf-ipm.org/license-info"/>) in effect on the date of
             publication of this document. Please review these documents
