@@ -116,7 +116,7 @@ tests/out/%.v2v3.xml: tests/input/%.xml install
 	@doc=$(basename $@); printf ' '; xmllint --noout --xinclude --relaxng xml2rfc/data/v3.rng $$doc.xml
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --strict --legacy-date-format --add-xinclude $< --out $@"
 
-tests/out/%.v3add-xinclude.xml: tests/input/draft-miek-test.v3.xml install
+tests/out/%.v3add-xinclude.xml: tests/input/draft-miek-test-v3.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --add-xinclude $< --out $@"
 
 tests/out/%.v3add-xinclude-w-revision.xml: tests/input/draft-template.xml install
