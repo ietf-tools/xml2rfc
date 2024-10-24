@@ -4,6 +4,7 @@ import copy
 import difflib
 import lxml
 import re
+import sys
 import unittest
 import xml2rfc
 import xml2rfc.utils
@@ -468,6 +469,7 @@ class WriterRfcTest(WriterRootTest):
         return self.status_test()
 
 
+@unittest.skipIf(sys.platform.startswith("win"), "Test skipped on Windows OS")
 class PdfWriterTests(unittest.TestCase):
     elements_root = None
     elements_pdfxml = None

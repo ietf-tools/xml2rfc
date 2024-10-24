@@ -168,28 +168,21 @@ jobs:
        with:
          python-version: ${{ matrix.python-version }}
 
-     - name: Install Fonts
-       shell: pwsh
-       run: |
-         go install github.com/Crosse/font-install@latest
-         $env:GOPATH = (go env GOPATH)
-         $env:Path += ";$env:GOPATH\bin"
-         font-install https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.zip
-
-     - name: Install WeasyPrint dependencies
-       uses: msys2/setup-msys2@v2
-       with:
-         update: true
-         install: mingw-w64-x86_64-pango
+#     - name: Install Fonts
+#       shell: pwsh
+#       run: |
+#         go install github.com/Crosse/font-install@latest
+#         $env:GOPATH = (go env GOPATH)
+#         $env:Path += ";$env:GOPATH\bin"
+#         font-install https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.zip
 
      - name: Install Python dependencies
        shell: pwsh
        run: |
-         echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH
          echo "Installing pip + wheel..."
          python -m pip install --upgrade pip wheel
          echo "Installing requirements.txt + test dependencies..."
-         python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
+         python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0"
 
      - name: Generate Valid Tests
        run: |
