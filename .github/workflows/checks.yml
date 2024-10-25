@@ -149,49 +149,35 @@ jobs:
       run: |
         echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
         tox
-      
-#   tests-windows:
-#     name: Unit Tests (Windows)
-#     runs-on: windows-latest
-#     if: github.event_name == 'pull_request'
-    
-#     strategy:
-#       matrix:
-#         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
-        
-#     steps:
-#     - name: Checkout repository
-#       uses: actions/checkout@v4
-      
-#     - name: Setup Python ${{ matrix.python-version }}
-#       uses: actions/setup-python@v5
-#       with:
-#         python-version: ${{ matrix.python-version }}
-        
-#     - name: Install Fonts
-#       shell: pwsh
-#       working-directory: .github/scripts
-#       run: |
-#         Invoke-WebRequest -Uri 'https://github.com/ietf-tools/common/raw/main/scripts/font-install/font-install.exe' -OutFile font-install.exe
-#         & ./font-install.exe -debug https://fonts.google.com/download?family=Roboto%20Mono
-#         & ./font-install.exe -debug https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
-        
-#     - name: Install dependencies
-#       shell: pwsh
-#       run: |
-#         Invoke-WebRequest -Uri 'https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/download/2022-01-04/gtk3-runtime-3.24.31-2022-01-04-ts-win64.exe' -OutFile gtk.exe
-#         & ./gtk.exe /S
-#         choco install make
-#         echo "Installing pip + wheel..."
-#         python -m pip install --upgrade pip wheel
-#         echo "Installing requirements.txt + test dependencies..."
-#         python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
-#     - name: Generate Valid Tests
-#       run: |
-#         make yestests || true
-#         cp tests/out/. tests/valid
-        
-#     - name: Test with tox
-#       env:
-#         PLATFORM: windows-latest
-#       run: tox
+
+  tests-windows:
+     name: Unit Tests (Windows)
+     runs-on: windows-latest
+     if: github.event_name == 'pull_request'
+
+     strategy:
+       matrix:
+         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
+
+     steps:
+     - name: Checkout repository
+       uses: actions/checkout@v4
+
+     - name: Setup Python ${{ matrix.python-version }}
+       uses: actions/setup-python@v5
+       with:
+         python-version: ${{ matrix.python-version }}
+
+     - name: Install Python dependencies
+       shell: pwsh
+       run: |
+         echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH
+         echo "Installing pip + wheel..."
+         python -m pip install --upgrade pip wheel
+         echo "Installing requirements.txt + test dependencies..."
+         python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.10"
+
+     - name: Run pytests
+       env:
+         PLATFORM: windows-latest
+       run: tox -- pytests
