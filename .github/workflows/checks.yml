@@ -97,7 +97,7 @@ jobs:
 
   tests-macos:
     name: Unit Tests (macOS)
-    runs-on: macos-12
+    runs-on: macos-latest
     if: github.event_name == 'pull_request'
     
     strategy:
@@ -131,7 +131,11 @@ jobs:
         
     - name: Install dependencies
       run: |
-        brew install pango pillow libffi groff make diffutils
+        brew install make diffutils
+        # Install WeasyPrint 61.2
+        brew tap-new --no-git custom/weasyprint
+        brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 weasyprint custom/weasyprint
+        brew install weasyprint@61.2
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing requirements.txt + test dependencies..."
@@ -139,6 +143,7 @@ jobs:
         
     - name: Generate Valid Tests
       run: |
+        export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_FALLBACK_LIBRARY_PATH
         echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
         make yestests || true
         cp -af tests/out/. tests/valid
@@ -147,8 +152,9 @@ jobs:
       env:
         PLATFORM: macos-latest
       run: |
+        export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_FALLBACK_LIBRARY_PATH
         echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
-        tox
+        env 'TOX_OVERRIDE=testenv.pass_env+=DYLD_FALLBACK_LIBRARY_PATH' tox
 
   tests-windows:
      name: Unit Tests (Windows)
