@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.24.0] - 2024-10-28
+### :sparkles: New Features
+- [`dce083d`](https://github.com/ietf-tools/xml2rfc/commit/dce083d139f37ee38c82d61f962c9194d5abaa6d) - Add support for Python 3.13 *(PR [#1175](https://github.com/ietf-tools/xml2rfc/pull/1175) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1145](https://github.com/ietf-tools/xml2rfc/issues/1145) opened by [@kesara](https://github.com/kesara)*
+
+### :white_check_mark: Tests
+- [`c8f9b7f`](https://github.com/ietf-tools/xml2rfc/commit/c8f9b7fe40ee0afdfba6e6633cff78e3a97d2b0d) - Add RFC 10k test *(PR [#1180](https://github.com/ietf-tools/xml2rfc/pull/1180) by [@kesara](https://github.com/kesara))*
+
+### :construction_worker: Build System
+- [`ebc2178`](https://github.com/ietf-tools/xml2rfc/commit/ebc21784087818ba60e81b1d2e5f05d489b46029) - Remove OpenPGP keys *(PR [#1162](https://github.com/ietf-tools/xml2rfc/pull/1162) by [@kesara](https://github.com/kesara))*
+- [`2fd70e8`](https://github.com/ietf-tools/xml2rfc/commit/2fd70e8ea00e6a70424fdc8183b251b9893b9d5d) - Enable tests on Windows OS *(PR [#1177](https://github.com/ietf-tools/xml2rfc/pull/1177) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1178](https://github.com/ietf-tools/xml2rfc/issues/1178) opened by [@kesara](https://github.com/kesara)*
+- [`0e8fee4`](https://github.com/ietf-tools/xml2rfc/commit/0e8fee458e8f76a6273e0daaf8cc8b6a6eb33d62) - Run macOS tests on m1 processor *(PR [#1141](https://github.com/ietf-tools/xml2rfc/pull/1141) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1129](https://github.com/ietf-tools/xml2rfc/issues/1129) opened by [@kesara](https://github.com/kesara)*
+
+### :memo: Documentation Changes
+- [`0b4bea0`](https://github.com/ietf-tools/xml2rfc/commit/0b4bea011fd4a91c3f7352ee254e6c81e9749c84) - update CHANGELOG.md + py file versions for v3.23.2 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`3f649a3`](https://github.com/ietf-tools/xml2rfc/commit/3f649a3473d3f99425276f54e52ea0260848288e) - **deps**: Bump up lxml to 5.3.0 *(PR [#1173](https://github.com/ietf-tools/xml2rfc/pull/1173) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1070](https://github.com/ietf-tools/xml2rfc/issues/1070) opened by [@kesara](https://github.com/kesara)*
+- [`d36244c`](https://github.com/ietf-tools/xml2rfc/commit/d36244cea222812d0cd33b9f57b813400898d56a) - Remove legacy Dockerfile syntax *(PR [#1176](https://github.com/ietf-tools/xml2rfc/pull/1176) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.23.2] - 2024-10-01
 ### :bug: Bug Fixes
 - [`f297f11`](https://github.com/ietf-tools/xml2rfc/commit/f297f115b34dc3c3391410c2c6c06f903daf5937) - **v2v3**: Use bib.ietf.org for I-D xinclude references *(PR [#1166](https://github.com/ietf-tools/xml2rfc/pull/1166) by [@kesara](https://github.com/kesara))*
@@ -2297,3 +2321,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.23.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.22.0...v3.23.0
 [v3.23.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.0...v3.23.1
 [v3.23.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.1...v3.23.2
+[v3.24.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.2...v3.24.0
