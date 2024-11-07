@@ -166,6 +166,9 @@ page_css_template = """
   tt, code, pre {{
     font-family: {mono-fonts};
   }}
+  sup {{
+    line-height: 0;
+  }}
   @page {{
     size: A4;
     font-size: 12px; /* needed for the page header and footer text */
