@@ -14,9 +14,6 @@ RUN apt-get update --fix-missing && \
         git \
         vim \
         less \
-        python3.8 \
-        python3.8-dev \
-        python3.8-distutils \
         python3.9 \
         python3.9-dev \
         python3.9-distutils \
