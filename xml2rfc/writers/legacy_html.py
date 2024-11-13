@@ -11,10 +11,7 @@ import sys
 import datetime
 import calendar
 
-try:
-    from html import escape
-except ImportError:
-    from cgi import escape
+from html import escape
 
 try:
     from xml2rfc import debug
