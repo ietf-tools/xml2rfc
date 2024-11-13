@@ -1101,7 +1101,7 @@ class PrepToolWriter(BaseV3Writer):
         subtype = self.root.get('submissionType')
         if not ipr:
             self.die(self.root, "Missing ipr attribute on <rfc> element.")
-        if not ipr.endswith('trust200902'):
+        if not (ipr.endswith("tlp202412") or ipr.endswith("trust200902")):
             self.die(self.root, "Unknown ipr attribute: %s" % (self.root.get('ipr'), ))
         #
         if   self.date < tlp_2_start_date:
@@ -1112,11 +1112,14 @@ class PrepToolWriter(BaseV3Writer):
         elif self.date < tlp_4_start_date:
             tlp = "3.0"
             stream = "n/a"
-        else:
+        elif ipr.endswith("trust200902"):
             # The only difference between 4.0 and 5.0 is selective URL scheme,
             # which we handle using the http cutover date, through interpolation:
-            tlp = "5.0"                 
-            stream = 'IETF' if subtype == 'IETF' else 'alt'
+            tlp = "5.0"
+            stream = "IETF" if subtype == "IETF" else "alt"
+        else:
+            tlp = "6.0"
+            stream = "IETF" if subtype == "IETF" else "alt"
         format_dict = {'year': self.date.year, }
         format_dict['scheme'] = 'http' if self.date < self.boilerplate_https_date else 'https'
         section = self.element('section', numbered='false', toc='exclude', anchor='copyright')
