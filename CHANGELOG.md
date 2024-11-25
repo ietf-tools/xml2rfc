@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.25.0] - 2024-11-25
+### :sparkles: New Features
+- [`7b8ed97`](https://github.com/ietf-tools/xml2rfc/commit/7b8ed97716fca1997d4903799145d532d4390740) - Drop support for Python 3.8 *(PR [#1183](https://github.com/ietf-tools/xml2rfc/pull/1183) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1146](https://github.com/ietf-tools/xml2rfc/issues/1146) opened by [@kesara](https://github.com/kesara)*
+
+### :bug: Bug Fixes
+- [`bf52f86`](https://github.com/ietf-tools/xml2rfc/commit/bf52f861886a19aacc95938d5ba8ea5b62646785) - **pdf**: Fix line height issue with superscripts *(PR [#1165](https://github.com/ietf-tools/xml2rfc/pull/1165) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1160](https://github.com/ietf-tools/xml2rfc/issues/1160) opened by [@ajeanmahoney](https://github.com/ajeanmahoney)*
+- [`b5381ac`](https://github.com/ietf-tools/xml2rfc/commit/b5381ac89bcc4b339a337544afd39f740ddfe404) - Remove deprecated cgi method *(PR [#1182](https://github.com/ietf-tools/xml2rfc/pull/1182) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1153](https://github.com/ietf-tools/xml2rfc/issues/1153) opened by [@kitterma](https://github.com/kitterma)*
+- [`2f17276`](https://github.com/ietf-tools/xml2rfc/commit/2f17276c680a7cb201254ec1894314ee28653c3d) - **text**: Fix truncated text issue in cells with rowspan *(PR [#1184](https://github.com/ietf-tools/xml2rfc/pull/1184) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1155](https://github.com/ietf-tools/xml2rfc/issues/1155) opened by [@ajeanmahoney](https://github.com/ajeanmahoney)*
+
+### :memo: Documentation Changes
+- [`f0aeb65`](https://github.com/ietf-tools/xml2rfc/commit/f0aeb656770d7c26118dedb33d9dcbcc0e66b466) - update CHANGELOG.md + py file versions for v3.24.0 [skip ci] *(commit by [@kesara](https://github.com/kesara))*
+
+### :wrench: Chores
+- [`5d38e19`](https://github.com/ietf-tools/xml2rfc/commit/5d38e192342b1b764f14e71eff29f73562db8bb5) - Remove obsolete script *(PR [#1185](https://github.com/ietf-tools/xml2rfc/pull/1185) by [@kesara](https://github.com/kesara))*
+- [`8085bcc`](https://github.com/ietf-tools/xml2rfc/commit/8085bcce2f33c3156641fb790b107536ef6b16f5) - Cleanup MANIFEST.in *(PR [#1186](https://github.com/ietf-tools/xml2rfc/pull/1186) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.24.0] - 2024-10-28
 ### :sparkles: New Features
 - [`dce083d`](https://github.com/ietf-tools/xml2rfc/commit/dce083d139f37ee38c82d61f962c9194d5abaa6d) - Add support for Python 3.13 *(PR [#1175](https://github.com/ietf-tools/xml2rfc/pull/1175) by [@kesara](https://github.com/kesara))*
@@ -2322,3 +2343,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.23.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.0...v3.23.1
 [v3.23.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.1...v3.23.2
 [v3.24.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.2...v3.24.0
+[v3.25.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.24.0...v3.25.0
