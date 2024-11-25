@@ -7,6 +7,11 @@ on:
         description: 'Create Production Release'
         required: true
         type: boolean
+      skip_test_pypi:
+        description: "Skip publishing to test PyPI"
+        required: false
+        type: boolean
+        default: "false"
 
 jobs:
   publish:
@@ -124,6 +129,7 @@ jobs:
         makeLatest: true
         
     - name: Publish to Test PyPI
+      if: ${{ !inputs.skip_test_pypi }}
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://test.pypi.org/legacy/
