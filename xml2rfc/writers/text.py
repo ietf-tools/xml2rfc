@@ -4179,7 +4179,7 @@ class TextWriter(BaseV3Writer):
                 k, l = cell.origin
                 hspan = cell.rowspan+k-i if cell.rowspan else minspan
                 lines = len(cell.wrapped) if cell.wrapped else 0
-                if hspan == minspan and lines > maxlines:
+                if lines > maxlines:
                     maxlines = lines
             for j in range(cols):
                 cells[i][j].lines = maxlines
