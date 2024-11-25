@@ -3,7 +3,7 @@ name: Publish Python Package
 on:
   workflow_dispatch:
     inputs:
-      publish:
+      publish_release:
         description: 'Create Production Release'
         required: true
         type: boolean
@@ -25,7 +25,7 @@ jobs:
         fetch-depth: 0
         
     - name: Get Next Version
-      if: ${{ github.event.inputs.publish }}
+      if: ${{ inputs.publish_release }}
       id: semver
       uses: ietf-tools/semver-action@v1
       with:
@@ -34,7 +34,7 @@ jobs:
         branch: main
         
     - name: Set Next Version Env Var
-      if: ${{ github.event.inputs.publish }}
+      if: ${{ inputs.publish_release }}
       env:
         NEXT_VERSION: ${{ steps.semver.outputs.next }}
       run: |
@@ -42,7 +42,7 @@ jobs:
         
     - name: Create Draft Release
       uses: ncipollo/release-action@v1
-      if: ${{ github.event.inputs.publish }}
+      if: ${{ inputs.publish_release }}
       with:
         prerelease: true
         draft: false
@@ -134,7 +134,7 @@ jobs:
 
   build-base:
     runs-on: ubuntu-latest
-    if: github.event.inputs.publish
+    if: ${{ inputs.publish_release }}
     needs: [publish]
     permissions:
       contents: read
