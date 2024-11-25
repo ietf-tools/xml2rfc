@@ -137,6 +137,8 @@ jobs:
     - name: Publish to PyPI
       if: env.SHOULD_DEPLOY == 'true'
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        attestations: false
 
   build-base:
     runs-on: ubuntu-latest
