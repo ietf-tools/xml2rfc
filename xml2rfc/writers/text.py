@@ -1648,7 +1648,10 @@ class TextWriter(BaseV3Writer):
             self.warn(e, "Expected the 'target' attribute to have a value, but found %s" % (etree.tostring(e), ))
         if   brackets == 'none':
             if e.text and target:
-                target = "(%s)" % target
+                if target[0] == '#':
+                    target = ""
+                else:
+                    target = "(%s)" % target
         elif brackets == 'angle':
             target = "<%s>" % target                
         else:
