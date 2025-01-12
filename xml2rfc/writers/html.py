@@ -507,7 +507,7 @@ class HtmlWriter(BaseV3Writer):
     # 
     #    <link rel="alternate" type="application/rfc+xml" href="source.xml">
 
-        add.link(head, None, href=self.xmlrfc.source, rel='alternate', type='application/rfc+xml')
+        add.link(head, None, href=os.path.basename(self.xmlrfc.source), rel='alternate', type='application/rfc+xml')
 
     # 6.3.5.  Link to License
     # 
