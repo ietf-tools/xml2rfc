@@ -49,20 +49,20 @@ jobs:
     name: Unit Tests (Linux)
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    
+
     strategy:
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
-        
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-        
+
     - name: Fonts Cache
       id: cache-fonts-linux
       uses: pat-s/always-upload-cache@v2.1.5
@@ -83,7 +83,7 @@ jobs:
         ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
         echo "Reloading Font Cache..."
         fc-cache -f -v
-        
+
     - name: Link Fonts
       if: steps.cache-fonts-linux.outputs.cache-hit == 'true'
       run: |
@@ -92,7 +92,7 @@ jobs:
         ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
         echo "Reloading Font Cache..."
         fc-cache -f -v
-        
+
     - name: Install dependencies
       run: |
         sudo apt-get update
@@ -101,12 +101,12 @@ jobs:
         python -m pip install --upgrade pip wheel
         echo "Installing requirements.txt + test dependencies..."
         python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
-        
+
     - name: Generate Valid Tests
       run: |
         make yestests || true
         cp -af tests/out/. tests/valid
-        
+
     - name: Test with tox
       env:
         PLATFORM: ubuntu-latest
@@ -116,20 +116,20 @@ jobs:
     name: Unit Tests (macOS)
     runs-on: macos-latest
     if: github.event_name == 'pull_request'
-    
+
     strategy:
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
-        
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-        
+
     - name: Fonts Cache
       id: cache-fonts-mac
       uses: pat-s/always-upload-cache@v2.1.5
@@ -145,7 +145,7 @@ jobs:
         tar zxf fonts.tar.gz -C ~/fonts
         mv ~/fonts/*/noto/* /Library/Fonts/
         mv ~/fonts/*/roboto_mono/* /Library/Fonts/
-        
+
     - name: Install dependencies
       run: |
         brew install make diffutils
@@ -157,14 +157,14 @@ jobs:
         python -m pip install --upgrade pip wheel
         echo "Installing requirements.txt + test dependencies..."
         python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
-        
+
     - name: Generate Valid Tests
       run: |
         export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_FALLBACK_LIBRARY_PATH
         echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
         make yestests || true
         cp -af tests/out/. tests/valid
-        
+
     - name: Test with tox
       env:
         PLATFORM: macos-latest
