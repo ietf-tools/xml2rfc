@@ -28,6 +28,23 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
 
+  validate-pyproject:
+    name: Validate pyproject.toml
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+
+    - name: Install validate-pyproject
+      run: pip install validate-pyproject
+
+    - name: Validate pyproject.toml
+      run: validate-pyproject pyproject.toml
+
   tests-linux:
     name: Unit Tests (Linux)
     runs-on: ubuntu-latest
