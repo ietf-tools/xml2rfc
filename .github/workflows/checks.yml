@@ -99,8 +99,8 @@ jobs:
         sudo apt-get install -qy groff html2text python3-cffi python3-brotli libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 libxml2-dev libxml2-utils libxslt-dev
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
-        echo "Installing requirements.txt + test dependencies..."
-        python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
+        echo "Installing test dependencies..."
+        python -m pip install tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
 
     - name: Generate Valid Tests
       run: |
@@ -155,8 +155,8 @@ jobs:
         brew install weasyprint@61.2
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
-        echo "Installing requirements.txt + test dependencies..."
-        python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
+        echo "Installing test dependencies..."
+        python -m pip install tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==61.2" "pydyf<0.10.0"
 
     - name: Generate Valid Tests
       run: |
@@ -197,8 +197,8 @@ jobs:
          echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH
          echo "Installing pip + wheel..."
          python -m pip install --upgrade pip wheel
-         echo "Installing requirements.txt + test dependencies..."
-         python -m pip install -r requirements.txt tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.10"
+         echo "Installing test dependencies..."
+         python -m pip install . tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.10"
 
      - name: Run pytests
        env:

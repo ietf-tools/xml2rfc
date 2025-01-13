@@ -96,7 +96,7 @@ jobs:
         source venv/bin/activate
         echo "Using version $PKG_VERSION_STRICT"
         sed -i -r -e "s/^__version__ += '.*'$/__version__ = '$PKG_VERSION_STRICT'/" xml2rfc/__init__.py
-        python -m build --sdist
+        python -m build
 
     - name: Update CHANGELOG
       id: changelog
