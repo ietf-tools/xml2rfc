@@ -1719,15 +1719,12 @@ class PrepToolWriter(BaseV3Writer):
         dir = os.path.abspath(os.path.dirname(self.xmlrfc.source))
         path = os.path.abspath(os.path.join(dir, path))
         if not path.startswith(dir):
-            self.err(e, "Expected an <%s> src= file located beside or below the .xml source (in %s), but found a reference to %s" % (e.tag, dir, path))
-            return None
+            self.die(e, "Expected an <%s> src= file located beside or below the .xml source (in %s), but found a reference to %s" % (e.tag, dir, path))
         src = urlunsplit((scheme, '', path, '', ''))
         if shellmeta.search(src):
-            self.err(e, "Found disallowed shell meta-characters in the src='file:...' attribute")
-            return None
+            self.die(e, "Found disallowed shell meta-characters in the src='file:...' attribute")
         if not os.path.exists(path):
-            self.err(e, "Expected an <%s> src= file at '%s', but no such file exists" % (e.tag, path, ))
-            return None
+            self.die(e, "Expected an <%s> src= file at '%s', but no such file exists" % (e.tag, path, ))
         #
         e.set('src', src)
         return src
