@@ -1941,7 +1941,8 @@ class PrepToolWriter(BaseV3Writer):
                 e.text = data
                 del e.attrib['src']
 
-        self.normalize_whitespace(e)
+        if e.text:
+            self.normalize_whitespace(e)
         
     #
     # 5.4.2.4  "Table of Contents" Insertion
