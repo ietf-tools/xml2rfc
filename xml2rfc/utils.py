@@ -60,7 +60,7 @@ class TextWrapper(textwrap.TextWrapper):
             # Tla with leading uppercase, and special cases
             # (Note: v1 spelled out Fig, Tbl, Mrs, Drs, Rep, Sen, Gov, Rev, Gen, Col, Maj and Cap,
             #  but those are redundant with the Tla regex.)
-            r'|([\(\[])?([A-Z][a-z][a-z]|Eq|[Cc]f|vs|resp|viz|ibid|[JS]r|M[rs]|Messrs|Mmes|Dr|Profs?|St|Lt|a\.k\.a|i\.e)\.'
+            r'|([\(\[])?([A-Z][a-z][a-z]|Eq|[Cc]f|vs|resp|viz|ibid|[JS]r|M[rs]|Messrs|Mmes|Dr|Profs?|St|Lt|a\.k\.a|i\.e|e\.g)\.'
             r')\Z' # trailing dot, end of group and end of chunk
             )
 
