@@ -1719,12 +1719,15 @@ class PrepToolWriter(BaseV3Writer):
         dir = os.path.abspath(os.path.dirname(self.xmlrfc.source))
         path = os.path.abspath(os.path.join(dir, path))
         if not path.startswith(dir):
-            self.die(e, "Expected an <%s> src= file located beside or below the .xml source (in %s), but found a reference to %s" % (e.tag, dir, path))
+            self.err(e, "Expected an <%s> src= file located beside or below the .xml source (in %s), but found a reference to %s" % (e.tag, dir, path))
+            return None
         src = urlunsplit((scheme, '', path, '', ''))
         if shellmeta.search(src):
-            self.die(e, "Found disallowed shell meta-characters in the src='file:...' attribute")
+            self.err(e, "Found disallowed shell meta-characters in the src='file:...' attribute")
+            return None
         if not os.path.exists(path):
-            self.die(e, "Expected an <%s> src= file at '%s', but no such file exists" % (e.tag, path, ))
+            self.err(e, "Expected an <%s> src= file at '%s', but no such file exists" % (e.tag, path, ))
+            return None
         #
         e.set('src', src)
         return src
@@ -1938,7 +1941,8 @@ class PrepToolWriter(BaseV3Writer):
                 e.text = data
                 del e.attrib['src']
 
-        self.normalize_whitespace(e)
+        if e.text:
+            self.normalize_whitespace(e)
         
     #
     # 5.4.2.4  "Table of Contents" Insertion
