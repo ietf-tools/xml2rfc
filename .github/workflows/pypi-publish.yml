@@ -81,9 +81,9 @@ jobs:
 
     - name: Build a binary wheel and a source tarball
       run: |
-        python3 -m build
         echo "Using version $PKG_VERSION_STRICT"
         sed -i -r -e "s/^__version__ += '.*'$/__version__ = '$PKG_VERSION_STRICT'/" xml2rfc/__init__.py
+        python3 -m build
 
     - name: Store the distribution packages
       uses: actions/upload-artifact@v4
