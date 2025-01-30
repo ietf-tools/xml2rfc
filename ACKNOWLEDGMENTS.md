@@ -26,5 +26,35 @@ contributors:
  - Josh Soref
  - Justus Winter
  - Scott Kitterman
+ - Jean Mahoney
+ - Alice Russo
+ - Asbjørn Ulsberg
+ - Kent Watsen
+ - Madison Church
+ - Lynne Bartholomew
+ - Tom Haynes
+ - Alanna Paloma
+ - Sandy Ginoza
+ - Sarah Tarrant
+ - John Scudder
+ - Paul Hoffman
+ - Mark Nottingham
+ - Rahul Gupta
+ - Bob Hinden
+ - John Preuß Mattsson
+ - Rebecca VanRheenen
+ - John C Klensin
+ - Randy Bush
+ - Florian Schmaus
+ - Adrian Farrel
+ - Valery Smyslov
+ - Bill P. Godfrey
+ - Miek Gieben
+ - Benoît Claise
+ - Lars Eggert
+ - John Levine
+ - David von Oheimb
+ - Brian E Carpenter
+ - Robert Kieffer
 
 [^1]: https://datatracker.ietf.org/doc/html/rfc2629
