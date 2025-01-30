@@ -24,19 +24,16 @@ RUN apt-get update --fix-missing && \
         python3.11-distutils \
         python3.12 \
         python3.12-dev \
-        python3.12-distutils \
         python3.13 \
         python3.13-dev && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log && \
     apt-get autoremove -y && \
     apt-get clean -y
 
-# Install Python dependencies & finalize
-RUN pip3 install \
-    tox \
-    decorator \
-    dict2xml \
-    "pypdf>=3.2.1" && \
-    git config --global --add safe.directory /root/xml2rfc
+# Install tox
+RUN pip3 install tox
+
+# git config
+RUN git config --global --add safe.directory /root/xml2rfc
 
 ENTRYPOINT ["bash"]

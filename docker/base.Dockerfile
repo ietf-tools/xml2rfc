@@ -43,8 +43,7 @@ RUN mkdir -p ~/.fonts/opentype /tmp/fonts && \
     fc-cache -f
 
 # Copy everything required to build xml2rfc
-COPY requirements.txt setup.py setup.cfg pyproject.toml README.md LICENSE Makefile configtest.py .
-
+COPY pyproject.toml README.md LICENSE Makefile configtest.py .
 
 # Install & update build tools
 RUN pip3 install --upgrade \
@@ -52,18 +51,7 @@ RUN pip3 install --upgrade \
     setuptools \
     wheel
 
-# Install Python dependencies
-RUN pip3 install -r requirements.txt \
-    "weasyprint==61.2" \
-    "pydyf<0.11.0" \
-    decorator \
-    dict2xml \
-    "pypdf>=3.2.1"
-
 COPY xml2rfc ./xml2rfc
 
-# Build xml2rfc & finalize
-RUN make install && \
-    pip3 uninstall -y decorator dict2xml pypdf && \
-    rm setup.py Makefile configtest.py requirements.txt && \
-    rm -r xml2rfc build
+# Install xml2rfc
+RUN pip install ".[pdf]"
