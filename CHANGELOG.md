@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [v3.26.0] - 2025-01-29
+### :sparkles: New Features
+* feat: Add option to update datatracker references by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1168
+* feat: Migrate to pyproject.toml by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1200
+
+### :bug: Bug Fixes
+* fix(html): Use basename for alternative link by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1198
+* fix: Add quotes to pip extra command by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1202
+* fix: Exit gracefully on artwork and sourcecode src file access errors by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1203
+* fix(text): Improve sentence ending logic by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1206
+* fix(pdf): Fix suboptimal overflow issues in the header by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1207
+
+### :wrench: Chores
+* build: Update Python publish GHA by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1208
+* ci: Use correct environment name for testpypi by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1209
+
+
 ## [v3.25.0] - 2024-11-25
 ### :sparkles: New Features
 - [`7b8ed97`](https://github.com/ietf-tools/xml2rfc/commit/7b8ed97716fca1997d4903799145d532d4390740) - Drop support for Python 3.8 *(PR [#1183](https://github.com/ietf-tools/xml2rfc/pull/1183) by [@kesara](https://github.com/kesara))*
@@ -2344,3 +2362,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.23.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.1...v3.23.2
 [v3.24.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.2...v3.24.0
 [v3.25.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.24.0...v3.25.0
+[v3.26.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.25.0...v3.26.0
