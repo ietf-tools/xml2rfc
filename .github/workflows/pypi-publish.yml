@@ -12,6 +12,8 @@ jobs:
   build:
     name: Build distribution 📦
     runs-on: ubuntu-latest
+    outputs:
+      pkg_version: ${{ steps.semver.outputs.next }}
 
     steps:
     - uses: actions/checkout@v4
@@ -56,17 +58,14 @@ jobs:
       run: |
         if [[ $NEXT_VERSION ]]; then
           echo "Using AUTO SEMVER mode: $NEXT_VERSION"
-          echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
           echo "PKG_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
           echo "PKG_VERSION_STRICT=${NEXT_VERSION#?}" >> $GITHUB_ENV
         elif [[ "$GITHUB_REF" =~ ^refs/tags/v* ]]; then
           echo "Using TAG mode: $GITHUB_REF_NAME"
-          echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
           echo "PKG_VERSION=$GITHUB_REF_NAME" >> $GITHUB_ENV
           echo "PKG_VERSION_STRICT=${GITHUB_REF_NAME#?}" >> $GITHUB_ENV
         else
           echo "Using TEST mode: v3.0.0-dev.$GITHUB_RUN_NUMBER"
-          echo "SHOULD_DEPLOY=false" >> $GITHUB_ENV
           echo "PKG_VERSION=v3.0.0-dev.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
           echo "PKG_VERSION_STRICT=3.0.0-dev.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
         fi
@@ -119,14 +118,14 @@ jobs:
       Sign the Python 🐍 distribution 📦 with Sigstore
       and upload them to GitHub Release
     needs:
+    - build
     - publish-to-pypi
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
       id-token: write
       packages: write
-    outputs:
-      pkg_version: ${{ steps.semver.outputs.next }}
 
     steps:
     - name: Download all the dists
@@ -135,10 +134,12 @@ jobs:
         name: python-package-distributions
         path: dist/
 
+    - name: Set Variables
+      run: echo "PKG_VERSION=${{needs.build.outputs.pkg_version}}" >> $GITHUB_ENV
+
     - name: Update CHANGELOG
       id: changelog
       uses: Requarks/changelog-action@v1
-      if: env.SHOULD_DEPLOY == 'true'
       with:
         token: ${{ github.token }}
         tag: ${{ env.PKG_VERSION }}
@@ -146,7 +147,6 @@ jobs:
 
     - name: Commit CHANGELOG.md
       uses: stefanzweifel/git-auto-commit-action@v5
-      if: env.SHOULD_DEPLOY == 'true'
       with:
         branch: main
         commit_message: 'docs: update CHANGELOG.md + py file versions for ${{ env.PKG_VERSION }} [skip ci]'
@@ -161,7 +161,6 @@ jobs:
 
     - name: Create Release
       uses: ncipollo/release-action@v1
-      if: env.SHOULD_DEPLOY == 'true'
       with:
         allowUpdates: true
         draft: false
