@@ -4,7 +4,8 @@
 markup language for RFCs and Internet-Drafts[^1]. The current implementation of
 the `xml2rfc` was originally authored by Henrik Levkowetz.
 
-Here is an inevitably incomplete list of much appreciated contributors:
+Here is an inevitably incomplete and unmaintained list of much appreciated
+contributors:
 
  - Marshall Rose
  - Henrik Levkowetz
