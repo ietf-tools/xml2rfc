@@ -57,4 +57,4 @@ contributors:
  - Brian E Carpenter
  - Robert Kieffer
 
-[^1]: https://datatracker.ietf.org/doc/html/rfc2629
+[^1]: https://www.rfc-editor.org/rfc/rfc2629
