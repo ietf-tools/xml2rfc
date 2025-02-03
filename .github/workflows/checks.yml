@@ -1,6 +1,8 @@
 name: Tests + Code Analysis
 
 on:
+  schedule:
+    - cron: '44 1 * * *'
   push:
     branches: [ main ]
   pull_request:
@@ -48,7 +50,7 @@ jobs:
   tests-linux:
     name: Unit Tests (Linux)
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
 
     strategy:
       matrix:
@@ -115,7 +117,7 @@ jobs:
   tests-macos:
     name: Unit Tests (macOS)
     runs-on: macos-latest
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
 
     strategy:
       matrix:
@@ -174,33 +176,33 @@ jobs:
         env 'TOX_OVERRIDE=testenv.pass_env+=DYLD_FALLBACK_LIBRARY_PATH' tox
 
   tests-windows:
-     name: Unit Tests (Windows)
-     runs-on: windows-latest
-     if: github.event_name == 'pull_request'
+    name: Unit Tests (Windows)
+    runs-on: windows-latest
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
 
-     strategy:
-       matrix:
-         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
 
-     steps:
-     - name: Checkout repository
-       uses: actions/checkout@v4
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-     - name: Setup Python ${{ matrix.python-version }}
-       uses: actions/setup-python@v5
-       with:
-         python-version: ${{ matrix.python-version }}
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
 
-     - name: Install Python dependencies
-       shell: pwsh
-       run: |
-         echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH
-         echo "Installing pip + wheel..."
-         python -m pip install --upgrade pip wheel
-         echo "Installing test dependencies..."
-         python -m pip install . tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.10"
+    - name: Install Python dependencies
+      shell: pwsh
+      run: |
+        echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH
+        echo "Installing pip + wheel..."
+        python -m pip install --upgrade pip wheel
+        echo "Installing test dependencies..."
+        python -m pip install . tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.10"
 
-     - name: Run pytests
-       env:
-         PLATFORM: windows-latest
-       run: tox -- pytests
+    - name: Run pytests
+      env:
+        PLATFORM: windows-latest
+      run: tox -- pytests
