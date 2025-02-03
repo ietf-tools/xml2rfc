@@ -50,7 +50,7 @@ jobs:
   tests-linux:
     name: Unit Tests (Linux)
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
 
     strategy:
       matrix:
@@ -117,7 +117,7 @@ jobs:
   tests-macos:
     name: Unit Tests (macOS)
     runs-on: macos-latest
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
 
     strategy:
       matrix:
@@ -178,7 +178,7 @@ jobs:
   tests-windows:
      name: Unit Tests (Windows)
      runs-on: windows-latest
-     if: github.event_name == 'pull_request'
+     if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
 
      strategy:
        matrix:
