@@ -1829,7 +1829,7 @@ class BaseV3Writer(object):
                 self.log(self.msg(e, label, text))
 
     def warn(self, e, text, label='Warning:'):
-        if self.options.verbose or not self.silenced(e, text):
+        if self.options.verbose or not (self.silenced(e, text) or self.options.quiet):
             self.log(self.msg(e, label, text))
 
     def err(self, e, text, trace=False):
