@@ -14,6 +14,7 @@ from xml2rfc.walkpdf import xmldoc
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc.writers import DatatrackerToBibConverter
 from xml2rfc.writers.text import MAX_WIDTH
+from xml2rfc.util.file import can_access, FileAccessError
 
 try:
     from xml2rfc import debug
@@ -880,6 +881,47 @@ class DatatrackerToBibConverterTest(unittest.TestCase):
 
         # reference with revision
         self.assertEqual(xincludes[1].get("href"), f"https://bib.ietf.org/public/rfc/bibxml-ids/{reference_b}")
+
+
+class FileAccessTest(unittest.TestCase):
+    def setUp(self):
+        self.options = copy.deepcopy(default_options)
+
+    def test_allow_access_false(self):
+        self.options.allow_local_file_access = False
+        with self.assertRaises(FileAccessError) as e:
+            can_access(self.options, "/foo/bar", "/bar")
+            self.assertIn("Can not access local file" in e.exception)
+
+    def test_has_meta_chars(self):
+        self.options.allow_local_file_access = True
+        for char in "[><*[`$|;&(#]":
+            with self.assertRaises(FileAccessError) as e:
+                can_access(self.options, "/foo/bar", f"/bar{char}")
+                self.assertIn("Found disallowed shell meta-characters" in e.exception)
+
+    def test_not_within_src_dir(self):
+        self.options.allow_local_file_access = True
+        with self.assertRaises(FileAccessError) as e:
+            can_access(self.options, "/foo/bar", "/etc/passwd")
+            self.assertIn("Expected a file located beside or below the .xml source" in e.exception)
+
+    def test_non_existent_file(self):
+        self.options.allow_local_file_access = True
+        with self.assertRaises(FileAccessError) as e:
+            can_access(self.options, "test.py", "foobar.foobar")
+            self.assertIn("no such file exists" in e.exception)
+
+    def test_allowed_access(self):
+        self.options.allow_local_file_access = True
+        self.assertTrue(can_access(self.options, "test.py", "test.py"))
+
+    def test_allowed_access_template(self):
+        self.options.allow_local_file_access = False
+        self.assertTrue(can_access(self.options,
+                                   source="test.py",
+                                   path="rfc2629-xhtml.ent",
+                                   access_templates=True))
 
 
 if __name__ == '__main__':

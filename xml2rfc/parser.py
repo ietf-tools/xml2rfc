@@ -17,6 +17,7 @@ import xml2rfc.log
 import xml2rfc.utils
 
 from xml2rfc.writers import base
+from xml2rfc.util.file import can_access, FileAccessError
 
 try:
     from urllib.parse import urlparse, urljoin, urlsplit
@@ -141,14 +142,13 @@ class CachingResolver(lxml.etree.Resolver):
         if not url.netloc or url.scheme == 'file':
             if request.startswith("file://"):
                 request = request[7:]
-            if not self.options.allow_local_file_access:
-                path = self.getReferenceRequest(request)
-                abspath = os.path.dirname(os.path.abspath(path))
-                if not (abspath == self.options.template_dir or
-                        abspath == self.source_dir):
-                    error = 'Can not access local file: {}'.format(request)
-                    xml2rfc.log.error(error)
-                    raise XmlRfcError(error)
+            try:
+                can_access(self.options,
+                           self.source,
+                           self.getReferenceRequest(request),
+                           access_templates=True)
+            except FileAccessError as error:
+                raise XmlRfcError(str(error))
         try:
             path = self.getReferenceRequest(request)
             return self.resolve_filename(path, context)

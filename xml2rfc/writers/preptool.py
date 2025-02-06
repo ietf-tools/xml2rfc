@@ -33,6 +33,7 @@ from xml2rfc.boilerplate_tlp import boilerplate_tlp
 from xml2rfc.scripts import get_scripts
 from xml2rfc.uniscripts import is_script
 from xml2rfc.util.date import get_expiry_date, format_date, normalize_month
+from xml2rfc.util.file import can_access, FileAccessError
 from xml2rfc.util.name import full_author_name_expansion
 from xml2rfc.util.num import ol_style_formatter
 from xml2rfc.util.unicode import (
@@ -1714,20 +1715,15 @@ class PrepToolWriter(BaseV3Writer):
         return (scheme, netloc, path, query, fragment)
 
     def check_src_file_path(self, e, scheme, netloc, path, query, fragment):
-        shellmeta = re.compile("[><*[`$|;&(#]")
+        try:
+            can_access(self.options, self.xmlrfc.source, path)
+        except FileAccessError as err:
+            self.err(e, err)
+            return None
         #
         dir = os.path.abspath(os.path.dirname(self.xmlrfc.source))
         path = os.path.abspath(os.path.join(dir, path))
-        if not path.startswith(dir):
-            self.err(e, "Expected an <%s> src= file located beside or below the .xml source (in %s), but found a reference to %s" % (e.tag, dir, path))
-            return None
         src = urlunsplit((scheme, '', path, '', ''))
-        if shellmeta.search(src):
-            self.err(e, "Found disallowed shell meta-characters in the src='file:...' attribute")
-            return None
-        if not os.path.exists(path):
-            self.err(e, "Expected an <%s> src= file at '%s', but no such file exists" % (e.tag, path, ))
-            return None
         #
         e.set('src', src)
         return src

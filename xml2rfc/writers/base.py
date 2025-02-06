@@ -25,6 +25,7 @@ except ImportError:
 
 from xml2rfc import strings, log
 from xml2rfc.util.date import extract_date, augment_date, format_date, get_expiry_date
+from xml2rfc.util.file import can_access, FileAccessError
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
 from xml2rfc.util.unicode import is_svg
 from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
@@ -1856,8 +1857,7 @@ class BaseV3Writer(object):
         #    xml:base attribute).  The tool may be configurable with a limit on
         #    the depth of recursion.
         try:
-            if not self.options.allow_local_file_access:
-                self.check_includes()
+            self.check_includes()
             self.tree.xinclude()
         except etree.XIncludeError as e:
             self.die(None, "XInclude processing failed: %s" % e)
@@ -1869,8 +1869,10 @@ class BaseV3Writer(object):
         for xinclude in xincludes:
             href = urlparse(xinclude.get('href'))
             if not href.netloc or href.scheme == 'file':
-                error = 'XInclude processing failed: Can not access local file: {}'.format(xinclude.get('href'))
-                self.die(None, error)
+                try:
+                    can_access(self.options, self.xmlrfc.source, href.path)
+                except FileAccessError as error:
+                    self.die(None, error)
 
     def remove_dtd(self):
         # 
