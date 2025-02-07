@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v3.27.0] - 2025-02-09
+### :sparkles: New Features
+ * feat: Respect `--allow-local-file-access` flag in `artwork` and `sourcecode` ([GHSA-432c-wxpg-m4q3](https://github.com/ietf-tools/xml2rfc/security/advisories/GHSA-432c-wxpg-m4q3)) by @kesara https://github.com/ietf-tools/xml2rfc/commit/ec98f9cb4b9a8658222117df037dda473ca3f4e4
+
+### :bug: Bug Fixes
+ * fix: Make warnings respect quite flag by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1217
+
+### :wrench: Chores
+* ci: Fix publish GHA issues by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1213
+* build: Fix and improve Docker images by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1212
+* ci: Run tests daily by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1218
+
+
 ## [v3.26.0] - 2025-01-29
 ### :sparkles: New Features
 * feat: Add option to update datatracker references by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1168
@@ -2363,3 +2376,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.24.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.23.2...v3.24.0
 [v3.25.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.24.0...v3.25.0
 [v3.26.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.25.0...v3.26.0
+[v3.27.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.26.0...v3.27.0
