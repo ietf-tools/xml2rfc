@@ -14,6 +14,7 @@
 
 - [Changelog](https://github.com/ietf-tools/xml2rfc/blob/main/CHANGELOG.md)
 - [Installation](#installation)
+- [Updating xml2rfc](#updating-xml2rfc)
 - [Usage](#usage)
 - [Contributing](https://github.com/ietf-tools/.github/blob/main/CONTRIBUTING.md)
 - [Getting Started](#getting-started)
@@ -31,7 +32,28 @@ The [IETF] uses a specific format for the standards and other documents it publi
 
 ### Installation
 
-Installation of the python package is done as usual with `pip install xml2rfc`, using appropriate switches.
+`xml2rfc` is available as Python package. You can install it with following command:
+```sh
+pip install xml2rfc
+```
+
+If you're using [pipx](https://pipx.pypa.io/stable/), you can install `xml2rfc` with the following command:
+```sh
+pipx install xml2rfc
+```
+
+`xml2rfc` also provides `pdf` extra package to install required packages required for PDF file generation.
+See [next section](#installation-of-support-libraries-for-the-pdf-formatter) about additional requirements for PDF generation.
+
+To install `xml2rfc` with PDF generation support run:
+```sh
+pip install "xml2rfc[pdf]"
+```
+
+To install `pdf` extra with `pipx` run:
+```sh
+pipx install "xml2rfc[pdf]"
+```
 
 #### Installation of support libraries for the PDF-formatter
 
@@ -51,6 +73,18 @@ pip install "xml2rfc[pdf]"
   * Install the fonts found in the `noto` and `roboto_mono` directories to your operating system.
 
 With these installed and available to **xml2rfc**, the `--pdf` switch will be enabled.
+
+### Updating xml2rfc
+
+To update `xml2rfc`, run the following command:
+```sh
+pip install --upgrade xml2rfc
+```
+
+If you are using `pipx`, you can update it with:
+```sh
+pipx upgrade xml2rfc
+```
 
 ### Usage
 
