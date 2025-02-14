@@ -916,8 +916,6 @@ class HtmlWriter(BaseV3Writer):
             vbox = svg.get('viewBox')
             svgw = maybefloat(svg.get('width'))
             svgh = maybefloat(svg.get('height'))
-            if svgw or svgh:
-                self.warn(x, "Found SVG with width or height specified, which will make the artwork not scale.  Specify a viewBox only to let the artwork scale.")
             try:
                 if vbox:
                     xo,yo,w,h = re.split(',? +', vbox.strip('()'))
@@ -926,12 +924,11 @@ class HtmlWriter(BaseV3Writer):
                     if not (svgw and svgh):
                         svgw = float(w)-float(xo)
                         svgh = float(h)-float(yo)
+                elif svgw and svgh:
+                    svg.set('viewBox', '0 0 %s %s' % (svgw, svgh))
                 else:
-                    if svgw and svgh:
-                        svg.set('viewBox', '0 0 %s %s' % (svgw, svgh))
-                    else:
-                        self.err(x, "Cannot place SVG properly when neither viewBox nor width and height is available") 
-                        return None
+                    self.err(x, "Cannot place SVG properly when neither viewBox nor width and height is available")
+                    return None
             except ValueError as e:
                 self.err(x, "Error when calculating SVG size: %s" % e)
             imgw = 660 if self.options.image_svg else 724
