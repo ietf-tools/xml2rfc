@@ -42,27 +42,20 @@ class PdfWriter(BaseV3Writer):
 
         logging.basicConfig(level=logging.INFO)
 
-        # Weasyprint logger
-        wplogger = logging.getLogger('weasyprint')
-        if   self.options.quiet:
-            wplogger.setLevel(logging.CRITICAL)
-        elif self.options.verbose:
-            wplogger.setLevel(logging.WARNING)
-        elif self.options.debug:
-            wplogger.setLevel(logging.DEBUG)
-        else:
-            wplogger.setLevel(logging.ERROR)
-
-        # fontTools logger
-        ftlogger = logging.getLogger('fontTools')
-        if self.options.quiet:
-            ftlogger.setLevel(logging.CRITICAL)
-        elif self.options.verbose:
-            ftlogger.setLevel(logging.WARNING)
-        elif self.options.debug:
-            ftlogger.setLevel(logging.DEBUG)
-        else:
-            ftlogger.setLevel(logging.ERROR)
+        loggers = []
+        loggers.append(logging.getLogger("weasyprint"))
+        loggers.append(logging.getLogger("fontTools.subset"))
+        loggers.append(logging.getLogger("fontTools.ttLib"))
+        loggers.append(logging.getLogger("fontTools.varlib"))
+        for _logger in loggers:
+            if   self.options.quiet:
+                _logger.setLevel(logging.CRITICAL)
+            elif self.options.verbose:
+                _logger.setLevel(logging.WARNING)
+            elif self.options.debug:
+                _logger.setLevel(logging.DEBUG)
+            else:
+                _logger.setLevel(logging.ERROR)
 
     def pdf(self):
         if not weasyprint:
