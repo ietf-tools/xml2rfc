@@ -66,7 +66,6 @@ roman_max_widths = { 1:1,  2:2,  3:3,  4:3,  5:3,  6:3,  7:3,  8:4,  9:4,
                 20:5, 21:5, 22:5, 23:5, 24:5, 25:5, 26:5, 27:5, 28:6, 29:6, }
 
 def update_roman_max_widths(n):
-    global roman_max_widths
     if n > 3999:
         raise NotImplementedError("Can't handle roman numerals larger than 3999")
     m = len(roman_max_widths)
@@ -83,7 +82,6 @@ def num_width(type, num):
     Return the largest width taken by the numbering of a list
     with num items (without punctuation)
     """
-    global roman_max_widths
     if   type in ['a','A','c','C',]:
         return int(math.log(num, 26))+1
     elif type in ['1','d',]:

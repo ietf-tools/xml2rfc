@@ -1728,7 +1728,6 @@ xref_tags   = get_xref_tags()
 class BaseV3Writer(object):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=None):
-        global v3_rnc_file, v3_rng_file, v3_schema
         self.xmlrfc = xmlrfc
         self.tree = xmlrfc.tree if xmlrfc else None
         self.root = self.tree.getroot() if xmlrfc else None
