@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [v3.28.1] - 2025-04-01
+### :wrench: Chores
+* refactor: Unnecessary global declarations by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1233
+* chore(pdf): Update WeasyPrint to v65.0 by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1231
+* ci: Fix GitHub publish issue by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1232
+
+
 ## [v3.28.0] - 2025-03-01
 ### :sparkles: New Features
 * feat: Remove warning about SVG width and height by @martinthomson in https://github.com/ietf-tools/xml2rfc/pull/1225
@@ -2388,3 +2396,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.26.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.25.0...v3.26.0
 [v3.27.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.26.0...v3.27.0
 [v3.28.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.27.0...v3.28.0
+[v3.28.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.28.0...v3.28.1
