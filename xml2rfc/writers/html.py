@@ -2156,7 +2156,7 @@ class HtmlWriter(BaseV3Writer):
         if len(inner):
             inner[-1].tail = ', '
         if target:
-            inner.append( build.span('<', build.a(target, href=target), '>') )
+            inner.append( build.span('<', build.a(target, href=target), '>', classes="link") )
         if len(inner):
             inner[-1].tail = '. '
         for ctag in ('annotation', ):
