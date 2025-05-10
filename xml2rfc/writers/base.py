@@ -1804,7 +1804,7 @@ class BaseV3Writer(object):
     def get_relevant_pi(self, e, name):
         pis = self.get_relevant_pis(e)
         pi_list = list(filter(None, [ pi.get(name) for pi in pis ]))
-        return pi_list[-1] if pi_list else None
+        return pi_list[0] if pi_list else None
 
     def silenced(self, e, text):
         text = text.strip()
