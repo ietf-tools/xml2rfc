@@ -947,6 +947,52 @@ class BaseV3WriterTest(unittest.TestCase):
         table = self.writer.root.xpath("//table")[0]
         self.assertEqual(self.writer.get_relevant_pi(table, "table_borders"), "min")
 
+    def test_get_relavent_pis_siblings(self):
+        xml = lxml.etree.fromstring(
+            """
+<rfc
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <?v3xml2rfc table_borders="light" ?>
+    <front>
+        <section>
+          <?v3xml2rfc table_borders="full" ?>
+          <table>
+            <thead>
+              <tr>
+                <th>Column 1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Value 1</td>
+              </tr>
+            </tbody>
+          </table>
+          <?v3xml2rfc table_borders="min" ?>
+          <table>
+            <thead>
+              <tr>
+                <th>Column 2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Value 2</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+    </front>
+</rfc>"""
+        )
+        self.writer.root = xml
+        table_1 = self.writer.root.xpath("//table")[0]
+        self.assertEqual(self.writer.get_relevant_pi(table_1, "table_borders"), "full")
+        table_2 = self.writer.root.xpath("//table")[1]
+        self.assertEqual(self.writer.get_relevant_pi(table_2, "table_borders"), "min")
+
 
 class DatatrackerToBibConverterTest(unittest.TestCase):
     """DatatrackerToBibConverter tests"""
