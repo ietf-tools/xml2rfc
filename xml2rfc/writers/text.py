@@ -1497,6 +1497,7 @@ class TextWriter(BaseV3Writer):
                 'artset',
                 'artwork',
                 'aside',
+                'blockquote',
                 'figure',
                 'ol',
                 'sourcecode',
