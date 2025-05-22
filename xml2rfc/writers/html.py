@@ -33,7 +33,7 @@ from xml2rfc.util.name import ( full_author_name_expansion, short_author_role,
 from xml2rfc.util.postal import ( get_normalized_address_info, address_hcard_properties,
                                 get_address_format_rules, address_field_mapping, )
 from xml2rfc.util.unicode import expand_unicode_element
-from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids, build_dataurl, sdict, clean_text
+from xml2rfc.utils import namespaces, is_htmlblock, find_duplicate_html_ids, sdict, clean_text
 
 #from xml2rfc import utils
 
@@ -931,18 +931,9 @@ class HtmlWriter(BaseV3Writer):
                     return None
             except ValueError as e:
                 self.err(x, "Error when calculating SVG size: %s" % e)
-            imgw = 660 if self.options.image_svg else 724
-            if imgw < svgw and svg.get('width') == None:
-                # maybe issue a warning here?
-                pass
-            #
-            if self.options.image_svg:
-                if not svg.get('width'):
-                    svg.set('width', "%s"%svgw) # Needed by the PDF renderer for proper scaling
-                data = build_dataurl('image/svg+xml', lxml.etree.tostring(svg))
-                add.img(div, None, src=data, alt=x.get('alt'))
-            else:
-                div.append(svg)
+
+            div.append(svg)
+
             if x.getparent().tag != 'figure':
                 self.maybe_add_pilcrow(div)
             else:

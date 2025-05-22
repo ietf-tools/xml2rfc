@@ -347,7 +347,6 @@ def main():
     # Some additional values not exposed as options
     options.doi_base_url = "https://doi.org/"
     options.no_css = False
-    options.image_svg = False
 
     # --- Set default values ---------------------------------
 
