@@ -68,7 +68,6 @@ class PdfWriter(BaseV3Writer):
             self.root = self.tree.getroot()
 
         self.options.no_css = True
-        self.options.image_svg = True
         self.options.pdf = True
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
