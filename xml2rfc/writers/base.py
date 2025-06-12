@@ -77,7 +77,6 @@ default_options.__dict__ = {
         'id_html_archive_url': 'https://www.ietf.org/archive/id/',
         'id_reference_base_url': 'https://datatracker.ietf.org/doc/html/',
         'id_is_work_in_progress': True,
-        'image_svg': False,
         'indent': 2,
         'info': False,
         'info_base_url': 'https://www.rfc-editor.org/info/',
