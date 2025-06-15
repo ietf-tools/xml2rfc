@@ -91,7 +91,6 @@ jobs:
         path: |
           dist/
           xml2rfc/
-          .git/
 
   publish-to-pypi:
     name: >-
@@ -133,7 +132,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        persist-credentials: false
         fetch-depth: 0
 
     - name: Download required artifacts
@@ -143,7 +141,6 @@ jobs:
         path: |
           dist/
           xml2rfc/
-          .git/
 
     - name: Set Variables
       run: echo "PKG_VERSION=${{needs.build.outputs.pkg_version}}" >> $GITHUB_ENV
