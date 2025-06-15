@@ -84,11 +84,13 @@ jobs:
         sed -i -r -e "s/^__version__ += '.*'$/__version__ = '$PKG_VERSION_STRICT'/" xml2rfc/__init__.py
         python3 -m build
 
-    - name: Store the distribution packages
+    - name: Store the distribution packages and other artifacts
       uses: actions/upload-artifact@v4
       with:
         name: python-package-distributions
-        path: dist/
+        path: |
+          dist/
+          xml2rfc/
 
   publish-to-pypi:
     name: >-
@@ -130,14 +132,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        persist-credentials: false
         fetch-depth: 0
 
-    - name: Download all the dists
+    - name: Download required artifacts
       uses: actions/download-artifact@v4
       with:
         name: python-package-distributions
-        path: dist/
+        path: |
+          dist/
+          xml2rfc/
 
     - name: Set Variables
       run: echo "PKG_VERSION=${{needs.build.outputs.pkg_version}}" >> $GITHUB_ENV
@@ -156,6 +159,8 @@ jobs:
         branch: main
         commit_message: 'docs: update CHANGELOG.md + py file versions for ${{ env.PKG_VERSION }} [skip ci]'
         file_pattern: CHANGELOG.md xml2rfc/__init__.py
+        commit_user_name: github-actions
+        commit_user_email: github-actions@github.com
 
     - name: Sign the dists with Sigstore
       uses: sigstore/gh-action-sigstore-python@v3.0.0
