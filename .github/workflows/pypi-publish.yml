@@ -90,6 +90,12 @@ jobs:
         name: python-package-distributions
         path: dist/
 
+    - name: Store updated init file
+      uses: actions/upload-artifact@v4
+      with:
+        name: xml2rfc-init
+        path: xml2rfc/__init__.py
+
   publish-to-pypi:
     name: >-
       Publish Python 🐍 distribution 📦 to PyPI
@@ -130,7 +136,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        persist-credentials: false
         fetch-depth: 0
 
     - name: Download all the dists
@@ -138,6 +143,13 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
+
+    - name: Download updated init file
+      uses: actions/download-artifact@v4
+      with:
+        name: xml2rfc-init
+        path: xml2rfc/
+        merge-multiple: true
 
     - name: Set Variables
       run: echo "PKG_VERSION=${{needs.build.outputs.pkg_version}}" >> $GITHUB_ENV
@@ -156,6 +168,8 @@ jobs:
         branch: main
         commit_message: 'docs: update CHANGELOG.md + py file versions for ${{ env.PKG_VERSION }} [skip ci]'
         file_pattern: CHANGELOG.md xml2rfc/__init__.py
+        commit_user_name: github-actions
+        commit_user_email: github-actions@github.com
 
     - name: Sign the dists with Sigstore
       uses: sigstore/gh-action-sigstore-python@v3.0.0

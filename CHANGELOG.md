@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.29.0] - 2025-06-16
+
+### :bug: Bug Fixes
+* fix: Local PIs need to override global ones, not the other way around by @cabo in https://github.com/ietf-tools/xml2rfc/pull/1237
+* Fix for #1204 - single letter names  by @TheEnbyperor in https://github.com/ietf-tools/xml2rfc/pull/1246
+* fix(pdf): Scale large SVG artwork by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1244
+
+### :wrench: Chores
+* chore: Remove v3compat files by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1240
+* chore: Delete obsolete INSTALL file by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1234
+* ci: Fix release GHA issues by @kesara in https://github.com/ietf-tools/xml2rfc/pull/1249
+
 
 ## [v3.28.1] - 2025-04-01
 ### :wrench: Chores
@@ -2397,3 +2409,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.27.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.26.0...v3.27.0
 [v3.28.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.27.0...v3.28.0
 [v3.28.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.28.0...v3.28.1
+[v3.29.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.28.1...v3.29.0
