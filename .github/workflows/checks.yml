@@ -54,7 +54,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
     - name: Checkout repository
@@ -64,6 +64,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
 
     - name: Fonts Cache
       id: cache-fonts-linux
@@ -98,7 +99,12 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -qy groff html2text python3-cffi python3-brotli libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 libxml2-dev libxml2-utils libxslt-dev
+        sudo apt-get install -qy groff html2text python3-cffi python3-brotli libpango-1.0-0 libharfbuzz0b
+        sudo apt-get install -qy libpangoft2-1.0-0 libxml2-dev libxml2-utils libxslt-dev
+        echo "Pillow build dependencies"
+        sudo apt-get install -qy libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev 
+        sudo apt-get install -qy libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk
+        sudo apt-get install -qy libharfbuzz-dev libfribidi-dev libxcb1-dev libavif-dev
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing test dependencies..."
@@ -121,7 +127,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
     - name: Checkout repository
@@ -131,6 +137,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
 
     - name: Fonts Cache
       id: cache-fonts-mac
@@ -182,7 +189,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
     - name: Checkout repository
@@ -192,6 +199,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
 
     - name: Install Python dependencies
       shell: pwsh
