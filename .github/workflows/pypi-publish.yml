@@ -111,7 +111,7 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
-        merge-multiple: true
+        pattern: dist/*
 
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -139,9 +139,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: python-package-distributions
-        path: |
-          dist/
-          xml2rfc/
         merge-multiple: true
 
     - name: Set Variables
@@ -200,7 +197,7 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
-        merge-multiple: true
+        pattern: dist/*
 
     - name: Publish distribution 📦 to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
