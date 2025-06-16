@@ -84,13 +84,17 @@ jobs:
         sed -i -r -e "s/^__version__ += '.*'$/__version__ = '$PKG_VERSION_STRICT'/" xml2rfc/__init__.py
         python3 -m build
 
-    - name: Store the distribution packages and other artifacts
+    - name: Store the distribution packages
       uses: actions/upload-artifact@v4
       with:
         name: python-package-distributions
-        path: |
-          dist/
-          xml2rfc/
+        path: dist/
+
+    - name: Store updated init file
+      uses: actions/upload-artifact@v4
+      with:
+        name: xml2rfc-init
+        path: xml2rfc/__init__.py
 
   publish-to-pypi:
     name: >-
@@ -111,7 +115,6 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
-        pattern: dist/*
 
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -135,10 +138,17 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Download required artifacts
+    - name: Download all the dists
       uses: actions/download-artifact@v4
       with:
         name: python-package-distributions
+        path: dist/
+
+    - name: Download updated init file
+      uses: actions/download-artifact@v4
+      with:
+        name: xml2rfc-init
+        path: xml2rfc/
         merge-multiple: true
 
     - name: Set Variables
@@ -197,7 +207,6 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
-        pattern: dist/*
 
     - name: Publish distribution 📦 to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
