@@ -1532,7 +1532,7 @@ class PrepToolWriter(BaseV3Writer):
     #       of the "target" attribute with no other adornment.  Issue a
     #       warning if the "derivedContent" attribute already exists and has a
     #       different value from what was being filled in.
-    def build_derived_content(self, e):
+    def build_derived_content(self, e, lax_validation=False):
         def split_pn(t, pn):
             if pn is None:
                 self.die(e, "Expected to find a pn= attribute on <%s anchor='%s'> when processing <xref>, but found none" % (t.tag, t.get('anchor')), trace=True)
@@ -1554,7 +1554,9 @@ class PrepToolWriter(BaseV3Writer):
             t = self.root.find('.//*[@pn="%s"]'%(target, ))
             if t is None:
                 t = self.root.find('.//*[@slugifiedName="%s"]'%(target, ))
-                if t is None:
+                if t is None and lax_validation:
+                    return e, "[PLACEHOLDER: %s]" % target
+                elif t is None:
                     self.die(e, "Found no element to match the <xref> target attribute '%s'" % (target, ))
         #
         p = t
@@ -1636,7 +1638,7 @@ class PrepToolWriter(BaseV3Writer):
     def element_xref(self, e, p):
         section = e.get('section')
         relative = e.get('relative')
-        t, content = self.build_derived_content(e)
+        t, content = self.build_derived_content(e, lax_validation=self.options.lax_validation)
         is_toc = p.get('pn', '').startswith('section-toc')
         if not (section or relative):
             attr = e.get('derivedContent')
