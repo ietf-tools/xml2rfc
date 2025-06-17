@@ -66,10 +66,10 @@ env/bin/python:
 .PHONY: install
 install:
 	python3 --version
-	python3 -m pip install . --quiet
+	python3 -m pip install .[tests] --quiet
 	rm -rf xml2rfc.egg-info/
 
-test:	install flaketest xml2rfc/data/v3.rng pytests configtest
+test:	install flaketest xml2rfc/data/v3.rng configtest pytests
 
 flaketest:
 	pyflakes xml2rfc
