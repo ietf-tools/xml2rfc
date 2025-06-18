@@ -26,7 +26,9 @@
 
 ### Introduction
 
-The [IETF] uses a specific format for the standards and other documents it publishes as [RFCs], and for the draft documents which are produced when developing documents for publications. There exists a number of different tools to facilitate the formatting of drafts and RFCs according to the existing rules, and this tool, **xml2rfc**, is one of them. It takes as input an xml file that contains the text and meta-information about author names etc., and transforms it into suitably formatted output. The input xml file should follow the grammars in [RFC7749] *(for v2 documents)* or [RFC7991] *(for v3 documents)*. Note that the grammar for v3 is still being refined, and changes will eventually be captured in the [bis draft for 7991]. Changes not yet captured can be seen in the xml2rfc source [v3.rng], or in the [documentation xml2rfc produces] with its `--doc` flag.
+The [IETF] uses a specific format for the standards and other documents it publishes as [RFCs], and for the draft documents which are produced when developing documents for publications. There exists a number of different tools to facilitate the formatting of drafts and RFCs according to the existing rules, and this tool, **xml2rfc**, is one of them. It takes as input an xml file that contains the text and meta-information about author names etc., and transforms it into suitably formatted output. The input xml file should follow the grammars in [RFC7749] *(for v2 documents)* or [RFC7991] *(for v3 documents)*.
+
+[RFCXML vocabulary reference] is available at [authors.ietf.org].
 
 **xml2rfc** provides a variety of output formats. See the command line help for a full list of formats. It also provides conversion from v2 to v3, and can run the [preptool] on its input.
 
@@ -129,9 +131,8 @@ The initial build may take time because it downloads all required fonts as well.
 [RFCs]: https://www.rfc-editor.org/
 [RFC7749]: https://www.rfc-editor.org/info/rfc7749
 [RFC7991]: https://www.rfc-editor.org/info/rfc7991
-[bis draft for 7991]: https://datatracker.ietf.org/doc/draft-iab-rfc7991bis/
-[v3.rng]: xml2rfc/data/v3.rng
-[documentation xml2rfc produces]: https://ietf-tools.github.io/xml2rfc/
+[RFCXML vocabulary reference]: https://authors.ietf.org/en/rfcxml-vocabulary
+[authors.ietf.org]: https://authors.ietf.org/
 [preptool]: https://www.rfc-editor.org/info/rfc7998
 [WeasyPrint]: https://weasyprint.org/
 [WeasyPrint Docs]: https://doc.courtbouillon.org/weasyprint/stable/first_steps.html
