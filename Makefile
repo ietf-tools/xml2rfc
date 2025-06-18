@@ -46,7 +46,7 @@ drafttests    = $(addprefix tests/out/, $(drafttest))
 
 pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
 
-.PHONY: tests tests-no-network
+.PHONY: clear-cache configtest install installtestdeps flaketest pytests tests tests-no-network yes yestests
 
 # All tests
 tests: minify tests-no-network cachetest
@@ -55,7 +55,6 @@ tests: minify tests-no-network cachetest
 tests-no-network: test flaketest drafttest old-drafttest rfctest utf8test v3featuretest elementstest indextest sourcecodetest notoctest bomtest wiptest mantest
 
 # Clear the cache
-.PHONY: clear-cache
 clear-cache: install
 	@echo -e "\n Clearing cache ..."
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --clear-cache"
@@ -63,13 +62,17 @@ clear-cache: install
 env/bin/python:
 	echo "Install virtualenv in $$PWD/env/ in order to run tests locally."
 
-.PHONY: install
 install:
+	python3 --version
+	python3 -m pip install . --quiet
+	rm -rf xml2rfc.egg-info/
+
+installtestdeps:
 	python3 --version
 	python3 -m pip install .[tests] --quiet
 	rm -rf xml2rfc.egg-info/
 
-test:	install flaketest xml2rfc/data/v3.rng configtest pytests
+test: flaketest installtestdeps xml2rfc/data/v3.rng configtest pytests
 
 flaketest:
 	pyflakes xml2rfc
