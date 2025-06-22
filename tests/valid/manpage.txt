@@ -1,5 +1,5 @@
 xml2rfc(1)                                                    xml2rfc(1)
-                                                             22 May 2025
+                                                            12 June 2025
 
 
                   Xml2rfc Vocabulary Version 3 Schema
@@ -394,7 +394,8 @@ Table of Contents
 
    Specifies that a block of text is a quotation.
 
-   This element can be a child element of <aside>, <li>, and <section>.
+   This element can be a child element of <aside>, <dd>, <li>, and
+   <section>.
 
    Content schema:  ( ( artset | artwork | dl | figure | ol |
       sourcecode | t | ul )+ | ( text | bcp14 | br | cref | em | eref |
@@ -648,9 +649,10 @@ Table of Contents
 
    This element can be a child element of <dl>.
 
-   Content schema:  ( ( artset | artwork | aside | dl | figure | ol |
-      sourcecode | t | table | ul )+ | ( text | bcp14 | br | cref | em |
-      eref | iref | strong | sub | sup | tt | u | xref )+ )
+   Content schema:  ( ( artset | artwork | aside | blockquote | dl |
+      figure | ol | sourcecode | t | table | ul )+ | ( text | bcp14 |
+      br | cref | em | eref | iref | strong | sub | sup | tt | u | xref
+      )+ )
 
 2.21.1.  "anchor" Attribute
 
@@ -3320,6 +3322,7 @@ Appendix A.  RELAX NG Schema
        (( artset
           | artwork
           | aside
+          | blockquote
           | dl
           | figure
           | ol
