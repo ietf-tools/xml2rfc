@@ -72,7 +72,7 @@ installtestdeps:
 	python3 -m pip install .[tests] --quiet
 	rm -rf xml2rfc.egg-info/
 
-test: flaketest installtestdeps xml2rfc/data/v3.rng configtest pytests
+test: installtestdeps flaketest xml2rfc/data/v3.rng configtest pytests
 
 flaketest:
 	pyflakes xml2rfc
