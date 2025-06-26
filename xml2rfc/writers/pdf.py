@@ -136,7 +136,7 @@ class PdfWriter(BaseV3Writer):
         for script in scripts:
             family = get_noto_serif_family_for_script(script)
             fonts.add("%s" % family)
-        fonts = [ roboto_mono, ] + NOTO_SYMBOLS + list(fonts)
+        fonts = [ roboto_mono, ] + NOTO_SYMBOLS + list(fonts) + [ "monospace" ]
         self.note(None, "Found installed font: %s" % ', '.join(fonts))
         return fonts
 
