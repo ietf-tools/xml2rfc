@@ -133,10 +133,11 @@ class PdfWriter(BaseV3Writer):
         fonts = set()
         scripts = self.root.get('scripts').split(',')
         roboto_mono = "Roboto Mono"
+        noto_sans_mono = "Noto Sans Mono"
         for script in scripts:
             family = get_noto_serif_family_for_script(script)
             fonts.add("%s" % family)
-        fonts = [ roboto_mono, ] + NOTO_SYMBOLS + list(fonts)
+        fonts = [ roboto_mono, noto_sans_mono, ] + NOTO_SYMBOLS + list(fonts)
         self.note(None, "Found installed font: %s" % ', '.join(fonts))
         return fonts
 
