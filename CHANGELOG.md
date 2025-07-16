@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.30.0] - 2025-07-17
+
+### :sparkles: New Features
+- [`fd8bca6`](https://github.com/ietf-tools/xml2rfc/commit/fd8bca6e7d7f2b98a76d17fd329467999df64944) - Allow blockquote inside dd *(PR #1239 by @kesara)*
+  - :arrow_lower_right: *addresses issue #570 opened by @ietf-svn-bot*
+
+### :bug: Bug Fixes
+- [`cd93225`](https://github.com/ietf-tools/xml2rfc/commit/cd932258addf3ebbe3ca026773f8f75f79ed4603) - **pdf**: For monospaced text, Add Noto Sans Mono before NOTO_SYMBOLS *(PR #1261 by @dkg)*
+
+### :white_check_mark: Tests
+- [`462cd98`](https://github.com/ietf-tools/xml2rfc/commit/462cd9851d191db19b46771757cda3119eb3b08e) - Add missing test dependency *(PR #1252 by @bkmgit)*
+
+### :construction_worker: Build System
+- [`a406ace`](https://github.com/ietf-tools/xml2rfc/commit/a406acea4d793432a86158b5d1675a34805a15a9) - Create PR with CHANGELOG and version update *(PR #1256 by @kesara)*
+  - :arrow_lower_right: *addresses issue #1251 opened by @kesara*
+- [`4d06c37`](https://github.com/ietf-tools/xml2rfc/commit/4d06c37540b78892dfe3e1c3b5526a8c398ce487) - Install dependencies before running flaketest *(PR #1260 by @kesara)*
+
+### :memo: Documentation Changes
+- [`6153a03`](https://github.com/ietf-tools/xml2rfc/commit/6153a03cc8e5129e623b2c22d775eca7e889056f) - update CHANGELOG.md + py file versions for v3.29.0 *(commit by @kesara)*
+
+### :wrench: Chores
+- [`dce8478`](https://github.com/ietf-tools/xml2rfc/commit/dce8478042b8b8b90c0af6289db406d9dd3bcfaf) - Update pyproject license configuration *(PR #1258 by @kesara)*
+  - :arrow_lower_right: *addresses issue #1250 opened by @kesara*
+- [`02dab85`](https://github.com/ietf-tools/xml2rfc/commit/02dab8511fe02aad0466687b1f12c68cc02ecfdd) - Improve tests configuration *(PR #1257 by @kesara)*
+- [`34eefa3`](https://github.com/ietf-tools/xml2rfc/commit/34eefa37db71ad6834a3984085ac97f52be1c83a) - Avoid github page generation for xml spec *(PR #1248 by @kesara)*
+  - :arrow_lower_right: *addresses issue #1243 opened by @kesara*
+
 ## [v3.29.0] - 2025-06-16
 
 ### :bug: Bug Fixes
@@ -2410,3 +2437,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.28.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.27.0...v3.28.0
 [v3.28.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.28.0...v3.28.1
 [v3.29.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.28.1...v3.29.0
+[v3.30.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.29.0...v3.30.0
