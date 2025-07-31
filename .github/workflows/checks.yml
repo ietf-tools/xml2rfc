@@ -47,6 +47,36 @@ jobs:
     - name: Validate pyproject.toml
       run: validate-pyproject pyproject.toml
 
+  test-minimum-requirements:
+    name: Test minimum requirements
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Set minimum requirements
+      run: sed -i "/^\s/ s/>=/==/g" pyproject.toml
+
+    - name: Install xml2rfc
+      run: |
+        xargs -I {} pip --quiet uninstall -y "{}"
+        pip install .
+
+    - name: Sanity check
+      run: |
+        xml2rfc --version
+        xml2rfc --man > /dev/null
+
   tests-linux:
     name: Unit Tests (Linux)
     runs-on: ubuntu-latest
