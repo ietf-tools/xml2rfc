@@ -301,7 +301,7 @@ def main():
     htmloptions.add_argument('--external-js', action='store_true', default=False,
                            help='place js in external files')
     htmloptions.add_argument('--no-external-js', dest='external_js', action='store_false',
-                           help='place js in external files')
+                           help="don't place js in external files")
     htmloptions.add_argument('--rfc-base-url', default="https://www.rfc-editor.org/rfc/",
                            help='Base URL for RFC links')
     htmloptions.add_argument('--id-base-url', default="https://datatracker.ietf.org/doc/html/",
