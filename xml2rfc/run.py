@@ -297,7 +297,7 @@ def main():
     htmloptions.add_argument('--external-css', action='store_true', default=False,
                            help='place css in external files')
     htmloptions.add_argument('--no-external-css', dest='external_css', action='store_false',
-                           help='place css in external files')
+                           help="don't place css in external files")
     htmloptions.add_argument('--external-js', action='store_true', default=False,
                            help='place js in external files')
     htmloptions.add_argument('--no-external-js', dest='external_js', action='store_false',
