@@ -81,7 +81,7 @@ flaketest:
 configtest:
 	python3 configtest.py
 
-pytests:
+pytests: installtestdeps
 	python3 test.py --verbose
 
 CHECKOUTPUT=	\
