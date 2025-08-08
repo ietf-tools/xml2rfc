@@ -610,10 +610,13 @@ class HtmlWriter(BaseV3Writer):
                             log.warn("Could not write to %s: %s" % (jsout, exception))
                     else:
                         add.script(head, None, js, type="application/javascript")
-            # Add external script tag -- the content might be newer than the
-            # JS we included above
-            s = add.script(body, None, src=self.options.metadata_js_url)
-            s.tail = '\n'
+            if self.options.metadata_js_url and (
+                urlparse(self.options.metadata_js_url).scheme
+                or self.options.external_js
+            ):
+                # Add external script tag
+                s = add.script(body, None, src=self.options.metadata_js_url)
+                s.tail = '\n'
 
     # 6.4.  Page Headers and Footers
     # 
