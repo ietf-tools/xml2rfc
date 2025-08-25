@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.30.1] - 2025-08-26
+
+### :bug: Bug Fixes
+- [`1dc1d33`](https://github.com/ietf-tools/xml2rfc/commit/1dc1d33233bf90be214470da9282a4d91ec8d82f) - **html**: Respect --no-external-js flag *(PR #1266 by @kesara)*
+  - :arrow_lower_right: *fixes issue #1263 opened by @dbuenzli*
+- [`f2b245bc`](https://github.com/ietf-tools/xml2rfc/commit/f2b245bc0aeeac0667c8f74e976c466c5991f0e4) - Strip `link` attachments. *(commit by @kesara)*
+  - :arrow_lower_right: Fixes [GHSA-cfmv-h8fx-85m7](https://github.com/ietf-tools/xml2rfc/security/advisories/GHSA-cfmv-h8fx-85m7)
+
+### :wrench: Chores
+- [`3932c7c`](https://github.com/ietf-tools/xml2rfc/commit/3932c7cf1b8773021e29776ad696638447971c50) - Fix typo in --no-external-css flag description *(PR #1267 by @kesara)*
+- [`3d53fe9`](https://github.com/ietf-tools/xml2rfc/commit/3d53fe9697959a12ba2d9a1e3ab4079812e6bf07) - Install test dependencies before pytests *(PR #1268 by @kesara)*
+
+### :memo: Documentation Changes
+- [`12a305f`](https://github.com/ietf-tools/xml2rfc/commit/12a305f3fc19d9137c67c6db8263b510bbcd2b38) - update CHANGELOG.md + py file versions for v3.30.0 *(commit by @kesara)*
+
+### :construction_worker: Build System
+- [`aca8be9`](https://github.com/ietf-tools/xml2rfc/commit/aca8be90bf5064964d2669d03875b22e372c9ebb) - Update pypi-publish.yml *(commit by @kesara)*
+- [`be48d64`](https://github.com/ietf-tools/xml2rfc/commit/be48d6427f206b64b8355d94f0977ddc575bae01) - Restrict windows GHA to windows-2022 image *(PR #1269 by @kesara)*
+- [`b4f349f`](https://github.com/ietf-tools/xml2rfc/commit/b4f349facd58feb56fd6cc13350a590eebb18ed9) - Use Windows latest (2025) image *(PR #1271 by @kesara)*
+  - :arrow_lower_right: *addresses issue #1270 opened by @kesara*
+
 ## [v3.30.0] - 2025-07-17
 
 ### :sparkles: New Features
@@ -2438,3 +2459,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.28.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.28.0...v3.28.1
 [v3.29.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.28.1...v3.29.0
 [v3.30.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.29.0...v3.30.0
+[v3.30.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.0...v3.30.1
