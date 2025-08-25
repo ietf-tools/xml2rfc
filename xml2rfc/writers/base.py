@@ -28,7 +28,7 @@ from xml2rfc.util.date import extract_date, augment_date, format_date, get_expir
 from xml2rfc.util.file import can_access, FileAccessError
 from xml2rfc.util.name import short_author_ascii_name_parts, full_author_name_expansion, short_author_name_parts
 from xml2rfc.util.unicode import is_svg
-from xml2rfc.utils import namespaces, find_duplicate_ids, slugify
+from xml2rfc.utils import namespaces, find_duplicate_ids, slugify, strip_link_attachments
 
 
 SUBSERIES = {
@@ -2116,6 +2116,9 @@ class BaseV3Writer(object):
         # 4.1.1, libxml 2.9.1): "Element li has extra content: t" when 't' has
         # a duplicate xsd:ID attribute.  So we check all attributes with
         # content specified as xsd:ID first, and give better messages:
+
+        # Strip link attachments
+        strip_link_attachments(self.tree)
 
         # Get the attributes we need to check
         if when and not when.startswith(' '):

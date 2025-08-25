@@ -362,6 +362,15 @@ def find_duplicate_attr_values(attr, tree):
                 seen.add(id)
     return dups
 
+def strip_link_attachments(tree):
+    """
+    Find link tags with rel="attachment".
+    """
+    for attachment in tree.xpath('//link[@rel="attachment"]'):
+        xml2rfc.log.warn(f"Removed {attachment}. link relationships type attachment is not allowed.")
+        attachment.getparent().remove(attachment)
+
+
 # ----------------------------------------------------------------------
 # Unicode operations
 

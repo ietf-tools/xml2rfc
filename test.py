@@ -14,6 +14,7 @@ from xml2rfc.walkpdf import xmldoc
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc.writers import DatatrackerToBibConverter
 from xml2rfc.writers.text import MAX_WIDTH
+from xml2rfc.utils import strip_link_attachments
 from xml2rfc.util.file import can_access, FileAccessError
 
 try:
@@ -1067,6 +1068,38 @@ class FileAccessTest(unittest.TestCase):
                                    source="test.py",
                                    path="rfc2629-xhtml.ent",
                                    access_templates=True))
+
+
+class StripLinkAttachmentsTest(unittest.TestCase):
+    def setUp(self):
+        self.options = copy.deepcopy(default_options)
+
+    def test_strips_attachement(self):
+        self.options.allow_local_file_access = False
+        xml_tree = lxml.etree.fromstring("""
+<rfc>
+    <link rel="item" href="urn:issn:0000-0000" />
+    <link rel="attachment" href="/etc/passwd" />
+    <link rel="describedBy" href="doi:00.00000/rfc0000" />
+    <link rel="prev" href="https://www.ietf.org/archive/id/draft-ietf-empire-death-star-00.txt" />
+    <link rel="attachment" href="/home/vader/ds-1/schematics" />
+    <link rel="alternate" href="https://www.ietf.org/ds-1" />
+</rfc>""")
+
+        strip_link_attachments(xml_tree)
+
+        # keeps non rel="attachment" elements
+        for rel in ["item", "describedBy", "prev", "alternate"]:
+            links = xml_tree.xpath(f'//link[@rel="{rel}"]')
+            self.assertEqual(len(links), 1)
+
+        # strip rel="attachment"
+        attachments = xml_tree.xpath('//link[@rel="attachment"]')
+        self.assertEqual(len(attachments), 0)
+        xml_str = lxml.etree.tostring(xml_tree).decode()
+        self.assertNotIn("attachment", xml_str)
+        self.assertNotIn("/etc/passwd", xml_str)
+        self.assertNotIn("/home/vader/ds-1/schematics", xml_str)
 
 
 if __name__ == '__main__':
