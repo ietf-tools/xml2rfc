@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.30.2] - 2025-09-08
+### :bug: Bug Fixes
+- [`73fb1c9`](https://github.com/ietf-tools/xml2rfc/commit/73fb1c91fc62ac540bb6bd24f982f2becf84c1b0) - Add sanitize step to the parser *(commit by [@kesara](https://github.com/kesara))*
+
+### :construction_worker: Build System
+- [`e14cd44`](https://github.com/ietf-tools/xml2rfc/commit/e14cd440c4e1212d5e4180d746f397dec163865a) - Give PR creation permission *(PR [#1275](https://github.com/ietf-tools/xml2rfc/pull/1275) by [@kesara](https://github.com/kesara))*
+
+### :memo: Documentation Changes
+- [`de31a1f`](https://github.com/ietf-tools/xml2rfc/commit/de31a1fa43141c109d73c95cbb673730701f336b) - update CHANGELOG.md + py file versions for v3.30.1 *(commit by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.30.1] - 2025-08-26
 
 ### :bug: Bug Fixes
@@ -2460,3 +2471,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.29.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.28.1...v3.29.0
 [v3.30.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.29.0...v3.30.0
 [v3.30.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.0...v3.30.1
+[v3.30.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.1...v3.30.2
