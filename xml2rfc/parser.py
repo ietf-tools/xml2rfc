@@ -755,6 +755,11 @@ class XmlRfc(object):
     def getpis(self):
         """ Returns a list of the XML processing instructions """
         return self.pis.copy()
+
+    def sanitize(self):
+        """ Sanitize the document """
+        # Strip link attachments
+        xml2rfc.utils.strip_link_attachments(self.tree)
     
     def validate(self, dtd_path=None):
         """ Validate the document with its default dtd, or an optional one 

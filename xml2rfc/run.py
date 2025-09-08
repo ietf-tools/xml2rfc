@@ -577,6 +577,9 @@ def main():
             xml2rfc.log.exception('Unable to validate the XML document: ' + args[0], errors)
             sys.exit(1)
 
+    # sanitize the document
+    xmlrfc.sanitize()
+
     if options.filename:
         xml2rfc.log.warn("The -f and --filename options are deprecated and will"
                         " go away in version 3.0 of xml2rfc.  Use -o instead")
