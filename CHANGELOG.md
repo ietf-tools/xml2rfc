@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.31.0] - 2025-10-08
+### :sparkles: New Features
+- [`640c3cc`](https://github.com/ietf-tools/xml2rfc/commit/640c3ccd80da73855241bf2f0f4a70ae95c7406e) - **html**: Use self hosted fonts *(PR [#1282](https://github.com/ietf-tools/xml2rfc/pull/1282) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1281](https://github.com/ietf-tools/xml2rfc/issues/1281) opened by [@kesara](https://github.com/kesara)*
+- [`54fa6ef`](https://github.com/ietf-tools/xml2rfc/commit/54fa6efe41ecf8815f21ac89ff1bc1b2493d0c39) - Add support for Python 3.14 *(PR [#1278](https://github.com/ietf-tools/xml2rfc/pull/1278) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1236](https://github.com/ietf-tools/xml2rfc/issues/1236) opened by [@kesara](https://github.com/kesara)*
+
+### :memo: Documentation Changes
+- [`f0dd5fa`](https://github.com/ietf-tools/xml2rfc/commit/f0dd5fa1fbdf9e86013578d4fac12cd72c5a41ed) - update CHANGELOG.md + py file versions for v3.30.2 [skip ci] *(PR [#1276](https://github.com/ietf-tools/xml2rfc/pull/1276) by [@github-actions[bot]](https://github.com/apps/github-actions))*
+
+### :wrench: Chores
+- [`5c5ba6c`](https://github.com/ietf-tools/xml2rfc/commit/5c5ba6c88f3bb9948a14b4eda4448b1efbb30684) - setuptools is not needed at runtime anymore *(PR [#1284](https://github.com/ietf-tools/xml2rfc/pull/1284) by [@a-detiste](https://github.com/a-detiste))*
+
+
 ## [v3.30.2] - 2025-09-08
 ### :bug: Bug Fixes
 - [`73fb1c9`](https://github.com/ietf-tools/xml2rfc/commit/73fb1c91fc62ac540bb6bd24f982f2becf84c1b0) - Add sanitize step to the parser *(commit by [@kesara](https://github.com/kesara))*
@@ -2472,3 +2486,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.30.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.29.0...v3.30.0
 [v3.30.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.0...v3.30.1
 [v3.30.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.1...v3.30.2
+[v3.31.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.2...v3.31.0
