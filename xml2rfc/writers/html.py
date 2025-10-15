@@ -227,21 +227,10 @@ class HtmlWriter(BaseV3Writer):
 
     def __init__(self, xmlrfc, quiet=None, options=default_options, date=None):
         super(HtmlWriter, self).__init__(xmlrfc, quiet=quiet, options=options, date=date)
-        self.anchor_tags = self.get_tags_with_anchor()
         self.duplicate_html_ids = set()
         self.filename = None
         self.refname_mapping = self.get_refname_mapping()
             
-    def get_tags_with_anchor(self):
-        anchor_nodes = self.schema.xpath("//x:define/x:element//x:attribute[@name='anchor']", namespaces=namespaces)
-        element_nodes = set()
-        for a in anchor_nodes:
-            for e in a.iterancestors():
-                if e.tag.endswith('element'):
-                    element_nodes.add(e.get('name'))
-                    break
-        return element_nodes
-
     def html_tree(self):
         if not self.root.get('prepTime'):
             prep = xml2rfc.PrepToolWriter(self.xmlrfc, options=self.options, date=self.options.date, liberal=True, keep_pis=[xml2rfc.V3_PI_TARGET])
