@@ -1061,8 +1061,14 @@ class HtmlWriter(BaseV3Writer):
             name, ascii = full_author_name_set(x)
             span = wrap_ascii('span', name, ascii, '', classes='contact-name')
             span.tail = x.tail
-            h.append(span)
-            return span
+            if x.get('anchor') and x.tag == 'contact':
+                id_span = add.span(h, x)
+                id_span.append(span)
+                h.append(id_span)
+                return id_span
+            else:
+                h.append(span)
+                return span
 
     # 9.7.2.  Authors of This Document
     # 
