@@ -114,6 +114,8 @@ class UnPrepWriter(BaseV3Writer):
         './front/toc',
         './/li[@derivedCounter]',
         './/name[@slugifiedName]',
+        './/reference[@derivedAnchor]',
+        './/referencegroup[@derivedAnchor]',
         './/*;remove_attribute_defaults()',
         './/*[@pn]',
         './/xref',
@@ -156,6 +158,12 @@ class UnPrepWriter(BaseV3Writer):
 
     def attribute_name_slugifiedname(self, e, p):
         del e.attrib['slugifiedName']
+
+    def attribute_reference_derivedanchor(self, e, p):
+        del e.attrib['derivedAnchor']
+
+    def attribute_referencegroup_derivedanchor(self, e, p):
+        del e.attrib['derivedAnchor']
 
     def remove_attribute_defaults(self, e, p):
         g = p.getparent() if p != None else None
