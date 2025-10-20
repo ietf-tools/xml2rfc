@@ -112,6 +112,7 @@ class UnPrepWriter(BaseV3Writer):
         './/ol[@group]',
         './front/boilerplate',
         './front/toc',
+        './/li[@derivedCounter]',
         './/name[@slugifiedName]',
         './/*;remove_attribute_defaults()',
         './/*[@pn]',
@@ -149,6 +150,9 @@ class UnPrepWriter(BaseV3Writer):
     element_front_toc = remove_element
     attribute_back_section_anchor_authors_addresses = remove_element
     attribute_back_section_t_anchor_rfcindexindex = remove_element
+
+    def attribute_li_derivedcounter(self, e, p):
+        del e.attrib['derivedCounter']
 
     def attribute_name_slugifiedname(self, e, p):
         del e.attrib['slugifiedName']
