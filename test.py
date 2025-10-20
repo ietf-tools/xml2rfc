@@ -641,6 +641,42 @@ class PrepToolWriterTest(unittest.TestCase):
         target = 'https://www.rfc-editor.org/info/rfc9280'
         self.assertEqual(target, rfc.xpath('./section/t/eref')[0].get('target'))
 
+
+class UnPrepWriterTest(unittest.TestCase):
+    '''UnPrepWriter tests'''
+
+    def setUp(self):
+        xml2rfc.log.quiet = True
+        path = 'tests/input/rfc9001.canonical.xml'
+        self.parser = xml2rfc.XmlRfcParser(path,
+                                           quiet=True,
+                                           options=default_options,
+                                           **options_for_xmlrfcparser)
+        self.xmlrfc = self.parser.parse()
+        self.writer = xml2rfc.UnPrepWriter(self.xmlrfc, quiet=True)
+
+    def test_li_derivedcounter(self):
+        xml = lxml.etree.fromstring('<li derivedCounter="a.">A</li>')
+        self.writer.root = xml
+
+        self.writer.attribute_li_derivedcounter(xml, None)
+        self.assertEqual(len(xml.xpath('@derivedCounter')), 0)
+
+    def test_reference_derivedanchor(self):
+        xml = lxml.etree.fromstring('<reference derivedAnchor="foobar" />')
+        self.writer.root = xml
+
+        self.writer.attribute_reference_derivedanchor(xml, None)
+        self.assertEqual(len(xml.xpath('@derivedAnchor')), 0)
+
+    def test_referencegroup_derivedanchor(self):
+        xml = lxml.etree.fromstring('<referencegroup derivedAnchor="foobar" />')
+        self.writer.root = xml
+
+        self.writer.attribute_referencegroup_derivedanchor(xml, None)
+        self.assertEqual(len(xml.xpath('@derivedAnchor')), 0)
+
+
 class TextWriterTest(unittest.TestCase):
     '''TextWriter tests'''
 
