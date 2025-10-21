@@ -2124,6 +2124,14 @@ class BaseV3Writer(object):
         for attr, id, e in dups:
             self.warn(e, 'Duplicate xsd:ID attribute %s="%s" found.  This will cause validation failure.' % (attr, id, ))
 
+        # Check for authors
+        try:
+            front = self.tree.xpath('./front')[0]
+            if len(front.xpath('./author')) == 0:
+                self.err(front, 'Document must contain one or more <author> in <front>')
+        except:
+            pass
+
         try:
             # Use a deepcopy to avoid any memory issues.
             tree = copy.deepcopy(self.tree)
