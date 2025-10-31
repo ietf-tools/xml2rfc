@@ -602,6 +602,96 @@ class PrepToolWriterTest(unittest.TestCase):
         self.xmlrfc = self.parser.parse()
         self.writer = xml2rfc.PrepToolWriter(self.xmlrfc, quiet=True)
 
+    def test_back_insert_author_address_prepped(self):
+        '''Test back_insert_author_address() for a prepped document.'''
+
+        rfc = lxml.etree.fromstring('''
+<rfc
+    prepTime="2025-10-20T03:47:27"
+    number="9280"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <author fullname="Jane Doe" anchor="jane" />
+    </front>
+    <back />
+</rfc>''')
+        self.writer.root = rfc
+        self.writer.prepped = True
+        self.writer.back_insert_author_address(self.writer.root, None)
+
+        # doesn't change author addresses section
+        self.assertEqual(len(rfc.xpath('./back/section[@anchor="authors-addresses"]/author')), 0)
+
+    def test_back_insert_author_address_existing(self):
+        '''Test back_insert_author_address() with existing author addresses section.'''
+        rfc = lxml.etree.fromstring('''
+<rfc
+    prepTime="2025-10-20T03:47:27"
+    number="9280"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <author fullname="Jane Doe" anchor="jane" />
+    </front>
+    <back>
+        <section anchor="authors-addresses">
+            <name>Author's Address</name>
+        </section>
+    </back>
+</rfc>''')
+        self.writer.root = rfc
+        self.writer.prepped = True
+        self.writer.back_insert_author_address(self.writer.root, None)
+
+        # doesn't change author addresses section
+        self.assertEqual(len(rfc.xpath('./back/section[@anchor="authors-addresses"]/author')), 0)
+
+    def test_back_insert_author_address_no_anchor(self):
+        '''Test back_insert_author_address() without author anchor.'''
+        rfc = lxml.etree.fromstring('''
+<rfc
+    prepTime="2025-10-20T03:47:27"
+    number="9280"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <author fullname="Jane Doe" />
+    </front>
+    <back />
+</rfc>''')
+        self.writer.root = rfc
+        self.writer.back_insert_author_address(self.writer.root, None)
+        self.assertEqual(len(rfc.xpath('./back/section[@anchor="authors-addresses"]/author')), 1)
+        front_author = rfc.xpath('./front/author')[0]
+        back_author = rfc.xpath('./back/section[@anchor="authors-addresses"]/author')[0]
+        self.assertIsNone(front_author.get('anchor'))
+        self.assertIsNone(back_author.get('anchor'))
+
+    def test_back_insert_author_address(self):
+        '''Test back_insert_author_address() with author anchor.'''
+        rfc = lxml.etree.fromstring('''
+<rfc
+    number="9280"
+    ipr="trust200902"
+    submissionType="editorial"
+    category="info">
+    <front>
+        <author fullname="Jane Doe" anchor="jane" />
+    </front>
+    <back />
+</rfc>''')
+        self.writer.root = rfc
+        self.writer.back_insert_author_address(self.writer.root, None)
+        self.assertEqual(len(rfc.xpath('./back/section[@anchor="authors-addresses"]/author')), 1)
+        front_author = rfc.xpath('./front/author')[0]
+        back_author = rfc.xpath('./back/section[@anchor="authors-addresses"]/author')[0]
+        self.assertIsNone(front_author.get('anchor'))
+        self.assertEqual(back_author.get('anchor'), 'jane')
+
     def test_rfc_check_attribute_values_editorial(self):
         rfc = lxml.etree.fromstring('''
 <rfc

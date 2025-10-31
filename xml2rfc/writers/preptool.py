@@ -2291,6 +2291,9 @@ class PrepToolWriter(BaseV3Writer):
         for e in self.root.find('./front'):
             if e.tag in ['author', etree.PI, ]:
                 s.append(copy.copy(e))
+                # remove anchor from /front/author to avoid duplications
+                if e.get('anchor'):
+                    e.attrib.pop('anchor')
         back.append(s)
         #
         self.back_section_add_number(s, e)
