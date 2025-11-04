@@ -97,6 +97,15 @@ docker run --rm -v "$(pwd):/data" ghcr.io/ietf-tools/xml2rfc-slim:latest --html 
 
 Development images are available under [#docker-dev-environment](#docker-dev-environment).
 
+#### Image versioning
+
+Docker image versions follow the regular release versioning.
+Use a versioned tag to ensure reproducibility in CI / CD:
+
+```sh
+docker run --rm -v "$(pwd):/data" ghcr.io/ietf-tools/xml2rfc-slim:v3.32.0 --html example.xml
+```
+
 ### Updating xml2rfc
 
 To update `xml2rfc`, run the following command:
