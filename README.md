@@ -86,8 +86,9 @@ A cross-platform docker image is available (at `ghcr.io/ietf-tools/xml2rfc-slim:
 ```sh
 docker run --rm `# automatically remove container upon termination` \
   -v "$(pwd):/data" `# bind current working directory to /data` \
-  ghcr.io/ietf-tools/xml2rfc-slim:latest `# container name` \
-  --html example.xml # example.xml input filename, output will be example.html
+  ghcr.io/ietf-tools/xml2rfc-slim:latest \
+  --html example.xml
+# example.xml input filename, output will be example.html
 ```
 
 ```sh
