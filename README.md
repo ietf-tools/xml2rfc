@@ -14,6 +14,7 @@
 
 - [Changelog](https://github.com/ietf-tools/xml2rfc/blob/main/CHANGELOG.md)
 - [Installation](#installation)
+- [Docker container](#docker-container)
 - [Updating xml2rfc](#updating-xml2rfc)
 - [Usage](#usage)
 - [Contributing](https://github.com/ietf-tools/.github/blob/main/CONTRIBUTING.md)
@@ -34,7 +35,9 @@ The [IETF] uses a specific format for the standards and other documents it publi
 
 ### Installation
 
-`xml2rfc` is available as Python package. You can install it with following command:
+`xml2rfc` is available as Python package and container image (see [Docker-container-usage](#Docker-container-usage)).
+You can install the python package with the following command:
+
 ```sh
 pip install xml2rfc
 ```
@@ -75,6 +78,24 @@ pip install "xml2rfc[pdf]"
   * Install the fonts found in the `noto` and `roboto_mono` directories to your operating system.
 
 With these installed and available to **xml2rfc**, the `--pdf` switch will be enabled.
+
+### Docker container
+
+A cross-platform docker image is available (at `ghcr.io/ietf-tools/xml2rfc-slim:latest`) for CI / CD usage. The image does NOT contain `pdf` support, as to keep the image size small (**175 MB**).
+
+```sh
+docker run --rm `# automatically remove container upon termination` \
+  -v "$(pwd):/data" `# bind current working directory to /data` \
+  ghcr.io/ietf-tools/xml2rfc-slim:latest `# container name` \
+  --html example.xml # example.xml input filename, output will be example.html
+```
+
+```sh
+# single line
+docker run --rm -v "$(pwd):/data" ghcr.io/ietf-tools/xml2rfc-slim:latest --html example.xml
+```
+
+Development images are available under [#docker-dev-environment](#docker-dev-environment).
 
 ### Updating xml2rfc
 
