@@ -81,22 +81,31 @@ With these installed and available to **xml2rfc**, the `--pdf` switch will be en
 
 ### Docker container
 
-A cross-platform docker image is available (at `ghcr.io/ietf-tools/xml2rfc-slim:latest`) for CI / CD usage. The image does NOT contain `pdf` support, as to keep the image size small (**175 MB**).
+A series of docker images are available to accommodate various use cases. The table below describes the features of each image type. 
+
+| Docker image name | Description                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| xml2rfc-slim      | xml2rfc without PDF support; small image.                                                |
+| xml2rfc-base      | xml2rfc with PDF generation and required fonts; large image.                             |
+| xml2rfc-dev       | xml2rfc with multiple Python versions and development tools; large image for developers. |
+
+Example using the `xml2rfc-slim` image:
 
 ```sh
 docker run --rm `# automatically remove container upon termination` \
   -v "$(pwd):/data" `# bind current working directory to /data` \
   ghcr.io/ietf-tools/xml2rfc-slim:latest \
   --html example.xml
-# example.xml input filename, output will be example.html
+# if input is example.xml, output will be example.html
 ```
 
+Single line:
+
 ```sh
-# single line
 docker run --rm -v "$(pwd):/data" ghcr.io/ietf-tools/xml2rfc-slim:latest --html example.xml
 ```
 
-Development images are available under [#docker-dev-environment](#docker-dev-environment).
+Development images are further documented under [#docker-dev-environment](#docker-dev-environment).
 
 #### Image versioning
 
