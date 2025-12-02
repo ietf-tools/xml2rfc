@@ -14,6 +14,7 @@
 
 - [Changelog](https://github.com/ietf-tools/xml2rfc/blob/main/CHANGELOG.md)
 - [Installation](#installation)
+- [Docker container](#docker-container)
 - [Updating xml2rfc](#updating-xml2rfc)
 - [Usage](#usage)
 - [Contributing](https://github.com/ietf-tools/.github/blob/main/CONTRIBUTING.md)
@@ -34,7 +35,9 @@ The [IETF] uses a specific format for the standards and other documents it publi
 
 ### Installation
 
-`xml2rfc` is available as Python package. You can install it with following command:
+`xml2rfc` is available as Python package and container image (see [Docker-container-usage](#Docker-container-usage)).
+You can install the python package with the following command:
+
 ```sh
 pip install xml2rfc
 ```
@@ -75,6 +78,43 @@ pip install "xml2rfc[pdf]"
   * Install the fonts found in the `noto` and `roboto_mono` directories to your operating system.
 
 With these installed and available to **xml2rfc**, the `--pdf` switch will be enabled.
+
+### Docker container
+
+A series of docker images are available to accommodate various use cases. The table below describes the features of each image type. 
+
+| Docker image name | Description                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| xml2rfc-slim      | xml2rfc without PDF support; small image.                                                |
+| xml2rfc-base      | xml2rfc with PDF generation and required fonts; large image.                             |
+| xml2rfc-dev       | xml2rfc with multiple Python versions and development tools; large image for developers. |
+
+Example using the `xml2rfc-slim` image:
+
+```sh
+docker run --rm `# automatically remove container upon termination` \
+  -v "$(pwd):/data" `# bind current working directory to /data` \
+  ghcr.io/ietf-tools/xml2rfc-slim:latest \
+  --html example.xml
+# if input is example.xml, output will be example.html
+```
+
+Single line:
+
+```sh
+docker run --rm -v "$(pwd):/data" ghcr.io/ietf-tools/xml2rfc-slim:latest --html example.xml
+```
+
+Development images are further documented under [#docker-dev-environment](#docker-dev-environment).
+
+#### Image versioning
+
+Docker image versions follow the regular release versioning.
+Use a versioned tag to ensure reproducibility in CI / CD:
+
+```sh
+docker run --rm -v "$(pwd):/data" ghcr.io/ietf-tools/xml2rfc-slim:v3.32.0 --html example.xml
+```
 
 ### Updating xml2rfc
 

@@ -7,6 +7,7 @@ on:
     paths:
       - 'docker/base.Dockerfile'
       - 'docker/dev.Dockerfile'
+      - 'docker/slim.Dockerfile'
 
   workflow_dispatch:
 
@@ -50,3 +51,12 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ghcr.io/ietf-tools/xml2rfc-dev:latest
+
+    - name: Slim image - Docker Build & Push
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: docker/slim.Dockerfile
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ghcr.io/ietf-tools/xml2rfc-slim:latest
