@@ -14,9 +14,6 @@ RUN apt-get update --fix-missing && \
         git \
         vim \
         less \
-        python3.9 \
-        python3.9-dev \
-        python3.9-distutils \
         libxml2-dev \
         libxslt-dev \
         python3.11 \
