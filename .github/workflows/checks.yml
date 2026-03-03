@@ -102,7 +102,7 @@ jobs:
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing test dependencies..."
-        python -m pip install tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==65.0"
+        python -m pip install tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==68.0"
 
     - name: Generate Valid Tests
       run: |
@@ -151,14 +151,12 @@ jobs:
     - name: Install dependencies
       run: |
         brew install make diffutils
-        # Install WeasyPrint 61.2
-        brew tap-new --no-git custom/weasyprint
-        brew extract --git-revision edb83fc7c8bb9987bdecb810e61281c5adc47c73 weasyprint custom/weasyprint
-        brew install weasyprint@61.2
+        # Install WeasyPrint 68.0
+        brew install weasyprint
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing test dependencies..."
-        python -m pip install tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==65.0"
+        python -m pip install tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==68.0"
 
     - name: Generate Valid Tests
       run: |

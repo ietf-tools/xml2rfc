@@ -1,6 +1,7 @@
 # Copyright The IETF Trust 2018, All Rights Reserved
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function, division
+from datetime import datetime, timezone
 
 import io
 import logging
@@ -14,7 +15,6 @@ try:
 except (ImportError, OSError, ValueError) as e:
     import_error = e
     weasyprint = False
-
 
 import xml2rfc
 from xml2rfc.writers.base import default_options, BaseV3Writer
@@ -69,6 +69,7 @@ class PdfWriter(BaseV3Writer):
 
         self.options.no_css = True
         self.options.pdf = True
+        self.options.attach_xml = True
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
 
@@ -96,7 +97,13 @@ class PdfWriter(BaseV3Writer):
         page_css_text = page_css_template.format(**page_info)
         page_css = weasyprint.CSS(string=page_css_text)
 
-        pdf = writer.write_pdf(None, stylesheets=[ css, page_css ], presentational_hints=True)
+        # set additional metadata
+        rendering = writer.render(stylesheets=[ css, page_css ], presentational_hints=True, pdf_identifier='xml2rfc')
+        now = datetime.now(timezone.utc).isoformat()
+        rendering.metadata.created = now
+        rendering.metadata.modified = now
+
+        pdf = rendering.write_pdf(None, pdf_variant='pdf/a-3u')
 
         return pdf
 
@@ -152,6 +159,7 @@ class PdfWriter(BaseV3Writer):
 
 page_css_template = """
 @media print {{
+  html {{ image-rendering: crisp-edges }}
   body {{
     font-family: {fonts};
     width: 100%;
