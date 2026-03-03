@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.32.0] - 2026-03-03
+### :sparkles: New Features
+- [`7cf3c54`](https://github.com/ietf-tools/xml2rfc/commit/7cf3c54c2154e48e0e91098762fa79c037df9946) - Drop support for Python 3.9 *(PR [#1306](https://github.com/ietf-tools/xml2rfc/pull/1306) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1287](https://github.com/ietf-tools/xml2rfc/issues/1287) opened by [@kesara](https://github.com/kesara)*
+
+### :bug: Bug Fixes
+- [`cd8ab2f`](https://github.com/ietf-tools/xml2rfc/commit/cd8ab2f90c543de2393cbe391d5c5d83afc4f666) - Remove duplicate anchors from authors *(PR [#1296](https://github.com/ietf-tools/xml2rfc/pull/1296) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1290](https://github.com/ietf-tools/xml2rfc/issues/1290) opened by [@reschke](https://github.com/reschke)*
+- [`c78f9c6`](https://github.com/ietf-tools/xml2rfc/commit/c78f9c60851c38e07bdd05640750a66be63f1a6c) - **text**: Avoid word breaks *(PR [#1292](https://github.com/ietf-tools/xml2rfc/pull/1292) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#531](https://github.com/ietf-tools/xml2rfc/issues/531) opened by [@ietf-svn-bot](https://github.com/ietf-svn-bot)*
+  - :arrow_lower_right: *fixes issue [#1308](https://github.com/ietf-tools/xml2rfc/issues/1308) opened by [@mchurch-rpc](https://github.com/mchurch-rpc)*
+
+### :construction_worker: Build System
+- [`aa6a419`](https://github.com/ietf-tools/xml2rfc/commit/aa6a41962992b49d1551c3b06f8a292e00e97249) - new xml2rfc-slim docker image *(PR [#1304](https://github.com/ietf-tools/xml2rfc/pull/1304) by [@daniel-dewa](https://github.com/daniel-dewa))*
+
+### :memo: Documentation Changes
+- [`220b86b`](https://github.com/ietf-tools/xml2rfc/commit/220b86b7007cd58ddc901f6b64d771334e91e374) - update CHANGELOG.md + py file versions for v3.31.0 [skip ci] *(PR [#1286](https://github.com/ietf-tools/xml2rfc/pull/1286) by [@github-actions[bot]](https://github.com/apps/github-actions))*
+
+### :wrench: Chores
+- [`a30f7d9`](https://github.com/ietf-tools/xml2rfc/commit/a30f7d92c1f10cf6708e3b0c52659e9718a02bf6) - Add issue template configuration for vocabulary issues *(PR [#1298](https://github.com/ietf-tools/xml2rfc/pull/1298) by [@kesara](https://github.com/kesara))*
+- [`c473498`](https://github.com/ietf-tools/xml2rfc/commit/c4734981da3758af34a8806c863080ef7eefdb39) - Remove unused code *(PR [#1293](https://github.com/ietf-tools/xml2rfc/pull/1293) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.31.0] - 2025-10-08
 ### :sparkles: New Features
 - [`640c3cc`](https://github.com/ietf-tools/xml2rfc/commit/640c3ccd80da73855241bf2f0f4a70ae95c7406e) - **html**: Use self hosted fonts *(PR [#1282](https://github.com/ietf-tools/xml2rfc/pull/1282) by [@kesara](https://github.com/kesara))*
@@ -2487,3 +2510,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.30.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.0...v3.30.1
 [v3.30.2]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.1...v3.30.2
 [v3.31.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.2...v3.31.0
+[v3.32.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.31.0...v3.32.0
