@@ -81,6 +81,7 @@ default_options.__dict__ = {
         'info': False,
         'info_base_url': 'https://www.rfc-editor.org/info/',
         'inline_version_info': True,
+        'lax_validation': False,
         'legacy': False,
         'legacy_date_format': False,
         'legacy_list_symbols': False,
@@ -2158,7 +2159,7 @@ class BaseV3Writer(object):
         version = self.root.get('version', '3')
         if version not in ['3', ]:
             self.die(self.root, 'Expected <rfc> version="3", but found "%s"' % version)
-        if not self.validate('before'):
+        if not self.validate('before', warn=self.options.lax_validation):
             self.note(None, "Schema validation failed for input document")
 
         self.validate_draft_name()
@@ -2186,7 +2187,7 @@ class BaseV3Writer(object):
         attrib = copy.deepcopy(e.attrib)
         e.attrib.clear()
         #
-        if not self.validate('after', warn=True):
+        if not self.validate('after', warn=self.options.lax_validation):
             self.note(None, "Schema validation failed for input document")
         else:
             self.root.set('version', '3')
