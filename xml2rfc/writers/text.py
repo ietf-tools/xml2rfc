@@ -82,7 +82,7 @@ class Block(object):
         self.beg  = beg                 # beginning line of block
         self.end  = end                 # ending line of block
 
-wrapper = utils.TextWrapper(width=MAX_WIDTH)
+wrapper = utils.TextWrapper(width=MAX_WIDTH, break_long_words=False)
 splitter = utils.TextSplitter(width=SPLITTER_WIDTH)
 seen = set()
 
