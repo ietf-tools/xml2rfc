@@ -69,7 +69,6 @@ class PdfWriter(BaseV3Writer):
 
         self.options.no_css = True
         self.options.pdf = True
-        self.options.attach_xml = True
         htmlwriter = HtmlWriter(self.xmlrfc, quiet=True, options=self.options, date=self.date)
         html = htmlwriter.html()
 

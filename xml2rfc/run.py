@@ -318,6 +318,9 @@ def main():
                            help=configargparse.SUPPRESS),
     htmloptions.add_argument('--no-rfc-local', action='store_false', dest='rfc_local', default=True,
                              help='Do not link to rfc-local.css')
+    pdfoptions = optionparser.add_argument_group('PDF Format Options')
+    pdfoptions.add_argument('--attach-xml', action='store_true', default=False,
+                           help='Attach XML in PDF metadata')
 
     v2v3options = optionparser.add_argument_group('V2-V3 Converter Options')
     v2v3options.add_argument('--add-xinclude', action='store_true',
