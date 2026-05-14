@@ -827,6 +827,42 @@ tt, code, pre {
   line-height: 1.12;
 }
 
+/* Copy unfolded text from RFC 8792-style folded sourcecode/artwork blocks. */
+.has-copy-unfolded {
+  position: relative;
+}
+.copy-unfolded {
+  position: absolute;
+  top: 0.35em;
+  right: 0.35em;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  padding: 0.25em 0.5em;
+  border: 1px solid #777;
+  border-radius: 3px;
+  color: #fff;
+  background: #444;
+  font-family: var(--font-sans);
+  font-size: 0.85em;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.copy-unfolded:hover,
+.copy-unfolded:focus {
+  background: #222;
+}
+.has-copy-unfolded:hover > .copy-unfolded,
+.has-copy-unfolded:focus-within > .copy-unfolded,
+.copy-unfolded:focus {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media print {
+  .copy-unfolded {
+    display: none;
+  }
+}
 
 /* Add styling for a link in the ToC that points to the top of the document */
 a.toplink {

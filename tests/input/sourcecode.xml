@@ -127,6 +127,35 @@ print("49")
 print("50")
             </sourcecode>
         </section>
+        <section>
+            <name>RFC 8792 wrapping</name>
+            <t>Source code using the single backslash strategy:</t>
+            <sourcecode name="single-wrap.txt"><![CDATA[========== NOTE: '\' line wrapping per RFC 8792 ===========
+
+first folded line \
+continues here
+second folded line \
+also continues
+]]></sourcecode>
+            <t>Text artwork using the double backslash strategy:</t>
+            <artwork><![CDATA[[NOTE: '\\' line wrapping per RFC 8792]
+
+first folded line \
+  \continues here
+second folded line \
+  \also continues
+]]></artwork>
+            <t>Source code with renderer-added markers:</t>
+            <sourcecode name="marked-wrap.txt" markers="true"><![CDATA[NOTE: '\' line wrapping per RFC 8792
+
+marked folded line \
+continues here
+]]></sourcecode>
+            <t>A quoted header without folded content is not copyable:</t>
+            <sourcecode><![CDATA[NOTE: '\' line wrapping per RFC 8792
+This block mentions the header but does not use RFC 8792 folding.
+]]></sourcecode>
+        </section>
     </middle>
     <back>
         <references>

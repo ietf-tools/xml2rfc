@@ -6,7 +6,7 @@
 <meta content="initial-scale=1.0" name="viewport">
 <title>xml2rfc sourcecode tests</title>
 <meta content="Human Person" name="author">
-<meta content="xml2rfc 3.32.0" name="generator">
+<meta content="xml2rfc 3.33.0" name="generator">
 <meta content="sourcecode-00" name="ietf.draft">
 <link href="sourcecode.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -19,11 +19,11 @@
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">xml2rfc sourcecode tests</td>
-<td class="right">March 2026</td>
+<td class="right">May 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Person</td>
-<td class="center">Expires October 1, 2026</td>
+<td class="center">Expires November 15, 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -36,12 +36,12 @@
 <dd class="internet-draft">sourcecode-00</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-30" class="published">March 30, 2026</time>
+<time datetime="2026-05-14" class="published">May 14, 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-10-01">October 1, 2026</time></dd>
+<dd class="expires"><time datetime="2026-11-15">November 15, 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -71,7 +71,7 @@
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on October 1, 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on November 15, 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -101,13 +101,16 @@
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-less-than-50-lines" class="internal xref">Less than 50 lines</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-rfc-8792-wrapping" class="internal xref">RFC 8792 wrapping</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-index" class="internal xref">Index</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-references" class="internal xref">References</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-index" class="internal xref">Index</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -224,8 +227,52 @@ print("50")
 </div>
 </section>
 <section id="section-2">
+      <h2 id="name-rfc-8792-wrapping">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-rfc-8792-wrapping" class="section-name selfRef">RFC 8792 wrapping</a>
+      </h2>
+<p id="section-2-1">Source code using the single backslash strategy:<a href="#section-2-1" class="pilcrow">¶</a></p>
+<div class="has-copy-unfolded sourcecode" id="section-2-2">
+<pre>========== NOTE: '\' line wrapping per RFC 8792 ===========
+
+first folded line \
+continues here
+second folded line \
+also continues
+</pre>
+<button type="button" class="copy-unfolded" aria-label="Copy unfolded">Copy unfolded</button><a href="#section-2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-2-3">Text artwork using the double backslash strategy:<a href="#section-2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork has-copy-unfolded" id="section-2-4">
+<pre>[NOTE: '\\' line wrapping per RFC 8792]
+
+first folded line \
+  \continues here
+second folded line \
+  \also continues
+</pre>
+<button type="button" class="copy-unfolded" aria-label="Copy unfolded">Copy unfolded</button><a href="#section-2-4" class="pilcrow">¶</a>
+</div>
+<p id="section-2-5">Source code with renderer-added markers:<a href="#section-2-5" class="pilcrow">¶</a></p>
+<div class="has-copy-unfolded sourcecode" id="section-2-6" data-sourcecode-markers="true">
+<pre>&lt;CODE BEGINS&gt; file "marked-wrap.txt"
+NOTE: '\' line wrapping per RFC 8792
+
+marked folded line \
+continues here
+
+&lt;CODE ENDS&gt;</pre>
+<button type="button" class="copy-unfolded" aria-label="Copy unfolded">Copy unfolded</button><a href="#section-2-6" class="pilcrow">¶</a>
+</div>
+<p id="section-2-7">A quoted header without folded content is not copyable:<a href="#section-2-7" class="pilcrow">¶</a></p>
+<div class="sourcecode" id="section-2-8">
+<pre>NOTE: '\' line wrapping per RFC 8792
+This block mentions the header but does not use RFC 8792 folding.
+</pre><a href="#section-2-8" class="pilcrow">¶</a>
+</div>
+</section>
+<section id="section-3">
       <h2 id="name-references">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <dl class="references">
 <dt id="ref0">[ref0]</dt>
@@ -284,6 +331,125 @@ toc.querySelector("h2").addEventListener("click", e => {
 });
 toc.querySelector("nav").addEventListener("click", e => {
   toc.classList.remove("active");
+});
+</script>
+<script>function stripSourcecodeMarkers(text) {
+  const lines = text.split("\n");
+  if (lines.length && /^<CODE BEGINS>(?: file "[^"]*")?$/.test(lines[0])) {
+    lines.shift();
+    if (lines.length && /^ file "[^"]*"$/.test(lines[0])) {
+      lines.shift();
+    }
+  }
+  if (lines.length && lines[lines.length - 1] === "<CODE ENDS>") {
+    lines.pop();
+  }
+  return lines.join("\n");
+}
+
+function findHeader(lines) {
+  const headers = [
+    { strategy: "double", text: "NOTE: '\\\\' line wrapping per RFC 8792" },
+    { strategy: "single", text: "NOTE: '\\' line wrapping per RFC 8792" },
+  ];
+  for (const header of headers) {
+    if (lines[0].includes(header.text)) {
+      return { strategy: header.strategy, index: 0 };
+    }
+    if (lines.length > 1 && lines[0].startsWith("<CODE BEGINS>") && lines[1].includes(header.text)) {
+      return { strategy: header.strategy, index: 1 };
+    }
+    if (lines.length > 2 && lines[0].startsWith("<CODE BEGINS>") && lines[1].startsWith(" file \"") && lines[2].includes(header.text)) {
+      return { strategy: header.strategy, index: 2 };
+    }
+  }
+  return null;
+}
+
+function unfoldText(text, stripMarkers) {
+  const lines = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+  const header = findHeader(lines);
+
+  if (!header) {
+    return text;
+  }
+
+  const before = lines.slice(0, header.index);
+  if (lines[header.index].startsWith("<CODE BEGINS>")) {
+    before.push("<CODE BEGINS>");
+  }
+  const after = lines.slice(header.index + 1);
+  if (after.length && /^[ ]*$/.test(after[0])) {
+    after.shift();
+  }
+
+  const folded = after.join("\n");
+  const unwrapped = header.strategy === "double"
+    ? folded.replace(/\\\n[ ]*\\/g, "")
+    : folded.replace(/\\\n[ ]*/g, "");
+
+  if (before.length) {
+    const result = `${before.join("\n")}\n${unwrapped}`;
+    return stripMarkers ? stripSourcecodeMarkers(result) : result;
+  }
+  return stripMarkers ? stripSourcecodeMarkers(unwrapped) : unwrapped;
+}
+
+function copyTextWithTextarea(text) {
+  return new Promise((resolve, reject) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "-1000px";
+    textarea.style.left = "-1000px";
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      if (document.execCommand("copy")) {
+        resolve();
+      } else {
+        reject(new Error("copy command failed"));
+      }
+    } catch (error) {
+      reject(error);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  });
+}
+
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text).catch(() => copyTextWithTextarea(text));
+  }
+  return copyTextWithTextarea(text);
+}
+
+document.querySelectorAll(".copy-unfolded").forEach(button => {
+  button.addEventListener("click", () => {
+    const block = button.closest(".has-copy-unfolded");
+    const pre = block ? block.querySelector("pre") : null;
+    if (!block || !pre) {
+      return;
+    }
+
+    const text = unfoldText(pre.textContent, block.dataset.sourcecodeMarkers === "true");
+    copyText(text).then(() => {
+      button.textContent = "Copied";
+      button.setAttribute("aria-label", "Copied");
+      window.setTimeout(() => {
+        button.textContent = "Copy unfolded";
+        button.setAttribute("aria-label", "Copy unfolded");
+      }, 1600);
+    }).catch(() => {
+      button.textContent = "Error";
+      window.setTimeout(() => {
+        button.textContent = "Copy unfolded";
+      }, 1600);
+    });
+  });
 });
 </script>
 </body>

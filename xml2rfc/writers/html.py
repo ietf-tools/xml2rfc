@@ -230,6 +230,7 @@ class HtmlWriter(BaseV3Writer):
         self.duplicate_html_ids = set()
         self.filename = None
         self.refname_mapping = self.get_refname_mapping()
+        self.has_copy_unfolded = False
             
     def html_tree(self):
         if not self.root.get('prepTime'):
@@ -358,6 +359,43 @@ class HtmlWriter(BaseV3Writer):
 
     def part_of_table_of_contents(self, e):
         return( len(e.xpath('ancestor::*[contains(@class, "toc")]')) > 0 )
+
+    def has_line_unfolding(self, text):
+        if not text:
+            return False
+        headers = [
+            ('double', r"NOTE: '\\' line wrapping per RFC 8792"),
+            ('single', r"NOTE: '\' line wrapping per RFC 8792"),
+        ]
+        lines = text.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+        for kind, header in headers:
+            if header in lines[0]:
+                body = lines[1:]
+            elif len(lines) > 1 and lines[0].startswith('<CODE BEGINS>') and header in lines[1]:
+                body = lines[2:]
+            elif len(lines) > 2 and lines[0].startswith('<CODE BEGINS>') and lines[1].startswith(' file "') and header in lines[2]:
+                body = lines[3:]
+            else:
+                continue
+            if kind == 'double':
+                for j, body_line in enumerate(body[:-1]):
+                    if body_line.endswith('\\') and body[j + 1].lstrip(' ').startswith('\\'):
+                        return True
+            elif any(body_line.endswith('\\') for body_line in body):
+                return True
+        return False
+
+    def maybe_add_copy_unfolded_button(self, e, text, strip_sourcecode_markers=False):
+        if not self.has_line_unfolding(text):
+            return
+        classes = e.get('class', '')
+        e.set('class', ' '.join(s for s in [classes, 'has-copy-unfolded'] if s))
+        if strip_sourcecode_markers:
+            e.set('data-sourcecode-markers', 'true')
+        button = build.button('Copy unfolded', type='button', classes='copy-unfolded')
+        button.set('aria-label', 'Copy unfolded')
+        e.append(button)
+        self.has_copy_unfolded = True
     
     def maybe_add_pilcrow(self, e, first=False):
         if not self.contains_pilcrow_in_sub_element(e) and not self.part_of_table_of_contents(e):
@@ -662,6 +700,7 @@ class HtmlWriter(BaseV3Writer):
             )
         )
 
+        self.has_copy_unfolded = False
         for c in [ e for e in [ x.find('front'), x.find('middle'), x.find('back') ] if e != None]:
             self.part = c.tag
             self.render(body, c)
@@ -669,6 +708,10 @@ class HtmlWriter(BaseV3Writer):
         with open(self.css_js, encoding='utf-8') as f:
             js = f.read()
         add.script(body, None, js)
+        if self.has_copy_unfolded:
+            with open(os.path.join(data_dir, 'xml2rfc-copy-unfolded.js'), encoding='utf-8') as f:
+                js = f.read()
+            add.script(body, None, js)
 
         return html
 
@@ -847,6 +890,7 @@ class HtmlWriter(BaseV3Writer):
                     classes += ' art-%s' % type
                 div = add.div(h, x, pre, classes=classes)
                 div.text = None
+                self.maybe_add_copy_unfolded_button(div, pre.text)
                 if x.getparent().tag != 'figure':
                     self.maybe_add_pilcrow(div)
                 return div
@@ -2464,6 +2508,7 @@ class HtmlWriter(BaseV3Writer):
                 text = (' file "%s"\n%s' % (file, text)) if text else '\n%s' % text
             text = "<CODE BEGINS>%s\n<CODE ENDS>" % text
             pre.text = text
+        self.maybe_add_copy_unfolded_button(div, pre.text, strip_sourcecode_markers=mark)
         if x.getparent().tag != 'figure':
             self.maybe_add_pilcrow(div)
         return div

@@ -3,9 +3,9 @@
 
 
 Network Working Group                                     H. Person, Ed.
-Internet-Draft                                            March 30, 2026
+Internet-Draft                                              May 14, 2026
 Intended status: Experimental                                           
-Expires: October 1, 2026
+Expires: November 15, 2026
 
 
                         xml2rfc sourcecode tests
@@ -26,7 +26,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 1, 2026.
+   This Internet-Draft will expire on November 15, 2026.
 
 Copyright Notice
 
@@ -42,9 +42,10 @@ Copyright Notice
 Table of Contents
 
    1.  Less than 50 lines  . . . . . . . . . . . . . . . . . . . . .   1
-   2.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   2.  RFC 8792 wrapping . . . . . . . . . . . . . . . . . . . . . .   4
+   3.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   4
    Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   4
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   5
 
 1.  Less than 50 lines
 
@@ -52,10 +53,9 @@ Table of Contents
 
 
 
-
-Person                   Expires October 1, 2026                [Page 1]
+Person                  Expires November 15, 2026               [Page 1]
 
-Internet-Draft          xml2rfc sourcecode tests              March 2026
+Internet-Draft          xml2rfc sourcecode tests                May 2026
 
 
    print("01")
@@ -109,9 +109,9 @@ Internet-Draft          xml2rfc sourcecode tests              March 2026
 
 
 
-Person                   Expires October 1, 2026                [Page 2]
+Person                  Expires November 15, 2026               [Page 2]
 
-Internet-Draft          xml2rfc sourcecode tests              March 2026
+Internet-Draft          xml2rfc sourcecode tests                May 2026
 
 
    print("49")
@@ -165,9 +165,9 @@ Internet-Draft          xml2rfc sourcecode tests              March 2026
 
 
 
-Person                   Expires October 1, 2026                [Page 3]
+Person                  Expires November 15, 2026               [Page 3]
 
-Internet-Draft          xml2rfc sourcecode tests              March 2026
+Internet-Draft          xml2rfc sourcecode tests                May 2026
 
 
    print("47")
@@ -175,7 +175,41 @@ Internet-Draft          xml2rfc sourcecode tests              March 2026
    print("49")
    print("50")
 
-2.  References
+2.  RFC 8792 wrapping
+
+   Source code using the single backslash strategy:
+
+   ========== NOTE: '\' line wrapping per RFC 8792 ===========
+
+   first folded line \
+   continues here
+   second folded line \
+   also continues
+
+   Text artwork using the double backslash strategy:
+
+   [NOTE: '\\' line wrapping per RFC 8792]
+
+   first folded line \
+     \continues here
+   second folded line \
+     \also continues
+
+   Source code with renderer-added markers:
+
+   <CODE BEGINS> file "marked-wrap.txt"
+   NOTE: '\' line wrapping per RFC 8792
+
+   marked folded line \
+   continues here
+   <CODE ENDS>
+
+   A quoted header without folded content is not copyable:
+
+   NOTE: '\' line wrapping per RFC 8792
+   This block mentions the header but does not use RFC 8792 folding.
+
+3.  References
 
    [ref0]     Author, R. Q., "Reference".  This is a reference not in a
               reference group.
@@ -183,6 +217,14 @@ Internet-Draft          xml2rfc sourcecode tests              March 2026
 Index
 
    A
+
+
+
+
+Person                  Expires November 15, 2026               [Page 4]
+
+Internet-Draft          xml2rfc sourcecode tests                May 2026
+
 
       A
 
@@ -221,4 +263,18 @@ Author's Address
 
 
 
-Person                   Expires October 1, 2026                [Page 4]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Person                  Expires November 15, 2026               [Page 5]

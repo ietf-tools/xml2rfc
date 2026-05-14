@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" version="3" sortRefs="true" category="exp" submissionType="independent" ipr="trust200902" docName="sourcecode-00" prepTime="2026-03-30T22:40:21" indexInclude="true" scripts="Common,Latin" symRefs="true" tocDepth="3" tocInclude="true">
-  <!-- xml2rfc v2v3 conversion 3.32.0 -->
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" version="3" sortRefs="true" category="exp" submissionType="independent" ipr="trust200902" docName="sourcecode-00" prepTime="2026-05-14T10:47:17" indexInclude="true" scripts="Common,Latin" symRefs="true" tocDepth="3" tocInclude="true">
+  <!-- xml2rfc v2v3 conversion 3.33.0 -->
   
     
     
@@ -20,7 +20,7 @@
         </postal>
       </address>
     </author>
-    <date day="30" month="03" year="2026"/>
+    <date day="14" month="05" year="2026"/>
     <boilerplate>
       <section anchor="status-of-memo" numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.1">
         <name slugifiedName="name-status-of-this-memo">Status of This Memo</name>
@@ -41,7 +41,7 @@
         material or to cite them other than as "work in progress."
         </t>
         <t indent="0" pn="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 October 2026.
+        This Internet-Draft will expire on 15 November 2026.
         </t>
       </section>
       <section anchor="copyright" numbered="false" removeInRFC="false" toc="exclude" pn="section-boilerplate.2">
@@ -68,13 +68,16 @@
             <t indent="0" keepWithNext="true" pn="section-toc.1-1.1.1"><xref derivedContent="1" format="counter" sectionFormat="of" target="section-1"/>.  <xref derivedContent="" format="title" sectionFormat="of" target="name-less-than-50-lines">Less than 50 lines</xref></t>
           </li>
           <li pn="section-toc.1-1.2">
-            <t indent="0" keepWithNext="true" pn="section-toc.1-1.2.1"><xref derivedContent="2" format="counter" sectionFormat="of" target="section-2"/>.  <xref derivedContent="" format="title" sectionFormat="of" target="name-references">References</xref></t>
+            <t indent="0" keepWithNext="true" pn="section-toc.1-1.2.1"><xref derivedContent="2" format="counter" sectionFormat="of" target="section-2"/>.  <xref derivedContent="" format="title" sectionFormat="of" target="name-rfc-8792-wrapping">RFC 8792 wrapping</xref></t>
           </li>
           <li pn="section-toc.1-1.3">
-            <t indent="0" keepWithNext="true" pn="section-toc.1-1.3.1"><xref derivedContent="" format="none" sectionFormat="of" target="section-appendix.a"/><xref derivedContent="" format="title" sectionFormat="of" target="name-index">Index</xref></t>
+            <t indent="0" keepWithNext="true" pn="section-toc.1-1.3.1"><xref derivedContent="3" format="counter" sectionFormat="of" target="section-3"/>.  <xref derivedContent="" format="title" sectionFormat="of" target="name-references">References</xref></t>
           </li>
           <li pn="section-toc.1-1.4">
-            <t indent="0" pn="section-toc.1-1.4.1"><xref derivedContent="" format="none" sectionFormat="of" target="section-appendix.b"/><xref derivedContent="" format="title" sectionFormat="of" target="name-authors-address">Author's Address</xref></t>
+            <t indent="0" pn="section-toc.1-1.4.1"><xref derivedContent="" format="none" sectionFormat="of" target="section-appendix.a"/><xref derivedContent="" format="title" sectionFormat="of" target="name-index">Index</xref></t>
+          </li>
+          <li pn="section-toc.1-1.5">
+            <t indent="0" pn="section-toc.1-1.5.1"><xref derivedContent="" format="none" sectionFormat="of" target="section-appendix.b"/><xref derivedContent="" format="title" sectionFormat="of" target="name-authors-address">Author's Address</xref></t>
           </li>
         </ul>
       </section>
@@ -185,9 +188,38 @@ print("49")
 print("50")
 </sourcecode>
     </section>
+    <section numbered="true" removeInRFC="false" toc="include" pn="section-2">
+      <name slugifiedName="name-rfc-8792-wrapping">RFC 8792 wrapping</name>
+      <t indent="0" pn="section-2-1">Source code using the single backslash strategy:</t>
+      <sourcecode name="single-wrap.txt" markers="false" pn="section-2-2">========== NOTE: '\' line wrapping per RFC 8792 ===========
+
+first folded line \
+continues here
+second folded line \
+also continues
+</sourcecode>
+      <t indent="0" pn="section-2-3">Text artwork using the double backslash strategy:</t>
+      <artwork align="left" pn="section-2-4"><![CDATA[[NOTE: '\\' line wrapping per RFC 8792]
+
+first folded line \
+  \continues here
+second folded line \
+  \also continues
+]]></artwork>
+      <t indent="0" pn="section-2-5">Source code with renderer-added markers:</t>
+      <sourcecode name="marked-wrap.txt" markers="true" pn="section-2-6">NOTE: '\' line wrapping per RFC 8792
+
+marked folded line \
+continues here
+</sourcecode>
+      <t indent="0" pn="section-2-7">A quoted header without folded content is not copyable:</t>
+      <sourcecode markers="false" pn="section-2-8">NOTE: '\' line wrapping per RFC 8792
+This block mentions the header but does not use RFC 8792 folding.
+</sourcecode>
+    </section>
   </middle>
   <back>
-    <references pn="section-2">
+    <references pn="section-3">
       <name slugifiedName="name-references">References</name>
       <reference anchor="ref0" quoteTitle="true" derivedAnchor="ref0">
         <front>
