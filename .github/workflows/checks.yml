@@ -65,15 +65,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Fonts Cache
-      id: cache-fonts-linux
-      uses: pat-s/always-upload-cache@v2.1.5
-      with:
-        path: ~/.fonts/opentype
-        key: fonts-linux
-
     - name: Download Fonts
-      if: steps.cache-fonts-linux.outputs.cache-hit != 'true'
       run: |
         echo "Downloading xml2rfc-fonts"
         mkdir -p ~/.fonts/opentype ~/fonts
@@ -82,15 +74,6 @@ jobs:
         mv ~/fonts/*/noto/* ~/.fonts/opentype/
         mv ~/fonts/*/roboto_mono/* ~/.fonts/opentype/
         mkdir -p /usr/share/fonts/truetype
-        ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
-        echo "Reloading Font Cache..."
-        fc-cache -f -v
-
-    - name: Link Fonts
-      if: steps.cache-fonts-linux.outputs.cache-hit == 'true'
-      run: |
-        echo "Linking Fonts..."
-        mkdir -p /usr/share/fonts/truetype/
         ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
         echo "Reloading Font Cache..."
         fc-cache -f -v
@@ -116,7 +99,7 @@ jobs:
 
   tests-macos:
     name: Unit Tests (macOS)
-    runs-on: macos-15
+    runs-on: macos-latest
     if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
 
     strategy:
@@ -133,7 +116,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Download Fonts
-      if: steps.cache-fonts-macos.outputs.cache-hit != 'true'
       run: |
         echo "Downloading xml2rfc-fonts"
         mkdir -p ~/fonts /Library/Fonts
@@ -145,19 +127,6 @@ jobs:
         mv ~/fonts/*/roboto_mono/* /Library/Fonts/
         echo "Reloading Font Cache..."
         fc-cache -f -v /Library/Fonts/
-
-    - name: Fonts Cache
-      id: cache-fonts-macos
-      uses: pat-s/always-upload-cache@v2.1.5
-      with:
-        path: /Library/Fonts
-        key: fonts-macos
-
-    - name: Link Fonts
-      if: steps.cache-fonts-macos.outputs.cache-hit == 'true'
-      run: |
-        echo "Reloading Font Cache..."
-        fc-cache -f -v
 
     - name: Install dependencies
       run: |
@@ -178,7 +147,7 @@ jobs:
 
     - name: Test with tox
       env:
-        PLATFORM: macos-15
+        PLATFORM: macos-latest
       run: |
         export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_FALLBACK_LIBRARY_PATH
         echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
