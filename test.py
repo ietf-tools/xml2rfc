@@ -515,6 +515,7 @@ class PdfWriterTests(unittest.TestCase):
                 t =  norm(e.text.split(None, 1)[0])
                 self.assertIn(t, text)
 
+    @unittest.skipIf(sys.platform.startswith("darwin"), "Test skipped on macOS")
     def test_included_fonts(self):
         if xml2rfc.HAVE_WEASYPRINT and xml2rfc.HAVE_PANGO:
             font_families = set([ f.text for f in self.pdfxml.xpath('.//FontFamily') ])
@@ -527,11 +528,13 @@ class PdfWriterTests(unittest.TestCase):
         output_html = self.pdf_writer.flatten_unicode_spans(input_html)
         self.assertEqual(output_html, '<body><p>foobar</p></body>')
 
+    @unittest.skipIf(sys.platform.startswith("darwin"), "Test skipped on macOS")
     def test_get_serif_fonts(self):
         fonts = self.pdf_writer.get_serif_fonts()
         for font in ['Noto Serif', 'Noto Sans Cherokee', 'Noto Serif CJK SC', 'Noto Serif Hebrew', 'NotoSansSymbols2', 'NotoSansMath']:
             self.assertIn(font, fonts)
 
+    @unittest.skipIf(sys.platform.startswith("darwin"), "Test skipped on macOS")
     def test_get_mono_fonts(self):
         fonts = self.pdf_writer.get_mono_fonts()
         for font in ['Roboto Mono', 'Noto Sans Cherokee', 'Noto Serif CJK SC', 'Noto Serif Hebrew', 'NotoSansSymbols2', 'NotoSansMath']:

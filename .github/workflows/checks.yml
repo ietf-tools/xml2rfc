@@ -65,15 +65,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Fonts Cache
-      id: cache-fonts-linux
-      uses: pat-s/always-upload-cache@v2.1.5
-      with:
-        path: ~/.fonts/opentype
-        key: fonts-linux
-
     - name: Download Fonts
-      if: steps.cache-fonts-linux.outputs.cache-hit != 'true'
       run: |
         echo "Downloading xml2rfc-fonts"
         mkdir -p ~/.fonts/opentype ~/fonts
@@ -82,15 +74,6 @@ jobs:
         mv ~/fonts/*/noto/* ~/.fonts/opentype/
         mv ~/fonts/*/roboto_mono/* ~/.fonts/opentype/
         mkdir -p /usr/share/fonts/truetype
-        ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
-        echo "Reloading Font Cache..."
-        fc-cache -f -v
-
-    - name: Link Fonts
-      if: steps.cache-fonts-linux.outputs.cache-hit == 'true'
-      run: |
-        echo "Linking Fonts..."
-        mkdir -p /usr/share/fonts/truetype/
         ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
         echo "Reloading Font Cache..."
         fc-cache -f -v
@@ -132,31 +115,28 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Fonts Cache
-      id: cache-fonts-mac
-      uses: pat-s/always-upload-cache@v2.1.5
-      with:
-        path: ~/fonts
-        key: fonts-macos
-
     - name: Download Fonts
       run: |
         echo "Downloading xml2rfc-fonts"
         mkdir -p ~/fonts /Library/Fonts
         wget -q -O fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.tar.gz
         tar zxf fonts.tar.gz -C ~/fonts
+        echo "Remove existing fonts"
+        sudo rm -rf /Library/Fonts/*
         mv ~/fonts/*/noto/* /Library/Fonts/
         mv ~/fonts/*/roboto_mono/* /Library/Fonts/
+        echo "Reloading Font Cache..."
+        fc-cache -f -v /Library/Fonts/
 
     - name: Install dependencies
       run: |
         brew install make diffutils
-        # Install WeasyPrint 68.0
+        # Install WeasyPrint 69.0
         brew install weasyprint
         echo "Installing pip + wheel..."
         python -m pip install --upgrade pip wheel
         echo "Installing test dependencies..."
-        python -m pip install tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==68.0"
+        python -m pip install tox tox-gh-actions certifi decorator dict2xml pyflakes "pypdf>=4.1.0" "weasyprint==69.0"
 
     - name: Generate Valid Tests
       run: |
