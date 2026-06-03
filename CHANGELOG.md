@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.34.0] - 2026-06-03
+### :sparkles: New Features
+- [`473a718`](https://github.com/ietf-tools/xml2rfc/commit/473a718787d60921dcf320f8e81da4bfb7de12ef) - Use natsort to sort references *(PR [#1321](https://github.com/ietf-tools/xml2rfc/pull/1321) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1318](https://github.com/ietf-tools/xml2rfc/issues/1318) opened by [@kesara](https://github.com/kesara)*
+
+### :memo: Documentation Changes
+- [`1eecf19`](https://github.com/ietf-tools/xml2rfc/commit/1eecf19dcffec8cdbb9cc9f74fcbca83881cc666) - update CHANGELOG.md + py file versions for v3.33.0 [skip ci] *(PR [#1319](https://github.com/ietf-tools/xml2rfc/pull/1319) by [@github-actions[bot]](https://github.com/apps/github-actions))*
+
+### :wrench: Chores
+- [`15f6824`](https://github.com/ietf-tools/xml2rfc/commit/15f6824216638dcef194abb787d76a664f02200a) - **deps**: Update Weasyprint to 69.0 *(PR [#1326](https://github.com/ietf-tools/xml2rfc/pull/1326) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.33.0] - 2026-04-09
 ### :sparkles: New Features
 - [`6e8cf6e`](https://github.com/ietf-tools/xml2rfc/commit/6e8cf6e1b6e4bdd18ea4e3c39b5005ea6a50da6f) - Add PDF/A support and source attachment to PDF. *(PR [#1090](https://github.com/ietf-tools/xml2rfc/pull/1090) by [@kesara](https://github.com/kesara))*
@@ -2525,3 +2537,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.31.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.30.2...v3.31.0
 [v3.32.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.31.0...v3.32.0
 [v3.33.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.32.0...v3.33.0
+[v3.34.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.33.0...v3.34.0
