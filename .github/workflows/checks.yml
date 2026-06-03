@@ -116,7 +116,7 @@ jobs:
 
   tests-macos:
     name: Unit Tests (macOS)
-    runs-on: macos-latest
+    runs-on: macos-15
     if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
 
     strategy:
@@ -176,7 +176,7 @@ jobs:
 
     - name: Test with tox
       env:
-        PLATFORM: macos-latest
+        PLATFORM: macos-15
       run: |
         export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_FALLBACK_LIBRARY_PATH
         echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
