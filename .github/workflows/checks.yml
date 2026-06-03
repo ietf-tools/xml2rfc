@@ -132,14 +132,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Fonts Cache
-      id: cache-fonts-mac
-      uses: pat-s/always-upload-cache@v2.1.5
-      with:
-        path: ~/fonts
-        key: fonts-macos
-
     - name: Download Fonts
+      if: steps.cache-fonts-macos.outputs.cache-hit != 'true'
       run: |
         echo "Downloading xml2rfc-fonts"
         mkdir -p ~/fonts /Library/Fonts
@@ -147,6 +141,21 @@ jobs:
         tar zxf fonts.tar.gz -C ~/fonts
         mv ~/fonts/*/noto/* /Library/Fonts/
         mv ~/fonts/*/roboto_mono/* /Library/Fonts/
+        echo "Reloading Font Cache..."
+        fc-cache -f -v /Library/Fonts/
+
+    - name: Fonts Cache
+      id: cache-fonts-mac
+      uses: pat-s/always-upload-cache@v2.1.5
+      with:
+        path: /Library/Fonts
+        key: fonts-macos
+
+    - name: Link Fonts
+      if: steps.cache-fonts-macos.outputs.cache-hit == 'true'
+      run: |
+        echo "Reloading Font Cache..."
+        fc-cache -f -v
 
     - name: Install dependencies
       run: |
