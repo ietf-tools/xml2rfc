@@ -140,7 +140,7 @@ jobs:
         wget -q -O fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.tar.gz
         tar zxf fonts.tar.gz -C ~/fonts
         echo "Remove existing fonts"
-        rm -rf /Library/Fonts/* 2>/dev/null || true
+        sudo rm -rf /Library/Fonts/*
         mv ~/fonts/*/noto/* /Library/Fonts/
         mv ~/fonts/*/roboto_mono/* /Library/Fonts/
         echo "Reloading Font Cache..."
