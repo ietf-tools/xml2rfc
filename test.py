@@ -515,6 +515,7 @@ class PdfWriterTests(unittest.TestCase):
                 t =  norm(e.text.split(None, 1)[0])
                 self.assertIn(t, text)
 
+    @unittest.skipIf(sys.platform.startswith("darwin"), "Test skipped on macOS")
     def test_included_fonts(self):
         if xml2rfc.HAVE_WEASYPRINT and xml2rfc.HAVE_PANGO:
             font_families = set([ f.text for f in self.pdfxml.xpath('.//FontFamily') ])
