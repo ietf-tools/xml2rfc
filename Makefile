@@ -49,7 +49,7 @@ pyfiles  = $(wildcard  xml2rfc/*.py) $(wildcard  xml2rfc/writers/*.py)
 .PHONY: clear-cache configtest install installtestdeps flaketest pytests tests tests-no-network yes yestests
 
 # All tests
-tests: minify tests-no-network cachetest
+tests: tests-no-network cachetest
 
 # Tests that can run without network access
 tests-no-network: test flaketest drafttest old-drafttest rfctest utf8test v3featuretest elementstest indextest sourcecodetest notoctest bomtest wiptest mantest
@@ -184,9 +184,6 @@ tests/out/%.exp.xml: tests/input/%.xml install
 	@echo " Diffing $< against previously generated and merged output"
 	@diff -u -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(datetime_regex)' -I '$(version_regex)' -I '$(libversion_regex)' -I '$(generator_regex)' tests/valid/$(notdir $<) $< || { echo "Diff failed for $< output (5)"; read $(READARGS) -p "Copy [y/n]? " REPLY; if [ $$? -gt 0 -o "$$REPLY" = "y" ]; then cp -v $< tests/valid/; else exit 1; fi; }
 
-%.min.js: %.js
-	bin/uglifycall $<
-
 .PRECIOUS: tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.nroff.txt tests/out/%.html tests/out/%.txt tests/out/%.exp.xml tests/out/%.v2v3.xml tests/out/%.prepped.xml tests/out/%.text tests/out/%.v3.html %.prepped.xml %.nroff.txt tests/out/%.plain.txt
 
 # ----------------------------------------------------------------------
@@ -281,10 +278,6 @@ yestests: yes tests
 noflakestests: install pytests regressiontests
 
 regressiontests: drafttest rfctest
-
-minify: xml2rfc/data/metadata.min.js
-
-
 
 test2:	test
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8 tests/input/rfc6635.xml --legacy --text --out tmp/rfc6635.txt	&& diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt "
