@@ -567,6 +567,7 @@ class HtmlWriterTest(unittest.TestCase):
     def test_set_font_family(self):
         input_svg = lxml.etree.fromstring('''
 <svg xmlns="http://www.w3.org/2000/svg">
+  <style>:root { font: "monospace"; }</style>
   <path />
   <g>
     <text>foobar</text>
@@ -578,6 +579,7 @@ class HtmlWriterTest(unittest.TestCase):
 </svg>''')
         expected_svg = lxml.etree.tostring(lxml.etree.fromstring('''
 <svg xmlns="http://www.w3.org/2000/svg">
+  <style>:root { font: "monospace"; }</style>
   <path />
   <g>
     <text>foobar</text>
