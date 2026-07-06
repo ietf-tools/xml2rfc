@@ -69,13 +69,15 @@ class DocWriter(base.BaseV3Writer):
         rnc.render(self.v3_schema.getroot())
         for element in edefs:
             ename = element.get('name')
+            if ename is None or ":" in ename:
+                continue
             is_new = self.rfc7991_schema.xpath("/x:grammar/x:define/x:element[@name='%s']" % ename, namespaces=namespaces) == []
             e = {'attributes': [], 'children': [], 'rnc': [], 'parents': [], 'new': is_new, }
             elements[ename] = e
             #debug.show('ename')
             for a in element.xpath('.//x:attribute', namespaces=namespaces):
                 aname = a.get('name')
-                if aname in ignored_attributes:
+                if aname is None or aname in ignored_attributes:
                     continue
                 adict = {'name': aname}
                 e['attributes'].append(adict)
@@ -139,7 +141,10 @@ class DocWriter(base.BaseV3Writer):
         element_list.sort(key=lambda x: x['tag'])
 
         for d in element_list:
-            d.update(elements[d['tag']])
+            tag = d['tag']
+            if tag is None or ":" in tag:
+                continue
+            d.update(elements[tag])
 
         # --- Command-line options information for the template context ---
 
@@ -244,7 +249,7 @@ class RelaxNGCompactRenderer():
         if 'deprecated' in kwargs:
             self.deprecated = kwargs.pop('deprecated')
     def render(self, e):
-        if e.tag  in [lxml.etree.Comment, ]:
+        if e.tag in [lxml.etree.Comment, ]:
             return ''
         tag = e.tag.replace('{http://relaxng.org/ns/structure/1.0}', '')
         if hasattr(self, tag):
@@ -252,6 +257,14 @@ class RelaxNGCompactRenderer():
             return func(e)
         else:
             raise NotImplementedError('%s()' % tag)
+    def name_and_children(self, e):
+        name = e.get('name')
+        cc = e.getchildren()
+        if len(cc) > 0 and cc[0].tag == "anyName":
+            return ('*', cc[1:])
+        return (name, cc)
+    def anyName(self, e):
+        return '' # see name_and_children() above
     def zeroOrMore(self, e):
         cc = e.getchildren()
         sub = ', '.join(filter(None, [ self.render(c) for c in cc ]))
@@ -314,18 +327,16 @@ class RelaxNGCompactRenderer():
         sub = ',\n'.join(filter(None, [ self.render(c) for c in cc ]))
         return '%s =\n  %s\n' % (txt, sub)
     def element(self, e):
-        name = e.get('name')
-        cc = e.getchildren()
+        name, cc = self.name_and_children(e)
         sub = ',\n    '.join(filter(None, [ self.render(c) for c in cc ]))
         txt = 'element %s {\n    %s\n  }\n' % (name, sub)
         txt = re.sub(r'(\n[ \t]*)+\n', '\n', txt)
         return txt
     def attribute(self, e):
         txt = ''
-        name = e.get('name')
         nsa = 'http://relaxng.org/ns/compatibility/annotations/1.0'
         default = e.get('{%s}defaultValue' % nsa, None)
-        cc = e.getchildren()
+        name, cc = self.name_and_children(e)
         sub = ', '.join(filter(None, [ self.render(c) for c in cc ])) if cc else 'text'
         if len(cc)==1 and re.match(r'\(.*\)$', sub):
             sub = sub[1:-1]

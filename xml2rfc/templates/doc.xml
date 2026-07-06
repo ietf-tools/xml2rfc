@@ -92,7 +92,7 @@
       <!-- Elements -->
       <section><name>Schema Version 3 Elements</name>
       {% for element in elements %}
-        {% if not element.deprecated %}
+        {% if not element.deprecated and not ":" in element.tag %}
         <section anchor="element-{{element.tag}}">
             <name>&lt;{{element.tag}}&gt; {% if element.new %} (New){% endif %}</name>
             {% if element.description %}
