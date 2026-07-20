@@ -1201,10 +1201,18 @@ class SanitizeTest(unittest.TestCase):
         svg_with_scripts = lxml.etree.fromstring('''
 <rfc><svg xmlns="http://www.w3.org/2000/svg">
   <script>globalThis.alert("haha");</script>
+  <foreignObject xmlns="otherns"></foreignObject>
+  <style>ok { foo: url(#local); }</style>
+  <style>notok { foo: url(not-local); }</style>
+  <use href="#a"></use>
+  <use href="https://..."></use>
   <text onclick="globalThis.alert(1)">foobar</text>
 </svg></rfc>''')
         expected_svg = lxml.etree.fromstring('''
 <rfc><svg xmlns="http://www.w3.org/2000/svg">
+  <style>ok { foo: url(#local); }</style>
+  <use href="#a"></use>
+  <use/>
   <text>foobar</text>
 </svg></rfc>''')
 

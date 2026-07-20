@@ -375,16 +375,29 @@ def strip_svg_scripts(tree):
     """
     Find any scripts in SVG images and remove them.
     """
-    for s in tree.xpath('//svg:svg//svg:script', namespaces=namespaces):
-        print(repr(s))
-        p = s.getparent()
-        xml2rfc.log.warn(f"Removed script element from {p.tag}. SVG cannot contain scripts.")
-        p.remove(s)
-    for e in tree.xpath('//svg:svg//attribute::*[starts-with(name(), "on")]/..', namespaces=namespaces):
-        for a in e.attrib.iterkeys():
+    # Only look at the local name, ignoring case for forbidden elements.
+    lcname = "translate(local-name(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')"
+    for forbid in ["script", "iframe", "frame", "foreignobject", "link"]:
+        for e in tree.xpath(f'//svg:svg//*[{lcname} = "{forbid}"]', namespaces=namespaces):
+            p = e.getparent()
+            xml2rfc.log.warn(f"Removed {e.tag} element from {p.tag}. SVG cannot contain these elements.")
+            p.remove(e)
+    css_url = re.compile(r"""url\(['"]?[^#]""", flags=re.IGNORECASE)
+    for e in tree.xpath(f'//svg:svg//*[{lcname} = "style"]', namespaces=namespaces):
+        if css_url.search(e.text) is not None:
+            p = e.getparent()
+            xml2rfc.log.warn(f"Removed {e.tag} element from {p.tag}. This appears to contain url().")
+            p.remove(e)
+    for e in tree.xpath(f'//svg:svg//*[@*[starts-with(local-name(), "on")]]', namespaces=namespaces):
+        for a in e.attrib.keys():
             if a[:2] == 'on':
                 xml2rfc.log.warn(f"Removed attribute {e.tag}@{a}. SVG cannot contain scripts.")
                 e.attrib.pop(a)
+    for e in tree.xpath(f'//svg:svg//*[@*[{lcname} = "href"]]', namespaces=namespaces):
+        for name, value in e.attrib.items():
+            if name.lower() == "href" and value[0] != "#":
+                xml2rfc.log.warn(f"Removed attribute {e.tag}@{name}. Cannot reference external entities.")
+                e.attrib.pop(name)
 
 # ----------------------------------------------------------------------
 # Unicode operations
