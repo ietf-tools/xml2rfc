@@ -367,9 +367,24 @@ def strip_link_attachments(tree):
     Find link tags with rel="attachment".
     """
     for attachment in tree.xpath('//link[@rel="attachment"]'):
-        xml2rfc.log.warn(f"Removed {attachment}. link relationships type attachment is not allowed.")
-        attachment.getparent().remove(attachment)
+        p = attachment.getparent()
+        xml2rfc.log.warn(f"Removed link relationship of type attachment from <{p.tag}>.")
+        p.remove(attachment)
 
+def strip_svg_scripts(tree):
+    """
+    Find any scripts in SVG images and remove them.
+    """
+    for s in tree.xpath('//svg:svg//svg:script', namespaces=namespaces):
+        print(repr(s))
+        p = s.getparent()
+        xml2rfc.log.warn(f"Removed script element from {p.tag}. SVG cannot contain scripts.")
+        p.remove(s)
+    for e in tree.xpath('//svg:svg//attribute::*[starts-with(name(), "on")]/..', namespaces=namespaces):
+        for a in e.attrib.iterkeys():
+            if a[:2] == 'on':
+                xml2rfc.log.warn(f"Removed attribute {e.tag}@{a}. SVG cannot contain scripts.")
+                e.attrib.pop(a)
 
 # ----------------------------------------------------------------------
 # Unicode operations

@@ -758,9 +758,9 @@ class XmlRfc(object):
 
     def sanitize(self):
         """ Sanitize the document """
-        # Strip link attachments
         xml2rfc.utils.strip_link_attachments(self.tree)
-    
+        xml2rfc.utils.strip_svg_scripts(self.tree)
+
     def validate(self, dtd_path=None):
         """ Validate the document with its default dtd, or an optional one 
         
