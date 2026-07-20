@@ -14,7 +14,7 @@ from xml2rfc.walkpdf import xmldoc
 from xml2rfc.writers.base import default_options, BaseV3Writer, RfcWriterError
 from xml2rfc.writers import DatatrackerToBibConverter
 from xml2rfc.writers.text import MAX_WIDTH
-from xml2rfc.utils import strip_link_attachments
+from xml2rfc.utils import strip_link_attachments, strip_svg_scripts
 from xml2rfc.util.file import can_access, FileAccessError
 
 try:
@@ -567,6 +567,7 @@ class HtmlWriterTest(unittest.TestCase):
     def test_set_font_family(self):
         input_svg = lxml.etree.fromstring('''
 <svg xmlns="http://www.w3.org/2000/svg">
+  <style>:root { font: "monospace"; }</style>
   <path />
   <g>
     <text>foobar</text>
@@ -578,6 +579,7 @@ class HtmlWriterTest(unittest.TestCase):
 </svg>''')
         expected_svg = lxml.etree.tostring(lxml.etree.fromstring('''
 <svg xmlns="http://www.w3.org/2000/svg">
+  <style>:root { font: "monospace"; }</style>
   <path />
   <g>
     <text>foobar</text>
@@ -1163,7 +1165,7 @@ class FileAccessTest(unittest.TestCase):
                                    access_templates=True))
 
 
-class StripLinkAttachmentsTest(unittest.TestCase):
+class SanitizeTest(unittest.TestCase):
     def setUp(self):
         self.options = copy.deepcopy(default_options)
 
@@ -1193,6 +1195,32 @@ class StripLinkAttachmentsTest(unittest.TestCase):
         self.assertNotIn("attachment", xml_str)
         self.assertNotIn("/etc/passwd", xml_str)
         self.assertNotIn("/home/vader/ds-1/schematics", xml_str)
+
+    def test_strip_svg(self):
+        self.options.allow_local_file_access = False
+        svg_with_scripts = lxml.etree.fromstring('''
+<rfc><svg xmlns="http://www.w3.org/2000/svg">
+  <script>globalThis.alert("haha");</script>
+  <foreignObject xmlns="otherns"></foreignObject>
+  <style>ok { foo: url(#local); }</style>
+  <style>notok { foo: url(not-local); }</style>
+  <use href="#a"></use>
+  <use href="https://..."></use>
+  <text onclick="globalThis.alert(1)">foobar</text>
+</svg></rfc>''')
+        expected_svg = lxml.etree.fromstring('''
+<rfc><svg xmlns="http://www.w3.org/2000/svg">
+  <style>ok { foo: url(#local); }</style>
+  <use href="#a"></use>
+  <use/>
+  <text>foobar</text>
+</svg></rfc>''')
+
+        strip_svg_scripts(svg_with_scripts)
+
+        sanitized = lxml.etree.tostring(svg_with_scripts)
+        expected = lxml.etree.tostring(expected_svg)
+        self.assertEqual(sanitized, expected)
 
 
 if __name__ == '__main__':
