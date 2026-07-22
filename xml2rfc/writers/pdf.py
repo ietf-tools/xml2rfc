@@ -44,9 +44,7 @@ class PdfWriter(BaseV3Writer):
 
         loggers = []
         loggers.append(logging.getLogger("weasyprint"))
-        loggers.append(logging.getLogger("fontTools.subset"))
-        loggers.append(logging.getLogger("fontTools.ttLib"))
-        loggers.append(logging.getLogger("fontTools.varlib"))
+        loggers.append(logging.getLogger("fontTools"))
         for _logger in loggers:
             if   self.options.quiet:
                 _logger.setLevel(logging.CRITICAL)
