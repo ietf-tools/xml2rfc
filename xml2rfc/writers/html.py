@@ -280,7 +280,7 @@ class HtmlWriter(BaseV3Writer):
 
     def read_css(self, data_dir, fn):
         try:
-            if urlparse(fn).scheme:
+            if urlparse(fn).scheme in ['http', 'https', 'ftp', 'file', ]:
                 with closing(urlopen(fn)) as f:
                     return f.read(), fn
             else:
