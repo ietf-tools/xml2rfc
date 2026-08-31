@@ -288,7 +288,7 @@ class HtmlWriter(BaseV3Writer):
                     for ext in ['', '.css', ]:
                         cssin = os.path.join(path, fn + ext)
                         if os.path.exists(cssin):
-                            with open(cssin) as f:
+                            with open(cssin, encoding='utf-8') as f:
                                 return f.read(), cssin
         except IOError as e:
             self.err(self.root, "Error when trying to read external css: %s" % e)
