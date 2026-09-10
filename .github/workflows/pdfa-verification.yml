@@ -1,0 +1,94 @@
+name: PDF/A Verification
+
+on:
+  schedule:
+    - cron: '22 2 * * *'
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  verify-pdfa:
+    name: Verify PDF/A-3U Conformance
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Setup Java (for veraPDF)
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Download Fonts
+      run: |
+        echo "Downloading xml2rfc-fonts"
+        mkdir -p ~/.fonts/opentype ~/fonts
+        wget -q -O fonts.tar.gz https://github.com/ietf-tools/xml2rfc-fonts/archive/refs/tags/3.22.0.tar.gz
+        tar zxf fonts.tar.gz -C ~/fonts
+        mv ~/fonts/*/noto/* ~/.fonts/opentype/
+        mv ~/fonts/*/roboto_mono/* ~/.fonts/opentype/
+        mkdir -p /usr/share/fonts/truetype
+        ln -sf ~/.fonts/opentype/*.[to]tf /usr/share/fonts/truetype/
+        echo "Reloading Font Cache..."
+        fc-cache -f -v
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -qy groff html2text python3-cffi python3-brotli libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 libxml2-dev libxml2-utils libxslt-dev
+        echo "Installing pip + wheel..."
+        python -m pip install --upgrade pip wheel
+        echo "Installing xml2rfc and PDF dependencies..."
+        pip install ".[pdf]"
+
+    - name: Install veraPDF
+      run: |
+        wget -q -O verapdf-installer.zip https://software.verapdf.org/releases/verapdf-installer.zip
+        unzip -q verapdf-installer.zip -d verapdf-installer
+        INSTALLER=$(find verapdf-installer -name 'verapdf-install' | head -n1)
+        # Auto-install using an answer file (unquoted heredoc so $HOME expands)
+        cat > /tmp/verapdf-auto-install.xml <<EOF
+        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+        <AutomatedInstallation langpack="eng">
+            <com.izforge.izpack.panels.htmlhello.HTMLHelloPanel id="welcome"/>
+            <com.izforge.izpack.panels.target.TargetPanel id="install_dir">
+                <installpath>$HOME/verapdf</installpath>
+            </com.izforge.izpack.panels.target.TargetPanel>
+            <com.izforge.izpack.panels.packs.PacksPanel id="sdk_pack_select">
+                <pack index="0" name="veraPDF GUI" selected="true"/>
+                <pack index="1" name="veraPDF CLI" selected="true"/>
+            </com.izforge.izpack.panels.packs.PacksPanel>
+            <com.izforge.izpack.panels.install.InstallPanel id="install"/>
+            <com.izforge.izpack.panels.finish.FinishPanel id="finish"/>
+        </AutomatedInstallation>
+        EOF
+        bash "$INSTALLER" /tmp/verapdf-auto-install.xml
+        VERAPDF_BIN=$(find "$HOME/verapdf" -name 'verapdf' -type f | head -n1)
+        if [ -z "$VERAPDF_BIN" ]; then
+          echo "ERROR: verapdf executable not found after install" >&2
+          exit 1
+        fi
+        echo "Found veraPDF at: $VERAPDF_BIN"
+        echo "$(dirname "$VERAPDF_BIN")" >> "$GITHUB_PATH"
+
+    - name: Generate PDF
+      run: |
+        mkdir -p tests/out
+        xml2rfc --skip-config --allow-local-file-access --no-network \
+          --pdf --attach-xml --v3 \
+          --rfc-reference-base-url https://rfc-editor.org/rfc \
+          tests/input/rfc9001.canonical.xml --out tests/out/rfc9001.pdf
+
+    - name: Verify PDF/A-3U conformance
+      run: |
+        verapdf --flavour 3u --format text tests/out/rfc9001.pdf
