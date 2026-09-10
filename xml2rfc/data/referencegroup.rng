@@ -1661,7 +1661,33 @@
       </choice>
     </element>
   </define>
-  <include href="SVG-1.2-RFC.rng"/>
+  <define name="any">
+    <element>
+      <anyName/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <attribute>
+            <anyName/>
+            <text/>
+          </attribute>
+          <ref name="any"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define xmlns:svg="http://www.w3.org/2000/svg" name="svg">
+    <element name="svg:svg">
+      <zeroOrMore>
+        <choice>
+          <attribute>
+            <anyName/>
+          </attribute>
+          <ref name="any"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
   <define name="sourcecode">
     <element name="sourcecode">
       <optional>

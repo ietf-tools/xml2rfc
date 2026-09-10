@@ -1656,7 +1656,7 @@ def get_element_tags():
     elements = v3_schema.xpath("/x:grammar/x:define/x:element", namespaces=namespaces)
     for element in elements:
         name = element.get('name')
-        if not name in tags:
+        if name is not None and not name in tags:
             tags.add(name)
     return tags
 
