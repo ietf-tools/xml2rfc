@@ -85,9 +85,8 @@ jobs:
       run: |
         mkdir -p tests/out
         xml2rfc --skip-config --allow-local-file-access --no-network \
-          --pdf --v3 --legacy-date-format \
+          --pdf --attach-xml --v3 \
           --rfc-reference-base-url https://rfc-editor.org/rfc \
-          --id-reference-base-url https://datatracker.ietf.org/doc/html/ \
           tests/input/rfc9001.canonical.xml --out tests/out/rfc9001.pdf
 
     - name: Verify PDF/A-3U conformance
