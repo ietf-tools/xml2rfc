@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.34.1] - 2026-09-10
+### :bug: Bug Fixes
+- [`f448bd2`](https://github.com/ietf-tools/xml2rfc/commit/f448bd2da7409dfab915de9bb2a184604f0aa829) - **html**: Update xml2rfc.css with sub/sup no wrapping *(PR [#1330](https://github.com/ietf-tools/xml2rfc/pull/1330) by [@holloway](https://github.com/holloway))*
+- [`4da32d4`](https://github.com/ietf-tools/xml2rfc/commit/4da32d4a6ed8eed1ab39cefcef2e8d728acabf4e) - **pdf**: Improve logging *(PR [#1338](https://github.com/ietf-tools/xml2rfc/pull/1338) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1337](https://github.com/ietf-tools/xml2rfc/issues/1337) opened by [@kesara](https://github.com/kesara)*
+- [`0d801c3`](https://github.com/ietf-tools/xml2rfc/commit/0d801c399f285a75fc6e01841b018ec964a82289) - **pdf**: Avoid page breaks inside tables *(PR [#1331](https://github.com/ietf-tools/xml2rfc/pull/1331) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1329](https://github.com/ietf-tools/xml2rfc/issues/1329) opened by [@kmoore-rpc](https://github.com/kmoore-rpc)*
+- [`7c0dca9`](https://github.com/ietf-tools/xml2rfc/commit/7c0dca94171909fedb5bd90eeace78a48df19679) - **unprep**: Remove @derivedCounter and @derivedAnchor *(PR [#1297](https://github.com/ietf-tools/xml2rfc/pull/1297) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *fixes issue [#1194](https://github.com/ietf-tools/xml2rfc/issues/1194) opened by [@ajeanmahoney](https://github.com/ajeanmahoney)*
+
+### :construction_worker: Build System
+- [`d53f2d5`](https://github.com/ietf-tools/xml2rfc/commit/d53f2d5adb11d136bc7075eea66462d2720df7b7) - Remove obsolete calls *(PR [#1332](https://github.com/ietf-tools/xml2rfc/pull/1332) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1305](https://github.com/ietf-tools/xml2rfc/issues/1305) opened by [@kesara](https://github.com/kesara)*
+- [`cf3a11d`](https://github.com/ietf-tools/xml2rfc/commit/cf3a11d99f2b78e4e07626b3ff303a326e60e4f9) - Add PDF/A-3U verification workflow *(PR [#1345](https://github.com/ietf-tools/xml2rfc/pull/1345) by [@kesara](https://github.com/kesara))*
+  - :arrow_lower_right: *addresses issue [#1344](https://github.com/ietf-tools/xml2rfc/issues/1344) opened by [@kesara](https://github.com/kesara)*
+
+### :memo: Documentation Changes
+- [`33e2c5f`](https://github.com/ietf-tools/xml2rfc/commit/33e2c5fd43fe884f2a06603a360407a678b4ac12) - update CHANGELOG.md + py file versions for v3.34.0 [skip ci] *(PR [#1328](https://github.com/ietf-tools/xml2rfc/pull/1328) by [@github-actions[bot]](https://github.com/apps/github-actions))*
+
+### :wrench: Chores
+- [`c3e8fdb`](https://github.com/ietf-tools/xml2rfc/commit/c3e8fdbec545abf029348cd5441caadb2e028815) - **deps**: Update Weasyprint to 70.0 *(PR [#1343](https://github.com/ietf-tools/xml2rfc/pull/1343) by [@kesara](https://github.com/kesara))*
+
+
 ## [v3.34.0] - 2026-06-03
 ### :sparkles: New Features
 - [`473a718`](https://github.com/ietf-tools/xml2rfc/commit/473a718787d60921dcf320f8e81da4bfb7de12ef) - Use natsort to sort references *(PR [#1321](https://github.com/ietf-tools/xml2rfc/pull/1321) by [@kesara](https://github.com/kesara))*
@@ -2538,3 +2561,4 @@ This release fixes all outstanding major bugs, details below. The issue tracker 
 [v3.32.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.31.0...v3.32.0
 [v3.33.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.32.0...v3.33.0
 [v3.34.0]: https://github.com/ietf-tools/xml2rfc/compare/v3.33.0...v3.34.0
+[v3.34.1]: https://github.com/ietf-tools/xml2rfc/compare/v3.34.0...v3.34.1
