@@ -831,6 +831,28 @@ class TextWriterTest(unittest.TestCase):
         self.assertEqual(len(lines), 2)
         self.assertIn(url, lines[1].text)
 
+    def test_render_reference_long_url_with_underscores(self):
+        url = 'http://bitsavers.org/pdf/xerox/ethernet_3mb/Practical_Considerations_in_Ethernet_Local_Network_Design_Feb1980.pdf'
+        reference = f'''
+<references>
+  <reference anchor="REFTEST" target="{url}">
+    <front>
+      <title>Practical Considerations in Ethernet Local Network Design</title>
+      <author initials="R." surname="Crane" fullname="Ronald Crane"/>
+      <date month="February" year="1980"/>
+    </front>
+  </reference>
+</references>'''
+        self.writer.refname_mapping['REFTEST'] = 'REFTEST'
+        references = lxml.etree.fromstring(reference)
+        width = MAX_WIDTH - 3
+        lines = self.writer.render_reference(references.getchildren()[0], width=width)
+        for line in lines:
+            self.assertLessEqual(len(line.text), width)
+        # URL is only broken after underscores (or slashes), never mid-word
+        text = ''.join(line.text.strip() for line in lines)
+        self.assertIn(f'<{url}>', text)
+
     def test_render_artwork_svg_only(self):
         artwork_str = '''
 <artwork type="svg">
@@ -1229,6 +1251,35 @@ class StripLinkAttachmentsTest(unittest.TestCase):
         self.assertNotIn("attachment", xml_str)
         self.assertNotIn("/etc/passwd", xml_str)
         self.assertNotIn("/home/vader/ds-1/schematics", xml_str)
+
+
+class TextWrapperTest(unittest.TestCase):
+    '''TextWrapper tests'''
+
+    def setUp(self):
+        self.wrapper = xml2rfc.utils.TextWrapper(width=40, break_long_words=False)
+
+    def test_wrap_long_word_on_underscores(self):
+        text = 'see <http://example.com/a_very_long_file_name_that_does_not_fit_on_one_line.pdf>'
+        lines = self.wrapper.wrap(text)
+        self.assertEqual(lines, [
+            'see <http://example.com/a_very_long_',
+            'file_name_that_does_not_fit_on_one_',
+            'line.pdf>',
+        ])
+
+    def test_wrap_does_not_split_short_words_on_underscores(self):
+        # max_word_len fits on the next line, so it moves there whole
+        lines = self.wrapper.wrap('the configuration variable is max_word_len')
+        self.assertEqual(lines, [
+            'the configuration variable is',
+            'max_word_len',
+        ])
+
+    def test_wrap_long_word_without_underscores(self):
+        word = 'x' * 50
+        lines = self.wrapper.wrap(f'a {word} b')
+        self.assertEqual(lines, ['a', word, 'b'])
 
 
 if __name__ == '__main__':
