@@ -154,7 +154,15 @@ class TextWrapper(textwrap.TextWrapper):
                 for bit in bits:
                     chunk3 = re.sub('[\u2060\uE060]', '', bit).replace('\u00A0', ' ')
                     if len(chunk3) > max_word_len:
-                        chunks += self._split(chunk3)
+                        _chunks = []
+                        _chunks += self._split(chunk3)
+                        for chunk in _chunks:
+                            if len(chunk) > max_word_len:
+                                # chunk is still longer than avialble space
+                                # allow breaks after underscores
+                                chunks += [ c for c in re.split(r'(?<=_)(?=\S)', chunk) if c ]
+                            else:
+                                chunks += [ chunk ]
                     else:
                         chunks += [ chunk3 ]
             else:
