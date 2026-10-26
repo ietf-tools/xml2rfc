@@ -849,9 +849,15 @@ class TextWriterTest(unittest.TestCase):
         lines = self.writer.render_reference(references.getchildren()[0], width=width)
         for line in lines:
             self.assertLessEqual(len(line.text), width)
-        # URL is only broken after underscores (or slashes), never mid-word
+        # the URL survives wrapping: rejoining the lines gives it back unchanged
         text = ''.join(line.text.strip() for line in lines)
         self.assertIn(f'<{url}>', text)
+        # every line break inside the URL comes right after an underscore or a slash
+        start = next(i for i, line in enumerate(lines) if f'<{url[:10]}' in line.text)
+        end = next(i for i, line in enumerate(lines) if '.pdf>' in line.text)
+        self.assertGreater(end, start)
+        for line in lines[start:end]:
+            self.assertRegex(line.text.rstrip(), r'[_/]$')
 
     def test_render_artwork_svg_only(self):
         artwork_str = '''
