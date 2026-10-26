@@ -832,7 +832,7 @@ class TextWriterTest(unittest.TestCase):
         self.assertIn(url, lines[1].text)
 
     def test_render_reference_long_url_with_underscores(self):
-        url = 'http://bitsavers.org/pdf/xerox/ethernet_3mb/Practical_Considerations_in_Ethernet_Local_Network_Design_Feb1980.pdf'
+        url = 'http://example.org/pdf/xerox/ethernet_3mb/Practical_Considerations_in_Ethernet_Local_Network_Design_Feb1980.pdf'
         reference = f'''
 <references>
   <reference anchor="REFTEST" target="{url}">
