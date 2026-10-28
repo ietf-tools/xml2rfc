@@ -16,7 +16,7 @@
             This version is adapted to work with "xml2rfc" version 2.x.  
        
     ' name="description">
-<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="xml2rfc 3.34.1" name="generator">
 <meta content="RFC" name="keyword">
 <meta content="Request for Comments" name="keyword">
 <meta content="I-D" name="keyword">
@@ -26,7 +26,7 @@
 <meta content="Extensible Markup Language" name="keyword">
 <meta content="draft-gieben-writing-rfcs-pandoc-02" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.33.0
+  xml2rfc 3.34.1
     Python 3.14.3
     ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
@@ -40,7 +40,7 @@
     PyYAML 6.0.3
     requests 2.34.2
     wcwidth 0.7.0
-    weasyprint 69.0
+    weasyprint 70.0
 -->
 <link href="draft-miek-test.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -365,6 +365,10 @@ table p {
   /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
      be allowed within tables more generally, it would be far better to select on a class. */
   margin: 0;
+}
+sub,
+sup {
+ white-space: nowrap;
 }
 
 /* pilcrow */
@@ -1072,6 +1076,9 @@ aside > p {
 @media print {
   figcaption, table caption {
     page-break-before: avoid;
+  }
+  table {
+    page-break-inside: avoid;
   }
 }
 /* Font size adjustments for print */
