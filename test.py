@@ -3,8 +3,10 @@
 import copy
 import difflib
 import lxml
+import os
 import re
 import sys
+import tempfile
 import unittest
 import xml2rfc
 import xml2rfc.utils
@@ -590,6 +592,26 @@ class HtmlWriterTest(unittest.TestCase):
         result_svg = self.writer.set_font_family(input_svg)
         result = lxml.etree.tostring(result_svg)
         self.assertEqual(result, expected_svg)
+
+
+    def test_read_css_local_absolute_path(self):
+        """--css takes a file path, and on Windows that path has a drive letter.
+
+        urlparse() reads the drive letter as a URL scheme, so the absolute path
+        went to urlopen() and failed with "unknown url type: c". The stylesheet
+        is also read with the locale encoding rather than as UTF-8, which is
+        what the builtin one five lines below already uses.
+        """
+        stylesheet = 'body { color: \u2014 red }\n'
+        with tempfile.TemporaryDirectory() as scratch:
+            path = os.path.join(scratch, 'custom.css')
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write(stylesheet)
+
+            css, cssin = self.writer.read_css(scratch, path)
+
+        self.assertEqual(css, stylesheet)
+        self.assertEqual(cssin, path)
 
 
 class PrepToolWriterTest(unittest.TestCase):
