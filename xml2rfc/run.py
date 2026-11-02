@@ -306,7 +306,7 @@ def main():
                            help='Base URL for RFC links')
     htmloptions.add_argument('--id-base-url', default="https://datatracker.ietf.org/doc/html/",
                            help='Base URL for Internet-Draft links')
-    htmloptions.add_argument('--rfc-reference-base-url', default="https://rfc-editor.org/rfc/",
+    htmloptions.add_argument('--rfc-reference-base-url', default="https://www.rfc-editor.org/rfc/",
                            help='Base URL for RFC reference targets, replacing the target="..." value given in the reference entry')
     htmloptions.add_argument('--id-reference-base-url', default="https://datatracker.ietf.org/doc/html/",
                            help='Base URL for I-D reference targets')

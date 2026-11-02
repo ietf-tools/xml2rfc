@@ -108,7 +108,7 @@ default_options.__dict__ = {
         'rfc_base_url': 'https://www.rfc-editor.org/rfc/',
         'rfc_html_archive_url': 'https://www.rfc-editor.org/rfc/',
         'rfc_local': True,
-        'rfc_reference_base_url': 'https://rfc-editor.org/rfc/',
+        'rfc_reference_base_url': 'https://www.rfc-editor.org/rfc/',
         'silence': default_silenced_messages,
         'skip_config_files': False,
         'source': None,

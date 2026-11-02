@@ -156,7 +156,7 @@ tests/out/%.wip.text: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --id-is-work-in-progress $< --out $@"
 
 tests/out/%.v3.html: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --html --v3 --external-css --external-js --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ --no-inline-version $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --html --v3 --external-css --external-js --strict --legacy-date-format --rfc-reference-base-url https://www.rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ --no-inline-version $< --out $@"
 
 tests/out/%.pdf: tests/input/%.xml install
 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --pdf --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ $< --out $@"
