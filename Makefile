@@ -57,7 +57,7 @@ tests-no-network: test flaketest drafttest old-drafttest rfctest utf8test v3feat
 # Clear the cache
 clear-cache: install
 	@echo -e "\n Clearing cache ..."
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --clear-cache"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --cache \"$${IETF_TEST_CACHE_PATH}\" --clear-cache"
 
 env/bin/python:
 	echo "Install virtualenv in $$PWD/env/ in order to run tests locally."
@@ -108,73 +108,73 @@ CHECKOUTPUT=	\
 # the first matching rule instead of the shortest stem
 tests/out/%.canonical.html: tests/input/%.canonical.xml install
 	@echo " Checking generation of .html from canonical prepped .xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).html --html --external-css --external-js --legacy-date-format --no-inline-version $<" 2> /dev/null || { err=$$?; echo "Error output when generating .html from canonical prepped .xml"; exit $$err; }
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).html --html --external-css --external-js --legacy-date-format --no-inline-version-info $<" 2> /dev/null || { err=$$?; echo "Error output when generating .html from canonical prepped .xml"; exit $$err; }
 
 tests/out/%.txt tests/out/%.raw.txt tests/out/%.nroff tests/out/%.html tests/out/%.txt : tests/input/%.xml install
 	@echo -e "\n Processing $<"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tests/out/ --text --html --strict $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --basename tests/out/ --text --html --strict $<"
 
 tests/out/%.v2v3.xml: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --strict --legacy-date-format $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --strict --legacy-date-format $< --out $@"
 	@doc=$(basename $@); printf ' '; xmllint --noout --xinclude --relaxng xml2rfc/data/v3.rng $$doc.xml
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --strict --legacy-date-format --add-xinclude $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --strict --legacy-date-format --add-xinclude $< --out $@"
 
 tests/out/%.v3add-xinclude.xml: tests/input/draft-miek-test-v3.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --add-xinclude $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --add-xinclude $< --out $@"
 
 tests/out/%.v3add-xinclude-w-revision.xml: tests/input/draft-template.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --add-xinclude --draft-revisions $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --v2v3 --add-xinclude --draft-revisions $< --out $@"
 
 tests/out/%.prepped.xml: tests/input/%.xml tests/out/%.v3.html tests/out/%.text install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --prep $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --preptool $<"
 	@echo " Checking generation of .html from prepped .xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).html --html --external-css --external-js --legacy-date-format --no-inline-version $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).html --html --external-css --external-js --legacy-date-format --no-inline-version-info $@" 2> /dev/null || { err=$$?; echo "Error output when generating .html from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(expire_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).v3.html $(basename $@).html || { echo "Diff failed for $(basename $@).html output (2)"; exit 1; }
 	@echo " Checking generation of .text from prepped .xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).text --text --no-pagination --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $(basename $@).text --text --no-pagination --external-css --external-js --legacy-date-format $@" 2> /dev/null || { err=$$?; echo "Error output when generating .text from prepped .xml"; exit $$err; }
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' -I '$(legacydate_regex)' -I '$(expire_regex)' -I '$(generator_regex)' -I 'rel="alternate"' tests/out/$(notdir $(basename $(basename $@))).text $(basename $@).text || { echo "Diff failed for $(basename $@).text output (3)"; exit 1; }
 
 tests/out/docfile.xml:
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --doc --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --docfile --out $@"
 
 tests/out/docfile.html: tests/out/docfile.xml
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --html --external-css --external-js --no-inline-version --out $@ $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --html --external-css --external-js --no-inline-version-info --out $@ $<"
 
 tests/out/manpage.txt:
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --man > $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --manpage > $@"
 
 tests/out/%.text: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@"
 
 tests/out/%.pages.text: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --legacy-date-format $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --legacy-date-format $< --out $@"
 
 tests/out/%.bom.text: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --bom $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --bom $< --out $@"
 
 tests/out/%.wip.text: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --id-is-work-in-progress $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --id-is-work-in-progress $< --out $@"
 
 tests/out/%.v3.html: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --html --v3 --external-css --external-js --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ --no-inline-version $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --html --v3 --external-css --external-js --strict --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ --no-inline-version-info $< --out $@"
 
 tests/out/%.pdf: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --pdf --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --pdf --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ $< --out $@"
 
 tests/out/%.plain.xml: tests/out/%.prepped.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --unprep --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ $< --out $@"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --unprep --v3 --legacy-date-format --rfc-reference-base-url https://rfc-editor.org/rfc --id-reference-base-url https://datatracker.ietf.org/doc/html/ $< --out $@"
 
 tests/out/%.plain.text: tests/out/%.plain.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@  --silence='The document date'"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --text --v3 --strict --no-pagination --legacy-date-format $< --out $@  --silence='The document date'"
 
 tests/out/%.exp.xml: tests/input/%.xml install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --exp $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --expand $<"
 
 %.prepped.xml: %.v2v3.xml
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --prep $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out $@ --preptool $<"
 
 %.v2v3.text: %.v2v3.xml
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8 --out $@ --text --v3 $<"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8 --out $@ --text --v3 $<"
 
 %.nroff.txt: %.nroff
 	@echo " Creating $@ from $<"
@@ -189,23 +189,23 @@ tests/out/%.exp.xml: tests/input/%.xml install
 # ----------------------------------------------------------------------
 
 old-drafttest: cleantmp install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 tests/input/draft-template-old.xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --basename tmp/ --raw --legacy --text --nroff --html --expand --v2v3 tests/input/draft-template-old.xml"
 	@PS4=" " /bin/bash -cx "cp  tests/input/ietf.svg tmp/"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out tmp/draft-template-old.prepped.xml --prep tmp/draft-template-old.v2v3.xml "
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out tmp/draft-template-old.prepped.xml --preptool tmp/draft-template-old.v2v3.xml "
 	doc=draft-template-old ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 miektest: cleantmp install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 tests/input/draft-miek-test.xml"
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out tmp/draft-miek-test.prepped.xml --prep tmp/draft-miek-test.v2v3.xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --basename tmp/ --raw --legacy --text --nroff --html --expand --v2v3 tests/input/draft-miek-test.xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --out tmp/draft-miek-test.prepped.xml --preptool tmp/draft-miek-test.v2v3.xml"
 	doc=draft-miek-test ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 cachetest: cleantmp install
 	@echo -e "\n Clearing cache ..."
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache .cache --clear-cache"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache .cache --clear-cache"
 	@echo " Filling cache ..."
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache .cache tests/input/draft-template.xml --base tmp/"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache .cache tests/input/draft-template.xml --basename tmp/"
 	@echo " Running without accessing network ..."
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache .cache tests/input/draft-template.xml --no-network --base tmp/"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache .cache tests/input/draft-template.xml --no-network --basename tmp/"
 
 
 rfctest: cleantmp env/bin/python install $(rfctests) tests/out/rfc9001.canonical.html.test
@@ -216,34 +216,34 @@ rfcregressiontest: cleantmp install
 	mkdir -p tests/rfc/out
 	@PS4=" " /bin/bash -cx "rsync -avz --delete --include='rfc[0-9][0-9][0-9][0-9].xml' --exclude='*' rsync.ietf.org::rfc tests/rfc/"
 	@echo -e "\n Generating text ..."
-	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config --allow-local-file-access --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --text $$rfc; done
+	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config-files --allow-local-file-access --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --text $$rfc; done
 	@echo -e "\n Generating html ..."
-	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config --allow-local-file-access --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --html $$rfc; done
+	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config-files --allow-local-file-access --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --html $$rfc; done
 	@echo -e "\n Generating pdf ..."
-	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config --allow-local-file-access --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --pdf $$rfc; done
+	for rfc in tests/rfc/*.xml; do xml2rfc --skip-config-files --allow-local-file-access --cache "$${IETF_TEST_CACHE_PATH}" --path tests/rfc/out/ --pdf $$rfc; done
 
 drafttest: cleantmp env/bin/python install $(drafttests) dateshifttest
 
 # rfctest: cleantmp env/bin/python install $(rfctests)
-# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc6787.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
+# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8 tests/input/rfc6787.xml --basename tmp/ --raw --legacy --text --nroff --html --expand --v2v3 --preptool"
 # 	doc=rfc6787 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
-# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc7754.edited.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
+# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8 tests/input/rfc7754.edited.xml --basename tmp/ --raw --legacy --text --nroff --html --expand --v2v3 --preptool"
 # 	doc=rfc7754.edited ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
-# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8tests/input/rfc7911.xml --base tmp/ --raw --legacy --text --nroff --html --exp --v2v3 --prep"
+# 	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8 tests/input/rfc7911.xml --basename tmp/ --raw --legacy --text --nroff --html --expand --v2v3 --preptool"
 # 	doc=rfc7911 ; postnrofffix="cat" ; type=ascii; $(CHECKOUTPUT)
 
 unicodetest: cleantmp  env/bin/python install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --no-inline-version --exp --v2v3 --prep tests/input/unicode.xml "
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --basename tmp/ --raw --legacy --text --nroff --html --no-inline-version-info --expand --v2v3 --preptool tests/input/unicode.xml "
 	doc=unicode ; postnrofffix="sed 1,2d" ; type=ascii; $(CHECKOUTPUT)
 
 utf8test: cleantmp  env/bin/python install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --base tmp/ --raw --legacy --text --nroff --html --no-inline-version --exp --v2v3 --prep -q tests/input/utf8.xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --basename tmp/ --raw --legacy --text --nroff --html --no-inline-version-info --expand --v2v3 --preptool -q tests/input/utf8.xml"
 	@doc=utf8 ; postnrofffix="cat" ; type=utf8; $(CHECKOUTPUT)
 
 v3featuretest: tests/out/draft-v3-features.prepped.xml.test tests/out/draft-v3-features.text.test tests/out/draft-v3-features.v3.html.test
 
 dateshifttest: cleantmp install
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --date 2013-02-01 --legacy --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml"
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --date 2013-02-01 --legacy --out tmp/draft-miek-test.dateshift.txt --text tests/input/draft-miek-test.xml"
 	@diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/draft-miek-test.dateshift.txt tmp/draft-miek-test.dateshift.txt || { echo "Diff failed for draft-miek-test.dateshift.txt output"; exit 1; } 
 
 elementstest: install tests/out/elements.prepped.xml.test tests/out/elements.text.test tests/out/elements.pages.text.test tests/out/elements.v3.html.test
@@ -280,7 +280,7 @@ noflakestests: install pytests regressiontests
 regressiontests: drafttest rfctest
 
 test2:	test
-	@PS4=" " /bin/bash -cx "xml2rfc --skip-config --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8 tests/input/rfc6635.xml --legacy --text --out tmp/rfc6635.txt	&& diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt "
+	@PS4=" " /bin/bash -cx "xml2rfc --skip-config-files --allow-local-file-access --cache \"$${IETF_TEST_CACHE_PATH}\" --no-network --utf8 tests/input/rfc6635.xml --legacy --text --out tmp/rfc6635.txt	&& diff -u -I '$(datetime_regex)' -I '$(version_regex)' -I '$(date_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt "
 
 upload: install
 	rst2html changelog > /dev/null	# verify that the changelog is valid rst
