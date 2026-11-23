@@ -233,6 +233,8 @@ def main():
                             help='generate utf8 output')
     plain_options.add_argument('-v', '--verbose', action='store_true',
                             help='print extra information')
+    plain_options.add_argument('--lax-validation', action='store_true', default=False,
+                            help='Treat schema validation errors as warnings (v3 writers)')
 
 
     value_options = optionparser.add_argument_group('Generic Options with Values')
