@@ -2449,21 +2449,20 @@ class HtmlWriter(BaseV3Writer):
     def render_sourcecode(self, h, x):
         file = x.get('name')
         type = x.get('type')
-        mark = x.get('markers') == 'true'
+        text = x.text
         classes = 'sourcecode'
         if type:
             classes += ' lang-%s' % type
-        if (len(x.text.split('\n')) > 50):
+        if (len(text.split('\n')) > 50):
             classes += ' breakable'
         div = add.div(h, x, classes=classes)
         div.text = None
-        pre = add.pre(div, None, x.text)
-        if mark:
-            text = pre.text
-            if file:
-                text = (' file "%s"\n%s' % (file, text)) if text else '\n%s' % text
-            text = "<CODE BEGINS>%s\n<CODE ENDS>" % text
-            pre.text = text
+        pre = add.pre(div, None, text)
+        if x.get('markers') == 'true':
+            label = f' file "{file}"' if file and text else ''
+            if file or (text and text[0] != '\n'):
+                text = '\n' + text
+            pre.text = f"<CODE BEGINS>{label}{text}\n<CODE ENDS>"
         if x.getparent().tag != 'figure':
             self.maybe_add_pilcrow(div)
         return div
