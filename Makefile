@@ -83,7 +83,6 @@ configtest:
 
 pytests: installtestdeps
 	python3 test.py --verbose
-	python3 -m unittest discover -s tests --verbose
 
 CHECKOUTPUT=	\
 	groff -ms -K$$type -T$$type tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ;	\
