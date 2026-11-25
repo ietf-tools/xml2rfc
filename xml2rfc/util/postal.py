@@ -116,8 +116,8 @@ def get_normalized_address_info(writer, x, latin=False):
                 if country_info:
                     country_element = c
                     break
+    country_name = get_value(country_element, latin=latin) if country_element is not None else ''
     if country_info:
-        country_name = get_value(country_element, latin=latin)
         if country_name in ['US', 'USA']:
             country_name = country_info.official_name
         elif re.match('[A-Z]{2,3}', country_name):
@@ -149,7 +149,7 @@ def get_normalized_address_info(writer, x, latin=False):
                 'city': '',
                 'country_area': '',
                 'country_code': '',
-                'country_name': ''
+                'country_name': country_name,
             }
     for c in x.getchildren():
         if c == country_element:
