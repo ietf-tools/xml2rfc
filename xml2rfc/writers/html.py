@@ -1461,7 +1461,11 @@ class HtmlWriter(BaseV3Writer):
         classes = ' '.join(classes)
         # workaround for weasyprint's unwillingness to break between <dd> and
         # <dt>: add an extra <dd> that is very prone to page breaks.  See CSS.
-        add.span(h, None, classes='break')
+        # Skip it when the <dl> is the first child of its parent: a break
+        # there would leave the parent's empty box (e.g. a <blockquote>
+        # border) alone at the bottom of the page.
+        if len(h) or (h.text and h.text.strip()):
+            add.span(h, None, classes='break')
         dl = add.dl(h, x, classes=classes)
         for c in x.getchildren():
             self.render(dl, c)

@@ -591,6 +591,26 @@ class HtmlWriterTest(unittest.TestCase):
         result = lxml.etree.tostring(result_svg)
         self.assertEqual(result, expected_svg)
 
+    def test_dl_break_span(self):
+        dl = '<dl><dt>term</dt><dd>definition</dd></dl>'
+
+        # <dl> as the first child: no break opportunity before it, so the
+        # parent box is not left empty at the bottom of a page
+        blockquote = lxml.etree.fromstring('<blockquote>%s</blockquote>' % dl)
+        html = lxml.etree.Element('div')
+        self.writer.render_blockquote(html, blockquote)
+        self.assertEqual(html.xpath('blockquote/*[1]')[0].tag, 'dl')
+        self.assertEqual(len(html.xpath('.//span[@class="break"]')), 0)
+
+        # <dl> after other content: the break opportunity stays
+        blockquote = lxml.etree.fromstring(
+            '<blockquote><t>text</t>%s</blockquote>' % dl)
+        html = lxml.etree.Element('div')
+        self.writer.render_blockquote(html, blockquote)
+        self.assertEqual(
+            [e.tag for e in html.xpath('blockquote/*')], ['p', 'span', 'dl'])
+        self.assertEqual(len(html.xpath('.//span[@class="break"]')), 1)
+
 
 class PrepToolWriterTest(unittest.TestCase):
     '''PrepToolWriter tests'''
